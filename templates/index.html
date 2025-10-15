@@ -1,248 +1,374 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ReelSpot - Download Social Media Content</title>
-    <link rel="icon" href="assets/icons/favicon.ico">
-    <link href="css/style.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-</head>
-<body>
-    <nav class="navbar">
-        <div class="container">
-            <div class="logo">
-                <i class="fas fa-film"></i>
-                <h1>ReelSpot</h1>
-            </div>
-            <div class="nav-links">
-                <a href="index.html" class="active">Home</a>
-                <a href="platforms.html">Platforms</a>
-                <a href="about.html">About</a>
-                <a href="contact.html">Contact</a>
-            </div>
-            <button id="mobile-menu-btn" aria-label="Toggle menu">
-                <i class="fas fa-bars"></i>
-            </button>
-        </div>
-    </nav>
+{% extends "base.html" %}
 
-    <section class="hero">
-        <div class="hero-content">
-            <div class="hero-badge">
-                <i class="fas fa-star"></i>
-                <span>Trusted by 100K+ Users</span>
+{% block content %}
+
+<!-- HERO SECTION -->
+<section class="hero">
+    <div class="container">
+        <div class="hero-grid">
+            <div class="hero-content">
+                <span class="hero-tag">Creative Developer</span>
+                <h1 class="hero-title">Arsh Verma</h1>
+                <p class="hero-subtitle">Innovative Developer & Creator</p>
+                <p class="hero-description">Transforming creative visions into immersive digital experiences through game development, web design, photography, videography, and innovative technology</p>
+                <div class="hero-actions">
+                    <a href="#games" class="btn btn-primary">
+                        <i class="fas fa-gamepad"></i> View Portfolio
+                    </a>
+                    <a href="#contact" class="btn btn-glass">
+                        <i class="fas fa-envelope"></i> Let's Connect
+                    </a>
+                </div>
             </div>
-            <h1 class="hero-title">
-                Download Videos from 
-                <span class="gradient-text">Any Platform</span>
-            </h1>
-            <p class="hero-description">
-                Fast, free, and simple. Download videos, reels, stories, and more from Instagram, YouTube, TikTok, Facebook, and X in HD quality.
-            </p>
-            <div class="hero-buttons">
-                <a href="platforms.html" class="btn btn-primary">
-                    <i class="fas fa-download"></i>
-                    Start Downloading
-                </a>
-                <a href="#features" class="btn btn-secondary">
-                    <i class="fas fa-info-circle"></i>
-                    Learn More
-                </a>
-            </div>
-            <div class="platform-icons">
-                <div class="platform-icon instagram">
-                    <i class="fab fa-instagram"></i>
-                </div>
-                <div class="platform-icon youtube">
-                    <i class="fab fa-youtube"></i>
-                </div>
-                <div class="platform-icon tiktok">
-                    <i class="fab fa-tiktok"></i>
-                </div>
-                <div class="platform-icon facebook">
-                    <i class="fab fa-facebook"></i>
-                </div>
-                <div class="platform-icon twitter">
-                    <i class="fab fa-twitter"></i>
+            <div class="hero-visual">
+                <div class="floating-cards">
+                    <div class="float-card">
+                        <i class="fab fa-unity"></i>
+                        <h4>Game Development</h4>
+                        <p>Immersive 3D Experiences</p>
+                    </div>
+                    <div class="float-card">
+                        <i class="fas fa-code"></i>
+                        <h4>Web Development</h4>
+                        <p>Modern Digital Solutions</p>
+                    </div>
+                    <div class="float-card">
+                        <i class="fas fa-camera"></i>
+                        <h4>Creative Content</h4>
+                        <p>Photography & Videography</p>
+                    </div>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+    <div class="scroll-indicator">
+        <span>Discover More</span>
+        <i class="fas fa-chevron-down"></i>
+    </div>
+</section>
 
-    <section class="stats-section">
-        <div class="container">
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <i class="fas fa-users"></i>
+<!-- ABOUT SECTION -->
+<section id="about" class="section">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-tag">About Me</span>
+            <h2 class="section-title">Building Interactive Worlds</h2>
+        </div>
+        <div class="about-grid">
+            <div class="about-text">
+                <p class="lead">I'm Arsh Verma, a dedicated creative developer and Computer Science student at VIT Bhopal University, passionate about crafting engaging digital experiences across multiple mediums.</p>
+                <p>My creative journey encompasses game development, web design, photography, videography, and digital art. This diverse skill set allows me to approach projects from multiple perspectives, creating comprehensive and innovative solutions.</p>
+                <p>Specializing in Unity and C# for game development, modern web technologies for website creation, and professional photography and video production, I bring ideas to life through carefully crafted experiences. My technical foundation spans JavaScript, Python, HTML/CSS, and advanced post-production techniques.</p>
+                <p>I'm actively seeking opportunities to collaborate with forward-thinking teams and contribute to groundbreaking projects that push creative boundaries across gaming, web development, visual storytelling, and beyond.</p>
+            </div>
+            <div class="skills-container">
+                <h3>Core Expertise</h3>
+                <div class="skills-grid">
+                    <div class="skill-item">
+                        <i class="fab fa-unity"></i>
+                        <span>Unity</span>
                     </div>
-                    <h3 class="stat-number">100K+</h3>
-                    <p class="stat-label">Active Users</p>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <i class="fas fa-download"></i>
+                    <div class="skill-item">
+                        <i class="fas fa-code"></i>
+                        <span>C#</span>
                     </div>
-                    <h3 class="stat-number">1M+</h3>
-                    <p class="stat-label">Downloads</p>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <i class="fas fa-globe"></i>
+                    <div class="skill-item">
+                        <i class="fab fa-js"></i>
+                        <span>JavaScript</span>
                     </div>
-                    <h3 class="stat-number">5</h3>
-                    <p class="stat-label">Platforms</p>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <i class="fas fa-star"></i>
+                    <div class="skill-item">
+                        <i class="fab fa-python"></i>
+                        <span>Python</span>
                     </div>
-                    <h3 class="stat-number">4.9/5</h3>
-                    <p class="stat-label">Rating</p>
+                    <div class="skill-item">
+                        <i class="fab fa-html5"></i>
+                        <span>HTML/CSS</span>
+                    </div>
+                    <div class="skill-item">
+                        <i class="fas fa-camera"></i>
+                        <span>Photography</span>
+                    </div>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <section id="features" class="features-section">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">Why Choose ReelSpot?</h2>
-                <p class="section-description">Fast, secure, and hassle-free video downloading experience</p>
+<!-- GAMES SECTION -->
+<section id="games" class="section">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-tag">Games</span>
+            <h2 class="section-title">Game Showcase</h2>
+            <p class="section-description">Interactive experiences designed to captivate and engage players</p>
+        </div>
+        <div class="portfolio-grid">
+            {% if games %}
+                {% for game in games %}
+                <div class="portfolio-card" data-game='{{ game | tojson }}' data-type="game">
+                    <div class="portfolio-image">
+                        <img src="{{ game['image'] }}" alt="{{ game['name'] }}">
+                        <div class="portfolio-overlay">
+                            <button class="play-btn" aria-label="Play game">
+                                <i class="fas fa-play"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="portfolio-info">
+                        <span class="portfolio-badge">Playable</span>
+                        <h3 class="portfolio-title">{{ game['name'] }}</h3>
+                        <p class="portfolio-description">{{ game['overview'] }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty-state">
+                    <i class="fas fa-gamepad"></i>
+                    <h3>Games Coming Soon</h3>
+                    <p>Exciting game projects are currently in development!</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<!-- WEBSITES SECTION -->
+<section id="websites" class="section">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-tag">Web Development</span>
+            <h2 class="section-title">Website Portfolio</h2>
+            <p class="section-description">Modern, responsive web applications and digital solutions</p>
+        </div>
+        <div class="portfolio-grid websites-grid">
+            {% if websites %}
+                {% for website in websites %}
+                <div class="portfolio-card website-card" data-website='{{ website | tojson }}' data-type="website">
+                    <div class="portfolio-image website-image">
+                        <img src="{{ website['image'] }}" alt="{{ website['name'] }}">
+                        <div class="portfolio-overlay">
+                            <button class="view-btn" aria-label="View website">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="portfolio-info">
+                        <span class="portfolio-badge">Live</span>
+                        <h3 class="portfolio-title">{{ website['name'] }}</h3>
+                        <p class="portfolio-description">{{ website['description'] }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty-state">
+                    <i class="fas fa-laptop-code"></i>
+                    <h3>Websites Coming Soon</h3>
+                    <p>Web projects are currently under development!</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<!-- PHOTOGRAPHY SECTION -->
+<section id="photography" class="section">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-tag">Photography</span>
+            <h2 class="section-title">Visual Stories</h2>
+            <p class="section-description">Capturing moments and emotions through the lens</p>
+        </div>
+        <div class="portfolio-grid">
+            {% if photos %}
+                {% for photo in photos %}
+                <div class="portfolio-card" data-photo='{{ photo | tojson }}' data-type="photo">
+                    <div class="portfolio-image">
+                        <img src="{{ photo['image'] }}" alt="{{ photo['title'] }}">
+                        <div class="portfolio-overlay">
+                            <button class="view-btn" aria-label="View photo">
+                                <i class="fas fa-search-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="portfolio-info">
+                        <span class="portfolio-badge">{{ photo['category'] }}</span>
+                        <h3 class="portfolio-title">{{ photo['title'] }}</h3>
+                        <p class="portfolio-description">{{ photo['description'] }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty-state">
+                    <i class="fas fa-camera"></i>
+                    <h3>Photography Coming Soon</h3>
+                    <p>Photo gallery is being curated!</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<!-- VIDEOS SECTION -->
+<section id="videos" class="section">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-tag">Videography</span>
+            <h2 class="section-title">Motion Content</h2>
+            <p class="section-description">Dynamic storytelling through video and animation</p>
+        </div>
+        <div class="portfolio-grid">
+            {% if videos %}
+                {% for video in videos %}
+                <div class="portfolio-card" data-video='{{ video | tojson }}' data-type="video">
+                    <div class="portfolio-image">
+                        <img src="{{ video['thumbnail'] }}" alt="{{ video['title'] }}">
+                        <div class="portfolio-overlay">
+                            <button class="play-btn" aria-label="Play video">
+                                <i class="fas fa-play"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="portfolio-info">
+                        <span class="portfolio-badge">{{ video['category'] }}</span>
+                        <h3 class="portfolio-title">{{ video['title'] }}</h3>
+                        <p class="portfolio-description">{{ video['description'] }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty-state">
+                    <i class="fas fa-video"></i>
+                    <h3>Videos Coming Soon</h3>
+                    <p>Video content is being produced!</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<!-- CONTACT SECTION -->
+<section id="contact" class="section">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-tag">Get in Touch</span>
+            <h2 class="section-title">Start a Conversation</h2>
+            <p class="section-description">Interested in collaboration? Let's discuss how we can create something amazing together</p>
+        </div>
+        <div class="contact-grid">
+            <div class="contact-form-wrapper">
+                <form class="contact-form" id="contactForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="full_name">Full Name</label>
+                            <input type="text" id="full_name" name="full_name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" name="phone">
+                    </div>
+                    <div class="form-group">
+                        <label for="contact_type">Contact Reason</label>
+                        <select id="contact_type" name="contact_type" required>
+                            <option value="">Select a reason</option>
+                            <option value="collaboration">Collaboration Opportunity</option>
+                            <option value="game_feedback">Feedback - Games</option>
+                            <option value="website_feedback">Feedback - Websites</option>
+                            <option value="photo_feedback">Feedback - Photography</option>
+                            <option value="video_feedback">Feedback - Videos</option>
+                            <option value="query">General Query</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="comment">Message</label>
+                        <textarea id="comment" name="comment" rows="5" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-paper-plane"></i> Send Message
+                    </button>
+                </form>
             </div>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-bolt"></i>
+            <div class="contact-info">
+                <div class="contact-card">
+                    <div class="contact-icon">
+                        <i class="fas fa-envelope"></i>
                     </div>
-                    <h3>Lightning Fast</h3>
-                    <p>Download videos in seconds with our optimized servers</p>
+                    <div class="contact-details">
+                        <h4>Email</h4>
+                        <a href="mailto:arshvermadev@gmail.com">arshvermadev@gmail.com</a>
+                    </div>
                 </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-hd-video"></i>
+                <div class="contact-card">
+                    <div class="contact-icon">
+                        <i class="fab fa-linkedin"></i>
                     </div>
-                    <h3>HD Quality</h3>
-                    <p>Get videos in the highest quality available</p>
+                    <div class="contact-details">
+                        <h4>LinkedIn</h4>
+                        <a href="https://linkedin.com/in/arshvermadev/" target="_blank" rel="noopener">Connect with me</a>
+                    </div>
                 </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-shield-alt"></i>
+                <div class="contact-card">
+                    <div class="contact-icon">
+                        <i class="fab fa-github"></i>
                     </div>
-                    <h3>100% Secure</h3>
-                    <p>Your privacy is our priority. No data stored</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-mobile-alt"></i>
+                    <div class="contact-details">
+                        <h4>GitHub</h4>
+                        <a href="https://github.com/ArshVermaGit" target="_blank" rel="noopener">View my work</a>
                     </div>
-                    <h3>Mobile Friendly</h3>
-                    <p>Works perfectly on all devices</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-infinity"></i>
-                    </div>
-                    <h3>Unlimited Downloads</h3>
-                    <p>No limits, no registration required</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-dollar-sign"></i>
-                    </div>
-                    <h3>100% Free</h3>
-                    <p>Completely free, forever</p>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <section class="how-it-works">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">How It Works</h2>
-                <p class="section-description">Download any video in 3 simple steps</p>
+<!-- UNIFIED MODAL -->
+<div class="portfolio-modal" id="portfolioModal">
+    <div class="modal-overlay"></div>
+    <div class="modal-container">
+        <button class="modal-close" id="closeModal" aria-label="Close modal">
+            <i class="fas fa-times"></i>
+        </button>
+        <div class="modal-content">
+            <div class="modal-preview" id="itemPreview">
+                <img src="" alt="Preview" id="previewImage">
+                <iframe id="websiteFrame" style="display:none;"></iframe>
+                <div id="photoViewer" style="display:none;"></div>
+                <div id="videoPlayer" style="display:none;"></div>
+                <button class="modal-play-btn" id="playItemBtn">
+                    <i class="fas fa-play"></i>
+                    <span>Play Game</span>
+                </button>
             </div>
-            <div class="steps-grid">
-                <div class="step-card">
-                    <div class="step-number">1</div>
-                    <div class="step-icon">
-                        <i class="fas fa-copy"></i>
+            <div class="modal-game" id="gameContainer" style="display: none;">
+                <canvas id="unity-canvas"></canvas>
+                <div class="game-loading" id="gameLoading">
+                    <div class="loading-spinner"></div>
+                    <p>Loading Game...</p>
+                    <div class="loading-bar">
+                        <div class="loading-progress" id="loadingProgress"></div>
                     </div>
-                    <h3>Copy URL</h3>
-                    <p>Copy the video link from your favorite platform</p>
                 </div>
-                <div class="step-arrow">
-                    <i class="fas fa-arrow-right"></i>
-                </div>
-                <div class="step-card">
-                    <div class="step-number">2</div>
-                    <div class="step-icon">
-                        <i class="fas fa-paste"></i>
-                    </div>
-                    <h3>Paste & Analyze</h3>
-                    <p>Paste the URL and let us analyze it</p>
-                </div>
-                <div class="step-arrow">
-                    <i class="fas fa-arrow-right"></i>
-                </div>
-                <div class="step-card">
-                    <div class="step-number">3</div>
-                    <div class="step-icon">
-                        <i class="fas fa-download"></i>
-                    </div>
-                    <h3>Download</h3>
-                    <p>Choose quality and download instantly</p>
+            </div>
+            <div class="modal-info">
+                <h2 id="modalTitle">Title</h2>
+                <p id="modalDescription">Description</p>
+                <div class="modal-actions" id="modalActions">
+                    <button class="btn btn-glass" id="fullscreenBtn">
+                        <i class="fas fa-expand"></i> Fullscreen
+                    </button>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</div>
 
-    <section class="cta-section">
-        <div class="container">
-            <div class="cta-content">
-                <h2>Ready to Start Downloading?</h2>
-                <p>Join thousands of users who trust ReelSpot for their video downloads</p>
-                <a href="platforms.html" class="btn btn-primary btn-large">
-                    <i class="fas fa-rocket"></i>
-                    Get Started Now
-                </a>
-            </div>
-        </div>
-    </section>
+{% endblock %}
 
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-brand">
-                    <div class="logo">
-                        <i class="fas fa-film"></i>
-                        <h3>ReelSpot</h3>
-                    </div>
-                    <p>Download social media content with ease</p>
-                </div>
-                <div class="footer-links">
-                    <div class="footer-column">
-                        <h4>Quick Links</h4>
-                        <a href="index.html">Home</a>
-                        <a href="platforms.html">Platforms</a>
-                        <a href="about.html">About</a>
-                        <a href="admin.html" class="admin-link">Admin</a>
-                    </div>
-                    <div class="footer-column">
-                        <h4>Legal</h4>
-                        <a href="privacy.html">Privacy Policy</a>
-                        <a href="contact.html">Contact</a>
-                    </div>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2025 ReelSpot - All Rights Reserved. Created by Arsh Verma.</p>
-            </div>
-        </div>
-    </footer>
-
-    <script src="js/main.js"></script>
-</body>
-</html>
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+{% endblock %}
