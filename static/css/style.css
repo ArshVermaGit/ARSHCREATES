@@ -1,5 +1,5 @@
 /* ========================================================================
-   COMPLETE style.css - Replace your entire style.css with this
+   COMPLETE style.css - Fixed Modal Layout for Desktop & Mobile
    ======================================================================== */
 
 :root {
@@ -872,7 +872,12 @@ select,
     gap: 12px; 
 }
 
-.formselect option,
+.form-row { 
+    display: grid; 
+    grid-template-columns: 1fr 1fr; 
+    gap: 24px; 
+}
+
 .form-group select option {
     background: #0a0a0c;
     color: var(--text-primary);
@@ -1307,6 +1312,10 @@ button:disabled {
     line-height: 1.7; 
 }
 
+/* ========================================================================
+   MODAL STYLES - FIXED FOR DESKTOP & MOBILE
+   ======================================================================== */
+
 .portfolio-modal { 
     display: none; 
     position: fixed; 
@@ -1331,7 +1340,9 @@ button:disabled {
     display: flex; 
     align-items: center; 
     justify-content: center; 
-    z-index: 1; 
+    z-index: 1;
+    overflow-y: auto;
+    padding: 20px 0;
 }
 
 .modal-content {
@@ -1341,10 +1352,13 @@ button:disabled {
     border-radius: 32px;
     max-width: 1300px;
     width: 100%;
-    max-height: 90vh;
-    overflow: hidden;
+    max-height: none;
+    min-height: min-content;
+    overflow: visible;
     animation: modalSlideUp .5s cubic-bezier(.2,.9,.38,1);
     box-shadow: 0 40px 120px rgba(0,0,0,0.7);
+    display: flex;
+    flex-direction: column;
 }
 
 @keyframes modalSlideUp {
@@ -1353,21 +1367,22 @@ button:disabled {
 }
 
 .modal-close {
-    position: absolute;
-    top: 40px;
-    right: 40px;
+    position: fixed;
+    top: 50px;
+    right: 50px;
     width: 60px;
     height: 60px;
-    background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+    background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
     backdrop-filter: blur(20px);
-    border: 1px solid rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.14);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    z-index: 10;
+    z-index: 2100;
     transition: all var(--fast);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
 }
 
 .modal-close:hover {
@@ -1389,6 +1404,9 @@ button:disabled {
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-shrink: 0;
+    border-radius: 32px 32px 0 0;
+    overflow: hidden;
 }
 
 .modal-preview img { 
@@ -1415,6 +1433,7 @@ button:disabled {
     cursor: pointer;
     transition: all var(--fast);
     box-shadow: 0 30px 90px rgba(0,198,255,0.2);
+    z-index: 10;
 }
 
 .modal-play-btn:hover { 
@@ -1428,14 +1447,17 @@ button:disabled {
 }
 
 .modal-info { 
-    padding: 48px; 
+    padding: 40px 48px 48px;
+    flex-shrink: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.2), transparent);
 }
 
 .modal-info h2 { 
     font-size: 36px; 
-    margin-bottom: 20px; 
+    margin-bottom: 16px; 
     font-weight: 800; 
     color: var(--text-primary); 
+    line-height: 1.2;
 }
 
 .modal-info p { 
@@ -1447,14 +1469,23 @@ button:disabled {
 
 .modal-actions { 
     display: flex; 
-    gap: 16px; 
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+}
+
+.modal-actions .btn {
+    flex-shrink: 0;
 }
 
 .modal-game { 
     position: relative; 
     width: 100%; 
-    height: 550px; 
-    background: var(--primary); 
+    height: 550px;
+    background: var(--primary);
+    flex-shrink: 0;
+    border-radius: 32px 32px 0 0;
+    overflow: hidden;
 }
 
 #unity-canvas { 
@@ -1472,6 +1503,7 @@ button:disabled {
     justify-content: center;
     background: rgba(0,0,0,0.92);
     gap: 28px;
+    z-index: 5;
 }
 
 .loading-spinner {
@@ -1485,6 +1517,12 @@ button:disabled {
 
 @keyframes spin { 
     to { transform: rotate(360deg); } 
+}
+
+.game-loading p {
+    color: var(--text-primary);
+    font-size: 18px;
+    font-weight: 600;
 }
 
 .loading-bar { 
@@ -1503,6 +1541,39 @@ button:disabled {
     border-radius: 50px;
 }
 
+/* Photo and Video Preview Containers */
+#photoViewer,
+#videoPlayer {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--primary);
+}
+
+#photoViewer img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+#videoPlayer video {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+#websiteFrame {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+/* ========================================================================
+   RESPONSIVE DESIGN
+   ======================================================================== */
+
 @media (max-width: 1200px) {
     .hero-grid { 
         grid-template-columns: 1fr; 
@@ -1519,6 +1590,11 @@ button:disabled {
     .footer-content { 
         grid-template-columns: 1fr; 
         gap: 50px; 
+    }
+    
+    .modal-preview,
+    .modal-game {
+        height: 450px;
     }
 }
 
@@ -1598,22 +1674,48 @@ button:disabled {
     
     .modal-container { 
         inset: 15px; 
+        padding: 10px 0;
+    }
+    
+    .modal-content {
+        border-radius: 20px;
+        margin: auto 0;
     }
     
     .modal-close { 
-        top: 20px; 
-        right: 20px; 
+        top: 25px; 
+        right: 25px; 
         width: 50px; 
-        height: 50px; 
+        height: 50px;
+        position: fixed;
     }
     
     .modal-preview, 
     .modal-game { 
-        height: 350px; 
+        height: 350px;
+        border-radius: 20px 20px 0 0;
     }
     
     .modal-info { 
-        padding: 30px; 
+        padding: 30px 24px 32px;
+    }
+    
+    .modal-info h2 {
+        font-size: 28px;
+    }
+    
+    .modal-info p {
+        font-size: 15px;
+    }
+    
+    .modal-actions {
+        gap: 12px;
+    }
+    
+    .modal-actions .btn {
+        width: 100%;
+        padding: 14px 24px;
+        font-size: 15px;
     }
     
     .skills-grid { 
@@ -1629,6 +1731,11 @@ button:disabled {
         left: 20px; 
         right: 20px; 
         top: 80px; 
+    }
+    
+    .notification {
+        min-width: auto;
+        width: 100%;
     }
     
     .contact-form-wrapper { 
@@ -1655,6 +1762,7 @@ button:disabled {
     .control-group { 
         flex-direction: column; 
         width: 100%; 
+        min-width: auto;
     }
     
     .feedback-table { 
@@ -1667,6 +1775,7 @@ button:disabled {
     }
 }
 
+/* Utility Classes */
 .text-muted { 
     color: var(--text-secondary); 
 }
@@ -1679,8 +1788,4 @@ button:disabled {
 
 .hidden { 
     display: none !important; 
-}-row { 
-    display: grid; 
-    grid-template-columns: 1fr 1fr; 
-    gap: 24px; 
 }
