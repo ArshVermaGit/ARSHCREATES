@@ -1,53 +1,35 @@
 from flask import Flask, render_template, request, jsonify
-import sqlite3
-from datetime import datetime
-import mimetypes
+import json
 import os
-import sys
+from datetime import datetime
 
-BASE_DIR = os.path.abspath(os.path.dirname(__file__))
-sys.path.append(BASE_DIR)
+app = Flask(__name__)
 
-app = Flask(
-    __name__,
-    template_folder=os.path.join(BASE_DIR, 'templates'),
-    static_folder=os.path.join(BASE_DIR, 'static')
-)
+# Paths for data storage
+DATA_DIR = 'data'
+FEEDBACK_FILE = os.path.join(DATA_DIR, 'feedback.json')
 
-app.secret_key = 'your-secret-key-change-this-in-production'
+# Ensure data directory exists
+os.makedirs(DATA_DIR, exist_ok=True)
 
-mimetypes.add_type('application/wasm', '.wasm')
-mimetypes.add_type('application/octet-stream', '.data')
-mimetypes.add_type('application/javascript', '.js')
-mimetypes.add_type('application/gzip', '.gz')
+# Initialize feedback file if it doesn't exist
+if not os.path.exists(FEEDBACK_FILE):
+    with open(FEEDBACK_FILE, 'w') as f:
+        json.dump([], f)
 
-app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
-
-# ============================================================================
-# GAMES DATA
-# TO ADD A NEW GAME:
-# 1. Add game files to: static/games/your_game_name/
-# 2. Add cover image: static/games/your_game_name/cover.jpg
-# 3. Add entry below with proper details
-# ============================================================================
+# Sample data (replace with your actual data or database)
 GAMES = [
     {
         'id': 1,
         'name': 'Sky Surfers',
-        'description': 'A thrilling aerial adventure game where players navigate through stunning sky landscapes, dodging obstacles and collecting power-ups. Built with Unity and C# for immersive 3D gameplay with dynamic weather systems and challenging levels.',
-        'overview': 'Navigate through stunning aerial landscapes in this fast-paced action game',
-        'image': '/static/games/sky_surfers/cover.jpg',
+        'overview': 'It is an intense dodging game where you fly a plane through a danger-filled valley.',
+        'description': 'In this challenging flight game, you must skillfully pilot your plane through a narrow, hazard-filled canyon. Master the controls and dodge everything that stands in your path to set a new high-score.',
+        'image': '/static/images/games/game1.jpg',
         'game_folder': 'sky_surfers',
         'build_name': 'sky_surfers'
-    },
+    }
 ]
 
-# ============================================================================
-# WEBSITES DATA
-# TO ADD A NEW WEBSITE:
-# 1. Add screenshot to: static/images/websites/your_website_name.jpg
-# 2. Add entry below with proper details
-# ============================================================================
 WEBSITES = [
     {
         'id': 1,
@@ -56,83 +38,64 @@ WEBSITES = [
         'image': '/static/images/websites/ReelSpot.jpg',
         'url': 'https://arshvermagit.github.io/REELSPOT/',
         'technologies': ['JavaScript', 'HTML', 'CSS']
-    },
-
+    }
 ]
 
-# ============================================================================
-# PHOTOGRAPHY DATA
-# TO ADD A NEW PHOTO:
-# 1. Add photo to: static/images/photography/your_photo_name.jpg
-# 2. Add entry below with proper details
-# ============================================================================
 PHOTOS = [
-    # {
-    #     'id': 1,
-    #     'title': 'Sunset Landscape',
-    #     'description': 'Beautiful sunset captured in the mountains',
-    #     'image': '/static/images/photography/sunset.jpg',
-    #     'category': 'Landscape'
-    # },
+    {
+        'id': 1,
+        'title': 'Golden Hour Landscape',
+        'description': 'Beautiful sunset captured in the mountains',
+        'category': 'Landscape',
+        'image': '/static/images/photos/photo1.jpg'
+    },
+    {
+        'id': 2,
+        'title': 'Urban Architecture',
+        'description': 'Modern cityscape with stunning architectural details',
+        'category': 'Architecture',
+        'image': '/static/images/photos/photo2.jpg'
+    },
+    {
+        'id': 3,
+        'title': 'Portrait Session',
+        'description': 'Professional portrait photography with natural lighting',
+        'category': 'Portrait',
+        'image': '/static/images/photos/photo3.jpg'
+    }
 ]
 
-# ============================================================================
-# VIDEOS DATA
-# TO ADD A NEW VIDEO:
-# 1. Add video to: static/videos/your_video_name.mp4
-# 2. Add thumbnail to: static/images/video_thumbnails/your_video_name.jpg
-# 3. Add entry below with proper details
-# ============================================================================
 VIDEOS = [
-    # {
-    #     'id': 1,
-    #     'title': 'Game Trailer',
-    #     'description': 'Official trailer for Sky Surfers game',
-    #     'thumbnail': '/static/images/video_thumbnails/trailer.jpg',
-    #     'video_url': '/static/videos/game_trailer.mp4',
-    #     'category': 'Game Development'
-    # },
+    {
+        'id': 1,
+        'title': 'Brand Showcase',
+        'description': 'Professional brand video with cinematic storytelling',
+        'category': 'Commercial',
+        'thumbnail': '/static/images/videos/video1-thumb.jpg',
+        'video_url': '/static/videos/video1.mp4'
+    },
+    {
+        'id': 2,
+        'title': 'Event Highlights',
+        'description': 'Dynamic event coverage with creative editing',
+        'category': 'Event',
+        'thumbnail': '/static/images/videos/video2-thumb.jpg',
+        'video_url': '/static/videos/video2.mp4'
+    }
 ]
-
-def get_db_connection():
-    """Create database connection"""
-    conn = sqlite3.connect('portfolio.db')
-    conn.row_factory = sqlite3.Row
-    return conn
-
-def init_feedback_db():
-    """Initialize feedback database table"""
-    conn = sqlite3.connect('portfolio.db')
-    cursor = conn.cursor()
-    cursor.execute('''
-        CREATE TABLE IF NOT EXISTS feedback (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT NOT NULL,
-            email TEXT NOT NULL,
-            phone TEXT,
-            message TEXT NOT NULL,
-            timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
-        )
-    ''')
-    conn.commit()
-    conn.close()
-
-init_feedback_db()
 
 @app.route('/')
 def index():
-    """Homepage with all portfolio sections"""
-    return render_template(
-        'index.html', 
-        games=GAMES,
-        websites=WEBSITES,
-        photos=PHOTOS,
-        videos=VIDEOS
-    )
+    """Main portfolio page"""
+    return render_template('index.html', 
+                         games=GAMES,
+                         websites=WEBSITES,
+                         photos=PHOTOS,
+                         videos=VIDEOS)
 
 @app.route('/contact', methods=['POST'])
 def contact():
-    """Handle contact form submissions"""
+    """Handle contact form submission"""
     try:
         # Get form data
         full_name = request.form.get('full_name', '').strip()
@@ -142,66 +105,91 @@ def contact():
         comment = request.form.get('comment', '').strip()
         
         # Validate required fields
-        if not full_name or not email or not contact_type or not comment:
+        if not all([full_name, email, contact_type, comment]):
             return jsonify({
                 'success': False,
                 'message': 'Please fill in all required fields'
             }), 400
         
-        # Basic email validation
-        if '@' not in email or '.' not in email:
-            return jsonify({
-                'success': False,
-                'message': 'Please enter a valid email address'
-            }), 400
+        # Create feedback entry
+        feedback_entry = {
+            'id': datetime.now().strftime('%Y%m%d%H%M%S%f'),
+            'full_name': full_name,
+            'email': email,
+            'phone': phone if phone else 'N/A',
+            'contact_type': contact_type,
+            'comment': comment,
+            'timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        }
         
-        # Insert into database
-        conn = get_db_connection()
-        cursor = conn.cursor()
+        # Read existing feedback
+        with open(FEEDBACK_FILE, 'r') as f:
+            feedbacks = json.load(f)
         
-        cursor.execute('''
-            INSERT INTO feedback (name, email, phone, contact_type, message, timestamp)
-            VALUES (?, ?, ?, ?, ?, ?)
-        ''', (full_name, email, phone if phone else None, contact_type, comment, datetime.now()))
+        # Add new feedback
+        feedbacks.append(feedback_entry)
         
-        conn.commit()
-        feedback_id = cursor.lastrowid
-        conn.close()
+        # Save updated feedback
+        with open(FEEDBACK_FILE, 'w') as f:
+            json.dump(feedbacks, f, indent=4)
         
-        print(f"✅ New feedback received (ID: {feedback_id}) from {full_name} ({email})")
-        
-        # Return success response
         return jsonify({
             'success': True,
-            'message': 'Thank you for reaching out! We will get back to you soon.',
-            'feedback_id': feedback_id
-        }), 200
+            'message': 'Thank you for your message! We will get back to you soon.'
+        })
         
     except Exception as e:
-        print(f"❌ Error: {e}")
+        print(f"Error saving feedback: {str(e)}")
         return jsonify({
             'success': False,
-            'message': 'An error occurred. Please try again.'
+            'message': 'An error occurred. Please try again later.'
         }), 500
 
-@app.route('/feedback-data')
-def feedback_data():
+@app.route('/admin/feedback')
+def admin_feedback():
     """Admin page to view all feedback"""
-    conn = get_db_connection()
-    feedback = [dict(row) for row in conn.execute(
-        'SELECT * FROM feedback ORDER BY timestamp DESC'
-    ).fetchall()]
-    conn.close()
-    return render_template('feedback_data.html', feedback=feedback)
+    try:
+        # Read feedback from file
+        with open(FEEDBACK_FILE, 'r') as f:
+            feedbacks = json.load(f)
+        
+        # Sort by timestamp (newest first)
+        feedbacks.sort(key=lambda x: x['timestamp'], reverse=True)
+        
+        return render_template('admin_feedback.html', feedbacks=feedbacks)
+        
+    except Exception as e:
+        print(f"Error loading feedback: {str(e)}")
+        return render_template('admin_feedback.html', feedbacks=[])
 
+@app.route('/api/feedback')
+def api_feedback():
+    """API endpoint to get feedback data as JSON"""
+    try:
+        with open(FEEDBACK_FILE, 'r') as f:
+            feedbacks = json.load(f)
+        
+        feedbacks.sort(key=lambda x: x['timestamp'], reverse=True)
+        
+        return jsonify({
+            'success': True,
+            'data': feedbacks,
+            'count': len(feedbacks)
+        })
+        
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'message': str(e)
+        }), 500
+
+# Error handlers
 @app.errorhandler(404)
-def page_not_found(e):
-    """Handle 404 errors"""
+def not_found(e):
     return render_template('404.html'), 404
 
 @app.errorhandler(500)
-def internal_server_error(e):
-    """Handle 500 errors"""
+def server_error(e):
     return render_template('500.html'), 500
 
 if __name__ == '__main__':

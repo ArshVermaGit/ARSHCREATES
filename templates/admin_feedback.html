@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+
+{% block title %}Admin - Feedback Management{% endblock %}
+
+{% block content %}
+<section class="section" style="padding-top: 140px;">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-tag">Admin Panel</span>
+            <h2 class="section-title">Feedback Management</h2>
+            <p class="section-description">View and manage all contact form submissions</p>
+        </div>
+
+        <div class="liquid-base feedback-table-wrapper">
+            <div class="table-controls">
+                <div class="control-group">
+                    <input type="text" 
+                           id="searchInput" 
+                           class="search-input" 
+                           placeholder="Search by name, email, or message...">
+                    
+                    <select id="filterType" class="filter-select">
+                        <option value="">All Types</option>
+                        <option value="collaboration">Collaboration</option>
+                        <option value="game_feedback">Game Feedback</option>
+                        <option value="website_feedback">Website Feedback</option>
+                        <option value="photo_feedback">Photo Feedback</option>
+                        <option value="video_feedback">Video Feedback</option>
+                        <option value="query">General Query</option>
+                        <option value="other">Other</option>
+                    </select>
+                    
+                    <select id="sortOrder" class="sort-select">
+                        <option value="newest">Newest First</option>
+                        <option value="oldest">Oldest First</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table class="feedback-table">
+                    <thead>
+                        <tr>
+                            <th>Date & Time</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Type</th>
+                            <th>Message</th>
+                        </tr>
+                    </thead>
+                    <tbody id="feedbackTableBody">
+                        {% if feedbacks %}
+                            {% for feedback in feedbacks %}
+                            <tr data-type="{{ feedback.contact_type }}" 
+                                data-timestamp="{{ feedback.timestamp }}"
+                                data-search="{{ (feedback.full_name + ' ' + feedback.email + ' ' + feedback.comment)|lower }}">
+                                <td>{{ feedback.timestamp }}</td>
+                                <td><strong>{{ feedback.full_name }}</strong></td>
+                                <td><a href="mailto:{{ feedback.email }}">{{ feedback.email }}</a></td>
+                                <td>{{ feedback.phone }}</td>
+                                <td>
+                                    <span class="type-badge type-{{ feedback.contact_type }}">
+                                        {{ feedback.contact_type.replace('_', ' ').title() }}
+                                    </span>
+                                </td>
+                                <td class="message-cell">{{ feedback.comment }}</td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr id="noDataRow">
+                                <td colspan="6" style="text-align: center; padding: 60px 20px; color: var(--text-secondary);">
+                                    <i class="fas fa-inbox" style="font-size: 48px; margin-bottom: 16px; display: block; opacity: 0.5;"></i>
+                                    <strong style="display: block; font-size: 18px; margin-bottom: 8px;">No feedback received yet</strong>
+                                    <span style="font-size: 14px;">Contact form submissions will appear here</span>
+                                </td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="table-footer">
+                <p class="text-muted">
+                    Total Entries: <strong id="totalCount">{{ feedbacks|length }}</strong> | 
+                    Showing: <strong id="visibleCount">{{ feedbacks|length }}</strong>
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('searchInput');
+    const filterType = document.getElementById('filterType');
+    const sortOrder = document.getElementById('sortOrder');
+    const tableBody = document.getElementById('feedbackTableBody');
+    const totalCount = document.getElementById('totalCount');
+    const visibleCount = document.getElementById('visibleCount');
+    
+    let allRows = Array.from(tableBody.querySelectorAll('tr[data-type]'));
+    const totalEntries = allRows.length;
+    
+    function filterAndSort() {
+        const searchTerm = searchInput.value.toLowerCase();
+        const selectedType = filterType.value;
+        const selectedSort = sortOrder.value;
+        
+        // Filter rows
+        let filteredRows = allRows.filter(row => {
+            const matchesSearch = row.dataset.search.includes(searchTerm);
+            const matchesType = !selectedType || row.dataset.type === selectedType;
+            return matchesSearch && matchesType;
+        });
+        
+        // Sort rows
+        filteredRows.sort((a, b) => {
+            const timeA = new Date(a.dataset.timestamp);
+            const timeB = new Date(b.dataset.timestamp);
+            return selectedSort === 'newest' ? timeB - timeA : timeA - timeB;
+        });
+        
+        // Clear table
+        tableBody.innerHTML = '';
+        
+        // Add filtered and sorted rows
+        if (filteredRows.length > 0) {
+            filteredRows.forEach(row => tableBody.appendChild(row));
+        } else {
+            tableBody.innerHTML = `
+                <tr>
+                    <td colspan="6" style="text-align: center; padding: 40px 20px; color: var(--text-secondary);">
+                        <i class="fas fa-search" style="font-size: 36px; margin-bottom: 12px; display: block; opacity: 0.5;"></i>
+                        <strong style="display: block; margin-bottom: 6px;">No results found</strong>
+                        <span style="font-size: 14px;">Try adjusting your search or filters</span>
+                    </td>
+                </tr>
+            `;
+        }
+        
+        // Update counts
+        visibleCount.textContent = filteredRows.length;
+    }
+    
+    // Event listeners
+    searchInput.addEventListener('input', filterAndSort);
+    filterType.addEventListener('change', filterAndSort);
+    sortOrder.addEventListener('change', filterAndSort);
+    
+    // Initial count update
+    if (totalCount) totalCount.textContent = totalEntries;
+    if (visibleCount) visibleCount.textContent = totalEntries;
+});
+</script>
+{% endblock %}
