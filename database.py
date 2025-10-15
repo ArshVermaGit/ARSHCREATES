@@ -30,13 +30,14 @@ def init_db():
         )
     ''')
     
-    # Create feedback table
+    # Create feedback table with contact_type column
     cursor.execute('''
         CREATE TABLE feedback (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT NOT NULL,
             email TEXT NOT NULL,
             phone TEXT,
+            contact_type TEXT NOT NULL,
             message TEXT NOT NULL,
             timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
         )
