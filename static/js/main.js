@@ -468,10 +468,11 @@ document.addEventListener('keydown', function(e) {
 });
 
 // =============================================================================
-// CONTACT FORM - WORKING VERSION
+// CONTACT FORM - WORKING VERSION (UPDATED WITH NEW CODE)
 // =============================================================================
 function initContactForm() {
     const contactForm = document.getElementById('contactForm');
+    const submitBtn = document.getElementById('submitBtn');
     
     if (!contactForm) {
         console.warn('Contact form not found');
@@ -480,6 +481,7 @@ function initContactForm() {
     
     let isSubmitting = false;
 
+    // Enhanced form submission handler
     contactForm.addEventListener('submit', async function(e) {
         e.preventDefault();
         
@@ -488,36 +490,40 @@ function initContactForm() {
             return;
         }
         
-        // Validate form fields
-        const fullName = document.getElementById('full_name')?.value.trim();
-        const email = document.getElementById('email')?.value.trim();
-        const contactType = document.getElementById('contact_type')?.value;
-        const comment = document.getElementById('comment')?.value.trim();
-        
-        if (!fullName || !email || !contactType || !comment) {
-            showNotification('Please fill in all required fields', 'error');
-            return;
-        }
-        
-        // Email validation
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-            showNotification('Please enter a valid email address', 'error');
-            return;
-        }
-        
+        // Show loading state
+        const originalText = submitBtn.innerHTML;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+        submitBtn.disabled = true;
         isSubmitting = true;
         
-        const submitBtn = this.querySelector('button[type="submit"]');
-        const originalBtnText = submitBtn.innerHTML;
-        submitBtn.disabled = true;
-        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
-
-        // Create FormData
-        const formData = new FormData(this);
-        
         try {
-            const response = await fetch('/contact', {
+            const formData = new FormData(contactForm);
+            
+            // Basic validation
+            const requiredFields = ['full_name', 'email', 'contact_type', 'comment'];
+            let isValid = true;
+            
+            requiredFields.forEach(field => {
+                const input = contactForm.querySelector(`[name="${field}"]`);
+                if (!input.value.trim()) {
+                    input.style.borderColor = 'rgba(239, 68, 68, 0.6)';
+                    isValid = false;
+                }
+            });
+            
+            if (!isValid) {
+                throw new Error('Please fill in all required fields');
+            }
+            
+            // Email validation
+            const email = contactForm.querySelector('[name="email"]').value.trim();
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                contactForm.querySelector('[name="email"]').style.borderColor = 'rgba(239, 68, 68, 0.6)';
+                throw new Error('Please enter a valid email address');
+            }
+            
+            const response = await fetch('/submit_feedback', {
                 method: 'POST',
                 body: formData,
                 headers: {
@@ -532,23 +538,46 @@ function initContactForm() {
             const result = await response.json();
             
             if (result.success) {
-                showNotification(result.message || 'Message sent successfully! We will get back to you soon.', 'success');
-                this.reset();
-                this.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                showNotification('Message sent successfully! I\'ll get back to you soon.', 'success');
+                contactForm.reset();
+                
+                // Reset border colors
+                contactForm.querySelectorAll('.form-input').forEach(input => {
+                    input.style.borderColor = '';
+                });
             } else {
-                showNotification(result.message || 'Failed to send message. Please try again.', 'error');
+                throw new Error(result.error || 'Failed to send message. Please try again.');
             }
         } catch (error) {
-            console.error('Form submission error:', error);
-            showNotification('Error sending message. Please try again or contact us directly via email.', 'error');
+            console.error('Error:', error);
+            showNotification(error.message || 'Network error. Please check your connection and try again.', 'error');
         } finally {
+            // Restore button state
+            submitBtn.innerHTML = originalText;
             submitBtn.disabled = false;
-            submitBtn.innerHTML = originalBtnText;
             isSubmitting = false;
         }
     });
     
     // Real-time validation feedback
+    const formInputs = contactForm.querySelectorAll('.form-input');
+    formInputs.forEach(input => {
+        input.addEventListener('input', function() {
+            if (this.value.trim()) {
+                this.style.borderColor = 'rgba(16, 185, 129, 0.4)';
+            } else {
+                this.style.borderColor = '';
+            }
+        });
+        
+        input.addEventListener('blur', function() {
+            if (this.hasAttribute('required') && !this.value.trim()) {
+                this.style.borderColor = 'rgba(239, 68, 68, 0.6)';
+            }
+        });
+    });
+    
+    // Email-specific validation
     const emailInput = document.getElementById('email');
     if (emailInput) {
         emailInput.addEventListener('blur', function() {
