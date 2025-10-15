@@ -1,12 +1,12 @@
 // =============================================================================
-// MAIN.JS - Complete Portfolio JavaScript
-// Replace your entire main.js file with this code
+// MAIN.JS - Updated Portfolio JavaScript with New Preview Logic
 // =============================================================================
 
 let currentGame = null;
 let unityInstance = null;
 let currentMediaType = null;
 let currentVideoElement = null;
+let currentItemData = null;
 
 // Initialize everything when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
@@ -25,25 +25,26 @@ function initPortfolioCards() {
         
         if (type === 'game') {
             const gameData = JSON.parse(card.dataset.game);
-            card.addEventListener('click', () => openGameModal(gameData));
+            card.addEventListener('click', () => openGamePreview(gameData));
         } else if (type === 'website') {
             const websiteData = JSON.parse(card.dataset.website);
-            card.addEventListener('click', () => openWebsiteModal(websiteData));
+            card.addEventListener('click', () => openWebsitePreview(websiteData));
         } else if (type === 'photo') {
             const photoData = JSON.parse(card.dataset.photo);
-            card.addEventListener('click', () => openPhotoModal(photoData));
+            card.addEventListener('click', () => openPhotoPreview(photoData));
         } else if (type === 'video') {
             const videoData = JSON.parse(card.dataset.video);
-            card.addEventListener('click', () => openVideoModal(videoData));
+            card.addEventListener('click', () => openVideoPreview(videoData));
         }
     });
 }
 
 // =============================================================================
-// GAME MODAL
+// GAME PREVIEW & MODAL
 // =============================================================================
-function openGameModal(gameData) {
+function openGamePreview(gameData) {
     currentGame = gameData;
+    currentItemData = gameData;
     currentMediaType = 'game';
     const modal = document.getElementById('portfolioModal');
     const previewImage = document.getElementById('previewImage');
@@ -67,7 +68,7 @@ function openGameModal(gameData) {
     playBtn.innerHTML = '<i class="fas fa-play"></i><span>Play Game</span>';
     
     modalActions.innerHTML = `
-        <button class="btn btn-glass" id="fullscreenBtn">
+        <button class="btn btn-glass" id="fullscreenBtn" style="display:none;">
             <i class="fas fa-expand"></i> Fullscreen
         </button>
     `;
@@ -76,10 +77,6 @@ function openGameModal(gameData) {
     document.body.style.overflow = 'hidden';
     
     playBtn.onclick = () => loadUnityGame();
-    
-    setTimeout(() => {
-        document.getElementById('fullscreenBtn').onclick = toggleFullscreen;
-    }, 100);
 }
 
 function loadUnityGame() {
@@ -89,10 +86,13 @@ function loadUnityGame() {
     const gameContainer = document.getElementById('gameContainer');
     const gameLoading = document.getElementById('gameLoading');
     const loadingProgress = document.getElementById('loadingProgress');
+    const fullscreenBtn = document.getElementById('fullscreenBtn');
     
     gamePreview.style.display = 'none';
     gameContainer.style.display = 'block';
     gameLoading.style.display = 'flex';
+    
+    if (fullscreenBtn) fullscreenBtn.style.display = 'inline-flex';
     
     const buildUrl = `/static/games/${currentGame.game_folder}/Build`;
     const loaderUrl = `${buildUrl}/${currentGame.build_name}.loader.js`;
@@ -127,12 +127,39 @@ function loadUnityGame() {
     };
     
     document.body.appendChild(script);
+    
+    setTimeout(() => {
+        document.getElementById('fullscreenBtn').onclick = toggleGameFullscreen;
+    }, 100);
+}
+
+function toggleGameFullscreen() {
+    const gameContainer = document.getElementById('gameContainer');
+    
+    if (!document.fullscreenElement) {
+        if (gameContainer.requestFullscreen) {
+            gameContainer.requestFullscreen();
+        } else if (gameContainer.webkitRequestFullscreen) {
+            gameContainer.webkitRequestFullscreen();
+        } else if (gameContainer.msRequestFullscreen) {
+            gameContainer.msRequestFullscreen();
+        }
+    } else {
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) {
+            document.webkitExitFullscreen();
+        } else if (document.msExitFullscreen) {
+            document.msExitFullscreen();
+        }
+    }
 }
 
 // =============================================================================
-// WEBSITE MODAL
+// WEBSITE PREVIEW
 // =============================================================================
-function openWebsiteModal(websiteData) {
+function openWebsitePreview(websiteData) {
+    currentItemData = websiteData;
     currentMediaType = 'website';
     const modal = document.getElementById('portfolioModal');
     const modalTitle = document.getElementById('modalTitle');
@@ -141,42 +168,45 @@ function openWebsiteModal(websiteData) {
     const gameContainer = document.getElementById('gameContainer');
     const modalActions = document.getElementById('modalActions');
     const previewImage = document.getElementById('previewImage');
+    const playBtn = document.getElementById('playItemBtn');
     
     hideAllPreviewElements();
     
     previewImage.src = websiteData.image;
     previewImage.style.display = 'block';
+    previewImage.style.cursor = 'pointer';
     
     modalTitle.textContent = websiteData.name;
     modalDescription.textContent = websiteData.description;
     
     gamePreview.style.display = 'flex';
     gameContainer.style.display = 'none';
+    playBtn.style.display = 'none';
     
     modalActions.innerHTML = `
-        <button class="btn btn-glass" id="visitWebsiteBtn">
+        <button class="btn btn-primary" id="visitWebsiteBtn">
             <i class="fas fa-external-link-alt"></i> Visit Website
-        </button>
-        <button class="btn btn-glass" id="fullscreenBtn">
-            <i class="fas fa-expand"></i> Fullscreen
         </button>
     `;
     
     modal.classList.add('active');
     document.body.style.overflow = 'hidden';
     
+    // Click on preview image to open website
+    previewImage.onclick = () => window.open(websiteData.url, '_blank');
+    
     setTimeout(() => {
         document.getElementById('visitWebsiteBtn').onclick = () => {
             window.open(websiteData.url, '_blank');
         };
-        document.getElementById('fullscreenBtn').onclick = toggleFullscreen;
     }, 100);
 }
 
 // =============================================================================
-// PHOTO MODAL
+// PHOTO PREVIEW
 // =============================================================================
-function openPhotoModal(photoData) {
+function openPhotoPreview(photoData) {
+    currentItemData = photoData;
     currentMediaType = 'photo';
     const modal = document.getElementById('portfolioModal');
     const modalTitle = document.getElementById('modalTitle');
@@ -189,7 +219,7 @@ function openPhotoModal(photoData) {
     
     hideAllPreviewElements();
     
-    photoViewer.innerHTML = `<img src="${photoData.image}" alt="${photoData.title}" style="width: 100%; height: 100%; object-fit: contain;">`;
+    photoViewer.innerHTML = `<img src="${photoData.image}" alt="${photoData.title}" style="width: 100%; height: 100%; object-fit: contain; cursor: pointer;" id="photoImage">`;
     photoViewer.style.display = 'flex';
     photoViewer.style.alignItems = 'center';
     photoViewer.style.justifyContent = 'center';
@@ -207,7 +237,7 @@ function openPhotoModal(photoData) {
         <button class="btn btn-glass" id="downloadPhotoBtn">
             <i class="fas fa-download"></i> Download
         </button>
-        <button class="btn btn-glass" id="fullscreenBtn">
+        <button class="btn btn-glass" id="fullscreenPhotoBtn">
             <i class="fas fa-expand"></i> Fullscreen
         </button>
     `;
@@ -216,15 +246,32 @@ function openPhotoModal(photoData) {
     document.body.style.overflow = 'hidden';
     
     setTimeout(() => {
-        document.getElementById('downloadPhotoBtn').onclick = () => downloadMedia(photoData.image, photoData.title);
-        document.getElementById('fullscreenBtn').onclick = toggleFullscreen;
+        document.getElementById('downloadPhotoBtn').onclick = () => downloadMedia(photoData.image, photoData.title + '.jpg');
+        document.getElementById('fullscreenPhotoBtn').onclick = () => {
+            const photoImg = document.getElementById('photoImage');
+            if (photoImg.requestFullscreen) {
+                photoImg.requestFullscreen();
+            } else if (photoImg.webkitRequestFullscreen) {
+                photoImg.webkitRequestFullscreen();
+            }
+        };
+        
+        // Click photo to view fullscreen
+        document.getElementById('photoImage').onclick = function() {
+            if (this.requestFullscreen) {
+                this.requestFullscreen();
+            } else if (this.webkitRequestFullscreen) {
+                this.webkitRequestFullscreen();
+            }
+        };
     }, 100);
 }
 
 // =============================================================================
-// VIDEO MODAL
+// VIDEO PREVIEW
 // =============================================================================
-function openVideoModal(videoData) {
+function openVideoPreview(videoData) {
+    currentItemData = videoData;
     currentMediaType = 'video';
     const modal = document.getElementById('portfolioModal');
     const modalTitle = document.getElementById('modalTitle');
@@ -266,7 +313,7 @@ function openVideoModal(videoData) {
         <button class="btn btn-glass" id="downloadVideoBtn">
             <i class="fas fa-download"></i> Download
         </button>
-        <button class="btn btn-glass" id="fullscreenBtn">
+        <button class="btn btn-glass" id="fullscreenVideoBtn">
             <i class="fas fa-expand"></i> Fullscreen
         </button>
     `;
@@ -280,8 +327,14 @@ function openVideoModal(videoData) {
         
         playPauseBtn.onclick = () => togglePlayPause(playPauseBtn);
         muteBtn.onclick = () => toggleMute(muteBtn);
-        document.getElementById('downloadVideoBtn').onclick = () => downloadMedia(videoData.video_url, videoData.title);
-        document.getElementById('fullscreenBtn').onclick = toggleFullscreen;
+        document.getElementById('downloadVideoBtn').onclick = () => downloadMedia(videoData.video_url, videoData.title + '.mp4');
+        document.getElementById('fullscreenVideoBtn').onclick = () => {
+            if (currentVideoElement.requestFullscreen) {
+                currentVideoElement.requestFullscreen();
+            } else if (currentVideoElement.webkitRequestFullscreen) {
+                currentVideoElement.webkitRequestFullscreen();
+            }
+        };
         
         currentVideoElement.play();
         
@@ -322,29 +375,6 @@ function toggleMute(btn) {
     }
 }
 
-function toggleFullscreen() {
-    const modal = document.getElementById('portfolioModal');
-    const modalContent = modal.querySelector('.modal-content');
-    
-    if (!document.fullscreenElement) {
-        if (modalContent.requestFullscreen) {
-            modalContent.requestFullscreen();
-        } else if (modalContent.webkitRequestFullscreen) {
-            modalContent.webkitRequestFullscreen();
-        } else if (modalContent.msRequestFullscreen) {
-            modalContent.msRequestFullscreen();
-        }
-    } else {
-        if (document.exitFullscreen) {
-            document.exitFullscreen();
-        } else if (document.webkitExitFullscreen) {
-            document.webkitExitFullscreen();
-        } else if (document.msExitFullscreen) {
-            document.msExitFullscreen();
-        }
-    }
-}
-
 function downloadMedia(url, filename) {
     const a = document.createElement('a');
     a.href = url;
@@ -361,10 +391,20 @@ function hideAllPreviewElements() {
     const photoViewer = document.getElementById('photoViewer');
     const videoPlayer = document.getElementById('videoPlayer');
     
-    if (previewImage) previewImage.style.display = 'none';
+    if (previewImage) {
+        previewImage.style.display = 'none';
+        previewImage.onclick = null;
+        previewImage.style.cursor = 'default';
+    }
     if (websiteFrame) websiteFrame.style.display = 'none';
-    if (photoViewer) photoViewer.style.display = 'none';
-    if (videoPlayer) videoPlayer.style.display = 'none';
+    if (photoViewer) {
+        photoViewer.style.display = 'none';
+        photoViewer.innerHTML = '';
+    }
+    if (videoPlayer) {
+        videoPlayer.style.display = 'none';
+        videoPlayer.innerHTML = '';
+    }
 }
 
 // =============================================================================
@@ -386,6 +426,8 @@ function closeModal() {
     }
     
     const gamePreview = document.getElementById('itemPreview');
+    const gameContainer = document.getElementById('gameContainer');
+    
     gamePreview.innerHTML = `
         <img src="" alt="Preview" id="previewImage">
         <iframe id="websiteFrame" style="display:none;"></iframe>
@@ -397,6 +439,8 @@ function closeModal() {
         </button>
     `;
     
+    gameContainer.style.display = 'none';
+    
     if (document.fullscreenElement) {
         if (document.exitFullscreen) {
             document.exitFullscreen();
@@ -407,6 +451,7 @@ function closeModal() {
     
     currentGame = null;
     currentMediaType = null;
+    currentItemData = null;
 }
 
 // Modal close event listeners
@@ -423,7 +468,7 @@ document.addEventListener('keydown', function(e) {
 });
 
 // =============================================================================
-// CONTACT FORM - FIXED VERSION
+// CONTACT FORM - WORKING VERSION
 // =============================================================================
 function initContactForm() {
     const contactForm = document.getElementById('contactForm');
@@ -438,7 +483,6 @@ function initContactForm() {
     contactForm.addEventListener('submit', async function(e) {
         e.preventDefault();
         
-        // Prevent double submission
         if (isSubmitting) {
             console.log('Form is already submitting...');
             return;
@@ -472,12 +516,6 @@ function initContactForm() {
         // Create FormData
         const formData = new FormData(this);
         
-        // Log form data for debugging
-        console.log('Submitting form data:');
-        for (let [key, value] of formData.entries()) {
-            console.log(`${key}: ${value}`);
-        }
-        
         try {
             const response = await fetch('/contact', {
                 method: 'POST',
@@ -487,32 +525,22 @@ function initContactForm() {
                 }
             });
             
-            console.log('Response status:', response.status);
-            
             if (!response.ok) {
-                throw new Error(`Server error: ${response.status} ${response.statusText}`);
-            }
-            
-            const contentType = response.headers.get('content-type');
-            if (!contentType || !contentType.includes('application/json')) {
-                throw new Error('Server did not return JSON');
+                throw new Error(`Server error: ${response.status}`);
             }
             
             const result = await response.json();
-            console.log('Server response:', result);
             
             if (result.success) {
                 showNotification(result.message || 'Message sent successfully! We will get back to you soon.', 'success');
                 this.reset();
-                
-                // Scroll to top of form smoothly
                 this.scrollIntoView({ behavior: 'smooth', block: 'center' });
             } else {
                 showNotification(result.message || 'Failed to send message. Please try again.', 'error');
             }
         } catch (error) {
             console.error('Form submission error:', error);
-            showNotification(`Error: ${error.message}. Please try again or contact us directly via email.`, 'error');
+            showNotification('Error sending message. Please try again or contact us directly via email.', 'error');
         } finally {
             submitBtn.disabled = false;
             submitBtn.innerHTML = originalBtnText;
@@ -542,7 +570,6 @@ function initContactForm() {
 // NOTIFICATION SYSTEM
 // =============================================================================
 function showNotification(message, type = 'info') {
-    // Remove any existing notifications
     const existingNotifications = document.querySelectorAll('.notification');
     existingNotifications.forEach(notif => {
         notif.style.animation = 'slideInRight 0.3s ease-out reverse';
@@ -580,7 +607,6 @@ function showNotification(message, type = 'info') {
     
     container.appendChild(notification);
     
-    // Auto-remove after 5 seconds
     setTimeout(() => {
         notification.style.animation = 'slideInRight 0.3s ease-out reverse';
         setTimeout(() => {

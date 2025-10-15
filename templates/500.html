@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}500 - Server Error{% endblock %}
+
+{% block content %}
+<section class="section" style="min-height: 80vh; display: flex; align-items: center; justify-content: center;">
+    <div class="container">
+        <div class="empty-state" style="padding: 120px 40px;">
+            <i class="fas fa-server" style="font-size: 96px; color: #ef4444; margin-bottom: 32px; display: block; opacity: 0.8;"></i>
+            <h1 style="font-size: 72px; margin-bottom: 24px; font-weight: 800; color: var(--text-primary);">500</h1>
+            <h3 style="font-size: 36px; margin-bottom: 20px; font-weight: 700; color: var(--text-primary);">Server Error</h3>
+            <p style="font-size: 18px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 40px; max-width: 600px; margin-left: auto; margin-right: auto;">
+                Something went wrong on our end. We're working to fix it. Please try again later or contact us if the problem persists.
+            </p>
+            <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
+                <a href="/" class="btn btn-primary">
+                    <i class="fas fa-home"></i> Back to Home
+                </a>
+                <a href="mailto:arshvermadev@gmail.com" class="btn btn-glass">
+                    <i class="fas fa-envelope"></i> Report Issue
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
