@@ -48,20 +48,6 @@ PHOTOS = [
         'description': 'Beautiful sunset captured in the mountains',
         'category': 'Landscape',
         'image': '/static/images/photos/photo1.jpg'
-    },
-    {
-        'id': 2,
-        'title': 'Urban Architecture',
-        'description': 'Modern cityscape with stunning architectural details',
-        'category': 'Architecture',
-        'image': '/static/images/photos/photo2.jpg'
-    },
-    {
-        'id': 3,
-        'title': 'Portrait Session',
-        'description': 'Professional portrait photography with natural lighting',
-        'category': 'Portrait',
-        'image': '/static/images/photos/photo3.jpg'
     }
 ]
 
@@ -73,14 +59,6 @@ VIDEOS = [
         'category': 'Commercial',
         'thumbnail': '/static/images/videos/video1-thumb.jpg',
         'video_url': '/static/videos/video1.mp4'
-    },
-    {
-        'id': 2,
-        'title': 'Event Highlights',
-        'description': 'Dynamic event coverage with creative editing',
-        'category': 'Event',
-        'thumbnail': '/static/images/videos/video2-thumb.jpg',
-        'video_url': '/static/videos/video2.mp4'
     }
 ]
 
