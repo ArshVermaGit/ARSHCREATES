@@ -1,325 +1,597 @@
-// Mobile Menu Toggle
+// =============================================================================
+// MAIN.JS - Complete Portfolio JavaScript
+// Replace your entire main.js file with this code
+// =============================================================================
+
+let currentGame = null;
+let unityInstance = null;
+let currentMediaType = null;
+let currentVideoElement = null;
+
+// Initialize everything when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
-    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-    const navLinks = document.querySelector('.nav-links');
-    
-    if (mobileMenuBtn) {
-        mobileMenuBtn.addEventListener('click', function() {
-            navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
-        });
-    }
-
-    // Handle download buttons
-    const downloadButtons = document.querySelectorAll('.download-btn');
-    downloadButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const platform = this.getAttribute('data-platform');
-            window.location.href = `download.html?platform=${platform}`;
-        });
-    });
-
-    // Handle platform cards
-    const platformCards = document.querySelectorAll('.platform-card');
-    platformCards.forEach(card => {
-        card.addEventListener('click', function(e) {
-            e.preventDefault();
-            const platform = this.getAttribute('data-platform');
-            window.location.href = `download.html?platform=${platform}`;
-        });
-    });
-
-    // Handle download process
-    const analyzeBtn = document.querySelector('.analyze-btn');
-    if (analyzeBtn) {
-        analyzeBtn.addEventListener('click', handleDownloadProcess);
-    }
-
-    // Handle quality selection
-    const qualityOptions = document.querySelectorAll('.quality-option');
-    qualityOptions.forEach(option => {
-        option.addEventListener('click', function() {
-            qualityOptions.forEach(opt => opt.classList.remove('selected'));
-            this.classList.add('selected');
-        });
-    });
-
-    // Admin functionality
-    initializeAdmin();
+    initPortfolioCards();
+    initContactForm();
 });
 
-function handleDownloadProcess() {
-    const urlInput = document.querySelector('.url-input');
-    const url = urlInput.value.trim();
+// =============================================================================
+// PORTFOLIO CARDS INITIALIZATION
+// =============================================================================
+function initPortfolioCards() {
+    const cards = document.querySelectorAll('.portfolio-card');
     
-    if (!url) {
-        alert('Please enter a valid URL');
+    cards.forEach(card => {
+        const type = card.dataset.type;
+        
+        if (type === 'game') {
+            const gameData = JSON.parse(card.dataset.game);
+            card.addEventListener('click', () => openGameModal(gameData));
+        } else if (type === 'website') {
+            const websiteData = JSON.parse(card.dataset.website);
+            card.addEventListener('click', () => openWebsiteModal(websiteData));
+        } else if (type === 'photo') {
+            const photoData = JSON.parse(card.dataset.photo);
+            card.addEventListener('click', () => openPhotoModal(photoData));
+        } else if (type === 'video') {
+            const videoData = JSON.parse(card.dataset.video);
+            card.addEventListener('click', () => openVideoModal(videoData));
+        }
+    });
+}
+
+// =============================================================================
+// GAME MODAL
+// =============================================================================
+function openGameModal(gameData) {
+    currentGame = gameData;
+    currentMediaType = 'game';
+    const modal = document.getElementById('portfolioModal');
+    const previewImage = document.getElementById('previewImage');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalDescription = document.getElementById('modalDescription');
+    const playBtn = document.getElementById('playItemBtn');
+    const gamePreview = document.getElementById('itemPreview');
+    const gameContainer = document.getElementById('gameContainer');
+    const modalActions = document.getElementById('modalActions');
+    
+    hideAllPreviewElements();
+    
+    previewImage.src = gameData.image;
+    previewImage.style.display = 'block';
+    modalTitle.textContent = gameData.name;
+    modalDescription.textContent = gameData.description;
+    
+    gamePreview.style.display = 'flex';
+    gameContainer.style.display = 'none';
+    playBtn.style.display = 'flex';
+    playBtn.innerHTML = '<i class="fas fa-play"></i><span>Play Game</span>';
+    
+    modalActions.innerHTML = `
+        <button class="btn btn-glass" id="fullscreenBtn">
+            <i class="fas fa-expand"></i> Fullscreen
+        </button>
+    `;
+    
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    
+    playBtn.onclick = () => loadUnityGame();
+    
+    setTimeout(() => {
+        document.getElementById('fullscreenBtn').onclick = toggleFullscreen;
+    }, 100);
+}
+
+function loadUnityGame() {
+    if (!currentGame) return;
+    
+    const gamePreview = document.getElementById('itemPreview');
+    const gameContainer = document.getElementById('gameContainer');
+    const gameLoading = document.getElementById('gameLoading');
+    const loadingProgress = document.getElementById('loadingProgress');
+    
+    gamePreview.style.display = 'none';
+    gameContainer.style.display = 'block';
+    gameLoading.style.display = 'flex';
+    
+    const buildUrl = `/static/games/${currentGame.game_folder}/Build`;
+    const loaderUrl = `${buildUrl}/${currentGame.build_name}.loader.js`;
+    const config = {
+        dataUrl: `${buildUrl}/${currentGame.build_name}.data`,
+        frameworkUrl: `${buildUrl}/${currentGame.build_name}.framework.js`,
+        codeUrl: `${buildUrl}/${currentGame.build_name}.wasm`,
+        streamingAssetsUrl: "StreamingAssets",
+        companyName: "ArshVerma",
+        productName: currentGame.name,
+        productVersion: "1.0",
+    };
+    
+    const canvas = document.querySelector("#unity-canvas");
+    
+    const script = document.createElement("script");
+    script.src = loaderUrl;
+    script.onload = () => {
+        createUnityInstance(canvas, config, (progress) => {
+            loadingProgress.style.width = (100 * progress) + "%";
+        }).then((instance) => {
+            unityInstance = instance;
+            gameLoading.style.display = 'none';
+        }).catch((message) => {
+            showNotification('Failed to load game: ' + message, 'error');
+            closeModal();
+        });
+    };
+    script.onerror = () => {
+        showNotification('Failed to load game. Please check if game files exist.', 'error');
+        closeModal();
+    };
+    
+    document.body.appendChild(script);
+}
+
+// =============================================================================
+// WEBSITE MODAL
+// =============================================================================
+function openWebsiteModal(websiteData) {
+    currentMediaType = 'website';
+    const modal = document.getElementById('portfolioModal');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalDescription = document.getElementById('modalDescription');
+    const gamePreview = document.getElementById('itemPreview');
+    const gameContainer = document.getElementById('gameContainer');
+    const modalActions = document.getElementById('modalActions');
+    const previewImage = document.getElementById('previewImage');
+    
+    hideAllPreviewElements();
+    
+    previewImage.src = websiteData.image;
+    previewImage.style.display = 'block';
+    
+    modalTitle.textContent = websiteData.name;
+    modalDescription.textContent = websiteData.description;
+    
+    gamePreview.style.display = 'flex';
+    gameContainer.style.display = 'none';
+    
+    modalActions.innerHTML = `
+        <button class="btn btn-glass" id="visitWebsiteBtn">
+            <i class="fas fa-external-link-alt"></i> Visit Website
+        </button>
+        <button class="btn btn-glass" id="fullscreenBtn">
+            <i class="fas fa-expand"></i> Fullscreen
+        </button>
+    `;
+    
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    
+    setTimeout(() => {
+        document.getElementById('visitWebsiteBtn').onclick = () => {
+            window.open(websiteData.url, '_blank');
+        };
+        document.getElementById('fullscreenBtn').onclick = toggleFullscreen;
+    }, 100);
+}
+
+// =============================================================================
+// PHOTO MODAL
+// =============================================================================
+function openPhotoModal(photoData) {
+    currentMediaType = 'photo';
+    const modal = document.getElementById('portfolioModal');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalDescription = document.getElementById('modalDescription');
+    const gamePreview = document.getElementById('itemPreview');
+    const gameContainer = document.getElementById('gameContainer');
+    const modalActions = document.getElementById('modalActions');
+    const photoViewer = document.getElementById('photoViewer');
+    const playBtn = document.getElementById('playItemBtn');
+    
+    hideAllPreviewElements();
+    
+    photoViewer.innerHTML = `<img src="${photoData.image}" alt="${photoData.title}" style="width: 100%; height: 100%; object-fit: contain;">`;
+    photoViewer.style.display = 'flex';
+    photoViewer.style.alignItems = 'center';
+    photoViewer.style.justifyContent = 'center';
+    photoViewer.style.width = '100%';
+    photoViewer.style.height = '100%';
+    
+    modalTitle.textContent = photoData.title;
+    modalDescription.textContent = photoData.description;
+    
+    playBtn.style.display = 'none';
+    gamePreview.style.display = 'flex';
+    gameContainer.style.display = 'none';
+    
+    modalActions.innerHTML = `
+        <button class="btn btn-glass" id="downloadPhotoBtn">
+            <i class="fas fa-download"></i> Download
+        </button>
+        <button class="btn btn-glass" id="fullscreenBtn">
+            <i class="fas fa-expand"></i> Fullscreen
+        </button>
+    `;
+    
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    
+    setTimeout(() => {
+        document.getElementById('downloadPhotoBtn').onclick = () => downloadMedia(photoData.image, photoData.title);
+        document.getElementById('fullscreenBtn').onclick = toggleFullscreen;
+    }, 100);
+}
+
+// =============================================================================
+// VIDEO MODAL
+// =============================================================================
+function openVideoModal(videoData) {
+    currentMediaType = 'video';
+    const modal = document.getElementById('portfolioModal');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalDescription = document.getElementById('modalDescription');
+    const gamePreview = document.getElementById('itemPreview');
+    const gameContainer = document.getElementById('gameContainer');
+    const modalActions = document.getElementById('modalActions');
+    const videoPlayer = document.getElementById('videoPlayer');
+    const playBtn = document.getElementById('playItemBtn');
+    
+    hideAllPreviewElements();
+    
+    videoPlayer.innerHTML = `
+        <video id="mainVideo" controls style="width: 100%; height: 100%; object-fit: contain;">
+            <source src="${videoData.video_url}" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    `;
+    videoPlayer.style.display = 'flex';
+    videoPlayer.style.width = '100%';
+    videoPlayer.style.height = '100%';
+    
+    currentVideoElement = videoPlayer.querySelector('#mainVideo');
+    
+    modalTitle.textContent = videoData.title;
+    modalDescription.textContent = videoData.description;
+    
+    playBtn.style.display = 'none';
+    gamePreview.style.display = 'flex';
+    gameContainer.style.display = 'none';
+    
+    modalActions.innerHTML = `
+        <button class="btn btn-glass" id="playPauseBtn">
+            <i class="fas fa-pause"></i> Pause
+        </button>
+        <button class="btn btn-glass" id="muteBtn">
+            <i class="fas fa-volume-up"></i> Mute
+        </button>
+        <button class="btn btn-glass" id="downloadVideoBtn">
+            <i class="fas fa-download"></i> Download
+        </button>
+        <button class="btn btn-glass" id="fullscreenBtn">
+            <i class="fas fa-expand"></i> Fullscreen
+        </button>
+    `;
+    
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    
+    setTimeout(() => {
+        const playPauseBtn = document.getElementById('playPauseBtn');
+        const muteBtn = document.getElementById('muteBtn');
+        
+        playPauseBtn.onclick = () => togglePlayPause(playPauseBtn);
+        muteBtn.onclick = () => toggleMute(muteBtn);
+        document.getElementById('downloadVideoBtn').onclick = () => downloadMedia(videoData.video_url, videoData.title);
+        document.getElementById('fullscreenBtn').onclick = toggleFullscreen;
+        
+        currentVideoElement.play();
+        
+        currentVideoElement.addEventListener('play', () => {
+            playPauseBtn.innerHTML = '<i class="fas fa-pause"></i> Pause';
+        });
+        
+        currentVideoElement.addEventListener('pause', () => {
+            playPauseBtn.innerHTML = '<i class="fas fa-play"></i> Play';
+        });
+    }, 100);
+}
+
+// =============================================================================
+// MEDIA CONTROLS
+// =============================================================================
+function togglePlayPause(btn) {
+    if (!currentVideoElement) return;
+    
+    if (currentVideoElement.paused) {
+        currentVideoElement.play();
+        btn.innerHTML = '<i class="fas fa-pause"></i> Pause';
+    } else {
+        currentVideoElement.pause();
+        btn.innerHTML = '<i class="fas fa-play"></i> Play';
+    }
+}
+
+function toggleMute(btn) {
+    if (!currentVideoElement) return;
+    
+    if (currentVideoElement.muted) {
+        currentVideoElement.muted = false;
+        btn.innerHTML = '<i class="fas fa-volume-up"></i> Mute';
+    } else {
+        currentVideoElement.muted = true;
+        btn.innerHTML = '<i class="fas fa-volume-mute"></i> Unmute';
+    }
+}
+
+function toggleFullscreen() {
+    const modal = document.getElementById('portfolioModal');
+    const modalContent = modal.querySelector('.modal-content');
+    
+    if (!document.fullscreenElement) {
+        if (modalContent.requestFullscreen) {
+            modalContent.requestFullscreen();
+        } else if (modalContent.webkitRequestFullscreen) {
+            modalContent.webkitRequestFullscreen();
+        } else if (modalContent.msRequestFullscreen) {
+            modalContent.msRequestFullscreen();
+        }
+    } else {
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) {
+            document.webkitExitFullscreen();
+        } else if (document.msExitFullscreen) {
+            document.msExitFullscreen();
+        }
+    }
+}
+
+function downloadMedia(url, filename) {
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename || 'download';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    showNotification('Download started!', 'success');
+}
+
+function hideAllPreviewElements() {
+    const previewImage = document.getElementById('previewImage');
+    const websiteFrame = document.getElementById('websiteFrame');
+    const photoViewer = document.getElementById('photoViewer');
+    const videoPlayer = document.getElementById('videoPlayer');
+    
+    if (previewImage) previewImage.style.display = 'none';
+    if (websiteFrame) websiteFrame.style.display = 'none';
+    if (photoViewer) photoViewer.style.display = 'none';
+    if (videoPlayer) videoPlayer.style.display = 'none';
+}
+
+// =============================================================================
+// CLOSE MODAL
+// =============================================================================
+function closeModal() {
+    const modal = document.getElementById('portfolioModal');
+    modal.classList.remove('active');
+    document.body.style.overflow = 'auto';
+    
+    if (unityInstance) {
+        unityInstance.Quit();
+        unityInstance = null;
+    }
+    
+    if (currentVideoElement) {
+        currentVideoElement.pause();
+        currentVideoElement = null;
+    }
+    
+    const gamePreview = document.getElementById('itemPreview');
+    gamePreview.innerHTML = `
+        <img src="" alt="Preview" id="previewImage">
+        <iframe id="websiteFrame" style="display:none;"></iframe>
+        <div id="photoViewer" style="display:none;"></div>
+        <div id="videoPlayer" style="display:none;"></div>
+        <button class="modal-play-btn" id="playItemBtn">
+            <i class="fas fa-play"></i>
+            <span>Play Game</span>
+        </button>
+    `;
+    
+    if (document.fullscreenElement) {
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) {
+            document.webkitExitFullscreen();
+        }
+    }
+    
+    currentGame = null;
+    currentMediaType = null;
+}
+
+// Modal close event listeners
+document.getElementById('closeModal')?.addEventListener('click', closeModal);
+document.querySelector('.modal-overlay')?.addEventListener('click', closeModal);
+
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        const modal = document.getElementById('portfolioModal');
+        if (modal && modal.classList.contains('active')) {
+            closeModal();
+        }
+    }
+});
+
+// =============================================================================
+// CONTACT FORM - FIXED VERSION
+// =============================================================================
+function initContactForm() {
+    const contactForm = document.getElementById('contactForm');
+    
+    if (!contactForm) {
+        console.warn('Contact form not found');
         return;
     }
+    
+    let isSubmitting = false;
 
-    // Show loading state
-    const downloadInputSection = document.querySelector('.download-input-section');
-    const loadingState = document.querySelector('.loading-state');
-    const downloadOptions = document.querySelector('.download-options');
-    
-    downloadInputSection.classList.add('hidden');
-    loadingState.classList.remove('hidden');
-    
-    // Simulate analysis
-    setTimeout(() => {
-        loadingState.classList.add('hidden');
-        downloadOptions.classList.remove('hidden');
+    contactForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
         
-        // Update video info based on platform
-        const urlParams = new URLSearchParams(window.location.search);
-        const platform = urlParams.get('platform');
-        updateVideoInfo(platform);
-    }, 2000);
-}
-
-function updateVideoInfo(platform) {
-    const videoTitle = document.querySelector('.video-info h3');
-    const platformIcons = {
-        'instagram': 'fab fa-instagram',
-        'youtube': 'fab fa-youtube',
-        'tiktok': 'fab fa-tiktok',
-        'facebook': 'fab fa-facebook',
-        'twitter': 'fab fa-twitter'
-    };
-    
-    const platformNames = {
-        'instagram': 'Instagram',
-        'youtube': 'YouTube',
-        'tiktok': 'TikTok',
-        'facebook': 'Facebook',
-        'twitter': 'X (Twitter)'
-    };
-    
-    if (videoTitle && platformIcons[platform]) {
-        videoTitle.innerHTML = `<i class="${platformIcons[platform]}"></i> ${platformNames[platform]} Video`;
-    }
-}
-
-function downloadVideo() {
-    const progressSection = document.querySelector('.progress-section');
-    const downloadOptions = document.querySelector('.download-options');
-    const progressBar = document.querySelector('.progress-bar-fill');
-    const progressPercentage = document.querySelector('.progress-percentage');
-    const progressMessage = document.querySelector('.progress-message');
-    
-    downloadOptions.classList.add('hidden');
-    progressSection.classList.remove('hidden');
-    
-    let progress = 0;
-    const interval = setInterval(() => {
-        progress += Math.random() * 10;
-        if (progress >= 100) {
-            progress = 100;
-            clearInterval(interval);
-            progressMessage.textContent = 'Download complete!';
-            
-            // Show success message and redirect after delay
-            setTimeout(() => {
-                alert('Download completed successfully!');
-                window.location.href = 'platforms.html';
-            }, 1000);
+        // Prevent double submission
+        if (isSubmitting) {
+            console.log('Form is already submitting...');
+            return;
         }
         
-        progressBar.style.width = `${progress}%`;
-        progressPercentage.textContent = `${Math.round(progress)}%`;
-    }, 200);
-}
+        // Validate form fields
+        const fullName = document.getElementById('full_name')?.value.trim();
+        const email = document.getElementById('email')?.value.trim();
+        const contactType = document.getElementById('contact_type')?.value;
+        const comment = document.getElementById('comment')?.value.trim();
+        
+        if (!fullName || !email || !contactType || !comment) {
+            showNotification('Please fill in all required fields', 'error');
+            return;
+        }
+        
+        // Email validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            showNotification('Please enter a valid email address', 'error');
+            return;
+        }
+        
+        isSubmitting = true;
+        
+        const submitBtn = this.querySelector('button[type="submit"]');
+        const originalBtnText = submitBtn.innerHTML;
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
 
-// Admin functionality
-function initializeAdmin() {
-    const adminLoginForm = document.getElementById('admin-login-form');
-    const adminDashboard = document.getElementById('admin-dashboard');
-    
-    if (adminLoginForm) {
-        adminLoginForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
+        // Create FormData
+        const formData = new FormData(this);
+        
+        // Log form data for debugging
+        console.log('Submitting form data:');
+        for (let [key, value] of formData.entries()) {
+            console.log(`${key}: ${value}`);
+        }
+        
+        try {
+            const response = await fetch('/contact', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            });
             
-            // Simple authentication (in real app, use secure authentication)
-            if (username === 'admin' && password === 'admin123') {
-                localStorage.setItem('adminLoggedIn', 'true');
-                adminLoginForm.classList.add('hidden');
-                adminDashboard.classList.remove('hidden');
-                loadFeedbackData();
+            console.log('Response status:', response.status);
+            
+            if (!response.ok) {
+                throw new Error(`Server error: ${response.status} ${response.statusText}`);
+            }
+            
+            const contentType = response.headers.get('content-type');
+            if (!contentType || !contentType.includes('application/json')) {
+                throw new Error('Server did not return JSON');
+            }
+            
+            const result = await response.json();
+            console.log('Server response:', result);
+            
+            if (result.success) {
+                showNotification(result.message || 'Message sent successfully! We will get back to you soon.', 'success');
+                this.reset();
+                
+                // Scroll to top of form smoothly
+                this.scrollIntoView({ behavior: 'smooth', block: 'center' });
             } else {
-                alert('Invalid credentials');
+                showNotification(result.message || 'Failed to send message. Please try again.', 'error');
+            }
+        } catch (error) {
+            console.error('Form submission error:', error);
+            showNotification(`Error: ${error.message}. Please try again or contact us directly via email.`, 'error');
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalBtnText;
+            isSubmitting = false;
+        }
+    });
+    
+    // Real-time validation feedback
+    const emailInput = document.getElementById('email');
+    if (emailInput) {
+        emailInput.addEventListener('blur', function() {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (this.value && !emailRegex.test(this.value)) {
+                this.style.borderColor = 'rgba(239, 68, 68, 0.5)';
+            } else {
+                this.style.borderColor = '';
             }
         });
-    }
-    
-    // Check if already logged in
-    if (localStorage.getItem('adminLoggedIn') === 'true' && adminDashboard) {
-        adminLoginForm.classList.add('hidden');
-        adminDashboard.classList.remove('hidden');
-        loadFeedbackData();
-    }
-    
-    // Handle filter buttons
-    const filterButtons = document.querySelectorAll('.filter-btn');
-    filterButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            filterButtons.forEach(btn => btn.classList.remove('active'));
-            this.classList.add('active');
-            filterFeedback(this.getAttribute('data-filter'));
+        
+        emailInput.addEventListener('input', function() {
+            this.style.borderColor = '';
         });
+    }
+}
+
+// =============================================================================
+// NOTIFICATION SYSTEM
+// =============================================================================
+function showNotification(message, type = 'info') {
+    // Remove any existing notifications
+    const existingNotifications = document.querySelectorAll('.notification');
+    existingNotifications.forEach(notif => {
+        notif.style.animation = 'slideInRight 0.3s ease-out reverse';
+        setTimeout(() => notif.remove(), 300);
     });
-}
-
-function loadFeedbackData() {
-    // Sample feedback data
-    const feedbackData = [
-        {
-            id: 1,
-            name: 'John Doe',
-            email: 'john@example.com',
-            rating: 5,
-            message: 'Amazing service! Downloaded my Instagram reels in seconds.',
-            date: '2025-01-15',
-            read: false
-        },
-        {
-            id: 2,
-            name: 'Sarah Wilson',
-            email: 'sarah@example.com',
-            rating: 4,
-            message: 'Works great for YouTube videos. Would love to see more platform support.',
-            date: '2025-01-14',
-            read: true
-        },
-        {
-            id: 3,
-            name: 'Mike Johnson',
-            email: 'mike@example.com',
-            rating: 5,
-            message: 'The download speed is incredible. Best free downloader I have used!',
-            date: '2025-01-13',
-            read: false
-        }
-    ];
     
-    displayFeedback(feedbackData);
-    updateStats(feedbackData);
-}
-
-function displayFeedback(feedbackData) {
-    const feedbackList = document.getElementById('feedback-list');
-    if (!feedbackList) return;
+    const container = document.getElementById('notificationContainer');
+    if (!container) {
+        console.error('Notification container not found');
+        return;
+    }
     
-    feedbackList.innerHTML = '';
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
     
-    feedbackData.forEach(feedback => {
-        const feedbackItem = document.createElement('div');
-        feedbackItem.className = `feedback-item ${feedback.read ? 'read' : 'unread'}`;
-        
-        const stars = '★'.repeat(feedback.rating) + '☆'.repeat(5 - feedback.rating);
-        
-        feedbackItem.innerHTML = `
-            <div class="feedback-avatar">${feedback.name.charAt(0)}</div>
-            <div class="feedback-content">
-                <div class="feedback-header">
-                    <div>
-                        <div class="feedback-name">${feedback.name}</div>
-                        <div class="feedback-rating">${stars}</div>
-                    </div>
-                    <div class="feedback-date">${feedback.date}</div>
-                </div>
-                <div class="feedback-message">${feedback.message}</div>
-                <div class="feedback-email">${feedback.email}</div>
+    const icon = type === 'success' ? 'fa-check-circle' : 
+                 type === 'error' ? 'fa-exclamation-circle' : 
+                 'fa-info-circle';
+    
+    const title = type === 'success' ? 'Success' : 
+                  type === 'error' ? 'Error' : 
+                  'Info';
+    
+    notification.innerHTML = `
+        <div class="notification-content">
+            <div class="notification-icon">
+                <i class="fas ${icon}"></i>
             </div>
-            <div class="feedback-actions">
-                <button class="action-btn" onclick="markAsRead(${feedback.id})" title="Mark as read">
-                    <i class="fas fa-check"></i>
-                </button>
-                <button class="action-btn" onclick="deleteFeedback(${feedback.id})" title="Delete">
-                    <i class="fas fa-trash"></i>
-                </button>
+            <div class="notification-text">
+                <h4>${title}</h4>
+                <p>${message}</p>
             </div>
-        `;
-        
-        feedbackList.appendChild(feedbackItem);
-    });
-}
-
-function updateStats(feedbackData) {
-    const totalFeedback = document.getElementById('total-feedback');
-    const unreadFeedback = document.getElementById('unread-feedback');
-    const avgRating = document.getElementById('avg-rating');
-    const thisMonth = document.getElementById('this-month');
+        </div>
+    `;
     
-    if (totalFeedback) totalFeedback.textContent = feedbackData.length;
-    if (unreadFeedback) {
-        const unreadCount = feedbackData.filter(f => !f.read).length;
-        unreadFeedback.textContent = unreadCount;
-    }
-    if (avgRating) {
-        const average = feedbackData.reduce((sum, f) => sum + f.rating, 0) / feedbackData.length;
-        avgRating.textContent = average.toFixed(1);
-    }
-    if (thisMonth) {
-        const thisMonthCount = feedbackData.filter(f => {
-            const feedbackDate = new Date(f.date);
-            const now = new Date();
-            return feedbackDate.getMonth() === now.getMonth() && feedbackDate.getFullYear() === now.getFullYear();
-        }).length;
-        thisMonth.textContent = thisMonthCount;
-    }
+    container.appendChild(notification);
+    
+    // Auto-remove after 5 seconds
+    setTimeout(() => {
+        notification.style.animation = 'slideInRight 0.3s ease-out reverse';
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.remove();
+            }
+        }, 300);
+    }, 5000);
 }
 
-function markAsRead(feedbackId) {
-    // In a real app, this would update the server
-    const feedbackItems = document.querySelectorAll('.feedback-item');
-    feedbackItems.forEach(item => {
-        // Simple simulation - in real app, you'd have proper IDs
-        item.classList.add('read');
-    });
-}
-
-function deleteFeedback(feedbackId) {
-    if (confirm('Are you sure you want to delete this feedback?')) {
-        // In a real app, this would delete from server
-        const feedbackItems = document.querySelectorAll('.feedback-item');
-        if (feedbackItems.length > 0) {
-            feedbackItems[0].remove(); // Simple simulation
-        }
-    }
-}
-
-function filterFeedback(filter) {
-    // In a real app, this would filter the feedback list
-    console.log('Filtering by:', filter);
-}
-
-function adminLogout() {
-    localStorage.removeItem('adminLoggedIn');
-    window.location.reload();
-}
-
-// Smooth scrolling for anchor links
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-            target.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-            });
-        }
-    });
-});
-
-// Add loading states for better UX
-function showLoading(element) {
-    element.disabled = true;
-    element.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
-}
-
-function hideLoading(element, originalText) {
-    element.disabled = false;
-    element.innerHTML = originalText;
-}
+// Make functions globally available
+window.showNotification = showNotification;
+window.initContactForm = initContactForm;
+window.closeModal = closeModal;
