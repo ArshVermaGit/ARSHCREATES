@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Arsh Verma - Creative Developer Portfolio - Games, Websites, Photography, and More">
+    <title>{% block title %}Arsh Verma - Creative Developer{% endblock %}</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<!-- NOTIFICATION CONTAINER -->
+<div id="notificationContainer"></div>
+<body>
+    <!-- NAVIGATION BAR -->
+    <nav class="navbar" id="navbar">
+        <div class="container nav-container">
+            <a href="/" class="logo">
+                <i class="fas fa-gamepad"></i>
+                Arsh Verma
+            </a>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="/#about">About</a></li>
+                <li><a href="/#games">Games</a></li>
+                <li><a href="/#websites">Websites</a></li>
+                <li><a href="/#photography">Photography</a></li>
+                <li><a href="/#videos">Videos</a></li>
+                <li><a href="/#contact">Contact</a></li>
+            </ul>
+            <button class="nav-toggle" id="navToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <!-- NAVIGATION SECTION -->
+                <div class="footer-section">
+                    <h4>Navigation</h4>
+                    <ul>
+                        <li><a href="/#about">About</a></li>
+                        <li><a href="/#games">Games</a></li>
+                        <li><a href="/#websites">Websites</a></li>
+                        <li><a href="/#photography">Photography</a></li>
+                        <li><a href="/#videos">Videos</a></li>
+                        <li><a href="/#contact">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <!-- SOCIAL LINKS SECTION -->
+                <div class="footer-social">
+                    <h4>Connect</h4>
+                    <div class="social-links">
+                        <a href="mailto:arshvermadev@gmail.com" title="Email" aria-label="Email">
+                            <i class="fas fa-envelope"></i>
+                        </a>
+                        <a href="https://linkedin.com/in/arshvermadev/" target="_blank" rel="noopener" title="LinkedIn" aria-label="LinkedIn">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                        <a href="https://github.com/ArshVermaGit" target="_blank" rel="noopener" title="GitHub" aria-label="GitHub">
+                            <i class="fab fa-github"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- COPYRIGHT SECTION -->
+            <div class="footer-bottom">
+                <p>&copy; 2025 Arsh Verma. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- NOTIFICATION CONTAINER -->
+    <div id="notificationContainer"></div>
+
+    <!-- SCRIPTS -->
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>
