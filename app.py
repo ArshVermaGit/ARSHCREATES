@@ -19,7 +19,7 @@ if not os.path.exists(FEEDBACK_FILE):
     with open(FEEDBACK_FILE, 'w') as f:
         json.dump([], f)
 
-# Sample data
+# Sample data (kept for fallback rendering)
 GAMES = [
     {
         'id': 1,
