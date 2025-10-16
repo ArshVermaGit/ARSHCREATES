@@ -1,4 +1,35 @@
 document.addEventListener('DOMContentLoaded', function() {
+    // Theme Management
+    const themeBtn = document.getElementById('themeBtn');
+    const html = document.documentElement;
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    
+    html.setAttribute('data-theme', savedTheme);
+    updateThemeIcon(savedTheme);
+    
+    if (themeBtn) {
+        themeBtn.addEventListener('click', function() {
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeIcon(newTheme);
+        });
+    }
+    
+    function updateThemeIcon(theme) {
+        if (themeBtn) {
+            const icon = themeBtn.querySelector('i');
+            if (theme === 'dark') {
+                icon.className = 'fas fa-sun';
+            } else {
+                icon.className = 'fas fa-moon';
+            }
+        }
+    }
+    
+    // Mobile Navigation
     const navToggle = document.getElementById('navToggle');
     const navMenu = document.getElementById('navMenu');
     const navbar = document.getElementById('navbar');
@@ -30,6 +61,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+    // Navbar Scroll Effect
     window.addEventListener('scroll', function() {
         if (window.pageYOffset > 50) {
             navbar.classList.add('scrolled');
@@ -38,6 +70,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+    // Smooth Scrolling
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
             const href = this.getAttribute('href');
@@ -55,6 +88,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
+    // Scroll Indicator
     const scrollIndicator = document.querySelector('.scroll-indicator');
     if (scrollIndicator) {
         scrollIndicator.addEventListener('click', function() {
@@ -69,6 +103,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    // Intersection Observer for Animations
     const observerOptions = {
         threshold: 0.15,
         rootMargin: '0px 0px -100px 0px'
@@ -91,8 +126,8 @@ document.addEventListener('DOMContentLoaded', function() {
         observer.observe(section);
     });
 
-    const gameCards = document.querySelectorAll('.game-card');
-    gameCards.forEach((card, index) => {
+    const portfolioCards = document.querySelectorAll('.portfolio-card');
+    portfolioCards.forEach((card, index) => {
         card.style.opacity = '0';
         card.style.transform = 'translateY(30px)';
         card.style.transition = `opacity 0.5s ease-out ${index * 0.1}s, transform 0.5s ease-out ${index * 0.1}s`;
