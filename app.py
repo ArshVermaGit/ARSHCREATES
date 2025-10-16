@@ -71,7 +71,8 @@ def index():
                          games=GAMES,
                          websites=WEBSITES,
                          photos=PHOTOS,
-                         videos=VIDEOS)
+                         videos=VIDEOS,
+                         now=datetime.now())
 
 @app.route('/contact', methods=['POST'])
 @app.route('/submit_feedback', methods=['POST'])
@@ -153,6 +154,13 @@ def admin_feedback():
                              feedbacks=feedbacks,
                              now=datetime.now())
         
+    except FileNotFoundError:
+        # If file doesn't exist, create it and return empty list
+        with open(FEEDBACK_FILE, 'w') as f:
+            json.dump([], f)
+        return render_template('admin_feedback.html', 
+                             feedbacks=[],
+                             now=datetime.now())
     except Exception as e:
         print(f"Error loading feedback: {str(e)}")
         return render_template('admin_feedback.html', 
@@ -274,11 +282,33 @@ def api_feedback():
 # Error handlers
 @app.errorhandler(404)
 def not_found(e):
+    """Handle 404 errors"""
     return render_template('404.html'), 404
 
 @app.errorhandler(500)
 def server_error(e):
+    """Handle 500 errors"""
     return render_template('500.html'), 500
 
+# Template filter for safe string operations
+@app.template_filter('lower')
+def lower_filter(s):
+    """Convert string to lowercase"""
+    return str(s).lower() if s else ''
+
 if __name__ == '__main__':
+    # Create data directory if it doesn't exist
+    os.makedirs(DATA_DIR, exist_ok=True)
+    
+    # Initialize feedback file if it doesn't exist
+    if not os.path.exists(FEEDBACK_FILE):
+        with open(FEEDBACK_FILE, 'w') as f:
+            json.dump([], f)
+    
+    print("=" * 50)
+    print("Server starting...")
+    print(f"Data directory: {os.path.abspath(DATA_DIR)}")
+    print(f"Feedback file: {os.path.abspath(FEEDBACK_FILE)}")
+    print("=" * 50)
+    
     app.run(debug=True, host='0.0.0.0', port=5002)
