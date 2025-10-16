@@ -74,7 +74,11 @@
                                 data-email="{{ feedback.email|lower }}"
                                 data-phone="{{ feedback.phone or '' }}"
                                 data-message="{{ feedback.comment|lower }}"
-                                data-id="{{ feedback.id }}">
+                                data-id="{{ feedback.id }}"
+                                data-full-name="{{ feedback.full_name }}"
+                                data-full-email="{{ feedback.email }}"
+                                data-full-type="{{ feedback.contact_type.replace('_', ' ').title() }}"
+                                data-full-comment="{{ feedback.comment }}">
                                 <td data-sort-value="{{ feedback.timestamp }}">
                                     <div class="timestamp">{{ feedback.timestamp }}</div>
                                 </td>
@@ -100,14 +104,14 @@
                                         {{ feedback.comment[:100] }}{% if feedback.comment|length > 100 %}...{% endif %}
                                     </div>
                                     {% if feedback.comment|length > 100 %}
-                                    <button class="btn-expand-message" onclick="toggleMessage('{{ feedback.id }}', `{{ feedback.comment|replace('`', '\\`')|replace('\\', '\\\\')|replace('\n', '\\n') }}`)">
+                                    <button class="btn-expand-message" onclick="toggleMessage('{{ feedback.id }}')">
                                         <i class="fas fa-expand-alt"></i> Expand
                                     </button>
                                     {% endif %}
                                 </td>
                                 <td>
                                     <div class="action-buttons">
-                                        <button class="btn-action btn-view" onclick="viewMessage('{{ feedback.id }}', '{{ feedback.full_name }}', '{{ feedback.email }}', '{{ feedback.contact_type.replace('_', ' ').title() }}', '{{ feedback.timestamp }}', `{{ feedback.comment|replace('`', '\\`')|replace('\\', '\\\\')|replace('\n', '\\n') }}`)" title="View full message">
+                                        <button class="btn-action btn-view" onclick="viewMessage('{{ feedback.id }}')" title="View full message">
                                             <i class="fas fa-eye"></i>
                                         </button>
                                         <button class="btn-action btn-delete" onclick="deleteFeedback('{{ feedback.id }}')" title="Delete feedback">
@@ -318,11 +322,11 @@ document.addEventListener('DOMContentLoaded', function() {
         visibleRows.forEach(row => {
             const rowData = [
                 row.dataset.timestamp,
-                row.querySelector('strong').textContent,
-                row.querySelector('a').textContent,
+                row.dataset.fullName,
+                row.dataset.fullEmail,
                 row.dataset.phone || '',
                 row.dataset.type.replace(/_/g, ' '),
-                `"${row.dataset.message.replace(/"/g, '""')}"`
+                `"${row.dataset.fullComment.replace(/"/g, '""')}"`
             ];
             csvData.push(rowData);
         });
@@ -354,9 +358,11 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // Message expansion function
-function toggleMessage(feedbackId, fullText) {
+function toggleMessage(feedbackId) {
+    const row = document.querySelector(`tr[data-id="${feedbackId}"]`);
     const messageElement = document.getElementById(`message-${feedbackId}`);
     const button = messageElement.nextElementSibling;
+    const fullText = row.dataset.fullComment;
     
     if (messageElement.classList.contains('expanded')) {
         messageElement.textContent = messageElement.dataset.shortText;
@@ -371,24 +377,31 @@ function toggleMessage(feedbackId, fullText) {
 }
 
 // View full message in modal
-function viewMessage(feedbackId, name, email, type, timestamp, message) {
+function viewMessage(feedbackId) {
+    const row = document.querySelector(`tr[data-id="${feedbackId}"]`);
+    const name = row.dataset.fullName;
+    const email = row.dataset.fullEmail;
+    const type = row.dataset.fullType;
+    const timestamp = row.dataset.timestamp;
+    const message = row.dataset.fullComment;
+    
     document.getElementById('modalMessageTitle').textContent = `Message from ${name}`;
     document.getElementById('modalMessageContent').innerHTML = `
         <div style="margin-bottom: 20px;">
             <div style="display: grid; grid-template-columns: auto 1fr; gap: 10px; margin-bottom: 15px;">
                 <strong>Email:</strong>
-                <a href="mailto:${email}">${email}</a>
+                <a href="mailto:${escapeHtml(email)}">${escapeHtml(email)}</a>
                 
                 <strong>Type:</strong>
-                <span>${type}</span>
+                <span>${escapeHtml(type)}</span>
                 
                 <strong>Date:</strong>
-                <span>${timestamp}</span>
+                <span>${escapeHtml(timestamp)}</span>
             </div>
             
             <div style="background: rgba(255,255,255,0.02); padding: 20px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);">
                 <strong style="display: block; margin-bottom: 10px; color: var(--accent);">Message:</strong>
-                <div style="white-space: pre-wrap; line-height: 1.6;">${message}</div>
+                <div style="white-space: pre-wrap; line-height: 1.6;">${escapeHtml(message)}</div>
             </div>
         </div>
     `;
@@ -400,6 +413,18 @@ function viewMessage(feedbackId, name, email, type, timestamp, message) {
 function closeMessageModal() {
     document.getElementById('messageModal').classList.remove('active');
     document.body.style.overflow = 'auto';
+}
+
+// Escape HTML to prevent XSS
+function escapeHtml(text) {
+    const map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+    };
+    return text.replace(/[&<>"']/g, m => map[m]);
 }
 
 // Delete feedback function
