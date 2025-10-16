@@ -3,18 +3,22 @@
 {% block title %}Admin - Feedback Management{% endblock %}
 
 {% block content %}
-<section class="section" style="padding-top: 120px;">
+<section class="section" style="padding-top: 140px;">
     <div class="container">
         <div class="section-header">
             <span class="section-tag">Admin Panel</span>
             <h2 class="section-title">Feedback Management</h2>
-            <p class="section-description">View and manage contact form submissions</p>
+            <p class="section-description">View and manage all contact form submissions with advanced filtering and sorting</p>
         </div>
 
         <div class="liquid-base feedback-table-wrapper">
             <div class="table-controls">
                 <div class="control-group">
-                    <input type="text" id="searchInput" class="search-input" placeholder="Search by name, email, or message..." aria-label="Search feedback">
+                    <input type="text" 
+                           id="searchInput" 
+                           class="search-input" 
+                           placeholder="Search by name, email, or message..."
+                           aria-label="Search feedback">
                     
                     <select id="filterType" class="filter-select" aria-label="Filter by type">
                         <option value="">All Types</option>
@@ -42,7 +46,9 @@
                         <option value="type">Type</option>
                     </select>
 
-                    <button class="btn btn-primary" id="exportBtn"><i class="fas fa-download"></i> Export CSV</button>
+                    <button class="btn btn-primary" id="exportBtn">
+                        <i class="fas fa-download"></i> Export CSV
+                    </button>
                 </div>
             </div>
 
@@ -73,31 +79,54 @@
                                 data-full-email="{{ feedback.email }}"
                                 data-full-type="{{ feedback.contact_type.replace('_', ' ').title() }}"
                                 data-full-comment="{{ feedback.comment }}">
-                                <td data-sort-value="{{ feedback.timestamp }}"><div class="timestamp">{{ feedback.timestamp }}</div></td>
-                                <td><strong>{{ feedback.full_name }}</strong>{% if feedback.phone and feedback.phone != 'N/A' %}<br><small style="color: var(--muted);">{{ feedback.phone }}</small>{% endif %}</td>
-                                <td><a href="mailto:{{ feedback.email }}" style="color: var(--accent); text-decoration:none;">{{ feedback.email }}</a></td>
+                                <td data-sort-value="{{ feedback.timestamp }}">
+                                    <div class="timestamp">{{ feedback.timestamp }}</div>
+                                </td>
+                                <td>
+                                    <strong>{{ feedback.full_name }}</strong>
+                                    {% if feedback.phone and feedback.phone != 'N/A' %}
+                                    <br><small style="color: var(--text-secondary);">{{ feedback.phone }}</small>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <a href="mailto:{{ feedback.email }}" style="color: var(--accent); text-decoration: none;">
+                                        {{ feedback.email }}
+                                    </a>
+                                </td>
                                 <td>{{ feedback.phone if feedback.phone != 'N/A' else '-' }}</td>
-                                <td><span class="type-badge type-{{ feedback.contact_type }}">{{ feedback.contact_type.replace('_',' ').title() }}</span></td>
+                                <td>
+                                    <span class="type-badge type-{{ feedback.contact_type }}">
+                                        {{ feedback.contact_type.replace('_', ' ').title() }}
+                                    </span>
+                                </td>
                                 <td class="message-cell">
-                                    <div class="message-preview" id="message-{{ feedback.id }}">{{ feedback.comment[:100] }}{% if feedback.comment|length > 100 %}...{% endif %}</div>
+                                    <div class="message-preview" id="message-{{ feedback.id }}">
+                                        {{ feedback.comment[:100] }}{% if feedback.comment|length > 100 %}...{% endif %}
+                                    </div>
                                     {% if feedback.comment|length > 100 %}
-                                    <button class="btn-expand-message" onclick="toggleMessage('{{ feedback.id }}')"><i class="fas fa-expand-alt"></i> Expand</button>
+                                    <button class="btn-expand-message" onclick="toggleMessage('{{ feedback.id }}')">
+                                        <i class="fas fa-expand-alt"></i> Expand
+                                    </button>
                                     {% endif %}
                                 </td>
                                 <td>
                                     <div class="action-buttons">
-                                        <button class="btn-action btn-view" onclick="viewMessage('{{ feedback.id }}')" title="View full message"><i class="fas fa-eye"></i></button>
-                                        <button class="btn-action btn-delete" onclick="deleteFeedback('{{ feedback.id }}')" title="Delete feedback"><i class="fas fa-trash"></i></button>
+                                        <button class="btn-action btn-view" onclick="viewMessage('{{ feedback.id }}')" title="View full message">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="btn-action btn-delete" onclick="deleteFeedback('{{ feedback.id }}')" title="Delete feedback">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
                                     </div>
                                 </td>
                             </tr>
                             {% endfor %}
                         {% else %}
                             <tr id="noDataRow">
-                                <td colspan="7" style="text-align:center; padding:40px 20px; color:var(--muted);">
-                                    <i class="fas fa-inbox" style="font-size:40px; margin-bottom:12px; display:block; opacity:0.5;"></i>
-                                    <strong style="display:block; font-size:16px;">No feedback received yet</strong>
-                                    <span style="font-size:13px;">Contact form submissions will appear here</span>
+                                <td colspan="7" style="text-align: center; padding: 60px 20px; color: var(--text-secondary);">
+                                    <i class="fas fa-inbox" style="font-size: 48px; margin-bottom: 16px; display: block; opacity: 0.5;"></i>
+                                    <strong style="display: block; font-size: 18px; margin-bottom: 8px;">No feedback received yet</strong>
+                                    <span style="font-size: 14px;">Contact form submissions will appear here</span>
                                 </td>
                             </tr>
                         {% endif %}
@@ -106,11 +135,23 @@
             </div>
 
             <div class="table-footer">
-                <div class="stats-container" style="display:flex; gap:18px; align-items:center;">
-                    <div class="stat-item"><span class="stat-value" id="totalCount">{{ feedbacks|length }}</span><span class="stat-label">Total</span></div>
-                    <div class="stat-item"><span class="stat-value" id="visibleCount">{{ feedbacks|length }}</span><span class="stat-label">Showing</span></div>
+                <div class="stats-container">
+                    <div class="stat-item">
+                        <span class="stat-value" id="totalCount">{{ feedbacks|length }}</span>
+                        <span class="stat-label">Total</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value" id="visibleCount">{{ feedbacks|length }}</span>
+                        <span class="stat-label">Showing</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value" id="todayCount">0</span>
+                        <span class="stat-label">Today</span>
+                    </div>
                 </div>
-                <p class="text-muted" style="margin:0; font-size:13px;">Last updated: <span id="lastUpdated">{{ now.strftime('%Y-%m-%d %H:%M') }}</span></p>
+                <p class="text-muted" style="margin: 0; font-size: 13px;">
+                    Last updated: <span id="lastUpdated">{{ now.strftime('%Y-%m-%d %H:%M') }}</span>
+                </p>
             </div>
         </div>
     </div>
@@ -120,12 +161,20 @@
 <div class="portfolio-modal" id="messageModal">
     <div class="modal-overlay" onclick="closeMessageModal()"></div>
     <div class="modal-container">
-        <button class="modal-close" onclick="closeMessageModal()" aria-label="Close modal"><i class="fas fa-times"></i></button>
+        <button class="modal-close" onclick="closeMessageModal()" aria-label="Close modal">
+            <i class="fas fa-times"></i>
+        </button>
         <div class="modal-content">
             <div class="modal-info">
                 <h2 id="modalMessageTitle">Message Details</h2>
-                <div id="modalMessageContent" style="line-height:1.6; max-height:400px; overflow-y:auto;"></div>
-                <div class="modal-actions"><button class="btn btn-glass" onclick="closeMessageModal()"><i class="fas fa-times"></i> Close</button></div>
+                <div id="modalMessageContent" style="line-height: 1.6; max-height: 400px; overflow-y: auto;">
+                    <!-- Message content will be inserted here -->
+                </div>
+                <div class="modal-actions">
+                    <button class="btn btn-glass" onclick="closeMessageModal()">
+                        <i class="fas fa-times"></i> Close
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -133,6 +182,355 @@
 {% endblock %}
 
 {% block extra_scripts %}
-<script src="{{ url_for('static', filename='js/admin_feedback_table.js') }}"></script>
-<!-- (Note: admin_feedback_table.js is assumed to be your existing table script. If you don't have it explicitly separate, the inline script from your upload can be used.) -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('searchInput');
+    const filterType = document.getElementById('filterType');
+    const dateFilter = document.getElementById('dateFilter');
+    const sortOrder = document.getElementById('sortOrder');
+    const exportBtn = document.getElementById('exportBtn');
+    const tableBody = document.getElementById('feedbackTableBody');
+    const totalCount = document.getElementById('totalCount');
+    const visibleCount = document.getElementById('visibleCount');
+    const todayCount = document.getElementById('todayCount');
+    
+    let allRows = Array.from(tableBody.querySelectorAll('tr[data-type]'));
+    const totalEntries = allRows.length;
+    
+    // Calculate today's count
+    const today = new Date().toISOString().split('T')[0];
+    const todayEntries = allRows.filter(row => {
+        const rowDate = row.dataset.timestamp.split(' ')[0];
+        return rowDate === today;
+    }).length;
+    
+    todayCount.textContent = todayEntries;
+
+    // Initialize table headers for sorting
+    initTableSorting();
+
+    function initTableSorting() {
+        const headers = document.querySelectorAll('th[data-sort]');
+        headers.forEach(header => {
+            header.style.cursor = 'pointer';
+            header.addEventListener('click', () => {
+                const sortBy = header.dataset.sort;
+                const currentSort = header.classList.contains('sort-asc') ? 'desc' : 'asc';
+                
+                headers.forEach(h => h.classList.remove('sort-asc', 'sort-desc'));
+                header.classList.add(`sort-${currentSort}`);
+                
+                filterAndSort();
+            });
+        });
+    }
+
+    function filterAndSort() {
+        const searchTerm = searchInput.value.toLowerCase();
+        const selectedType = filterType.value;
+        const selectedDate = dateFilter.value;
+        const selectedSort = sortOrder.value;
+        
+        let filteredRows = allRows.filter(row => {
+            const matchesSearch = 
+                row.dataset.name.includes(searchTerm) ||
+                row.dataset.email.includes(searchTerm) ||
+                row.dataset.message.includes(searchTerm) ||
+                (row.dataset.phone && row.dataset.phone.includes(searchTerm));
+            
+            const matchesType = !selectedType || row.dataset.type === selectedType;
+            
+            let matchesDate = true;
+            if (selectedDate) {
+                const rowDate = new Date(row.dataset.timestamp);
+                const now = new Date();
+                
+                switch(selectedDate) {
+                    case 'today':
+                        matchesDate = rowDate.toDateString() === now.toDateString();
+                        break;
+                    case 'week':
+                        const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+                        matchesDate = rowDate >= weekAgo;
+                        break;
+                    case 'month':
+                        const monthAgo = new Date(now.getFullYear(), now.getMonth() - 1, now.getDate());
+                        matchesDate = rowDate >= monthAgo;
+                        break;
+                }
+            }
+            
+            return matchesSearch && matchesType && matchesDate;
+        });
+        
+        filteredRows.sort((a, b) => {
+            let aValue, bValue;
+            
+            switch(selectedSort) {
+                case 'newest':
+                case 'oldest':
+                    aValue = new Date(a.dataset.timestamp);
+                    bValue = new Date(b.dataset.timestamp);
+                    return selectedSort === 'newest' ? bValue - aValue : aValue - bValue;
+                case 'name_asc':
+                case 'name_desc':
+                    aValue = a.dataset.name;
+                    bValue = b.dataset.name;
+                    return selectedSort === 'name_asc' ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
+                case 'type':
+                    aValue = a.dataset.type;
+                    bValue = b.dataset.type;
+                    return aValue.localeCompare(bValue);
+                default:
+                    aValue = new Date(a.dataset.timestamp);
+                    bValue = new Date(b.dataset.timestamp);
+                    return bValue - aValue;
+            }
+        });
+        
+        tableBody.innerHTML = '';
+        
+        if (filteredRows.length > 0) {
+            filteredRows.forEach(row => tableBody.appendChild(row));
+        } else {
+            tableBody.innerHTML = `
+                <tr>
+                    <td colspan="7" style="text-align: center; padding: 40px 20px; color: var(--text-secondary);">
+                        <i class="fas fa-search" style="font-size: 36px; margin-bottom: 12px; display: block; opacity: 0.5;"></i>
+                        <strong style="display: block; margin-bottom: 6px;">No results found</strong>
+                        <span style="font-size: 14px;">Try adjusting your search or filters</span>
+                    </td>
+                </tr>
+            `;
+        }
+        
+        visibleCount.textContent = filteredRows.length;
+    }
+    
+    // Export to CSV function
+    function exportToCSV() {
+        const visibleRows = Array.from(tableBody.querySelectorAll('tr[data-type]'));
+        
+        if (visibleRows.length === 0) {
+            alert('No data to export!');
+            return;
+        }
+        
+        const headers = ['Date', 'Name', 'Email', 'Phone', 'Type', 'Message'];
+        const csvData = [headers];
+        
+        visibleRows.forEach(row => {
+            const rowData = [
+                row.dataset.timestamp,
+                row.dataset.fullName,
+                row.dataset.fullEmail,
+                row.dataset.phone || '',
+                row.dataset.type.replace(/_/g, ' '),
+                `"${row.dataset.fullComment.replace(/"/g, '""')}"`
+            ];
+            csvData.push(rowData);
+        });
+        
+        const csvContent = csvData.map(row => row.join(',')).join('\n');
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        const url = URL.createObjectURL(blob);
+        
+        link.setAttribute('href', url);
+        link.setAttribute('download', `feedback_${new Date().toISOString().split('T')[0]}.csv`);
+        link.style.visibility = 'hidden';
+        
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+    
+    // Event listeners
+    searchInput.addEventListener('input', filterAndSort);
+    filterType.addEventListener('change', filterAndSort);
+    dateFilter.addEventListener('change', filterAndSort);
+    sortOrder.addEventListener('change', filterAndSort);
+    exportBtn.addEventListener('click', exportToCSV);
+    
+    // Initial count update
+    if (totalCount) totalCount.textContent = totalEntries;
+    if (visibleCount) visibleCount.textContent = totalEntries;
+});
+
+// Message expansion function
+function toggleMessage(feedbackId) {
+    const row = document.querySelector(`tr[data-id="${feedbackId}"]`);
+    const messageElement = document.getElementById(`message-${feedbackId}`);
+    const button = messageElement.nextElementSibling;
+    const fullText = row.dataset.fullComment;
+    
+    if (messageElement.classList.contains('expanded')) {
+        messageElement.textContent = messageElement.dataset.shortText;
+        messageElement.classList.remove('expanded');
+        button.innerHTML = '<i class="fas fa-expand-alt"></i> Expand';
+    } else {
+        messageElement.dataset.shortText = messageElement.textContent;
+        messageElement.textContent = fullText;
+        messageElement.classList.add('expanded');
+        button.innerHTML = '<i class="fas fa-compress-alt"></i> Collapse';
+    }
+}
+
+// View full message in modal
+function viewMessage(feedbackId) {
+    const row = document.querySelector(`tr[data-id="${feedbackId}"]`);
+    const name = row.dataset.fullName;
+    const email = row.dataset.fullEmail;
+    const type = row.dataset.fullType;
+    const timestamp = row.dataset.timestamp;
+    const message = row.dataset.fullComment;
+    
+    document.getElementById('modalMessageTitle').textContent = `Message from ${name}`;
+    document.getElementById('modalMessageContent').innerHTML = `
+        <div style="margin-bottom: 20px;">
+            <div style="display: grid; grid-template-columns: auto 1fr; gap: 10px; margin-bottom: 15px;">
+                <strong>Email:</strong>
+                <a href="mailto:${escapeHtml(email)}">${escapeHtml(email)}</a>
+                
+                <strong>Type:</strong>
+                <span>${escapeHtml(type)}</span>
+                
+                <strong>Date:</strong>
+                <span>${escapeHtml(timestamp)}</span>
+            </div>
+            
+            <div style="background: rgba(255,255,255,0.02); padding: 20px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);">
+                <strong style="display: block; margin-bottom: 10px; color: var(--accent);">Message:</strong>
+                <div style="white-space: pre-wrap; line-height: 1.6;">${escapeHtml(message)}</div>
+            </div>
+        </div>
+    `;
+    
+    document.getElementById('messageModal').classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeMessageModal() {
+    document.getElementById('messageModal').classList.remove('active');
+    document.body.style.overflow = 'auto';
+}
+
+// Escape HTML to prevent XSS
+function escapeHtml(text) {
+    const map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+    };
+    return text.replace(/[&<>"']/g, m => map[m]);
+}
+
+// Delete feedback function
+function deleteFeedback(feedbackId) {
+    if (confirm('Are you sure you want to delete this feedback? This action cannot be undone.')) {
+        fetch(`/delete_feedback/${feedbackId}`, {
+            method: 'DELETE',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const row = document.querySelector(`tr[data-id="${feedbackId}"]`);
+                if (row) {
+                    row.style.transition = 'opacity 0.3s ease';
+                    row.style.opacity = '0';
+                    setTimeout(() => {
+                        row.remove();
+                        updateCounts();
+                        showNotification('Feedback deleted successfully', 'success');
+                        
+                        // Check if table is empty after deletion
+                        const remainingRows = document.querySelectorAll('tr[data-type]');
+                        if (remainingRows.length === 0) {
+                            const tableBody = document.getElementById('feedbackTableBody');
+                            tableBody.innerHTML = `
+                                <tr id="noDataRow">
+                                    <td colspan="7" style="text-align: center; padding: 60px 20px; color: var(--text-secondary);">
+                                        <i class="fas fa-inbox" style="font-size: 48px; margin-bottom: 16px; display: block; opacity: 0.5;"></i>
+                                        <strong style="display: block; font-size: 18px; margin-bottom: 8px;">No feedback received yet</strong>
+                                        <span style="font-size: 14px;">Contact form submissions will appear here</span>
+                                    </td>
+                                </tr>
+                            `;
+                        }
+                    }, 300);
+                }
+            } else {
+                showNotification('Failed to delete feedback', 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showNotification('Error deleting feedback', 'error');
+        });
+    }
+}
+
+function updateCounts() {
+    const allRows = document.querySelectorAll('tr[data-type]');
+    const visibleRows = Array.from(allRows).filter(row => row.style.display !== 'none');
+    
+    document.getElementById('totalCount').textContent = allRows.length;
+    document.getElementById('visibleCount').textContent = visibleRows.length;
+    
+    // Update today's count
+    const today = new Date().toISOString().split('T')[0];
+    const todayEntries = Array.from(allRows).filter(row => {
+        const rowDate = row.dataset.timestamp.split(' ')[0];
+        return rowDate === today;
+    }).length;
+    document.getElementById('todayCount').textContent = todayEntries;
+}
+
+function showNotification(message, type) {
+    if (window.showNotification) {
+        window.showNotification(message, type);
+    } else {
+        // Fallback notification system
+        const container = document.getElementById('notificationContainer');
+        if (!container) return;
+        
+        const notification = document.createElement('div');
+        notification.className = `notification ${type}`;
+        
+        const icon = type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle';
+        const title = type === 'success' ? 'Success' : 'Error';
+        
+        notification.innerHTML = `
+            <div class="notification-content">
+                <div class="notification-icon">
+                    <i class="fas ${icon}"></i>
+                </div>
+                <div class="notification-text">
+                    <h4>${title}</h4>
+                    <p>${message}</p>
+                </div>
+            </div>
+        `;
+        
+        container.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.style.animation = 'slideInRight 0.3s ease-out reverse';
+            setTimeout(() => notification.remove(), 300);
+        }, 5000);
+    }
+}
+
+// Close modal with Escape key
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        closeMessageModal();
+    }
+});
+</script>
 {% endblock %}

@@ -1,27 +1,22 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en" data-theme="dark">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Arsh Verma - Creative Developer & Content Creator specializing in game development, web design, photography, and videography.">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>{% block title %}Arsh Verma - Creative Developer{% endblock %}</title>
-    
-    <!-- Stylesheets -->
+    <meta name="description" content="Arsh Verma - Creative developer and creator.">
+
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    
+    <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    
-    <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
-    
+
     {% block extra_head %}{% endblock %}
 </head>
-
-<body class="fade-in">
-
+<body>
     <!-- Navbar -->
-    <nav class="navbar glass-nav" id="navbar">
+    <nav class="navbar" id="navbar">
         <div class="nav-container">
             <a href="/" class="logo">
                 <i class="fas fa-bolt"></i>
@@ -29,117 +24,50 @@
             </a>
 
             <ul class="nav-menu" id="navMenu">
-                <li><a href="/#about"><span>About</span></a></li>
-                <li><a href="/#games"><span>Games</span></a></li>
-                <li><a href="/#websites"><span>Websites</span></a></li>
-                <li><a href="/#photography"><span>Photography</span></a></li>
-                <li><a href="/#videos"><span>Videos</span></a></li>
-                <li><a href="/#contact"><span>Contact</span></a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#games">Games</a></li>
+                <li><a href="#websites">Websites</a></li>
+                <li><a href="#photography">Photography</a></li>
+                <li><a href="#videos">Videos</a></li>
+                <li><a href="#contact">Contact</a></li>
             </ul>
 
             <div class="nav-actions">
-                <!-- Dark/Light mode toggle -->
-                <button id="themeToggle" class="theme-toggle" aria-label="Toggle dark mode">
-                    <i class="fas fa-sun"></i>
-                    <i class="fas fa-moon"></i>
-                </button>
-                <!-- Mobile menu toggle -->
+                <button id="themeBtn" class="btn-icon" aria-label="Toggle theme"><i class="fas fa-moon"></i></button>
                 <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
-                    <span></span>
-                    <span></span>
-                    <span></span>
+                    <span></span><span></span><span></span>
                 </button>
             </div>
         </div>
     </nav>
 
-    <!-- Main Content -->
-    <main id="mainContent">
+    <main id="main">
         {% block content %}{% endblock %}
     </main>
 
-    <!-- Footer -->
-    <footer class="footer glass-footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <div class="footer-brand">
-                        <i class="fas fa-bolt"></i>
-                        <span>Arsh Verma</span>
-                    </div>
-                    <p>Creative developer specializing in game development, web design, photography, and videography. Transforming ideas into immersive digital experiences.</p>
-                    <div class="social-links">
-                        <a href="https://github.com/ArshVermaGit" target="_blank" rel="noopener" aria-label="GitHub">
-                            <i class="fab fa-github"></i>
-                        </a>
-                        <a href="https://linkedin.com/in/arshvermadev/" target="_blank" rel="noopener" aria-label="LinkedIn">
-                            <i class="fab fa-linkedin"></i>
-                        </a>
-                        <a href="mailto:arshvermadev@gmail.com" aria-label="Email">
-                            <i class="fas fa-envelope"></i>
-                        </a>
-                        <a href="https://instagram.com/arshverma" target="_blank" rel="noopener" aria-label="Instagram">
-                            <i class="fab fa-instagram"></i>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="footer-section">
-                    <h4>Quick Links</h4>
-                    <ul>
-                        <li><a href="/#about">About Me</a></li>
-                        <li><a href="/#games">Games</a></li>
-                        <li><a href="/#websites">Websites</a></li>
-                        <li><a href="/#photography">Photography</a></li>
-                        <li><a href="/#videos">Videos</a></li>
-                    </ul>
-                </div>
-
-                <div class="footer-section">
-                    <h4>Contact</h4>
-                    <ul>
-                        <li><a href="/#contact">Get in Touch</a></li>
-                        <li><a href="mailto:arshvermadev@gmail.com">Email Me</a></li>
-                        <li><a href="/admin/feedback">Admin Panel</a></li>
-                    </ul>
-                </div>
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-brand"><i class="fas fa-bolt"></i><span>Arsh Verma</span></div>
+                <p class="muted">Creative developer specializing in game dev, web, photography & videography.</p>
             </div>
-
-            <div class="footer-bottom">
-                <p>&copy; {{ now.year if now else 2025 }} Arsh Verma. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="#about">About</a>
+                <a href="#games">Games</a>
+                <a href="#videos">Videos</a>
+                <a href="#contact">Contact</a>
+                <a href="/admin/feedback">Admin</a>
             </div>
+        </div>
+        <div class="container footer-bottom">
+            <span>&copy; {{ now.year if now else 2025 }} Arsh Verma</span>
         </div>
     </footer>
 
-    <!-- Notification Container -->
     <div id="notificationContainer"></div>
 
-    <!-- Scripts -->
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
-
-    <!-- Theme toggle logic -->
-    <script>
-        const toggle = document.getElementById('themeToggle');
-        const html = document.documentElement;
-        const userTheme = localStorage.getItem('theme');
-
-        if (userTheme) {
-            html.setAttribute('data-theme', userTheme);
-        }
-
-        toggle.addEventListener('click', () => {
-            const current = html.getAttribute('data-theme');
-            const next = current === 'light' ? 'dark' : 'light';
-            html.setAttribute('data-theme', next);
-            localStorage.setItem('theme', next);
-
-            // Animate icon change
-            toggle.classList.add('active');
-            setTimeout(() => toggle.classList.remove('active'), 500);
-        });
-    </script>
-
     {% block extra_scripts %}{% endblock %}
 </body>
 </html>

@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     const navToggle = document.getElementById('navToggle');
     const navMenu = document.getElementById('navMenu');
-    const navbar = document.getElementById('navbar') || document.querySelector('.navbar');
+    const navbar = document.getElementById('navbar');
 
     if (navToggle) {
         navToggle.addEventListener('click', function() {
@@ -31,20 +31,26 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     window.addEventListener('scroll', function() {
-        if (!navbar) return;
-        if (window.pageYOffset > 50) navbar.classList.add('scrolled');
-        else navbar.classList.remove('scrolled');
+        if (window.pageYOffset > 50) {
+            navbar.classList.add('scrolled');
+        } else {
+            navbar.classList.remove('scrolled');
+        }
     });
 
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
             const href = this.getAttribute('href');
             if (href === '#') return;
+            
             e.preventDefault();
             const target = document.querySelector(href);
             if (target) {
                 const offsetTop = target.offsetTop - 80;
-                window.scrollTo({ top: offsetTop, behavior: 'smooth' });
+                window.scrollTo({
+                    top: offsetTop,
+                    behavior: 'smooth'
+                });
             }
         });
     });
@@ -55,12 +61,19 @@ document.addEventListener('DOMContentLoaded', function() {
             const aboutSection = document.getElementById('about');
             if (aboutSection) {
                 const offsetTop = aboutSection.offsetTop - 80;
-                window.scrollTo({ top: offsetTop, behavior: 'smooth' });
+                window.scrollTo({
+                    top: offsetTop,
+                    behavior: 'smooth'
+                });
             }
         });
     }
 
-    const observerOptions = { threshold: 0.12, rootMargin: '0px 0px -80px 0px' };
+    const observerOptions = {
+        threshold: 0.15,
+        rootMargin: '0px 0px -100px 0px'
+    };
+
     const observer = new IntersectionObserver(function(entries) {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -73,16 +86,16 @@ document.addEventListener('DOMContentLoaded', function() {
     const sections = document.querySelectorAll('section');
     sections.forEach(section => {
         section.style.opacity = '0';
-        section.style.transform = 'translateY(18px)';
+        section.style.transform = 'translateY(30px)';
         section.style.transition = 'opacity 0.7s ease-out, transform 0.7s ease-out';
         observer.observe(section);
     });
 
-    const gameCards = document.querySelectorAll('.game-card, .portfolio-card');
+    const gameCards = document.querySelectorAll('.game-card');
     gameCards.forEach((card, index) => {
         card.style.opacity = '0';
-        card.style.transform = 'translateY(18px)';
-        card.style.transition = `opacity 0.55s ease-out ${index * 0.06}s, transform 0.55s ease-out ${index * 0.06}s`;
+        card.style.transform = 'translateY(30px)';
+        card.style.transition = `opacity 0.5s ease-out ${index * 0.1}s, transform 0.5s ease-out ${index * 0.1}s`;
         observer.observe(card);
     });
 });

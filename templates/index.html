@@ -4,13 +4,13 @@
 
 <!-- HERO SECTION -->
 <section class="hero">
-    <div class="container hero-inner">
+    <div class="container">
         <div class="hero-grid">
             <div class="hero-content">
                 <span class="hero-tag">Creative Developer</span>
                 <h1 class="hero-title">Arsh Verma</h1>
                 <p class="hero-subtitle">Innovative Developer & Creator</p>
-                <p class="hero-description">Transforming creative visions into immersive digital experiences through game development, web design, photography, videography, and innovative technology.</p>
+                <p class="hero-description">Transforming creative visions into immersive digital experiences through game development, web design, photography, videography, and innovative technology</p>
                 <div class="hero-actions">
                     <a href="#games" class="btn btn-primary">
                         <i class="fas fa-gamepad"></i> View Portfolio
@@ -20,20 +20,19 @@
                     </a>
                 </div>
             </div>
-
             <div class="hero-visual">
-                <div class="floating-cards" aria-hidden="true">
-                    <div class="float-card" role="presentation">
+                <div class="floating-cards">
+                    <div class="float-card">
                         <i class="fab fa-unity"></i>
                         <h4>Game Development</h4>
                         <p>Immersive 3D Experiences</p>
                     </div>
-                    <div class="float-card" role="presentation">
+                    <div class="float-card">
                         <i class="fas fa-code"></i>
                         <h4>Web Development</h4>
                         <p>Modern Digital Solutions</p>
                     </div>
-                    <div class="float-card" role="presentation">
+                    <div class="float-card">
                         <i class="fas fa-camera"></i>
                         <h4>Creative Content</h4>
                         <p>Photography & Videography</p>
@@ -41,14 +40,8 @@
                 </div>
             </div>
         </div>
-
-        <!-- theme and quick controls: injected to work with base navbar if it exists -->
-        <div class="hero-controls">
-            <div id="themeToggleContainer" class="theme-toggle-container" aria-hidden="false"></div>
-        </div>
     </div>
-
-    <div class="scroll-indicator" role="button" aria-label="Discover more">
+    <div class="scroll-indicator">
         <span>Discover More</span>
         <i class="fas fa-chevron-down"></i>
     </div>
@@ -60,111 +53,269 @@
         <div class="section-header">
             <span class="section-tag">About Me</span>
             <h2 class="section-title">Building Interactive Worlds</h2>
-            <p class="section-description">I craft immersive digital experiences across games, web, and visual storytelling — blending technical rigor with creative design.</p>
         </div>
-
         <div class="about-grid">
             <div class="about-text">
-                <p class="lead">I'm Arsh Verma, a creative developer and Computer Science student at VIT Bhopal University. I build immersive experiences with Unity, modern web stacks, and cinematic visual content.</p>
-                <p>My work spans game development, web applications, photography and videography. I focus on intuitive UX, delightful micro-interactions, and polish — delivering products people love to use.</p>
+                <p class="lead">I'm Arsh Verma, a dedicated creative developer and Computer Science student at VIT Bhopal University, passionate about crafting engaging digital experiences across multiple mediums.</p>
+                <p>My creative journey encompasses game development, web design, photography, videography, and digital art. This diverse skill set allows me to approach projects from multiple perspectives, creating comprehensive and innovative solutions.</p>
+                <p>Specializing in Unity and C# for game development, modern web technologies for website creation, and professional photography and video production, I bring ideas to life through carefully crafted experiences. My technical foundation spans JavaScript, Python, HTML/CSS, and advanced post-production techniques.</p>
+                <p>I'm actively seeking opportunities to collaborate with forward-thinking teams and contribute to groundbreaking projects that push creative boundaries across gaming, web development, visual storytelling, and beyond.</p>
             </div>
-
-            <div class="skills-container glass--soft">
+            <div class="skills-container">
                 <h3>Core Expertise</h3>
                 <div class="skills-grid">
-                    <div class="skill-item"><i class="fab fa-unity"></i><span>Unity</span></div>
-                    <div class="skill-item"><i class="fas fa-code"></i><span>C#</span></div>
-                    <div class="skill-item"><i class="fab fa-js"></i><span>JavaScript</span></div>
-                    <div class="skill-item"><i class="fab fa-python"></i><span>Python</span></div>
-                    <div class="skill-item"><i class="fab fa-html5"></i><span>HTML/CSS</span></div>
-                    <div class="skill-item"><i class="fas fa-camera"></i><span>Photography</span></div>
+                    <div class="skill-item">
+                        <i class="fab fa-unity"></i>
+                        <span>Unity</span>
+                    </div>
+                    <div class="skill-item">
+                        <i class="fas fa-code"></i>
+                        <span>C#</span>
+                    </div>
+                    <div class="skill-item">
+                        <i class="fab fa-js"></i>
+                        <span>JavaScript</span>
+                    </div>
+                    <div class="skill-item">
+                        <i class="fab fa-python"></i>
+                        <span>Python</span>
+                    </div>
+                    <div class="skill-item">
+                        <i class="fab fa-html5"></i>
+                        <span>HTML/CSS</span>
+                    </div>
+                    <div class="skill-item">
+                        <i class="fas fa-camera"></i>
+                        <span>Photography</span>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- GAMES / WEBSITES / PHOTOS / VIDEOS sections remain structurally same (omitted here for brevity) -->
-<!-- Keep your templates for portfolio cards exactly as before so JS hooks still work -->
+<!-- GAMES SECTION -->
+<section id="games" class="section">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-tag">Games</span>
+            <h2 class="section-title">Game Showcase</h2>
+            <p class="section-description">Interactive experiences designed to captivate and engage players</p>
+        </div>
+        <div class="portfolio-grid">
+            {% if games %}
+                {% for game in games %}
+                <div class="portfolio-card" data-game='{{ game | tojson }}' data-type="game">
+                    <div class="portfolio-image">
+                        <img src="{{ game['image'] }}" alt="{{ game['name'] }}">
+                        <div class="portfolio-overlay">
+                            <button class="play-btn" aria-label="Play game">
+                                <i class="fas fa-play"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="portfolio-info">
+                        <span class="portfolio-badge">Playable</span>
+                        <h3 class="portfolio-title">{{ game['name'] }}</h3>
+                        <p class="portfolio-description">{{ game['overview'] }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty-state">
+                    <i class="fas fa-gamepad"></i>
+                    <h3>Games Coming Soon</h3>
+                    <p>Exciting game projects are currently in development!</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
 
-<!-- CONTACT SECTION (redesigned compact "Start a Conversation" card) -->
+<!-- WEBSITES SECTION -->
+<section id="websites" class="section">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-tag">Web Development</span>
+            <h2 class="section-title">Website Portfolio</h2>
+            <p class="section-description">Modern, responsive web applications and digital solutions</p>
+        </div>
+        <div class="portfolio-grid websites-grid">
+            {% if websites %}
+                {% for website in websites %}
+                <div class="portfolio-card website-card" data-website='{{ website | tojson }}' data-type="website">
+                    <div class="portfolio-image website-image">
+                        <img src="{{ website['image'] }}" alt="{{ website['name'] }}">
+                        <div class="portfolio-overlay">
+                            <button class="view-btn" aria-label="View website">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="portfolio-info">
+                        <span class="portfolio-badge">Live</span>
+                        <h3 class="portfolio-title">{{ website['name'] }}</h3>
+                        <p class="portfolio-description">{{ website['description'] }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty-state">
+                    <i class="fas fa-laptop-code"></i>
+                    <h3>Websites Coming Soon</h3>
+                    <p>Web projects are currently under development!</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<!-- PHOTOGRAPHY SECTION -->
+<section id="photography" class="section">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-tag">Photography</span>
+            <h2 class="section-title">Visual Stories</h2>
+            <p class="section-description">Capturing moments and emotions through the lens</p>
+        </div>
+        <div class="portfolio-grid">
+            {% if photos %}
+                {% for photo in photos %}
+                <div class="portfolio-card" data-photo='{{ photo | tojson }}' data-type="photo">
+                    <div class="portfolio-image">
+                        <img src="{{ photo['image'] }}" alt="{{ photo['title'] }}">
+                        <div class="portfolio-overlay">
+                            <button class="view-btn" aria-label="View photo">
+                                <i class="fas fa-search-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="portfolio-info">
+                        <span class="portfolio-badge">{{ photo['category'] }}</span>
+                        <h3 class="portfolio-title">{{ photo['title'] }}</h3>
+                        <p class="portfolio-description">{{ photo['description'] }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty-state">
+                    <i class="fas fa-camera"></i>
+                    <h3>Photography Coming Soon</h3>
+                    <p>Photo gallery is being curated!</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<!-- VIDEOS SECTION -->
+<section id="videos" class="section">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-tag">Videography</span>
+            <h2 class="section-title">Motion Content</h2>
+            <p class="section-description">Dynamic storytelling through video and animation</p>
+        </div>
+        <div class="portfolio-grid">
+            {% if videos %}
+                {% for video in videos %}
+                <div class="portfolio-card" data-video='{{ video | tojson }}' data-type="video">
+                    <div class="portfolio-image">
+                        <img src="{{ video['thumbnail'] }}" alt="{{ video['title'] }}">
+                        <div class="portfolio-overlay">
+                            <button class="play-btn" aria-label="Play video">
+                                <i class="fas fa-play"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="portfolio-info">
+                        <span class="portfolio-badge">{{ video['category'] }}</span>
+                        <h3 class="portfolio-title">{{ video['title'] }}</h3>
+                        <p class="portfolio-description">{{ video['description'] }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty-state">
+                    <i class="fas fa-video"></i>
+                    <h3>Videos Coming Soon</h3>
+                    <p>Video content is being produced!</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<!-- CONTACT SECTION -->
 <section id="contact" class="section">
     <div class="container">
-        <div class="section-header" style="margin-bottom: 48px;">
+        <div class="section-header">
             <span class="section-tag">Get in Touch</span>
             <h2 class="section-title">Start a Conversation</h2>
-            <p class="section-description">Interested in collaboration? Tell me what you have in mind — quick, clear, and easy.</p>
+            <p class="section-description">Interested in collaboration? Let's discuss how we can create something amazing together</p>
         </div>
-
-        <div class="contact-grid compact-contact">
-            <!-- Contact form card: narrower and denser; fields grouped for minimal whitespace -->
-            <div class="contact-form-wrapper glass compact">
-                <form class="contact-form" id="contactForm" method="POST" action="/submit_feedback" novalidate>
-                    <div class="form-row compact-row">
+        <div class="contact-grid">
+            <div class="contact-form-wrapper">
+                <form class="contact-form" id="contactForm" method="POST" action="/submit_feedback">
+                    <div class="form-row">
                         <div class="form-group">
                             <label for="full_name">Full Name *</label>
-                            <input type="text" id="full_name" name="full_name" class="form-input" required placeholder="Your full name">
+                            <input type="text" id="full_name" name="full_name" class="form-input" required placeholder="Enter your full name">
                         </div>
                         <div class="form-group">
                             <label for="email">Email Address *</label>
-                            <input type="email" id="email" name="email" class="form-input" required placeholder="you@example.com">
+                            <input type="email" id="email" name="email" class="form-input" required placeholder="your.email@example.com">
                         </div>
                     </div>
-
-                    <div class="form-row compact-row">
-                        <div class="form-group">
-                            <label for="phone">Phone</label>
-                            <input type="tel" id="phone" name="phone" class="form-input" placeholder="+1 (555) 123-4567">
-                        </div>
-                        <div class="form-group">
-                            <label for="contact_type">Contact Reason *</label>
-                            <select id="contact_type" name="contact_type" class="form-input form-select" required>
-                                <option value="">Select a reason</option>
-                                <option value="collaboration">Collaboration Opportunity</option>
-                                <option value="game_feedback">Feedback - Games</option>
-                                <option value="website_feedback">Feedback - Websites</option>
-                                <option value="photo_feedback">Feedback - Photography</option>
-                                <option value="video_feedback">Feedback - Videos</option>
-                                <option value="query">General Query</option>
-                                <option value="other">Other</option>
-                            </select>
-                        </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" name="phone" class="form-input" placeholder="+1 (555) 123-4567">
                     </div>
-
+                    <div class="form-group">
+                        <label for="contact_type">Contact Reason *</label>
+                        <select id="contact_type" name="contact_type" class="form-input form-select" required>
+                            <option value="">Select a reason</option>
+                            <option value="collaboration">Collaboration Opportunity</option>
+                            <option value="game_feedback">Feedback - Games</option>
+                            <option value="website_feedback">Feedback - Websites</option>
+                            <option value="photo_feedback">Feedback - Photography</option>
+                            <option value="video_feedback">Feedback - Videos</option>
+                            <option value="query">General Query</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
                     <div class="form-group">
                         <label for="comment">Message *</label>
-                        <textarea id="comment" name="comment" class="form-input form-textarea" rows="5" required placeholder="Tell me briefly about your project or question..."></textarea>
+                        <textarea id="comment" name="comment" class="form-input form-textarea" rows="5" required placeholder="Tell me about your project or inquiry..."></textarea>
                     </div>
-
-                    <div class="form-actions" style="display:flex; gap:12px; align-items:center; justify-content:space-between;">
-                        <div style="color:var(--text-secondary); font-size:13px;">I typically reply within 1–2 business days</div>
-                        <button type="submit" class="btn btn-primary submit-btn" id="submitBtn">
-                            <i class="fas fa-paper-plane"></i> Send Message
-                        </button>
-                    </div>
+                    <button type="submit" class="btn btn-primary submit-btn" id="submitBtn">
+                        <i class="fas fa-paper-plane"></i> Send Message
+                    </button>
                 </form>
             </div>
-
-            <!-- Contact info column — shorter cards to balance vertical space -->
             <div class="contact-info">
                 <div class="contact-card">
-                    <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+                    <div class="contact-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
                     <div class="contact-details">
                         <h4>Email</h4>
                         <a href="mailto:arshvermadev@gmail.com">arshvermadev@gmail.com</a>
                     </div>
                 </div>
-
                 <div class="contact-card">
-                    <div class="contact-icon"><i class="fab fa-linkedin"></i></div>
+                    <div class="contact-icon">
+                        <i class="fab fa-linkedin"></i>
+                    </div>
                     <div class="contact-details">
                         <h4>LinkedIn</h4>
                         <a href="https://linkedin.com/in/arshvermadev/" target="_blank" rel="noopener">Connect with me</a>
                     </div>
                 </div>
-
                 <div class="contact-card">
-                    <div class="contact-icon"><i class="fab fa-github"></i></div>
+                    <div class="contact-icon">
+                        <i class="fab fa-github"></i>
+                    </div>
                     <div class="contact-details">
                         <h4>GitHub</h4>
                         <a href="https://github.com/ArshVermaGit" target="_blank" rel="noopener">View my work</a>
@@ -175,36 +326,42 @@
     </div>
 </section>
 
-<!-- MODAL (unchanged structural markup — your JS expects these ids) -->
+<!-- UNIFIED MODAL -->
 <div class="portfolio-modal" id="portfolioModal">
     <div class="modal-overlay"></div>
     <div class="modal-container">
         <button class="modal-close" id="closeModal" aria-label="Close modal">
             <i class="fas fa-times"></i>
         </button>
-
         <div class="modal-content">
-            <div id="itemPreview" class="item-preview">
-                <img src="" alt="Preview" id="previewImage" style="display:none;">
-                <iframe id="websiteFrame" style="display:none;" aria-hidden="true"></iframe>
+            <div class="modal-preview" id="itemPreview">
+                <img src="" alt="Preview" id="previewImage">
+                <iframe id="websiteFrame" style="display:none;"></iframe>
                 <div id="photoViewer" style="display:none;"></div>
                 <div id="videoPlayer" style="display:none;"></div>
-                <button class="modal-play-btn" id="playItemBtn" aria-hidden="true">
-                    <i class="fas fa-play"></i><span>Play Game</span>
+                <button class="modal-play-btn" id="playItemBtn">
+                    <i class="fas fa-play"></i>
+                    <span>Play Game</span>
                 </button>
             </div>
-
-            <div id="gameContainer" style="display:none;">
+            <div class="modal-game" id="gameContainer" style="display: none;">
                 <canvas id="unity-canvas"></canvas>
-                <div id="gameLoading" class="game-loading" style="display:none;">
-                    <div class="loading-bar"><div id="loadingProgress"></div></div>
+                <div class="game-loading" id="gameLoading">
+                    <div class="loading-spinner"></div>
+                    <p>Loading Game...</p>
+                    <div class="loading-bar">
+                        <div class="loading-progress" id="loadingProgress"></div>
+                    </div>
                 </div>
             </div>
-
             <div class="modal-info">
-                <h3 id="modalTitle"></h3>
-                <p id="modalDescription"></p>
-                <div id="modalActions" class="modal-actions"></div>
+                <h2 id="modalTitle">Title</h2>
+                <p id="modalDescription">Description</p>
+                <div class="modal-actions" id="modalActions">
+                    <button class="btn btn-glass" id="fullscreenBtn">
+                        <i class="fas fa-expand"></i> Fullscreen
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -214,22 +371,4 @@
 
 {% block extra_scripts %}
 <script src="{{ url_for('static', filename='js/main.js') }}"></script>
-<script src="{{ url_for('static', filename='js/script.js') }}"></script>
-<script>
-/* Enhance theme toggle placement: if base has navbar, we attempt to place toggle there; else we append to hero-controls */
-document.addEventListener('DOMContentLoaded', function() {
-    const themeToggleContainer = document.getElementById('themeToggleContainer');
-    const existingNav = document.querySelector('.navbar .nav-container') || document.getElementById('navbar');
-    if (existingNav && !existingNav.querySelector('.theme-toggle')) {
-        const toggle = document.createElement('div');
-        toggle.className = 'theme-toggle';
-        toggle.id = 'themeToggle';
-        toggle.innerHTML = '<button id="themeBtn" class="btn btn-icon" aria-label="Toggle Theme"><i class="fas fa-moon"></i></button>';
-        // Insert at the far right of the existing nav if possible
-        if (existingNav.appendChild) existingNav.appendChild(toggle);
-    } else if (themeToggleContainer) {
-        themeToggleContainer.innerHTML = '<div class="theme-toggle" id="themeToggle"><button id="themeBtn" class="btn btn-icon" aria-label="Toggle Theme"><i class="fas fa-moon"></i></button></div>';
-    }
-});
-</script>
 {% endblock %}
