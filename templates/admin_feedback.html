@@ -76,14 +76,11 @@
                                 data-message="{{ feedback.comment|lower }}"
                                 data-id="{{ feedback.id }}">
                                 <td data-sort-value="{{ feedback.timestamp }}">
-                                    <div class="timestamp">{{ feedback.timestamp.strftime('%Y-%m-%d %H:%M') if feedback.timestamp is string else feedback.timestamp }}</div>
-                                    <small style="color: var(--text-secondary); font-size: 11px;">
-                                        {{ feedback.timestamp.strftime('%Y-%m-%d') if feedback.timestamp is string else feedback.timestamp.split(' ')[0] }}
-                                    </small>
+                                    <div class="timestamp">{{ feedback.timestamp }}</div>
                                 </td>
                                 <td>
                                     <strong>{{ feedback.full_name }}</strong>
-                                    {% if feedback.phone %}
+                                    {% if feedback.phone and feedback.phone != 'N/A' %}
                                     <br><small style="color: var(--text-secondary);">{{ feedback.phone }}</small>
                                     {% endif %}
                                 </td>
@@ -92,7 +89,7 @@
                                         {{ feedback.email }}
                                     </a>
                                 </td>
-                                <td>{{ feedback.phone or '-' }}</td>
+                                <td>{{ feedback.phone if feedback.phone != 'N/A' else '-' }}</td>
                                 <td>
                                     <span class="type-badge type-{{ feedback.contact_type }}">
                                         {{ feedback.contact_type.replace('_', ' ').title() }}
@@ -103,14 +100,14 @@
                                         {{ feedback.comment[:100] }}{% if feedback.comment|length > 100 %}...{% endif %}
                                     </div>
                                     {% if feedback.comment|length > 100 %}
-                                    <button class="btn-expand-message" onclick="toggleMessage('{{ feedback.id }}')" data-full-text="{{ feedback.comment }}">
+                                    <button class="btn-expand-message" onclick="toggleMessage('{{ feedback.id }}', `{{ feedback.comment|replace('`', '\\`')|replace('\\', '\\\\')|replace('\n', '\\n') }}`)">
                                         <i class="fas fa-expand-alt"></i> Expand
                                     </button>
                                     {% endif %}
                                 </td>
                                 <td>
                                     <div class="action-buttons">
-                                        <button class="btn-action btn-view" onclick="viewMessage('{{ feedback.id }}')" title="View full message">
+                                        <button class="btn-action btn-view" onclick="viewMessage('{{ feedback.id }}', '{{ feedback.full_name }}', '{{ feedback.email }}', '{{ feedback.contact_type.replace('_', ' ').title() }}', '{{ feedback.timestamp }}', `{{ feedback.comment|replace('`', '\\`')|replace('\\', '\\\\')|replace('\n', '\\n') }}`)" title="View full message">
                                             <i class="fas fa-eye"></i>
                                         </button>
                                         <button class="btn-action btn-delete" onclick="deleteFeedback('{{ feedback.id }}')" title="Delete feedback">
@@ -149,7 +146,7 @@
                     </div>
                 </div>
                 <p class="text-muted" style="margin: 0; font-size: 13px;">
-                    Last updated: <span id="lastUpdated">{{ now.strftime('%Y-%m-%d %H:%M') if now else 'Just now' }}</span>
+                    Last updated: <span id="lastUpdated">{{ now.strftime('%Y-%m-%d %H:%M') }}</span>
                 </p>
             </div>
         </div>
@@ -192,7 +189,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const totalCount = document.getElementById('totalCount');
     const visibleCount = document.getElementById('visibleCount');
     const todayCount = document.getElementById('todayCount');
-    const lastUpdated = document.getElementById('lastUpdated');
     
     let allRows = Array.from(tableBody.querySelectorAll('tr[data-type]'));
     const totalEntries = allRows.length;
@@ -200,12 +196,11 @@ document.addEventListener('DOMContentLoaded', function() {
     // Calculate today's count
     const today = new Date().toISOString().split('T')[0];
     const todayEntries = allRows.filter(row => {
-        const rowDate = new Date(row.dataset.timestamp).toISOString().split('T')[0];
+        const rowDate = row.dataset.timestamp.split(' ')[0];
         return rowDate === today;
     }).length;
     
     todayCount.textContent = todayEntries;
-    lastUpdated.textContent = new Date().toLocaleString();
 
     // Initialize table headers for sorting
     initTableSorting();
@@ -218,16 +213,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 const sortBy = header.dataset.sort;
                 const currentSort = header.classList.contains('sort-asc') ? 'desc' : 'asc';
                 
-                // Remove sort classes from all headers
-                headers.forEach(h => {
-                    h.classList.remove('sort-asc', 'sort-desc');
-                });
-                
-                // Add sort class to current header
+                headers.forEach(h => h.classList.remove('sort-asc', 'sort-desc'));
                 header.classList.add(`sort-${currentSort}`);
-                
-                // Update sort order select to match
-                sortOrder.value = `${sortBy}_${currentSort}`;
                 
                 filterAndSort();
             });
@@ -240,7 +227,6 @@ document.addEventListener('DOMContentLoaded', function() {
         const selectedDate = dateFilter.value;
         const selectedSort = sortOrder.value;
         
-        // Filter rows
         let filteredRows = allRows.filter(row => {
             const matchesSearch = 
                 row.dataset.name.includes(searchTerm) ||
@@ -250,7 +236,6 @@ document.addEventListener('DOMContentLoaded', function() {
             
             const matchesType = !selectedType || row.dataset.type === selectedType;
             
-            // Date filtering
             let matchesDate = true;
             if (selectedDate) {
                 const rowDate = new Date(row.dataset.timestamp);
@@ -274,7 +259,6 @@ document.addEventListener('DOMContentLoaded', function() {
             return matchesSearch && matchesType && matchesDate;
         });
         
-        // Sort rows
         filteredRows.sort((a, b) => {
             let aValue, bValue;
             
@@ -300,10 +284,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
         
-        // Clear table
         tableBody.innerHTML = '';
         
-        // Add filtered and sorted rows
         if (filteredRows.length > 0) {
             filteredRows.forEach(row => tableBody.appendChild(row));
         } else {
@@ -318,7 +300,6 @@ document.addEventListener('DOMContentLoaded', function() {
             `;
         }
         
-        // Update counts
         visibleCount.textContent = filteredRows.length;
     }
     
@@ -335,14 +316,13 @@ document.addEventListener('DOMContentLoaded', function() {
         const csvData = [headers];
         
         visibleRows.forEach(row => {
-            const cells = row.querySelectorAll('td');
             const rowData = [
                 row.dataset.timestamp,
-                row.dataset.name,
-                row.dataset.email,
+                row.querySelector('strong').textContent,
+                row.querySelector('a').textContent,
                 row.dataset.phone || '',
-                row.dataset.type.replace('_', ' ').title(),
-                `"${row.dataset.message.replace(/"/g, '""')}"` // Escape quotes in message
+                row.dataset.type.replace(/_/g, ' '),
+                `"${row.dataset.message.replace(/"/g, '""')}"`
             ];
             csvData.push(rowData);
         });
@@ -374,7 +354,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // Message expansion function
-function toggleMessage(feedbackId) {
+function toggleMessage(feedbackId, fullText) {
     const messageElement = document.getElementById(`message-${feedbackId}`);
     const button = messageElement.nextElementSibling;
     
@@ -384,21 +364,14 @@ function toggleMessage(feedbackId) {
         button.innerHTML = '<i class="fas fa-expand-alt"></i> Expand';
     } else {
         messageElement.dataset.shortText = messageElement.textContent;
-        messageElement.textContent = button.dataset.fullText;
+        messageElement.textContent = fullText;
         messageElement.classList.add('expanded');
         button.innerHTML = '<i class="fas fa-compress-alt"></i> Collapse';
     }
 }
 
 // View full message in modal
-function viewMessage(feedbackId) {
-    const row = document.querySelector(`tr[data-id="${feedbackId}"]`);
-    const name = row.querySelector('strong').textContent;
-    const email = row.querySelector('a').textContent;
-    const type = row.querySelector('.type-badge').textContent;
-    const timestamp = row.querySelector('.timestamp').textContent;
-    const message = row.dataset.message;
-    
+function viewMessage(feedbackId, name, email, type, timestamp, message) {
     document.getElementById('modalMessageTitle').textContent = `Message from ${name}`;
     document.getElementById('modalMessageContent').innerHTML = `
         <div style="margin-bottom: 20px;">
@@ -420,11 +393,13 @@ function viewMessage(feedbackId) {
         </div>
     `;
     
-    document.getElementById('messageModal').style.display = 'block';
+    document.getElementById('messageModal').classList.add('active');
+    document.body.style.overflow = 'hidden';
 }
 
 function closeMessageModal() {
-    document.getElementById('messageModal').style.display = 'none';
+    document.getElementById('messageModal').classList.remove('active');
+    document.body.style.overflow = 'auto';
 }
 
 // Delete feedback function
@@ -441,11 +416,27 @@ function deleteFeedback(feedbackId) {
             if (data.success) {
                 const row = document.querySelector(`tr[data-id="${feedbackId}"]`);
                 if (row) {
-                    row.style.opacity = '0.5';
+                    row.style.transition = 'opacity 0.3s ease';
+                    row.style.opacity = '0';
                     setTimeout(() => {
                         row.remove();
                         updateCounts();
                         showNotification('Feedback deleted successfully', 'success');
+                        
+                        // Check if table is empty after deletion
+                        const remainingRows = document.querySelectorAll('tr[data-type]');
+                        if (remainingRows.length === 0) {
+                            const tableBody = document.getElementById('feedbackTableBody');
+                            tableBody.innerHTML = `
+                                <tr id="noDataRow">
+                                    <td colspan="7" style="text-align: center; padding: 60px 20px; color: var(--text-secondary);">
+                                        <i class="fas fa-inbox" style="font-size: 48px; margin-bottom: 16px; display: block; opacity: 0.5;"></i>
+                                        <strong style="display: block; font-size: 18px; margin-bottom: 8px;">No feedback received yet</strong>
+                                        <span style="font-size: 14px;">Contact form submissions will appear here</span>
+                                    </td>
+                                </tr>
+                            `;
+                        }
                     }, 300);
                 }
             } else {
@@ -465,14 +456,48 @@ function updateCounts() {
     
     document.getElementById('totalCount').textContent = allRows.length;
     document.getElementById('visibleCount').textContent = visibleRows.length;
+    
+    // Update today's count
+    const today = new Date().toISOString().split('T')[0];
+    const todayEntries = Array.from(allRows).filter(row => {
+        const rowDate = row.dataset.timestamp.split(' ')[0];
+        return rowDate === today;
+    }).length;
+    document.getElementById('todayCount').textContent = todayEntries;
 }
 
 function showNotification(message, type) {
-    // Use your existing notification system
     if (window.showNotification) {
         window.showNotification(message, type);
     } else {
-        alert(`${type.toUpperCase()}: ${message}`);
+        // Fallback notification system
+        const container = document.getElementById('notificationContainer');
+        if (!container) return;
+        
+        const notification = document.createElement('div');
+        notification.className = `notification ${type}`;
+        
+        const icon = type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle';
+        const title = type === 'success' ? 'Success' : 'Error';
+        
+        notification.innerHTML = `
+            <div class="notification-content">
+                <div class="notification-icon">
+                    <i class="fas ${icon}"></i>
+                </div>
+                <div class="notification-text">
+                    <h4>${title}</h4>
+                    <p>${message}</p>
+                </div>
+            </div>
+        `;
+        
+        container.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.style.animation = 'slideInRight 0.3s ease-out reverse';
+            setTimeout(() => notification.remove(), 300);
+        }, 5000);
     }
 }
 
@@ -483,3 +508,4 @@ document.addEventListener('keydown', function(e) {
     }
 });
 </script>
+{% endblock %}

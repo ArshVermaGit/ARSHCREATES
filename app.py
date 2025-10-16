@@ -19,7 +19,7 @@ if not os.path.exists(FEEDBACK_FILE):
     with open(FEEDBACK_FILE, 'w') as f:
         json.dump([], f)
 
-# Sample data (replace with your actual data or database)
+# Sample data
 GAMES = [
     {
         'id': 1,
@@ -74,6 +74,7 @@ def index():
                          videos=VIDEOS)
 
 @app.route('/contact', methods=['POST'])
+@app.route('/submit_feedback', methods=['POST'])
 def contact():
     """Handle contact form submission"""
     try:
@@ -88,7 +89,16 @@ def contact():
         if not all([full_name, email, contact_type, comment]):
             return jsonify({
                 'success': False,
-                'message': 'Please fill in all required fields'
+                'error': 'Please fill in all required fields'
+            }), 400
+        
+        # Email validation
+        import re
+        email_regex = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+        if not re.match(email_regex, email):
+            return jsonify({
+                'success': False,
+                'error': 'Please enter a valid email address'
             }), 400
         
         # Create feedback entry
@@ -103,8 +113,11 @@ def contact():
         }
         
         # Read existing feedback
-        with open(FEEDBACK_FILE, 'r') as f:
-            feedbacks = json.load(f)
+        try:
+            with open(FEEDBACK_FILE, 'r') as f:
+                feedbacks = json.load(f)
+        except (FileNotFoundError, json.JSONDecodeError):
+            feedbacks = []
         
         # Add new feedback
         feedbacks.append(feedback_entry)
@@ -122,7 +135,7 @@ def contact():
         print(f"Error saving feedback: {str(e)}")
         return jsonify({
             'success': False,
-            'message': 'An error occurred. Please try again later.'
+            'error': 'An error occurred. Please try again later.'
         }), 500
 
 @app.route('/admin/feedback')
@@ -134,81 +147,78 @@ def admin_feedback():
             feedbacks = json.load(f)
         
         # Sort by timestamp (newest first)
-        feedbacks.sort(key=lambda x: x['timestamp'], reverse=True)
+        feedbacks.sort(key=lambda x: x.get('timestamp', ''), reverse=True)
         
-        return render_template('admin_feedback.html', feedbacks=feedbacks)
+        return render_template('admin_feedback.html', 
+                             feedbacks=feedbacks,
+                             now=datetime.now())
         
     except Exception as e:
         print(f"Error loading feedback: {str(e)}")
-        return render_template('admin_feedback.html', feedbacks=[])
+        return render_template('admin_feedback.html', 
+                             feedbacks=[],
+                             now=datetime.now())
 
-@app.route('/submit_feedback', methods=['POST'])
-def submit_feedback():
-    try:
-        # Get form data
-        full_name = request.form.get('full_name')
-        email = request.form.get('email')
-        phone = request.form.get('phone')
-        contact_type = request.form.get('contact_type')
-        comment = request.form.get('comment')
-        
-        # Basic validation
-        if not all([full_name, email, contact_type, comment]):
-            return jsonify({'success': False, 'error': 'All required fields must be filled'})
-        
-        # Email validation
-        import re
-        email_regex = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
-        if not re.match(email_regex, email):
-            return jsonify({'success': False, 'error': 'Please enter a valid email address'})
-        
-        # Here you would typically save to database
-        # For SQLite example:
-        """
-        from datetime import datetime
-        new_feedback = Feedback(
-            full_name=full_name,
-            email=email,
-            phone=phone,
-            contact_type=contact_type,
-            comment=comment,
-            timestamp=datetime.utcnow()
-        )
-        db.session.add(new_feedback)
-        db.session.commit()
-        """
-        
-        print(f"Feedback received: {full_name}, {email}, {contact_type}")
-        
-        return jsonify({'success': True})
-        
-    except Exception as e:
-        return jsonify({'success': False, 'error': str(e)})
-    
-@app.route('/delete_feedback/<int:feedback_id>', methods=['DELETE'])
+@app.route('/delete_feedback/<feedback_id>', methods=['DELETE'])
 def delete_feedback(feedback_id):
+    """Delete feedback entry"""
     try:
-        # Here you would delete from database
-        """
-        feedback = Feedback.query.get(feedback_id)
-        if feedback:
-            db.session.delete(feedback)
-            db.session.commit()
-        """
+        # Read feedback from file
+        with open(FEEDBACK_FILE, 'r') as f:
+            feedbacks = json.load(f)
+        
+        # Filter out the feedback to delete
+        feedbacks = [f for f in feedbacks if f.get('id') != feedback_id]
+        
+        # Save updated feedback
+        with open(FEEDBACK_FILE, 'w') as f:
+            json.dump(feedbacks, f, indent=4)
+        
         return jsonify({'success': True})
+        
     except Exception as e:
-        return jsonify({'success': False, 'error': str(e)})
-    
+        print(f"Error deleting feedback: {str(e)}")
+        return jsonify({'success': False, 'error': str(e)}), 500
+
 @app.route('/export_feedback_csv')
 def export_feedback_csv():
+    """Export feedback as CSV"""
     try:
         # Get filter parameters
         search = request.args.get('search', '')
         contact_type = request.args.get('type', '')
         date_filter = request.args.get('date', '')
         
-        # Here you would query your database with filters
-        # feedbacks = Feedback.query.filter(...).all()
+        # Read feedback from file
+        with open(FEEDBACK_FILE, 'r') as f:
+            feedbacks = json.load(f)
+        
+        # Apply filters if provided
+        if search:
+            search_lower = search.lower()
+            feedbacks = [f for f in feedbacks if 
+                        search_lower in f.get('full_name', '').lower() or
+                        search_lower in f.get('email', '').lower() or
+                        search_lower in f.get('comment', '').lower()]
+        
+        if contact_type:
+            feedbacks = [f for f in feedbacks if f.get('contact_type') == contact_type]
+        
+        if date_filter:
+            now = datetime.now()
+            if date_filter == 'today':
+                today = now.strftime('%Y-%m-%d')
+                feedbacks = [f for f in feedbacks if f.get('timestamp', '').startswith(today)]
+            elif date_filter == 'week':
+                # Filter last 7 days
+                from datetime import timedelta
+                week_ago = (now - timedelta(days=7)).strftime('%Y-%m-%d')
+                feedbacks = [f for f in feedbacks if f.get('timestamp', '') >= week_ago]
+            elif date_filter == 'month':
+                # Filter last 30 days
+                from datetime import timedelta
+                month_ago = (now - timedelta(days=30)).strftime('%Y-%m-%d')
+                feedbacks = [f for f in feedbacks if f.get('timestamp', '') >= month_ago]
         
         # Create CSV in memory
         output = io.StringIO()
@@ -217,18 +227,17 @@ def export_feedback_csv():
         # Write header
         writer.writerow(['Date', 'Name', 'Email', 'Phone', 'Type', 'Message'])
         
-        # Write data (replace with actual database query)
-        # for feedback in feedbacks:
-        #     writer.writerow([
-        #         feedback.timestamp,
-        #         feedback.full_name,
-        #         feedback.email,
-        #         feedback.phone or '',
-        #         feedback.contact_type,
-        #         feedback.comment
-        #     ])
+        # Write data
+        for feedback in feedbacks:
+            writer.writerow([
+                feedback.get('timestamp', ''),
+                feedback.get('full_name', ''),
+                feedback.get('email', ''),
+                feedback.get('phone', ''),
+                feedback.get('contact_type', '').replace('_', ' ').title(),
+                feedback.get('comment', '')
+            ])
         
-        # For now, return empty CSV
         output.seek(0)
         
         return Response(
@@ -238,7 +247,8 @@ def export_feedback_csv():
         )
         
     except Exception as e:
-        return jsonify({'success': False, 'error': str(e)})
+        print(f"Error exporting CSV: {str(e)}")
+        return jsonify({'success': False, 'error': str(e)}), 500
 
 @app.route('/api/feedback')
 def api_feedback():
@@ -247,7 +257,7 @@ def api_feedback():
         with open(FEEDBACK_FILE, 'r') as f:
             feedbacks = json.load(f)
         
-        feedbacks.sort(key=lambda x: x['timestamp'], reverse=True)
+        feedbacks.sort(key=lambda x: x.get('timestamp', ''), reverse=True)
         
         return jsonify({
             'success': True,

@@ -1,5 +1,5 @@
 // =============================================================================
-// MAIN.JS - Updated Portfolio JavaScript with New Preview Logic
+// MAIN.JS - Portfolio JavaScript
 // =============================================================================
 
 let currentGame = null;
@@ -192,7 +192,6 @@ function openWebsitePreview(websiteData) {
     modal.classList.add('active');
     document.body.style.overflow = 'hidden';
     
-    // Click on preview image to open website
     previewImage.onclick = () => window.open(websiteData.url, '_blank');
     
     setTimeout(() => {
@@ -256,7 +255,6 @@ function openPhotoPreview(photoData) {
             }
         };
         
-        // Click photo to view fullscreen
         document.getElementById('photoImage').onclick = function() {
             if (this.requestFullscreen) {
                 this.requestFullscreen();
@@ -468,7 +466,7 @@ document.addEventListener('keydown', function(e) {
 });
 
 // =============================================================================
-// CONTACT FORM - FIXED VERSION
+// CONTACT FORM
 // =============================================================================
 function initContactForm() {
     const contactForm = document.getElementById('contactForm');
@@ -481,7 +479,6 @@ function initContactForm() {
     
     let isSubmitting = false;
 
-    // Enhanced form submission handler
     contactForm.addEventListener('submit', async function(e) {
         e.preventDefault();
         
@@ -490,7 +487,6 @@ function initContactForm() {
             return;
         }
         
-        // Show loading state
         const originalText = submitBtn.innerHTML;
         submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
         submitBtn.disabled = true;
@@ -508,6 +504,8 @@ function initContactForm() {
                 if (!input.value.trim()) {
                     input.style.borderColor = 'rgba(239, 68, 68, 0.6)';
                     isValid = false;
+                } else {
+                    input.style.borderColor = '';
                 }
             });
             
@@ -552,7 +550,6 @@ function initContactForm() {
             console.error('Error:', error);
             showNotification(error.message || 'Network error. Please check your connection and try again.', 'error');
         } finally {
-            // Restore button state
             submitBtn.innerHTML = originalText;
             submitBtn.disabled = false;
             isSubmitting = false;
