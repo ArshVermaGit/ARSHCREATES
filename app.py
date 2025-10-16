@@ -140,6 +140,29 @@ def admin_feedback():
         print(f"Error loading feedback: {str(e)}")
         return render_template('admin_feedback.html', feedbacks=[])
 
+@app.route('/submit_feedback', methods=['POST'])
+def submit_feedback():
+    try:
+        # Get form data
+        full_name = request.form.get('full_name')
+        email = request.form.get('email')
+        phone = request.form.get('phone')
+        contact_type = request.form.get('contact_type')
+        comment = request.form.get('comment')
+        
+        # Basic validation
+        if not all([full_name, email, contact_type, comment]):
+            return jsonify({'success': False, 'error': 'All required fields must be filled'})
+        
+        # Here you would typically save to database
+        # For now, just return success
+        print(f"Feedback received: {full_name}, {email}, {contact_type}")
+        
+        return jsonify({'success': True})
+        
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)})
+
 @app.route('/api/feedback')
 def api_feedback():
     """API endpoint to get feedback data as JSON"""

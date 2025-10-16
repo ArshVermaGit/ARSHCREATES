@@ -468,7 +468,7 @@ document.addEventListener('keydown', function(e) {
 });
 
 // =============================================================================
-// CONTACT FORM - WORKING VERSION (UPDATED WITH NEW CODE)
+// CONTACT FORM - FIXED VERSION
 // =============================================================================
 function initContactForm() {
     const contactForm = document.getElementById('contactForm');
@@ -542,7 +542,7 @@ function initContactForm() {
                 contactForm.reset();
                 
                 // Reset border colors
-                contactForm.querySelectorAll('.form-input').forEach(input => {
+                contactForm.querySelectorAll('input, select, textarea').forEach(input => {
                     input.style.borderColor = '';
                 });
             } else {
@@ -560,7 +560,7 @@ function initContactForm() {
     });
     
     // Real-time validation feedback
-    const formInputs = contactForm.querySelectorAll('.form-input');
+    const formInputs = contactForm.querySelectorAll('input, select, textarea');
     formInputs.forEach(input => {
         input.addEventListener('input', function() {
             if (this.value.trim()) {
