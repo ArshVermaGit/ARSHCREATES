@@ -1,30 +1,33 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Arsh Verma - Creative Developer & Content Creator specializing in game development, web design, photography, and videography">
+    <meta name="description" content="Arsh Verma - Creative Developer & Content Creator specializing in game development, web design, photography, and videography.">
     <title>{% block title %}Arsh Verma - Creative Developer{% endblock %}</title>
     
     <!-- Stylesheets -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
     
     {% block extra_head %}{% endblock %}
 </head>
-<body>
+
+<body class="fade-in">
+
     <!-- Navbar -->
-    <nav class="navbar" id="navbar">
+    <nav class="navbar glass-nav" id="navbar">
         <div class="nav-container">
             <a href="/" class="logo">
                 <i class="fas fa-bolt"></i>
                 <span>Arsh Verma</span>
             </a>
+
             <ul class="nav-menu" id="navMenu">
                 <li><a href="/#about"><span>About</span></a></li>
                 <li><a href="/#games"><span>Games</span></a></li>
@@ -33,21 +36,30 @@
                 <li><a href="/#videos"><span>Videos</span></a></li>
                 <li><a href="/#contact"><span>Contact</span></a></li>
             </ul>
-            <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
+
+            <div class="nav-actions">
+                <!-- Dark/Light mode toggle -->
+                <button id="themeToggle" class="theme-toggle" aria-label="Toggle dark mode">
+                    <i class="fas fa-sun"></i>
+                    <i class="fas fa-moon"></i>
+                </button>
+                <!-- Mobile menu toggle -->
+                <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
         </div>
     </nav>
 
     <!-- Main Content -->
-    <main>
+    <main id="mainContent">
         {% block content %}{% endblock %}
     </main>
 
     <!-- Footer -->
-    <footer class="footer">
+    <footer class="footer glass-footer">
         <div class="container">
             <div class="footer-content">
                 <div class="footer-section">
@@ -56,7 +68,7 @@
                         <span>Arsh Verma</span>
                     </div>
                     <p>Creative developer specializing in game development, web design, photography, and videography. Transforming ideas into immersive digital experiences.</p>
-                    <div class="social-links" style="margin-top: 20px;">
+                    <div class="social-links">
                         <a href="https://github.com/ArshVermaGit" target="_blank" rel="noopener" aria-label="GitHub">
                             <i class="fab fa-github"></i>
                         </a>
@@ -71,6 +83,7 @@
                         </a>
                     </div>
                 </div>
+
                 <div class="footer-section">
                     <h4>Quick Links</h4>
                     <ul>
@@ -81,6 +94,7 @@
                         <li><a href="/#videos">Videos</a></li>
                     </ul>
                 </div>
+
                 <div class="footer-section">
                     <h4>Contact</h4>
                     <ul>
@@ -90,6 +104,7 @@
                     </ul>
                 </div>
             </div>
+
             <div class="footer-bottom">
                 <p>&copy; {{ now.year if now else 2025 }} Arsh Verma. All rights reserved.</p>
             </div>
@@ -101,6 +116,30 @@
 
     <!-- Scripts -->
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+    <!-- Theme toggle logic -->
+    <script>
+        const toggle = document.getElementById('themeToggle');
+        const html = document.documentElement;
+        const userTheme = localStorage.getItem('theme');
+
+        if (userTheme) {
+            html.setAttribute('data-theme', userTheme);
+        }
+
+        toggle.addEventListener('click', () => {
+            const current = html.getAttribute('data-theme');
+            const next = current === 'light' ? 'dark' : 'light';
+            html.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+
+            // Animate icon change
+            toggle.classList.add('active');
+            setTimeout(() => toggle.classList.remove('active'), 500);
+        });
+    </script>
+
     {% block extra_scripts %}{% endblock %}
 </body>
 </html>
