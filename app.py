@@ -1,5 +1,7 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, Response
 import json
+import csv
+import io
 import os
 from datetime import datetime
 
@@ -154,11 +156,86 @@ def submit_feedback():
         if not all([full_name, email, contact_type, comment]):
             return jsonify({'success': False, 'error': 'All required fields must be filled'})
         
+        # Email validation
+        import re
+        email_regex = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+        if not re.match(email_regex, email):
+            return jsonify({'success': False, 'error': 'Please enter a valid email address'})
+        
         # Here you would typically save to database
-        # For now, just return success
+        # For SQLite example:
+        """
+        from datetime import datetime
+        new_feedback = Feedback(
+            full_name=full_name,
+            email=email,
+            phone=phone,
+            contact_type=contact_type,
+            comment=comment,
+            timestamp=datetime.utcnow()
+        )
+        db.session.add(new_feedback)
+        db.session.commit()
+        """
+        
         print(f"Feedback received: {full_name}, {email}, {contact_type}")
         
         return jsonify({'success': True})
+        
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)})
+    
+@app.route('/delete_feedback/<int:feedback_id>', methods=['DELETE'])
+def delete_feedback(feedback_id):
+    try:
+        # Here you would delete from database
+        """
+        feedback = Feedback.query.get(feedback_id)
+        if feedback:
+            db.session.delete(feedback)
+            db.session.commit()
+        """
+        return jsonify({'success': True})
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)})
+    
+@app.route('/export_feedback_csv')
+def export_feedback_csv():
+    try:
+        # Get filter parameters
+        search = request.args.get('search', '')
+        contact_type = request.args.get('type', '')
+        date_filter = request.args.get('date', '')
+        
+        # Here you would query your database with filters
+        # feedbacks = Feedback.query.filter(...).all()
+        
+        # Create CSV in memory
+        output = io.StringIO()
+        writer = csv.writer(output)
+        
+        # Write header
+        writer.writerow(['Date', 'Name', 'Email', 'Phone', 'Type', 'Message'])
+        
+        # Write data (replace with actual database query)
+        # for feedback in feedbacks:
+        #     writer.writerow([
+        #         feedback.timestamp,
+        #         feedback.full_name,
+        #         feedback.email,
+        #         feedback.phone or '',
+        #         feedback.contact_type,
+        #         feedback.comment
+        #     ])
+        
+        # For now, return empty CSV
+        output.seek(0)
+        
+        return Response(
+            output.getvalue(),
+            mimetype="text/csv",
+            headers={"Content-disposition": f"attachment; filename=feedback_{datetime.now().strftime('%Y%m%d')}.csv"}
+        )
         
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)})
