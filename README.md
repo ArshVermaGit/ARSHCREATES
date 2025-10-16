@@ -1,5 +1,5 @@
 # My_Portfolio
-This Website showcases my projects including Games, Websites, Photography and videography Albums
+This Website showcases my projects including Games, Websites, Photography and videography Albums.
 
 ## Features
 
