@@ -1,5 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Theme Management
+    // ==================================================
+    // THEME MANAGEMENT SECTION
+    // ==================================================
     const themeBtn = document.getElementById('themeBtn');
     const html = document.documentElement;
     const savedTheme = localStorage.getItem('theme') || 'dark';
@@ -28,8 +30,10 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
     }
-    
-    // Mobile Navigation
+
+    // ==================================================
+    // MOBILE NAVIGATION SECTION
+    // ==================================================
     const navToggle = document.getElementById('navToggle');
     const navMenu = document.getElementById('navMenu');
     const navbar = document.getElementById('navbar');
@@ -61,7 +65,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Navbar Scroll Effect
+    // ==================================================
+    // NAVBAR SCROLL EFFECT SECTION
+    // ==================================================
     window.addEventListener('scroll', function() {
         if (window.pageYOffset > 50) {
             navbar.classList.add('scrolled');
@@ -70,7 +76,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Smooth Scrolling
+    // ==================================================
+    // SMOOTH SCROLLING SECTION
+    // ==================================================
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
             const href = this.getAttribute('href');
@@ -88,7 +96,9 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Scroll Indicator
+    // ==================================================
+    // SCROLL INDICATOR SECTION
+    // ==================================================
     const scrollIndicator = document.querySelector('.scroll-indicator');
     if (scrollIndicator) {
         scrollIndicator.addEventListener('click', function() {
@@ -103,7 +113,9 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Intersection Observer for Animations
+    // ==================================================
+    // ANIMATION SECTION
+    // ==================================================
     const observerOptions = {
         threshold: 0.15,
         rootMargin: '0px 0px -100px 0px'
