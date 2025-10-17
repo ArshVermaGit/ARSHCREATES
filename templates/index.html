@@ -246,85 +246,87 @@
     </div>
 </section>
 
-<!-- CONTACT SECTION -->
-<section id="contact" class="section">
-    <div class="container">
-        <div class="section-header">
-            <span class="section-tag">Get in Touch</span>
-            <h2 class="section-title">Start a Conversation</h2>
-            <p class="section-description">Interested in collaboration? Let's discuss how we can create something amazing together</p>
-        </div>
-        <div class="contact-grid">
-            <div class="contact-form-wrapper">
-                <form class="contact-form" id="contactForm" method="POST" action="/submit_feedback">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="full_name">Full Name *</label>
-                            <input type="text" id="full_name" name="full_name" class="form-input" required placeholder="Enter your full name">
-                        </div>
-                        <div class="form-group">
-                            <label for="email">Email Address *</label>
-                            <input type="email" id="email" name="email" class="form-input" required placeholder="your.email@example.com">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="phone">Phone Number</label>
-                        <input type="tel" id="phone" name="phone" class="form-input" placeholder="+1 (555) 123-4567">
-                    </div>
-                    <div class="form-group">
-                        <label for="contact_type">Contact Reason *</label>
-                        <select id="contact_type" name="contact_type" class="form-input form-select" required>
-                            <option value="">Select a reason</option>
-                            <option value="collaboration">Collaboration Opportunity</option>
-                            <option value="game_feedback">Feedback - Games</option>
-                            <option value="website_feedback">Feedback - Websites</option>
-                            <option value="photo_feedback">Feedback - Photography</option>
-                            <option value="video_feedback">Feedback - Videos</option>
-                            <option value="query">General Query</option>
-                            <option value="other">Other</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="comment">Message *</label>
-                        <textarea id="comment" name="comment" class="form-input form-textarea" rows="5" required placeholder="Tell me about your project or inquiry..."></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary submit-btn" id="submitBtn">
-                        <i class="fas fa-paper-plane"></i> Send Message
-                    </button>
-                </form>
-            </div>
-            <div class="contact-info">
-                <div class="contact-card">
-                    <div class="contact-icon">
-                        <i class="fas fa-envelope"></i>
-                    </div>
-                    <div class="contact-details">
-                        <h4>Email</h4>
-                        <a href="mailto:arshvermadev@gmail.com">arshvermadev@gmail.com</a>
-                    </div>
-                </div>
-                <div class="contact-card">
-                    <div class="contact-icon">
-                        <i class="fab fa-linkedin"></i>
-                    </div>
-                    <div class="contact-details">
-                        <h4>LinkedIn</h4>
-                        <a href="https://linkedin.com/in/arshvermadev/" target="_blank" rel="noopener">Connect with me</a>
-                    </div>
-                </div>
-                <div class="contact-card">
-                    <div class="contact-icon">
-                        <i class="fab fa-github"></i>
-                    </div>
-                    <div class="contact-details">
-                        <h4>GitHub</h4>
-                        <a href="https://github.com/ArshVermaGit" target="_blank" rel="noopener">View my work</a>
-                    </div>
-                </div>
-            </div>
-        </div>
+<section id="contact" class="contact-section">
+  <div class="contact-container">
+    <div class="contact-header">
+      <h2 class="section-title">Get in Touch</h2>
+      <p class="section-subtitle">
+        Feel free to reach out for collaborations, project inquiries, or just to say hello!
+      </p>
     </div>
+
+    <div class="contact-grid">
+      <!-- Contact Form -->
+      <div class="contact-form-wrapper">
+        <form class="contact-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="name"><i class="fas fa-user"></i> Full Name *</label>
+              <input type="text" id="name" class="form-input" placeholder="Enter your full name" required>
+            </div>
+            <div class="form-group">
+              <label for="email"><i class="fas fa-envelope"></i> Email Address *</label>
+              <input type="email" id="email" class="form-input" placeholder="your.email@example.com" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="phone"><i class="fas fa-phone"></i> Phone Number</label>
+            <input type="tel" id="phone" class="form-input" placeholder="+1 (555) 123-4567">
+          </div>
+
+          <div class="form-group">
+            <label for="reason"><i class="fas fa-list"></i> Contact Reason *</label>
+            <select id="reason" class="form-select" required>
+              <option value="">Select a reason</option>
+              <option>Project Inquiry</option>
+              <option>Collaboration</option>
+              <option>Support</option>
+              <option>Other</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="message"><i class="fas fa-comment"></i> Message *</label>
+            <textarea id="message" class="form-textarea" placeholder="Tell me about your project or inquiry..." required></textarea>
+          </div>
+
+          <button type="submit" class="submit-btn">
+            <i class="fas fa-paper-plane"></i> Send Message
+          </button>
+        </form>
+      </div>
+
+      <!-- Contact Links -->
+      <div class="contact-info">
+        <div class="contact-card">
+          <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+          <div class="contact-details">
+            <h4>Email</h4>
+            <a href="mailto:arshvermadev@gmail.com">arshvermadev@gmail.com</a>
+          </div>
+        </div>
+
+        <div class="contact-card">
+          <div class="contact-icon"><i class="fab fa-linkedin-in"></i></div>
+          <div class="contact-details">
+            <h4>LinkedIn</h4>
+            <a href="https://linkedin.com/in/arshvermadev/" target="_blank" rel="noopener">Connect with me</a>
+          </div>
+        </div>
+
+        <div class="contact-card">
+          <div class="contact-icon"><i class="fab fa-github"></i></div>
+          <div class="contact-details">
+            <h4>GitHub</h4>
+            <a href="https://github.com/ArshVermaGit" target="_blank" rel="noopener">View my work</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
+
 
 <!-- UNIFIED MODAL -->
 <div class="portfolio-modal" id="portfolioModal">
