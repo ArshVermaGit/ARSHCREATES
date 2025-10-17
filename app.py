@@ -46,10 +46,31 @@ WEBSITES = [
 PHOTOS = [
     {
         'id': 1,
-        'title': 'Golden Hour Landscape',
-        'description': 'Beautiful sunset captured in the mountains',
-        'category': 'Landscape',
+        'title': 'The Heart Of Love',
+        'description': 'It Showcases The Symbol of Love.',
+        'category': 'Love',
         'image': '/static/images/photos/photo1.jpg'
+    },
+    {
+        'id': 2,
+        'title': 'The Peacock',
+        'description': 'A Beautiful Peacock Structure made of Iron Rods.',
+        'category': 'Animals',
+        'image': '/static/images/photos/photo2.jpg'
+    },
+    {
+        'id': 3,
+        'title': 'The Acadamic Block',
+        'description': 'A Beautiful Click of The Acadamic Block.',
+        'category': 'VIT Bhopal',
+        'image': '/static/images/photos/photo3.jpg'
+    },
+    {
+        'id': 4,
+        'title': 'The Block-1',
+        'description': 'A Beautiful Click of the Block-1.',
+        'category': 'VIT Bhopal',
+        'image': '/static/images/photos/photo4.jpg'
     }
 ]
 
