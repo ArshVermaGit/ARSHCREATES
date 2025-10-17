@@ -1,77 +1,109 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="light">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>{% block title %}Arsh Verma - Creative Developer{% endblock %}</title>
-    <meta name="description" content="Arsh Verma - Creative developer and creator.">
-
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
-
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
-    {% block extra_head %}{% endblock %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Arsh Verma's Portfolio - Showcasing games, websites, photography, and videography">
+    <meta name="keywords" content="portfolio, games, websites, photography, videography, Arsh Verma">
+    <meta name="author" content="Arsh Verma">
+    <title>{% block title %}Arsh Verma's Portfolio{% endblock %}</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 <body>
-    <!-- Navbar -->
-    <nav class="navbar" id="navbar">
+    <!-- NOTIFICATION CONTAINER -->
+    <div id="notificationContainer"></div>
+
+    <!-- HEADER SECTION -->
+    <header class="navbar" id="navbar">
         <div class="nav-container">
             <a href="/" class="logo">
-                <i class="fas fa-bolt"></i>
-                <span>My Portfolio</span>
+                <i class="fas fa-code"></i> Arsh Verma
             </a>
-
+            <button class="nav-toggle" id="navToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
             <ul class="nav-menu" id="navMenu">
-                <li><a href="#about">About</a></li>
-                <li><a href="#games">Games</a></li>
-                <li><a href="#websites">Websites</a></li>
-                <li><a href="#photography">Photography</a></li>
-                <li><a href="#videos">Videos</a></li>
-                <li><a href="#contact">Contact</a></li>
+                <li><a href="/#home">Home</a></li>
+                <li><a href="/#about">About</a></li>
+                <li><a href="/#portfolio">Portfolio</a></li>
+                <li><a href="/#contact">Contact</a></li>
+                <li><a href="/admin/feedback">Admin</a></li>
             </ul>
-
             <div class="nav-actions">
-                <button id="themeBtn" class="btn-icon" aria-label="Toggle theme">
+                <button class="btn-icon" id="themeBtn">
                     <i class="fas fa-moon"></i>
-                </button>
-                <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
-                    <span></span>
-                    <span></span>
-                    <span></span>
                 </button>
             </div>
         </div>
-    </nav>
+    </header>
 
-    <main id="main">
-        {% block content %}{% endblock %}
-    </main>
+    <!-- MAIN CONTENT -->
+    {% block content %}
+    {% endblock %}
 
+    <!-- PORTFOLIO MODAL -->
+    <div class="portfolio-modal" id="portfolioModal">
+        <div class="modal-overlay" onclick="closeModal()"></div>
+        <div class="modal-container">
+            <button class="modal-close" onclick="closeModal()">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="modal-content">
+                <div class="modal-preview">
+                    <img id="previewImage" src="" alt="Preview" style="display: none;">
+                    <iframe id="websiteFrame" style="display: none;"></iframe>
+                    <div id="photoViewer" style="display: none;"></div>
+                    <div id="videoPlayer" style="display: none;"></div>
+                    <div id="gameContainer" style="display: none;">
+                        <div id="gameLoading" class="game-loading">
+                            <div class="loading-bar">
+                                <div class="loading-progress" id="loadingProgress"></div>
+                            </div>
+                            <p>Loading game...</p>
+                        </div>
+                        <canvas id="unity-canvas" width="800" height="600"></canvas>
+                    </div>
+                </div>
+                <div class="modal-info">
+                    <h2 id="modalTitle" class="modal-title"></h2>
+                    <p id="modalDescription" class="modal-description"></p>
+                    <div class="modal-actions" id="modalActions"></div>
+                    <button id="playItemBtn" class="btn btn-primary" style="display: none;">
+                        <i class="fas fa-play"></i> Play
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER SECTION -->
     <footer class="footer">
-        <div class="container footer-inner">
+        <div class="footer-inner">
             <div class="footer-left">
-                <div class="footer-brand"><i class="fas fa-bolt"></i><span>Arsh Verma</span></div>
-                <p class="muted">Creative developer specializing in game dev, web, photography & videography.</p>
+                <a href="/" class="footer-brand">
+                    <i class="fas fa-code"></i> Arsh Verma
+                </a>
+                <p>© {{ now.year }} Arsh Verma. All rights reserved.</p>
             </div>
             <div class="footer-links">
-                <a href="#about">About</a>
-                <a href="#games">Games</a>
-                <a href="#videos">Videos</a>
-                <a href="#contact">Contact</a>
+                <a href="/#home">Home</a>
+                <a href="/#about">About</a>
+                <a href="/#portfolio">Portfolio</a>
+                <a href="/#contact">Contact</a>
                 <a href="/admin/feedback">Admin</a>
             </div>
         </div>
-        <div class="container footer-bottom">
-            <span>&copy; {{ now.year if now else 2025 }} Arsh Verma</span>
+        <div class="footer-bottom">
+            <p>Built with <i class="fas fa-heart" style="color: var(--accent);"></i> by Arsh Verma</p>
         </div>
     </footer>
 
-    <div id="notificationContainer"></div>
-
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
-    {% block extra_scripts %}{% endblock %}
+    <!-- SCRIPTS -->
+    <script src="/static/js/main.js"></script>
+    <script src="/static/js/script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/unity-webgl@2.4.0/dist/UnityWebGL.min.js"></script>
 </body>
 </html>
