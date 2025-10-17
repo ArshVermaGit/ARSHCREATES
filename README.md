@@ -12,9 +12,6 @@ This Website showcases my projects including Games, Websites, Photography and vi
 
 # Portfolio Website - Complete Project Structure
 
-## Directory Layout
-
-```
 portfolio_website/
 │
 ├── app.py                          # Main Flask application (REPLACE THIS FILE)

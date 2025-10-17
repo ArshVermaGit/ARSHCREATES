@@ -24,8 +24,8 @@ GAMES = [
     {
         'id': 1,
         'name': 'Sky Surfers',
-        'overview': 'It is an intense dodging game where you fly a plane through a danger-filled valley.',
-        'description': 'In this challenging flight game, you must skillfully pilot your plane through a narrow, hazard-filled canyon. Master the controls and dodge everything that stands in your path to set a new high-score.',
+        'overview': 'I built this as a high-speed dodging challenge to test your absolute precision.',
+        'description': 'Ready for the Test? I built this intense flight game to challenge your piloting skills. Take control and see if you can master the narrow, hazard-filled canyon—you will need precision dodging and nerves of steel to set that high score I know you are aiming for.',
         'image': '/static/images/games/game1.jpg',
         'game_folder': 'sky_surfers',
         'build_name': 'sky_surfers'
@@ -36,7 +36,7 @@ WEBSITES = [
     {
         'id': 1,
         'name': 'ReelSpot',
-        'description': 'The spot to save it all. Paste your link, download your video. Multi-platform media saving made simple.',
+        'description': 'I built the fastest way to save your media. You find the link, I handle the rest. Multi-platform downloading is finally quick, simple, and painless.',
         'image': '/static/images/websites/ReelSpot.jpg',
         'url': 'https://arshvermagit.github.io/REELSPOT/',
         'technologies': ['JavaScript', 'HTML', 'CSS']
