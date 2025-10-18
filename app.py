@@ -26,7 +26,7 @@ GAMES = [
         'name': 'Sky Surfers',
         'overview': 'I built this as a high-speed dodging challenge to test your absolute precision.',
         'description': 'Ready for the Test? I built this intense flight game to challenge your piloting skills. Take control and see if you can master the narrow, hazard-filled canyon—you will need precision dodging and nerves of steel to set that high score I know you are aiming for.',
-        'image': '/static/images/games/game1.jpg',
+        'image': '/static/images/games/Game1.jpg',
         'game_folder': 'sky_surfers',
         'build_name': 'sky_surfers'
     }
