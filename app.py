@@ -324,18 +324,4 @@ def lower_filter(s):
     return str(s).lower() if s else ''
 
 if __name__ == '__main__':
-    # Create data directory if it doesn't exist
-    os.makedirs(DATA_DIR, exist_ok=True)
-    
-    # Initialize feedback file if it doesn't exist
-    if not os.path.exists(FEEDBACK_FILE):
-        with open(FEEDBACK_FILE, 'w') as f:
-            json.dump([], f)
-    
-    print("=" * 50)
-    print("Server starting...")
-    print(f"Data directory: {os.path.abspath(DATA_DIR)}")
-    print(f"Feedback file: {os.path.abspath(FEEDBACK_FILE)}")
-    print("=" * 50)
-    
     app.run(debug=True)
