@@ -209,6 +209,34 @@ def delete_feedback(feedback_id):
         print(f"Error deleting feedback: {str(e)}")
         return jsonify({'success': False, 'error': str(e)}), 500
 
+# ADD THIS NEW ROUTE - This is what the JavaScript is calling
+@app.route('/admin/delete_feedback/<feedback_id>', methods=['DELETE'])
+def admin_delete_feedback(feedback_id):
+    """Delete feedback entry from admin panel"""
+    try:
+        # Read feedback from file
+        with open(FEEDBACK_FILE, 'r') as f:
+            feedbacks = json.load(f)
+        
+        # Filter out the feedback to delete
+        original_count = len(feedbacks)
+        feedbacks = [f for f in feedbacks if f.get('id') != feedback_id]
+        new_count = len(feedbacks)
+        
+        # Check if feedback was actually deleted
+        if original_count == new_count:
+            return jsonify({'success': False, 'error': 'Feedback not found'}), 404
+        
+        # Save updated feedback
+        with open(FEEDBACK_FILE, 'w') as f:
+            json.dump(feedbacks, f, indent=4)
+        
+        return jsonify({'success': True, 'message': 'Feedback deleted successfully'})
+        
+    except Exception as e:
+        print(f"Error deleting feedback: {str(e)}")
+        return jsonify({'success': False, 'error': str(e)}), 500
+
 @app.route('/export_feedback_csv')
 def export_feedback_csv():
     """Export feedback as CSV"""
