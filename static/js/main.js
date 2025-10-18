@@ -639,22 +639,12 @@ function hideAllPreviewElements() {
 }
 
 // =============================================================================
-// MODAL OPEN/CLOSE - COMPLETELY REWRITTEN
+// MODAL OPEN/CLOSE - ORIGINAL WORKING VERSION
 // =============================================================================
 function openModal() {
     const modal = document.getElementById('portfolioModal');
     if (modal) {
-        // Force show the modal with inline styles
-        modal.style.display = 'flex';
-        modal.style.opacity = '1';
-        modal.style.visibility = 'visible';
-        modal.style.position = 'fixed';
-        modal.style.top = '0';
-        modal.style.left = '0';
-        modal.style.width = '100%';
-        modal.style.height = '100%';
-        modal.style.zIndex = '1000';
-        
+        modal.classList.add('active');
         document.body.style.overflow = 'hidden';
         isModalOpen = true;
         
@@ -668,49 +658,43 @@ function closeModal() {
     const modal = document.getElementById('portfolioModal');
     if (!modal) return;
     
-    // Hide modal with inline styles
-    modal.style.opacity = '0';
-    modal.style.visibility = 'hidden';
+    modal.classList.remove('active');
+    document.body.style.overflow = 'auto';
+    isModalOpen = false;
     
-    setTimeout(() => {
-        modal.style.display = 'none';
-        document.body.style.overflow = 'auto';
-        isModalOpen = false;
-        
-        // Clean up resources
-        if (unityInstance) {
-            try {
-                unityInstance.Quit();
-                console.log('Unity instance quit');
-            } catch (error) {
-                console.warn('Error quitting Unity instance:', error);
-            }
-            unityInstance = null;
+    // Clean up resources
+    if (unityInstance) {
+        try {
+            unityInstance.Quit();
+            console.log('Unity instance quit');
+        } catch (error) {
+            console.warn('Error quitting Unity instance:', error);
         }
-        
-        if (currentVideoElement) {
-            currentVideoElement.pause();
-            currentVideoElement = null;
-            console.log('Video element cleaned up');
+        unityInstance = null;
+    }
+    
+    if (currentVideoElement) {
+        currentVideoElement.pause();
+        currentVideoElement = null;
+        console.log('Video element cleaned up');
+    }
+    
+    // Exit fullscreen if active
+    if (document.fullscreenElement) {
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
         }
-        
-        // Exit fullscreen if active
-        if (document.fullscreenElement) {
-            if (document.exitFullscreen) {
-                document.exitFullscreen();
-            }
-        }
-        
-        // Reset state
-        currentGame = null;
-        currentMediaType = null;
-        currentItemData = null;
-        
-        // Reset modal content
-        hideAllPreviewElements();
-        
-        console.log('Modal closed and cleaned up');
-    }, 300);
+    }
+    
+    // Reset state
+    currentGame = null;
+    currentMediaType = null;
+    currentItemData = null;
+    
+    // Reset modal content
+    hideAllPreviewElements();
+    
+    console.log('Modal closed and cleaned up');
 }
 
 // =============================================================================
