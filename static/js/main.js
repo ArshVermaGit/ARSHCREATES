@@ -3,15 +3,49 @@ let unityInstance = null;
 let currentMediaType = null;
 let currentVideoElement = null;
 let currentItemData = null;
+let isModalOpen = false;
 
 // Initialize everything when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
     initPortfolioCards();
     initContactForm();
+    initModalEvents();
 });
 
 // =============================================================================
-// PORTFOLIO CARDS INITIALIZATION
+// MODAL EVENT LISTENERS INITIALIZATION
+// =============================================================================
+function initModalEvents() {
+    // Modal close event listeners
+    const closeModalBtn = document.getElementById('closeModal');
+    const modalOverlay = document.querySelector('.modal-overlay');
+    
+    if (closeModalBtn) {
+        closeModalBtn.addEventListener('click', closeModal);
+    }
+    
+    if (modalOverlay) {
+        modalOverlay.addEventListener('click', closeModal);
+    }
+    
+    // Escape key listener
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && isModalOpen) {
+            closeModal();
+        }
+    });
+    
+    // Prevent modal content click from closing modal
+    const modalContainer = document.querySelector('.modal-container');
+    if (modalContainer) {
+        modalContainer.addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+    }
+}
+
+// =============================================================================
+// PORTFOLIO CARDS INITIALIZATION - FIXED
 // =============================================================================
 function initPortfolioCards() {
     const cards = document.querySelectorAll('.portfolio-card');
@@ -19,64 +53,110 @@ function initPortfolioCards() {
     cards.forEach(card => {
         const type = card.dataset.type;
         
-        if (type === 'game') {
-            const gameData = JSON.parse(card.dataset.game);
-            card.addEventListener('click', () => openGamePreview(gameData));
-        } else if (type === 'website') {
-            const websiteData = JSON.parse(card.dataset.website);
-            card.addEventListener('click', () => openWebsitePreview(websiteData));
-        } else if (type === 'photo') {
-            const photoData = JSON.parse(card.dataset.photo);
-            card.addEventListener('click', () => openPhotoPreview(photoData));
-        } else if (type === 'video') {
-            const videoData = JSON.parse(card.dataset.video);
-            card.addEventListener('click', () => openVideoPreview(videoData));
-        }
+        card.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            try {
+                if (type === 'game') {
+                    const gameData = JSON.parse(card.dataset.game);
+                    openGamePreview(gameData);
+                } else if (type === 'website') {
+                    const websiteData = JSON.parse(card.dataset.website);
+                    openWebsitePreview(websiteData);
+                } else if (type === 'photo') {
+                    const photoData = JSON.parse(card.dataset.photo);
+                    openPhotoPreview(photoData);
+                } else if (type === 'video') {
+                    const videoData = JSON.parse(card.dataset.video);
+                    openVideoPreview(videoData);
+                }
+            } catch (error) {
+                console.error('Error opening preview:', error);
+                showNotification('Error loading content. Please try again.', 'error');
+            }
+        });
+        
+        // Add keyboard support
+        card.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                card.click();
+            }
+        });
     });
 }
 
 // =============================================================================
-// GAME PREVIEW & MODAL
+// GAME PREVIEW & MODAL - FIXED
 // =============================================================================
 function openGamePreview(gameData) {
+    if (!gameData) {
+        showNotification('Game data not available.', 'error');
+        return;
+    }
+    
     currentGame = gameData;
     currentItemData = gameData;
     currentMediaType = 'game';
+    
     const modal = document.getElementById('portfolioModal');
-    const previewImage = document.getElementById('previewImage');
-    const modalTitle = document.getElementById('modalTitle');
-    const modalDescription = document.getElementById('modalDescription');
+    if (!modal) {
+        showNotification('Modal not found.', 'error');
+        return;
+    }
+    
+    // Update modal content
+    updateModalContent({
+        title: gameData.name,
+        description: gameData.description,
+        image: gameData.image
+    });
+    
+    // Setup game-specific elements
     const playBtn = document.getElementById('playItemBtn');
     const gamePreview = document.getElementById('itemPreview');
     const gameContainer = document.getElementById('gameContainer');
-    const modalActions = document.getElementById('modalActions');
     
     hideAllPreviewElements();
     
-    previewImage.src = gameData.image;
-    previewImage.style.display = 'block';
-    modalTitle.textContent = gameData.name;
-    modalDescription.textContent = gameData.description;
+    // Show preview image
+    const previewImage = document.getElementById('previewImage');
+    if (previewImage) {
+        previewImage.src = gameData.image;
+        previewImage.style.display = 'block';
+        previewImage.alt = gameData.name;
+    }
     
-    gamePreview.style.display = 'flex';
-    gameContainer.style.display = 'none';
-    playBtn.style.display = 'flex';
-    playBtn.innerHTML = '<i class="fas fa-play"></i><span>Play Game</span>';
+    // Setup game preview area
+    if (gamePreview) gamePreview.style.display = 'flex';
+    if (gameContainer) gameContainer.style.display = 'none';
     
-    modalActions.innerHTML = `
+    // Setup play button
+    if (playBtn) {
+        playBtn.style.display = 'flex';
+        playBtn.innerHTML = '<i class="fas fa-play"></i><span>Play Game</span>';
+        
+        // Remove existing event listeners and add new one
+        playBtn.onclick = loadUnityGame;
+    }
+    
+    // Setup modal actions
+    setupModalActions(`
         <button class="btn btn-glass" id="fullscreenBtn" style="display:none;">
             <i class="fas fa-expand"></i> Fullscreen
         </button>
-    `;
+    `);
     
-    modal.classList.add('active');
-    document.body.style.overflow = 'hidden';
-    
-    playBtn.onclick = () => loadUnityGame();
+    // Open modal
+    openModal();
 }
 
 function loadUnityGame() {
-    if (!currentGame) return;
+    if (!currentGame) {
+        showNotification('No game selected.', 'error');
+        return;
+    }
     
     const gamePreview = document.getElementById('itemPreview');
     const gameContainer = document.getElementById('gameContainer');
@@ -84,12 +164,19 @@ function loadUnityGame() {
     const loadingProgress = document.getElementById('loadingProgress');
     const fullscreenBtn = document.getElementById('fullscreenBtn');
     
-    gamePreview.style.display = 'none';
-    gameContainer.style.display = 'block';
-    gameLoading.style.display = 'flex';
+    // Show loading state
+    if (gamePreview) gamePreview.style.display = 'none';
+    if (gameContainer) gameContainer.style.display = 'block';
+    if (gameLoading) gameLoading.style.display = 'flex';
+    if (loadingProgress) loadingProgress.style.width = '0%';
     
-    if (fullscreenBtn) fullscreenBtn.style.display = 'inline-flex';
+    if (fullscreenBtn) {
+        fullscreenBtn.style.display = 'inline-flex';
+        // Setup fullscreen button
+        fullscreenBtn.onclick = toggleGameFullscreen;
+    }
     
+    // Load Unity game
     const buildUrl = `/static/games/${currentGame.game_folder}/Build`;
     const loaderUrl = `${buildUrl}/${currentGame.build_name}.loader.js`;
     const config = {
@@ -103,38 +190,59 @@ function loadUnityGame() {
     };
     
     const canvas = document.querySelector("#unity-canvas");
+    if (!canvas) {
+        showNotification('Game canvas not found.', 'error');
+        return;
+    }
+    
+    // Remove existing Unity script if any
+    const existingScript = document.querySelector(`script[src="${loaderUrl}"]`);
+    if (existingScript) {
+        existingScript.remove();
+    }
     
     const script = document.createElement("script");
     script.src = loaderUrl;
+    
     script.onload = () => {
+        if (typeof createUnityInstance !== 'function') {
+            showNotification('Unity loader failed to initialize.', 'error');
+            return;
+        }
+        
         createUnityInstance(canvas, config, (progress) => {
-            loadingProgress.style.width = (100 * progress) + "%";
+            if (loadingProgress) {
+                loadingProgress.style.width = (progress * 100) + "%";
+            }
         }).then((instance) => {
             unityInstance = instance;
-            gameLoading.style.display = 'none';
-        }).catch((message) => {
-            showNotification('Failed to load game: ' + message, 'error');
+            if (gameLoading) gameLoading.style.display = 'none';
+            showNotification('Game loaded successfully!', 'success');
+        }).catch((error) => {
+            console.error('Unity instance creation failed:', error);
+            showNotification('Failed to load game. Please try again.', 'error');
             closeModal();
         });
     };
-    script.onerror = () => {
-        showNotification('Failed to load game. Please check if game files exist.', 'error');
+    
+    script.onerror = (error) => {
+        console.error('Script loading error:', error);
+        showNotification('Failed to load game files. Please check if game files exist.', 'error');
         closeModal();
     };
     
     document.body.appendChild(script);
-    
-    setTimeout(() => {
-        document.getElementById('fullscreenBtn').onclick = toggleGameFullscreen;
-    }, 100);
 }
 
 function toggleGameFullscreen() {
     const gameContainer = document.getElementById('gameContainer');
+    if (!gameContainer) return;
     
     if (!document.fullscreenElement) {
         if (gameContainer.requestFullscreen) {
-            gameContainer.requestFullscreen();
+            gameContainer.requestFullscreen().catch(err => {
+                console.error('Error attempting to enable fullscreen:', err);
+            });
         } else if (gameContainer.webkitRequestFullscreen) {
             gameContainer.webkitRequestFullscreen();
         } else if (gameContainer.msRequestFullscreen) {
@@ -152,152 +260,175 @@ function toggleGameFullscreen() {
 }
 
 // =============================================================================
-// WEBSITE PREVIEW
+// WEBSITE PREVIEW - FIXED
 // =============================================================================
 function openWebsitePreview(websiteData) {
+    if (!websiteData) {
+        showNotification('Website data not available.', 'error');
+        return;
+    }
+    
     currentItemData = websiteData;
     currentMediaType = 'website';
-    const modal = document.getElementById('portfolioModal');
-    const modalTitle = document.getElementById('modalTitle');
-    const modalDescription = document.getElementById('modalDescription');
-    const gamePreview = document.getElementById('itemPreview');
-    const gameContainer = document.getElementById('gameContainer');
-    const modalActions = document.getElementById('modalActions');
+    
+    updateModalContent({
+        title: websiteData.name,
+        description: websiteData.description,
+        image: websiteData.image
+    });
+    
     const previewImage = document.getElementById('previewImage');
     const playBtn = document.getElementById('playItemBtn');
     
     hideAllPreviewElements();
     
-    previewImage.src = websiteData.image;
-    previewImage.style.display = 'block';
-    previewImage.style.cursor = 'pointer';
+    if (previewImage) {
+        previewImage.src = websiteData.image;
+        previewImage.style.display = 'block';
+        previewImage.style.cursor = 'pointer';
+        previewImage.alt = websiteData.name;
+        
+        // Setup click event for image
+        previewImage.onclick = () => {
+            window.open(websiteData.url, '_blank');
+            showNotification('Opening website...', 'info');
+        };
+    }
     
-    modalTitle.textContent = websiteData.name;
-    modalDescription.textContent = websiteData.description;
+    if (playBtn) playBtn.style.display = 'none';
     
-    gamePreview.style.display = 'flex';
-    gameContainer.style.display = 'none';
-    playBtn.style.display = 'none';
-    
-    modalActions.innerHTML = `
+    setupModalActions(`
         <button class="btn btn-primary" id="visitWebsiteBtn">
             <i class="fas fa-external-link-alt"></i> Visit Website
         </button>
-    `;
+    `);
     
-    modal.classList.add('active');
-    document.body.style.overflow = 'hidden';
+    openModal();
     
-    previewImage.onclick = () => window.open(websiteData.url, '_blank');
-    
+    // Setup website button after modal is open
     setTimeout(() => {
-        document.getElementById('visitWebsiteBtn').onclick = () => {
-            window.open(websiteData.url, '_blank');
-        };
-    }, 100);
+        const visitBtn = document.getElementById('visitWebsiteBtn');
+        if (visitBtn) {
+            visitBtn.onclick = () => {
+                window.open(websiteData.url, '_blank');
+                showNotification('Opening website...', 'info');
+            };
+        }
+    }, 50);
 }
 
 // =============================================================================
-// PHOTO PREVIEW
+// PHOTO PREVIEW - FIXED
 // =============================================================================
 function openPhotoPreview(photoData) {
+    if (!photoData) {
+        showNotification('Photo data not available.', 'error');
+        return;
+    }
+    
     currentItemData = photoData;
     currentMediaType = 'photo';
-    const modal = document.getElementById('portfolioModal');
-    const modalTitle = document.getElementById('modalTitle');
-    const modalDescription = document.getElementById('modalDescription');
-    const gamePreview = document.getElementById('itemPreview');
-    const gameContainer = document.getElementById('gameContainer');
-    const modalActions = document.getElementById('modalActions');
+    
+    updateModalContent({
+        title: photoData.title,
+        description: photoData.description
+    });
+    
     const photoViewer = document.getElementById('photoViewer');
     const playBtn = document.getElementById('playItemBtn');
     
     hideAllPreviewElements();
     
-    photoViewer.innerHTML = `<img src="${photoData.image}" alt="${photoData.title}" style="width: 100%; height: 100%; object-fit: contain; cursor: pointer;" id="photoImage">`;
-    photoViewer.style.display = 'flex';
-    photoViewer.style.alignItems = 'center';
-    photoViewer.style.justifyContent = 'center';
-    photoViewer.style.width = '100%';
-    photoViewer.style.height = '100%';
+    if (photoViewer) {
+        photoViewer.innerHTML = `
+            <img src="${photoData.image}" alt="${photoData.title}" 
+                 style="width: 100%; height: 100%; object-fit: contain; cursor: pointer;" 
+                 id="photoImage">
+        `;
+        photoViewer.style.display = 'flex';
+    }
     
-    modalTitle.textContent = photoData.title;
-    modalDescription.textContent = photoData.description;
+    if (playBtn) playBtn.style.display = 'none';
     
-    playBtn.style.display = 'none';
-    gamePreview.style.display = 'flex';
-    gameContainer.style.display = 'none';
-    
-    modalActions.innerHTML = `
+    setupModalActions(`
         <button class="btn btn-glass" id="downloadPhotoBtn">
             <i class="fas fa-download"></i> Download
         </button>
         <button class="btn btn-glass" id="fullscreenPhotoBtn">
             <i class="fas fa-expand"></i> Fullscreen
         </button>
-    `;
+    `);
     
-    modal.classList.add('active');
-    document.body.style.overflow = 'hidden';
+    openModal();
     
+    // Setup photo buttons after modal is open
     setTimeout(() => {
-        document.getElementById('downloadPhotoBtn').onclick = () => downloadMedia(photoData.image, photoData.title + '.jpg');
-        document.getElementById('fullscreenPhotoBtn').onclick = () => {
-            const photoImg = document.getElementById('photoImage');
-            if (photoImg.requestFullscreen) {
-                photoImg.requestFullscreen();
-            } else if (photoImg.webkitRequestFullscreen) {
-                photoImg.webkitRequestFullscreen();
-            }
-        };
+        const downloadBtn = document.getElementById('downloadPhotoBtn');
+        const fullscreenBtn = document.getElementById('fullscreenPhotoBtn');
+        const photoImg = document.getElementById('photoImage');
         
-        document.getElementById('photoImage').onclick = function() {
-            if (this.requestFullscreen) {
-                this.requestFullscreen();
-            } else if (this.webkitRequestFullscreen) {
-                this.webkitRequestFullscreen();
-            }
-        };
-    }, 100);
+        if (downloadBtn) {
+            downloadBtn.onclick = () => {
+                downloadMedia(photoData.image, `${photoData.title}.jpg`);
+            };
+        }
+        
+        if (fullscreenBtn) {
+            fullscreenBtn.onclick = () => {
+                if (photoImg && photoImg.requestFullscreen) {
+                    photoImg.requestFullscreen();
+                }
+            };
+        }
+        
+        if (photoImg) {
+            photoImg.onclick = function() {
+                if (this.requestFullscreen) {
+                    this.requestFullscreen();
+                }
+            };
+        }
+    }, 50);
 }
 
 // =============================================================================
-// VIDEO PREVIEW
+// VIDEO PREVIEW - FIXED
 // =============================================================================
 function openVideoPreview(videoData) {
+    if (!videoData) {
+        showNotification('Video data not available.', 'error');
+        return;
+    }
+    
     currentItemData = videoData;
     currentMediaType = 'video';
-    const modal = document.getElementById('portfolioModal');
-    const modalTitle = document.getElementById('modalTitle');
-    const modalDescription = document.getElementById('modalDescription');
-    const gamePreview = document.getElementById('itemPreview');
-    const gameContainer = document.getElementById('gameContainer');
-    const modalActions = document.getElementById('modalActions');
+    
+    updateModalContent({
+        title: videoData.title,
+        description: videoData.description
+    });
+    
     const videoPlayer = document.getElementById('videoPlayer');
     const playBtn = document.getElementById('playItemBtn');
     
     hideAllPreviewElements();
     
-    videoPlayer.innerHTML = `
-        <video id="mainVideo" controls style="width: 100%; height: 100%; object-fit: contain;">
-            <source src="${videoData.video_url}" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
-    `;
-    videoPlayer.style.display = 'flex';
-    videoPlayer.style.width = '100%';
-    videoPlayer.style.height = '100%';
+    if (videoPlayer) {
+        videoPlayer.innerHTML = `
+            <video id="mainVideo" controls style="width: 100%; height: 100%; object-fit: contain;">
+                <source src="${videoData.video_url}" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        `;
+        videoPlayer.style.display = 'flex';
+        
+        // Store video element reference
+        currentVideoElement = videoPlayer.querySelector('#mainVideo');
+    }
     
-    currentVideoElement = videoPlayer.querySelector('#mainVideo');
+    if (playBtn) playBtn.style.display = 'none';
     
-    modalTitle.textContent = videoData.title;
-    modalDescription.textContent = videoData.description;
-    
-    playBtn.style.display = 'none';
-    gamePreview.style.display = 'flex';
-    gameContainer.style.display = 'none';
-    
-    modalActions.innerHTML = `
+    setupModalActions(`
         <button class="btn btn-glass" id="playPauseBtn">
             <i class="fas fa-pause"></i> Pause
         </button>
@@ -310,164 +441,230 @@ function openVideoPreview(videoData) {
         <button class="btn btn-glass" id="fullscreenVideoBtn">
             <i class="fas fa-expand"></i> Fullscreen
         </button>
-    `;
+    `);
     
-    modal.classList.add('active');
-    document.body.style.overflow = 'hidden';
+    openModal();
     
+    // Setup video controls after modal is open
     setTimeout(() => {
-        const playPauseBtn = document.getElementById('playPauseBtn');
-        const muteBtn = document.getElementById('muteBtn');
-        
+        setupVideoControls();
+    }, 50);
+}
+
+function setupVideoControls() {
+    const playPauseBtn = document.getElementById('playPauseBtn');
+    const muteBtn = document.getElementById('muteBtn');
+    const downloadBtn = document.getElementById('downloadVideoBtn');
+    const fullscreenBtn = document.getElementById('fullscreenVideoBtn');
+    
+    if (!currentVideoElement) return;
+    
+    // Play/Pause button
+    if (playPauseBtn) {
         playPauseBtn.onclick = () => togglePlayPause(playPauseBtn);
+    }
+    
+    // Mute button
+    if (muteBtn) {
         muteBtn.onclick = () => toggleMute(muteBtn);
-        document.getElementById('downloadVideoBtn').onclick = () => downloadMedia(videoData.video_url, videoData.title + '.mp4');
-        document.getElementById('fullscreenVideoBtn').onclick = () => {
+    }
+    
+    // Download button
+    if (downloadBtn) {
+        downloadBtn.onclick = () => {
+            downloadMedia(currentItemData.video_url, `${currentItemData.title}.mp4`);
+        };
+    }
+    
+    // Fullscreen button
+    if (fullscreenBtn) {
+        fullscreenBtn.onclick = () => {
             if (currentVideoElement.requestFullscreen) {
                 currentVideoElement.requestFullscreen();
-            } else if (currentVideoElement.webkitRequestFullscreen) {
-                currentVideoElement.webkitRequestFullscreen();
             }
         };
-        
-        currentVideoElement.play();
-        
-        currentVideoElement.addEventListener('play', () => {
-            playPauseBtn.innerHTML = '<i class="fas fa-pause"></i> Pause';
+    }
+    
+    // Auto-play video
+    const playPromise = currentVideoElement.play();
+    if (playPromise !== undefined) {
+        playPromise.catch(error => {
+            console.log('Auto-play prevented:', error);
+            showNotification('Click play to start video', 'info');
         });
-        
-        currentVideoElement.addEventListener('pause', () => {
-            playPauseBtn.innerHTML = '<i class="fas fa-play"></i> Play';
-        });
-    }, 100);
+    }
+    
+    // Update play/pause button state
+    currentVideoElement.addEventListener('play', () => {
+        const btn = document.getElementById('playPauseBtn');
+        if (btn) btn.innerHTML = '<i class="fas fa-pause"></i> Pause';
+    });
+    
+    currentVideoElement.addEventListener('pause', () => {
+        const btn = document.getElementById('playPauseBtn');
+        if (btn) btn.innerHTML = '<i class="fas fa-play"></i> Play';
+    });
 }
 
 // =============================================================================
-// MEDIA CONTROLS
+// MEDIA CONTROLS - FIXED
 // =============================================================================
 function togglePlayPause(btn) {
     if (!currentVideoElement) return;
     
     if (currentVideoElement.paused) {
-        currentVideoElement.play();
-        btn.innerHTML = '<i class="fas fa-pause"></i> Pause';
+        currentVideoElement.play().catch(error => {
+            console.error('Play failed:', error);
+            showNotification('Failed to play video', 'error');
+        });
     } else {
         currentVideoElement.pause();
-        btn.innerHTML = '<i class="fas fa-play"></i> Play';
     }
 }
 
 function toggleMute(btn) {
     if (!currentVideoElement) return;
     
-    if (currentVideoElement.muted) {
-        currentVideoElement.muted = false;
-        btn.innerHTML = '<i class="fas fa-volume-up"></i> Mute';
-    } else {
-        currentVideoElement.muted = true;
-        btn.innerHTML = '<i class="fas fa-volume-mute"></i> Unmute';
-    }
+    currentVideoElement.muted = !currentVideoElement.muted;
+    btn.innerHTML = currentVideoElement.muted ? 
+        '<i class="fas fa-volume-mute"></i> Unmute' : 
+        '<i class="fas fa-volume-up"></i> Mute';
 }
 
 function downloadMedia(url, filename) {
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = filename || 'download';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    showNotification('Download started!', 'success');
+    if (!url) {
+        showNotification('Download URL not available.', 'error');
+        return;
+    }
+    
+    try {
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename || 'download';
+        a.style.display = 'none';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        showNotification('Download started!', 'success');
+    } catch (error) {
+        console.error('Download failed:', error);
+        showNotification('Download failed. Please try again.', 'error');
+    }
+}
+
+// =============================================================================
+// MODAL UTILITY FUNCTIONS
+// =============================================================================
+function updateModalContent({ title, description, image }) {
+    const modalTitle = document.getElementById('modalTitle');
+    const modalDescription = document.getElementById('modalDescription');
+    
+    if (modalTitle && title) modalTitle.textContent = title;
+    if (modalDescription && description) modalDescription.textContent = description;
+}
+
+function setupModalActions(html) {
+    const modalActions = document.getElementById('modalActions');
+    if (modalActions) {
+        modalActions.innerHTML = html;
+    }
 }
 
 function hideAllPreviewElements() {
-    const previewImage = document.getElementById('previewImage');
-    const websiteFrame = document.getElementById('websiteFrame');
-    const photoViewer = document.getElementById('photoViewer');
-    const videoPlayer = document.getElementById('videoPlayer');
+    const elements = [
+        'previewImage', 'websiteFrame', 'photoViewer', 'videoPlayer'
+    ];
     
-    if (previewImage) {
-        previewImage.style.display = 'none';
-        previewImage.onclick = null;
-        previewImage.style.cursor = 'default';
-    }
-    if (websiteFrame) websiteFrame.style.display = 'none';
-    if (photoViewer) {
-        photoViewer.style.display = 'none';
-        photoViewer.innerHTML = '';
-    }
-    if (videoPlayer) {
-        videoPlayer.style.display = 'none';
-        videoPlayer.innerHTML = '';
-    }
-}
-
-// =============================================================================
-// CLOSE MODAL
-// =============================================================================
-function closeModal() {
-    const modal = document.getElementById('portfolioModal');
-    modal.classList.remove('active');
-    document.body.style.overflow = 'auto';
+    elements.forEach(id => {
+        const element = document.getElementById(id);
+        if (element) {
+            element.style.display = 'none';
+            if (id === 'previewImage') {
+                element.onclick = null;
+                element.style.cursor = 'default';
+            }
+        }
+    });
     
-    if (unityInstance) {
-        unityInstance.Quit();
-        unityInstance = null;
-    }
-    
-    if (currentVideoElement) {
-        currentVideoElement.pause();
-        currentVideoElement = null;
-    }
-    
+    // Reset game preview area
     const gamePreview = document.getElementById('itemPreview');
     const gameContainer = document.getElementById('gameContainer');
     
-    gamePreview.innerHTML = `
-        <img src="" alt="Preview" id="previewImage">
-        <iframe id="websiteFrame" style="display:none;"></iframe>
-        <div id="photoViewer" style="display:none;"></div>
-        <div id="videoPlayer" style="display:none;"></div>
-        <button class="modal-play-btn" id="playItemBtn">
-            <i class="fas fa-play"></i>
-            <span>Play Game</span>
-        </button>
-    `;
-    
-    gameContainer.style.display = 'none';
-    
-    if (document.fullscreenElement) {
-        if (document.exitFullscreen) {
-            document.exitFullscreen();
-        } else if (document.webkitExitFullscreen) {
-            document.webkitExitFullscreen();
-        }
-    }
-    
-    currentGame = null;
-    currentMediaType = null;
-    currentItemData = null;
+    if (gamePreview) gamePreview.style.display = 'none';
+    if (gameContainer) gameContainer.style.display = 'none';
 }
 
-// Modal close event listeners
-document.getElementById('closeModal')?.addEventListener('click', closeModal);
-document.querySelector('.modal-overlay')?.addEventListener('click', closeModal);
-
-document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') {
-        const modal = document.getElementById('portfolioModal');
-        if (modal && modal.classList.contains('active')) {
-            closeModal();
-        }
+function openModal() {
+    const modal = document.getElementById('portfolioModal');
+    if (modal) {
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        isModalOpen = true;
+        
+        // Add animation class for smooth opening
+        setTimeout(() => {
+            modal.style.opacity = '1';
+        }, 10);
     }
-});
+}
 
 // =============================================================================
-// CONTACT FORM
+// CLOSE MODAL - FIXED
+// =============================================================================
+function closeModal() {
+    const modal = document.getElementById('portfolioModal');
+    if (!modal) return;
+    
+    // Add closing animation
+    modal.style.opacity = '0';
+    
+    setTimeout(() => {
+        modal.classList.remove('active');
+        document.body.style.overflow = 'auto';
+        isModalOpen = false;
+        
+        // Clean up resources
+        if (unityInstance) {
+            try {
+                unityInstance.Quit();
+            } catch (error) {
+                console.warn('Error quitting Unity instance:', error);
+            }
+            unityInstance = null;
+        }
+        
+        if (currentVideoElement) {
+            currentVideoElement.pause();
+            currentVideoElement = null;
+        }
+        
+        // Exit fullscreen if active
+        if (document.fullscreenElement) {
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            }
+        }
+        
+        // Reset state
+        currentGame = null;
+        currentMediaType = null;
+        currentItemData = null;
+        
+        // Reset modal content
+        const gamePreview = document.getElementById('itemPreview');
+        const gameContainer = document.getElementById('gameContainer');
+        
+        if (gamePreview) gamePreview.style.display = 'none';
+        if (gameContainer) gameContainer.style.display = 'none';
+        
+    }, 300); // Match CSS transition duration
+}
+
+// =============================================================================
+// CONTACT FORM - IMPLEMENTED
 // =============================================================================
 function initContactForm() {
     const contactForm = document.getElementById('contactForm');
-    const submitBtn = document.getElementById('submitBtn');
-    
     if (!contactForm) {
         console.warn('Contact form not found');
         return;
@@ -483,6 +680,7 @@ function initContactForm() {
             return;
         }
         
+        const submitBtn = document.getElementById('submitBtn');
         const originalText = submitBtn.innerHTML;
         submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
         submitBtn.disabled = true;
@@ -546,6 +744,7 @@ function initContactForm() {
             console.error('Error:', error);
             showNotification(error.message || 'Network error. Please check your connection and try again.', 'error');
         } finally {
+            const submitBtn = document.getElementById('submitBtn');
             submitBtn.innerHTML = originalText;
             submitBtn.disabled = false;
             isSubmitting = false;
@@ -589,7 +788,7 @@ function initContactForm() {
 }
 
 // =============================================================================
-// NOTIFICATION SYSTEM
+// NOTIFICATION SYSTEM - IMPLEMENTED
 // =============================================================================
 function showNotification(message, type = 'info') {
     const existingNotifications = document.querySelectorAll('.notification');
@@ -639,17 +838,9 @@ function showNotification(message, type = 'info') {
     }, 5000);
 }
 
-// Admin Feedback Management JavaScript
-document.addEventListener('DOMContentLoaded', function() {
-    // Initialize today count
-    updateTodayCount();
-    
-    // Initialize event listeners
-    initSearch();
-    initFilters();
-    initExport();
-    initModal();
-});
+// =============================================================================
+// ADMIN FEEDBACK MANAGEMENT
+// =============================================================================
 
 // Update today's feedback count
 function updateTodayCount() {
@@ -917,155 +1108,24 @@ function deleteFeedback(feedbackId) {
     });
 }
 
-// Notification system
-function showNotification(message, type = 'info') {
-    // Create notification container if it doesn't exist
-    let container = document.getElementById('notificationContainer');
-    if (!container) {
-        container = document.createElement('div');
-        container.id = 'notificationContainer';
-        container.style.cssText = `
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 10000;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        `;
-        document.body.appendChild(container);
-    }
-    
-    // Remove existing notifications
-    const existingNotifications = document.querySelectorAll('.notification');
-    existingNotifications.forEach(notif => {
-        notif.style.animation = 'slideInRight 0.3s ease-out reverse';
-        setTimeout(() => notif.remove(), 300);
-    });
-    
-    const notification = document.createElement('div');
-    notification.className = `notification ${type}`;
-    
-    const icon = type === 'success' ? 'fa-check-circle' : 
-                 type === 'error' ? 'fa-exclamation-circle' : 
-                 'fa-info-circle';
-    
-    const title = type === 'success' ? 'Success' : 
-                  type === 'error' ? 'Error' : 
-                  'Info';
-    
-    notification.innerHTML = `
-        <div class="notification-content">
-            <div class="notification-icon">
-                <i class="fas ${icon}"></i>
-            </div>
-            <div class="notification-text">
-                <h4>${title}</h4>
-                <p>${message}</p>
-            </div>
-        </div>
-    `;
-    
-    // Add basic notification styles if not already present
-    if (!document.querySelector('#notificationStyles')) {
-        const style = document.createElement('style');
-        style.id = 'notificationStyles';
-        style.textContent = `
-            .notification {
-                background: var(--glass-bg);
-                border: 1px solid var(--glass-border);
-                border-radius: var(--radius);
-                padding: 1rem;
-                backdrop-filter: blur(var(--glass-blur));
-                box-shadow: var(--shadow-medium);
-                animation: slideInRight 0.3s ease-out;
-                max-width: 300px;
-            }
-            
-            .notification.success {
-                border-left: 4px solid var(--success);
-            }
-            
-            .notification.error {
-                border-left: 4px solid var(--error);
-            }
-            
-            .notification.info {
-                border-left: 4px solid var(--accent);
-            }
-            
-            .notification-content {
-                display: flex;
-                align-items: flex-start;
-                gap: 0.75rem;
-            }
-            
-            .notification-icon {
-                font-size: 1.25rem;
-                margin-top: 0.125rem;
-            }
-            
-            .notification.success .notification-icon {
-                color: var(--success);
-            }
-            
-            .notification.error .notification-icon {
-                color: var(--error);
-            }
-            
-            .notification.info .notification-icon {
-                color: var(--accent);
-            }
-            
-            .notification-text h4 {
-                margin: 0 0 0.25rem 0;
-                font-size: 0.9rem;
-                font-weight: 600;
-                color: var(--text-primary);
-            }
-            
-            .notification-text p {
-                margin: 0;
-                font-size: 0.85rem;
-                color: var(--text-secondary);
-                line-height: 1.4;
-            }
-            
-            @keyframes slideInRight {
-                from {
-                    transform: translateX(100%);
-                    opacity: 0;
-                }
-                to {
-                    transform: translateX(0);
-                    opacity: 1;
-                }
-            }
-        `;
-        document.head.appendChild(style);
-    }
-    
-    container.appendChild(notification);
-    
-    // Auto remove after 5 seconds
-    setTimeout(() => {
-        notification.style.animation = 'slideInRight 0.3s ease-out reverse';
-        setTimeout(() => {
-            if (notification.parentNode) {
-                notification.remove();
-            }
-        }, 300);
-    }, 5000);
-}
-
-// Make functions globally available
-window.viewMessage = viewMessage;
-window.closeMessageModal = closeMessageModal;
-window.replyToCurrentMessage = replyToCurrentMessage;
-window.deleteFeedback = deleteFeedback;
-window.showNotification = showNotification;
-
 // Make functions globally available
 window.showNotification = showNotification;
 window.initContactForm = initContactForm;
 window.closeModal = closeModal;
+window.openGamePreview = openGamePreview;
+window.openWebsitePreview = openWebsitePreview;
+window.openPhotoPreview = openPhotoPreview;
+window.openVideoPreview = openVideoPreview;
+
+// Admin functions
+window.viewMessage = viewMessage;
+window.closeMessageModal = closeMessageModal;
+window.replyToCurrentMessage = replyToCurrentMessage;
+window.deleteFeedback = deleteFeedback;
+window.updateTodayCount = updateTodayCount;
+window.initSearch = initSearch;
+window.initFilters = initFilters;
+window.initExport = initExport;
+window.initModal = initModal;
+
+console.log('Portfolio JS initialized successfully');

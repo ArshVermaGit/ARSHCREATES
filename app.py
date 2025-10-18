@@ -188,28 +188,7 @@ def admin_feedback():
                              feedbacks=[],
                              now=datetime.now())
 
-@app.route('/delete_feedback/<feedback_id>', methods=['DELETE'])
-def delete_feedback(feedback_id):
-    """Delete feedback entry"""
-    try:
-        # Read feedback from file
-        with open(FEEDBACK_FILE, 'r') as f:
-            feedbacks = json.load(f)
-        
-        # Filter out the feedback to delete
-        feedbacks = [f for f in feedbacks if f.get('id') != feedback_id]
-        
-        # Save updated feedback
-        with open(FEEDBACK_FILE, 'w') as f:
-            json.dump(feedbacks, f, indent=4)
-        
-        return jsonify({'success': True})
-        
-    except Exception as e:
-        print(f"Error deleting feedback: {str(e)}")
-        return jsonify({'success': False, 'error': str(e)}), 500
-
-# ADD THIS NEW ROUTE - This is what the JavaScript is calling
+# FIXED: Added the missing admin delete route
 @app.route('/admin/delete_feedback/<feedback_id>', methods=['DELETE'])
 def admin_delete_feedback(feedback_id):
     """Delete feedback entry from admin panel"""
