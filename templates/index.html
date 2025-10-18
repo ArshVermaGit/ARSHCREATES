@@ -336,33 +336,32 @@
             <i class="fas fa-times"></i>
         </button>
         <div class="modal-content">
-            <div class="modal-preview" id="itemPreview">
-                <img src="" alt="Preview" id="previewImage">
-                <iframe id="websiteFrame" style="display:none;"></iframe>
-                <div id="photoViewer" style="display:none;"></div>
-                <div id="videoPlayer" style="display:none;"></div>
-                <button class="modal-play-btn" id="playItemBtn">
-                    <i class="fas fa-play"></i>
-                    <span>Play Game</span>
-                </button>
-            </div>
-            <div class="modal-game" id="gameContainer" style="display: none;">
-                <canvas id="unity-canvas"></canvas>
-                <div class="game-loading" id="gameLoading">
-                    <div class="loading-spinner"></div>
-                    <p>Loading Game...</p>
-                    <div class="loading-bar">
-                        <div class="loading-progress" id="loadingProgress"></div>
+            <div class="modal-preview">
+                <div id="itemPreview">
+                    <img src="" alt="Preview" id="previewImage">
+                    <button class="modal-play-btn" id="playItemBtn">
+                        <i class="fas fa-play"></i>
+                        <span>Play Game</span>
+                    </button>
+                </div>
+                <div id="photoViewer"></div>
+                <div id="videoPlayer"></div>
+                <div class="modal-game" id="gameContainer">
+                    <canvas id="unity-canvas"></canvas>
+                    <div class="game-loading" id="gameLoading">
+                        <div class="loading-spinner"></div>
+                        <p>Loading Game...</p>
+                        <div class="loading-bar">
+                            <div class="loading-progress" id="loadingProgress"></div>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="modal-info">
-                <h2 id="modalTitle">Title</h2>
-                <p id="modalDescription">Description</p>
+                <h2 class="modal-title" id="modalTitle">Title</h2>
+                <p class="modal-description" id="modalDescription">Description</p>
                 <div class="modal-actions" id="modalActions">
-                    <button class="btn btn-glass" id="fullscreenBtn">
-                        <i class="fas fa-expand"></i> Fullscreen
-                    </button>
+                    <!-- Action buttons will be inserted here dynamically -->
                 </div>
             </div>
         </div>

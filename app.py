@@ -150,7 +150,7 @@ def contact():
         
         return jsonify({
             'success': True,
-            'message': 'Thank you for your message! We will get back to you soon.'
+            'message': 'Thank you for your message! I will get back to you soon.'
         })
         
     except Exception as e:
@@ -188,7 +188,6 @@ def admin_feedback():
                              feedbacks=[],
                              now=datetime.now())
 
-# FIXED: Added the missing admin delete route
 @app.route('/admin/delete_feedback/<feedback_id>', methods=['DELETE'])
 def admin_delete_feedback(feedback_id):
     """Delete feedback entry from admin panel"""
