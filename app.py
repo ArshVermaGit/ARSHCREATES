@@ -338,4 +338,4 @@ if __name__ == '__main__':
     print(f"Feedback file: {os.path.abspath(FEEDBACK_FILE)}")
     print("=" * 50)
     
-    app.run(debug=True, host='0.0.0.0', port=5002)
+    app.run(debug=True)
