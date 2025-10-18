@@ -139,7 +139,7 @@
 </section>
 
 <!-- Message Modal -->
-<div class="modal" id="messageModal">
+<div class="modal" id="messageModal" style="display: none;">
     <div class="modal-overlay" onclick="closeMessageModal()"></div>
     <div class="modal-content">
         <div class="modal-header">
@@ -162,19 +162,25 @@
     </div>
 </div>
 
-<script>
-// Initialize admin functionality when DOM is loaded
-document.addEventListener('DOMContentLoaded', function() {
-    updateTodayCount();
-    initSearch();
-    initFilters();
-    initExport();
-    initModal();
-});
-</script>
-
 {% endblock %}
 
 {% block extra_scripts %}
-<!-- No extra scripts needed - all functions are in main.js -->
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+<script>
+// Wait for main.js to load, then initialize admin functions
+document.addEventListener('DOMContentLoaded', function() {
+    // Give main.js time to load
+    setTimeout(function() {
+        if (typeof initAdminFunctions === 'function') {
+            initAdminFunctions();
+        } else {
+            console.error('initAdminFunctions not found in main.js');
+        }
+        
+        if (typeof updateTodayCount === 'function') {
+            updateTodayCount();
+        }
+    }, 100);
+});
+</script>
 {% endblock %}

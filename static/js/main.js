@@ -87,9 +87,6 @@ function initPortfolioCards() {
     });
 }
 
-// =============================================================================
-// GAME PREVIEW & MODAL - FIXED
-// =============================================================================
 function openGamePreview(gameData) {
     if (!gameData) {
         showNotification('Game data not available.', 'error');
@@ -129,15 +126,17 @@ function openGamePreview(gameData) {
     }
     
     // Setup game preview area
-    if (gamePreview) gamePreview.style.display = 'flex';
-    if (gameContainer) gameContainer.style.display = 'none';
+    if (gamePreview) {
+        gamePreview.style.display = 'flex';
+    }
+    if (gameContainer) {
+        gameContainer.style.display = 'none';
+    }
     
     // Setup play button
     if (playBtn) {
         playBtn.style.display = 'flex';
         playBtn.innerHTML = '<i class="fas fa-play"></i><span>Play Game</span>';
-        
-        // Remove existing event listeners and add new one
         playBtn.onclick = loadUnityGame;
     }
     
@@ -158,21 +157,33 @@ function loadUnityGame() {
         return;
     }
     
+    console.log('Loading Unity game:', currentGame.name);
+    
     const gamePreview = document.getElementById('itemPreview');
     const gameContainer = document.getElementById('gameContainer');
     const gameLoading = document.getElementById('gameLoading');
     const loadingProgress = document.getElementById('loadingProgress');
     const fullscreenBtn = document.getElementById('fullscreenBtn');
     
-    // Show loading state
-    if (gamePreview) gamePreview.style.display = 'none';
-    if (gameContainer) gameContainer.style.display = 'block';
-    if (gameLoading) gameLoading.style.display = 'flex';
-    if (loadingProgress) loadingProgress.style.width = '0%';
+    // CRITICAL: Hide preview and show game container
+    if (gamePreview) {
+        gamePreview.style.display = 'none';
+        console.log('Preview hidden');
+    }
+    if (gameContainer) {
+        gameContainer.style.display = 'flex';
+        console.log('Game container shown');
+    }
+    if (gameLoading) {
+        gameLoading.style.display = 'flex';
+        console.log('Loading screen shown');
+    }
+    if (loadingProgress) {
+        loadingProgress.style.width = '0%';
+    }
     
     if (fullscreenBtn) {
         fullscreenBtn.style.display = 'inline-flex';
-        // Setup fullscreen button
         fullscreenBtn.onclick = toggleGameFullscreen;
     }
     
@@ -189,6 +200,8 @@ function loadUnityGame() {
         productVersion: "1.0",
     };
     
+    console.log('Unity config:', config);
+    
     const canvas = document.querySelector("#unity-canvas");
     if (!canvas) {
         showNotification('Game canvas not found.', 'error');
@@ -199,14 +212,18 @@ function loadUnityGame() {
     const existingScript = document.querySelector(`script[src="${loaderUrl}"]`);
     if (existingScript) {
         existingScript.remove();
+        console.log('Removed existing Unity script');
     }
     
     const script = document.createElement("script");
     script.src = loaderUrl;
     
     script.onload = () => {
+        console.log('Unity loader script loaded');
+        
         if (typeof createUnityInstance !== 'function') {
             showNotification('Unity loader failed to initialize.', 'error');
+            console.error('createUnityInstance not found');
             return;
         }
         
@@ -214,10 +231,12 @@ function loadUnityGame() {
             if (loadingProgress) {
                 loadingProgress.style.width = (progress * 100) + "%";
             }
+            console.log('Loading progress:', (progress * 100) + '%');
         }).then((instance) => {
             unityInstance = instance;
             if (gameLoading) gameLoading.style.display = 'none';
             showNotification('Game loaded successfully!', 'success');
+            console.log('Unity instance created successfully');
         }).catch((error) => {
             console.error('Unity instance creation failed:', error);
             showNotification('Failed to load game. Please try again.', 'error');
@@ -232,6 +251,7 @@ function loadUnityGame() {
     };
     
     document.body.appendChild(script);
+    console.log('Unity script appended to body');
 }
 
 function toggleGameFullscreen() {
@@ -268,6 +288,8 @@ function openWebsitePreview(websiteData) {
         return;
     }
     
+    console.log('Opening website preview:', websiteData);
+    
     currentItemData = websiteData;
     currentMediaType = 'website';
     
@@ -277,10 +299,15 @@ function openWebsitePreview(websiteData) {
         image: websiteData.image
     });
     
+    hideAllPreviewElements();
+    
+    const itemPreview = document.getElementById('itemPreview');
     const previewImage = document.getElementById('previewImage');
     const playBtn = document.getElementById('playItemBtn');
     
-    hideAllPreviewElements();
+    if (itemPreview) {
+        itemPreview.style.display = 'flex';
+    }
     
     if (previewImage) {
         previewImage.src = websiteData.image;
@@ -326,6 +353,8 @@ function openPhotoPreview(photoData) {
         return;
     }
     
+    console.log('Opening photo preview:', photoData);
+    
     currentItemData = photoData;
     currentMediaType = 'photo';
     
@@ -334,10 +363,10 @@ function openPhotoPreview(photoData) {
         description: photoData.description
     });
     
+    hideAllPreviewElements();
+    
     const photoViewer = document.getElementById('photoViewer');
     const playBtn = document.getElementById('playItemBtn');
-    
-    hideAllPreviewElements();
     
     if (photoViewer) {
         photoViewer.innerHTML = `
@@ -400,6 +429,8 @@ function openVideoPreview(videoData) {
         return;
     }
     
+    console.log('Opening video preview:', videoData);
+    
     currentItemData = videoData;
     currentMediaType = 'video';
     
@@ -408,10 +439,10 @@ function openVideoPreview(videoData) {
         description: videoData.description
     });
     
+    hideAllPreviewElements();
+    
     const videoPlayer = document.getElementById('videoPlayer');
     const playBtn = document.getElementById('playItemBtn');
-    
-    hideAllPreviewElements();
     
     if (videoPlayer) {
         videoPlayer.innerHTML = `
@@ -553,20 +584,27 @@ function downloadMedia(url, filename) {
 }
 
 // =============================================================================
-// MODAL UTILITY FUNCTIONS
+// MODAL UTILITY FUNCTIONS - FIXED
 // =============================================================================
 function updateModalContent({ title, description, image }) {
     const modalTitle = document.getElementById('modalTitle');
     const modalDescription = document.getElementById('modalDescription');
     
-    if (modalTitle && title) modalTitle.textContent = title;
-    if (modalDescription && description) modalDescription.textContent = description;
+    if (modalTitle && title) {
+        modalTitle.textContent = title;
+        console.log('Modal title set:', title);
+    }
+    if (modalDescription && description) {
+        modalDescription.textContent = description;
+        console.log('Modal description set:', description);
+    }
 }
 
 function setupModalActions(html) {
     const modalActions = document.getElementById('modalActions');
     if (modalActions) {
         modalActions.innerHTML = html;
+        console.log('Modal actions set');
     }
 }
 
@@ -589,39 +627,53 @@ function hideAllPreviewElements() {
     
     // Hide loading state
     const gameLoading = document.getElementById('gameLoading');
-    if (gameLoading) gameLoading.style.display = 'none';
+    if (gameLoading) {
+        gameLoading.style.display = 'none';
+    }
     
     // Hide play button
     const playBtn = document.getElementById('playItemBtn');
-    if (playBtn) playBtn.style.display = 'none';
-}
-
-function openModal() {
-    const modal = document.getElementById('portfolioModal');
-    if (modal) {
-        modal.classList.add('active');
-        document.body.style.overflow = 'hidden';
-        isModalOpen = true;
-        
-        // Add animation
-        setTimeout(() => {
-            modal.style.opacity = '1';
-        }, 10);
+    if (playBtn) {
+        playBtn.style.display = 'none';
     }
 }
 
 // =============================================================================
-// CLOSE MODAL - FIXED
+// MODAL OPEN/CLOSE - COMPLETELY REWRITTEN
 // =============================================================================
+function openModal() {
+    const modal = document.getElementById('portfolioModal');
+    if (modal) {
+        // Force show the modal with inline styles
+        modal.style.display = 'flex';
+        modal.style.opacity = '1';
+        modal.style.visibility = 'visible';
+        modal.style.position = 'fixed';
+        modal.style.top = '0';
+        modal.style.left = '0';
+        modal.style.width = '100%';
+        modal.style.height = '100%';
+        modal.style.zIndex = '1000';
+        
+        document.body.style.overflow = 'hidden';
+        isModalOpen = true;
+        
+        console.log('Modal opened successfully');
+    }
+}
+
 function closeModal() {
+    console.log('Closing modal');
+    
     const modal = document.getElementById('portfolioModal');
     if (!modal) return;
     
-    // Add closing animation
+    // Hide modal with inline styles
     modal.style.opacity = '0';
+    modal.style.visibility = 'hidden';
     
     setTimeout(() => {
-        modal.classList.remove('active');
+        modal.style.display = 'none';
         document.body.style.overflow = 'auto';
         isModalOpen = false;
         
@@ -629,6 +681,7 @@ function closeModal() {
         if (unityInstance) {
             try {
                 unityInstance.Quit();
+                console.log('Unity instance quit');
             } catch (error) {
                 console.warn('Error quitting Unity instance:', error);
             }
@@ -638,6 +691,7 @@ function closeModal() {
         if (currentVideoElement) {
             currentVideoElement.pause();
             currentVideoElement = null;
+            console.log('Video element cleaned up');
         }
         
         // Exit fullscreen if active
@@ -655,6 +709,7 @@ function closeModal() {
         // Reset modal content
         hideAllPreviewElements();
         
+        console.log('Modal closed and cleaned up');
     }, 300);
 }
 
