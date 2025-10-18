@@ -109,7 +109,7 @@ function openGamePreview(gameData) {
     // Update modal content
     updateModalContent({
         title: gameData.name,
-        description: gameData.description,
+        description: gameData.description || gameData.overview,
         image: gameData.image
     });
     
@@ -572,7 +572,8 @@ function setupModalActions(html) {
 
 function hideAllPreviewElements() {
     const elements = [
-        'previewImage', 'websiteFrame', 'photoViewer', 'videoPlayer'
+        'previewImage', 'itemPreview', 'gameContainer', 
+        'photoViewer', 'videoPlayer'
     ];
     
     elements.forEach(id => {
@@ -586,12 +587,13 @@ function hideAllPreviewElements() {
         }
     });
     
-    // Reset game preview area
-    const gamePreview = document.getElementById('itemPreview');
-    const gameContainer = document.getElementById('gameContainer');
+    // Hide loading state
+    const gameLoading = document.getElementById('gameLoading');
+    if (gameLoading) gameLoading.style.display = 'none';
     
-    if (gamePreview) gamePreview.style.display = 'none';
-    if (gameContainer) gameContainer.style.display = 'none';
+    // Hide play button
+    const playBtn = document.getElementById('playItemBtn');
+    if (playBtn) playBtn.style.display = 'none';
 }
 
 function openModal() {
@@ -601,7 +603,7 @@ function openModal() {
         document.body.style.overflow = 'hidden';
         isModalOpen = true;
         
-        // Add animation class for smooth opening
+        // Add animation
         setTimeout(() => {
             modal.style.opacity = '1';
         }, 10);
@@ -651,13 +653,9 @@ function closeModal() {
         currentItemData = null;
         
         // Reset modal content
-        const gamePreview = document.getElementById('itemPreview');
-        const gameContainer = document.getElementById('gameContainer');
+        hideAllPreviewElements();
         
-        if (gamePreview) gamePreview.style.display = 'none';
-        if (gameContainer) gameContainer.style.display = 'none';
-        
-    }, 300); // Match CSS transition duration
+    }, 300);
 }
 
 // =============================================================================
@@ -838,276 +836,6 @@ function showNotification(message, type = 'info') {
     }, 5000);
 }
 
-// =============================================================================
-// ADMIN FEEDBACK MANAGEMENT
-// =============================================================================
-
-// Update today's feedback count
-function updateTodayCount() {
-    const today = new Date().toISOString().split('T')[0];
-    const todayRows = document.querySelectorAll(`.feedback-row[data-date="${today}"]`);
-    document.getElementById('todayCount').textContent = todayRows.length;
-}
-
-// Search functionality
-function initSearch() {
-    const searchInput = document.getElementById('searchInput');
-    
-    searchInput.addEventListener('input', function() {
-        const searchTerm = this.value.toLowerCase().trim();
-        const rows = document.querySelectorAll('.feedback-row');
-        let visibleCount = 0;
-        
-        rows.forEach(row => {
-            const name = row.dataset.name || '';
-            const email = row.dataset.email || '';
-            const phone = row.dataset.phone || '';
-            const message = row.dataset.message || '';
-            
-            const matches = name.includes(searchTerm) || 
-                           email.includes(searchTerm) || 
-                           phone.includes(searchTerm) || 
-                           message.includes(searchTerm);
-            
-            row.style.display = matches ? '' : 'none';
-            if (matches) visibleCount++;
-        });
-        
-        document.getElementById('visibleCount').textContent = visibleCount;
-    });
-}
-
-// Filter functionality
-function initFilters() {
-    const typeFilter = document.getElementById('filterType');
-    const dateFilter = document.getElementById('dateFilter');
-    
-    // Type filter
-    typeFilter.addEventListener('change', applyFilters);
-    
-    // Date filter
-    dateFilter.addEventListener('change', applyFilters);
-    
-    function applyFilters() {
-        const selectedType = typeFilter.value;
-        const selectedDate = dateFilter.value;
-        const rows = document.querySelectorAll('.feedback-row');
-        let visibleCount = 0;
-        
-        const today = new Date();
-        const startOfWeek = new Date(today);
-        startOfWeek.setDate(today.getDate() - today.getDay());
-        const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
-        
-        rows.forEach(row => {
-            const rowType = row.dataset.type;
-            const rowDate = new Date(row.dataset.date);
-            
-            // Type filter
-            const typeMatch = !selectedType || rowType === selectedType;
-            
-            // Date filter
-            let dateMatch = true;
-            if (selectedDate === 'today') {
-                dateMatch = rowDate.toDateString() === today.toDateString();
-            } else if (selectedDate === 'week') {
-                dateMatch = rowDate >= startOfWeek;
-            } else if (selectedDate === 'month') {
-                dateMatch = rowDate >= startOfMonth;
-            }
-            
-            const shouldShow = typeMatch && dateMatch;
-            row.style.display = shouldShow ? '' : 'none';
-            if (shouldShow) visibleCount++;
-        });
-        
-        document.getElementById('visibleCount').textContent = visibleCount;
-    }
-}
-
-// Export functionality
-function initExport() {
-    const exportBtn = document.getElementById('exportBtn');
-    
-    exportBtn.addEventListener('click', function() {
-        const rows = document.querySelectorAll('.feedback-row:not([style*="display: none"])');
-        const csvData = [];
-        
-        // Add header row
-        csvData.push(['Name', 'Email', 'Phone', 'Type', 'Message', 'Date', 'Time']);
-        
-        // Add data rows
-        rows.forEach(row => {
-            const name = row.dataset.fullName || '';
-            const email = row.dataset.fullEmail || '';
-            const phone = row.querySelector('.contact-phone')?.textContent || '';
-            const type = row.dataset.fullType || '';
-            const message = row.dataset.fullComment || '';
-            const date = row.dataset.date || '';
-            const time = row.querySelector('.time')?.textContent || '';
-            
-            csvData.push([name, email, phone, type, message, date, time]);
-        });
-        
-        // Convert to CSV string
-        const csvContent = csvData.map(row => 
-            row.map(field => `"${field.replace(/"/g, '""')}"`).join(',')
-        ).join('\n');
-        
-        // Create and download file
-        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-        const link = document.createElement('a');
-        const url = URL.createObjectURL(blob);
-        
-        link.setAttribute('href', url);
-        link.setAttribute('download', `feedback_export_${new Date().toISOString().split('T')[0]}.csv`);
-        link.style.visibility = 'hidden';
-        
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        
-        showNotification('Feedback exported successfully!', 'success');
-    });
-}
-
-// Modal functionality
-function initModal() {
-    const modal = document.getElementById('messageModal');
-    const modalOverlay = modal.querySelector('.modal-overlay');
-    
-    // Close modal when clicking overlay
-    modalOverlay.addEventListener('click', closeMessageModal);
-    
-    // Close modal when pressing Escape key
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape' && modal.style.display === 'flex') {
-            closeMessageModal();
-        }
-    });
-}
-
-// View message in modal
-function viewMessage(feedbackId) {
-    const row = document.querySelector(`.feedback-row[data-id="${feedbackId}"]`);
-    if (!row) return;
-    
-    const name = row.dataset.fullName || 'Unknown';
-    const email = row.dataset.fullEmail || 'No email';
-    const phone = row.querySelector('.contact-phone')?.textContent || 'Not provided';
-    const type = row.dataset.fullType || 'Unknown type';
-    const message = row.dataset.fullComment || 'No message';
-    const date = row.dataset.date || 'Unknown date';
-    const time = row.querySelector('.time')?.textContent || 'Unknown time';
-    
-    const modalContent = document.getElementById('modalMessageContent');
-    modalContent.innerHTML = `
-        <div class="message-details">
-            <div class="message-contact">
-                <div class="message-contact-name">${name}</div>
-                <div class="message-contact-email">${email}</div>
-                <div class="message-contact-phone">${phone}</div>
-                <span class="message-type">${type}</span>
-            </div>
-            
-            <div class="message-content">${message}</div>
-            
-            <div class="message-meta">
-                <div>Received: ${date} at ${time}</div>
-                <div>ID: ${feedbackId}</div>
-            </div>
-        </div>
-    `;
-    
-    // Store current message data for reply functionality
-    window.currentMessageData = { name, email, type, message };
-    
-    // Show modal
-    const modal = document.getElementById('messageModal');
-    modal.style.display = 'flex';
-    document.body.style.overflow = 'hidden';
-}
-
-// Close message modal
-function closeMessageModal() {
-    const modal = document.getElementById('messageModal');
-    modal.style.display = 'none';
-    document.body.style.overflow = 'auto';
-    window.currentMessageData = null;
-}
-
-// Reply to current message
-function replyToCurrentMessage() {
-    if (!window.currentMessageData) {
-        showNotification('No message selected to reply to.', 'error');
-        return;
-    }
-    
-    const { name, email, type, message } = window.currentMessageData;
-    
-    // Create mailto link with pre-filled content
-    const subject = `Re: Your ${type} feedback`;
-    const body = `Hi ${name},\n\nThank you for your message:\n"${message}"\n\nBest regards,\nArsh Verma`;
-    
-    const mailtoLink = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    
-    // Open email client
-    window.location.href = mailtoLink;
-    
-    // Close modal after a short delay
-    setTimeout(closeMessageModal, 500);
-}
-
-// Delete feedback
-function deleteFeedback(feedbackId) {
-    if (!confirm('Are you sure you want to delete this feedback? This action cannot be undone.')) {
-        return;
-    }
-    
-    // Show loading state
-    const deleteBtn = document.querySelector(`.feedback-row[data-id="${feedbackId}"] .delete-btn`);
-    const originalHTML = deleteBtn.innerHTML;
-    deleteBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-    deleteBtn.disabled = true;
-    
-    // Make API call to delete feedback
-    fetch(`/admin/delete_feedback/${feedbackId}`, {
-        method: 'DELETE',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-Requested-With': 'XMLHttpRequest'
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            // Remove the row from the table
-            const row = document.querySelector(`.feedback-row[data-id="${feedbackId}"]`);
-            if (row) {
-                row.style.opacity = '0';
-                setTimeout(() => {
-                    row.remove();
-                    updateTodayCount();
-                    
-                    // Update visible count
-                    const visibleRows = document.querySelectorAll('.feedback-row:not([style*="display: none"])');
-                    document.getElementById('visibleCount').textContent = visibleRows.length;
-                    
-                    showNotification('Feedback deleted successfully!', 'success');
-                }, 300);
-            }
-        } else {
-            throw new Error(data.error || 'Failed to delete feedback');
-        }
-    })
-    .catch(error => {
-        console.error('Error deleting feedback:', error);
-        showNotification('Failed to delete feedback. Please try again.', 'error');
-        deleteBtn.innerHTML = originalHTML;
-        deleteBtn.disabled = false;
-    });
-}
-
 // Make functions globally available
 window.showNotification = showNotification;
 window.initContactForm = initContactForm;
@@ -1116,16 +844,5 @@ window.openGamePreview = openGamePreview;
 window.openWebsitePreview = openWebsitePreview;
 window.openPhotoPreview = openPhotoPreview;
 window.openVideoPreview = openVideoPreview;
-
-// Admin functions
-window.viewMessage = viewMessage;
-window.closeMessageModal = closeMessageModal;
-window.replyToCurrentMessage = replyToCurrentMessage;
-window.deleteFeedback = deleteFeedback;
-window.updateTodayCount = updateTodayCount;
-window.initSearch = initSearch;
-window.initFilters = initFilters;
-window.initExport = initExport;
-window.initModal = initModal;
 
 console.log('Portfolio JS initialized successfully');

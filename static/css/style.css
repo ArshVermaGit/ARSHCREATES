@@ -2540,7 +2540,7 @@ p {
    ========================================================= */
 
 /* Main Modal Structure - FIXED */
-#portfolioModal {
+.portfolio-modal {
     position: fixed;
     top: 0;
     left: 0;
@@ -2555,7 +2555,7 @@ p {
     transition: opacity var(--transition-smooth);
 }
 
-#portfolioModal.active {
+.portfolio-modal.active {
     display: flex;
     opacity: 1;
 }
@@ -2599,6 +2599,10 @@ p {
         opacity: 1;
         transform: translateY(0) scale(1);
     }
+}
+
+.modal-content {
+    display: contents;
 }
 
 /* Modal Preview Area */
@@ -2736,6 +2740,17 @@ p {
     justify-content: center;
     gap: 1.5rem;
     color: var(--text-primary);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 10;
+    backdrop-filter: blur(20px);
+    padding: 3rem;
+    border-radius: var(--radius-xl);
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .loading-bar {
@@ -2751,6 +2766,20 @@ p {
     background: linear-gradient(90deg, var(--accent), var(--accent-secondary));
     border-radius: 2px;
     transition: width 0.3s ease;
+}
+
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--glass-border);
+    border-top: 3px solid var(--accent);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
 /* Media Viewers */
@@ -2769,6 +2798,47 @@ p {
     width: 100%;
     height: 100%;
     object-fit: contain;
+}
+
+/* Play Button */
+.modal-play-btn {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+    color: #000;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    font-size: 2.5rem;
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+    transition: all var(--transition-smooth);
+    box-shadow: 
+        0 20px 80px rgba(227, 178, 60, 0.6),
+        0 0 0 1px rgba(255, 255, 255, 0.2);
+    z-index: 10;
+    backdrop-filter: blur(20px);
+    overflow: hidden;
+}
+
+.modal-play-btn:hover {
+    transform: translate(-50%, -50%) scale(1.1);
+    box-shadow: 
+        0 25px 100px rgba(227, 178, 60, 0.8),
+        0 0 0 1px rgba(255, 255, 255, 0.3);
+}
+
+.modal-play-btn span {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #000;
 }
 
 /* Responsive Modal */
@@ -2795,7 +2865,7 @@ p {
 }
 
 @media (max-width: 768px) {
-    #portfolioModal {
+    .portfolio-modal {
         padding: 1rem;
     }
     
@@ -2818,6 +2888,12 @@ p {
         right: 1rem;
         width: 44px;
         height: 44px;
+    }
+    
+    .modal-play-btn {
+        width: 95px;
+        height: 95px;
+        font-size: 2.1rem;
     }
 }
 
