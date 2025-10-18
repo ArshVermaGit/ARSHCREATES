@@ -35,13 +35,10 @@
             
             <select id="filterType" class="filter-select">
                 <option value="">All Types</option>
-                <option value="collaboration">Collaboration</option>
-                <option value="game_feedback">Game Feedback</option>
-                <option value="website_feedback">Website Feedback</option>
-                <option value="photo_feedback">Photo Feedback</option>
-                <option value="video_feedback">Video Feedback</option>
-                <option value="query">General Query</option>
-                <option value="other">Other</option>
+                <option value="Project Inquiry">Project Inquiry</option>
+                <option value="Collaboration">Collaboration</option>
+                <option value="Support">Support</option>
+                <option value="Other">Other</option>
             </select>
             
             <select id="dateFilter" class="filter-select">
@@ -72,7 +69,7 @@
                     {% if feedbacks %}
                         {% for feedback in feedbacks %}
                         <tr class="feedback-row" 
-                            data-type="{{ feedback.contact_type }}" 
+                            data-type="{{ feedback.contact_type|lower }}" 
                             data-timestamp="{{ feedback.timestamp }}"
                             data-name="{{ feedback.full_name|lower }}"
                             data-email="{{ feedback.email|lower }}"
@@ -81,7 +78,7 @@
                             data-id="{{ feedback.id }}"
                             data-full-name="{{ feedback.full_name }}"
                             data-full-email="{{ feedback.email }}"
-                            data-full-type="{{ feedback.contact_type.replace('_', ' ').title() }}"
+                            data-full-type="{{ feedback.contact_type }}"
                             data-full-comment="{{ feedback.comment }}"
                             data-date="{{ feedback.timestamp.split(' ')[0] }}">
                             
@@ -96,8 +93,8 @@
                             </td>
                             
                             <td>
-                                <span class="type-badge type-{{ feedback.contact_type }}">
-                                    {{ feedback.contact_type.replace('_', ' ').title() }}
+                                <span class="type-badge type-{{ feedback.contact_type|lower|replace(' ', '-') }}">
+                                    {{ feedback.contact_type }}
                                 </span>
                             </td>
                             
@@ -164,8 +161,20 @@
         </div>
     </div>
 </div>
+
+<script>
+// Initialize admin functionality when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    updateTodayCount();
+    initSearch();
+    initFilters();
+    initExport();
+    initModal();
+});
+</script>
+
 {% endblock %}
 
 {% block extra_scripts %}
-<script src="{{ url_for('static', filename='js/admin_feedback.js') }}"></script>
+<!-- No extra scripts needed - all functions are in main.js -->
 {% endblock %}
