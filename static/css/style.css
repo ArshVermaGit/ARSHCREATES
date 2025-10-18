@@ -2586,6 +2586,68 @@ p {
     overflow: hidden;
 }
 
+/* Light theme - PURE WHITE background */
+[data-theme="light"] .modal-preview {
+  background: #FFFFFF !important;
+}
+
+/* FIXED: Reduced blur and removed continuous animation */
+.modal-preview::before, .modal-game::before, #photoViewer::before, #videoPlayer::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, 
+    rgba(161, 133, 109, 0.1) 0%,
+    rgba(184, 162, 138, 0.05) 50%,
+    rgba(139, 115, 85, 0.08) 100%);
+  /* REDUCED BLUR - won't interfere with content */
+  filter: blur(20px) saturate(150%);
+  opacity: 0.3;
+  z-index: 1; /* Ensure it stays behind content */
+  pointer-events: none;
+  /* REMOVED continuous animation - only animate on hover */
+  transition: opacity var(--transition-smooth);
+}
+
+/* LIGHT THEME - Remove overlay completely for pure white */
+[data-theme="light"] .modal-preview::before, 
+[data-theme="light"] .modal-game::before, 
+[data-theme="light"] #photoViewer::before, 
+[data-theme="light"] #videoPlayer::before {
+  display: none !important;
+}
+
+.modal-preview:hover::before, 
+.modal-game:hover::before, 
+#photoViewer:hover::before, 
+#videoPlayer:hover::before {
+  opacity: 0.4;
+}
+
+/* Ensure all interactive content is above the background */
+.modal-preview > *:not(::before),
+.modal-game > *:not(::before),
+#photoViewer > *:not(::before),
+#videoPlayer > *:not(::before) {
+  position: relative;
+  z-index: 2;
+}
+
+@keyframes liquidShift {
+  0%, 100% { 
+    transform: translate3d(0, 0, 0) scale(1); 
+    filter: blur(20px) saturate(150%) hue-rotate(0deg);
+  }
+  33% { 
+    transform: translate3d(15px, -10px, 0) scale(1.03); 
+    filter: blur(20px) saturate(150%) hue-rotate(5deg);
+  }
+  66% { 
+    transform: translate3d(-10px, 8px, 0) scale(0.97); 
+    filter: blur(20px) saturate(150%) hue-rotate(-3deg);
+  }
+}
+
 /* Preview Content Container */
 #itemPreview {
     display: flex;
@@ -2752,10 +2814,33 @@ p {
 .modal-title {
     font-size: 2.5rem;
     font-weight: 800;
-    color: var(--text-primary);
     margin-bottom: 20px;
     line-height: 1.2;
     font-family: var(--font-heading);
+    /* PREMIUM GRADIENT TEXT EFFECT */
+    background: linear-gradient(135deg, 
+        var(--text-primary) 0%, 
+        var(--text-primary) 30%, 
+        var(--accent) 65%, 
+        var(--accent-secondary) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    background-size: 200% 200%;
+    animation: gradientShift 8s ease-in-out infinite;
+}
+
+/* Light theme gradient - warmer tones */
+[data-theme="light"] .modal-title {
+    background: linear-gradient(135deg, 
+        #1a1a1a 0%, 
+        #3a3a3a 30%, 
+        var(--accent) 65%, 
+        var(--accent-secondary) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    background-size: 200% 200%;
 }
 
 .modal-description {
@@ -2763,6 +2848,16 @@ p {
     color: var(--text-secondary);
     line-height: 1.8;
     margin-bottom: 30px;
+}
+
+/* Subtle gradient for description in dark theme */
+[data-theme="dark"] .modal-description {
+    background: linear-gradient(135deg, 
+        var(--text-secondary) 0%, 
+        var(--text-tertiary) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 .modal-features {
@@ -2929,10 +3024,6 @@ p {
         width: 40px;
         height: 40px;
     }
-}
-
-[data-theme="light"] .modal-preview {
-    background: linear-gradient(135deg, #f0f0f0, #e0e0e0);
 }
 
 [data-theme="light"] .modal-close {
