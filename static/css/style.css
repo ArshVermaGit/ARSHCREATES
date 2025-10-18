@@ -96,54 +96,41 @@
 
 /* ==================== LIGHT THEME ==================== */
 [data-theme="light"] {
-  /* Background System - Premium Cream & White */
-  --bg-primary: #FAF8F5;
-  --bg-secondary: #F2F0EB;
-  --bg-tertiary: #EAE8E3;
+  /* Background System - Clean White & Light Gray */
+  --bg-primary: #FFFFFF;
+  --bg-secondary: #F8F9FA;
+  --bg-tertiary: #E9ECEF;
   --bg-elevated: #FFFFFF;
-  --bg-overlay: rgba(250, 248, 245, 0.92);
+  --bg-overlay: rgba(255, 255, 255, 0.95);
 
-  /* Premium Brown in Light */
+  /* Premium Brown in Light - More Vibrant */
   --accent: #8B7355;
   --accent-secondary: #A1856D;
   --accent-tertiary: #6D5D4A;
-  --accent-light: rgba(139, 115, 85, 0.12);
-  --accent-medium: rgba(139, 115, 85, 0.20);
-  --accent-strong: rgba(139, 115, 85, 0.35);
-  --accent-glow: rgba(139, 115, 85, 0.18);
-  --accent-intense: rgba(139, 115, 85, 0.45);
+  --accent-light: rgba(139, 115, 85, 0.08);
+  --accent-medium: rgba(139, 115, 85, 0.15);
+  --accent-strong: rgba(139, 115, 85, 0.25);
+  --accent-glow: rgba(139, 115, 85, 0.12);
+  --accent-intense: rgba(139, 115, 85, 0.35);
 
-  /* Glass Effects in Light */
-  --glass-bg: rgba(255, 255, 255, 0.70);
-  --glass-bg-hover: rgba(255, 255, 255, 0.80);
+  /* Glass Effects in Light - More Transparent */
+  --glass-bg: rgba(255, 255, 255, 0.85);
+  --glass-bg-hover: rgba(255, 255, 255, 0.95);
   --glass-border: rgba(0, 0, 0, 0.08);
   --glass-border-hover: rgba(139, 115, 85, 0.25);
 
-  /* Liquid Glass in Light */
-  --liquid-glass-bg: rgba(255, 255, 255, 0.40);
-  --liquid-glass-border: rgba(0, 0, 0, 0.10);
-  --liquid-glass-shadow: 0 12px 40px rgba(139, 115, 85, 0.15);
-  --liquid-glass-blur: 30px;
+  /* Liquid Glass in Light - Less Opaque */
+  --liquid-glass-bg: rgba(255, 255, 255, 0.75);
+  --liquid-glass-border: rgba(0, 0, 0, 0.12);
+  --liquid-glass-shadow: 0 12px 40px rgba(139, 115, 85, 0.1);
+  --liquid-glass-blur: 20px;
 
   /* Text System - Deep Charcoal */
-  --text-primary: #18181B;
-  --text-secondary: #3F3F46;
-  --text-tertiary: #71717A;
-  --text-muted: #A1A1AA;
-  --text-dim: #D4D4D8;
-
-  /* Supporting Colors in Light */
-  --success: #7A8A5E;
-  --error: #A86D5D;
-  --warning: #B8945A;
-  --info: #6C7D8F;
-
-  /* Shadows in Light */
-  --shadow-soft: 0 8px 32px rgba(0, 0, 0, 0.08);
-  --shadow-medium: 0 12px 48px rgba(0, 0, 0, 0.12);
-  --shadow-strong: 0 20px 64px rgba(0, 0, 0, 0.16);
-  --shadow-glow: 0 0 50px rgba(139, 115, 85, 0.12);
-  --shadow-glow-strong: 0 0 80px rgba(139, 115, 85, 0.20);
+  --text-primary: #1A1A1A;
+  --text-secondary: #404040;
+  --text-tertiary: #666666;
+  --text-muted: #999999;
+  --text-dim: #CCCCCC;
 }
 
 /* ==================== DARK THEME ==================== */
