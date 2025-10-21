@@ -1,84 +1,43 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>404 - Not Found</title>
-    <meta name="description" content="Arsh Verma - Creative developer and creator.">
-
-    <link rel="stylesheet" href="static/css/style.css">
-    <link rel="icon" href="static/images/favicon.ico">
-
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Not Found - Portfolio</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
-    <!-- Navbar -->
-    <nav class="navbar" id="navbar">
+    <nav class="navbar">
         <div class="nav-container">
-            <a href="/" class="logo">
-                <i class="fas fa-code"></i>
-                <span>ArshCreates</span>
+            <a href="index.html" class="logo">
+                <i class="fas fa-gem"></i>
+                <span>Portfolio</span>
             </a>
-
-            <ul class="nav-menu" id="navMenu">
-                <li><a href="index.html#about">About</a></li>
-                <li><a href="index.html#games">Games</a></li>
-                <li><a href="index.html#websites">Websites</a></li>
-                <li><a href="index.html#photos">Photos</a></li>
-                <li><a href="index.html#videos">Videos</a></li>
-                <li><a href="index.html#contact">Contact</a></li>
-            </ul>
-
-            <div class="nav-actions">
-                <button id="themeBtn" class="btn-icon" aria-label="Toggle theme">
-                    <i class="fas fa-moon"></i>
-                </button>
-                <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </button>
-            </div>
         </div>
     </nav>
 
-    <main id="main">
-        <section class="section glass-section center-content" style="min-height:70vh;">
-          <div class="container">
-            <div class="error-container">
-              <div class="error-icon"><i class="fas fa-exclamation-triangle"></i></div>
-              <h1 class="error-code">404</h1>
-              <h3 class="error-title">Page Not Found</h3>
-              <p class="error-message">The page you requested doesn't exist. Try returning home or contact me.</p>
-              <div class="error-actions">
-                <a href="index.html" class="btn btn-primary"><i class="fas fa-home"></i> Home</a>
-                <a href="index.html#contact" class="btn btn-glass"><i class="fas fa-envelope"></i> Contact</a>
-              </div>
-            </div>
-          </div>
-        </section>
-    </main>
-
-    <footer class="footer">
-        <div class="container footer-inner">
-            <div class="footer-left">
-                <div class="footer-brand"><i class="fas fa-code"></i><span>ArshCreates</span></div>
-                <p class="muted">Creative developer specializing in game dev, web, photography & videography.</p>
-            </div>
-            <div class="footer-links">
-                <a href="index.html#about">About</a>
-                <a href="index.html#games">Games</a>
-                <a href="index.html#websites">Websites</a>
-                <a href="index.html#photos">Photos</a>
-                <a href="index.html#videos">Videos</a>
+    <section class="error-container">
+        <div class="container">
+            <i class="fas fa-exclamation-triangle error-icon"></i>
+            <h1 class="error-code">404</h1>
+            <h2 class="error-title">Page Not Found</h2>
+            <p class="error-message">
+                The page you're looking for doesn't exist or has been moved.
+            </p>
+            <div class="error-actions">
+                <a href="index.html" class="btn btn-primary">
+                    <i class="fas fa-home"></i>
+                    Back to Home
+                </a>
+                <a href="index.html#contact" class="btn btn-glass">
+                    <i class="fas fa-envelope"></i>
+                    Contact Support
+                </a>
             </div>
         </div>
-        <div class="container footer-bottom">
-            <span>&copy; <span id="currentYear">2025</span> Arsh Verma. All Rights Reserved.</span>
-        </div>
-    </footer>
+    </section>
 
-    <script src="static/js/script.js"></script>
+    <script src="main.js"></script>
 </body>
 </html>
