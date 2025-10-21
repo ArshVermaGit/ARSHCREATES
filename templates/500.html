@@ -1,18 +1,84 @@
-{% extends "base.html" %}
-{% block title %}500 - Server Error{% endblock %}
-{% block content %}
-<section class="section glass-section center-content" style="min-height:70vh;">
-  <div class="container">
-    <div class="error-container">
-      <div class="error-icon error-server"><i class="fas fa-server"></i></div>
-      <h1 class="error-code error-red">500</h1>
-      <h3 class="error-title">Server Error</h3>
-      <p class="error-message">Something went wrong on our side. Please try again shortly.</p>
-      <div class="error-actions">
-        <a href="/" class="btn btn-primary"><i class="fas fa-home"></i> Home</a>
-        <button class="btn btn-glass" onclick="location.reload()"><i class="fas fa-redo"></i> Retry</button>
-      </div>
-    </div>
-  </div>
-</section>
-{% endblock %}
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>500 - Server Error</title>
+    <meta name="description" content="Arsh Verma - Creative developer and creator.">
+
+    <link rel="stylesheet" href="static/css/style.css">
+    <link rel="icon" href="static/images/favicon.ico">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="/" class="logo">
+                <i class="fas fa-code"></i>
+                <span>ArshCreates</span>
+            </a>
+
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html#about">About</a></li>
+                <li><a href="index.html#games">Games</a></li>
+                <li><a href="index.html#websites">Websites</a></li>
+                <li><a href="index.html#photos">Photos</a></li>
+                <li><a href="index.html#videos">Videos</a></li>
+                <li><a href="index.html#contact">Contact</a></li>
+            </ul>
+
+            <div class="nav-actions">
+                <button id="themeBtn" class="btn-icon" aria-label="Toggle theme">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main id="main">
+        <section class="section glass-section center-content" style="min-height:70vh;">
+          <div class="container">
+            <div class="error-container">
+              <div class="error-icon error-server"><i class="fas fa-server"></i></div>
+              <h1 class="error-code error-red">500</h1>
+              <h3 class="error-title">Server Error</h3>
+              <p class="error-message">Something went wrong on our side. Please try again shortly.</p>
+              <div class="error-actions">
+                <a href="index.html" class="btn btn-primary"><i class="fas fa-home"></i> Home</a>
+                <button class="btn btn-glass" onclick="location.reload()"><i class="fas fa-redo"></i> Retry</button>
+              </div>
+            </div>
+          </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-brand"><i class="fas fa-code"></i><span>ArshCreates</span></div>
+                <p class="muted">Creative developer specializing in game dev, web, photography & videography.</p>
+            </div>
+            <div class="footer-links">
+                <a href="index.html#about">About</a>
+                <a href="index.html#games">Games</a>
+                <a href="index.html#websites">Websites</a>
+                <a href="index.html#photos">Photos</a>
+                <a href="index.html#videos">Videos</a>
+            </div>
+        </div>
+        <div class="container footer-bottom">
+            <span>&copy; <span id="currentYear">2025</span> Arsh Verma. All Rights Reserved.</span>
+        </div>
+    </footer>
+
+    <script src="static/js/script.js"></script>
+</body>
+</html>
