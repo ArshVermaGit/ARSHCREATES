@@ -1,15 +1,2 @@
-venv/
-env/
-.venv/
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-.Python
-*.so
-.env
-.DS_Store
-*.swp
-*.swo
-.idea/
-.vscode/
+# Auto detect text files and perform LF normalization
+* text=auto
