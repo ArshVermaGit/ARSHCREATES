@@ -940,14 +940,8 @@ function initVideoPlayer() {
     // Fullscreen button
     if (fullscreenBtn) {
         fullscreenBtn.onclick = () => {
-            if (!document.fullscreenElement) {
-                video.requestFullscreen().catch(err => {
-                    console.error('Error attempting to enable fullscreen:', err);
-                });
-            } else {
-                if (document.exitFullscreen) {
-                    document.exitFullscreen();
-                }
+            if (video.requestFullscreen) {
+                video.requestFullscreen();
             }
         };
     }
@@ -955,21 +949,22 @@ function initVideoPlayer() {
     // Progress bar
     if (progressBar) {
         progressBar.addEventListener('input', () => {
-            const time = video.duration * (progressBar.value / 100);
-            video.currentTime = time;
+            const percent = progressBar.value;
+            video.currentTime = (percent / 100) * video.duration;
         });
     }
     
     // Update progress bar as video plays
     video.addEventListener('timeupdate', () => {
-        if (progressBar) {
-            const value = (video.currentTime / video.duration) * 100;
-            progressBar.value = value;
+        if (progressBar && video.duration) {
+            const percent = (video.currentTime / video.duration) * 100;
+            progressBar.value = percent;
         }
         
         if (progressTime) {
-            progressTime.textContent = 
-                `${formatTime(video.currentTime)} / ${formatTime(video.duration)}`;
+            const currentTime = formatTime(video.currentTime);
+            const duration = formatTime(video.duration);
+            progressTime.textContent = `${currentTime} / ${duration}`;
         }
     });
     
@@ -988,51 +983,92 @@ function initVideoPlayer() {
             playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
         }
     });
+    
+    // Update time display initially
+    if (progressTime) {
+        progressTime.textContent = `0:00 / ${formatTime(video.duration)}`;
+    }
 }
 
 function formatTime(seconds) {
+    if (!seconds || isNaN(seconds)) return '0:00';
+    
     const mins = Math.floor(seconds / 60);
     const secs = Math.floor(seconds % 60);
-    return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
 }
 
 // =============================================================================
-// MEDIA CONTROLS - FIXED
+// MODAL UTILITY FUNCTIONS
 // =============================================================================
-function downloadMedia(url, filename) {
-    if (!url) {
-        showNotification('Download URL not available.', 'error');
-        return;
+function openModal() {
+    const modal = document.getElementById('portfolioModal');
+    if (modal) {
+        modal.classList.add('active');
+        isModalOpen = true;
+        document.body.style.overflow = 'hidden'; // Prevent background scrolling
+        
+        // Focus trap for accessibility
+        modal.setAttribute('aria-hidden', 'false');
     }
+}
+
+function closeModal() {
+    const modal = document.getElementById('portfolioModal');
+    if (modal) {
+        modal.classList.remove('active');
+        isModalOpen = false;
+        document.body.style.overflow = ''; // Re-enable scrolling
+        
+        // Stop any playing videos
+        const video = document.getElementById('mainVideo');
+        if (video) {
+            video.pause();
+            video.currentTime = 0;
+        }
+        
+        // Reset photo zoom
+        const photoImg = document.getElementById('photoImage');
+        if (photoImg) {
+            photoImg.style.transform = 'scale(1)';
+        }
+        
+        // Hide quick actions
+        const quickActions = document.getElementById('quickActions');
+        if (quickActions) {
+            quickActions.style.display = 'none';
+        }
+        
+        modal.setAttribute('aria-hidden', 'true');
+    }
+}
+
+function hideAllPreviewElements() {
+    const elements = [
+        'itemPreview',
+        'photoViewer', 
+        'videoPlayer',
+        'gameContainer'
+    ];
     
-    try {
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = filename;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        showNotification(`Downloading ${filename}...`, 'success');
-    } catch (error) {
-        console.error('Download failed:', error);
-        showNotification('Download failed. Please try again.', 'error');
-    }
+    elements.forEach(id => {
+        const element = document.getElementById(id);
+        if (element) {
+            element.style.display = 'none';
+        }
+    });
 }
 
-// =============================================================================
-// MODAL UTILITY FUNCTIONS - FIXED
-// =============================================================================
 function updateModalContent({ title, description, image }) {
     const modalTitle = document.getElementById('modalTitle');
     const modalDescription = document.getElementById('modalDescription');
     
     if (modalTitle && title) {
         modalTitle.textContent = title;
-        console.log('Modal title set:', title);
     }
+    
     if (modalDescription && description) {
         modalDescription.textContent = description;
-        console.log('Modal description set:', description);
     }
 }
 
@@ -1047,7 +1083,7 @@ function updateModalTech(technologies) {
     const modalTech = document.getElementById('modalTech');
     if (modalTech && technologies && technologies.length > 0) {
         modalTech.innerHTML = `
-            <h4>Technologies</h4>
+            <h4>Technologies Used</h4>
             <div class="tech-tags">
                 ${technologies.map(tech => `<span class="tech-tag">${tech}</span>`).join('')}
             </div>
@@ -1061,7 +1097,6 @@ function setupModalActions(html) {
     const modalActions = document.getElementById('modalActions');
     if (modalActions) {
         modalActions.innerHTML = html;
-        console.log('Modal actions set');
     }
 }
 
@@ -1075,249 +1110,77 @@ function updateNavigationArrows() {
     }
 }
 
-function hideAllPreviewElements() {
-    const elements = [
-        'previewImage', 'itemPreview', 'gameContainer', 
-        'photoViewer', 'videoPlayer'
-    ];
-    
-    elements.forEach(id => {
-        const element = document.getElementById(id);
-        if (element) {
-            element.style.display = 'none';
-            if (id === 'previewImage') {
-                element.onclick = null;
-                element.style.cursor = 'default';
-            }
-        }
-    });
-    
-    // Hide loading state
-    const gameLoading = document.getElementById('gameLoading');
-    if (gameLoading) {
-        gameLoading.style.display = 'none';
-    }
-    
-    // Hide play button
-    const playBtn = document.getElementById('playItemBtn');
-    if (playBtn) {
-        playBtn.style.display = 'none';
-    }
-}
-
 // =============================================================================
-// MODAL OPEN/CLOSE - ORIGINAL WORKING VERSION
-// =============================================================================
-function openModal() {
-    const modal = document.getElementById('portfolioModal');
-    if (modal) {
-        modal.classList.add('active');
-        document.body.style.overflow = 'hidden';
-        isModalOpen = true;
-        
-        console.log('Modal opened successfully');
-    }
-}
-
-function closeModal() {
-    console.log('Closing modal');
-    
-    const modal = document.getElementById('portfolioModal');
-    if (!modal) return;
-    
-    modal.classList.remove('active');
-    document.body.style.overflow = 'auto';
-    isModalOpen = false;
-    
-    // Clean up resources
-    if (unityInstance) {
-        try {
-            unityInstance.Quit();
-            console.log('Unity instance quit');
-        } catch (error) {
-            console.warn('Error quitting Unity instance:', error);
-        }
-        unityInstance = null;
-    }
-    
-    if (currentVideoElement) {
-        currentVideoElement.pause();
-        currentVideoElement = null;
-        console.log('Video element cleaned up');
-    }
-    
-    // Exit fullscreen if active
-    if (document.fullscreenElement) {
-        if (document.exitFullscreen) {
-            document.exitFullscreen();
-        }
-    }
-    
-    // Reset state
-    currentGame = null;
-    currentMediaType = null;
-    currentItemData = null;
-    
-    // Reset modal content
-    hideAllPreviewElements();
-    
-    console.log('Modal closed and cleaned up');
-}
-
-// =============================================================================
-// CONTACT FORM - IMPLEMENTED
+// CONTACT FORM INITIALIZATION
 // =============================================================================
 function initContactForm() {
     const contactForm = document.getElementById('contactForm');
-    if (!contactForm) {
-        console.warn('Contact form not found');
-        return;
-    }
+    if (!contactForm) return;
     
-    let isSubmitting = false;
-
-    contactForm.addEventListener('submit', async function(e) {
+    contactForm.addEventListener('submit', function(e) {
         e.preventDefault();
         
-        if (isSubmitting) {
-            console.log('Form is already submitting...');
+        const formData = new FormData(this);
+        const feedbackData = {
+            full_name: formData.get('full_name'),
+            email: formData.get('email'),
+            phone: formData.get('phone'),
+            contact_type: formData.get('contact_type'),
+            comment: formData.get('comment')
+        };
+        
+        // Basic validation
+        if (!feedbackData.full_name || !feedbackData.email || !feedbackData.contact_type || !feedbackData.comment) {
+            showNotification('Please fill in all required fields.', 'error');
             return;
         }
         
-        const submitBtn = document.getElementById('submitBtn');
-        const originalText = submitBtn.innerHTML;
-        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
-        submitBtn.disabled = true;
-        isSubmitting = true;
+        // Email validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(feedbackData.email)) {
+            showNotification('Please enter a valid email address.', 'error');
+            return;
+        }
         
-        try {
-            const formData = {
-                full_name: contactForm.querySelector('[name="full_name"]').value.trim(),
-                email: contactForm.querySelector('[name="email"]').value.trim(),
-                phone: contactForm.querySelector('[name="phone"]').value.trim(),
-                contact_type: contactForm.querySelector('[name="contact_type"]').value.trim(),
-                comment: contactForm.querySelector('[name="comment"]').value.trim()
-            };
-            
-            // Basic validation
-            const requiredFields = ['full_name', 'email', 'contact_type', 'comment'];
-            let isValid = true;
-            
-            requiredFields.forEach(field => {
-                const input = contactForm.querySelector(`[name="${field}"]`);
-                if (!formData[field]) {
-                    input.style.borderColor = 'rgba(239, 68, 68, 0.6)';
-                    isValid = false;
-                } else {
-                    input.style.borderColor = '';
-                }
-            });
-            
-            if (!isValid) {
-                throw new Error('Please fill in all required fields');
-            }
-            
-            // Email validation
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(formData.email)) {
-                contactForm.querySelector('[name="email"]').style.borderColor = 'rgba(239, 68, 68, 0.6)';
-                throw new Error('Please enter a valid email address');
-            }
-            
-            // Save feedback using data.js functions
-            if (typeof saveFeedback === 'function') {
-                saveFeedback(formData);
-                showNotification('Message sent successfully! I\'ll get back to you soon.', 'success');
+        // Save feedback
+        if (typeof saveFeedback === 'function') {
+            const saved = saveFeedback(feedbackData);
+            if (saved) {
+                showNotification('Thank you for your message! I\'ll get back to you soon.', 'success');
                 contactForm.reset();
-                
-                // Reset border colors
-                contactForm.querySelectorAll('input, select, textarea').forEach(input => {
-                    input.style.borderColor = '';
-                });
             } else {
-                throw new Error('Feedback system not available');
+                showNotification('Error sending message. Please try again.', 'error');
             }
-        } catch (error) {
-            console.error('Error:', error);
-            showNotification(error.message || 'Failed to send message. Please try again.', 'error');
-        } finally {
-            const submitBtn = document.getElementById('submitBtn');
-            submitBtn.innerHTML = originalText;
-            submitBtn.disabled = false;
-            isSubmitting = false;
+        } else {
+            showNotification('Thank you for your message!', 'success');
+            contactForm.reset();
         }
     });
-    
-    // Real-time validation feedback
-    const formInputs = contactForm.querySelectorAll('input, select, textarea');
-    formInputs.forEach(input => {
-        input.addEventListener('input', function() {
-            if (this.value.trim()) {
-                this.style.borderColor = 'rgba(16, 185, 129, 0.4)';
-            } else {
-                this.style.borderColor = '';
-            }
-        });
-        
-        input.addEventListener('blur', function() {
-            if (this.hasAttribute('required') && !this.value.trim()) {
-                this.style.borderColor = 'rgba(239, 68, 68, 0.6)';
-            }
-        });
-    });
-    
-    // Email-specific validation
-    const emailInput = document.getElementById('email');
-    if (emailInput) {
-        emailInput.addEventListener('blur', function() {
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (this.value && !emailRegex.test(this.value)) {
-                this.style.borderColor = 'rgba(239, 68, 68, 0.5)';
-            } else {
-                this.style.borderColor = '';
-            }
-        });
-        
-        emailInput.addEventListener('input', function() {
-            this.style.borderColor = '';
-        });
-    }
 }
 
 // =============================================================================
-// NOTIFICATION SYSTEM - IMPLEMENTED
+// NOTIFICATION SYSTEM
 // =============================================================================
-function showNotification(message, type = 'info') {
-    const existingNotifications = document.querySelectorAll('.notification');
-    existingNotifications.forEach(notif => {
-        notif.style.animation = 'slideInRight 0.3s ease-out reverse';
-        setTimeout(() => notif.remove(), 300);
-    });
-    
+function showNotification(message, type = 'info', duration = 5000) {
     const container = document.getElementById('notificationContainer');
-    if (!container) {
-        console.error('Notification container not found');
-        return;
-    }
+    if (!container) return;
     
     const notification = document.createElement('div');
     notification.className = `notification ${type}`;
     
-    const icon = type === 'success' ? 'fa-check-circle' : 
-                 type === 'error' ? 'fa-exclamation-circle' : 
-                 'fa-info-circle';
-    
-    const title = type === 'success' ? 'Success' : 
-                  type === 'error' ? 'Error' : 
-                  'Info';
+    const icons = {
+        success: 'fas fa-check-circle',
+        error: 'fas fa-exclamation-circle',
+        info: 'fas fa-info-circle'
+    };
     
     notification.innerHTML = `
         <div class="notification-content">
             <div class="notification-icon">
-                <i class="fas ${icon}"></i>
+                <i class="${icons[type] || icons.info}"></i>
             </div>
             <div class="notification-text">
-                <h4>${title}</h4>
+                <h4>${type.charAt(0).toUpperCase() + type.slice(1)}</h4>
                 <p>${message}</p>
             </div>
         </div>
@@ -1325,23 +1188,59 @@ function showNotification(message, type = 'info') {
     
     container.appendChild(notification);
     
+    // Auto remove after duration
     setTimeout(() => {
-        notification.style.animation = 'slideInRight 0.3s ease-out reverse';
-        setTimeout(() => {
-            if (notification.parentNode) {
-                notification.remove();
-            }
-        }, 300);
-    }, 5000);
+        if (notification.parentNode) {
+            notification.style.opacity = '0';
+            notification.style.transform = 'translateX(100px)';
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+            }, 300);
+        }
+    }, duration);
 }
 
-// Make functions globally available
-window.showNotification = showNotification;
-window.initContactForm = initContactForm;
-window.closeModal = closeModal;
+// =============================================================================
+// UTILITY FUNCTIONS
+// =============================================================================
+function downloadMedia(url, filename) {
+    if (!url) {
+        showNotification('Download URL not available', 'error');
+        return;
+    }
+    
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    showNotification(`Downloading ${filename}...`, 'success');
+}
+
+function getItemsByCategory(category) {
+    if (typeof window.getItemsByCategory === 'function') {
+        return window.getItemsByCategory(category);
+    }
+    
+    // Fallback if function not available
+    switch (category) {
+        case 'games': return window.PORTFOLIO_DATA?.games || [];
+        case 'websites': return window.PORTFOLIO_DATA?.websites || [];
+        case 'photos': return window.PORTFOLIO_DATA?.photos || [];
+        case 'videos': return window.PORTFOLIO_DATA?.videos || [];
+        default: return [];
+    }
+}
+
+// =============================================================================
+// GLOBAL EXPORTS
+// =============================================================================
 window.openGamePreview = openGamePreview;
 window.openWebsitePreview = openWebsitePreview;
 window.openPhotoPreview = openPhotoPreview;
 window.openVideoPreview = openVideoPreview;
-window.initPortfolioCards = initPortfolioCards;
-window.navigateModal = navigateModal;
+window.closeModal = closeModal;
+window.showNotification = showNotification;
