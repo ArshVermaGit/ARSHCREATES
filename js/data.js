@@ -1,6 +1,4 @@
-// Portfolio Data Storage
-// This file contains all portfolio items (games, websites, photos, videos)
-
+// Portfolio Data Storage with corrected image paths
 const PORTFOLIO_DATA = {
     games: [
         {
@@ -8,7 +6,7 @@ const PORTFOLIO_DATA = {
             name: 'Sky Surfers',
             overview: 'High-speed dodging challenge to test your absolute precision',
             description: 'An intense flight game that challenges your piloting skills. Take control and master the narrow, hazard-filled canyon with precision dodging and nerves of steel.',
-            image: 'images/games/Game1.jpg',
+            image: 'images/games/game1.jpg',
             game_folder: 'sky_surfers',
             build_name: 'sky_surfers'
         },
@@ -28,7 +26,7 @@ const PORTFOLIO_DATA = {
             id: 1,
             name: 'ReelSpot',
             description: 'The fastest way to save your media. Multi-platform downloading made quick, simple, and painless.',
-            image: 'images/websites/ReelSpot.jpg',
+            image: 'images/websites/website1.jpg',
             url: 'https://arshvermagit.github.io/REELSPOT/',
             technologies: ['JavaScript', 'HTML', 'CSS']
         },
@@ -36,7 +34,7 @@ const PORTFOLIO_DATA = {
             id: 2,
             name: 'Creative Portfolio',
             description: 'Modern responsive portfolio showcasing creative development work and digital artistry.',
-            image: 'images/websites/portfolio.jpg',
+            image: 'images/websites/website2.jpg',
             url: '#',
             technologies: ['HTML', 'CSS', 'JavaScript']
         }
@@ -79,7 +77,7 @@ const PORTFOLIO_DATA = {
             title: 'Brand Showcase',
             description: 'Professional brand video with cinematic storytelling and visual appeal that captures attention.',
             category: 'Commercial',
-            thumbnail: 'images/videos/video1-thumb.jpg',
+            thumbnail: 'images/videos/video1.jpg',
             video_url: 'videos/demo.mp4'
         },
         {
@@ -87,7 +85,7 @@ const PORTFOLIO_DATA = {
             title: 'Creative Montage',
             description: 'Collection of creative moments and visual stories that inspire and engage viewers.',
             category: 'Creative',
-            thumbnail: 'images/videos/video2-thumb.jpg',
+            thumbnail: 'images/videos/video2.jpg',
             video_url: 'videos/montage.mp4'
         }
     ]
@@ -151,33 +149,33 @@ function deleteFeedback(feedbackId) {
 
 // Create placeholder images dynamically
 function createPlaceholderImages() {
-    const placeholderImages = [
-        'images/games/Game1.jpg',
+    const images = [
+        'images/games/game1.jpg',
         'images/games/game2.jpg',
-        'images/websites/ReelSpot.jpg',
-        'images/websites/portfolio.jpg',
+        'images/websites/website1.jpg',
+        'images/websites/website2.jpg',
         'images/photos/photo1.jpg',
         'images/photos/photo2.jpg',
         'images/photos/photo3.jpg',
         'images/photos/photo4.jpg',
-        'images/videos/video1-thumb.jpg',
-        'images/videos/video2-thumb.jpg'
+        'images/videos/video1.jpg',
+        'images/videos/video2.jpg'
     ];
     
-    console.log('Ensure these images exist:', placeholderImages);
+    console.log('Required images:', images);
 }
 
-// Portfolio rendering functions
+// Enhanced portfolio rendering with image fallbacks
 function renderGames() {
     const gamesGrid = document.getElementById('gamesGrid');
     if (!gamesGrid) return;
     
     if (PORTFOLIO_DATA.games && PORTFOLIO_DATA.games.length > 0) {
-        gamesGrid.innerHTML = PORTFOLIO_DATA.games.map(game => `
-            <div class="portfolio-card" data-game='${JSON.stringify(game).replace(/'/g, "&apos;")}' data-type="game">
+        gamesGrid.innerHTML = PORTFOLIO_DATA.games.map((game, index) => `
+            <div class="portfolio-card" data-game='${JSON.stringify(game).replace(/'/g, "&apos;")}' data-type="game" style="animation-delay: ${index * 0.1}s">
                 <div class="portfolio-image">
                     <img src="${game.image}" alt="${game.name}" 
-                         onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAwIiBoZWlnaHQ9IjQwMCIgdmlld0JveD0iMCAwIDYwMCA0MDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjYwMCIgaGVpZ2h0PSI0MDAiIGZpbGw9IiMxQTJBMzEiLz48cGF0aCBkPSJNMzAwIDIwMEwzNTAgMjUwTDMwMCAzMDBMMjUwIDI1MEwzMDAgMjAwWiIgZmlsbD0iI0ExODU2RCIvPjx0ZXh0IHg9IjMwMCIgeT0iMzUwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjRkFGOEY1IiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTgiPiR7Z2FtZS5uYW1lfTwvdGV4dD48L3N2Zz4='; this.alt='${game.name} Placeholder'">
+                         onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAwIiBoZWlnaHQ9IjQwMCIgdmlld0JveD0iMCAwIDYwMCA0MDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjYwMCIgaGVpZ2h0PSI0MDAiIGZpbGw9IiMxQTJBMzEiLz48cGF0aCBkPSJNMzAwIDIwMEwzNTAgMjUwTDMwMCAzMDBMMjUwIDI1MEwzMDAgMjAwWiIgZmlsbD0iI0ExODU2RCIvPjx0ZXh0IHg9IjMwMCIgeT0iMzUwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjRkFGOEY1IiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTgiPiR7Z2FtZS5uYW1lfTwvdGV4dD48L3N2Zz4='; this.alt='${game.name}'">
                     <div class="portfolio-overlay">
                         <button class="play-btn" aria-label="Play ${game.name}">
                             <i class="fas fa-play"></i>
@@ -192,7 +190,6 @@ function renderGames() {
             </div>
         `).join('');
         
-        // Re-initialize portfolio cards after rendering
         setTimeout(() => {
             if (typeof initPortfolioCards === 'function') {
                 initPortfolioCards();
@@ -214,11 +211,11 @@ function renderWebsites() {
     if (!websitesGrid) return;
     
     if (PORTFOLIO_DATA.websites && PORTFOLIO_DATA.websites.length > 0) {
-        websitesGrid.innerHTML = PORTFOLIO_DATA.websites.map(website => `
-            <div class="portfolio-card" data-website='${JSON.stringify(website).replace(/'/g, "&apos;")}' data-type="website">
+        websitesGrid.innerHTML = PORTFOLIO_DATA.websites.map((website, index) => `
+            <div class="portfolio-card" data-website='${JSON.stringify(website).replace(/'/g, "&apos;")}' data-type="website" style="animation-delay: ${index * 0.1}s">
                 <div class="portfolio-image">
                     <img src="${website.image}" alt="${website.name}" 
-                         onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAwIiBoZWlnaHQ9IjQwMCIgdmlld0JveD0iMCAwIDYwMCA0MDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjYwMCIgaGVpZ2h0PSI0MDAiIGZpbGw9IiMxQTJBMzEiLz48cGF0aCBkPSJNMjAwIDE1MEg0MDBWMTUwSDQwMFYzNTBIMjAwVjE1MFoiIGZpbGw9IiNBMTg1NkQiLz48dGV4dCB4PSIzMDAiIHk9IjM1MCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iI0ZBRjhGNSIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE4Ij4ke3dlYnNpdGUubmFtZX08L3RleHQ+PC9zdmc+'; this.alt='${website.name} Placeholder'">
+                         onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAwIiBoZWlnaHQ9IjQwMCIgdmlld0JveD0iMCAwIDYwMCA0MDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjYwMCIgaGVpZ2h0PSI0MDAiIGZpbGw9IiMxQTJBMzEiLz48cGF0aCBkPSJNMjAwIDE1MEg0MDBWMTUwSDQwMFYzNTBIMjAwVjE1MFoiIGZpbGw9IiNBMTg1NkQiLz48dGV4dCB4PSIzMDAiIHk9IjM1MCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iI0ZBRjhGNSIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE4Ij4ke3dlYnNpdGUubmFtZX08L3RleHQ+PC9zdmc+'; this.alt='${website.name}'">
                     <div class="portfolio-overlay">
                         <button class="view-btn" aria-label="View ${website.name}">
                             <i class="fas fa-eye"></i>
@@ -233,7 +230,6 @@ function renderWebsites() {
             </div>
         `).join('');
         
-        // Re-initialize portfolio cards after rendering
         setTimeout(() => {
             if (typeof initPortfolioCards === 'function') {
                 initPortfolioCards();
@@ -255,11 +251,11 @@ function renderPhotos() {
     if (!photosGrid) return;
     
     if (PORTFOLIO_DATA.photos && PORTFOLIO_DATA.photos.length > 0) {
-        photosGrid.innerHTML = PORTFOLIO_DATA.photos.map(photo => `
-            <div class="portfolio-card" data-photo='${JSON.stringify(photo).replace(/'/g, "&apos;")}' data-type="photo">
+        photosGrid.innerHTML = PORTFOLIO_DATA.photos.map((photo, index) => `
+            <div class="portfolio-card" data-photo='${JSON.stringify(photo).replace(/'/g, "&apos;")}' data-type="photo" style="animation-delay: ${index * 0.1}s">
                 <div class="portfolio-image">
                     <img src="${photo.image}" alt="${photo.title}" 
-                         onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAwIiBoZWlnaHQ9IjQwMCIgdmlld0JveD0iMCAwIDYwMCA0MDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjYwMCIgaGVpZ2h0PSI0MDAiIGZpbGw9IiMxQTJBMzEiLz48Y2lyY2xlIGN4PSIzMDAiIGN5PSIyMDAiIHI9IjgwIiBmaWxsPSIjQTE4NTZEIi8+PHRleHQgeD0iMzAwIiB5PSIzNTAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiNGQUY4RjUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxOCI+JHtwaG90by50aXRsZX08L3RleHQ+PC9zdmc+'; this.alt='${photo.title} Placeholder'">
+                         onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAwIiBoZWlnaHQ9IjQwMCIgdmlld0JveD0iMCAwIDYwMCA0MDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjYwMCIgaGVpZ2h0PSI0MDAiIGZpbGw9IiMxQTJBMzEiLz48Y2lyY2xlIGN4PSIzMDAiIGN5PSIyMDAiIHI9IjgwIiBmaWxsPSIjQTE4NTZEIi8+PHRleHQgeD0iMzAwIiB5PSIzNTAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiNGQUY4RjUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxOCI+JHtwaG90by50aXRsZX08L3RleHQ+PC9zdmc+'; this.alt='${photo.title}'">
                     <div class="portfolio-overlay">
                         <button class="view-btn" aria-label="View ${photo.title}">
                             <i class="fas fa-search-plus"></i>
@@ -274,7 +270,6 @@ function renderPhotos() {
             </div>
         `).join('');
         
-        // Re-initialize portfolio cards after rendering
         setTimeout(() => {
             if (typeof initPortfolioCards === 'function') {
                 initPortfolioCards();
@@ -296,11 +291,11 @@ function renderVideos() {
     if (!videosGrid) return;
     
     if (PORTFOLIO_DATA.videos && PORTFOLIO_DATA.videos.length > 0) {
-        videosGrid.innerHTML = PORTFOLIO_DATA.videos.map(video => `
-            <div class="portfolio-card" data-video='${JSON.stringify(video).replace(/'/g, "&apos;")}' data-type="video">
+        videosGrid.innerHTML = PORTFOLIO_DATA.videos.map((video, index) => `
+            <div class="portfolio-card" data-video='${JSON.stringify(video).replace(/'/g, "&apos;")}' data-type="video" style="animation-delay: ${index * 0.1}s">
                 <div class="portfolio-image">
                     <img src="${video.thumbnail}" alt="${video.title}" 
-                         onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAwIiBoZWlnaHQ9IjQwMCIgdmlld0JveD0iMCAwIDYwMCA0MDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjYwMCIgaGVpZ2h0PSI0MDAiIGZpbGw9IiMxQTJBMzEiLz48cGF0aCBkPSJNMjI1IDE3NVYzMjVMMzc1IDI1MEwyMjUgMTc1WiIgZmlsbD0iI0ExODU2RCIvPjx0ZXh0IHg9IjMwMCIgeT0iMzUwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjRkFGOEY1IiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTgiPiR7dmlkZW8udGl0bGV9PC90ZXh0Pjwvc3ZnPg=='; this.alt='${video.title} Placeholder'">
+                         onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAwIiBoZWlnaHQ9IjQwMCIgdmlld0JveD0iMCAwIDYwMCA0MDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjYwMCIgaGVpZ2h0PSI0MDAiIGZpbGw9IiMxQTJBMzEiLz48cGF0aCBkPSJNMjI1IDE3NVYzMjVMMzc1IDI1MEwyMjUgMTc1WiIgZmlsbD0iI0ExODU2RCIvPjx0ZXh0IHg9IjMwMCIgeT0iMzUwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjRkFGOEY1IiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTgiPiR7dmlkZW8udGl0bGV9PC90ZXh0Pjwvc3ZnPg=='; this.alt='${video.title}'">
                     <div class="portfolio-overlay">
                         <button class="play-btn" aria-label="Play ${video.title}">
                             <i class="fas fa-play"></i>
@@ -315,7 +310,6 @@ function renderVideos() {
             </div>
         `).join('');
         
-        // Re-initialize portfolio cards after rendering
         setTimeout(() => {
             if (typeof initPortfolioCards === 'function') {
                 initPortfolioCards();
