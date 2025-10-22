@@ -371,37 +371,39 @@ function initGameControls() {
     }
 }
 
-function openWebsitePreview(website) {
-    currentMediaType = 'website';
-    currentItemData = website;
-    currentCategory = 'websites';
-    currentItems = getItemsByCategory('websites');
-    currentIndex = currentItems.findIndex(item => item.id === website.id);
-    
-    const modal = document.getElementById('portfolioModal');
-    const websitePreview = document.getElementById('websitePreview');
-    const iframe = document.getElementById('websiteIframe');
-    
-    hideAllMediaExcept('websitePreview');
-    
-    iframe.src = website.url;
-    websitePreview.style.display = 'block';
-    
-    updateModalInfo(website.name, website.description, website.technologies);
-    updateModalStats([
-        { label: 'Status', value: website.status }
-    ]);
-    updateModalActions(`
-        <a href="${website.url}" target="_blank" class="btn btn-primary">
-            <i class="fas fa-external-link-alt"></i> Visit Site
-        </a>
-    `);
-    updateNavigationArrows();
-    
-    modal.classList.add('active');
-    isModalOpen = true;
-    document.body.style.overflow = 'hidden';
+function openWebsitePreview(itemData) {
+  updateModalTitle(itemData.name);
+  updateModalDescription(itemData.description);
+  updateModalTech(itemData.technologies);
+  updateModalStatus(itemData.status); // Assuming this function exists from pattern
+  
+  const iframe = document.getElementById('websiteIframe');
+  const modalMedia = document.getElementById('modalMedia');
+  
+  // Clear any previous placeholders
+  const existingPlaceholder = modalMedia.querySelector('.placeholder-coming-soon');
+  if (existingPlaceholder) {
+    existingPlaceholder.remove();
+  }
+  
+  if (itemData.url && itemData.url !== '#') {
+    iframe.src = itemData.url;
+    iframe.style.display = '';
+    updateModalActions(`<a href="${itemData.url}" target="_blank" class="btn btn-primary"><i class="fas fa-external-link-alt"></i> Visit Website</a>`);
+  } else {
+    iframe.style.display = 'none';
+    const placeholder = document.createElement('div');
+    placeholder.className = 'empty-state placeholder-coming-soon';
+    placeholder.innerHTML = `<i class="fas fa-clock"></i><h3>Coming Soon</h3><p>This website is under development.</p>`;
+    modalMedia.appendChild(placeholder);
+    updateModalActions('<button class="btn btn-glass" disabled>Coming Soon</button>');
+  }
+  
+  hideAllMediaExcept('website');
+  openModal();
 }
+
+// ... (keep other functions like openGamePreview, etc.)
 
 function openPhotoPreview(photo) {
     currentMediaType = 'photo';
