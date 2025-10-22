@@ -133,4 +133,63 @@ document.addEventListener('DOMContentLoaded', function() {
         card.style.transition = `opacity 0.5s ease-out ${index * 0.1}s, transform 0.5s ease-out ${index * 0.1}s`;
         observer.observe(card);
     });
+
+    // Keyboard Shortcuts
+    document.addEventListener('keydown', function(e) {
+        // Ctrl/Cmd + K to focus search (for admin page)
+        if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+            e.preventDefault();
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) {
+                searchInput.focus();
+            }
+        }
+        
+        // Escape to close modals
+        if (e.key === 'Escape') {
+            const modal = document.getElementById('portfolioModal');
+            if (modal && modal.classList.contains('active')) {
+                closeModal();
+            }
+        }
+    });
+
+    // Enhanced image loading
+    const images = document.querySelectorAll('img');
+    images.forEach(img => {
+        // Add loading state
+        if (!img.complete) {
+            img.style.opacity = '0';
+            img.addEventListener('load', function() {
+                this.style.opacity = '1';
+                this.classList.add('loaded');
+            });
+            img.addEventListener('error', function() {
+                console.warn('Failed to load image:', this.src);
+                this.style.opacity = '1';
+            });
+        } else {
+            img.classList.add('loaded');
+        }
+    });
+
+    // Performance optimization: Lazy load images
+    if ('IntersectionObserver' in window) {
+        const imageObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const img = entry.target;
+                    if (img.dataset.src) {
+                        img.src = img.dataset.src;
+                        img.removeAttribute('data-src');
+                    }
+                    imageObserver.unobserve(img);
+                }
+            });
+        });
+
+        document.querySelectorAll('img[data-src]').forEach(img => {
+            imageObserver.observe(img);
+        });
+    }
 });
