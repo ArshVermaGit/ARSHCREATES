@@ -1,4 +1,4 @@
-// Portfolio Data Storage with corrected image paths
+// Portfolio Data Storage with corrected image paths and enhanced data structure
 const PORTFOLIO_DATA = {
     games: [
         {
@@ -8,7 +8,9 @@ const PORTFOLIO_DATA = {
             description: 'An intense flight game that challenges your piloting skills. Take control and master the narrow, hazard-filled canyon with precision dodging and nerves of steel.',
             image: 'images/games/game1.jpg',
             game_folder: 'sky_surfers',
-            build_name: 'sky_surfers'
+            build_name: 'sky_surfers',
+            technologies: ['Unity', 'C#', '3D Modeling'],
+            status: 'Playable'
         },
         {
             id: 2,
@@ -17,7 +19,9 @@ const PORTFOLIO_DATA = {
             description: 'Embark on an unforgettable journey through mystical lands. Solve puzzles, battle creatures, and uncover ancient secrets in this epic adventure.',
             image: 'images/games/game2.jpg',
             game_folder: 'adventure_quest',
-            build_name: 'adventure_quest'
+            build_name: 'adventure_quest',
+            technologies: ['Unity', 'C#', 'Blender'],
+            status: 'Playable'
         }
     ],
     
@@ -28,7 +32,8 @@ const PORTFOLIO_DATA = {
             description: 'The fastest way to save your media. Multi-platform downloading made quick, simple, and painless.',
             image: 'images/websites/website1.jpg',
             url: 'https://arshvermagit.github.io/REELSPOT/',
-            technologies: ['JavaScript', 'HTML', 'CSS']
+            technologies: ['JavaScript', 'HTML', 'CSS'],
+            status: 'Live'
         },
         {
             id: 2,
@@ -36,7 +41,8 @@ const PORTFOLIO_DATA = {
             description: 'Modern responsive portfolio showcasing creative development work and digital artistry.',
             image: 'images/websites/website2.jpg',
             url: '#',
-            technologies: ['HTML', 'CSS', 'JavaScript']
+            technologies: ['HTML', 'CSS', 'JavaScript'],
+            status: 'Coming Soon'
         }
     ],
     
@@ -46,28 +52,36 @@ const PORTFOLIO_DATA = {
             title: 'The Heart Of Love',
             description: 'Showcasing the symbol of love and connection in a beautiful artistic composition.',
             category: 'Love',
-            image: 'images/photos/photo1.jpg'
+            image: 'images/photos/photo1.jpg',
+            camera: 'Canon EOS R5',
+            location: 'Art Gallery'
         },
         {
             id: 2,
             title: 'The Peacock',
             description: 'Beautiful peacock structure crafted from iron rods, showcasing artistic metalwork.',
             category: 'Art',
-            image: 'images/photos/photo2.jpg'
+            image: 'images/photos/photo2.jpg',
+            camera: 'Sony A7III',
+            location: 'Sculpture Park'
         },
         {
             id: 3,
             title: 'Academic Block',
             description: 'Architectural beauty of the academic building with modern design elements.',
             category: 'Architecture',
-            image: 'images/photos/photo3.jpg'
+            image: 'images/photos/photo3.jpg',
+            camera: 'Nikon Z6',
+            location: 'University Campus'
         },
         {
             id: 4,
             title: 'Block-1 Structure',
             description: 'Modern architectural design of Block-1 with clean lines and aesthetic appeal.',
             category: 'Architecture',
-            image: 'images/photos/photo4.jpg'
+            image: 'images/photos/photo4.jpg',
+            camera: 'Canon 5D Mark IV',
+            location: 'Educational Complex'
         }
     ],
     
@@ -78,7 +92,9 @@ const PORTFOLIO_DATA = {
             description: 'Professional brand video with cinematic storytelling and visual appeal that captures attention.',
             category: 'Commercial',
             thumbnail: 'images/videos/video1.jpg',
-            video_url: 'videos/demo.mp4'
+            video_url: 'videos/demo.mp4',
+            duration: '2:30',
+            resolution: '4K'
         },
         {
             id: 2,
@@ -86,7 +102,9 @@ const PORTFOLIO_DATA = {
             description: 'Collection of creative moments and visual stories that inspire and engage viewers.',
             category: 'Creative',
             thumbnail: 'images/videos/video2.jpg',
-            video_url: 'videos/montage.mp4'
+            video_url: 'videos/montage.mp4',
+            duration: '1:45',
+            resolution: '1080p'
         }
     ]
 };
@@ -102,7 +120,8 @@ function initializeFeedback() {
             feedbackStorage = JSON.parse(stored);
         }
     } catch (e) {
-        console.warn('localStorage not available');
+        console.warn('localStorage not available, using in-memory storage only');
+        feedbackStorage = [];
     }
 }
 
@@ -136,6 +155,7 @@ function getAllFeedback() {
 }
 
 function deleteFeedback(feedbackId) {
+    const initialLength = feedbackStorage.length;
     feedbackStorage = feedbackStorage.filter(f => f.id !== feedbackId);
     
     try {
@@ -144,7 +164,12 @@ function deleteFeedback(feedbackId) {
         console.warn('localStorage not available');
     }
     
-    return true;
+    return feedbackStorage.length < initialLength;
+}
+
+// Get items by category for navigation
+function getItemsByCategory(category) {
+    return PORTFOLIO_DATA[category] || [];
 }
 
 // Create placeholder images dynamically
@@ -162,7 +187,7 @@ function createPlaceholderImages() {
         'images/videos/video2.jpg'
     ];
     
-    console.log('Required images:', images);
+    console.log('Required images for portfolio:', images);
 }
 
 // Enhanced portfolio rendering with image fallbacks
@@ -170,8 +195,10 @@ function renderGames() {
     const gamesGrid = document.getElementById('gamesGrid');
     if (!gamesGrid) return;
     
-    if (PORTFOLIO_DATA.games && PORTFOLIO_DATA.games.length > 0) {
-        gamesGrid.innerHTML = PORTFOLIO_DATA.games.map((game, index) => `
+    const games = PORTFOLIO_DATA.games || [];
+    
+    if (games.length > 0) {
+        gamesGrid.innerHTML = games.map((game, index) => `
             <div class="portfolio-card" data-game='${JSON.stringify(game).replace(/'/g, "&apos;")}' data-type="game" style="animation-delay: ${index * 0.1}s">
                 <div class="portfolio-image">
                     <img src="${game.image}" alt="${game.name}" 
@@ -183,7 +210,7 @@ function renderGames() {
                     </div>
                 </div>
                 <div class="portfolio-info">
-                    <span class="portfolio-badge">Playable</span>
+                    <span class="portfolio-badge">${game.status || 'Playable'}</span>
                     <h3 class="portfolio-title">${game.name}</h3>
                     <p class="portfolio-description">${game.overview}</p>
                 </div>
@@ -210,8 +237,10 @@ function renderWebsites() {
     const websitesGrid = document.getElementById('websitesGrid');
     if (!websitesGrid) return;
     
-    if (PORTFOLIO_DATA.websites && PORTFOLIO_DATA.websites.length > 0) {
-        websitesGrid.innerHTML = PORTFOLIO_DATA.websites.map((website, index) => `
+    const websites = PORTFOLIO_DATA.websites || [];
+    
+    if (websites.length > 0) {
+        websitesGrid.innerHTML = websites.map((website, index) => `
             <div class="portfolio-card" data-website='${JSON.stringify(website).replace(/'/g, "&apos;")}' data-type="website" style="animation-delay: ${index * 0.1}s">
                 <div class="portfolio-image">
                     <img src="${website.image}" alt="${website.name}" 
@@ -223,7 +252,7 @@ function renderWebsites() {
                     </div>
                 </div>
                 <div class="portfolio-info">
-                    <span class="portfolio-badge">Live</span>
+                    <span class="portfolio-badge">${website.status || 'Live'}</span>
                     <h3 class="portfolio-title">${website.name}</h3>
                     <p class="portfolio-description">${website.description}</p>
                 </div>
@@ -250,8 +279,10 @@ function renderPhotos() {
     const photosGrid = document.getElementById('photosGrid');
     if (!photosGrid) return;
     
-    if (PORTFOLIO_DATA.photos && PORTFOLIO_DATA.photos.length > 0) {
-        photosGrid.innerHTML = PORTFOLIO_DATA.photos.map((photo, index) => `
+    const photos = PORTFOLIO_DATA.photos || [];
+    
+    if (photos.length > 0) {
+        photosGrid.innerHTML = photos.map((photo, index) => `
             <div class="portfolio-card" data-photo='${JSON.stringify(photo).replace(/'/g, "&apos;")}' data-type="photo" style="animation-delay: ${index * 0.1}s">
                 <div class="portfolio-image">
                     <img src="${photo.image}" alt="${photo.title}" 
@@ -290,8 +321,10 @@ function renderVideos() {
     const videosGrid = document.getElementById('videosGrid');
     if (!videosGrid) return;
     
-    if (PORTFOLIO_DATA.videos && PORTFOLIO_DATA.videos.length > 0) {
-        videosGrid.innerHTML = PORTFOLIO_DATA.videos.map((video, index) => `
+    const videos = PORTFOLIO_DATA.videos || [];
+    
+    if (videos.length > 0) {
+        videosGrid.innerHTML = videos.map((video, index) => `
             <div class="portfolio-card" data-video='${JSON.stringify(video).replace(/'/g, "&apos;")}' data-type="video" style="animation-delay: ${index * 0.1}s">
                 <div class="portfolio-image">
                     <img src="${video.thumbnail}" alt="${video.title}" 
@@ -364,3 +397,4 @@ window.saveFeedback = saveFeedback;
 window.getAllFeedback = getAllFeedback;
 window.deleteFeedback = deleteFeedback;
 window.initializePortfolio = initializePortfolio;
+window.getItemsByCategory = getItemsByCategory;
