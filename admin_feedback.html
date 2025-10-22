@@ -1,197 +1,25 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Feedback - Arsh Verma Portfolio</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="icon" href="images/favicon.ico">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <style>
-        .admin-header {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.04) 100%);
-            border: 1.5px solid var(--glass-border);
-            backdrop-filter: blur(var(--glass-blur)) saturate(180%);
-            border-radius: var(--radius-xl);
-            padding: 2rem;
-            margin-bottom: 2rem;
-        }
-        
-        .admin-stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-        
-        .stat-card {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.04) 100%);
-            border: 1.5px solid var(--glass-border);
-            backdrop-filter: blur(var(--glass-blur)) saturate(180%);
-            border-radius: var(--radius-lg);
-            padding: 1.5rem;
-            text-align: center;
-        }
-        
-        .stat-card i {
-            font-size: 2rem;
-            color: var(--accent);
-            margin-bottom: 0.5rem;
-        }
-        
-        .stat-card h3 {
-            font-size: 2rem;
-            margin: 0.5rem 0;
-        }
-        
-        .stat-card p {
-            color: var(--text-tertiary);
-            margin: 0;
-        }
-        
-        .filters {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.04) 100%);
-            border: 1.5px solid var(--glass-border);
-            backdrop-filter: blur(var(--glass-blur)) saturate(180%);
-            border-radius: var(--radius-lg);
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-        }
-        
-        .filter-group {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-bottom: 1rem;
-        }
-        
-        .feedback-table-container {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.04) 100%);
-            border: 1.5px solid var(--glass-border);
-            backdrop-filter: blur(var(--glass-blur)) saturate(180%);
-            border-radius: var(--radius-xl);
-            padding: 2rem;
-            overflow-x: auto;
-        }
-        
-        .feedback-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        
-        .feedback-table th,
-        .feedback-table td {
-            padding: 1rem;
-            text-align: left;
-            border-bottom: 1px solid var(--glass-border);
-        }
-        
-        .feedback-table th {
-            font-weight: 600;
-            color: var(--accent);
-            white-space: nowrap;
-        }
-        
-        .feedback-table tr:hover {
-            background: rgba(255, 255, 255, 0.05);
-        }
-        
-        .badge {
-            display: inline-block;
-            padding: 0.25rem 0.75rem;
-            border-radius: 50px;
-            font-size: 0.85rem;
-            font-weight: 600;
-        }
-        
-        .badge-project { background: rgba(59, 130, 246, 0.2); color: #60a5fa; }
-        .badge-collaboration { background: rgba(16, 185, 129, 0.2); color: #34d399; }
-        .badge-support { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
-        .badge-other { background: rgba(139, 92, 246, 0.2); color: #a78bfa; }
-        
-        .action-btns {
-            display: flex;
-            gap: 0.5rem;
-        }
-        
-        .btn-icon-small {
-            width: 36px;
-            height: 36px;
-            padding: 0;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: var(--radius-sm);
-            border: 1px solid var(--glass-border);
-            background: var(--bg-elevated);
-            color: var(--text-secondary);
-            cursor: pointer;
-            transition: all var(--transition-smooth);
-        }
-        
-        .btn-icon-small:hover {
-            background: var(--accent-light);
-            color: var(--accent);
-            border-color: var(--accent);
-        }
-        
-        .btn-delete:hover {
-            background: rgba(239, 68, 68, 0.2);
-            color: #ef4444;
-            border-color: #ef4444;
-        }
-        
-        .empty-state-admin {
-            text-align: center;
-            padding: 4rem 2rem;
-        }
-        
-        .empty-state-admin i {
-            font-size: 4rem;
-            color: var(--accent);
-            margin-bottom: 1rem;
-        }
-        
-        .export-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.75rem 1.5rem;
-            border-radius: var(--radius-lg);
-            background: var(--accent);
-            color: white;
-            border: none;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all var(--transition-smooth);
-        }
-        
-        .export-btn:hover {
-            background: var(--accent-secondary);
-            transform: translateY(-2px);
-        }
-
-        .meta-item {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.9rem;
-            color: var(--text-tertiary);
-        }
-
-        .meta-item i {
-            color: var(--accent);
-        }
-    </style>
 </head>
 <body>
-    <nav class="navbar" id="navbar">
+    <!-- Navigation -->
+    <nav class="navbar">
         <div class="nav-container">
             <a href="index.html" class="logo">
                 <i class="fas fa-code"></i>
                 <span>ArshCreates</span>
             </a>
             <div class="nav-actions">
+                <a href="index.html" class="btn-icon" title="Back to Portfolio">
+                    <i class="fas fa-arrow-left"></i>
+                </a>
                 <button id="themeBtn" class="btn-icon" aria-label="Toggle theme">
                     <i class="fas fa-moon"></i>
                 </button>
@@ -199,352 +27,811 @@
         </div>
     </nav>
 
-    <main id="main" style="margin-top: 100px;">
-        <section class="section">
-            <div class="container">
-                <div class="admin-header">
-                    <h1><i class="fas fa-envelope-open-text"></i> Feedback Management</h1>
-                    <p>View and manage all contact form submissions</p>
-                </div>
+    <main class="admin-main">
+        <div class="container">
+            <div class="section-header">
+                <h1 class="section-title">Feedback Management</h1>
+                <p class="section-description">Manage and review all incoming messages and feedback</p>
+            </div>
 
-                <div class="admin-stats" id="statsContainer">
-                    <div class="stat-card">
+            <!-- Stats Overview -->
+            <div class="admin-stats">
+                <div class="stat-card">
+                    <div class="stat-icon">
                         <i class="fas fa-envelope"></i>
-                        <h3 id="totalCount">0</h3>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="totalMessages">0</h3>
                         <p>Total Messages</p>
                     </div>
-                    <div class="stat-card">
-                        <i class="fas fa-calendar-day"></i>
-                        <h3 id="todayCount">0</h3>
-                        <p>Today</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-clock"></i>
                     </div>
-                    <div class="stat-card">
-                        <i class="fas fa-calendar-week"></i>
-                        <h3 id="weekCount">0</h3>
-                        <p>This Week</p>
-                    </div>
-                    <div class="stat-card">
-                        <i class="fas fa-calendar-alt"></i>
-                        <h3 id="monthCount">0</h3>
-                        <p>This Month</p>
+                    <div class="stat-info">
+                        <h3 id="recentMessages">0</h3>
+                        <p>Last 7 Days</p>
                     </div>
                 </div>
-
-                <div class="filters">
-                    <h3>Filters</h3>
-                    <div class="filter-group">
-                        <input type="text" id="searchInput" class="form-input" placeholder="Search name, email, or message...">
-                        <select id="typeFilter" class="form-select">
-                            <option value="">All Types</option>
-                            <option value="Project Inquiry">Project Inquiry</option>
-                            <option value="Collaboration">Collaboration</option>
-                            <option value="Support">Support</option>
-                            <option value="Other">Other</option>
-                        </select>
-                        <select id="dateFilter" class="form-select">
-                            <option value="">All Time</option>
-                            <option value="today">Today</option>
-                            <option value="week">This Week</option>
-                            <option value="month">This Month</option>
-                        </select>
-                        <button onclick="exportToCSV()" class="export-btn">
-                            <i class="fas fa-download"></i> Export CSV
-                        </button>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-project-diagram"></i>
                     </div>
-                </div>
-
-                <div class="feedback-table-container">
-                    <div id="feedbackTableWrapper">
-                        <!-- Table will be inserted here -->
+                    <div class="stat-info">
+                        <h3 id="projectInquiries">0</h3>
+                        <p>Project Inquiries</p>
                     </div>
                 </div>
             </div>
-        </section>
+
+            <!-- Filters and Actions -->
+            <div class="admin-controls">
+                <div class="filter-group">
+                    <label for="filterType">Filter by Type:</label>
+                    <select id="filterType">
+                        <option value="all">All Types</option>
+                        <option value="Project Inquiry">Project Inquiry</option>
+                        <option value="Collaboration">Collaboration</option>
+                        <option value="Support">Support</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="sortBy">Sort by:</label>
+                    <select id="sortBy">
+                        <option value="newest">Newest First</option>
+                        <option value="oldest">Oldest First</option>
+                        <option value="name">Name A-Z</option>
+                    </select>
+                </div>
+                <button id="exportBtn" class="btn btn-glass">
+                    <i class="fas fa-download"></i> Export CSV
+                </button>
+                <button id="refreshBtn" class="btn btn-primary">
+                    <i class="fas fa-sync-alt"></i> Refresh
+                </button>
+            </div>
+
+            <!-- Feedback Table -->
+            <div class="feedback-table-container">
+                <table class="feedback-table" id="feedbackTable">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Type</th>
+                            <th>Message Preview</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="feedbackTableBody">
+                        <!-- Feedback rows will be inserted here -->
+                    </tbody>
+                </table>
+                
+                <!-- Empty State -->
+                <div class="empty-state" id="emptyState" style="display: none;">
+                    <i class="fas fa-inbox"></i>
+                    <h3>No Feedback Yet</h3>
+                    <p>All incoming messages will appear here</p>
+                </div>
+            </div>
+
+            <!-- Feedback Detail Modal -->
+            <div class="modal-overlay" id="detailModal" style="display: none;">
+                <div class="modal-container admin-modal">
+                    <button class="modal-close" id="closeDetailModal">
+                        <i class="fas fa-times"></i>
+                    </button>
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h2 class="modal-title" id="detailName">Loading...</h2>
+                            <div class="modal-meta" id="detailMeta"></div>
+                        </div>
+                        <div class="modal-body">
+                            <div class="detail-grid">
+                                <div class="detail-item">
+                                    <label>Email:</label>
+                                    <span id="detailEmail"></span>
+                                </div>
+                                <div class="detail-item">
+                                    <label>Phone:</label>
+                                    <span id="detailPhone"></span>
+                                </div>
+                                <div class="detail-item">
+                                    <label>Contact Type:</label>
+                                    <span id="detailType"></span>
+                                </div>
+                                <div class="detail-item full-width">
+                                    <label>Message:</label>
+                                    <div class="message-content" id="detailMessage"></div>
+                                </div>
+                                <div class="detail-item">
+                                    <label>Received:</label>
+                                    <span id="detailDate"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-actions">
+                            <button class="btn btn-glass" id="replyBtn">
+                                <i class="fas fa-reply"></i> Reply via Email
+                            </button>
+                            <button class="btn btn-primary" id="markReadBtn">
+                                <i class="fas fa-check"></i> Mark as Read
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </main>
-
-    <footer class="footer">
-        <div class="container footer-inner">
-            <div class="footer-left">
-                <div class="footer-brand"><i class="fas fa-code"></i><span>ArshCreates</span></div>
-                <p class="muted">Admin Panel - Feedback Management</p>
-            </div>
-        </div>
-        <div class="container footer-bottom">
-            <span>&copy; <span id="currentYear"></span> Arsh Verma. All Rights Reserved.</span>
-        </div>
-    </footer>
 
     <div id="notificationContainer"></div>
 
     <script src="js/data.js"></script>
     <script src="js/script.js"></script>
     <script>
-        document.getElementById('currentYear').textContent = new Date().getFullYear();
-
-        let allFeedback = [];
-        let filteredFeedback = [];
-
-        function loadFeedback() {
-            if (typeof getAllFeedback === 'function') {
-                allFeedback = getAllFeedback();
-                filteredFeedback = [...allFeedback];
-                updateStats();
-                renderTable(filteredFeedback);
-            } else {
-                console.error('getAllFeedback function not available');
-                showNotification('Error loading feedback data', 'error');
-            }
-        }
-
-        function updateStats() {
-            const now = new Date();
-            const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-            const weekAgo = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
-            const monthAgo = new Date(today.getTime() - 30 * 24 * 60 * 60 * 1000);
-
-            const todayCount = allFeedback.filter(f => new Date(f.timestamp) >= today).length;
-            const weekCount = allFeedback.filter(f => new Date(f.timestamp) >= weekAgo).length;
-            const monthCount = allFeedback.filter(f => new Date(f.timestamp) >= monthAgo).length;
-
-            document.getElementById('totalCount').textContent = allFeedback.length;
-            document.getElementById('todayCount').textContent = todayCount;
-            document.getElementById('weekCount').textContent = weekCount;
-            document.getElementById('monthCount').textContent = monthCount;
-        }
-
-        function renderTable(feedback) {
-            const wrapper = document.getElementById('feedbackTableWrapper');
-            
-            if (feedback.length === 0) {
-                wrapper.innerHTML = `
-                    <div class="empty-state-admin">
-                        <i class="fas fa-inbox"></i>
-                        <h3>No Feedback Found</h3>
-                        <p>No feedback submissions match your current filters</p>
-                    </div>
-                `;
-                return;
-            }
-
-            const table = document.createElement('table');
-            table.className = 'feedback-table';
-            table.innerHTML = `
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Phone</th>
-                        <th>Type</th>
-                        <th>Message</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    ${feedback.map(f => {
-                        const date = new Date(f.timestamp);
-                        const formattedDate = date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
-                        const badgeClass = `badge-${f.contact_type.toLowerCase().replace(' ', '-')}`;
-                        
-                        // Truncate long messages
-                        const truncatedMessage = f.comment.length > 100 ? 
-                            f.comment.substring(0, 100) + '...' : f.comment;
-                        
-                        return `
-                            <tr>
-                                <td style="white-space: nowrap;">${formattedDate}</td>
-                                <td>${f.full_name}</td>
-                                <td>${f.email}</td>
-                                <td>${f.phone}</td>
-                                <td><span class="badge ${badgeClass}">${f.contact_type}</span></td>
-                                <td style="max-width: 300px;" title="${f.comment}">${truncatedMessage}</td>
-                                <td>
-                                    <div class="action-btns">
-                                        <button class="btn-icon-small" onclick="viewFeedback('${f.id}')" title="View Details">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                        <button class="btn-icon-small btn-delete" onclick="deleteFeedbackItem('${f.id}')" title="Delete">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        `;
-                    }).join('')}
-                </tbody>
-            `;
-            
-            wrapper.innerHTML = '';
-            wrapper.appendChild(table);
-        }
-
-        function filterFeedback() {
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-            const typeFilter = document.getElementById('typeFilter').value;
-            const dateFilter = document.getElementById('dateFilter').value;
-
-            filteredFeedback = [...allFeedback];
-
-            // Search filter
-            if (searchTerm) {
-                filteredFeedback = filteredFeedback.filter(f => 
-                    f.full_name.toLowerCase().includes(searchTerm) ||
-                    f.email.toLowerCase().includes(searchTerm) ||
-                    f.comment.toLowerCase().includes(searchTerm)
-                );
-            }
-
-            // Type filter
-            if (typeFilter) {
-                filteredFeedback = filteredFeedback.filter(f => f.contact_type === typeFilter);
-            }
-
-            // Date filter
-            if (dateFilter) {
-                const now = new Date();
-                const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        // Admin Feedback Management
+        class FeedbackAdmin {
+            constructor() {
+                this.feedback = [];
+                this.filteredFeedback = [];
+                this.currentFilter = 'all';
+                this.currentSort = 'newest';
+                this.selectedFeedback = null;
                 
-                if (dateFilter === 'today') {
-                    filteredFeedback = filteredFeedback.filter(f => new Date(f.timestamp) >= today);
-                } else if (dateFilter === 'week') {
-                    const weekAgo = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
-                    filteredFeedback = filteredFeedback.filter(f => new Date(f.timestamp) >= weekAgo);
-                } else if (dateFilter === 'month') {
-                    const monthAgo = new Date(today.getTime() - 30 * 24 * 60 * 60 * 1000);
-                    filteredFeedback = filteredFeedback.filter(f => new Date(f.timestamp) >= monthAgo);
-                }
-            }
-
-            renderTable(filteredFeedback);
-        }
-
-        function viewFeedback(id) {
-            const feedback = allFeedback.find(f => f.id === id);
-            if (!feedback) return;
-
-            const message = `
-Name: ${feedback.full_name}
-Email: ${feedback.email}
-Phone: ${feedback.phone}
-Type: ${feedback.contact_type}
-Date: ${new Date(feedback.timestamp).toLocaleString()}
-
-Message:
-${feedback.comment}
-            `;
-
-            alert(message);
-        }
-
-        function deleteFeedbackItem(id) {
-            if (!confirm('Are you sure you want to delete this feedback? This action cannot be undone.')) return;
-
-            if (typeof deleteFeedback === 'function') {
-                const success = deleteFeedback(id);
-                if (success) {
-                    loadFeedback();
-                    showNotification('Feedback deleted successfully', 'success');
-                } else {
-                    showNotification('Failed to delete feedback', 'error');
-                }
-            } else {
-                showNotification('Delete function not available', 'error');
-            }
-        }
-
-        function exportToCSV() {
-            if (filteredFeedback.length === 0) {
-                showNotification('No data to export', 'info');
-                return;
-            }
-
-            let csvContent = "Date,Name,Email,Phone,Type,Message\n";
-            
-            filteredFeedback.forEach(f => {
-                const date = new Date(f.timestamp).toLocaleString();
-                const row = [
-                    `"${date}"`,
-                    `"${f.full_name}"`,
-                    `"${f.email}"`,
-                    `"${f.phone}"`,
-                    `"${f.contact_type}"`,
-                    `"${f.comment.replace(/"/g, '""')}"`
-                ].join(',');
-                csvContent += row + "\n";
-            });
-
-            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `feedback_${new Date().toISOString().split('T')[0]}.csv`;
-            a.click();
-            window.URL.revokeObjectURL(url);
-            
-            showNotification('CSV exported successfully', 'success');
-        }
-
-        function showNotification(message, type = 'info') {
-            const container = document.getElementById('notificationContainer');
-            if (!container) {
-                console.error('Notification container not found');
-                return;
+                this.init();
             }
             
-            const notification = document.createElement('div');
-            notification.className = `notification ${type}`;
+            init() {
+                this.loadFeedback();
+                this.initEventListeners();
+                this.renderTable();
+                this.updateStats();
+            }
             
-            const icon = type === 'success' ? 'fa-check-circle' : 
-                         type === 'error' ? 'fa-exclamation-circle' : 
-                         'fa-info-circle';
-            
-            const title = type === 'success' ? 'Success' : 
-                          type === 'error' ? 'Error' : 
-                          'Info';
-            
-            notification.innerHTML = `
-                <div class="notification-content">
-                    <div class="notification-icon">
-                        <i class="fas ${icon}"></i>
-                    </div>
-                    <div class="notification-text">
-                        <h4>${title}</h4>
-                        <p>${message}</p>
-                    </div>
-                </div>
-            `;
-            
-            container.appendChild(notification);
-            
-            setTimeout(() => {
-                notification.style.animation = 'slideInRight 0.3s ease-out reverse';
-                setTimeout(() => {
-                    if (notification.parentNode) {
-                        notification.remove();
+            loadFeedback() {
+                try {
+                    if (typeof getAllFeedback === 'function') {
+                        this.feedback = getAllFeedback();
+                    } else {
+                        // Fallback to localStorage
+                        const stored = localStorage.getItem('portfolio_feedback');
+                        this.feedback = stored ? JSON.parse(stored) : [];
                     }
-                }, 300);
-            }, 5000);
+                    this.applyFilters();
+                } catch (error) {
+                    console.error('Error loading feedback:', error);
+                    this.feedback = [];
+                }
+            }
+            
+            initEventListeners() {
+                // Theme switcher
+                const themeBtn = document.getElementById('themeBtn');
+                if (themeBtn) {
+                    themeBtn.addEventListener('click', () => {
+                        if (typeof initThemeSwitcher === 'function') {
+                            initThemeSwitcher();
+                        }
+                    });
+                }
+                
+                // Filter and sort
+                document.getElementById('filterType')?.addEventListener('change', (e) => {
+                    this.currentFilter = e.target.value;
+                    this.applyFilters();
+                });
+                
+                document.getElementById('sortBy')?.addEventListener('change', (e) => {
+                    this.currentSort = e.target.value;
+                    this.applyFilters();
+                });
+                
+                // Actions
+                document.getElementById('refreshBtn')?.addEventListener('click', () => {
+                    this.loadFeedback();
+                    this.showNotification('Feedback list refreshed', 'success');
+                });
+                
+                document.getElementById('exportBtn')?.addEventListener('click', () => {
+                    this.exportToCSV();
+                });
+                
+                // Modal
+                document.getElementById('closeDetailModal')?.addEventListener('click', () => {
+                    this.closeDetailModal();
+                });
+                
+                document.getElementById('markReadBtn')?.addEventListener('click', () => {
+                    this.markAsRead();
+                });
+                
+                document.getElementById('replyBtn')?.addEventListener('click', () => {
+                    this.replyToFeedback();
+                });
+                
+                // Close modal on overlay click
+                document.getElementById('detailModal')?.addEventListener('click', (e) => {
+                    if (e.target.id === 'detailModal') {
+                        this.closeDetailModal();
+                    }
+                });
+                
+                // Escape key to close modal
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape' && this.selectedFeedback) {
+                        this.closeDetailModal();
+                    }
+                });
+            }
+            
+            applyFilters() {
+                let filtered = [...this.feedback];
+                
+                // Apply type filter
+                if (this.currentFilter !== 'all') {
+                    filtered = filtered.filter(item => item.contact_type === this.currentFilter);
+                }
+                
+                // Apply sorting
+                switch (this.currentSort) {
+                    case 'newest':
+                        filtered.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+                        break;
+                    case 'oldest':
+                        filtered.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+                        break;
+                    case 'name':
+                        filtered.sort((a, b) => a.full_name.localeCompare(b.full_name));
+                        break;
+                }
+                
+                this.filteredFeedback = filtered;
+                this.renderTable();
+            }
+            
+            renderTable() {
+                const tbody = document.getElementById('feedbackTableBody');
+                const emptyState = document.getElementById('emptyState');
+                
+                if (!tbody) return;
+                
+                if (this.filteredFeedback.length === 0) {
+                    tbody.innerHTML = '';
+                    if (emptyState) emptyState.style.display = 'block';
+                    return;
+                }
+                
+                if (emptyState) emptyState.style.display = 'none';
+                
+                tbody.innerHTML = this.filteredFeedback.map(feedback => `
+                    <tr class="feedback-row" data-id="${feedback.id}">
+                        <td class="name-cell">
+                            <div class="user-avatar">
+                                ${feedback.full_name.split(' ').map(n => n[0]).join('').toUpperCase()}
+                            </div>
+                            <span>${feedback.full_name}</span>
+                        </td>
+                        <td class="email-cell">${feedback.email}</td>
+                        <td class="type-cell">
+                            <span class="type-badge type-${feedback.contact_type.toLowerCase().replace(' ', '-')}">
+                                ${feedback.contact_type}
+                            </span>
+                        </td>
+                        <td class="message-cell">
+                            <div class="message-preview">
+                                ${this.truncateText(feedback.comment, 80)}
+                            </div>
+                        </td>
+                        <td class="date-cell">
+                            ${this.formatDate(feedback.timestamp)}
+                        </td>
+                        <td class="actions-cell">
+                            <button class="btn-icon view-btn" title="View Details">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn-icon delete-btn" title="Delete">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `).join('');
+                
+                // Add event listeners to table rows
+                tbody.querySelectorAll('.feedback-row').forEach(row => {
+                    const id = row.dataset.id;
+                    const viewBtn = row.querySelector('.view-btn');
+                    const deleteBtn = row.querySelector('.delete-btn');
+                    
+                    viewBtn?.addEventListener('click', () => {
+                        this.showFeedbackDetail(id);
+                    });
+                    
+                    deleteBtn?.addEventListener('click', () => {
+                        this.deleteFeedback(id);
+                    });
+                    
+                    // Make entire row clickable
+                    row.addEventListener('click', (e) => {
+                        if (!e.target.closest('.btn-icon')) {
+                            this.showFeedbackDetail(id);
+                        }
+                    });
+                });
+            }
+            
+            showFeedbackDetail(id) {
+                const feedback = this.feedback.find(f => f.id === id);
+                if (!feedback) return;
+                
+                this.selectedFeedback = feedback;
+                
+                // Update modal content
+                document.getElementById('detailName').textContent = feedback.full_name;
+                document.getElementById('detailEmail').textContent = feedback.email;
+                document.getElementById('detailPhone').textContent = feedback.phone || 'Not provided';
+                document.getElementById('detailType').textContent = feedback.contact_type;
+                document.getElementById('detailMessage').textContent = feedback.comment;
+                document.getElementById('detailDate').textContent = this.formatDate(feedback.timestamp, true);
+                
+                // Update meta info
+                const metaElement = document.getElementById('detailMeta');
+                if (metaElement) {
+                    metaElement.innerHTML = `
+                        <div class="meta-item">
+                            <i class="fas fa-envelope"></i>
+                            <span>${feedback.email}</span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-clock"></i>
+                            <span>${this.formatRelativeTime(feedback.timestamp)}</span>
+                        </div>
+                    `;
+                }
+                
+                // Show modal
+                document.getElementById('detailModal').style.display = 'block';
+            }
+            
+            closeDetailModal() {
+                document.getElementById('detailModal').style.display = 'none';
+                this.selectedFeedback = null;
+            }
+            
+            markAsRead() {
+                if (!this.selectedFeedback) return;
+                
+                // In a real application, you would mark as read in your database
+                // For now, we'll just show a notification
+                this.showNotification('Marked as read', 'success');
+                this.closeDetailModal();
+            }
+            
+            replyToFeedback() {
+                if (!this.selectedFeedback) return;
+                
+                const email = this.selectedFeedback.email;
+                const subject = encodeURIComponent('Re: Your message to ArshCreates');
+                const body = encodeURIComponent(`Hi ${this.selectedFeedback.full_name},\n\nThank you for your message!`);
+                
+                window.open(`mailto:${email}?subject=${subject}&body=${body}`, '_blank');
+            }
+            
+            deleteFeedback(id) {
+                if (!confirm('Are you sure you want to delete this feedback? This action cannot be undone.')) {
+                    return;
+                }
+                
+                try {
+                    let success = false;
+                    
+                    if (typeof deleteFeedback === 'function') {
+                        success = deleteFeedback(id);
+                    } else {
+                        // Fallback deletion
+                        const index = this.feedback.findIndex(f => f.id === id);
+                        if (index > -1) {
+                            this.feedback.splice(index, 1);
+                            localStorage.setItem('portfolio_feedback', JSON.stringify(this.feedback));
+                            success = true;
+                        }
+                    }
+                    
+                    if (success) {
+                        this.loadFeedback();
+                        this.showNotification('Feedback deleted successfully', 'success');
+                        
+                        // Close detail modal if it's open for the deleted item
+                        if (this.selectedFeedback && this.selectedFeedback.id === id) {
+                            this.closeDetailModal();
+                        }
+                    } else {
+                        this.showNotification('Error deleting feedback', 'error');
+                    }
+                } catch (error) {
+                    console.error('Error deleting feedback:', error);
+                    this.showNotification('Error deleting feedback', 'error');
+                }
+            }
+            
+            exportToCSV() {
+                if (this.feedback.length === 0) {
+                    this.showNotification('No feedback to export', 'info');
+                    return;
+                }
+                
+                const headers = ['Name', 'Email', 'Phone', 'Type', 'Message', 'Date'];
+                const csvData = [
+                    headers.join(','),
+                    ...this.feedback.map(f => [
+                        `"${f.full_name.replace(/"/g, '""')}"`,
+                        `"${f.email}"`,
+                        `"${f.phone || ''}"`,
+                        `"${f.contact_type}"`,
+                        `"${f.comment.replace(/"/g, '""')}"`,
+                        `"${this.formatDate(f.timestamp)}"`
+                    ].join(','))
+                ].join('\n');
+                
+                const blob = new Blob([csvData], { type: 'text/csv' });
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `feedback-export-${new Date().toISOString().split('T')[0]}.csv`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+                
+                this.showNotification('Feedback exported successfully', 'success');
+            }
+            
+            updateStats() {
+                const total = this.feedback.length;
+                const weekAgo = new Date();
+                weekAgo.setDate(weekAgo.getDate() - 7);
+                const recent = this.feedback.filter(f => new Date(f.timestamp) > weekAgo).length;
+                const projects = this.feedback.filter(f => f.contact_type === 'Project Inquiry').length;
+                
+                document.getElementById('totalMessages').textContent = total;
+                document.getElementById('recentMessages').textContent = recent;
+                document.getElementById('projectInquiries').textContent = projects;
+            }
+            
+            truncateText(text, maxLength) {
+                if (text.length <= maxLength) return text;
+                return text.substr(0, maxLength) + '...';
+            }
+            
+            formatDate(timestamp, full = false) {
+                const date = new Date(timestamp);
+                if (full) {
+                    return date.toLocaleString();
+                }
+                return date.toLocaleDateString();
+            }
+            
+            formatRelativeTime(timestamp) {
+                const date = new Date(timestamp);
+                const now = new Date();
+                const diffInHours = Math.floor((now - date) / (1000 * 60 * 60));
+                
+                if (diffInHours < 1) return 'Just now';
+                if (diffInHours < 24) return `${diffInHours}h ago`;
+                if (diffInHours < 168) return `${Math.floor(diffInHours / 24)}d ago`;
+                return this.formatDate(timestamp);
+            }
+            
+            showNotification(message, type = 'info') {
+                if (typeof showNotification === 'function') {
+                    showNotification(message, type);
+                } else {
+                    // Fallback notification
+                    alert(`${type.toUpperCase()}: ${message}`);
+                }
+            }
         }
-
-        // Event listeners
-        document.getElementById('searchInput').addEventListener('input', filterFeedback);
-        document.getElementById('typeFilter').addEventListener('change', filterFeedback);
-        document.getElementById('dateFilter').addEventListener('change', filterFeedback);
-
-        // Keyboard shortcut for search
-        document.addEventListener('keydown', function(e) {
-            if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
-                e.preventDefault();
-                document.getElementById('searchInput').focus();
+        
+        // Initialize admin when DOM is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            new FeedbackAdmin();
+            
+            // Initialize theme switcher if available
+            if (typeof initThemeSwitcher === 'function') {
+                initThemeSwitcher();
             }
         });
-
-        // Load feedback on page load
-        document.addEventListener('DOMContentLoaded', loadFeedback);
-        // Also load immediately in case DOM is already ready
-        if (document.readyState === 'complete') {
-            loadFeedback();
-        }
     </script>
+    
+    <style>
+        /* Admin-specific styles */
+        .admin-main {
+            padding: 120px 0 60px;
+            min-height: 100vh;
+        }
+        
+        .admin-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+        
+        .stat-card {
+            background: var(--liquid-glass-bg);
+            border: 1px solid var(--liquid-glass-border);
+            backdrop-filter: blur(var(--liquid-glass-blur));
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            transition: all var(--transition-smooth);
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent);
+            box-shadow: var(--shadow-glow);
+        }
+        
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: var(--radius-lg);
+            background: var(--accent-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--accent);
+        }
+        
+        .stat-info h3 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+        
+        .stat-info p {
+            color: var(--text-tertiary);
+            margin: 0;
+            font-size: 0.9rem;
+        }
+        
+        .admin-controls {
+            display: flex;
+            gap: 1.5rem;
+            align-items: end;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .filter-group label {
+            font-weight: 600;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        
+        .filter-group select {
+            padding: 0.75rem 1rem;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--glass-border);
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            min-width: 150px;
+        }
+        
+        .feedback-table-container {
+            background: var(--liquid-glass-bg);
+            border: 1px solid var(--liquid-glass-border);
+            backdrop-filter: blur(var(--liquid-glass-blur));
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+        }
+        
+        .feedback-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .feedback-table th {
+            background: var(--bg-secondary);
+            padding: 1.25rem 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: var(--text-primary);
+            border-bottom: 1px solid var(--glass-border);
+        }
+        
+        .feedback-table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--glass-border);
+            vertical-align: middle;
+        }
+        
+        .feedback-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .feedback-table tr:hover {
+            background: var(--glass-bg-hover);
+        }
+        
+        .name-cell {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        .type-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .type-project-inquiry {
+            background: rgba(138, 155, 110, 0.2);
+            color: var(--success);
+        }
+        
+        .type-collaboration {
+            background: rgba(125, 143, 161, 0.2);
+            color: var(--info);
+        }
+        
+        .type-support {
+            background: rgba(201, 168, 106, 0.2);
+            color: var(--warning);
+        }
+        
+        .type-other {
+            background: rgba(184, 124, 109, 0.2);
+            color: var(--error);
+        }
+        
+        .message-preview {
+            color: var(--text-tertiary);
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+        
+        .date-cell {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            white-space: nowrap;
+        }
+        
+        .actions-cell {
+            display: flex;
+            gap: 0.5rem;
+            white-space: nowrap;
+        }
+        
+        .btn-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--glass-border);
+            background: transparent;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all var(--transition-smooth);
+        }
+        
+        .btn-icon:hover {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: white;
+            transform: scale(1.1);
+        }
+        
+        .delete-btn:hover {
+            background: var(--error);
+            border-color: var(--error);
+        }
+        
+        .admin-modal {
+            max-width: 600px;
+            width: 90vw;
+        }
+        
+        .modal-body {
+            padding: 2rem 0;
+        }
+        
+        .detail-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+        
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .detail-item.full-width {
+            grid-column: 1 / -1;
+        }
+        
+        .detail-item label {
+            font-weight: 600;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        
+        .message-content {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-sm);
+            padding: 1.5rem;
+            line-height: 1.6;
+            white-space: pre-wrap;
+        }
+        
+        @media (max-width: 768px) {
+            .admin-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .filter-group {
+                width: 100%;
+            }
+            
+            .filter-group select {
+                width: 100%;
+            }
+            
+            .feedback-table {
+                display: block;
+                overflow-x: auto;
+            }
+            
+            .detail-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .name-cell {
+                flex-direction: column;
+                align-items: start;
+                gap: 0.5rem;
+            }
+            
+            .actions-cell {
+                flex-direction: column;
+            }
+        }
+    </style>
 </body>
 </html>
