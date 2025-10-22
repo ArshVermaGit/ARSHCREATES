@@ -8,7 +8,7 @@ const PORTFOLIO_DATA = {
             name: 'Sky Surfers',
             overview: 'I built this as a high-speed dodging challenge to test your absolute precision.',
             description: 'Ready for the Test? I built this intense flight game to challenge your piloting skills. Take control and see if you can master the narrow, hazard-filled canyon—you will need precision dodging and nerves of steel to set that high score I know you are aiming for.',
-            image: '/static/images/games/Game1.jpg',
+            image: '/images/games/Game1.jpg',
             game_folder: 'sky_surfers',
             build_name: 'sky_surfers'
         }
@@ -31,28 +31,28 @@ const PORTFOLIO_DATA = {
             title: 'The Heart Of Love',
             description: 'It Showcases The Symbol of Love.',
             category: 'Love',
-            image: '/static/images/photos/photo1.jpg'
+            image: '/images/photos/photo1.jpg'
         },
         {
             id: 2,
             title: 'The Peacock',
             description: 'A Beautiful Peacock Structure made of Iron Rods.',
             category: 'Animals',
-            image: '/static/images/photos/photo2.jpg'
+            image: '/images/photos/photo2.jpg'
         },
         {
             id: 3,
             title: 'The Acadamic Block',
             description: 'A Beautiful Click of The Acadamic Block.',
             category: 'VIT Bhopal',
-            image: '/static/images/photos/photo3.jpg'
+            image: '/images/photos/photo3.jpg'
         },
         {
             id: 4,
             title: 'The Block-1',
             description: 'A Beautiful Click of the Block-1.',
             category: 'VIT Bhopal',
-            image: '/static/images/photos/photo4.jpg'
+            image: '/images/photos/photo4.jpg'
         }
     ],
     
@@ -62,8 +62,8 @@ const PORTFOLIO_DATA = {
             title: 'Brand Showcase',
             description: 'Professional brand video with cinematic storytelling',
             category: 'Commercial',
-            thumbnail: '/static/images/videos/video1-thumb.jpg',
-            video_url: '/static/videos/video1.mp4'
+            thumbnail: '/images/videos/video1-thumb.jpg',
+            video_url: '/videos/video1.mp4'
         }
     ]
 };
