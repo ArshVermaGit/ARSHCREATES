@@ -19,7 +19,7 @@ const PORTFOLIO_DATA = {
             id: 1,
             name: 'ReelSpot',
             description: 'I built the fastest way to save your media. You find the link, I handle the rest. Multi-platform downloading is finally quick, simple, and painless.',
-            image: '/static/images/websites/ReelSpot.jpg',
+            image: '/images/websites/ReelSpot.jpg',
             url: 'https://arshvermagit.github.io/REELSPOT/',
             technologies: ['JavaScript', 'HTML', 'CSS']
         }
