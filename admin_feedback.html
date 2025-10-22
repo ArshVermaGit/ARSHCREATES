@@ -170,6 +170,18 @@
             background: var(--accent-secondary);
             transform: translateY(-2px);
         }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-tertiary);
+        }
+
+        .meta-item i {
+            color: var(--accent);
+        }
     </style>
 </head>
 <body>
@@ -270,11 +282,18 @@
         document.getElementById('currentYear').textContent = new Date().getFullYear();
 
         let allFeedback = [];
+        let filteredFeedback = [];
 
         function loadFeedback() {
-            allFeedback = getAllFeedback();
-            updateStats();
-            renderTable(allFeedback);
+            if (typeof getAllFeedback === 'function') {
+                allFeedback = getAllFeedback();
+                filteredFeedback = [...allFeedback];
+                updateStats();
+                renderTable(filteredFeedback);
+            } else {
+                console.error('getAllFeedback function not available');
+                showNotification('Error loading feedback data', 'error');
+            }
         }
 
         function updateStats() {
@@ -300,8 +319,8 @@
                 wrapper.innerHTML = `
                     <div class="empty-state-admin">
                         <i class="fas fa-inbox"></i>
-                        <h3>No Feedback Yet</h3>
-                        <p>Feedback submissions will appear here</p>
+                        <h3>No Feedback Found</h3>
+                        <p>No feedback submissions match your current filters</p>
                     </div>
                 `;
                 return;
@@ -327,6 +346,10 @@
                         const formattedDate = date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
                         const badgeClass = `badge-${f.contact_type.toLowerCase().replace(' ', '-')}`;
                         
+                        // Truncate long messages
+                        const truncatedMessage = f.comment.length > 100 ? 
+                            f.comment.substring(0, 100) + '...' : f.comment;
+                        
                         return `
                             <tr>
                                 <td style="white-space: nowrap;">${formattedDate}</td>
@@ -334,10 +357,10 @@
                                 <td>${f.email}</td>
                                 <td>${f.phone}</td>
                                 <td><span class="badge ${badgeClass}">${f.contact_type}</span></td>
-                                <td style="max-width: 300px;">${f.comment}</td>
+                                <td style="max-width: 300px;" title="${f.comment}">${truncatedMessage}</td>
                                 <td>
                                     <div class="action-btns">
-                                        <button class="btn-icon-small" onclick="viewFeedback('${f.id}')" title="View">
+                                        <button class="btn-icon-small" onclick="viewFeedback('${f.id}')" title="View Details">
                                             <i class="fas fa-eye"></i>
                                         </button>
                                         <button class="btn-icon-small btn-delete" onclick="deleteFeedbackItem('${f.id}')" title="Delete">
@@ -360,11 +383,11 @@
             const typeFilter = document.getElementById('typeFilter').value;
             const dateFilter = document.getElementById('dateFilter').value;
 
-            let filtered = [...allFeedback];
+            filteredFeedback = [...allFeedback];
 
             // Search filter
             if (searchTerm) {
-                filtered = filtered.filter(f => 
+                filteredFeedback = filteredFeedback.filter(f => 
                     f.full_name.toLowerCase().includes(searchTerm) ||
                     f.email.toLowerCase().includes(searchTerm) ||
                     f.comment.toLowerCase().includes(searchTerm)
@@ -373,7 +396,7 @@
 
             // Type filter
             if (typeFilter) {
-                filtered = filtered.filter(f => f.contact_type === typeFilter);
+                filteredFeedback = filteredFeedback.filter(f => f.contact_type === typeFilter);
             }
 
             // Date filter
@@ -382,17 +405,17 @@
                 const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
                 
                 if (dateFilter === 'today') {
-                    filtered = filtered.filter(f => new Date(f.timestamp) >= today);
+                    filteredFeedback = filteredFeedback.filter(f => new Date(f.timestamp) >= today);
                 } else if (dateFilter === 'week') {
                     const weekAgo = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
-                    filtered = filtered.filter(f => new Date(f.timestamp) >= weekAgo);
+                    filteredFeedback = filteredFeedback.filter(f => new Date(f.timestamp) >= weekAgo);
                 } else if (dateFilter === 'month') {
                     const monthAgo = new Date(today.getTime() - 30 * 24 * 60 * 60 * 1000);
-                    filtered = filtered.filter(f => new Date(f.timestamp) >= monthAgo);
+                    filteredFeedback = filteredFeedback.filter(f => new Date(f.timestamp) >= monthAgo);
                 }
             }
 
-            renderTable(filtered);
+            renderTable(filteredFeedback);
         }
 
         function viewFeedback(id) {
@@ -414,37 +437,43 @@ ${feedback.comment}
         }
 
         function deleteFeedbackItem(id) {
-            if (!confirm('Are you sure you want to delete this feedback?')) return;
+            if (!confirm('Are you sure you want to delete this feedback? This action cannot be undone.')) return;
 
-            deleteFeedback(id);
-            loadFeedback();
-            showNotification('Feedback deleted successfully', 'success');
+            if (typeof deleteFeedback === 'function') {
+                const success = deleteFeedback(id);
+                if (success) {
+                    loadFeedback();
+                    showNotification('Feedback deleted successfully', 'success');
+                } else {
+                    showNotification('Failed to delete feedback', 'error');
+                }
+            } else {
+                showNotification('Delete function not available', 'error');
+            }
         }
 
         function exportToCSV() {
-            const searchTerm = document.getElementById('searchInput').value;
-            const typeFilter = document.getElementById('typeFilter').value;
-            const dateFilter = document.getElementById('dateFilter').value;
+            if (filteredFeedback.length === 0) {
+                showNotification('No data to export', 'info');
+                return;
+            }
 
-            // Get filtered data
-            filterFeedback();
-            
             let csvContent = "Date,Name,Email,Phone,Type,Message\n";
             
-            allFeedback.forEach(f => {
+            filteredFeedback.forEach(f => {
                 const date = new Date(f.timestamp).toLocaleString();
                 const row = [
-                    date,
-                    f.full_name,
-                    f.email,
-                    f.phone,
-                    f.contact_type,
+                    `"${date}"`,
+                    `"${f.full_name}"`,
+                    `"${f.email}"`,
+                    `"${f.phone}"`,
+                    `"${f.contact_type}"`,
                     `"${f.comment.replace(/"/g, '""')}"`
                 ].join(',');
                 csvContent += row + "\n";
             });
 
-            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
@@ -457,6 +486,11 @@ ${feedback.comment}
 
         function showNotification(message, type = 'info') {
             const container = document.getElementById('notificationContainer');
+            if (!container) {
+                console.error('Notification container not found');
+                return;
+            }
+            
             const notification = document.createElement('div');
             notification.className = `notification ${type}`;
             
@@ -484,7 +518,11 @@ ${feedback.comment}
             
             setTimeout(() => {
                 notification.style.animation = 'slideInRight 0.3s ease-out reverse';
-                setTimeout(() => notification.remove(), 300);
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.remove();
+                    }
+                }, 300);
             }, 5000);
         }
 
@@ -493,8 +531,20 @@ ${feedback.comment}
         document.getElementById('typeFilter').addEventListener('change', filterFeedback);
         document.getElementById('dateFilter').addEventListener('change', filterFeedback);
 
+        // Keyboard shortcut for search
+        document.addEventListener('keydown', function(e) {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                e.preventDefault();
+                document.getElementById('searchInput').focus();
+            }
+        });
+
         // Load feedback on page load
-        loadFeedback();
+        document.addEventListener('DOMContentLoaded', loadFeedback);
+        // Also load immediately in case DOM is already ready
+        if (document.readyState === 'complete') {
+            loadFeedback();
+        }
     </script>
 </body>
 </html>
