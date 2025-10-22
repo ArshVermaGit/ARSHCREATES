@@ -2897,3 +2897,297 @@ section {
   transform: none !important;
   animation: none !important;
 }
+
+/* Add these fixes to your existing style.css file */
+
+/* =========================================================
+   NAVBAR FIXES
+   ========================================================= */
+.nav-container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 clamp(1rem, 4vw, 2rem);
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Logo on the left */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  font-family: var(--font-heading);
+  color: var(--text-primary);
+  margin-right: auto; /* Push everything else to the right */
+}
+
+/* Navigation menu positioned properly */
+.nav-menu {
+  display: flex;
+  list-style: none;
+  gap: 2.5rem;
+  align-items: center;
+  margin: 0 auto; /* Center the menu */
+  padding: 0 2rem;
+}
+
+/* Nav actions on the right */
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-left: auto; /* Push to the right */
+}
+
+/* Remove any horizontal scroll */
+html, body {
+  overflow-x: hidden;
+  width: 100%;
+  position: relative;
+}
+
+.container {
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 clamp(1.25rem, 5vw, 3rem);
+  position: relative;
+}
+
+/* =========================================================
+   IMAGE DISPLAY FIXES
+   ========================================================= */
+.portfolio-image {
+  position: relative;
+  width: 100%;
+  padding-top: 66.67%; /* 3:2 aspect ratio */
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  background: var(--bg-secondary);
+}
+
+.portfolio-image img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--transition-slow);
+  display: block !important; /* Force display */
+  opacity: 1 !important; /* Force visibility */
+}
+
+/* Fix for broken images */
+.portfolio-image img[src=""],
+.portfolio-image img:not([src]) {
+  background: linear-gradient(135deg, var(--accent-light), var(--bg-tertiary));
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+}
+
+.portfolio-image img[src=""]::after,
+.portfolio-image img:not([src])::after {
+  content: "Image Preview";
+  color: var(--text-tertiary);
+  font-size: 1rem;
+  font-weight: 500;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Ensure modal images show */
+#previewImage {
+  display: block !important;
+  opacity: 1 !important;
+  max-width: 90%;
+  max-height: 70%;
+  object-fit: contain;
+  border-radius: 16px;
+}
+
+/* =========================================================
+   CONTACT FORM SELECT STYLING
+   ========================================================= */
+.form-select {
+  width: 100%;
+  padding: 1rem 1.25rem;
+  border-radius: 14px;
+  border: 1.5px solid rgba(255, 255, 255, 0.08);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  transition: all var(--transition-smooth);
+  backdrop-filter: blur(20px);
+  font-family: var(--font-body);
+  appearance: none; /* Remove default arrow */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23A1856D' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 16px;
+  cursor: pointer;
+}
+
+.form-select:focus {
+  outline: none;
+  border-color: var(--accent);
+  background: rgba(255, 255, 255, 0.08);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(161, 133, 109, 0.15);
+}
+
+.form-select option {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  padding: 1rem;
+}
+
+/* =========================================================
+   LAYOUT STABILITY FIXES
+   ========================================================= */
+/* Ensure no horizontal scroll */
+main {
+  width: 100%;
+  overflow-x: hidden;
+}
+
+.section {
+  width: 100%;
+  overflow-x: hidden;
+}
+
+/* Fix for any potential horizontal scroll issues */
+* {
+  max-width: 100%;
+}
+
+/* =========================================================
+   RESPONSIVE NAVBAR FIXES
+   ========================================================= */
+@media (max-width: 1024px) {
+  .nav-menu {
+    gap: 2rem;
+    padding: 0 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .nav-menu {
+    position: fixed;
+    top: 70px;
+    left: 0;
+    width: 100%;
+    background: var(--bg-overlay);
+    backdrop-filter: blur(20px) saturate(180%);
+    flex-direction: column;
+    padding: 2rem 0;
+    transform: translateX(-100%);
+    transition: all var(--transition-smooth);
+    border-bottom: 1px solid var(--glass-border);
+    margin: 0;
+  }
+  
+  .nav-menu.active {
+    transform: translateX(0);
+  }
+
+  .nav-menu li {
+    width: 100%;
+    text-align: center;
+  }
+
+  .nav-menu a {
+    display: block;
+    padding: 1rem 2rem;
+  }
+  
+  .nav-container {
+    justify-content: space-between;
+  }
+}
+
+/* =========================================================
+   IMAGE LOADING ENHANCEMENTS
+   ========================================================= */
+.portfolio-card {
+  position: relative;
+}
+
+/* Add loading animation for images */
+.portfolio-image img {
+  transition: opacity 0.3s ease;
+}
+
+.portfolio-image img:not([src]) {
+  opacity: 0;
+}
+
+.portfolio-image img[src] {
+  opacity: 1;
+}
+
+/* =========================================================
+   FORM ENHANCEMENTS
+   ========================================================= */
+.form-group {
+  position: relative;
+}
+
+.form-input:valid {
+  border-color: rgba(16, 185, 129, 0.4);
+}
+
+.form-input:invalid:not(:focus):not(:placeholder-shown) {
+  border-color: rgba(239, 68, 68, 0.4);
+}
+
+/* =========================================================
+   SCROLLBAR FIXES (Remove unwanted horizontal scroll)
+   ========================================================= */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--accent-light);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-medium);
+}
+
+/* Hide horizontal scrollbar */
+::-webkit-scrollbar:horizontal {
+  height: 0;
+  display: none;
+}
+
+/* =========================================================
+   ADDITIONAL MOBILE FIXES
+   ========================================================= */
+@media (max-width: 480px) {
+  .nav-container {
+    padding: 0 1rem;
+  }
+  
+  .logo {
+    font-size: 1.25rem;
+  }
+  
+  .logo i {
+    font-size: 1.25rem;
+  }
+}
