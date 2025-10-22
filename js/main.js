@@ -14,7 +14,6 @@ document.addEventListener('DOMContentLoaded', function() {
     initPortfolioCards();
     initContactForm();
     initModalEvents();
-    initQuickNavigation();
     initQuickActions();
     
     // Initialize portfolio if not already done
@@ -22,74 +21,6 @@ document.addEventListener('DOMContentLoaded', function() {
         setTimeout(initializePortfolio, 100);
     }
 });
-
-// =============================================================================
-// QUICK NAVIGATION INITIALIZATION
-// =============================================================================
-function initQuickNavigation() {
-    const quickNav = document.getElementById('quickNav');
-    const quickNavBtns = document.querySelectorAll('.quick-nav-btn');
-    
-    if (!quickNav || !quickNavBtns.length) return;
-    
-    // Show quick nav after hero section
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                quickNav.classList.add('active');
-            }
-        });
-    }, { threshold: 0.1 });
-    
-    const aboutSection = document.getElementById('about');
-    if (aboutSection) {
-        observer.observe(aboutSection);
-    }
-    
-    // Quick nav button click handlers
-    quickNavBtns.forEach(btn => {
-        btn.addEventListener('click', function() {
-            const section = this.dataset.section;
-            if (section) {
-                // Update active state
-                quickNavBtns.forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-                
-                // Scroll to section
-                const targetSection = document.getElementById(section);
-                if (targetSection) {
-                    const offsetTop = targetSection.offsetTop - 80;
-                    window.scrollTo({
-                        top: offsetTop,
-                        behavior: 'smooth'
-                    });
-                }
-            }
-        });
-    });
-    
-    // Update active state on scroll
-    window.addEventListener('scroll', function() {
-        const sections = ['games', 'websites', 'photos', 'videos'];
-        let currentSection = '';
-        
-        sections.forEach(section => {
-            const element = document.getElementById(section);
-            if (element) {
-                const rect = element.getBoundingClientRect();
-                if (rect.top <= 150 && rect.bottom >= 150) {
-                    currentSection = section;
-                }
-            }
-        });
-        
-        if (currentSection) {
-            quickNavBtns.forEach(btn => {
-                btn.classList.toggle('active', btn.dataset.section === currentSection);
-            });
-        }
-    });
-}
 
 // =============================================================================
 // QUICK ACTIONS INITIALIZATION
@@ -185,100 +116,120 @@ function downloadCurrentItem() {
 
 function shareCurrentItem() {
     if (!currentItemData) {
-        showNotification('No item selected to share', 'info');
+        showNotification('No item to share', 'info');
         return;
     }
     
     const shareData = {
-        title: currentItemData.name || currentItemData.title,
+        title: currentItemData.title || currentItemData.name,
         text: currentItemData.description,
         url: window.location.href
     };
     
     if (navigator.share) {
         navigator.share(shareData)
-            .then(() => showNotification('Item shared successfully!', 'success'))
-            .catch(err => console.log('Error sharing:', err));
+            .then(() => showNotification('Shared successfully!', 'success'))
+            .catch((error) => {
+                console.error('Error sharing:', error);
+                showNotification('Error sharing item', 'error');
+            });
     } else {
-        // Fallback: copy to clipboard
-        const textToCopy = `${shareData.title}\n\n${shareData.text}\n\n${shareData.url}`;
-        navigator.clipboard.writeText(textToCopy)
+        // Fallback: Copy to clipboard
+        navigator.clipboard.writeText(window.location.href)
             .then(() => showNotification('Link copied to clipboard!', 'success'))
-            .catch(err => showNotification('Failed to copy to clipboard', 'error'));
+            .catch(() => showNotification('Error copying link', 'error'));
     }
 }
 
 // =============================================================================
-// MODAL EVENT LISTENERS INITIALIZATION
+// PORTFOLIO CARDS INITIALIZATION
+// =============================================================================
+function initPortfolioCards() {
+    const cards = document.querySelectorAll('.portfolio-card');
+    
+    cards.forEach(card => {
+        card.addEventListener('click', function(e) {
+            if (e.target.closest('.card-action-btn')) return;
+            
+            const type = this.dataset.type;
+            const itemData = JSON.parse(this.dataset[type]);
+            
+            switch (type) {
+                case 'game':
+                    openGamePreview(itemData);
+                    break;
+                case 'website':
+                    openWebsitePreview(itemData);
+                    break;
+                case 'photo':
+                    openPhotoPreview(itemData);
+                    break;
+                case 'video':
+                    openVideoPreview(itemData);
+                    break;
+            }
+        });
+    });
+}
+
+// =============================================================================
+// MODAL EVENTS
 // =============================================================================
 function initModalEvents() {
-    // Modal close event listeners
-    const closeModalBtn = document.getElementById('closeModal');
-    const modalOverlay = document.querySelector('.modal-overlay');
-    
-    if (closeModalBtn) {
-        closeModalBtn.addEventListener('click', closeModal);
-    }
-    
-    if (modalOverlay) {
-        modalOverlay.addEventListener('click', closeModal);
-    }
-    
-    // Escape key listener
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape' && isModalOpen) {
-            closeModal();
-        }
-        
-        // Navigation with arrow keys
-        if (isModalOpen && (e.key === 'ArrowLeft' || e.key === 'ArrowRight')) {
-            e.preventDefault();
-            if (e.key === 'ArrowLeft') {
-                navigateModal('prev');
-            } else {
-                navigateModal('next');
-            }
-        }
-    });
-    
-    // Prevent modal content click from closing modal
-    const modalContainer = document.querySelector('.modal-container');
-    if (modalContainer) {
-        modalContainer.addEventListener('click', function(e) {
-            e.stopPropagation();
-        });
-    }
-    
-    // Modal navigation arrows
+    const modalOverlay = document.getElementById('portfolioModal');
+    const modalClose = document.getElementById('modalClose');
     const modalPrev = document.getElementById('modalPrev');
     const modalNext = document.getElementById('modalNext');
     
+    if (modalClose) {
+        modalClose.addEventListener('click', closeModal);
+    }
+    
+    if (modalOverlay) {
+        modalOverlay.addEventListener('click', (e) => {
+            if (e.target === modalOverlay) {
+                closeModal();
+            }
+        });
+    }
+    
+    document.addEventListener('keydown', (e) => {
+        if (isModalOpen) {
+            if (e.key === 'Escape') closeModal();
+            if (e.key === 'ArrowLeft') navigateModal(-1);
+            if (e.key === 'ArrowRight') navigateModal(1);
+        }
+    });
+    
     if (modalPrev) {
-        modalPrev.addEventListener('click', () => navigateModal('prev'));
+        modalPrev.addEventListener('click', () => navigateModal(-1));
     }
     
     if (modalNext) {
-        modalNext.addEventListener('click', () => navigateModal('next'));
+        modalNext.addEventListener('click', () => navigateModal(1));
     }
+    
+    // Swipe navigation for touch devices
+    let touchStartX = 0;
+    let touchEndX = 0;
+    
+    modalOverlay.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+    });
+    
+    modalOverlay.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        if (touchStartX - touchEndX > 50) navigateModal(1); // Swipe left
+        if (touchEndX - touchStartX > 50) navigateModal(-1); // Swipe right
+    });
 }
 
-// =============================================================================
-// MODAL NAVIGATION
-// =============================================================================
 function navigateModal(direction) {
-    if (!currentCategory || !currentItems.length) return;
+    if (!currentItems || currentItems.length <= 1) return;
     
-    let newIndex;
-    if (direction === 'next') {
-        newIndex = (currentIndex + 1) % currentItems.length;
-    } else {
-        newIndex = (currentIndex - 1 + currentItems.length) % currentItems.length;
-    }
-    
-    currentIndex = newIndex;
+    currentIndex = (currentIndex + direction + currentItems.length) % currentItems.length;
     const item = currentItems[currentIndex];
     
-    // Reopen modal with new item
     switch (currentCategory) {
         case 'games':
             openGamePreview(item);
@@ -296,792 +247,393 @@ function navigateModal(direction) {
 }
 
 // =============================================================================
-// PORTFOLIO CARDS INITIALIZATION - FIXED
+// MODAL OPEN FUNCTIONS
 // =============================================================================
-function initPortfolioCards() {
-    const cards = document.querySelectorAll('.portfolio-card');
-    console.log('Initializing portfolio cards:', cards.length);
-    
-    cards.forEach(card => {
-        const type = card.dataset.type;
-        
-        card.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            
-            try {
-                // Set current category and items for navigation
-                currentCategory = type + 's'; // games, websites, etc.
-                currentItems = getItemsByCategory(currentCategory);
-                
-                let itemData;
-                switch (type) {
-                    case 'game':
-                        itemData = JSON.parse(card.dataset.game);
-                        currentIndex = currentItems.findIndex(item => item.id === itemData.id);
-                        openGamePreview(itemData);
-                        break;
-                    case 'website':
-                        itemData = JSON.parse(card.dataset.website);
-                        currentIndex = currentItems.findIndex(item => item.id === itemData.id);
-                        openWebsitePreview(itemData);
-                        break;
-                    case 'photo':
-                        itemData = JSON.parse(card.dataset.photo);
-                        currentIndex = currentItems.findIndex(item => item.id === itemData.id);
-                        openPhotoPreview(itemData);
-                        break;
-                    case 'video':
-                        itemData = JSON.parse(card.dataset.video);
-                        currentIndex = currentItems.findIndex(item => item.id === itemData.id);
-                        openVideoPreview(itemData);
-                        break;
-                }
-            } catch (error) {
-                console.error('Error opening preview:', error);
-                showNotification('Error loading content. Please try again.', 'error');
-            }
-        });
-        
-        // Add keyboard support
-        card.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                card.click();
-            }
-        });
-        
-        // Add tabindex for accessibility
-        card.setAttribute('tabindex', '0');
-    });
-}
-
-function openGamePreview(gameData) {
-    if (!gameData) {
-        showNotification('Game data not available.', 'error');
-        return;
-    }
-    
-    currentGame = gameData;
-    currentItemData = gameData;
+function openGamePreview(game) {
     currentMediaType = 'game';
+    currentItemData = game;
+    currentCategory = 'games';
+    currentItems = getItemsByCategory('games');
+    currentIndex = currentItems.findIndex(item => item.id === game.id);
     
     const modal = document.getElementById('portfolioModal');
-    if (!modal) {
-        showNotification('Modal not found.', 'error');
-        return;
-    }
-    
-    // Update modal content
-    updateModalContent({
-        title: gameData.name,
-        description: gameData.description || gameData.overview,
-        image: gameData.image
-    });
-    
-    // Setup modal meta info
-    updateModalMeta(`
-        <div class="meta-item">
-            <i class="fas fa-tags"></i>
-            <span>${gameData.status || 'Playable'}</span>
-        </div>
-        ${gameData.technologies ? `
-        <div class="meta-item">
-            <i class="fas fa-code"></i>
-            <span>${gameData.technologies.join(', ')}</span>
-        </div>
-        ` : ''}
-    `);
-    
-    // Setup modal tech tags
-    if (gameData.technologies && gameData.technologies.length > 0) {
-        updateModalTech(gameData.technologies);
-    }
-    
-    // Setup game-specific elements
-    const playBtn = document.getElementById('playItemBtn');
-    const gamePreview = document.getElementById('itemPreview');
+    const gamePreview = document.getElementById('gamePreview');
     const gameContainer = document.getElementById('gameContainer');
+    const playBtn = document.getElementById('playItemBtn');
+    const gameLoading = document.getElementById('gameLoading');
     
-    hideAllPreviewElements();
+    // Hide other media
+    hideAllMediaExcept('gamePreview');
     
-    // Show preview image
-    const previewImage = document.getElementById('previewImage');
-    if (previewImage) {
-        previewImage.src = gameData.image;
-        previewImage.style.display = 'block';
-        previewImage.alt = gameData.name;
-    }
+    // Reset game container
+    gameContainer.innerHTML = '<canvas id="unity-canvas"></canvas>';
+    gamePreview.style.display = 'block';
+    gameLoading.style.display = 'flex';
+    playBtn.style.display = 'block';
     
-    // Setup game preview area
-    if (gamePreview) {
-        gamePreview.style.display = 'flex';
-    }
-    if (gameContainer) {
-        gameContainer.style.display = 'none';
-    }
-    
-    // Setup play button
-    if (playBtn) {
-        playBtn.style.display = 'flex';
-        playBtn.innerHTML = '<i class="fas fa-play"></i><span>Play Game</span>';
-        playBtn.onclick = loadUnityGame;
-    }
-    
-    // Setup modal actions
-    setupModalActions(`
-        <button class="btn btn-glass" id="fullscreenBtn" style="display:none;">
-            <i class="fas fa-expand"></i> Fullscreen
+    // Update modal info
+    updateModalInfo(game.name, game.description, game.technologies);
+    updateModalStats([
+        { label: 'Status', value: game.status },
+        { label: 'Engine', value: 'Unity' }
+    ]);
+    updateModalActions(`
+        <button class="btn btn-primary" onclick="loadUnityGame('${game.game_folder}', '${game.build_name}')">
+            <i class="fas fa-play"></i> Play Now
         </button>
     `);
-    
-    // Open modal
-    openModal();
-    
-    // Update navigation arrows visibility
     updateNavigationArrows();
+    
+    // Show modal
+    modal.classList.add('active');
+    isModalOpen = true;
+    document.body.style.overflow = 'hidden';
+    
+    // Load game on play button click
+    playBtn.addEventListener('click', () => loadUnityGame(game.game_folder, game.build_name), { once: true });
 }
 
-function loadUnityGame() {
-    if (!currentGame) {
-        showNotification('No game selected.', 'error');
-        return;
-    }
-    
-    console.log('Loading Unity game:', currentGame.name);
-    
-    const gamePreview = document.getElementById('itemPreview');
-    const gameContainer = document.getElementById('gameContainer');
+function loadUnityGame(folder, buildName) {
+    const playBtn = document.getElementById('playItemBtn');
     const gameLoading = document.getElementById('gameLoading');
     const loadingProgress = document.getElementById('loadingProgress');
-    const fullscreenBtn = document.getElementById('fullscreenBtn');
     
-    // CRITICAL: Hide preview and show game container
-    if (gamePreview) {
-        gamePreview.style.display = 'none';
-        console.log('Preview hidden');
-    }
-    if (gameContainer) {
-        gameContainer.style.display = 'flex';
-        console.log('Game container shown');
-    }
-    if (gameLoading) {
-        gameLoading.style.display = 'flex';
-        console.log('Loading screen shown');
-    }
-    if (loadingProgress) {
-        loadingProgress.style.width = '0%';
-    }
+    playBtn.style.display = 'none';
+    gameLoading.style.display = 'flex';
+    
+    const buildUrl = `static/games/${folder}/Build`;
+    
+    const loaderUrl = `${buildUrl}/${buildName}.loader.js`;
+    
+    const config = {
+        dataUrl: `${buildUrl}/${buildName}.data`,
+        frameworkUrl: `${buildUrl}/${buildName}.framework.js`,
+        codeUrl: `${buildUrl}/${buildName}.wasm`,
+        streamingAssetsUrl: "StreamingAssets",
+        companyName: "ArshVerma",
+        productName: currentItemData.name,
+        productVersion: "1.0",
+    };
+    
+    const script = document.createElement('script');
+    script.src = loaderUrl;
+    script.onload = () => {
+        createUnityInstance(document.getElementById('unity-canvas'), config, (progress) => {
+            loadingProgress.style.width = `${progress * 100}%`;
+        }).then((instance) => {
+            unityInstance = instance;
+            gameLoading.style.display = 'none';
+            
+            // Initialize game controls
+            initGameControls();
+        }).catch((message) => {
+            showNotification('Error loading game: ' + message, 'error');
+            gameLoading.style.display = 'none';
+            playBtn.style.display = 'block';
+        });
+    };
+    
+    document.body.appendChild(script);
+}
+
+function initGameControls() {
+    const fullscreenBtn = document.getElementById('gameFullscreenBtn');
+    const restartBtn = document.getElementById('gameRestartBtn');
+    const muteBtn = document.getElementById('gameMuteBtn');
     
     if (fullscreenBtn) {
-        fullscreenBtn.style.display = 'inline-flex';
-        fullscreenBtn.onclick = toggleGameFullscreen;
-    }
-    
-    // Simulate loading progress
-    let progress = 0;
-    const interval = setInterval(() => {
-        progress += Math.random() * 10;
-        if (progress >= 100) {
-            progress = 100;
-            clearInterval(interval);
-            if (gameLoading) gameLoading.style.display = 'none';
-            showNotification('Game demo loaded successfully! (Unity integration ready)', 'success');
-        }
-        if (loadingProgress) {
-            loadingProgress.style.width = progress + '%';
-        }
-    }, 200);
-}
-
-function toggleGameFullscreen() {
-    const gameContainer = document.getElementById('gameContainer');
-    if (!gameContainer) return;
-    
-    if (!document.fullscreenElement) {
-        if (gameContainer.requestFullscreen) {
-            gameContainer.requestFullscreen().catch(err => {
-                console.error('Error attempting to enable fullscreen:', err);
-            });
-        }
-    } else {
-        if (document.exitFullscreen) {
-            document.exitFullscreen();
-        }
-    }
-}
-
-// =============================================================================
-// WEBSITE PREVIEW - FIXED
-// =============================================================================
-function openWebsitePreview(websiteData) {
-    if (!websiteData) {
-        showNotification('Website data not available.', 'error');
-        return;
-    }
-    
-    console.log('Opening website preview:', websiteData);
-    
-    currentItemData = websiteData;
-    currentMediaType = 'website';
-    
-    updateModalContent({
-        title: websiteData.name,
-        description: websiteData.description,
-        image: websiteData.image
-    });
-    
-    // Setup modal meta info
-    updateModalMeta(`
-        <div class="meta-item">
-            <i class="fas fa-globe"></i>
-            <span>${websiteData.status || 'Live'}</span>
-        </div>
-        ${websiteData.technologies ? `
-        <div class="meta-item">
-            <i class="fas fa-code"></i>
-            <span>${websiteData.technologies.join(', ')}</span>
-        </div>
-        ` : ''}
-    `);
-    
-    // Setup modal tech tags
-    if (websiteData.technologies && websiteData.technologies.length > 0) {
-        updateModalTech(websiteData.technologies);
-    }
-    
-    hideAllPreviewElements();
-    
-    const itemPreview = document.getElementById('itemPreview');
-    const previewImage = document.getElementById('previewImage');
-    const playBtn = document.getElementById('playItemBtn');
-    
-    if (itemPreview) {
-        itemPreview.style.display = 'flex';
-    }
-    
-    if (previewImage) {
-        previewImage.src = websiteData.image;
-        previewImage.style.display = 'block';
-        previewImage.style.cursor = 'pointer';
-        previewImage.alt = websiteData.name;
-        
-        // Setup click event for image
-        previewImage.onclick = () => {
-            if (websiteData.url && websiteData.url !== '#') {
-                window.open(websiteData.url, '_blank');
-                showNotification('Opening website...', 'info');
-            } else {
-                showNotification('Website URL not available', 'info');
+        fullscreenBtn.addEventListener('click', () => {
+            if (unityInstance) {
+                unityInstance.SetFullscreen(1);
             }
-        };
+        });
     }
     
-    if (playBtn) playBtn.style.display = 'none';
+    if (restartBtn) {
+        restartBtn.addEventListener('click', () => {
+            if (unityInstance) {
+                unityInstance.Quit().then(() => {
+                    loadUnityGame(currentItemData.game_folder, currentItemData.build_name);
+                });
+            }
+        });
+    }
     
-    setupModalActions(`
-        <button class="btn btn-primary" id="visitWebsiteBtn">
-            <i class="fas fa-external-link-alt"></i> Visit Website
-        </button>
-    `);
-    
-    openModal();
-    
-    // Setup website button after modal is open
-    setTimeout(() => {
-        const visitBtn = document.getElementById('visitWebsiteBtn');
-        if (visitBtn) {
-            visitBtn.onclick = () => {
-                if (websiteData.url && websiteData.url !== '#') {
-                    window.open(websiteData.url, '_blank');
-                    showNotification('Opening website...', 'info');
-                } else {
-                    showNotification('Website URL not available', 'info');
-                }
-            };
-        }
-    }, 50);
-    
-    // Update navigation arrows visibility
-    updateNavigationArrows();
+    if (muteBtn) {
+        let isMuted = false;
+        muteBtn.addEventListener('click', () => {
+            isMuted = !isMuted;
+            if (unityInstance) {
+                unityInstance.Module.WebGLSendMessage('AudioManager', isMuted ? 'Mute' : 'Unmute');
+            }
+            muteBtn.querySelector('i').className = isMuted ? 'fas fa-volume-mute' : 'fas fa-volume-up';
+        });
+    }
 }
 
-// =============================================================================
-// PHOTO PREVIEW - FIXED
-// =============================================================================
-function openPhotoPreview(photoData) {
-    if (!photoData) {
-        showNotification('Photo data not available.', 'error');
-        return;
-    }
+function openWebsitePreview(website) {
+    currentMediaType = 'website';
+    currentItemData = website;
+    currentCategory = 'websites';
+    currentItems = getItemsByCategory('websites');
+    currentIndex = currentItems.findIndex(item => item.id === website.id);
     
-    console.log('Opening photo preview:', photoData);
+    const modal = document.getElementById('portfolioModal');
+    const websitePreview = document.getElementById('websitePreview');
+    const iframe = document.getElementById('websiteIframe');
     
-    currentItemData = photoData;
-    currentMediaType = 'photo';
+    hideAllMediaExcept('websitePreview');
     
-    updateModalContent({
-        title: photoData.title,
-        description: photoData.description
-    });
+    iframe.src = website.url;
+    websitePreview.style.display = 'block';
     
-    // Setup modal meta info
-    updateModalMeta(`
-        <div class="meta-item">
-            <i class="fas fa-image"></i>
-            <span>${photoData.category}</span>
-        </div>
-        ${photoData.camera ? `
-        <div class="meta-item">
-            <i class="fas fa-camera"></i>
-            <span>${photoData.camera}</span>
-        </div>
-        ` : ''}
-        ${photoData.location ? `
-        <div class="meta-item">
-            <i class="fas fa-map-marker-alt"></i>
-            <span>${photoData.location}</span>
-        </div>
-        ` : ''}
+    updateModalInfo(website.name, website.description, website.technologies);
+    updateModalStats([
+        { label: 'Status', value: website.status }
+    ]);
+    updateModalActions(`
+        <a href="${website.url}" target="_blank" class="btn btn-primary">
+            <i class="fas fa-external-link-alt"></i> Visit Site
+        </a>
     `);
+    updateNavigationArrows();
     
-    hideAllPreviewElements();
+    modal.classList.add('active');
+    isModalOpen = true;
+    document.body.style.overflow = 'hidden';
+}
+
+function openPhotoPreview(photo) {
+    currentMediaType = 'photo';
+    currentItemData = photo;
+    currentCategory = 'photos';
+    currentItems = getItemsByCategory('photos');
+    currentIndex = currentItems.findIndex(item => item.id === photo.id);
     
+    const modal = document.getElementById('portfolioModal');
     const photoViewer = document.getElementById('photoViewer');
-    const playBtn = document.getElementById('playItemBtn');
+    const photoImage = document.getElementById('photoImage');
     
-    if (photoViewer) {
-        photoViewer.innerHTML = `
-            <div class="photo-container">
-                <img src="${photoData.image}" alt="${photoData.title}" 
-                     style="width: 100%; height: 100%; object-fit: contain; cursor: pointer;" 
-                     id="photoImage">
-                <div class="photo-zoom-controls">
-                    <button class="zoom-btn" id="zoomInBtn">
-                        <i class="fas fa-search-plus"></i>
-                    </button>
-                    <button class="zoom-btn" id="zoomOutBtn">
-                        <i class="fas fa-search-minus"></i>
-                    </button>
-                    <button class="zoom-btn" id="resetZoomBtn">
-                        <i class="fas fa-sync-alt"></i>
-                    </button>
-                </div>
-            </div>
-        `;
-        photoViewer.style.display = 'flex';
-    }
+    hideAllMediaExcept('photoViewer');
     
-    if (playBtn) playBtn.style.display = 'none';
+    photoImage.src = photo.image;
+    photoViewer.style.display = 'block';
     
-    setupModalActions(`
-        <button class="btn btn-glass" id="downloadPhotoBtn">
+    updateModalInfo(photo.title, photo.description);
+    updateModalStats([
+        { label: 'Category', value: photo.category },
+        { label: 'Camera', value: photo.camera },
+        { label: 'Location', value: photo.location }
+    ]);
+    updateModalActions(`
+        <button class="btn btn-primary" onclick="downloadMedia('${photo.image}', '${photo.title.replace(/\s+/g, '_')}.jpg')">
             <i class="fas fa-download"></i> Download
         </button>
-        <button class="btn btn-glass" id="fullscreenPhotoBtn">
-            <i class="fas fa-expand"></i> Fullscreen
-        </button>
     `);
-    
-    openModal();
-    
-    // Setup photo buttons after modal is open
-    setTimeout(() => {
-        initPhotoViewer();
-    }, 50);
-    
-    // Update navigation arrows visibility
     updateNavigationArrows();
+    
+    modal.classList.add('active');
+    isModalOpen = true;
+    document.body.style.overflow = 'hidden';
+    
+    initPhotoZoom(photoImage);
 }
 
-function initPhotoViewer() {
-    const downloadBtn = document.getElementById('downloadPhotoBtn');
-    const fullscreenBtn = document.getElementById('fullscreenPhotoBtn');
-    const photoImg = document.getElementById('photoImage');
+function initPhotoZoom(image) {
+    let zoomLevel = 1;
+    const zoomStep = 0.5;
+    const maxZoom = 3;
+    const minZoom = 1;
+    
     const zoomInBtn = document.getElementById('zoomInBtn');
     const zoomOutBtn = document.getElementById('zoomOutBtn');
-    const resetZoomBtn = document.getElementById('resetZoomBtn');
+    const resetBtn = document.getElementById('resetZoomBtn');
     
-    let scale = 1;
-    
-    if (downloadBtn) {
-        downloadBtn.onclick = () => {
-            if (currentItemData && currentItemData.image) {
-                downloadMedia(currentItemData.image, `${currentItemData.title}.jpg`);
-            }
-        };
-    }
-    
-    if (fullscreenBtn && photoImg) {
-        fullscreenBtn.onclick = () => {
-            if (photoImg.requestFullscreen) {
-                photoImg.requestFullscreen();
-            }
-        };
+    function updateZoom() {
+        image.style.transform = `scale(${zoomLevel})`;
     }
     
     if (zoomInBtn) {
-        zoomInBtn.onclick = () => {
-            scale = Math.min(scale + 0.25, 3);
-            photoImg.style.transform = `scale(${scale})`;
-        };
+        zoomInBtn.addEventListener('click', () => {
+            zoomLevel = Math.min(zoomLevel + zoomStep, maxZoom);
+            updateZoom();
+        });
     }
     
     if (zoomOutBtn) {
-        zoomOutBtn.onclick = () => {
-            scale = Math.max(scale - 0.25, 0.5);
-            photoImg.style.transform = `scale(${scale})`;
-        };
+        zoomOutBtn.addEventListener('click', () => {
+            zoomLevel = Math.max(zoomLevel - zoomStep, minZoom);
+            updateZoom();
+        });
     }
     
-    if (resetZoomBtn) {
-        resetZoomBtn.onclick = () => {
-            scale = 1;
-            photoImg.style.transform = `scale(${scale})`;
-        };
+    if (resetBtn) {
+        resetBtn.addEventListener('click', () => {
+            zoomLevel = 1;
+            updateZoom();
+        });
     }
     
-    if (photoImg) {
-        photoImg.onclick = function() {
-            if (this.requestFullscreen) {
-                this.requestFullscreen();
-            }
-        };
-        
-        // Enable panning when zoomed
-        let isDragging = false;
-        let startX, startY, scrollLeft, scrollTop;
-        
-        photoImg.addEventListener('mousedown', (e) => {
-            if (scale > 1) {
-                isDragging = true;
-                startX = e.pageX - photoImg.offsetLeft;
-                startY = e.pageY - photoImg.offsetTop;
-                scrollLeft = photoImg.scrollLeft;
-                scrollTop = photoImg.scrollTop;
-                photoImg.style.cursor = 'grabbing';
-            }
-        });
-        
-        photoImg.addEventListener('mouseleave', () => {
-            isDragging = false;
-            photoImg.style.cursor = 'grab';
-        });
-        
-        photoImg.addEventListener('mouseup', () => {
-            isDragging = false;
-            photoImg.style.cursor = 'grab';
-        });
-        
-        photoImg.addEventListener('mousemove', (e) => {
-            if (!isDragging) return;
-            e.preventDefault();
-            const x = e.pageX - photoImg.offsetLeft;
-            const y = e.pageY - photoImg.offsetTop;
-            const walkX = (x - startX) * 2;
-            const walkY = (y - startY) * 2;
-            photoImg.scrollLeft = scrollLeft - walkX;
-            photoImg.scrollTop = scrollTop - walkY;
-        });
-    }
+    // Wheel zoom
+    image.parentElement.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        zoomLevel = Math.max(minZoom, Math.min(maxZoom, zoomLevel + (e.deltaY > 0 ? -zoomStep : zoomStep)));
+        updateZoom();
+    });
 }
 
-// =============================================================================
-// VIDEO PREVIEW - FIXED
-// =============================================================================
-function openVideoPreview(videoData) {
-    if (!videoData) {
-        showNotification('Video data not available.', 'error');
-        return;
-    }
-    
-    console.log('Opening video preview:', videoData);
-    
-    currentItemData = videoData;
+function openVideoPreview(video) {
     currentMediaType = 'video';
+    currentItemData = video;
+    currentCategory = 'videos';
+    currentItems = getItemsByCategory('videos');
+    currentIndex = currentItems.findIndex(item => item.id === video.id);
     
-    updateModalContent({
-        title: videoData.title,
-        description: videoData.description
-    });
-    
-    // Setup modal meta info
-    updateModalMeta(`
-        <div class="meta-item">
-            <i class="fas fa-film"></i>
-            <span>${videoData.category}</span>
-        </div>
-        ${videoData.duration ? `
-        <div class="meta-item">
-            <i class="fas fa-clock"></i>
-            <span>${videoData.duration}</span>
-        </div>
-        ` : ''}
-        ${videoData.resolution ? `
-        <div class="meta-item">
-            <i class="fas fa-hd-video"></i>
-            <span>${videoData.resolution}</span>
-        </div>
-        ` : ''}
-    `);
-    
-    hideAllPreviewElements();
-    
+    const modal = document.getElementById('portfolioModal');
     const videoPlayer = document.getElementById('videoPlayer');
-    const playBtn = document.getElementById('playItemBtn');
+    const mainVideo = document.getElementById('mainVideo');
     
-    if (videoPlayer) {
-        videoPlayer.innerHTML = `
-            <div class="video-container">
-                <video id="mainVideo" controls>
-                    <source src="${videoData.video_url}" type="video/mp4">
-                    Your browser does not support the video tag.
-                </video>
-                <div class="video-controls-overlay">
-                    <div class="video-progress">
-                        <input type="range" id="videoProgress" min="0" max="100" value="0" class="progress-bar">
-                        <div class="progress-time" id="progressTime">0:00 / 0:00</div>
-                    </div>
-                    <div class="video-controls">
-                        <button class="video-control-btn" id="videoPlayPauseBtn">
-                            <i class="fas fa-play"></i>
-                        </button>
-                        <button class="video-control-btn" id="videoMuteBtn">
-                            <i class="fas fa-volume-up"></i>
-                        </button>
-                        <input type="range" id="videoVolume" min="0" max="100" value="100" class="volume-bar">
-                        <button class="video-control-btn" id="videoSpeedBtn">
-                            <span>1x</span>
-                        </button>
-                        <button class="video-control-btn" id="videoFullscreenBtn">
-                            <i class="fas fa-expand"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        `;
-        videoPlayer.style.display = 'flex';
-    }
+    hideAllMediaExcept('videoPlayer');
     
-    if (playBtn) playBtn.style.display = 'none';
+    mainVideo.src = video.video_url;
+    mainVideo.load();
+    videoPlayer.style.display = 'block';
     
-    setupModalActions(`
-        <button class="btn btn-glass" id="downloadVideoBtn">
+    updateModalInfo(video.title, video.description);
+    updateModalStats([
+        { label: 'Category', value: video.category },
+        { label: 'Duration', value: video.duration },
+        { label: 'Resolution', value: video.resolution }
+    ]);
+    updateModalActions(`
+        <button class="btn btn-primary" onclick="downloadMedia('${video.video_url}', '${video.title.replace(/\s+/g, '_')}.mp4')">
             <i class="fas fa-download"></i> Download
         </button>
     `);
-    
-    openModal();
-    
-    // Setup video controls after modal is open
-    setTimeout(() => {
-        initVideoPlayer();
-    }, 50);
-    
-    // Update navigation arrows visibility
     updateNavigationArrows();
+    
+    modal.classList.add('active');
+    isModalOpen = true;
+    document.body.style.overflow = 'hidden';
+    
+    initVideoControls(mainVideo);
 }
 
-function initVideoPlayer() {
-    const video = document.getElementById('mainVideo');
+function initVideoControls(video) {
     const playPauseBtn = document.getElementById('videoPlayPauseBtn');
     const muteBtn = document.getElementById('videoMuteBtn');
     const volumeSlider = document.getElementById('videoVolume');
+    const progressSlider = document.getElementById('videoProgress');
+    const progressTime = document.getElementById('progressTime');
     const speedBtn = document.getElementById('videoSpeedBtn');
     const fullscreenBtn = document.getElementById('videoFullscreenBtn');
-    const progressBar = document.getElementById('videoProgress');
-    const progressTime = document.getElementById('progressTime');
-    const downloadBtn = document.getElementById('downloadVideoBtn');
     
-    if (!video) return;
+    let playbackSpeeds = [1, 1.5, 2, 0.5];
+    let currentSpeedIndex = 0;
     
-    // Play/Pause button
+    // Play/Pause
     if (playPauseBtn) {
-        playPauseBtn.onclick = () => {
+        playPauseBtn.addEventListener('click', () => {
             if (video.paused) {
                 video.play();
-                playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                playPauseBtn.querySelector('i').className = 'fas fa-pause';
             } else {
                 video.pause();
-                playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+                playPauseBtn.querySelector('i').className = 'fas fa-play';
             }
-        };
+        });
     }
     
-    // Mute button
+    // Mute
     if (muteBtn) {
-        muteBtn.onclick = () => {
+        muteBtn.addEventListener('click', () => {
             video.muted = !video.muted;
-            muteBtn.innerHTML = video.muted ? 
-                '<i class="fas fa-volume-mute"></i>' : 
-                '<i class="fas fa-volume-up"></i>';
-        };
+            muteBtn.querySelector('i').className = video.muted ? 'fas fa-volume-mute' : 'fas fa-volume-up';
+        });
     }
     
-    // Volume slider
+    // Volume
     if (volumeSlider) {
         volumeSlider.addEventListener('input', () => {
             video.volume = volumeSlider.value / 100;
         });
     }
     
-    // Speed control
-    if (speedBtn) {
-        const speeds = [0.5, 0.75, 1, 1.25, 1.5, 2];
-        let speedIndex = 2; // Start at 1x
+    // Progress
+    if (progressSlider && progressTime) {
+        video.addEventListener('timeupdate', () => {
+            const progress = (video.currentTime / video.duration) * 100;
+            progressSlider.value = progress;
+            progressTime.textContent = `${formatTime(video.currentTime)} / ${formatTime(video.duration)}`;
+        });
         
-        speedBtn.onclick = () => {
-            speedIndex = (speedIndex + 1) % speeds.length;
-            video.playbackRate = speeds[speedIndex];
-            speedBtn.innerHTML = `<span>${speeds[speedIndex]}x</span>`;
-        };
-    }
-    
-    // Fullscreen button
-    if (fullscreenBtn) {
-        fullscreenBtn.onclick = () => {
-            if (video.requestFullscreen) {
-                video.requestFullscreen();
-            }
-        };
-    }
-    
-    // Progress bar
-    if (progressBar) {
-        progressBar.addEventListener('input', () => {
-            const percent = progressBar.value;
-            video.currentTime = (percent / 100) * video.duration;
+        progressSlider.addEventListener('input', () => {
+            video.currentTime = (progressSlider.value / 100) * video.duration;
         });
     }
     
-    // Update progress bar as video plays
-    video.addEventListener('timeupdate', () => {
-        if (progressBar && video.duration) {
-            const percent = (video.currentTime / video.duration) * 100;
-            progressBar.value = percent;
-        }
-        
-        if (progressTime) {
-            const currentTime = formatTime(video.currentTime);
-            const duration = formatTime(video.duration);
-            progressTime.textContent = `${currentTime} / ${duration}`;
-        }
-    });
-    
-    // Download button
-    if (downloadBtn) {
-        downloadBtn.onclick = () => {
-            if (currentItemData && currentItemData.video_url) {
-                downloadMedia(currentItemData.video_url, `${currentItemData.title}.mp4`);
-            }
-        };
+    // Speed
+    if (speedBtn) {
+        speedBtn.addEventListener('click', () => {
+            currentSpeedIndex = (currentSpeedIndex + 1) % playbackSpeeds.length;
+            video.playbackRate = playbackSpeeds[currentSpeedIndex];
+            speedBtn.querySelector('span').textContent = `${playbackSpeeds[currentSpeedIndex]}x`;
+        });
     }
     
-    // Video ended
-    video.addEventListener('ended', () => {
-        if (playPauseBtn) {
-            playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
-        }
-    });
-    
-    // Update time display initially
-    if (progressTime) {
-        progressTime.textContent = `0:00 / ${formatTime(video.duration)}`;
+    // Fullscreen
+    if (fullscreenBtn) {
+        fullscreenBtn.addEventListener('click', () => {
+            if (!document.fullscreenElement) {
+                video.requestFullscreen();
+            } else {
+                document.exitFullscreen();
+            }
+        });
     }
 }
 
 function formatTime(seconds) {
-    if (!seconds || isNaN(seconds)) return '0:00';
-    
-    const mins = Math.floor(seconds / 60);
-    const secs = Math.floor(seconds % 60);
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
+    const min = Math.floor(seconds / 60);
+    const sec = Math.floor(seconds % 60);
+    return `${min}:${sec < 10 ? '0' : ''}${sec}`;
 }
 
 // =============================================================================
-// MODAL UTILITY FUNCTIONS
+// MODAL UTILITIES
 // =============================================================================
-function openModal() {
-    const modal = document.getElementById('portfolioModal');
-    if (modal) {
-        modal.classList.add('active');
-        isModalOpen = true;
-        document.body.style.overflow = 'hidden'; // Prevent background scrolling
-        
-        // Focus trap for accessibility
-        modal.setAttribute('aria-hidden', 'false');
-    }
-}
-
-function closeModal() {
-    const modal = document.getElementById('portfolioModal');
-    if (modal) {
-        modal.classList.remove('active');
-        isModalOpen = false;
-        document.body.style.overflow = ''; // Re-enable scrolling
-        
-        // Stop any playing videos
-        const video = document.getElementById('mainVideo');
-        if (video) {
-            video.pause();
-            video.currentTime = 0;
-        }
-        
-        // Reset photo zoom
-        const photoImg = document.getElementById('photoImage');
-        if (photoImg) {
-            photoImg.style.transform = 'scale(1)';
-        }
-        
-        // Hide quick actions
-        const quickActions = document.getElementById('quickActions');
-        if (quickActions) {
-            quickActions.style.display = 'none';
-        }
-        
-        modal.setAttribute('aria-hidden', 'true');
-    }
-}
-
-function hideAllPreviewElements() {
-    const elements = [
-        'itemPreview',
-        'photoViewer', 
-        'videoPlayer',
-        'gameContainer'
-    ];
-    
-    elements.forEach(id => {
-        const element = document.getElementById(id);
-        if (element) {
-            element.style.display = 'none';
-        }
+function hideAllMediaExcept(activeId) {
+    const mediaContainers = ['websitePreview', 'gamePreview', 'photoViewer', 'videoPlayer'];
+    mediaContainers.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.style.display = id === activeId ? 'block' : 'none';
     });
-}
-
-function updateModalContent({ title, description, image }) {
-    const modalTitle = document.getElementById('modalTitle');
-    const modalDescription = document.getElementById('modalDescription');
     
-    if (modalTitle && title) {
-        modalTitle.textContent = title;
+    // Clean up previous content
+    if (activeId !== 'websitePreview') document.getElementById('websiteIframe').src = '';
+    if (activeId !== 'photoViewer') document.getElementById('photoImage').src = '';
+    if (activeId !== 'videoPlayer') {
+        const video = document.getElementById('mainVideo');
+        video.pause();
+        video.src = '';
     }
+    if (activeId !== 'gamePreview') {
+        if (unityInstance) {
+            unityInstance.Quit();
+            unityInstance = null;
+        }
+        document.getElementById('gameContainer').innerHTML = '<canvas id="unity-canvas"></canvas>';
+        document.getElementById('playItemBtn').style.display = 'none';
+        document.getElementById('gameLoading').style.display = 'none';
+    }
+}
+
+function updateModalInfo(title, description, technologies = []) {
+    document.getElementById('modalTitle').textContent = title;
+    document.getElementById('modalDescription').textContent = description;
     
-    if (modalDescription && description) {
-        modalDescription.textContent = description;
-    }
-}
-
-function updateModalMeta(html) {
-    const modalMeta = document.getElementById('modalMeta');
-    if (modalMeta) {
-        modalMeta.innerHTML = html;
-    }
-}
-
-function updateModalTech(technologies) {
     const modalTech = document.getElementById('modalTech');
-    if (modalTech && technologies && technologies.length > 0) {
+    if (modalTech && technologies.length > 0) {
         modalTech.innerHTML = `
             <h4>Technologies Used</h4>
             <div class="tech-tags">
@@ -1093,7 +645,21 @@ function updateModalTech(technologies) {
     }
 }
 
-function setupModalActions(html) {
+function updateModalStats(stats) {
+    const modalStats = document.getElementById('modalStats');
+    if (modalStats && stats) {
+        modalStats.innerHTML = stats.map(stat => `
+            <div class="stat-item">
+                <div class="stat-value">${stat.value}</div>
+                <div class="stat-label">${stat.label}</div>
+            </div>
+        `).join('');
+    } else if (modalStats) {
+        modalStats.innerHTML = '';
+    }
+}
+
+function updateModalActions(html) {
     const modalActions = document.getElementById('modalActions');
     if (modalActions) {
         modalActions.innerHTML = html;
@@ -1104,10 +670,34 @@ function updateNavigationArrows() {
     const modalPrev = document.getElementById('modalPrev');
     const modalNext = document.getElementById('modalNext');
     
-    if (modalPrev && modalNext && currentItems && currentItems.length > 0) {
-        modalPrev.style.display = currentItems.length > 1 ? 'flex' : 'none';
-        modalNext.style.display = currentItems.length > 1 ? 'flex' : 'none';
+    if (modalPrev && modalNext && currentItems && currentItems.length > 1) {
+        modalPrev.style.display = 'flex';
+        modalNext.style.display = 'flex';
+    } else if (modalPrev && modalNext) {
+        modalPrev.style.display = 'none';
+        modalNext.style.display = 'none';
     }
+}
+
+function closeModal() {
+    const modal = document.getElementById('portfolioModal');
+    if (modal) {
+        modal.classList.remove('active');
+    }
+    isModalOpen = false;
+    document.body.style.overflow = '';
+    
+    // Cleanup
+    hideAllMediaExcept(null);
+    if (unityInstance) {
+        unityInstance.Quit();
+        unityInstance = null;
+    }
+    currentMediaType = null;
+    currentItemData = null;
+    currentCategory = null;
+    currentItems = [];
+    currentIndex = 0;
 }
 
 // =============================================================================
@@ -1126,7 +716,8 @@ function initContactForm() {
             email: formData.get('email'),
             phone: formData.get('phone'),
             contact_type: formData.get('contact_type'),
-            comment: formData.get('comment')
+            comment: formData.get('comment'),
+            timestamp: new Date().toISOString()
         };
         
         // Basic validation
