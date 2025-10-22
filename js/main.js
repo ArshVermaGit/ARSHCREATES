@@ -724,7 +724,13 @@ function initContactForm() {
         isSubmitting = true;
         
         try {
-            const formData = new FormData(contactForm);
+            const formData = {
+                full_name: contactForm.querySelector('[name="full_name"]').value.trim(),
+                email: contactForm.querySelector('[name="email"]').value.trim(),
+                phone: contactForm.querySelector('[name="phone"]').value.trim(),
+                contact_type: contactForm.querySelector('[name="contact_type"]').value.trim(),
+                comment: contactForm.querySelector('[name="comment"]').value.trim()
+            };
             
             // Basic validation
             const requiredFields = ['full_name', 'email', 'contact_type', 'comment'];
@@ -732,7 +738,7 @@ function initContactForm() {
             
             requiredFields.forEach(field => {
                 const input = contactForm.querySelector(`[name="${field}"]`);
-                if (!input.value.trim()) {
+                if (!formData[field]) {
                     input.style.borderColor = 'rgba(239, 68, 68, 0.6)';
                     isValid = false;
                 } else {
@@ -745,28 +751,15 @@ function initContactForm() {
             }
             
             // Email validation
-            const email = contactForm.querySelector('[name="email"]').value.trim();
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(email)) {
+            if (!emailRegex.test(formData.email)) {
                 contactForm.querySelector('[name="email"]').style.borderColor = 'rgba(239, 68, 68, 0.6)';
                 throw new Error('Please enter a valid email address');
             }
             
-            const response = await fetch('/submit_feedback', {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest'
-                }
-            });
-            
-            if (!response.ok) {
-                throw new Error(`Server error: ${response.status}`);
-            }
-            
-            const result = await response.json();
-            
-            if (result.success) {
+            // Save feedback using data.js functions
+            if (typeof saveFeedback === 'function') {
+                saveFeedback(formData);
                 showNotification('Message sent successfully! I\'ll get back to you soon.', 'success');
                 contactForm.reset();
                 
@@ -775,11 +768,11 @@ function initContactForm() {
                     input.style.borderColor = '';
                 });
             } else {
-                throw new Error(result.error || 'Failed to send message. Please try again.');
+                throw new Error('Feedback system not available');
             }
         } catch (error) {
             console.error('Error:', error);
-            showNotification(error.message || 'Network error. Please check your connection and try again.', 'error');
+            showNotification(error.message || 'Failed to send message. Please try again.', 'error');
         } finally {
             const submitBtn = document.getElementById('submitBtn');
             submitBtn.innerHTML = originalText;
