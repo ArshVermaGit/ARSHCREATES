@@ -13,6 +13,28 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
+    <!-- Quick Navigation Bar -->
+    <div class="quick-nav" id="quickNav">
+        <div class="quick-nav-items">
+            <button class="quick-nav-btn active" data-section="games">
+                <i class="fas fa-gamepad"></i>
+                <span>Games</span>
+            </button>
+            <button class="quick-nav-btn" data-section="websites">
+                <i class="fas fa-laptop-code"></i>
+                <span>Websites</span>
+            </button>
+            <button class="quick-nav-btn" data-section="photos">
+                <i class="fas fa-camera"></i>
+                <span>Photos</span>
+            </button>
+            <button class="quick-nav-btn" data-section="videos">
+                <i class="fas fa-video"></i>
+                <span>Videos</span>
+            </button>
+        </div>
+    </div>
+
     <!-- Navbar -->
     <nav class="navbar" id="navbar">
         <div class="nav-container">
@@ -135,8 +157,8 @@
             </div>
         </section>
 
-        <!-- GAMES SECTION -->
-        <section id="games" class="section">
+        <!-- PORTFOLIO SECTIONS -->
+        <section id="games" class="section portfolio-section active-section">
             <div class="container">
                 <div class="section-header">
                     <span class="section-tag">Games</span>
@@ -145,17 +167,11 @@
                 </div>
                 <div class="portfolio-grid" id="gamesGrid">
                     <!-- Games will be injected here by JavaScript -->
-                    <div class="empty-state">
-                        <i class="fas fa-gamepad"></i>
-                        <h3>Loading Games...</h3>
-                        <p>Game projects are being loaded</p>
-                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- WEBSITES SECTION -->
-        <section id="websites" class="section">
+        <section id="websites" class="section portfolio-section">
             <div class="container">
                 <div class="section-header">
                     <span class="section-tag">Websites</span>
@@ -164,17 +180,11 @@
                 </div>
                 <div class="portfolio-grid websites-grid" id="websitesGrid">
                     <!-- Websites will be injected here by JavaScript -->
-                    <div class="empty-state">
-                        <i class="fas fa-laptop-code"></i>
-                        <h3>Loading Websites...</h3>
-                        <p>Website projects are being loaded</p>
-                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- PHOTOGRAPHY SECTION -->
-        <section id="photos" class="section">
+        <section id="photos" class="section portfolio-section">
             <div class="container">
                 <div class="section-header">
                     <span class="section-tag">Photography</span>
@@ -183,17 +193,11 @@
                 </div>
                 <div class="portfolio-grid" id="photosGrid">
                     <!-- Photos will be injected here by JavaScript -->
-                    <div class="empty-state">
-                        <i class="fas fa-camera"></i>
-                        <h3>Loading Photos...</h3>
-                        <p>Photo gallery is being loaded</p>
-                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- VIDEOS SECTION -->
-        <section id="videos" class="section">
+        <section id="videos" class="section portfolio-section">
             <div class="container">
                 <div class="section-header">
                     <span class="section-tag">Videography</span>
@@ -202,11 +206,6 @@
                 </div>
                 <div class="portfolio-grid" id="videosGrid">
                     <!-- Videos will be injected here by JavaScript -->
-                    <div class="empty-state">
-                        <i class="fas fa-video"></i>
-                        <h3>Loading Videos...</h3>
-                        <p>Video content is being loaded</p>
-                    </div>
                 </div>
             </div>
         </section>
@@ -313,13 +312,22 @@
         </div>
     </footer>
 
-    <!-- UNIFIED MODAL -->
+    <!-- ENHANCED UNIFIED MODAL -->
     <div class="portfolio-modal" id="portfolioModal">
         <div class="modal-overlay"></div>
         <div class="modal-container">
             <button class="modal-close" id="closeModal" aria-label="Close modal">
                 <i class="fas fa-times"></i>
             </button>
+            
+            <!-- Navigation Arrows -->
+            <button class="modal-nav modal-prev" id="modalPrev" aria-label="Previous item">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="modal-nav modal-next" id="modalNext" aria-label="Next item">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+
             <div class="modal-content">
                 <div class="modal-preview">
                     <div id="itemPreview">
@@ -329,10 +337,71 @@
                             <span>Play Game</span>
                         </button>
                     </div>
-                    <div id="photoViewer"></div>
-                    <div id="videoPlayer"></div>
+                    
+                    <!-- Enhanced Photo Viewer -->
+                    <div id="photoViewer">
+                        <div class="photo-container">
+                            <img src="" alt="Photo" id="photoImage">
+                            <div class="photo-zoom-controls">
+                                <button class="zoom-btn" id="zoomInBtn">
+                                    <i class="fas fa-search-plus"></i>
+                                </button>
+                                <button class="zoom-btn" id="zoomOutBtn">
+                                    <i class="fas fa-search-minus"></i>
+                                </button>
+                                <button class="zoom-btn" id="resetZoomBtn">
+                                    <i class="fas fa-sync-alt"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Enhanced Video Player -->
+                    <div id="videoPlayer">
+                        <div class="video-container">
+                            <video id="mainVideo" controls>
+                                Your browser does not support the video tag.
+                            </video>
+                            <div class="video-controls-overlay">
+                                <div class="video-progress">
+                                    <input type="range" id="videoProgress" min="0" max="100" value="0" class="progress-bar">
+                                    <div class="progress-time" id="progressTime">0:00 / 0:00</div>
+                                </div>
+                                <div class="video-controls">
+                                    <button class="video-control-btn" id="videoPlayPauseBtn">
+                                        <i class="fas fa-play"></i>
+                                    </button>
+                                    <button class="video-control-btn" id="videoMuteBtn">
+                                        <i class="fas fa-volume-up"></i>
+                                    </button>
+                                    <input type="range" id="videoVolume" min="0" max="100" value="100" class="volume-bar">
+                                    <button class="video-control-btn" id="videoSpeedBtn">
+                                        <span>1x</span>
+                                    </button>
+                                    <button class="video-control-btn" id="videoFullscreenBtn">
+                                        <i class="fas fa-expand"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Enhanced Game Container -->
                     <div class="modal-game" id="gameContainer">
                         <canvas id="unity-canvas"></canvas>
+                        <div class="game-controls-overlay">
+                            <div class="game-controls">
+                                <button class="game-control-btn" id="gameFullscreenBtn">
+                                    <i class="fas fa-expand"></i>
+                                </button>
+                                <button class="game-control-btn" id="gameRestartBtn">
+                                    <i class="fas fa-redo"></i>
+                                </button>
+                                <button class="game-control-btn" id="gameMuteBtn">
+                                    <i class="fas fa-volume-up"></i>
+                                </button>
+                            </div>
+                        </div>
                         <div class="game-loading" id="gameLoading">
                             <div class="loading-spinner"></div>
                             <p>Loading Game...</p>
@@ -342,15 +411,43 @@
                         </div>
                     </div>
                 </div>
+                
                 <div class="modal-info">
-                    <h2 class="modal-title" id="modalTitle">Title</h2>
+                    <div class="modal-header">
+                        <h2 class="modal-title" id="modalTitle">Title</h2>
+                        <div class="modal-meta" id="modalMeta">
+                            <!-- Meta info like date, category, etc. -->
+                        </div>
+                    </div>
                     <p class="modal-description" id="modalDescription">Description</p>
+                    
+                    <div class="modal-stats" id="modalStats">
+                        <!-- Statistics and additional info -->
+                    </div>
+                    
                     <div class="modal-actions" id="modalActions">
-                        <!-- Action buttons will be inserted here dynamically -->
+                        <!-- Dynamic action buttons -->
+                    </div>
+                    
+                    <div class="modal-tech" id="modalTech">
+                        <!-- Technologies used -->
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+
+    <!-- Quick Actions Panel -->
+    <div class="quick-actions" id="quickActions">
+        <button class="quick-action-btn" id="fullscreenToggle" title="Toggle Fullscreen">
+            <i class="fas fa-expand"></i>
+        </button>
+        <button class="quick-action-btn" id="downloadCurrent" title="Download Current Item">
+            <i class="fas fa-download"></i>
+        </button>
+        <button class="quick-action-btn" id="shareItem" title="Share Item">
+            <i class="fas fa-share-alt"></i>
+        </button>
     </div>
 
     <div id="notificationContainer"></div>
