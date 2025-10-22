@@ -6,11 +6,20 @@ const PORTFOLIO_DATA = {
         {
             id: 1,
             name: 'Sky Surfers',
-            overview: 'I built this as a high-speed dodging challenge to test your absolute precision.',
-            description: 'Ready for the Test? I built this intense flight game to challenge your piloting skills. Take control and see if you can master the narrow, hazard-filled canyon—you will need precision dodging and nerves of steel to set that high score I know you are aiming for.',
-            image: '/images/games/Game1.jpg',
+            overview: 'High-speed dodging challenge to test your absolute precision',
+            description: 'An intense flight game that challenges your piloting skills. Take control and master the narrow, hazard-filled canyon with precision dodging and nerves of steel.',
+            image: 'images/games/Game1.jpg',
             game_folder: 'sky_surfers',
             build_name: 'sky_surfers'
+        },
+        {
+            id: 2,
+            name: 'Adventure Quest',
+            overview: 'Epic adventure game with immersive storytelling',
+            description: 'Embark on an unforgettable journey through mystical lands. Solve puzzles, battle creatures, and uncover ancient secrets in this epic adventure.',
+            image: 'images/games/game2.jpg',
+            game_folder: 'adventure_quest',
+            build_name: 'adventure_quest'
         }
     ],
     
@@ -18,10 +27,18 @@ const PORTFOLIO_DATA = {
         {
             id: 1,
             name: 'ReelSpot',
-            description: 'I built the fastest way to save your media. You find the link, I handle the rest. Multi-platform downloading is finally quick, simple, and painless.',
-            image: '/images/websites/ReelSpot.jpg',
+            description: 'The fastest way to save your media. Multi-platform downloading made quick, simple, and painless.',
+            image: 'images/websites/ReelSpot.jpg',
             url: 'https://arshvermagit.github.io/REELSPOT/',
             technologies: ['JavaScript', 'HTML', 'CSS']
+        },
+        {
+            id: 2,
+            name: 'Creative Portfolio',
+            description: 'Modern responsive portfolio showcasing creative development work and digital artistry.',
+            image: 'images/websites/portfolio.jpg',
+            url: '#',
+            technologies: ['HTML', 'CSS', 'JavaScript']
         }
     ],
     
@@ -29,30 +46,30 @@ const PORTFOLIO_DATA = {
         {
             id: 1,
             title: 'The Heart Of Love',
-            description: 'It Showcases The Symbol of Love.',
+            description: 'Showcasing the symbol of love and connection in a beautiful artistic composition.',
             category: 'Love',
-            image: '/images/photos/photo1.jpg'
+            image: 'images/photos/photo1.jpg'
         },
         {
             id: 2,
             title: 'The Peacock',
-            description: 'A Beautiful Peacock Structure made of Iron Rods.',
-            category: 'Animals',
-            image: '/images/photos/photo2.jpg'
+            description: 'Beautiful peacock structure crafted from iron rods, showcasing artistic metalwork.',
+            category: 'Art',
+            image: 'images/photos/photo2.jpg'
         },
         {
             id: 3,
-            title: 'The Acadamic Block',
-            description: 'A Beautiful Click of The Acadamic Block.',
-            category: 'VIT Bhopal',
-            image: '/images/photos/photo3.jpg'
+            title: 'Academic Block',
+            description: 'Architectural beauty of the academic building with modern design elements.',
+            category: 'Architecture',
+            image: 'images/photos/photo3.jpg'
         },
         {
             id: 4,
-            title: 'The Block-1',
-            description: 'A Beautiful Click of the Block-1.',
-            category: 'VIT Bhopal',
-            image: '/images/photos/photo4.jpg'
+            title: 'Block-1 Structure',
+            description: 'Modern architectural design of Block-1 with clean lines and aesthetic appeal.',
+            category: 'Architecture',
+            image: 'images/photos/photo4.jpg'
         }
     ],
     
@@ -60,16 +77,36 @@ const PORTFOLIO_DATA = {
         {
             id: 1,
             title: 'Brand Showcase',
-            description: 'Professional brand video with cinematic storytelling',
+            description: 'Professional brand video with cinematic storytelling and visual appeal that captures attention.',
             category: 'Commercial',
-            thumbnail: '/images/videos/video1-thumb.jpg',
-            video_url: '/videos/video1.mp4'
+            thumbnail: 'images/videos/video1-thumb.jpg',
+            video_url: 'videos/demo.mp4'
+        },
+        {
+            id: 2,
+            title: 'Creative Montage',
+            description: 'Collection of creative moments and visual stories that inspire and engage viewers.',
+            category: 'Creative',
+            thumbnail: 'images/videos/video2-thumb.jpg',
+            video_url: 'videos/montage.mp4'
         }
     ]
 };
 
-// Feedback Storage (in-memory for demo - replace with real backend)
+// Feedback Storage
 let feedbackStorage = [];
+
+// Initialize feedback from localStorage
+function initializeFeedback() {
+    try {
+        const stored = localStorage.getItem('portfolio_feedback');
+        if (stored) {
+            feedbackStorage = JSON.parse(stored);
+        }
+    } catch (e) {
+        console.warn('localStorage not available');
+    }
+}
 
 // Feedback Management Functions
 function saveFeedback(feedbackData) {
@@ -85,28 +122,17 @@ function saveFeedback(feedbackData) {
     
     feedbackStorage.push(feedback);
     
-    // Try to save to localStorage if available
     try {
         localStorage.setItem('portfolio_feedback', JSON.stringify(feedbackStorage));
     } catch (e) {
-        console.warn('localStorage not available, feedback will be lost on page refresh');
+        console.warn('localStorage not available');
     }
     
     return feedback;
 }
 
 function getAllFeedback() {
-    // Try to load from localStorage if available
-    try {
-        const stored = localStorage.getItem('portfolio_feedback');
-        if (stored) {
-            feedbackStorage = JSON.parse(stored);
-        }
-    } catch (e) {
-        console.warn('localStorage not available');
-    }
-    
-    return feedbackStorage.sort((a, b) => 
+    return [...feedbackStorage].sort((a, b) => 
         new Date(b.timestamp) - new Date(a.timestamp)
     );
 }
@@ -114,7 +140,6 @@ function getAllFeedback() {
 function deleteFeedback(feedbackId) {
     feedbackStorage = feedbackStorage.filter(f => f.id !== feedbackId);
     
-    // Update localStorage
     try {
         localStorage.setItem('portfolio_feedback', JSON.stringify(feedbackStorage));
     } catch (e) {
@@ -124,23 +149,37 @@ function deleteFeedback(feedbackId) {
     return true;
 }
 
-// Initialize portfolio data on page load
-function initializePortfolio() {
-    // Set current year in footer
-    const yearElement = document.getElementById('currentYear');
-    if (yearElement) {
-        yearElement.textContent = new Date().getFullYear();
-    }
+// Create placeholder images dynamically
+function createPlaceholderImages() {
+    const placeholderImages = [
+        'images/games/Game1.jpg',
+        'images/games/game2.jpg',
+        'images/websites/ReelSpot.jpg',
+        'images/websites/portfolio.jpg',
+        'images/photos/photo1.jpg',
+        'images/photos/photo2.jpg',
+        'images/photos/photo3.jpg',
+        'images/photos/photo4.jpg',
+        'images/videos/video1-thumb.jpg',
+        'images/videos/video2-thumb.jpg'
+    ];
     
-    // Load games
+    console.log('Ensure these images exist:', placeholderImages);
+}
+
+// Portfolio rendering functions
+function renderGames() {
     const gamesGrid = document.getElementById('gamesGrid');
-    if (gamesGrid && PORTFOLIO_DATA.games.length > 0) {
+    if (!gamesGrid) return;
+    
+    if (PORTFOLIO_DATA.games && PORTFOLIO_DATA.games.length > 0) {
         gamesGrid.innerHTML = PORTFOLIO_DATA.games.map(game => `
-            <div class="portfolio-card" data-game='${JSON.stringify(game)}' data-type="game">
+            <div class="portfolio-card" data-game='${JSON.stringify(game).replace(/'/g, "&apos;")}' data-type="game">
                 <div class="portfolio-image">
-                    <img src="${game.image}" alt="${game.name}">
+                    <img src="${game.image}" alt="${game.name}" 
+                         onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAwIiBoZWlnaHQ9IjQwMCIgdmlld0JveD0iMCAwIDYwMCA0MDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjYwMCIgaGVpZ2h0PSI0MDAiIGZpbGw9IiMxQTJBMzEiLz48cGF0aCBkPSJNMzAwIDIwMEwzNTAgMjUwTDMwMCAzMDBMMjUwIDI1MEwzMDAgMjAwWiIgZmlsbD0iI0ExODU2RCIvPjx0ZXh0IHg9IjMwMCIgeT0iMzUwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjRkFGOEY1IiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTgiPiR7Z2FtZS5uYW1lfTwvdGV4dD48L3N2Zz4='; this.alt='${game.name} Placeholder'">
                     <div class="portfolio-overlay">
-                        <button class="play-btn" aria-label="Play game">
+                        <button class="play-btn" aria-label="Play ${game.name}">
                             <i class="fas fa-play"></i>
                         </button>
                     </div>
@@ -152,7 +191,14 @@ function initializePortfolio() {
                 </div>
             </div>
         `).join('');
-    } else if (gamesGrid) {
+        
+        // Re-initialize portfolio cards after rendering
+        setTimeout(() => {
+            if (typeof initPortfolioCards === 'function') {
+                initPortfolioCards();
+            }
+        }, 100);
+    } else {
         gamesGrid.innerHTML = `
             <div class="empty-state">
                 <i class="fas fa-gamepad"></i>
@@ -161,16 +207,20 @@ function initializePortfolio() {
             </div>
         `;
     }
-    
-    // Load websites
+}
+
+function renderWebsites() {
     const websitesGrid = document.getElementById('websitesGrid');
-    if (websitesGrid && PORTFOLIO_DATA.websites.length > 0) {
+    if (!websitesGrid) return;
+    
+    if (PORTFOLIO_DATA.websites && PORTFOLIO_DATA.websites.length > 0) {
         websitesGrid.innerHTML = PORTFOLIO_DATA.websites.map(website => `
-            <div class="portfolio-card website-card" data-website='${JSON.stringify(website)}' data-type="website">
-                <div class="portfolio-image website-image">
-                    <img src="${website.image}" alt="${website.name}">
+            <div class="portfolio-card" data-website='${JSON.stringify(website).replace(/'/g, "&apos;")}' data-type="website">
+                <div class="portfolio-image">
+                    <img src="${website.image}" alt="${website.name}" 
+                         onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAwIiBoZWlnaHQ9IjQwMCIgdmlld0JveD0iMCAwIDYwMCA0MDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjYwMCIgaGVpZ2h0PSI0MDAiIGZpbGw9IiMxQTJBMzEiLz48cGF0aCBkPSJNMjAwIDE1MEg0MDBWMTUwSDQwMFYzNTBIMjAwVjE1MFoiIGZpbGw9IiNBMTg1NkQiLz48dGV4dCB4PSIzMDAiIHk9IjM1MCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iI0ZBRjhGNSIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE4Ij4ke3dlYnNpdGUubmFtZX08L3RleHQ+PC9zdmc+'; this.alt='${website.name} Placeholder'">
                     <div class="portfolio-overlay">
-                        <button class="view-btn" aria-label="View website">
+                        <button class="view-btn" aria-label="View ${website.name}">
                             <i class="fas fa-eye"></i>
                         </button>
                     </div>
@@ -182,7 +232,14 @@ function initializePortfolio() {
                 </div>
             </div>
         `).join('');
-    } else if (websitesGrid) {
+        
+        // Re-initialize portfolio cards after rendering
+        setTimeout(() => {
+            if (typeof initPortfolioCards === 'function') {
+                initPortfolioCards();
+            }
+        }, 100);
+    } else {
         websitesGrid.innerHTML = `
             <div class="empty-state">
                 <i class="fas fa-laptop-code"></i>
@@ -191,16 +248,20 @@ function initializePortfolio() {
             </div>
         `;
     }
-    
-    // Load photos
+}
+
+function renderPhotos() {
     const photosGrid = document.getElementById('photosGrid');
-    if (photosGrid && PORTFOLIO_DATA.photos.length > 0) {
+    if (!photosGrid) return;
+    
+    if (PORTFOLIO_DATA.photos && PORTFOLIO_DATA.photos.length > 0) {
         photosGrid.innerHTML = PORTFOLIO_DATA.photos.map(photo => `
-            <div class="portfolio-card" data-photo='${JSON.stringify(photo)}' data-type="photo">
+            <div class="portfolio-card" data-photo='${JSON.stringify(photo).replace(/'/g, "&apos;")}' data-type="photo">
                 <div class="portfolio-image">
-                    <img src="${photo.image}" alt="${photo.title}">
+                    <img src="${photo.image}" alt="${photo.title}" 
+                         onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAwIiBoZWlnaHQ9IjQwMCIgdmlld0JveD0iMCAwIDYwMCA0MDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjYwMCIgaGVpZ2h0PSI0MDAiIGZpbGw9IiMxQTJBMzEiLz48Y2lyY2xlIGN4PSIzMDAiIGN5PSIyMDAiIHI9IjgwIiBmaWxsPSIjQTE4NTZEIi8+PHRleHQgeD0iMzAwIiB5PSIzNTAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiNGQUY4RjUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxOCI+JHtwaG90by50aXRsZX08L3RleHQ+PC9zdmc+'; this.alt='${photo.title} Placeholder'">
                     <div class="portfolio-overlay">
-                        <button class="view-btn" aria-label="View photo">
+                        <button class="view-btn" aria-label="View ${photo.title}">
                             <i class="fas fa-search-plus"></i>
                         </button>
                     </div>
@@ -212,7 +273,14 @@ function initializePortfolio() {
                 </div>
             </div>
         `).join('');
-    } else if (photosGrid) {
+        
+        // Re-initialize portfolio cards after rendering
+        setTimeout(() => {
+            if (typeof initPortfolioCards === 'function') {
+                initPortfolioCards();
+            }
+        }, 100);
+    } else {
         photosGrid.innerHTML = `
             <div class="empty-state">
                 <i class="fas fa-camera"></i>
@@ -221,16 +289,20 @@ function initializePortfolio() {
             </div>
         `;
     }
-    
-    // Load videos
+}
+
+function renderVideos() {
     const videosGrid = document.getElementById('videosGrid');
-    if (videosGrid && PORTFOLIO_DATA.videos.length > 0) {
+    if (!videosGrid) return;
+    
+    if (PORTFOLIO_DATA.videos && PORTFOLIO_DATA.videos.length > 0) {
         videosGrid.innerHTML = PORTFOLIO_DATA.videos.map(video => `
-            <div class="portfolio-card" data-video='${JSON.stringify(video)}' data-type="video">
+            <div class="portfolio-card" data-video='${JSON.stringify(video).replace(/'/g, "&apos;")}' data-type="video">
                 <div class="portfolio-image">
-                    <img src="${video.thumbnail}" alt="${video.title}">
+                    <img src="${video.thumbnail}" alt="${video.title}" 
+                         onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAwIiBoZWlnaHQ9IjQwMCIgdmlld0JveD0iMCAwIDYwMCA0MDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjYwMCIgaGVpZ2h0PSI0MDAiIGZpbGw9IiMxQTJBMzEiLz48cGF0aCBkPSJNMjI1IDE3NVYzMjVMMzc1IDI1MEwyMjUgMTc1WiIgZmlsbD0iI0ExODU2RCIvPjx0ZXh0IHg9IjMwMCIgeT0iMzUwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjRkFGOEY1IiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTgiPiR7dmlkZW8udGl0bGV9PC90ZXh0Pjwvc3ZnPg=='; this.alt='${video.title} Placeholder'">
                     <div class="portfolio-overlay">
-                        <button class="play-btn" aria-label="Play video">
+                        <button class="play-btn" aria-label="Play ${video.title}">
                             <i class="fas fa-play"></i>
                         </button>
                     </div>
@@ -242,7 +314,14 @@ function initializePortfolio() {
                 </div>
             </div>
         `).join('');
-    } else if (videosGrid) {
+        
+        // Re-initialize portfolio cards after rendering
+        setTimeout(() => {
+            if (typeof initPortfolioCards === 'function') {
+                initPortfolioCards();
+            }
+        }, 100);
+    } else {
         videosGrid.innerHTML = `
             <div class="empty-state">
                 <i class="fas fa-video"></i>
@@ -253,9 +332,41 @@ function initializePortfolio() {
     }
 }
 
-// Initialize when DOM is loaded
+// Initialize portfolio
+function initializePortfolio() {
+    console.log('Initializing portfolio...');
+    
+    // Set current year
+    const yearElement = document.getElementById('currentYear');
+    if (yearElement) {
+        yearElement.textContent = new Date().getFullYear();
+    }
+    
+    // Initialize feedback storage
+    initializeFeedback();
+    
+    // Create placeholder images
+    createPlaceholderImages();
+    
+    // Render all portfolio sections
+    renderGames();
+    renderWebsites();
+    renderPhotos();
+    renderVideos();
+    
+    console.log('Portfolio initialized successfully');
+}
+
+// Initialize when DOM is ready
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initializePortfolio);
 } else {
     initializePortfolio();
 }
+
+// Make functions globally available
+window.PORTFOLIO_DATA = PORTFOLIO_DATA;
+window.saveFeedback = saveFeedback;
+window.getAllFeedback = getAllFeedback;
+window.deleteFeedback = deleteFeedback;
+window.initializePortfolio = initializePortfolio;
