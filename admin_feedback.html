@@ -1,837 +1,124 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Feedback - Arsh Verma Portfolio</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="icon" href="images/favicon.ico">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <title>Admin Panel - Media Gallery Pro</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <a href="index.html" class="logo">
-                <i class="fas fa-code"></i>
-                <span>ArshCreates</span>
-            </a>
-            <div class="nav-actions">
-                <a href="index.html" class="btn-icon" title="Back to Portfolio">
-                    <i class="fas fa-arrow-left"></i>
-                </a>
-                <button id="themeBtn" class="btn-icon" aria-label="Toggle theme">
-                    <i class="fas fa-moon"></i>
-                </button>
-            </div>
-        </div>
-    </nav>
-
-    <main class="admin-main">
+    <header>
         <div class="container">
-            <div class="section-header">
-                <h1 class="section-title">Feedback Management</h1>
-                <p class="section-description">Manage and review all incoming messages and feedback</p>
-            </div>
-
-            <!-- Stats Overview -->
-            <div class="admin-stats">
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <i class="fas fa-envelope"></i>
+            <h1>Admin Panel</h1>
+            <p>Manage your media gallery and user feedback</p>
+            <nav>
+                <a href="index.html" class="nav-link">Gallery</a>
+                <a href="admin_feedback.html" class="nav-link active">Admin</a>
+            </nav>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="admin-panels">
+            <div class="admin-panel">
+                <h2><i class="fas fa-chart-line"></i> Analytics</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Total Views</h3>
+                        <p class="stat-number">1,247</p>
                     </div>
-                    <div class="stat-info">
-                        <h3 id="totalMessages">0</h3>
-                        <p>Total Messages</p>
+                    <div class="stat-card">
+                        <h3>Media Items</h3>
+                        <p class="stat-number">42</p>
                     </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <i class="fas fa-clock"></i>
+                    <div class="stat-card">
+                        <h3>User Shares</h3>
+                        <p class="stat-number">89</p>
                     </div>
-                    <div class="stat-info">
-                        <h3 id="recentMessages">0</h3>
-                        <p>Last 7 Days</p>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <i class="fas fa-project-diagram"></i>
-                    </div>
-                    <div class="stat-info">
-                        <h3 id="projectInquiries">0</h3>
-                        <p>Project Inquiries</p>
+                    <div class="stat-card">
+                        <h3>Downloads</h3>
+                        <p class="stat-number">156</p>
                     </div>
                 </div>
             </div>
-
-            <!-- Filters and Actions -->
-            <div class="admin-controls">
-                <div class="filter-group">
-                    <label for="filterType">Filter by Type:</label>
-                    <select id="filterType">
-                        <option value="all">All Types</option>
-                        <option value="Project Inquiry">Project Inquiry</option>
-                        <option value="Collaboration">Collaboration</option>
-                        <option value="Support">Support</option>
-                        <option value="Other">Other</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <label for="sortBy">Sort by:</label>
-                    <select id="sortBy">
-                        <option value="newest">Newest First</option>
-                        <option value="oldest">Oldest First</option>
-                        <option value="name">Name A-Z</option>
-                    </select>
-                </div>
-                <button id="exportBtn" class="btn btn-glass">
-                    <i class="fas fa-download"></i> Export CSV
-                </button>
-                <button id="refreshBtn" class="btn btn-primary">
-                    <i class="fas fa-sync-alt"></i> Refresh
-                </button>
-            </div>
-
-            <!-- Feedback Table -->
-            <div class="feedback-table-container">
-                <table class="feedback-table" id="feedbackTable">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Type</th>
-                            <th>Message Preview</th>
-                            <th>Date</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="feedbackTableBody">
-                        <!-- Feedback rows will be inserted here -->
-                    </tbody>
-                </table>
-                
-                <!-- Empty State -->
-                <div class="empty-state" id="emptyState" style="display: none;">
-                    <i class="fas fa-inbox"></i>
-                    <h3>No Feedback Yet</h3>
-                    <p>All incoming messages will appear here</p>
-                </div>
-            </div>
-
-            <!-- Feedback Detail Modal -->
-            <div class="modal-overlay" id="detailModal" style="display: none;">
-                <div class="modal-container admin-modal">
-                    <button class="modal-close" id="closeDetailModal">
-                        <i class="fas fa-times"></i>
-                    </button>
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h2 class="modal-title" id="detailName">Loading...</h2>
-                            <div class="modal-meta" id="detailMeta"></div>
+            
+            <div class="admin-panel">
+                <h2><i class="fas fa-comment-alt"></i> User Feedback</h2>
+                <div class="feedback-list">
+                    <div class="feedback-item">
+                        <div class="feedback-header">
+                            <span class="user-name">John Doe</span>
+                            <span class="feedback-date">2023-10-15</span>
                         </div>
-                        <div class="modal-body">
-                            <div class="detail-grid">
-                                <div class="detail-item">
-                                    <label>Email:</label>
-                                    <span id="detailEmail"></span>
-                                </div>
-                                <div class="detail-item">
-                                    <label>Phone:</label>
-                                    <span id="detailPhone"></span>
-                                </div>
-                                <div class="detail-item">
-                                    <label>Contact Type:</label>
-                                    <span id="detailType"></span>
-                                </div>
-                                <div class="detail-item full-width">
-                                    <label>Message:</label>
-                                    <div class="message-content" id="detailMessage"></div>
-                                </div>
-                                <div class="detail-item">
-                                    <label>Received:</label>
-                                    <span id="detailDate"></span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-actions">
-                            <button class="btn btn-glass" id="replyBtn">
-                                <i class="fas fa-reply"></i> Reply via Email
-                            </button>
-                            <button class="btn btn-primary" id="markReadBtn">
-                                <i class="fas fa-check"></i> Mark as Read
-                            </button>
+                        <p class="feedback-text">Great website! Love the video player controls.</p>
+                        <div class="feedback-actions">
+                            <button class="btn btn-primary">Reply</button>
+                            <button class="btn btn-secondary">Mark as Read</button>
                         </div>
                     </div>
+                    
+                    <div class="feedback-item">
+                        <div class="feedback-header">
+                            <span class="user-name">Sarah Smith</span>
+                            <span class="feedback-date">2023-10-12</span>
+                        </div>
+                        <p class="feedback-text">Could you add more games? The current ones are fun!</p>
+                        <div class="feedback-actions">
+                            <button class="btn btn-primary">Reply</button>
+                            <button class="btn btn-secondary">Mark as Read</button>
+                        </div>
+                    </div>
+                    
+                    <div class="feedback-item">
+                        <div class="feedback-header">
+                            <span class="user-name">Mike Johnson</span>
+                            <span class="feedback-date">2023-10-10</span>
+                        </div>
+                        <p class="feedback-text">The download feature is very useful. Thanks!</p>
+                        <div class="feedback-actions">
+                            <button class="btn btn-primary">Reply</button>
+                            <button class="btn btn-secondary">Mark as Read</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="admin-panel">
+                <h2><i class="fas fa-cog"></i> Settings</h2>
+                <div class="settings-form">
+                    <div class="form-group">
+                        <label for="siteTitle">Site Title</label>
+                        <input type="text" id="siteTitle" value="Media Gallery Pro">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="maxFileSize">Maximum File Size (MB)</label>
+                        <input type="number" id="maxFileSize" value="50">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="autoPlay">Auto-play Videos</label>
+                        <input type="checkbox" id="autoPlay" checked>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="allowDownloads">Allow Downloads</label>
+                        <input type="checkbox" id="allowDownloads" checked>
+                    </div>
+                    
+                    <button class="btn btn-primary save-settings">Save Settings</button>
                 </div>
             </div>
         </div>
-    </main>
-
-    <div id="notificationContainer"></div>
-
-    <script src="js/data.js"></script>
-    <script src="js/script.js"></script>
-    <script>
-        // Admin Feedback Management
-        class FeedbackAdmin {
-            constructor() {
-                this.feedback = [];
-                this.filteredFeedback = [];
-                this.currentFilter = 'all';
-                this.currentSort = 'newest';
-                this.selectedFeedback = null;
-                
-                this.init();
-            }
-            
-            init() {
-                this.loadFeedback();
-                this.initEventListeners();
-                this.renderTable();
-                this.updateStats();
-            }
-            
-            loadFeedback() {
-                try {
-                    if (typeof getAllFeedback === 'function') {
-                        this.feedback = getAllFeedback();
-                    } else {
-                        // Fallback to localStorage
-                        const stored = localStorage.getItem('portfolio_feedback');
-                        this.feedback = stored ? JSON.parse(stored) : [];
-                    }
-                    this.applyFilters();
-                } catch (error) {
-                    console.error('Error loading feedback:', error);
-                    this.feedback = [];
-                }
-            }
-            
-            initEventListeners() {
-                // Theme switcher
-                const themeBtn = document.getElementById('themeBtn');
-                if (themeBtn) {
-                    themeBtn.addEventListener('click', () => {
-                        if (typeof initThemeSwitcher === 'function') {
-                            initThemeSwitcher();
-                        }
-                    });
-                }
-                
-                // Filter and sort
-                document.getElementById('filterType')?.addEventListener('change', (e) => {
-                    this.currentFilter = e.target.value;
-                    this.applyFilters();
-                });
-                
-                document.getElementById('sortBy')?.addEventListener('change', (e) => {
-                    this.currentSort = e.target.value;
-                    this.applyFilters();
-                });
-                
-                // Actions
-                document.getElementById('refreshBtn')?.addEventListener('click', () => {
-                    this.loadFeedback();
-                    this.showNotification('Feedback list refreshed', 'success');
-                });
-                
-                document.getElementById('exportBtn')?.addEventListener('click', () => {
-                    this.exportToCSV();
-                });
-                
-                // Modal
-                document.getElementById('closeDetailModal')?.addEventListener('click', () => {
-                    this.closeDetailModal();
-                });
-                
-                document.getElementById('markReadBtn')?.addEventListener('click', () => {
-                    this.markAsRead();
-                });
-                
-                document.getElementById('replyBtn')?.addEventListener('click', () => {
-                    this.replyToFeedback();
-                });
-                
-                // Close modal on overlay click
-                document.getElementById('detailModal')?.addEventListener('click', (e) => {
-                    if (e.target.id === 'detailModal') {
-                        this.closeDetailModal();
-                    }
-                });
-                
-                // Escape key to close modal
-                document.addEventListener('keydown', (e) => {
-                    if (e.key === 'Escape' && this.selectedFeedback) {
-                        this.closeDetailModal();
-                    }
-                });
-            }
-            
-            applyFilters() {
-                let filtered = [...this.feedback];
-                
-                // Apply type filter
-                if (this.currentFilter !== 'all') {
-                    filtered = filtered.filter(item => item.contact_type === this.currentFilter);
-                }
-                
-                // Apply sorting
-                switch (this.currentSort) {
-                    case 'newest':
-                        filtered.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-                        break;
-                    case 'oldest':
-                        filtered.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
-                        break;
-                    case 'name':
-                        filtered.sort((a, b) => a.full_name.localeCompare(b.full_name));
-                        break;
-                }
-                
-                this.filteredFeedback = filtered;
-                this.renderTable();
-            }
-            
-            renderTable() {
-                const tbody = document.getElementById('feedbackTableBody');
-                const emptyState = document.getElementById('emptyState');
-                
-                if (!tbody) return;
-                
-                if (this.filteredFeedback.length === 0) {
-                    tbody.innerHTML = '';
-                    if (emptyState) emptyState.style.display = 'block';
-                    return;
-                }
-                
-                if (emptyState) emptyState.style.display = 'none';
-                
-                tbody.innerHTML = this.filteredFeedback.map(feedback => `
-                    <tr class="feedback-row" data-id="${feedback.id}">
-                        <td class="name-cell">
-                            <div class="user-avatar">
-                                ${feedback.full_name.split(' ').map(n => n[0]).join('').toUpperCase()}
-                            </div>
-                            <span>${feedback.full_name}</span>
-                        </td>
-                        <td class="email-cell">${feedback.email}</td>
-                        <td class="type-cell">
-                            <span class="type-badge type-${feedback.contact_type.toLowerCase().replace(' ', '-')}">
-                                ${feedback.contact_type}
-                            </span>
-                        </td>
-                        <td class="message-cell">
-                            <div class="message-preview">
-                                ${this.truncateText(feedback.comment, 80)}
-                            </div>
-                        </td>
-                        <td class="date-cell">
-                            ${this.formatDate(feedback.timestamp)}
-                        </td>
-                        <td class="actions-cell">
-                            <button class="btn-icon view-btn" title="View Details">
-                                <i class="fas fa-eye"></i>
-                            </button>
-                            <button class="btn-icon delete-btn" title="Delete">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </td>
-                    </tr>
-                `).join('');
-                
-                // Add event listeners to table rows
-                tbody.querySelectorAll('.feedback-row').forEach(row => {
-                    const id = row.dataset.id;
-                    const viewBtn = row.querySelector('.view-btn');
-                    const deleteBtn = row.querySelector('.delete-btn');
-                    
-                    viewBtn?.addEventListener('click', () => {
-                        this.showFeedbackDetail(id);
-                    });
-                    
-                    deleteBtn?.addEventListener('click', () => {
-                        this.deleteFeedback(id);
-                    });
-                    
-                    // Make entire row clickable
-                    row.addEventListener('click', (e) => {
-                        if (!e.target.closest('.btn-icon')) {
-                            this.showFeedbackDetail(id);
-                        }
-                    });
-                });
-            }
-            
-            showFeedbackDetail(id) {
-                const feedback = this.feedback.find(f => f.id === id);
-                if (!feedback) return;
-                
-                this.selectedFeedback = feedback;
-                
-                // Update modal content
-                document.getElementById('detailName').textContent = feedback.full_name;
-                document.getElementById('detailEmail').textContent = feedback.email;
-                document.getElementById('detailPhone').textContent = feedback.phone || 'Not provided';
-                document.getElementById('detailType').textContent = feedback.contact_type;
-                document.getElementById('detailMessage').textContent = feedback.comment;
-                document.getElementById('detailDate').textContent = this.formatDate(feedback.timestamp, true);
-                
-                // Update meta info
-                const metaElement = document.getElementById('detailMeta');
-                if (metaElement) {
-                    metaElement.innerHTML = `
-                        <div class="meta-item">
-                            <i class="fas fa-envelope"></i>
-                            <span>${feedback.email}</span>
-                        </div>
-                        <div class="meta-item">
-                            <i class="fas fa-clock"></i>
-                            <span>${this.formatRelativeTime(feedback.timestamp)}</span>
-                        </div>
-                    `;
-                }
-                
-                // Show modal
-                document.getElementById('detailModal').style.display = 'block';
-            }
-            
-            closeDetailModal() {
-                document.getElementById('detailModal').style.display = 'none';
-                this.selectedFeedback = null;
-            }
-            
-            markAsRead() {
-                if (!this.selectedFeedback) return;
-                
-                // In a real application, you would mark as read in your database
-                // For now, we'll just show a notification
-                this.showNotification('Marked as read', 'success');
-                this.closeDetailModal();
-            }
-            
-            replyToFeedback() {
-                if (!this.selectedFeedback) return;
-                
-                const email = this.selectedFeedback.email;
-                const subject = encodeURIComponent('Re: Your message to ArshCreates');
-                const body = encodeURIComponent(`Hi ${this.selectedFeedback.full_name},\n\nThank you for your message!`);
-                
-                window.open(`mailto:${email}?subject=${subject}&body=${body}`, '_blank');
-            }
-            
-            deleteFeedback(id) {
-                if (!confirm('Are you sure you want to delete this feedback? This action cannot be undone.')) {
-                    return;
-                }
-                
-                try {
-                    let success = false;
-                    
-                    if (typeof deleteFeedback === 'function') {
-                        success = deleteFeedback(id);
-                    } else {
-                        // Fallback deletion
-                        const index = this.feedback.findIndex(f => f.id === id);
-                        if (index > -1) {
-                            this.feedback.splice(index, 1);
-                            localStorage.setItem('portfolio_feedback', JSON.stringify(this.feedback));
-                            success = true;
-                        }
-                    }
-                    
-                    if (success) {
-                        this.loadFeedback();
-                        this.showNotification('Feedback deleted successfully', 'success');
-                        
-                        // Close detail modal if it's open for the deleted item
-                        if (this.selectedFeedback && this.selectedFeedback.id === id) {
-                            this.closeDetailModal();
-                        }
-                    } else {
-                        this.showNotification('Error deleting feedback', 'error');
-                    }
-                } catch (error) {
-                    console.error('Error deleting feedback:', error);
-                    this.showNotification('Error deleting feedback', 'error');
-                }
-            }
-            
-            exportToCSV() {
-                if (this.feedback.length === 0) {
-                    this.showNotification('No feedback to export', 'info');
-                    return;
-                }
-                
-                const headers = ['Name', 'Email', 'Phone', 'Type', 'Message', 'Date'];
-                const csvData = [
-                    headers.join(','),
-                    ...this.feedback.map(f => [
-                        `"${f.full_name.replace(/"/g, '""')}"`,
-                        `"${f.email}"`,
-                        `"${f.phone || ''}"`,
-                        `"${f.contact_type}"`,
-                        `"${f.comment.replace(/"/g, '""')}"`,
-                        `"${this.formatDate(f.timestamp)}"`
-                    ].join(','))
-                ].join('\n');
-                
-                const blob = new Blob([csvData], { type: 'text/csv' });
-                const url = window.URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `feedback-export-${new Date().toISOString().split('T')[0]}.csv`;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                window.URL.revokeObjectURL(url);
-                
-                this.showNotification('Feedback exported successfully', 'success');
-            }
-            
-            updateStats() {
-                const total = this.feedback.length;
-                const weekAgo = new Date();
-                weekAgo.setDate(weekAgo.getDate() - 7);
-                const recent = this.feedback.filter(f => new Date(f.timestamp) > weekAgo).length;
-                const projects = this.feedback.filter(f => f.contact_type === 'Project Inquiry').length;
-                
-                document.getElementById('totalMessages').textContent = total;
-                document.getElementById('recentMessages').textContent = recent;
-                document.getElementById('projectInquiries').textContent = projects;
-            }
-            
-            truncateText(text, maxLength) {
-                if (text.length <= maxLength) return text;
-                return text.substr(0, maxLength) + '...';
-            }
-            
-            formatDate(timestamp, full = false) {
-                const date = new Date(timestamp);
-                if (full) {
-                    return date.toLocaleString();
-                }
-                return date.toLocaleDateString();
-            }
-            
-            formatRelativeTime(timestamp) {
-                const date = new Date(timestamp);
-                const now = new Date();
-                const diffInHours = Math.floor((now - date) / (1000 * 60 * 60));
-                
-                if (diffInHours < 1) return 'Just now';
-                if (diffInHours < 24) return `${diffInHours}h ago`;
-                if (diffInHours < 168) return `${Math.floor(diffInHours / 24)}d ago`;
-                return this.formatDate(timestamp);
-            }
-            
-            showNotification(message, type = 'info') {
-                if (typeof showNotification === 'function') {
-                    showNotification(message, type);
-                } else {
-                    // Fallback notification
-                    alert(`${type.toUpperCase()}: ${message}`);
-                }
-            }
-        }
-        
-        // Initialize admin when DOM is ready
-        document.addEventListener('DOMContentLoaded', () => {
-            new FeedbackAdmin();
-            
-            // Initialize theme switcher if available
-            if (typeof initThemeSwitcher === 'function') {
-                initThemeSwitcher();
-            }
-        });
-    </script>
+    </div>
     
-    <style>
-        /* Admin-specific styles */
-        .admin-main {
-            padding: 120px 0 60px;
-            min-height: 100vh;
-        }
-        
-        .admin-stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 3rem;
-        }
-        
-        .stat-card {
-            background: var(--liquid-glass-bg);
-            border: 1px solid var(--liquid-glass-border);
-            backdrop-filter: blur(var(--liquid-glass-blur));
-            border-radius: var(--radius-lg);
-            padding: 2rem;
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-            transition: all var(--transition-smooth);
-        }
-        
-        .stat-card:hover {
-            transform: translateY(-5px);
-            border-color: var(--accent);
-            box-shadow: var(--shadow-glow);
-        }
-        
-        .stat-icon {
-            width: 60px;
-            height: 60px;
-            border-radius: var(--radius-lg);
-            background: var(--accent-light);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            color: var(--accent);
-        }
-        
-        .stat-info h3 {
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
-            color: var(--text-primary);
-        }
-        
-        .stat-info p {
-            color: var(--text-tertiary);
-            margin: 0;
-            font-size: 0.9rem;
-        }
-        
-        .admin-controls {
-            display: flex;
-            gap: 1.5rem;
-            align-items: end;
-            margin-bottom: 2rem;
-            flex-wrap: wrap;
-        }
-        
-        .filter-group {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-        
-        .filter-group label {
-            font-weight: 600;
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-        
-        .filter-group select {
-            padding: 0.75rem 1rem;
-            border-radius: var(--radius-sm);
-            border: 1px solid var(--glass-border);
-            background: var(--glass-bg);
-            color: var(--text-primary);
-            min-width: 150px;
-        }
-        
-        .feedback-table-container {
-            background: var(--liquid-glass-bg);
-            border: 1px solid var(--liquid-glass-border);
-            backdrop-filter: blur(var(--liquid-glass-blur));
-            border-radius: var(--radius-lg);
-            overflow: hidden;
-        }
-        
-        .feedback-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        
-        .feedback-table th {
-            background: var(--bg-secondary);
-            padding: 1.25rem 1rem;
-            text-align: left;
-            font-weight: 600;
-            color: var(--text-primary);
-            border-bottom: 1px solid var(--glass-border);
-        }
-        
-        .feedback-table td {
-            padding: 1rem;
-            border-bottom: 1px solid var(--glass-border);
-            vertical-align: middle;
-        }
-        
-        .feedback-table tr:last-child td {
-            border-bottom: none;
-        }
-        
-        .feedback-table tr:hover {
-            background: var(--glass-bg-hover);
-        }
-        
-        .name-cell {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-        
-        .user-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: var(--accent);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 600;
-            font-size: 0.9rem;
-        }
-        
-        .type-badge {
-            padding: 0.25rem 0.75rem;
-            border-radius: 50px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-        
-        .type-project-inquiry {
-            background: rgba(138, 155, 110, 0.2);
-            color: var(--success);
-        }
-        
-        .type-collaboration {
-            background: rgba(125, 143, 161, 0.2);
-            color: var(--info);
-        }
-        
-        .type-support {
-            background: rgba(201, 168, 106, 0.2);
-            color: var(--warning);
-        }
-        
-        .type-other {
-            background: rgba(184, 124, 109, 0.2);
-            color: var(--error);
-        }
-        
-        .message-preview {
-            color: var(--text-tertiary);
-            font-size: 0.9rem;
-            line-height: 1.4;
-        }
-        
-        .date-cell {
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            white-space: nowrap;
-        }
-        
-        .actions-cell {
-            display: flex;
-            gap: 0.5rem;
-            white-space: nowrap;
-        }
-        
-        .btn-icon {
-            width: 36px;
-            height: 36px;
-            border-radius: var(--radius-sm);
-            border: 1px solid var(--glass-border);
-            background: transparent;
-            color: var(--text-secondary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all var(--transition-smooth);
-        }
-        
-        .btn-icon:hover {
-            background: var(--accent);
-            border-color: var(--accent);
-            color: white;
-            transform: scale(1.1);
-        }
-        
-        .delete-btn:hover {
-            background: var(--error);
-            border-color: var(--error);
-        }
-        
-        .admin-modal {
-            max-width: 600px;
-            width: 90vw;
-        }
-        
-        .modal-body {
-            padding: 2rem 0;
-        }
-        
-        .detail-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
-        }
-        
-        .detail-item {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-        
-        .detail-item.full-width {
-            grid-column: 1 / -1;
-        }
-        
-        .detail-item label {
-            font-weight: 600;
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-        
-        .message-content {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--radius-sm);
-            padding: 1.5rem;
-            line-height: 1.6;
-            white-space: pre-wrap;
-        }
-        
-        @media (max-width: 768px) {
-            .admin-controls {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            
-            .filter-group {
-                width: 100%;
-            }
-            
-            .filter-group select {
-                width: 100%;
-            }
-            
-            .feedback-table {
-                display: block;
-                overflow-x: auto;
-            }
-            
-            .detail-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .name-cell {
-                flex-direction: column;
-                align-items: start;
-                gap: 0.5rem;
-            }
-            
-            .actions-cell {
-                flex-direction: column;
-            }
-        }
-    </style>
+    <footer>
+        <div class="container">
+            <p>Media Gallery Pro Admin Panel &copy; 2023</p>
+        </div>
+    </footer>
+    
+    <script src="script.js"></script>
 </body>
 </html>
