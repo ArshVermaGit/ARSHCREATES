@@ -7,8 +7,8 @@ const PORTFOLIO_DATA = {
             overview: 'High-speed dodging challenge to test your absolute precision',
             description: 'An intense flight game that challenges your piloting skills. Take control and master the narrow, hazard-filled canyon with precision dodging and nerves of steel.',
             image: 'images/games/game1.jpg',
-            game_folder: 'sky_surfers',
-            build_name: 'sky_surfers',
+            game_folder: '/games/sky_surfers',
+            build_name: '/games/sky_surfers',
             technologies: ['Unity', 'C#', '3D Modeling'],
             status: 'Playable'
         },
