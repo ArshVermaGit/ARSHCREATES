@@ -1,115 +1,173 @@
-// Video control functions
-function togglePlayPause() {
-    const videoPlayer = document.getElementById('videoPlayer');
-    if (videoPlayer) {
-        if (videoPlayer.paused) {
-            videoPlayer.play();
-            document.getElementById('playPauseIcon').className = 'fas fa-pause';
-            document.getElementById('playPauseText').textContent = 'Pause';
-        } else {
-            videoPlayer.pause();
-            document.getElementById('playPauseIcon').className = 'fas fa-play';
-            document.getElementById('playPauseText').textContent = 'Play';
-        }
-    }
-}
-
-function toggleMute() {
-    const videoPlayer = document.getElementById('videoPlayer');
-    if (videoPlayer) {
-        videoPlayer.muted = !videoPlayer.muted;
-        const muteIcon = document.getElementById('muteIcon');
-        const muteText = document.getElementById('muteText');
-        
-        if (videoPlayer.muted) {
-            muteIcon.className = 'fas fa-volume-mute';
-            muteText.textContent = 'Unmute';
-        } else {
-            muteIcon.className = 'fas fa-volume-up';
-            muteText.textContent = 'Mute';
-        }
-    }
-}
-
-// Utility functions
-function downloadMedia(url, filename) {
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-}
-
-function toggleFullscreen(type) {
-    alert(`${type} fullscreen mode would activate here`);
-    // In a real implementation, we would use the Fullscreen API
-}
-
-function exitFullscreen() {
-    openMedia(currentMediaType, currentMediaIndex, false);
-}
-
-function visitWebsite(url) {
-    window.open(url, '_blank');
-}
-
-function shareWebsite() {
-    if (navigator.share) {
-        navigator.share({
-            title: 'Media Gallery Pro',
-            text: 'Check out this amazing media gallery website!',
-            url: window.location.href
-        })
-        .catch(error => console.log('Error sharing:', error));
-    } else {
-        // Fallback for browsers that don't support the Web Share API
-        alert('Share this website: ' + window.location.href);
-    }
-}
-
-// Admin panel functionality
+// Theme toggle functionality
 document.addEventListener('DOMContentLoaded', function() {
-    // Settings form submission
-    const saveSettingsBtn = document.querySelector('.save-settings');
-    if (saveSettingsBtn) {
-        saveSettingsBtn.addEventListener('click', function() {
-            const siteTitle = document.getElementById('siteTitle').value;
-            const maxFileSize = document.getElementById('maxFileSize').value;
-            const autoPlay = document.getElementById('autoPlay').checked;
-            const allowDownloads = document.getElementById('allowDownloads').checked;
+    // Theme toggle
+    const themeBtn = document.getElementById('themeBtn');
+    const themeIcon = themeBtn.querySelector('i');
+    
+    // Load saved theme
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    themeIcon.className = savedTheme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
+    
+    // Theme toggle event
+    themeBtn.addEventListener('click', function() {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        
+        document.documentElement.setAttribute('data-theme', newTheme);
+        themeIcon.className = newTheme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
+        
+        // Save theme preference
+        localStorage.setItem('theme', newTheme);
+    });
+    
+    // Mobile navigation toggle
+    const navToggle = document.getElementById('navToggle');
+    const navMenu = document.getElementById('navMenu');
+    
+    navToggle.addEventListener('click', function() {
+        navToggle.classList.toggle('active');
+        navMenu.classList.toggle('active');
+    });
+    
+    // Close mobile menu when clicking on a link
+    const navLinks = document.querySelectorAll('.nav-menu a');
+    navLinks.forEach(link => {
+        link.addEventListener('click', function() {
+            navToggle.classList.remove('active');
+            navMenu.classList.remove('active');
+        });
+    });
+    
+    // Update current year in footer
+    document.getElementById('currentYear').textContent = new Date().getFullYear();
+    
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
             
-            // In a real application, you would save these settings to a server
-            alert('Settings saved successfully!');
+            const targetId = this.getAttribute('href');
+            if (targetId === '#') return;
             
-            // Update page title if changed
-            if (siteTitle) {
-                document.title = siteTitle + ' - Admin Panel';
-                const headerTitle = document.querySelector('header h1');
-                if (headerTitle) {
-                    headerTitle.textContent = siteTitle;
-                }
+            const targetElement = document.querySelector(targetId);
+            if (targetElement) {
+                const offsetTop = targetElement.offsetTop - 80;
+                window.scrollTo({
+                    top: offsetTop,
+                    behavior: 'smooth'
+                });
+            }
+        });
+    });
+    
+    // Navbar scroll effect
+    window.addEventListener('scroll', function() {
+        const navbar = document.getElementById('navbar');
+        if (window.scrollY > 50) {
+            navbar.style.background = 'rgba(10, 10, 10, 0.95)';
+            navbar.style.backdropFilter = 'blur(20px) saturate(180%)';
+        } else {
+            navbar.style.background = 'rgba(10, 10, 10, 0.85)';
+            navbar.style.backdropFilter = 'blur(20px) saturate(180%)';
+        }
+    });
+    
+    // Scroll indicator functionality
+    const scrollIndicator = document.querySelector('.scroll-indicator');
+    if (scrollIndicator) {
+        scrollIndicator.addEventListener('click', function() {
+            const aboutSection = document.getElementById('about');
+            if (aboutSection) {
+                const offsetTop = aboutSection.offsetTop - 80;
+                window.scrollTo({
+                    top: offsetTop,
+                    behavior: 'smooth'
+                });
             }
         });
     }
     
-    // Feedback actions
-    const feedbackActions = document.querySelectorAll('.feedback-actions .btn');
-    feedbackActions.forEach(btn => {
-        btn.addEventListener('click', function() {
-            const feedbackItem = this.closest('.feedback-item');
-            if (this.classList.contains('btn-primary')) {
-                // Reply button
-                const userName = feedbackItem.querySelector('.user-name').textContent;
-                const reply = prompt(`Enter your reply to ${userName}:`);
-                if (reply) {
-                    alert(`Reply sent to ${userName}: ${reply}`);
+    // Quick navigation functionality
+    const quickNav = document.getElementById('quickNav');
+    const quickNavBtns = document.querySelectorAll('.quick-nav-btn');
+    
+    if (quickNav && quickNavBtns.length) {
+        // Show quick nav after hero section
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    quickNav.classList.add('active');
                 }
-            } else {
-                // Mark as read button
-                feedbackItem.style.opacity = '0.7';
-                alert('Feedback marked as read');
+            });
+        }, { threshold: 0.1 });
+        
+        const aboutSection = document.getElementById('about');
+        if (aboutSection) {
+            observer.observe(aboutSection);
+        }
+        
+        // Quick nav button click handlers
+        quickNavBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const section = this.dataset.section;
+                if (section) {
+                    // Update active state
+                    quickNavBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Scroll to section
+                    const targetSection = document.getElementById(section);
+                    if (targetSection) {
+                        const offsetTop = targetSection.offsetTop - 80;
+                        window.scrollTo({
+                            top: offsetTop,
+                            behavior: 'smooth'
+                        });
+                    }
+                }
+            });
+        });
+        
+        // Update active state on scroll
+        window.addEventListener('scroll', function() {
+            const sections = ['games', 'websites', 'photos', 'videos'];
+            let currentSection = '';
+            
+            sections.forEach(section => {
+                const element = document.getElementById(section);
+                if (element) {
+                    const rect = element.getBoundingClientRect();
+                    if (rect.top <= 150 && rect.bottom >= 150) {
+                        currentSection = section;
+                    }
+                }
+            });
+            
+            if (currentSection) {
+                quickNavBtns.forEach(btn => {
+                    btn.classList.toggle('active', btn.dataset.section === currentSection);
+                });
             }
         });
+    }
+    
+    // Initialize animations on scroll
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.animation = 'fadeInUp 0.8s ease-out forwards';
+            }
+        });
+    }, observerOptions);
+
+    // Observe elements for animation
+    document.querySelectorAll('.portfolio-card, .about-text, .skills-container, .contact-card, .contact-form').forEach(el => {
+        observer.observe(el);
     });
 });
