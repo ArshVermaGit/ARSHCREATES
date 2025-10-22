@@ -1,43 +1,18 @@
-<!DOCTYPE html>
-<html lang="en" data-theme="dark">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Page Not Found - Portfolio</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-</head>
-<body>
-    <nav class="navbar">
-        <div class="nav-container">
-            <a href="index.html" class="logo">
-                <i class="fas fa-gem"></i>
-                <span>Portfolio</span>
-            </a>
-        </div>
-    </nav>
-
-    <section class="error-container">
-        <div class="container">
-            <i class="fas fa-exclamation-triangle error-icon"></i>
-            <h1 class="error-code">404</h1>
-            <h2 class="error-title">Page Not Found</h2>
-            <p class="error-message">
-                The page you're looking for doesn't exist or has been moved.
-            </p>
-            <div class="error-actions">
-                <a href="index.html" class="btn btn-primary">
-                    <i class="fas fa-home"></i>
-                    Back to Home
-                </a>
-                <a href="index.html#contact" class="btn btn-glass">
-                    <i class="fas fa-envelope"></i>
-                    Contact Support
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <script src="main.js"></script>
-</body>
-</html>
+{% extends "base.html" %}
+{% block title %}500 - Server Error{% endblock %}
+{% block content %}
+<section class="section glass-section center-content" style="min-height:70vh;">
+  <div class="container">
+    <div class="error-container">
+      <div class="error-icon error-server"><i class="fas fa-server"></i></div>
+      <h1 class="error-code error-red">500</h1>
+      <h3 class="error-title">Server Error</h3>
+      <p class="error-message">Something went wrong on our side. Please try again shortly.</p>
+      <div class="error-actions">
+        <a href="/" class="btn btn-primary"><i class="fas fa-home"></i> Home</a>
+        <button class="btn btn-glass" onclick="location.reload()"><i class="fas fa-redo"></i> Retry</button>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
