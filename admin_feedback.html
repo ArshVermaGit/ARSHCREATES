@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Admin Feedback - Arsh Verma Portfolio</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" href="images/favicon.ico">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        .admin-header {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.04) 100%);
+            border: 1.5px solid var(--glass-border);
+            backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+            border-radius: var(--radius-xl);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .admin-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.04) 100%);
+            border: 1.5px solid var(--glass-border);
+            backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            text-align: center;
+        }
+        
+        .stat-card i {
+            font-size: 2rem;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-card h3 {
+            font-size: 2rem;
+            margin: 0.5rem 0;
+        }
+        
+        .stat-card p {
+            color: var(--text-tertiary);
+            margin: 0;
+        }
+        
+        .filters {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.04) 100%);
+            border: 1.5px solid var(--glass-border);
+            backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .filter-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .feedback-table-container {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.04) 100%);
+            border: 1.5px solid var(--glass-border);
+            backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+            border-radius: var(--radius-xl);
+            padding: 2rem;
+            overflow-x: auto;
+        }
+        
+        .feedback-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .feedback-table th,
+        .feedback-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--glass-border);
+        }
+        
+        .feedback-table th {
+            font-weight: 600;
+            color: var(--accent);
+            white-space: nowrap;
+        }
+        
+        .feedback-table tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        
+        .badge-project { background: rgba(59, 130, 246, 0.2); color: #60a5fa; }
+        .badge-collaboration { background: rgba(16, 185, 129, 0.2); color: #34d399; }
+        .badge-support { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
+        .badge-other { background: rgba(139, 92, 246, 0.2); color: #a78bfa; }
+        
+        .action-btns {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .btn-icon-small {
+            width: 36px;
+            height: 36px;
+            padding: 0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--glass-border);
+            background: var(--bg-elevated);
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all var(--transition-smooth);
+        }
+        
+        .btn-icon-small:hover {
+            background: var(--accent-light);
+            color: var(--accent);
+            border-color: var(--accent);
+        }
+        
+        .btn-delete:hover {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+            border-color: #ef4444;
+        }
+        
+        .empty-state-admin {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+        
+        .empty-state-admin i {
+            font-size: 4rem;
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+        
+        .export-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--radius-lg);
+            background: var(--accent);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all var(--transition-smooth);
+        }
+        
+        .export-btn:hover {
+            background: var(--accent-secondary);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <i class="fas fa-code"></i>
+                <span>ArshCreates</span>
+            </a>
+            <div class="nav-actions">
+                <button id="themeBtn" class="btn-icon" aria-label="Toggle theme">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main id="main" style="margin-top: 100px;">
+        <section class="section">
+            <div class="container">
+                <div class="admin-header">
+                    <h1><i class="fas fa-envelope-open-text"></i> Feedback Management</h1>
+                    <p>View and manage all contact form submissions</p>
+                </div>
+
+                <div class="admin-stats" id="statsContainer">
+                    <div class="stat-card">
+                        <i class="fas fa-envelope"></i>
+                        <h3 id="totalCount">0</h3>
+                        <p>Total Messages</p>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-calendar-day"></i>
+                        <h3 id="todayCount">0</h3>
+                        <p>Today</p>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-calendar-week"></i>
+                        <h3 id="weekCount">0</h3>
+                        <p>This Week</p>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-calendar-alt"></i>
+                        <h3 id="monthCount">0</h3>
+                        <p>This Month</p>
+                    </div>
+                </div>
+
+                <div class="filters">
+                    <h3>Filters</h3>
+                    <div class="filter-group">
+                        <input type="text" id="searchInput" class="form-input" placeholder="Search name, email, or message...">
+                        <select id="typeFilter" class="form-select">
+                            <option value="">All Types</option>
+                            <option value="Project Inquiry">Project Inquiry</option>
+                            <option value="Collaboration">Collaboration</option>
+                            <option value="Support">Support</option>
+                            <option value="Other">Other</option>
+                        </select>
+                        <select id="dateFilter" class="form-select">
+                            <option value="">All Time</option>
+                            <option value="today">Today</option>
+                            <option value="week">This Week</option>
+                            <option value="month">This Month</option>
+                        </select>
+                        <button onclick="exportToCSV()" class="export-btn">
+                            <i class="fas fa-download"></i> Export CSV
+                        </button>
+                    </div>
+                </div>
+
+                <div class="feedback-table-container">
+                    <div id="feedbackTableWrapper">
+                        <!-- Table will be inserted here -->
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-brand"><i class="fas fa-code"></i><span>ArshCreates</span></div>
+                <p class="muted">Admin Panel - Feedback Management</p>
+            </div>
+        </div>
+        <div class="container footer-bottom">
+            <span>&copy; <span id="currentYear"></span> Arsh Verma. All Rights Reserved.</span>
+        </div>
+    </footer>
+
+    <div id="notificationContainer"></div>
+
+    <script src="js/data.js"></script>
+    <script src="js/script.js"></script>
+    <script>
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        let allFeedback = [];
+
+        function loadFeedback() {
+            allFeedback = getAllFeedback();
+            updateStats();
+            renderTable(allFeedback);
+        }
+
+        function updateStats() {
+            const now = new Date();
+            const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            const weekAgo = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
+            const monthAgo = new Date(today.getTime() - 30 * 24 * 60 * 60 * 1000);
+
+            const todayCount = allFeedback.filter(f => new Date(f.timestamp) >= today).length;
+            const weekCount = allFeedback.filter(f => new Date(f.timestamp) >= weekAgo).length;
+            const monthCount = allFeedback.filter(f => new Date(f.timestamp) >= monthAgo).length;
+
+            document.getElementById('totalCount').textContent = allFeedback.length;
+            document.getElementById('todayCount').textContent = todayCount;
+            document.getElementById('weekCount').textContent = weekCount;
+            document.getElementById('monthCount').textContent = monthCount;
+        }
+
+        function renderTable(feedback) {
+            const wrapper = document.getElementById('feedbackTableWrapper');
+            
+            if (feedback.length === 0) {
+                wrapper.innerHTML = `
+                    <div class="empty-state-admin">
+                        <i class="fas fa-inbox"></i>
+                        <h3>No Feedback Yet</h3>
+                        <p>Feedback submissions will appear here</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const table = document.createElement('table');
+            table.className = 'feedback-table';
+            table.innerHTML = `
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Type</th>
+                        <th>Message</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${feedback.map(f => {
+                        const date = new Date(f.timestamp);
+                        const formattedDate = date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+                        const badgeClass = `badge-${f.contact_type.toLowerCase().replace(' ', '-')}`;
+                        
+                        return `
+                            <tr>
+                                <td style="white-space: nowrap;">${formattedDate}</td>
+                                <td>${f.full_name}</td>
+                                <td>${f.email}</td>
+                                <td>${f.phone}</td>
+                                <td><span class="badge ${badgeClass}">${f.contact_type}</span></td>
+                                <td style="max-width: 300px;">${f.comment}</td>
+                                <td>
+                                    <div class="action-btns">
+                                        <button class="btn-icon-small" onclick="viewFeedback('${f.id}')" title="View">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="btn-icon-small btn-delete" onclick="deleteFeedbackItem('${f.id}')" title="Delete">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        `;
+                    }).join('')}
+                </tbody>
+            `;
+            
+            wrapper.innerHTML = '';
+            wrapper.appendChild(table);
+        }
+
+        function filterFeedback() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const typeFilter = document.getElementById('typeFilter').value;
+            const dateFilter = document.getElementById('dateFilter').value;
+
+            let filtered = [...allFeedback];
+
+            // Search filter
+            if (searchTerm) {
+                filtered = filtered.filter(f => 
+                    f.full_name.toLowerCase().includes(searchTerm) ||
+                    f.email.toLowerCase().includes(searchTerm) ||
+                    f.comment.toLowerCase().includes(searchTerm)
+                );
+            }
+
+            // Type filter
+            if (typeFilter) {
+                filtered = filtered.filter(f => f.contact_type === typeFilter);
+            }
+
+            // Date filter
+            if (dateFilter) {
+                const now = new Date();
+                const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+                
+                if (dateFilter === 'today') {
+                    filtered = filtered.filter(f => new Date(f.timestamp) >= today);
+                } else if (dateFilter === 'week') {
+                    const weekAgo = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
+                    filtered = filtered.filter(f => new Date(f.timestamp) >= weekAgo);
+                } else if (dateFilter === 'month') {
+                    const monthAgo = new Date(today.getTime() - 30 * 24 * 60 * 60 * 1000);
+                    filtered = filtered.filter(f => new Date(f.timestamp) >= monthAgo);
+                }
+            }
+
+            renderTable(filtered);
+        }
+
+        function viewFeedback(id) {
+            const feedback = allFeedback.find(f => f.id === id);
+            if (!feedback) return;
+
+            const message = `
+Name: ${feedback.full_name}
+Email: ${feedback.email}
+Phone: ${feedback.phone}
+Type: ${feedback.contact_type}
+Date: ${new Date(feedback.timestamp).toLocaleString()}
+
+Message:
+${feedback.comment}
+            `;
+
+            alert(message);
+        }
+
+        function deleteFeedbackItem(id) {
+            if (!confirm('Are you sure you want to delete this feedback?')) return;
+
+            deleteFeedback(id);
+            loadFeedback();
+            showNotification('Feedback deleted successfully', 'success');
+        }
+
+        function exportToCSV() {
+            const searchTerm = document.getElementById('searchInput').value;
+            const typeFilter = document.getElementById('typeFilter').value;
+            const dateFilter = document.getElementById('dateFilter').value;
+
+            // Get filtered data
+            filterFeedback();
+            
+            let csvContent = "Date,Name,Email,Phone,Type,Message\n";
+            
+            allFeedback.forEach(f => {
+                const date = new Date(f.timestamp).toLocaleString();
+                const row = [
+                    date,
+                    f.full_name,
+                    f.email,
+                    f.phone,
+                    f.contact_type,
+                    `"${f.comment.replace(/"/g, '""')}"`
+                ].join(',');
+                csvContent += row + "\n";
+            });
+
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `feedback_${new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
+            window.URL.revokeObjectURL(url);
+            
+            showNotification('CSV exported successfully', 'success');
+        }
+
+        function showNotification(message, type = 'info') {
+            const container = document.getElementById('notificationContainer');
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            
+            const icon = type === 'success' ? 'fa-check-circle' : 
+                         type === 'error' ? 'fa-exclamation-circle' : 
+                         'fa-info-circle';
+            
+            const title = type === 'success' ? 'Success' : 
+                          type === 'error' ? 'Error' : 
+                          'Info';
+            
+            notification.innerHTML = `
+                <div class="notification-content">
+                    <div class="notification-icon">
+                        <i class="fas ${icon}"></i>
+                    </div>
+                    <div class="notification-text">
+                        <h4>${title}</h4>
+                        <p>${message}</p>
+                    </div>
+                </div>
+            `;
+            
+            container.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideInRight 0.3s ease-out reverse';
+                setTimeout(() => notification.remove(), 300);
+            }, 5000);
+        }
+
+        // Event listeners
+        document.getElementById('searchInput').addEventListener('input', filterFeedback);
+        document.getElementById('typeFilter').addEventListener('change', filterFeedback);
+        document.getElementById('dateFilter').addEventListener('change', filterFeedback);
+
+        // Load feedback on page load
+        loadFeedback();
+    </script>
+</body>
+</html>
