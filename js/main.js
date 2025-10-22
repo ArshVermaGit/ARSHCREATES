@@ -14,87 +14,12 @@ document.addEventListener('DOMContentLoaded', function() {
     initPortfolioCards();
     initContactForm();
     initModalEvents();
-    initQuickNavigation();
-    
-    // Remove quick actions initialization since we're moving buttons to modals
-    const quickActions = document.getElementById('quickActions');
-    if (quickActions) {
-        quickActions.style.display = 'none';
-    }
     
     // Initialize portfolio if not already done
     if (typeof initializePortfolio === 'function') {
         setTimeout(initializePortfolio, 100);
     }
 });
-
-// =============================================================================
-// QUICK NAVIGATION INITIALIZATION
-// =============================================================================
-function initQuickNavigation() {
-    const quickNav = document.getElementById('quickNav');
-    const quickNavBtns = document.querySelectorAll('.quick-nav-btn');
-    
-    if (!quickNav || !quickNavBtns.length) return;
-    
-    // Show quick nav after hero section
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                quickNav.classList.add('active');
-            }
-        });
-    }, { threshold: 0.1 });
-    
-    const aboutSection = document.getElementById('about');
-    if (aboutSection) {
-        observer.observe(aboutSection);
-    }
-    
-    // Quick nav button click handlers
-    quickNavBtns.forEach(btn => {
-        btn.addEventListener('click', function() {
-            const section = this.dataset.section;
-            if (section) {
-                // Update active state
-                quickNavBtns.forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-                
-                // Scroll to section
-                const targetSection = document.getElementById(section);
-                if (targetSection) {
-                    const offsetTop = targetSection.offsetTop - 80;
-                    window.scrollTo({
-                        top: offsetTop,
-                        behavior: 'smooth'
-                    });
-                }
-            }
-        });
-    });
-    
-    // Update active state on scroll
-    window.addEventListener('scroll', function() {
-        const sections = ['games', 'websites', 'photos', 'videos'];
-        let currentSection = '';
-        
-        sections.forEach(section => {
-            const element = document.getElementById(section);
-            if (element) {
-                const rect = element.getBoundingClientRect();
-                if (rect.top <= 150 && rect.bottom >= 150) {
-                    currentSection = section;
-                }
-            }
-        });
-        
-        if (currentSection) {
-            quickNavBtns.forEach(btn => {
-                btn.classList.toggle('active', btn.dataset.section === currentSection);
-            });
-        }
-    });
-}
 
 // =============================================================================
 // MODAL EVENT LISTENERS INITIALIZATION
