@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initSmoothScrolling();
     initDynamicEffects();
     initPortfolioSectionObserver();
+    initSidePanel(); // New: Initialize side panel
     
     // Set current year
     const yearElement = document.getElementById('currentYear');
@@ -122,17 +123,6 @@ function initNavigation() {
 // SMOOTH SCROLLING
 // =============================================================================
 function initSmoothScrolling() {
-    // Scroll indicator
-    const scrollIndicator = document.querySelector('.scroll-indicator');
-    if (scrollIndicator) {
-        scrollIndicator.addEventListener('click', function() {
-            const aboutSection = document.getElementById('about');
-            if (aboutSection) {
-                aboutSection.scrollIntoView({ behavior: 'smooth' });
-            }
-        });
-    }
-    
     // Enhanced smooth scrolling for all anchor links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
@@ -170,24 +160,49 @@ function initSmoothScrolling() {
 // SCROLL ANIMATIONS
 // =============================================================================
 function initScrollAnimations() {
-    const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-    };
+    const elements = document.querySelectorAll('.section, .portfolio-card');
     
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                entry.target.classList.add('animate-in');
-                observer.unobserve(entry.target);
+                entry.target.classList.add('in-view');
             }
         });
-    }, observerOptions);
+    }, { threshold: 0.1 });
     
-    // Observe elements for animation
-    const animateElements = document.querySelectorAll('.portfolio-card, .float-card, .skill-item, .contact-card');
-    animateElements.forEach(el => {
-        observer.observe(el);
+    elements.forEach(el => observer.observe(el));
+}
+
+// =============================================================================
+// DYNAMIC EFFECTS
+// =============================================================================
+function initDynamicEffects() {
+    // Parallax effect for hero visual
+    const heroVisual = document.querySelector('.hero-visual');
+    if (heroVisual) {
+        window.addEventListener('scroll', throttle(() => {
+            const scroll = window.scrollY;
+            heroVisual.style.transform = `translateY(${scroll * 0.2}px)`;
+        }, 16));
+    }
+    
+    // Card hover effects
+    const cards = document.querySelectorAll('.portfolio-card, .float-card, .skill-card');
+    cards.forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left - rect.width / 2;
+            const mouseY = e.clientY - rect.top - rect.height / 2;
+            
+            const rotateY = (mouseX / rect.width) * 10;
+            const rotateX = (mouseY / rect.height) * 10;
+            
+            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+        });
+        
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
+        });
     });
 }
 
@@ -195,76 +210,81 @@ function initScrollAnimations() {
 // PORTFOLIO SECTION OBSERVER
 // =============================================================================
 function initPortfolioSectionObserver() {
-    const sections = document.querySelectorAll('.portfolio-section');
-    if (!sections.length) return;
-    
+    const sections = document.querySelectorAll('.section');
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                entry.target.classList.add('active-section');
+                entry.target.classList.add('visible');
             }
         });
-    }, {
-        threshold: 0.15,
-        rootMargin: '-10% 0px -10% 0px'
-    });
+    }, { threshold: 0.2 });
     
-    sections.forEach(section => {
-        observer.observe(section);
-    });
+    sections.forEach(section => observer.observe(section));
 }
 
 // =============================================================================
-// DYNAMIC EFFECTS
+// SIDE PANEL INITIALIZATION (NEW)
 // =============================================================================
-function initDynamicEffects() {
-    // Parallax effect for hero background
-    window.addEventListener('scroll', function() {
-        const scrolled = window.pageYOffset;
-        const parallax = document.querySelector('.hero');
-        
-        if (parallax) {
-            parallax.style.transform = `translateY(${scrolled * 0.5}px)`;
-        }
-    });
+function initSidePanel() {
+    const sidePanel = document.getElementById('sidePanel');
+    const sideBtns = document.querySelectorAll('.side-panel-btn');
     
-    // Mouse move effects for interactive elements
-    document.addEventListener('mousemove', function(e) {
-        const cards = document.querySelectorAll('.portfolio-card, .float-card');
-        const mouseX = e.clientX / window.innerWidth;
-        const mouseY = e.clientY / window.innerHeight;
-        
-        cards.forEach(card => {
-            const rect = card.getBoundingClientRect();
-            const cardCenterX = rect.left + rect.width / 2;
-            const cardCenterY = rect.top + rect.height / 2;
-            
-            const distanceX = Math.abs(e.clientX - cardCenterX);
-            const distanceY = Math.abs(e.clientY - cardCenterY);
-            
-            if (distanceX < 200 && distanceY < 200) {
-                const rotateY = (mouseX - 0.5) * 10;
-                const rotateX = (0.5 - mouseY) * 10;
+    if (!sidePanel || !sideBtns.length) return;
+    
+    // Show panel on mouse near right edge
+    document.addEventListener('mousemove', debounce((e) => {
+        const triggerZone = 50; // pixels from right edge
+        if (window.innerWidth - e.clientX < triggerZone) {
+            sidePanel.classList.add('active');
+        } else {
+            sidePanel.classList.remove('active');
+        }
+    }, 100));
+    
+    // Button click handlers
+    sideBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const section = this.dataset.section;
+            if (section) {
+                // Update active state
+                sideBtns.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
                 
-                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
-            } else {
-                card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
+                // Scroll to section
+                const targetSection = document.getElementById(section);
+                if (targetSection) {
+                    const navbarHeight = document.getElementById('navbar')?.offsetHeight || 0;
+                    const offsetTop = targetSection.offsetTop - navbarHeight - 20;
+                    window.scrollTo({
+                        top: offsetTop,
+                        behavior: 'smooth'
+                    });
+                }
             }
         });
     });
     
-    // Add hover sounds for interactive elements (optional)
-    const interactiveElements = document.querySelectorAll('.btn, .portfolio-card, .quick-action-btn');
-    interactiveElements.forEach(el => {
-        el.addEventListener('mouseenter', function() {
-            // You could add sound effects here if desired
-            this.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+    // Update active state on scroll
+    window.addEventListener('scroll', throttle(() => {
+        const sections = ['games', 'websites', 'photos', 'videos'];
+        let currentSection = '';
+        
+        sections.forEach(sectionId => {
+            const element = document.getElementById(sectionId);
+            if (element) {
+                const rect = element.getBoundingClientRect();
+                if (rect.top <= 150 && rect.bottom >= 150) {
+                    currentSection = sectionId;
+                }
+            }
         });
         
-        el.addEventListener('mouseleave', function() {
-            this.style.transition = 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
-        });
-    });
+        if (currentSection) {
+            sideBtns.forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.section === currentSection);
+            });
+        }
+    }, 100));
 }
 
 // =============================================================================
@@ -284,7 +304,6 @@ function debounce(func, wait, immediate) {
     };
 }
 
-// Throttle function for scroll events
 function throttle(func, limit) {
     let inThrottle;
     return function(...args) {
@@ -417,5 +436,8 @@ window.initAccessibility = initAccessibility;
 window.registerServiceWorker = registerServiceWorker;
 window.initAnalytics = initAnalytics;
 
-// Initialize lazy loading when DOM is ready
-document.addEventListener('DOMContentLoaded', initLazyLoading);
+// Initialize additional features
+initLazyLoading();
+initAccessibility();
+registerServiceWorker();
+initAnalytics();
