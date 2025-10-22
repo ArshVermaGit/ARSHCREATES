@@ -3424,7 +3424,7 @@ main {
     background: rgba(255, 255, 255, 0.2);
     border-radius: 3px;
     outline: none;
-    -webkit-appearance: none;
+    appearance: none;
 }
 
 .progress-bar::-webkit-slider-thumb {
