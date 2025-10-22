@@ -13,6 +13,28 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
+    <!-- Quick Navigation Bar -->
+    <div class="quick-nav" id="quickNav">
+        <div class="quick-nav-items">
+            <button class="quick-nav-btn active" data-section="games">
+                <i class="fas fa-gamepad"></i>
+                <span>Games</span>
+            </button>
+            <button class="quick-nav-btn" data-section="websites">
+                <i class="fas fa-laptop-code"></i>
+                <span>Websites</span>
+            </button>
+            <button class="quick-nav-btn" data-section="photos">
+                <i class="fas fa-camera"></i>
+                <span>Photos</span>
+            </button>
+            <button class="quick-nav-btn" data-section="videos">
+                <i class="fas fa-video"></i>
+                <span>Videos</span>
+            </button>
+        </div>
+    </div>
+
     <!-- Navbar -->
     <nav class="navbar" id="navbar">
         <div class="nav-container">
@@ -83,6 +105,10 @@
                     </div>
                 </div>
             </div>
+            <div class="scroll-indicator">
+                <span>About Me</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
         </section>
 
         <!-- ABOUT SECTION -->
@@ -98,32 +124,32 @@
                         <p>My work spans game development, modern web design, professional photography, and cinematic videography. This diverse foundation ensures I approach your vision holistically, making certain every element—from the code logic to the final visual flair—tells a cohesive and powerful story.</p>
                         <p>I don't just execute tasks; I build innovative, human-centered solutions. I achieve this by merging my technical discipline with artistic sensitivity, focusing on user experience above all else. I'm actively looking for partners ready to push creative boundaries alongside me, whether that's through a groundbreaking game or a visually stunning website. Let's turn your next vision into a powerful digital reality together.</p>
                     </div>
-                    <div class="skills-column">
-                        <h3 class="skills-title">My Toolkit</h3>
+                    <div class="skills-container">
+                        <h3>Core Expertise</h3>
                         <div class="skills-grid">
-                            <div class="skill-card">
+                            <div class="skill-item">
                                 <i class="fab fa-unity"></i>
-                                <span>Unity Game Engine</span>
+                                <span>Unity</span>
                             </div>
-                            <div class="skill-card">
-                                <i class="fab fa-html5"></i>
-                                <span>HTML/CSS/JS</span>
+                            <div class="skill-item">
+                                <i class="fas fa-code"></i>
+                                <span>C#</span>
                             </div>
-                            <div class="skill-card">
-                                <i class="fas fa-camera-retro"></i>
-                                <span>Adobe Suite</span>
+                            <div class="skill-item">
+                                <i class="fab fa-python"></i>
+                                <span>Python</span>
                             </div>
-                            <div class="skill-card">
-                                <i class="fas fa-video"></i>
-                                <span>Video Editing</span>
+                            <div class="skill-item">
+                                <i class="fas fa-code"></i>
+                                <span>HTML</span>
                             </div>
-                            <div class="skill-card">
-                                <i class="fab fa-react"></i>
-                                <span>React.js</span>
+                            <div class="skill-item">
+                                <i class="fas fa-camera"></i>
+                                <span>Photos</span>
                             </div>
-                            <div class="skill-card">
-                                <i class="fas fa-blender"></i>
-                                <span>Blender 3D</span>
+                            <div class="skill-item">
+                                <i class="fas fa-play"></i>
+                                <span>Videos</span>
                             </div>
                         </div>
                     </div>
@@ -131,132 +157,139 @@
             </div>
         </section>
 
-        <!-- GAMES SECTION -->
-        <section id="games" class="section">
+        <!-- PORTFOLIO SECTIONS -->
+        <section id="games" class="section portfolio-section active-section">
             <div class="container">
                 <div class="section-header">
                     <span class="section-tag">Games</span>
-                    <h2 class="section-title">Interactive Experiences</h2>
-                    <p class="section-description">Immersive games built with Unity, focusing on engaging gameplay and stunning visuals.</p>
+                    <h2 class="section-title">Game Showcase</h2>
+                    <p class="section-description">See the digital gaming experience I create for you</p>
                 </div>
                 <div class="portfolio-grid" id="gamesGrid">
-                    <!-- Games rendered dynamically -->
+                    <!-- Games will be injected here by JavaScript -->
                 </div>
             </div>
         </section>
 
-        <!-- WEBSITES SECTION -->
-        <section id="websites" class="section">
+        <section id="websites" class="section portfolio-section">
             <div class="container">
                 <div class="section-header">
                     <span class="section-tag">Websites</span>
-                    <h2 class="section-title">Digital Solutions</h2>
-                    <p class="section-description">Modern, responsive websites that deliver seamless user experiences.</p>
+                    <h2 class="section-title">Website Showcase</h2>
+                    <p class="section-description">My commitment: Modern, responsive web solutions, every time</p>
                 </div>
-                <div class="portfolio-grid" id="websitesGrid">
-                    <!-- Websites rendered dynamically -->
+                <div class="portfolio-grid websites-grid" id="websitesGrid">
+                    <!-- Websites will be injected here by JavaScript -->
                 </div>
             </div>
         </section>
 
-        <!-- PHOTOS SECTION -->
-        <section id="photos" class="section">
+        <section id="photos" class="section portfolio-section">
             <div class="container">
                 <div class="section-header">
                     <span class="section-tag">Photography</span>
-                    <h2 class="section-title">Captured Moments</h2>
-                    <p class="section-description">Professional photographs showcasing artistic vision and technical skill.</p>
+                    <h2 class="section-title">The Captured Moment</h2>
+                    <p class="section-description">Capturing moments and emotions through my lens</p>
                 </div>
                 <div class="portfolio-grid" id="photosGrid">
-                    <!-- Photos rendered dynamically -->
+                    <!-- Photos will be injected here by JavaScript -->
                 </div>
             </div>
         </section>
 
-        <!-- VIDEOS SECTION -->
-        <section id="videos" class="section">
+        <section id="videos" class="section portfolio-section">
             <div class="container">
                 <div class="section-header">
                     <span class="section-tag">Videography</span>
-                    <h2 class="section-title">Moving Stories</h2>
-                    <p class="section-description">Cinematic videos that tell compelling narratives.</p>
+                    <h2 class="section-title">My Visual Narratives</h2>
+                    <p class="section-description">Dynamic storytelling through video and animation</p>
                 </div>
                 <div class="portfolio-grid" id="videosGrid">
-                    <!-- Videos rendered dynamically -->
+                    <!-- Videos will be injected here by JavaScript -->
                 </div>
             </div>
         </section>
 
         <!-- CONTACT SECTION -->
-        <section id="contact" class="section contact-section">
-            <div class="container">
-                <div class="section-header">
-                    <span class="section-tag">Get in Touch</span>
-                    <h2 class="section-title">Let's Collaborate</h2>
-                    <p class="section-description">I'm open to new projects and opportunities. Drop me a message!</p>
-                </div>
-                <div class="contact-grid">
-                    <div class="contact-form">
-                        <form id="contactForm">
-                            <div class="form-group">
-                                <label for="full_name">Full Name</label>
-                                <input type="text" id="full_name" name="full_name" required placeholder="Enter your name">
-                            </div>
-                            <div class="form-group">
-                                <label for="email">Email Address</label>
-                                <input type="email" id="email" name="email" required placeholder="your.email@example.com">
-                            </div>
-                            <div class="form-group">
-                                <label for="phone">Phone Number (Optional)</label>
-                                <input type="tel" id="phone" name="phone" placeholder="+1 (123) 456-7890">
-                            </div>
-                            <div class="form-group">
-                                <label for="contact_type">Contact Type</label>
-                                <select id="contact_type" name="contact_type" required>
-                                    <option value="">Select type</option>
-                                    <option value="Project Inquiry">Project Inquiry</option>
-                                    <option value="Collaboration">Collaboration</option>
-                                    <option value="Support">Support</option>
-                                    <option value="Other">Other</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="comment">Your Message</label>
-                                <textarea id="comment" name="comment" rows="6" required placeholder="Tell me about your project or ideas..."></textarea>
-                            </div>
-                            <button type="submit" class="btn btn-primary full-width">Send Message</button>
-                        </form>
-                    </div>
-                    <div class="contact-info">
-                        <div class="info-card">
-                            <i class="fas fa-envelope"></i>
-                            <div>
-                                <h4>Email</h4>
-                                <a href="mailto:arshvermadev@gmail.com">arshvermadev@gmail.com</a>
-                            </div>
-                        </div>
-                        <div class="info-card">
-                            <i class="fab fa-linkedin"></i>
-                            <div>
-                                <h4>LinkedIn</h4>
-                                <a href="https://linkedin.com/in/arshvermadev/" target="_blank">Connect with me</a>
-                            </div>
-                        </div>
-                        <div class="info-card">
-                            <i class="fab fa-github"></i>
-                            <div>
-                                <h4>GitHub</h4>
-                                <a href="https://github.com/ArshVermaGit" target="_blank">View my work</a>
-                            </div>
-                        </div>
-                        <div class="admin-link">
-                            <a href="admin_feedback.html" class="btn btn-glass full-width">
-                                <i class="fas fa-lock"></i> Admin Panel
-                            </a>
-                        </div>
-                    </div>
-                </div>
+        <section id="contact" class="contact-section">
+          <div class="contact-container">
+            <div class="contact-header">
+              <h2 class="section-title">Let's connect!</h2>
+              <p class="section-subtitle">
+                I love hearing about creative ideas. Drop me a line if you have a project in mind, a potential collaboration, or just want to chat about tech and design.
+              </p>
             </div>
+
+            <div class="contact-grid">
+              <!-- Contact Form -->
+              <div class="contact-form-wrapper">
+                <form class="contact-form" id="contactForm">
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label for="full_name"><i class="fas fa-user"></i> Full Name *</label>
+                      <input type="text" id="full_name" name="full_name" class="form-input" placeholder="Enter your full name" required>
+                    </div>
+                    <div class="form-group">
+                      <label for="email"><i class="fas fa-envelope"></i> Email Address *</label>
+                      <input type="email" id="email" name="email" class="form-input" placeholder="your.email@example.com" required>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="phone"><i class="fas fa-phone"></i> Phone Number</label>
+                    <input type="tel" id="phone" name="phone" class="form-input" placeholder="+1 (555) 123-4567">
+                  </div>
+
+                  <div class="form-group">
+                    <label for="contact_type"><i class="fas fa-list"></i> Contact Reason *</label>
+                    <select id="contact_type" name="contact_type" class="form-select" required>
+                      <option value="">Select a reason</option>
+                      <option value="Project Inquiry">Project Inquiry</option>
+                      <option value="Collaboration">Collaboration</option>
+                      <option value="Support">Support</option>
+                      <option value="Other">Other</option>
+                    </select>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="comment"><i class="fas fa-comment"></i> Message *</label>
+                    <textarea id="comment" name="comment" class="form-textarea" placeholder="Tell me about your project or inquiry..." required></textarea>
+                  </div>
+
+                  <button type="submit" class="submit-btn" id="submitBtn">
+                    <i class="fas fa-paper-plane"></i> Send Message
+                  </button>
+                </form>
+              </div>
+
+              <!-- Contact Links -->
+              <div class="contact-info">
+                <div class="contact-card">
+                  <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+                  <div class="contact-details">
+                    <h4>Email</h4>
+                    <a href="mailto:arshvermadev@gmail.com">arshvermadev@gmail.com</a>
+                  </div>
+                </div>
+
+                <div class="contact-card">
+                  <div class="contact-icon"><i class="fab fa-linkedin-in"></i></div>
+                  <div class="contact-details">
+                    <h4>LinkedIn</h4>
+                    <a href="https://linkedin.com/in/arshvermadev/" target="_blank" rel="noopener">Connect with me</a>
+                  </div>
+                </div>
+
+                <div class="contact-card">
+                  <div class="contact-icon"><i class="fab fa-github"></i></div>
+                  <div class="contact-details">
+                    <h4>GitHub</h4>
+                    <a href="https://github.com/ArshVermaGit" target="_blank" rel="noopener">View my work</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </section>
     </main>
 
@@ -275,63 +308,34 @@
             </div>
         </div>
         <div class="container footer-bottom">
-            <span>&copy; <span id="currentYear">2025</span> Arsh Verma. All Rights Reserved.</span>
+            <span>&copy; <span id="currentYear"></span> Arsh Verma. All Rights Reserved.</span>
         </div>
     </footer>
 
-    <!-- Portfolio Modal -->
-    <div class="modal-overlay" id="portfolioModal">
+    <!-- ENHANCED UNIFIED MODAL -->
+    <div class="portfolio-modal" id="portfolioModal">
+        <div class="modal-overlay"></div>
         <div class="modal-container">
-            <button class="modal-close" id="modalClose">
+            <button class="modal-close" id="closeModal" aria-label="Close modal">
                 <i class="fas fa-times"></i>
             </button>
-            <button class="modal-nav modal-prev" id="modalPrev">
+            
+            <!-- Navigation Arrows -->
+            <button class="modal-nav modal-prev" id="modalPrev" aria-label="Previous item">
                 <i class="fas fa-chevron-left"></i>
             </button>
-            <button class="modal-nav modal-next" id="modalNext">
+            <button class="modal-nav modal-next" id="modalNext" aria-label="Next item">
                 <i class="fas fa-chevron-right"></i>
             </button>
-            
-            <div class="modal-grid">
-                <div class="modal-media">
-                    <!-- Website Preview -->
-                    <div id="websitePreview">
-                        <iframe id="websiteIframe" src="" frameborder="0"></iframe>
-                    </div>
-                    
-                    <!-- Game Preview -->
-                    <div id="gamePreview">
-                        <div class="game-overlay">
-                            <button class="modal-play-btn" id="playItemBtn">
-                                <i class="fas fa-play"></i>
-                                <span>Play Game</span>
-                            </button>
-                        </div>
-                        
-                        <!-- Enhanced Game Container -->
-                        <div class="modal-game" id="gameContainer">
-                            <canvas id="unity-canvas"></canvas>
-                            <div class="game-controls-overlay">
-                                <div class="game-controls">
-                                    <button class="game-control-btn" id="gameFullscreenBtn">
-                                        <i class="fas fa-expand"></i>
-                                    </button>
-                                    <button class="game-control-btn" id="gameRestartBtn">
-                                        <i class="fas fa-redo"></i>
-                                    </button>
-                                    <button class="game-control-btn" id="gameMuteBtn">
-                                        <i class="fas fa-volume-up"></i>
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="game-loading" id="gameLoading">
-                                <div class="loading-spinner"></div>
-                                <p>Loading Game...</p>
-                                <div class="loading-bar">
-                                    <div class="loading-progress" id="loadingProgress"></div>
-                                </div>
-                            </div>
-                        </div>
+
+            <div class="modal-content">
+                <div class="modal-preview">
+                    <div id="itemPreview">
+                        <img src="" alt="Preview" id="previewImage">
+                        <button class="modal-play-btn" id="playItemBtn">
+                            <i class="fas fa-play"></i>
+                            <span>Play Game</span>
+                        </button>
                     </div>
                     
                     <!-- Enhanced Photo Viewer -->
@@ -381,6 +385,31 @@
                             </div>
                         </div>
                     </div>
+                    
+                    <!-- Enhanced Game Container -->
+                    <div class="modal-game" id="gameContainer">
+                        <canvas id="unity-canvas"></canvas>
+                        <div class="game-controls-overlay">
+                            <div class="game-controls">
+                                <button class="game-control-btn" id="gameFullscreenBtn">
+                                    <i class="fas fa-expand"></i>
+                                </button>
+                                <button class="game-control-btn" id="gameRestartBtn">
+                                    <i class="fas fa-redo"></i>
+                                </button>
+                                <button class="game-control-btn" id="gameMuteBtn">
+                                    <i class="fas fa-volume-up"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="game-loading" id="gameLoading">
+                            <div class="loading-spinner"></div>
+                            <p>Loading Game...</p>
+                            <div class="loading-bar">
+                                <div class="loading-progress" id="loadingProgress"></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 
                 <div class="modal-info">
@@ -419,28 +448,6 @@
         <button class="quick-action-btn" id="shareItem" title="Share Item">
             <i class="fas fa-share-alt"></i>
         </button>
-    </div>
-
-    <!-- Side Panel (Replaced quick-nav) -->
-    <div class="side-panel" id="sidePanel">
-        <div class="side-panel-items">
-            <button class="side-panel-btn active" data-section="games">
-                <i class="fas fa-gamepad"></i>
-                <span>Games</span>
-            </button>
-            <button class="side-panel-btn" data-section="websites">
-                <i class="fas fa-laptop-code"></i>
-                <span>Websites</span>
-            </button>
-            <button class="side-panel-btn" data-section="photos">
-                <i class="fas fa-camera"></i>
-                <span>Photos</span>
-            </button>
-            <button class="side-panel-btn" data-section="videos">
-                <i class="fas fa-video"></i>
-                <span>Videos</span>
-            </button>
-        </div>
     </div>
 
     <div id="notificationContainer"></div>
