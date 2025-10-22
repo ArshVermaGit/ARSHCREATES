@@ -4,6 +4,9 @@ let currentMediaType = null;
 let currentVideoElement = null;
 let currentItemData = null;
 let isModalOpen = false;
+let currentCategory = null;
+let currentIndex = 0;
+let currentItems = [];
 
 // Initialize everything when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
@@ -11,12 +14,199 @@ document.addEventListener('DOMContentLoaded', function() {
     initPortfolioCards();
     initContactForm();
     initModalEvents();
+    initQuickNavigation();
+    initQuickActions();
     
     // Initialize portfolio if not already done
     if (typeof initializePortfolio === 'function') {
         setTimeout(initializePortfolio, 100);
     }
 });
+
+// =============================================================================
+// QUICK NAVIGATION INITIALIZATION
+// =============================================================================
+function initQuickNavigation() {
+    const quickNav = document.getElementById('quickNav');
+    const quickNavBtns = document.querySelectorAll('.quick-nav-btn');
+    
+    if (!quickNav || !quickNavBtns.length) return;
+    
+    // Show quick nav after hero section
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                quickNav.classList.add('active');
+            }
+        });
+    }, { threshold: 0.1 });
+    
+    const aboutSection = document.getElementById('about');
+    if (aboutSection) {
+        observer.observe(aboutSection);
+    }
+    
+    // Quick nav button click handlers
+    quickNavBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const section = this.dataset.section;
+            if (section) {
+                // Update active state
+                quickNavBtns.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Scroll to section
+                const targetSection = document.getElementById(section);
+                if (targetSection) {
+                    const offsetTop = targetSection.offsetTop - 80;
+                    window.scrollTo({
+                        top: offsetTop,
+                        behavior: 'smooth'
+                    });
+                }
+            }
+        });
+    });
+    
+    // Update active state on scroll
+    window.addEventListener('scroll', function() {
+        const sections = ['games', 'websites', 'photos', 'videos'];
+        let currentSection = '';
+        
+        sections.forEach(section => {
+            const element = document.getElementById(section);
+            if (element) {
+                const rect = element.getBoundingClientRect();
+                if (rect.top <= 150 && rect.bottom >= 150) {
+                    currentSection = section;
+                }
+            }
+        });
+        
+        if (currentSection) {
+            quickNavBtns.forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.section === currentSection);
+            });
+        }
+    });
+}
+
+// =============================================================================
+// QUICK ACTIONS INITIALIZATION
+// =============================================================================
+function initQuickActions() {
+    const quickActions = document.getElementById('quickActions');
+    if (!quickActions) return;
+    
+    const fullscreenBtn = document.getElementById('fullscreenToggle');
+    const downloadBtn = document.getElementById('downloadCurrent');
+    const shareBtn = document.getElementById('shareItem');
+    
+    // Show quick actions when modal is open
+    const modalObserver = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+            if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                const modal = document.getElementById('portfolioModal');
+                if (modal && modal.classList.contains('active')) {
+                    quickActions.style.display = 'flex';
+                } else {
+                    quickActions.style.display = 'none';
+                }
+            }
+        });
+    });
+    
+    const modal = document.getElementById('portfolioModal');
+    if (modal) {
+        modalObserver.observe(modal, { attributes: true });
+    }
+    
+    // Fullscreen toggle
+    if (fullscreenBtn) {
+        fullscreenBtn.addEventListener('click', toggleFullscreen);
+    }
+    
+    // Download current item
+    if (downloadBtn) {
+        downloadBtn.addEventListener('click', downloadCurrentItem);
+    }
+    
+    // Share item
+    if (shareBtn) {
+        shareBtn.addEventListener('click', shareCurrentItem);
+    }
+}
+
+function toggleFullscreen() {
+    if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => {
+            console.error('Error attempting to enable fullscreen:', err);
+        });
+    } else {
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        }
+    }
+}
+
+function downloadCurrentItem() {
+    if (!currentItemData) {
+        showNotification('No item selected for download', 'info');
+        return;
+    }
+    
+    let downloadUrl = '';
+    let filename = '';
+    
+    switch (currentMediaType) {
+        case 'photo':
+            downloadUrl = currentItemData.image;
+            filename = `${currentItemData.title.replace(/\s+/g, '_')}.jpg`;
+            break;
+        case 'video':
+            downloadUrl = currentItemData.video_url;
+            filename = `${currentItemData.title.replace(/\s+/g, '_')}.mp4`;
+            break;
+        default:
+            showNotification('Download not available for this item type', 'info');
+            return;
+    }
+    
+    if (downloadUrl) {
+        const link = document.createElement('a');
+        link.href = downloadUrl;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        showNotification(`Downloading ${filename}...`, 'success');
+    }
+}
+
+function shareCurrentItem() {
+    if (!currentItemData) {
+        showNotification('No item selected to share', 'info');
+        return;
+    }
+    
+    const shareData = {
+        title: currentItemData.name || currentItemData.title,
+        text: currentItemData.description,
+        url: window.location.href
+    };
+    
+    if (navigator.share) {
+        navigator.share(shareData)
+            .then(() => showNotification('Item shared successfully!', 'success'))
+            .catch(err => console.log('Error sharing:', err));
+    } else {
+        // Fallback: copy to clipboard
+        const textToCopy = `${shareData.title}\n\n${shareData.text}\n\n${shareData.url}`;
+        navigator.clipboard.writeText(textToCopy)
+            .then(() => showNotification('Link copied to clipboard!', 'success'))
+            .catch(err => showNotification('Failed to copy to clipboard', 'error'));
+    }
+}
 
 // =============================================================================
 // MODAL EVENT LISTENERS INITIALIZATION
@@ -39,6 +229,16 @@ function initModalEvents() {
         if (e.key === 'Escape' && isModalOpen) {
             closeModal();
         }
+        
+        // Navigation with arrow keys
+        if (isModalOpen && (e.key === 'ArrowLeft' || e.key === 'ArrowRight')) {
+            e.preventDefault();
+            if (e.key === 'ArrowLeft') {
+                navigateModal('prev');
+            } else {
+                navigateModal('next');
+            }
+        }
     });
     
     // Prevent modal content click from closing modal
@@ -47,6 +247,51 @@ function initModalEvents() {
         modalContainer.addEventListener('click', function(e) {
             e.stopPropagation();
         });
+    }
+    
+    // Modal navigation arrows
+    const modalPrev = document.getElementById('modalPrev');
+    const modalNext = document.getElementById('modalNext');
+    
+    if (modalPrev) {
+        modalPrev.addEventListener('click', () => navigateModal('prev'));
+    }
+    
+    if (modalNext) {
+        modalNext.addEventListener('click', () => navigateModal('next'));
+    }
+}
+
+// =============================================================================
+// MODAL NAVIGATION
+// =============================================================================
+function navigateModal(direction) {
+    if (!currentCategory || !currentItems.length) return;
+    
+    let newIndex;
+    if (direction === 'next') {
+        newIndex = (currentIndex + 1) % currentItems.length;
+    } else {
+        newIndex = (currentIndex - 1 + currentItems.length) % currentItems.length;
+    }
+    
+    currentIndex = newIndex;
+    const item = currentItems[currentIndex];
+    
+    // Reopen modal with new item
+    switch (currentCategory) {
+        case 'games':
+            openGamePreview(item);
+            break;
+        case 'websites':
+            openWebsitePreview(item);
+            break;
+        case 'photos':
+            openPhotoPreview(item);
+            break;
+        case 'videos':
+            openVideoPreview(item);
+            break;
     }
 }
 
@@ -65,18 +310,32 @@ function initPortfolioCards() {
             e.stopPropagation();
             
             try {
-                if (type === 'game') {
-                    const gameData = JSON.parse(card.dataset.game);
-                    openGamePreview(gameData);
-                } else if (type === 'website') {
-                    const websiteData = JSON.parse(card.dataset.website);
-                    openWebsitePreview(websiteData);
-                } else if (type === 'photo') {
-                    const photoData = JSON.parse(card.dataset.photo);
-                    openPhotoPreview(photoData);
-                } else if (type === 'video') {
-                    const videoData = JSON.parse(card.dataset.video);
-                    openVideoPreview(videoData);
+                // Set current category and items for navigation
+                currentCategory = type + 's'; // games, websites, etc.
+                currentItems = getItemsByCategory(currentCategory);
+                
+                let itemData;
+                switch (type) {
+                    case 'game':
+                        itemData = JSON.parse(card.dataset.game);
+                        currentIndex = currentItems.findIndex(item => item.id === itemData.id);
+                        openGamePreview(itemData);
+                        break;
+                    case 'website':
+                        itemData = JSON.parse(card.dataset.website);
+                        currentIndex = currentItems.findIndex(item => item.id === itemData.id);
+                        openWebsitePreview(itemData);
+                        break;
+                    case 'photo':
+                        itemData = JSON.parse(card.dataset.photo);
+                        currentIndex = currentItems.findIndex(item => item.id === itemData.id);
+                        openPhotoPreview(itemData);
+                        break;
+                    case 'video':
+                        itemData = JSON.parse(card.dataset.video);
+                        currentIndex = currentItems.findIndex(item => item.id === itemData.id);
+                        openVideoPreview(itemData);
+                        break;
                 }
             } catch (error) {
                 console.error('Error opening preview:', error);
@@ -120,6 +379,25 @@ function openGamePreview(gameData) {
         image: gameData.image
     });
     
+    // Setup modal meta info
+    updateModalMeta(`
+        <div class="meta-item">
+            <i class="fas fa-tags"></i>
+            <span>${gameData.status || 'Playable'}</span>
+        </div>
+        ${gameData.technologies ? `
+        <div class="meta-item">
+            <i class="fas fa-code"></i>
+            <span>${gameData.technologies.join(', ')}</span>
+        </div>
+        ` : ''}
+    `);
+    
+    // Setup modal tech tags
+    if (gameData.technologies && gameData.technologies.length > 0) {
+        updateModalTech(gameData.technologies);
+    }
+    
     // Setup game-specific elements
     const playBtn = document.getElementById('playItemBtn');
     const gamePreview = document.getElementById('itemPreview');
@@ -159,6 +437,9 @@ function openGamePreview(gameData) {
     
     // Open modal
     openModal();
+    
+    // Update navigation arrows visibility
+    updateNavigationArrows();
 }
 
 function loadUnityGame() {
@@ -197,11 +478,20 @@ function loadUnityGame() {
         fullscreenBtn.onclick = toggleGameFullscreen;
     }
     
-    // For demo purposes - show success message since we don't have actual Unity games
-    setTimeout(() => {
-        if (gameLoading) gameLoading.style.display = 'none';
-        showNotification('Game demo loaded successfully! (Unity integration ready)', 'success');
-    }, 2000);
+    // Simulate loading progress
+    let progress = 0;
+    const interval = setInterval(() => {
+        progress += Math.random() * 10;
+        if (progress >= 100) {
+            progress = 100;
+            clearInterval(interval);
+            if (gameLoading) gameLoading.style.display = 'none';
+            showNotification('Game demo loaded successfully! (Unity integration ready)', 'success');
+        }
+        if (loadingProgress) {
+            loadingProgress.style.width = progress + '%';
+        }
+    }, 200);
 }
 
 function toggleGameFullscreen() {
@@ -213,18 +503,10 @@ function toggleGameFullscreen() {
             gameContainer.requestFullscreen().catch(err => {
                 console.error('Error attempting to enable fullscreen:', err);
             });
-        } else if (gameContainer.webkitRequestFullscreen) {
-            gameContainer.webkitRequestFullscreen();
-        } else if (gameContainer.msRequestFullscreen) {
-            gameContainer.msRequestFullscreen();
         }
     } else {
         if (document.exitFullscreen) {
             document.exitFullscreen();
-        } else if (document.webkitExitFullscreen) {
-            document.webkitExitFullscreen();
-        } else if (document.msExitFullscreen) {
-            document.msExitFullscreen();
         }
     }
 }
@@ -248,6 +530,25 @@ function openWebsitePreview(websiteData) {
         description: websiteData.description,
         image: websiteData.image
     });
+    
+    // Setup modal meta info
+    updateModalMeta(`
+        <div class="meta-item">
+            <i class="fas fa-globe"></i>
+            <span>${websiteData.status || 'Live'}</span>
+        </div>
+        ${websiteData.technologies ? `
+        <div class="meta-item">
+            <i class="fas fa-code"></i>
+            <span>${websiteData.technologies.join(', ')}</span>
+        </div>
+        ` : ''}
+    `);
+    
+    // Setup modal tech tags
+    if (websiteData.technologies && websiteData.technologies.length > 0) {
+        updateModalTech(websiteData.technologies);
+    }
     
     hideAllPreviewElements();
     
@@ -300,6 +601,9 @@ function openWebsitePreview(websiteData) {
             };
         }
     }, 50);
+    
+    // Update navigation arrows visibility
+    updateNavigationArrows();
 }
 
 // =============================================================================
@@ -321,6 +625,26 @@ function openPhotoPreview(photoData) {
         description: photoData.description
     });
     
+    // Setup modal meta info
+    updateModalMeta(`
+        <div class="meta-item">
+            <i class="fas fa-image"></i>
+            <span>${photoData.category}</span>
+        </div>
+        ${photoData.camera ? `
+        <div class="meta-item">
+            <i class="fas fa-camera"></i>
+            <span>${photoData.camera}</span>
+        </div>
+        ` : ''}
+        ${photoData.location ? `
+        <div class="meta-item">
+            <i class="fas fa-map-marker-alt"></i>
+            <span>${photoData.location}</span>
+        </div>
+        ` : ''}
+    `);
+    
     hideAllPreviewElements();
     
     const photoViewer = document.getElementById('photoViewer');
@@ -328,9 +652,22 @@ function openPhotoPreview(photoData) {
     
     if (photoViewer) {
         photoViewer.innerHTML = `
-            <img src="${photoData.image}" alt="${photoData.title}" 
-                 style="width: 100%; height: 100%; object-fit: contain; cursor: pointer;" 
-                 id="photoImage">
+            <div class="photo-container">
+                <img src="${photoData.image}" alt="${photoData.title}" 
+                     style="width: 100%; height: 100%; object-fit: contain; cursor: pointer;" 
+                     id="photoImage">
+                <div class="photo-zoom-controls">
+                    <button class="zoom-btn" id="zoomInBtn">
+                        <i class="fas fa-search-plus"></i>
+                    </button>
+                    <button class="zoom-btn" id="zoomOutBtn">
+                        <i class="fas fa-search-minus"></i>
+                    </button>
+                    <button class="zoom-btn" id="resetZoomBtn">
+                        <i class="fas fa-sync-alt"></i>
+                    </button>
+                </div>
+            </div>
         `;
         photoViewer.style.display = 'flex';
     }
@@ -350,32 +687,103 @@ function openPhotoPreview(photoData) {
     
     // Setup photo buttons after modal is open
     setTimeout(() => {
-        const downloadBtn = document.getElementById('downloadPhotoBtn');
-        const fullscreenBtn = document.getElementById('fullscreenPhotoBtn');
-        const photoImg = document.getElementById('photoImage');
-        
-        if (downloadBtn) {
-            downloadBtn.onclick = () => {
-                downloadMedia(photoData.image, `${photoData.title}.jpg`);
-            };
-        }
-        
-        if (fullscreenBtn) {
-            fullscreenBtn.onclick = () => {
-                if (photoImg && photoImg.requestFullscreen) {
-                    photoImg.requestFullscreen();
-                }
-            };
-        }
-        
-        if (photoImg) {
-            photoImg.onclick = function() {
-                if (this.requestFullscreen) {
-                    this.requestFullscreen();
-                }
-            };
-        }
+        initPhotoViewer();
     }, 50);
+    
+    // Update navigation arrows visibility
+    updateNavigationArrows();
+}
+
+function initPhotoViewer() {
+    const downloadBtn = document.getElementById('downloadPhotoBtn');
+    const fullscreenBtn = document.getElementById('fullscreenPhotoBtn');
+    const photoImg = document.getElementById('photoImage');
+    const zoomInBtn = document.getElementById('zoomInBtn');
+    const zoomOutBtn = document.getElementById('zoomOutBtn');
+    const resetZoomBtn = document.getElementById('resetZoomBtn');
+    
+    let scale = 1;
+    
+    if (downloadBtn) {
+        downloadBtn.onclick = () => {
+            if (currentItemData && currentItemData.image) {
+                downloadMedia(currentItemData.image, `${currentItemData.title}.jpg`);
+            }
+        };
+    }
+    
+    if (fullscreenBtn && photoImg) {
+        fullscreenBtn.onclick = () => {
+            if (photoImg.requestFullscreen) {
+                photoImg.requestFullscreen();
+            }
+        };
+    }
+    
+    if (zoomInBtn) {
+        zoomInBtn.onclick = () => {
+            scale = Math.min(scale + 0.25, 3);
+            photoImg.style.transform = `scale(${scale})`;
+        };
+    }
+    
+    if (zoomOutBtn) {
+        zoomOutBtn.onclick = () => {
+            scale = Math.max(scale - 0.25, 0.5);
+            photoImg.style.transform = `scale(${scale})`;
+        };
+    }
+    
+    if (resetZoomBtn) {
+        resetZoomBtn.onclick = () => {
+            scale = 1;
+            photoImg.style.transform = `scale(${scale})`;
+        };
+    }
+    
+    if (photoImg) {
+        photoImg.onclick = function() {
+            if (this.requestFullscreen) {
+                this.requestFullscreen();
+            }
+        };
+        
+        // Enable panning when zoomed
+        let isDragging = false;
+        let startX, startY, scrollLeft, scrollTop;
+        
+        photoImg.addEventListener('mousedown', (e) => {
+            if (scale > 1) {
+                isDragging = true;
+                startX = e.pageX - photoImg.offsetLeft;
+                startY = e.pageY - photoImg.offsetTop;
+                scrollLeft = photoImg.scrollLeft;
+                scrollTop = photoImg.scrollTop;
+                photoImg.style.cursor = 'grabbing';
+            }
+        });
+        
+        photoImg.addEventListener('mouseleave', () => {
+            isDragging = false;
+            photoImg.style.cursor = 'grab';
+        });
+        
+        photoImg.addEventListener('mouseup', () => {
+            isDragging = false;
+            photoImg.style.cursor = 'grab';
+        });
+        
+        photoImg.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            e.preventDefault();
+            const x = e.pageX - photoImg.offsetLeft;
+            const y = e.pageY - photoImg.offsetTop;
+            const walkX = (x - startX) * 2;
+            const walkY = (y - startY) * 2;
+            photoImg.scrollLeft = scrollLeft - walkX;
+            photoImg.scrollTop = scrollTop - walkY;
+        });
+    }
 }
 
 // =============================================================================
@@ -397,6 +805,26 @@ function openVideoPreview(videoData) {
         description: videoData.description
     });
     
+    // Setup modal meta info
+    updateModalMeta(`
+        <div class="meta-item">
+            <i class="fas fa-film"></i>
+            <span>${videoData.category}</span>
+        </div>
+        ${videoData.duration ? `
+        <div class="meta-item">
+            <i class="fas fa-clock"></i>
+            <span>${videoData.duration}</span>
+        </div>
+        ` : ''}
+        ${videoData.resolution ? `
+        <div class="meta-item">
+            <i class="fas fa-hd-video"></i>
+            <span>${videoData.resolution}</span>
+        </div>
+        ` : ''}
+    `);
+    
     hideAllPreviewElements();
     
     const videoPlayer = document.getElementById('videoPlayer');
@@ -404,10 +832,32 @@ function openVideoPreview(videoData) {
     
     if (videoPlayer) {
         videoPlayer.innerHTML = `
-            <div style="text-align: center; color: var(--text-tertiary);">
-                <i class="fas fa-video" style="font-size: 4rem; margin-bottom: 1rem;"></i>
-                <p>Video preview would play here</p>
-                <p style="font-size: 0.9rem;">Video file: ${videoData.video_url}</p>
+            <div class="video-container">
+                <video id="mainVideo" controls>
+                    <source src="${videoData.video_url}" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                <div class="video-controls-overlay">
+                    <div class="video-progress">
+                        <input type="range" id="videoProgress" min="0" max="100" value="0" class="progress-bar">
+                        <div class="progress-time" id="progressTime">0:00 / 0:00</div>
+                    </div>
+                    <div class="video-controls">
+                        <button class="video-control-btn" id="videoPlayPauseBtn">
+                            <i class="fas fa-play"></i>
+                        </button>
+                        <button class="video-control-btn" id="videoMuteBtn">
+                            <i class="fas fa-volume-up"></i>
+                        </button>
+                        <input type="range" id="videoVolume" min="0" max="100" value="100" class="volume-bar">
+                        <button class="video-control-btn" id="videoSpeedBtn">
+                            <span>1x</span>
+                        </button>
+                        <button class="video-control-btn" id="videoFullscreenBtn">
+                            <i class="fas fa-expand"></i>
+                        </button>
+                    </div>
+                </div>
             </div>
         `;
         videoPlayer.style.display = 'flex';
@@ -416,9 +866,6 @@ function openVideoPreview(videoData) {
     if (playBtn) playBtn.style.display = 'none';
     
     setupModalActions(`
-        <button class="btn btn-glass" id="playPauseBtn">
-            <i class="fas fa-play"></i> Play Demo
-        </button>
         <button class="btn btn-glass" id="downloadVideoBtn">
             <i class="fas fa-download"></i> Download
         </button>
@@ -428,27 +875,125 @@ function openVideoPreview(videoData) {
     
     // Setup video controls after modal is open
     setTimeout(() => {
-        setupVideoControls();
+        initVideoPlayer();
     }, 50);
+    
+    // Update navigation arrows visibility
+    updateNavigationArrows();
 }
 
-function setupVideoControls() {
-    const playPauseBtn = document.getElementById('playPauseBtn');
+function initVideoPlayer() {
+    const video = document.getElementById('mainVideo');
+    const playPauseBtn = document.getElementById('videoPlayPauseBtn');
+    const muteBtn = document.getElementById('videoMuteBtn');
+    const volumeSlider = document.getElementById('videoVolume');
+    const speedBtn = document.getElementById('videoSpeedBtn');
+    const fullscreenBtn = document.getElementById('videoFullscreenBtn');
+    const progressBar = document.getElementById('videoProgress');
+    const progressTime = document.getElementById('progressTime');
     const downloadBtn = document.getElementById('downloadVideoBtn');
+    
+    if (!video) return;
     
     // Play/Pause button
     if (playPauseBtn) {
         playPauseBtn.onclick = () => {
-            showNotification('Video playback demo activated', 'info');
+            if (video.paused) {
+                video.play();
+                playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+            } else {
+                video.pause();
+                playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+            }
         };
     }
+    
+    // Mute button
+    if (muteBtn) {
+        muteBtn.onclick = () => {
+            video.muted = !video.muted;
+            muteBtn.innerHTML = video.muted ? 
+                '<i class="fas fa-volume-mute"></i>' : 
+                '<i class="fas fa-volume-up"></i>';
+        };
+    }
+    
+    // Volume slider
+    if (volumeSlider) {
+        volumeSlider.addEventListener('input', () => {
+            video.volume = volumeSlider.value / 100;
+        });
+    }
+    
+    // Speed control
+    if (speedBtn) {
+        const speeds = [0.5, 0.75, 1, 1.25, 1.5, 2];
+        let speedIndex = 2; // Start at 1x
+        
+        speedBtn.onclick = () => {
+            speedIndex = (speedIndex + 1) % speeds.length;
+            video.playbackRate = speeds[speedIndex];
+            speedBtn.innerHTML = `<span>${speeds[speedIndex]}x</span>`;
+        };
+    }
+    
+    // Fullscreen button
+    if (fullscreenBtn) {
+        fullscreenBtn.onclick = () => {
+            if (!document.fullscreenElement) {
+                video.requestFullscreen().catch(err => {
+                    console.error('Error attempting to enable fullscreen:', err);
+                });
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+            }
+        };
+    }
+    
+    // Progress bar
+    if (progressBar) {
+        progressBar.addEventListener('input', () => {
+            const time = video.duration * (progressBar.value / 100);
+            video.currentTime = time;
+        });
+    }
+    
+    // Update progress bar as video plays
+    video.addEventListener('timeupdate', () => {
+        if (progressBar) {
+            const value = (video.currentTime / video.duration) * 100;
+            progressBar.value = value;
+        }
+        
+        if (progressTime) {
+            progressTime.textContent = 
+                `${formatTime(video.currentTime)} / ${formatTime(video.duration)}`;
+        }
+    });
     
     // Download button
     if (downloadBtn) {
         downloadBtn.onclick = () => {
-            showNotification('Download feature ready for implementation', 'info');
+            if (currentItemData && currentItemData.video_url) {
+                downloadMedia(currentItemData.video_url, `${currentItemData.title}.mp4`);
+            }
         };
     }
+    
+    // Video ended
+    video.addEventListener('ended', () => {
+        if (playPauseBtn) {
+            playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+        }
+    });
+}
+
+function formatTime(seconds) {
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
 }
 
 // =============================================================================
@@ -461,7 +1006,13 @@ function downloadMedia(url, filename) {
     }
     
     try {
-        showNotification('Download functionality ready for implementation', 'info');
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        showNotification(`Downloading ${filename}...`, 'success');
     } catch (error) {
         console.error('Download failed:', error);
         showNotification('Download failed. Please try again.', 'error');
@@ -485,11 +1036,42 @@ function updateModalContent({ title, description, image }) {
     }
 }
 
+function updateModalMeta(html) {
+    const modalMeta = document.getElementById('modalMeta');
+    if (modalMeta) {
+        modalMeta.innerHTML = html;
+    }
+}
+
+function updateModalTech(technologies) {
+    const modalTech = document.getElementById('modalTech');
+    if (modalTech && technologies && technologies.length > 0) {
+        modalTech.innerHTML = `
+            <h4>Technologies</h4>
+            <div class="tech-tags">
+                ${technologies.map(tech => `<span class="tech-tag">${tech}</span>`).join('')}
+            </div>
+        `;
+    } else if (modalTech) {
+        modalTech.innerHTML = '';
+    }
+}
+
 function setupModalActions(html) {
     const modalActions = document.getElementById('modalActions');
     if (modalActions) {
         modalActions.innerHTML = html;
         console.log('Modal actions set');
+    }
+}
+
+function updateNavigationArrows() {
+    const modalPrev = document.getElementById('modalPrev');
+    const modalNext = document.getElementById('modalNext');
+    
+    if (modalPrev && modalNext && currentItems && currentItems.length > 0) {
+        modalPrev.style.display = currentItems.length > 1 ? 'flex' : 'none';
+        modalNext.style.display = currentItems.length > 1 ? 'flex' : 'none';
     }
 }
 
@@ -762,5 +1344,4 @@ window.openWebsitePreview = openWebsitePreview;
 window.openPhotoPreview = openPhotoPreview;
 window.openVideoPreview = openVideoPreview;
 window.initPortfolioCards = initPortfolioCards;
-
-console.log('Portfolio JS initialized successfully');
+window.navigateModal = navigateModal;
