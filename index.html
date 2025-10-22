@@ -1,316 +1,375 @@
-<!DOCTYPE html>
-<html lang="en" data-theme="dark">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio - Premium Design</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-</head>
-<body>
-    <!-- Navigation -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <a href="#" class="logo">
-                <i class="fas fa-gem"></i>
-                <span>Portfolio</span>
-            </a>
-            
-            <div class="nav-menu">
-                <a href="#home">Home</a>
-                <a href="#portfolio">Portfolio</a>
-                <a href="#about">About</a>
-                <a href="#contact">Contact</a>
-            </div>
-            
-            <div class="nav-actions">
-                <button class="btn-icon" id="themeToggle">
-                    <i class="fas fa-moon"></i>
-                </button>
-                <div class="nav-toggle">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
-            </div>
-        </div>
-    </nav>
+{% extends "base.html" %}
 
-    <!-- Hero Section -->
-    <section class="hero" id="home">
-        <div class="container">
-            <div class="hero-grid">
-                <div class="hero-content">
-                    <span class="hero-tag">Premium Portfolio</span>
-                    <h1 class="hero-title">Creative Developer</h1>
-                    <h2 class="hero-subtitle">Building Digital Experiences</h2>
-                    <p class="hero-description">
-                        Crafting beautiful, functional websites and applications with modern technologies 
-                        and attention to detail.
-                    </p>
-                    <div class="hero-actions">
-                        <button class="btn btn-primary">
-                            <i class="fas fa-rocket"></i>
-                            View Work
-                        </button>
-                        <button class="btn btn-glass">
-                            <i class="fas fa-download"></i>
-                            Download CV
-                        </button>
-                    </div>
-                </div>
-                <div class="hero-visual">
-                    <!-- Hero visual content will be added here -->
-                </div>
-            </div>
-        </div>
-        
-        <div class="scroll-indicator">
-            <span>Scroll Down</span>
-            <i class="fas fa-chevron-down"></i>
-        </div>
-    </section>
+{% block content %}
 
-    <!-- Portfolio Section -->
-    <section class="section" id="portfolio">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-tag">Work</span>
-                <h2 class="section-title">Featured Projects</h2>
-                <p class="section-description">
-                    A collection of my latest work showcasing design and development skills across various platforms.
-                </p>
-            </div>
-            
-            <div class="portfolio-grid">
-                <!-- Portfolio items will be dynamically loaded -->
-            </div>
-        </div>
-    </section>
-
-    <!-- About Section -->
-    <section class="section" id="about">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-tag">About</span>
-                <h2 class="section-title">About Me</h2>
-                <p class="section-description">
-                    Passionate developer with expertise in modern web technologies and user experience design.
-                </p>
-            </div>
-            
-            <div class="about-grid">
-                <div class="about-text">
-                    <p>
-                        I'm a dedicated developer with over 5 years of experience creating digital solutions 
-                        that combine beautiful design with robust functionality.
-                    </p>
-                    <p>
-                        My expertise includes front-end development, UI/UX design, and creating seamless 
-                        user experiences across all devices and platforms.
-                    </p>
-                </div>
-                
-                <div class="skills-container">
-                    <h3>Skills & Technologies</h3>
-                    <div class="skills-grid">
-                        <div class="skill-item">
-                            <i class="fab fa-js-square"></i>
-                            <span>JavaScript</span>
-                        </div>
-                        <div class="skill-item">
-                            <i class="fab fa-react"></i>
-                            <span>React</span>
-                        </div>
-                        <div class="skill-item">
-                            <i class="fab fa-vuejs"></i>
-                            <span>Vue.js</span>
-                        </div>
-                        <div class="skill-item">
-                            <i class="fab fa-node-js"></i>
-                            <span>Node.js</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Contact Section -->
-    <section class="contact-section" id="contact">
-        <div class="container">
-            <div class="contact-container">
-                <div class="contact-header">
-                    <span class="section-tag">Contact</span>
-                    <h2 class="section-title">Get In Touch</h2>
-                    <p class="section-subtitle">
-                        Have a project in mind? Let's discuss how we can work together to bring your ideas to life.
-                    </p>
-                </div>
-                
-                <div class="contact-grid">
-                    <div class="contact-form-wrapper">
-                        <form class="contact-form" id="contactForm">
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="name">
-                                        <i class="fas fa-user"></i>
-                                        Full Name
-                                    </label>
-                                    <input type="text" id="name" name="name" class="form-input" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="email">
-                                        <i class="fas fa-envelope"></i>
-                                        Email Address
-                                    </label>
-                                    <input type="email" id="email" name="email" class="form-input" required>
-                                </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="subject">
-                                    <i class="fas fa-tag"></i>
-                                    Subject
-                                </label>
-                                <input type="text" id="subject" name="subject" class="form-input" required>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="message">
-                                    <i class="fas fa-comment"></i>
-                                    Message
-                                </label>
-                                <textarea id="message" name="message" class="form-textarea" rows="5" required></textarea>
-                            </div>
-                            
-                            <div class="submit-btn-wrapper">
-                                <button type="submit" class="submit-btn">
-                                    <i class="fas fa-paper-plane"></i>
-                                    Send Message
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                    
-                    <div class="contact-info">
-                        <div class="contact-card">
-                            <div class="contact-icon">
-                                <i class="fas fa-map-marker-alt"></i>
-                            </div>
-                            <div class="contact-details">
-                                <h4>Location</h4>
-                                <p>New York, NY</p>
-                            </div>
-                        </div>
-                        
-                        <div class="contact-card">
-                            <div class="contact-icon">
-                                <i class="fas fa-phone"></i>
-                            </div>
-                            <div class="contact-details">
-                                <h4>Phone</h4>
-                                <a href="tel:+1234567890">+1 (234) 567-890</a>
-                            </div>
-                        </div>
-                        
-                        <div class="contact-card">
-                            <div class="contact-icon">
-                                <i class="fas fa-envelope"></i>
-                            </div>
-                            <div class="contact-details">
-                                <h4>Email</h4>
-                                <a href="mailto:hello@portfolio.com">hello@portfolio.com</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-inner">
-                <div class="footer-left">
-                    <a href="#" class="footer-brand">
-                        <i class="fas fa-gem"></i>
-                        Portfolio
+<!-- HERO SECTION -->
+<section class="hero">
+    <div class="container">
+        <div class="hero-grid">
+            <div class="hero-content">
+                <span class="hero-tag">Creative Developer</span>
+                <h1 class="hero-title">Arsh Verma</h1>
+                <p class="hero-subtitle">Creating Something Meaningful</p>
+                <p class="hero-description">I turn creative visions into memorable digital experiences. I use expertise in game development, web design, photography, and videography to tell my story simply and powerfully.</p>
+                <div class="hero-actions">
+                    <a href="#games" class="btn btn-primary">
+                        <i class="fas fa-gamepad"></i> View My Works
                     </a>
-                    <p>
-                        Creating beautiful digital experiences with modern technologies 
-                        and attention to detail.
-                    </p>
-                    <div class="footer-links">
-                        <a href="#home">Home</a>
-                        <a href="#portfolio">Portfolio</a>
-                        <a href="#about">About</a>
-                        <a href="#contact">Contact</a>
-                    </div>
+                    <a href="#contact" class="btn btn-glass">
+                        <i class="fas fa-envelope"></i> Let's Connect
+                    </a>
                 </div>
             </div>
-            
-            <div class="footer-bottom">
-                <p>&copy; 2024 Portfolio. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Portfolio Modal -->
-    <div class="portfolio-modal">
-        <div class="modal-overlay"></div>
-        <div class="modal-container">
-            <button class="modal-close">
-                <i class="fas fa-times"></i>
-            </button>
-            
-            <div class="modal-content">
-                <div class="modal-preview">
-                    <div id="itemPreview">
-                        <!-- Preview content will be loaded here -->
+            <div class="hero-visual">
+                <div class="floating-cards">
+                    <div class="float-card">
+                        <i class="fab fa-unity"></i>
+                        <h4>Game Development</h4>
+                        <p>Immersive 3D Experiences</p>
                     </div>
-                    
-                    <div id="photoViewer">
-                        <!-- Photo viewer content -->
+                    <div class="float-card">
+                        <i class="fas fa-code"></i>
+                        <h4>Web Development</h4>
+                        <p>Modern Digital Solutions</p>
                     </div>
-                    
-                    <div id="videoPlayer">
-                        <video controls>
-                            Your browser does not support the video tag.
-                        </video>
-                    </div>
-                    
-                    <div id="gameContainer">
-                        <!-- Game content will be loaded here -->
-                    </div>
-                </div>
-                
-                <div class="modal-info">
-                    <h2 class="modal-title">Project Title</h2>
-                    <p class="modal-description">
-                        Project description will appear here.
-                    </p>
-                    
-                    <div class="modal-features">
-                        <!-- Features will be loaded here -->
-                    </div>
-                    
-                    <div class="modal-actions">
-                        <!-- Action buttons will be loaded here -->
+                    <div class="float-card">
+                        <i class="fas fa-camera"></i>
+                        <h4>Creative Content</h4>
+                        <p>Photography & Videography</p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <div class="scroll-indicator">
+        <span>About Me</span>
+        <i class="fas fa-chevron-down"></i>
+    </div>
+</section>
 
-    <!-- Notification Container -->
-    <div id="notificationContainer"></div>
+<!-- ABOUT SECTION -->
+<section id="about" class="section">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-tag">About Me</span>
+            <h2 class="section-title">My Passion, Your Vision</h2>
+        </div>
+        <div class="about-grid">
+            <div class="about-text">
+                <p class="lead">Hi, I'm Arsh Verma. As a dedicated creative developer and Computer Science student, I believe every great idea deserves an unforgettable digital home that works beautifully.</p>
+                <p>My work spans game development, modern web design, professional photography, and cinematic videography. This diverse foundation ensures I approach your vision holistically, making certain every element—from the code logic to the final visual flair—tells a cohesive and powerful story.</p>
+                <p>I don't just execute tasks; I build innovative, human-centered solutions. I achieve this by merging my technical discipline with artistic sensitivity, focusing on user experience above all else. I'm actively looking for partners ready to push creative boundaries alongside me, whether that's through a groundbreaking game or a visually stunning website. Let's turn your next vision into a powerful digital reality together.</p>
+            </div>
+            <div class="skills-container">
+                <h3>Core Expertise</h3>
+                <div class="skills-grid">
+                    <div class="skill-item">
+                        <i class="fab fa-unity"></i>
+                        <span>Unity</span>
+                    </div>
+                    <div class="skill-item">
+                        <i class="fas fa-code"></i>
+                        <span>C#</span>
+                    </div>
+                    <div class="skill-item">
+                        <i class="fas fa-python"></i>
+                        <span>Python</span>
+                    </div>
+                    <div class="skill-item">
+                        <i class="fas fa-code"></i>
+                        <span>HTML</span>
+                    </div>
+                    <div class="skill-item">
+                        <i class="fas fa-camera"></i>
+                        <span>Photos</span>
+                    </div>
+                    <div class="skill-item">
+                        <i class="fas fa-play"></i>
+                        <span>Videos</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
-    <!-- Scripts -->
-    <script src="main.js"></script>
-    <script src="script.js"></script>
-</body>
-</html>
+<!-- GAMES SECTION -->
+<section id="games" class="section">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-tag">Games</span>
+            <h2 class="section-title">Game Showcase</h2>
+            <p class="section-description">See the digital gaming experience I create for you</p>
+        </div>
+        <div class="portfolio-grid">
+            {% if games %}
+                {% for game in games %}
+                <div class="portfolio-card" data-game='{{ game | tojson }}' data-type="game">
+                    <div class="portfolio-image">
+                        <img src="{{ game['image'] }}" alt="{{ game['name'] }}">
+                        <div class="portfolio-overlay">
+                            <button class="play-btn" aria-label="Play game">
+                                <i class="fas fa-play"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="portfolio-info">
+                        <span class="portfolio-badge">Playable</span>
+                        <h3 class="portfolio-title">{{ game['name'] }}</h3>
+                        <p class="portfolio-description">{{ game['overview'] }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty-state">
+                    <i class="fas fa-gamepad"></i>
+                    <h3>Games Coming Soon</h3>
+                    <p>Exciting game projects are currently in development!</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<!-- WEBSITES SECTION -->
+<section id="websites" class="section">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-tag">Websites</span>
+            <h2 class="section-title">Website Showcase</h2>
+            <p class="section-description">My commitment: Modern, responsive web solutions, every time</p>
+        </div>
+        <div class="portfolio-grid websites-grid">
+            {% if websites %}
+                {% for website in websites %}
+                <div class="portfolio-card website-card" data-website='{{ website | tojson }}' data-type="website">
+                    <div class="portfolio-image website-image">
+                        <img src="{{ website['image'] }}" alt="{{ website['name'] }}">
+                        <div class="portfolio-overlay">
+                            <button class="view-btn" aria-label="View website">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="portfolio-info">
+                        <span class="portfolio-badge">Live</span>
+                        <h3 class="portfolio-title">{{ website['name'] }}</h3>
+                        <p class="portfolio-description">{{ website['description'] }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty-state">
+                    <i class="fas fa-laptop-code"></i>
+                    <h3>Websites Coming Soon</h3>
+                    <p>Web projects are currently under development!</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<!-- PHOTOGRAPHY SECTION -->
+<section id="photos" class="section">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-tag">Photography</span>
+            <h2 class="section-title">The Captured Moment</h2>
+            <p class="section-description">Capturing moments and emotions through my lens</p>
+        </div>
+        <div class="portfolio-grid">
+            {% if photos %}
+                {% for photo in photos %}
+                <div class="portfolio-card" data-photo='{{ photo | tojson }}' data-type="photo">
+                    <div class="portfolio-image">
+                        <img src="{{ photo['image'] }}" alt="{{ photo['title'] }}">
+                        <div class="portfolio-overlay">
+                            <button class="view-btn" aria-label="View photo">
+                                <i class="fas fa-search-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="portfolio-info">
+                        <span class="portfolio-badge">{{ photo['category'] }}</span>
+                        <h3 class="portfolio-title">{{ photo['title'] }}</h3>
+                        <p class="portfolio-description">{{ photo['description'] }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty-state">
+                    <i class="fas fa-camera"></i>
+                    <h3>Photography Coming Soon</h3>
+                    <p>Photo gallery is being curated!</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<!-- VIDEOS SECTION -->
+<section id="videos" class="section">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-tag">Videography</span>
+            <h2 class="section-title">My Visual Narratives</h2>
+            <p class="section-description">Dynamic storytelling through video and animation</p>
+        </div>
+        <div class="portfolio-grid">
+            {% if videos %}
+                {% for video in videos %}
+                <div class="portfolio-card" data-video='{{ video | tojson }}' data-type="video">
+                    <div class="portfolio-image">
+                        <img src="{{ video['thumbnail'] }}" alt="{{ video['title'] }}">
+                        <div class="portfolio-overlay">
+                            <button class="play-btn" aria-label="Play video">
+                                <i class="fas fa-play"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="portfolio-info">
+                        <span class="portfolio-badge">{{ video['category'] }}</span>
+                        <h3 class="portfolio-title">{{ video['title'] }}</h3>
+                        <p class="portfolio-description">{{ video['description'] }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty-state">
+                    <i class="fas fa-video"></i>
+                    <h3>Videos Coming Soon</h3>
+                    <p>Video content is being produced!</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<!-- CONTACT SECTION -->
+<section id="contact" class="contact-section">
+  <div class="contact-container">
+    <div class="contact-header">
+      <h2 class="section-title">Let's connect!</h2>
+      <p class="section-subtitle">
+        I love hearing about creative ideas. Drop me a line if you have a project in mind, a potential collaboration, or just want to chat about tech and design.
+      </p>
+    </div>
+
+    <div class="contact-grid">
+      <!-- Contact Form -->
+      <div class="contact-form-wrapper">
+        <form class="contact-form" id="contactForm">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="full_name"><i class="fas fa-user"></i> Full Name *</label>
+              <input type="text" id="full_name" name="full_name" class="form-input" placeholder="Enter your full name" required>
+            </div>
+            <div class="form-group">
+              <label for="email"><i class="fas fa-envelope"></i> Email Address *</label>
+              <input type="email" id="email" name="email" class="form-input" placeholder="your.email@example.com" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="phone"><i class="fas fa-phone"></i> Phone Number</label>
+            <input type="tel" id="phone" name="phone" class="form-input" placeholder="+1 (555) 123-4567">
+          </div>
+
+          <div class="form-group">
+            <label for="contact_type"><i class="fas fa-list"></i> Contact Reason *</label>
+            <select id="contact_type" name="contact_type" class="form-select" required>
+              <option value="">Select a reason</option>
+              <option value="Project Inquiry">Project Inquiry</option>
+              <option value="Collaboration">Collaboration</option>
+              <option value="Support">Support</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="comment"><i class="fas fa-comment"></i> Message *</label>
+            <textarea id="comment" name="comment" class="form-textarea" placeholder="Tell me about your project or inquiry..." required></textarea>
+          </div>
+
+          <button type="submit" class="submit-btn" id="submitBtn">
+            <i class="fas fa-paper-plane"></i> Send Message
+          </button>
+        </form>
+      </div>
+
+      <!-- Contact Links -->
+      <div class="contact-info">
+        <div class="contact-card">
+          <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+          <div class="contact-details">
+            <h4>Email</h4>
+            <a href="mailto:arshvermadev@gmail.com">arshvermadev@gmail.com</a>
+          </div>
+        </div>
+
+        <div class="contact-card">
+          <div class="contact-icon"><i class="fab fa-linkedin-in"></i></div>
+          <div class="contact-details">
+            <h4>LinkedIn</h4>
+            <a href="https://linkedin.com/in/arshvermadev/" target="_blank" rel="noopener">Connect with me</a>
+          </div>
+        </div>
+
+        <div class="contact-card">
+          <div class="contact-icon"><i class="fab fa-github"></i></div>
+          <div class="contact-details">
+            <h4>GitHub</h4>
+            <a href="https://github.com/ArshVermaGit" target="_blank" rel="noopener">View my work</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- UNIFIED MODAL -->
+<div class="portfolio-modal" id="portfolioModal">
+    <div class="modal-overlay"></div>
+    <div class="modal-container">
+        <button class="modal-close" id="closeModal" aria-label="Close modal">
+            <i class="fas fa-times"></i>
+        </button>
+        <div class="modal-content">
+            <div class="modal-preview">
+                <div id="itemPreview">
+                    <img src="" alt="Preview" id="previewImage">
+                    <button class="modal-play-btn" id="playItemBtn">
+                        <i class="fas fa-play"></i>
+                        <span>Play Game</span>
+                    </button>
+                </div>
+                <div id="photoViewer"></div>
+                <div id="videoPlayer"></div>
+                <div class="modal-game" id="gameContainer">
+                    <canvas id="unity-canvas"></canvas>
+                    <div class="game-loading" id="gameLoading">
+                        <div class="loading-spinner"></div>
+                        <p>Loading Game...</p>
+                        <div class="loading-bar">
+                            <div class="loading-progress" id="loadingProgress"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-info">
+                <h2 class="modal-title" id="modalTitle">Title</h2>
+                <p class="modal-description" id="modalDescription">Description</p>
+                <div class="modal-actions" id="modalActions">
+                    <!-- Action buttons will be inserted here dynamically -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+{% endblock %}
