@@ -8,11 +8,27 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
+    <!-- Loading Screen -->
+    <div id="loadingScreen">
+        <div class="loading-logo">
+            <div class="loading-logo-inner">
+                <i class="fas fa-mobile-alt"></i>
+            </div>
+        </div>
+        <div class="loading-bar-container">
+            <div class="loading-bar" id="loadingBar"></div>
+        </div>
+        <div class="loading-text" id="loadingText">Loading App Details...</div>
+    </div>
+
+    <!-- Navigation -->
     <nav class="navbar">
         <div class="container">
             <div class="nav-content">
                 <a href="index.html" class="logo">
-                    <i class="fas fa-code"></i>
+                    <div class="logo-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
                     <span>ArshCreates</span>
                 </a>
                 <button id="themeToggle" class="btn-icon">
@@ -79,7 +95,7 @@
                     </div>
 
                     <div class="detail-description">
-                        <h2>About</h2>
+                        <h2>About This App</h2>
                         <p id="appOverview"></p>
                         <p id="appDescription"></p>
                     </div>
@@ -112,10 +128,10 @@
                                 </div>
                             </div>
                             <div class="stat-box">
-                                <i class="fas fa-star"></i>
+                                <i class="fas fa-calendar"></i>
                                 <div>
-                                    <div class="stat-value" id="rating"></div>
-                                    <div class="stat-label">Rating</div>
+                                    <div class="stat-value" id="lastUpdate"></div>
+                                    <div class="stat-label">Last Updated</div>
                                 </div>
                             </div>
                         </div>
@@ -136,7 +152,7 @@
                         </a>
                         <button id="shareBtn" class="btn btn-outline">
                             <i class="fas fa-share-alt"></i>
-                            <span>Share</span>
+                            <span>Share App</span>
                         </button>
                     </div>
                 </div>
@@ -146,7 +162,7 @@
 
     <div id="notificationContainer"></div>
 
-    <script src="js/data.js"></script>
+    <script src="js/data/app-data.js"></script>
     <script src="js/app-detail.js"></script>
 </body>
 </html>
