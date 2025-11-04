@@ -8,11 +8,27 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
+    <!-- Loading Screen -->
+    <div id="loadingScreen">
+        <div class="loading-logo">
+            <div class="loading-logo-inner">
+                <i class="fas fa-laptop-code"></i>
+            </div>
+        </div>
+        <div class="loading-bar-container">
+            <div class="loading-bar" id="loadingBar"></div>
+        </div>
+        <div class="loading-text" id="loadingText">Loading Website Details...</div>
+    </div>
+
+    <!-- Navigation -->
     <nav class="navbar">
         <div class="container">
             <div class="nav-content">
                 <a href="index.html" class="logo">
-                    <i class="fas fa-code"></i>
+                    <div class="logo-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
                     <span>ArshCreates</span>
                 </a>
                 <button id="themeToggle" class="btn-icon">
@@ -63,12 +79,16 @@
                         </span>
                         <span class="meta-item">
                             <i class="fas fa-calendar"></i>
-                            <span id="websiteStatus"></span>
+                            <span id="launchDate"></span>
+                        </span>
+                        <span class="meta-item">
+                            <i class="fas fa-clock"></i>
+                            <span id="developmentTime"></span>
                         </span>
                     </div>
 
                     <div class="detail-description">
-                        <h2>About</h2>
+                        <h2>About This Project</h2>
                         <p id="websiteOverview"></p>
                         <p id="websiteDescription"></p>
                     </div>
@@ -94,7 +114,7 @@
                         </a>
                         <button id="shareBtn" class="btn btn-outline">
                             <i class="fas fa-share-alt"></i>
-                            <span>Share</span>
+                            <span>Share Project</span>
                         </button>
                     </div>
                 </div>
@@ -104,7 +124,7 @@
 
     <div id="notificationContainer"></div>
 
-    <script src="js/data.js"></script>
+    <script src="js/data/website-data.js"></script>
     <script src="js/website-detail.js"></script>
 </body>
 </html>
