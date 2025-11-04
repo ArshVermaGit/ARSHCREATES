@@ -1,276 +1,168 @@
-// ============================================
-// ADMIN PANEL MANAGEMENT SYSTEM
-// ============================================
-
+// Admin Panel Script
 class AdminPanel {
   constructor() {
-    this.feedback = [];
-    this.filters = {
-      status: 'all',
-      search: '',
-      sort: 'date-desc'
-    };
-    this.selectedItems = new Set();
-    this.currentView = 'card';
-    this.currentPage = 1;
-    this.itemsPerPage = 10;
+    this.messages = [];
+    this.currentMessage = null;
     this.init();
   }
 
-  async init() {
-    await this.loadData();
+  init() {
+    this.loadMessages();
+    this.setupTheme();
     this.setupEventListeners();
-    this.initializeCharts();
-    this.renderFeedback();
+    this.renderMessages();
     this.updateStats();
-    this.renderActivity();
   }
 
-  async loadData() {
-    try {
-      const stored = localStorage.getItem('portfolio_feedback');
-      this.feedback = stored ? JSON.parse(stored) : ADMIN_CONFIG.feedback;
-    } catch (error) {
-      console.error('Error loading feedback data:', error);
-      this.feedback = ADMIN_CONFIG.feedback;
+  loadMessages() {
+    // Load messages from localStorage
+    this.messages = JSON.parse(localStorage.getItem('contacts') || '[]');
+  }
+
+  saveMessages() {
+    localStorage.setItem('contacts', JSON.stringify(this.messages));
+  }
+
+  setupTheme() {
+    const themeToggle = document.getElementById('themeToggle');
+    const currentTheme = localStorage.getItem('theme') || 'dark';
+    
+    document.documentElement.setAttribute('data-theme', currentTheme);
+    this.updateThemeIcon(currentTheme);
+
+    if (themeToggle) {
+      themeToggle.addEventListener('click', () => {
+        const theme = document.documentElement.getAttribute('data-theme');
+        const newTheme = theme === 'dark' ? 'light' : 'dark';
+        
+        document.documentElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+        this.updateThemeIcon(newTheme);
+      });
     }
   }
 
-  async saveData() {
-    try {
-      localStorage.setItem('portfolio_feedback', JSON.stringify(this.feedback));
-    } catch (error) {
-      console.error('Error saving feedback data:', error);
+  updateThemeIcon(theme) {
+    const icon = document.querySelector('#themeToggle i');
+    if (icon) {
+      icon.className = theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
     }
   }
 
   setupEventListeners() {
-    const searchInput = document.getElementById('feedbackSearch');
-    if (searchInput) {
-      searchInput.addEventListener('input', this.debounce(() => {
-        this.filters.search = searchInput.value;
-        this.currentPage = 1;
-        this.renderFeedback();
-      }, 300));
-    }
-
-    document.querySelectorAll('.filter-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        this.filters.status = btn.dataset.filter;
-        this.currentPage = 1;
-        this.updateFilterButtons(btn);
-        this.renderFeedback();
-      });
+    // Refresh button
+    document.getElementById('refreshBtn').addEventListener('click', () => {
+      this.loadMessages();
+      this.renderMessages();
+      this.updateStats();
+      this.showNotification('Data refreshed');
     });
 
-    document.querySelectorAll('[data-sort]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        this.filters.sort = btn.dataset.sort;
-        this.updateSortButtons(btn);
-        this.renderFeedback();
-      });
-    });
-
-    document.querySelectorAll('.view-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        this.currentView = btn.dataset.view;
-        this.updateViewButtons(btn);
-        this.renderFeedback();
-      });
-    });
-
-    this.setupBulkActions();
-    this.setupExportFunctionality();
-    
-    const refreshBtn = document.getElementById('refreshBtn');
-    if (refreshBtn) {
-      refreshBtn.addEventListener('click', () => this.refreshData());
-    }
-
-    const themeBtn = document.getElementById('themeBtn');
-    if (themeBtn) {
-      themeBtn.addEventListener('click', () => this.toggleTheme());
-    }
-
-    const logoutBtn = document.getElementById('logoutBtn');
-    if (logoutBtn) {
-      logoutBtn.addEventListener('click', () => this.logout());
-    }
-  }
-
-  updateFilterButtons(activeBtn) {
-    document.querySelectorAll('.filter-btn').forEach(btn => {
-      btn.classList.remove('active');
-    });
-    activeBtn.classList.add('active');
-  }
-
-  updateSortButtons(activeBtn) {
-    document.querySelectorAll('[data-sort]').forEach(btn => {
-      btn.classList.remove('active');
-    });
-    activeBtn.classList.add('active');
-  }
-
-  updateViewButtons(activeBtn) {
-    document.querySelectorAll('.view-btn').forEach(btn => {
-      btn.classList.remove('active');
-    });
-    activeBtn.classList.add('active');
-  }
-
-  setupBulkActions() {
-    const selectAll = document.getElementById('selectAll');
-    if (selectAll) {
-      selectAll.addEventListener('change', (e) => {
-        const checkboxes = document.querySelectorAll('.feedback-checkbox');
-        checkboxes.forEach(checkbox => {
-          checkbox.checked = e.target.checked;
-          this.toggleItemSelection(checkbox);
-        });
-      });
-    }
-
-    const bulkActions = {
-      'bulkMarkRead': () => this.bulkUpdateStatus('read'),
-      'bulkMarkImportant': () => this.bulkToggleImportant(),
-      'bulkArchive': () => this.bulkArchive(),
-      'bulkDelete': () => this.bulkDelete(),
-      'bulkCancel': () => this.cancelBulkSelection()
-    };
-
-    Object.entries(bulkActions).forEach(([id, action]) => {
-      const btn = document.getElementById(id);
-      if (btn) btn.addEventListener('click', action);
-    });
-  }
-
-  setupExportFunctionality() {
-    const exportBtn = document.getElementById('exportBtn');
-    if (exportBtn) {
-      exportBtn.addEventListener('click', () => this.openExportModal());
-    }
-
-    document.querySelectorAll('.export-option').forEach(option => {
-      option.addEventListener('click', () => {
-        const format = option.dataset.format;
-        this.exportData(format);
-      });
-    });
-  }
-
-  renderFeedback() {
-    const filtered = this.getFilteredFeedback();
-    const paginated = this.paginateFeedback(filtered);
-    
-    this.renderFeedbackCards(paginated);
-    this.renderFeedbackTable(paginated);
-    this.updatePagination(filtered.length);
-    this.updateBulkActions();
-    this.updateEmptyState(filtered.length);
-  }
-
-  getFilteredFeedback() {
-    let filtered = [...this.feedback];
-
-    if (this.filters.status !== 'all') {
-      filtered = filtered.filter(item => {
-        switch (this.filters.status) {
-          case 'unread': return item.status === 'unread';
-          case 'resolved': return item.resolved;
-          case 'important': return item.important;
-          default: return true;
-        }
-      });
-    }
-
-    if (this.filters.search) {
-      const searchTerm = this.filters.search.toLowerCase();
-      filtered = filtered.filter(item =>
-        item.name.toLowerCase().includes(searchTerm) ||
-        item.email.toLowerCase().includes(searchTerm) ||
-        item.message.toLowerCase().includes(searchTerm) ||
-        item.type.toLowerCase().includes(searchTerm)
-      );
-    }
-
-    filtered.sort((a, b) => {
-      const dateA = new Date(a.timestamp);
-      const dateB = new Date(b.timestamp);
-
-      switch (this.filters.sort) {
-        case 'date-asc': return dateA - dateB;
-        case 'name': return a.name.localeCompare(b.name);
-        case 'type': return a.type.localeCompare(b.type);
-        case 'date-desc':
-        default: return dateB - dateA;
+    // Clear all button
+    document.getElementById('clearAllBtn').addEventListener('click', () => {
+      if (confirm('Are you sure you want to delete all messages?')) {
+        this.messages = [];
+        this.saveMessages();
+        this.renderMessages();
+        this.updateStats();
+        this.showNotification('All messages deleted');
       }
     });
 
-    return filtered;
+    // Search input
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+      this.filterMessages(e.target.value);
+    });
+
+    // Modal close
+    document.getElementById('closeModal').addEventListener('click', () => {
+      this.closeModal();
+    });
+
+    document.querySelector('.modal-overlay').addEventListener('click', () => {
+      this.closeModal();
+    });
+
+    // Modal actions
+    document.getElementById('markReadBtn').addEventListener('click', () => {
+      this.markAsRead();
+    });
+
+    document.getElementById('deleteMessageBtn').addEventListener('click', () => {
+      this.deleteMessage();
+    });
   }
 
-  paginateFeedback(feedback) {
-    const start = (this.currentPage - 1) * this.itemsPerPage;
-    const end = start + this.itemsPerPage;
-    return feedback.slice(start, end);
-  }
-
-  renderFeedbackCards(feedback) {
+  renderMessages() {
     const container = document.getElementById('feedbackList');
-    if (!container) return;
+    const emptyState = document.getElementById('emptyState');
 
-    if (feedback.length === 0) {
-      container.innerHTML = '';
+    if (this.messages.length === 0) {
+      container.style.display = 'none';
+      emptyState.style.display = 'block';
       return;
     }
 
-    const cardsHTML = feedback.map(item => this.createFeedbackCard(item)).join('');
-    container.innerHTML = cardsHTML;
-    
-    this.attachCardEventListeners();
+    container.style.display = 'flex';
+    emptyState.style.display = 'none';
+
+    // Sort by timestamp (newest first)
+    const sortedMessages = [...this.messages].sort((a, b) => 
+      new Date(b.timestamp) - new Date(a.timestamp)
+    );
+
+    container.innerHTML = sortedMessages.map(msg => this.createMessageCard(msg)).join('');
+
+    // Add click listeners
+    document.querySelectorAll('.feedback-item').forEach(item => {
+      item.addEventListener('click', (e) => {
+        if (!e.target.closest('.action-btn')) {
+          const id = parseInt(item.dataset.id);
+          this.showMessageDetail(id);
+        }
+      });
+    });
+
+    // Add action button listeners
+    document.querySelectorAll('.action-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const id = parseInt(btn.dataset.id);
+        const action = btn.dataset.action;
+
+        if (action === 'delete') {
+          this.quickDelete(id);
+        } else if (action === 'read') {
+          this.quickMarkRead(id);
+        }
+      });
+    });
   }
 
-  createFeedbackCard(item) {
-    const statusClass = item.status === 'unread' ? 'unread' : '';
-    const importantClass = item.important ? 'important' : '';
-    const resolvedClass = item.resolved ? 'resolved' : '';
-    
+  createMessageCard(msg) {
+    const isUnread = msg.status === 'unread';
+    const timeAgo = this.getTimeAgo(msg.timestamp);
+
     return `
-      <div class="feedback-card ${statusClass} ${importantClass} ${resolvedClass}" data-id="${item.id}">
-        <div class="feedback-select">
-          <input type="checkbox" class="feedback-checkbox" data-id="${item.id}">
-        </div>
-        <div class="feedback-status">
-          <span class="status-indicator ${item.status}"></span>
-        </div>
+      <div class="feedback-item ${isUnread ? 'unread' : ''}" data-id="${msg.id}">
         <div class="feedback-header">
-          <div class="user-avatar">
-            <i class="fas fa-user"></i>
-          </div>
-          <div class="user-info">
-            <h4 class="user-name">${item.name}</h4>
-            <p class="user-email">${item.email}</p>
+          <div class="feedback-user">
+            <div class="feedback-name">${msg.name}</div>
+            <div class="feedback-email">${msg.email}</div>
           </div>
           <div class="feedback-meta">
-            <span class="feedback-time">${formatRelativeTime(item.timestamp)}</span>
-            <span class="feedback-type">${item.type}</span>
+            <div class="feedback-time">${timeAgo}</div>
+            <span class="feedback-status ${msg.status}">${msg.status}</span>
           </div>
         </div>
-        <div class="feedback-body">
-          <p class="feedback-message">${item.message}</p>
-        </div>
-        <div class="feedback-footer">
-          <button class="action-btn" data-action="reply" data-id="${item.id}">
-            <i class="fas fa-reply"></i> Reply
-          </button>
-          <button class="action-btn" data-action="star" data-id="${item.id}">
-            <i class="${item.important ? 'fas' : 'far'} fa-star"></i> Important
-          </button>
-          <button class="action-btn" data-action="resolve" data-id="${item.id}">
-            <i class="fas fa-check"></i> ${item.resolved ? 'Unresolve' : 'Resolve'}
-          </button>
-          <button class="action-btn text-danger" data-action="delete" data-id="${item.id}">
+        <div class="feedback-message">${msg.message}</div>
+        <div class="feedback-actions">
+          ${isUnread ? `
+            <button class="action-btn" data-id="${msg.id}" data-action="read">
+              <i class="fas fa-check"></i> Mark Read
+            </button>
+          ` : ''}
+          <button class="action-btn danger" data-id="${msg.id}" data-action="delete">
             <i class="fas fa-trash"></i> Delete
           </button>
         </div>
@@ -278,456 +170,151 @@ class AdminPanel {
     `;
   }
 
-  renderFeedbackTable(feedback) {
-    const container = document.getElementById('feedbackTableBody');
-    if (!container) return;
+  filterMessages(query) {
+    const items = document.querySelectorAll('.feedback-item');
+    const searchQuery = query.toLowerCase();
 
-    if (feedback.length === 0) {
-      container.innerHTML = '';
-      return;
-    }
-
-    const rowsHTML = feedback.map(item => this.createTableRow(item)).join('');
-    container.innerHTML = rowsHTML;
-    
-    this.attachTableEventListeners();
-  }
-
-  createTableRow(item) {
-    return `
-      <tr data-id="${item.id}" class="${item.status === 'unread' ? 'unread' : ''}">
-        <td><input type="checkbox" class="feedback-checkbox" data-id="${item.id}"></td>
-        <td>
-          <span class="status-indicator ${item.status}"></span>
-          ${item.important ? '<i class="fas fa-star text-warning"></i>' : ''}
-        </td>
-        <td>${item.name}</td>
-        <td>${item.email}</td>
-        <td><span class="badge">${item.type}</span></td>
-        <td class="truncate">${item.message}</td>
-        <td>${formatRelativeTime(item.timestamp)}</td>
-        <td>
-          <div class="table-actions">
-            <button class="action-btn btn-sm" data-action="reply" data-id="${item.id}" title="Reply">
-              <i class="fas fa-reply"></i>
-            </button>
-            <button class="action-btn btn-sm" data-action="star" data-id="${item.id}" title="Important">
-              <i class="${item.important ? 'fas' : 'far'} fa-star"></i>
-            </button>
-            <button class="action-btn btn-sm" data-action="resolve" data-id="${item.id}" title="${item.resolved ? 'Unresolve' : 'Resolve'}">
-              <i class="fas fa-check"></i>
-            </button>
-            <button class="action-btn btn-sm text-danger" data-action="delete" data-id="${item.id}" title="Delete">
-              <i class="fas fa-trash"></i>
-            </button>
-          </div>
-        </td>
-      </tr>
-    `;
-  }
-
-  attachCardEventListeners() {
-    document.querySelectorAll('.feedback-card .action-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const action = btn.dataset.action;
-        const id = btn.dataset.id;
-        this.handleAction(action, id);
-      });
-    });
-
-    document.querySelectorAll('.feedback-checkbox').forEach(checkbox => {
-      checkbox.addEventListener('change', () => this.toggleItemSelection(checkbox));
-    });
-  }
-
-  attachTableEventListeners() {
-    document.querySelectorAll('#feedbackTableBody .action-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const action = btn.dataset.action;
-        const id = btn.dataset.id;
-        this.handleAction(action, id);
-      });
-    });
-
-    document.querySelectorAll('#feedbackTableBody .feedback-checkbox').forEach(checkbox => {
-      checkbox.addEventListener('change', () => this.toggleItemSelection(checkbox));
-    });
-  }
-
-  handleAction(action, id) {
-    const item = this.feedback.find(f => f.id == id);
-    if (!item) return;
-
-    switch (action) {
-      case 'reply':
-        this.openReplyModal(item);
-        break;
-      case 'star':
-        this.toggleImportant(id);
-        break;
-      case 'resolve':
-        this.toggleResolved(id);
-        break;
-      case 'delete':
-        this.deleteItem(id);
-        break;
-    }
-  }
-
-  toggleItemSelection(checkbox) {
-    const id = checkbox.dataset.id;
-    
-    if (checkbox.checked) {
-      this.selectedItems.add(id);
-    } else {
-      this.selectedItems.delete(id);
-    }
-
-    this.updateBulkActions();
-  }
-
-  updateBulkActions() {
-    const bulkActions = document.getElementById('bulkActions');
-    const selectedCount = document.getElementById('selectedCount');
-    const selectAll = document.getElementById('selectAll');
-
-    if (bulkActions && selectedCount) {
-      if (this.selectedItems.size > 0) {
-        bulkActions.style.display = 'flex';
-        selectedCount.textContent = this.selectedItems.size;
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      if (text.includes(searchQuery)) {
+        item.style.display = 'block';
       } else {
-        bulkActions.style.display = 'none';
+        item.style.display = 'none';
       }
-    }
-
-    if (selectAll) {
-      const checkboxes = document.querySelectorAll('.feedback-checkbox');
-      const checkedCount = document.querySelectorAll('.feedback-checkbox:checked').length;
-      selectAll.checked = checkedCount > 0 && checkedCount === checkboxes.length;
-      selectAll.indeterminate = checkedCount > 0 && checkedCount < checkboxes.length;
-    }
-  }
-
-  bulkUpdateStatus(status) {
-    this.selectedItems.forEach(id => {
-      const item = this.feedback.find(f => f.id == id);
-      if (item) item.status = status;
     });
-    
-    this.saveData();
-    this.renderFeedback();
-    this.updateStats();
-    this.showNotification(`${this.selectedItems.size} items marked as ${status}`, 'success');
-    this.cancelBulkSelection();
   }
 
-  bulkToggleImportant() {
-    this.selectedItems.forEach(id => {
-      const item = this.feedback.find(f => f.id == id);
-      if (item) item.important = !item.important;
-    });
-    
-    this.saveData();
-    this.renderFeedback();
-    this.showNotification(`Important status updated for ${this.selectedItems.size} items`, 'success');
-    this.cancelBulkSelection();
+  showMessageDetail(id) {
+    const message = this.messages.find(m => m.id === id);
+    if (!message) return;
+
+    this.currentMessage = message;
+
+    const modalBody = document.getElementById('modalBody');
+    modalBody.innerHTML = `
+      <div class="message-detail">
+        <div class="detail-row">
+          <div class="detail-label">Name</div>
+          <div class="detail-value">${message.name}</div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-label">Email</div>
+          <div class="detail-value">${message.email}</div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-label">Date</div>
+          <div class="detail-value">${new Date(message.timestamp).toLocaleString()}</div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-label">Status</div>
+          <div class="detail-value">${message.status}</div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-label">Message</div>
+          <div class="detail-value">${message.message}</div>
+        </div>
+      </div>
+    `;
+
+    document.getElementById('messageModal').classList.add('active');
   }
 
-  bulkArchive() {
-    this.showNotification(`${this.selectedItems.size} items archived`, 'success');
-    this.cancelBulkSelection();
+  closeModal() {
+    document.getElementById('messageModal').classList.remove('active');
+    this.currentMessage = null;
   }
 
-  bulkDelete() {
-    if (confirm(`Are you sure you want to delete ${this.selectedItems.size} items?`)) {
-      this.feedback = this.feedback.filter(item => !this.selectedItems.has(item.id.toString()));
-      this.saveData();
-      this.renderFeedback();
+  markAsRead() {
+    if (!this.currentMessage) return;
+
+    const index = this.messages.findIndex(m => m.id === this.currentMessage.id);
+    if (index !== -1) {
+      this.messages[index].status = 'read';
+      this.saveMessages();
+      this.renderMessages();
       this.updateStats();
-      this.showNotification(`${this.selectedItems.size} items deleted`, 'success');
-      this.cancelBulkSelection();
+      this.closeModal();
+      this.showNotification('Message marked as read');
     }
   }
 
-  cancelBulkSelection() {
-    this.selectedItems.clear();
-    document.querySelectorAll('.feedback-checkbox').forEach(checkbox => {
-      checkbox.checked = false;
-    });
-    this.updateBulkActions();
-  }
-
-  toggleImportant(id) {
-    const item = this.feedback.find(f => f.id == id);
-    if (item) {
-      item.important = !item.important;
-      this.saveData();
-      this.renderFeedback();
-      this.showNotification(`Marked as ${item.important ? 'important' : 'not important'}`, 'success');
-    }
-  }
-
-  toggleResolved(id) {
-    const item = this.feedback.find(f => f.id == id);
-    if (item) {
-      item.resolved = !item.resolved;
-      item.status = 'read';
-      this.saveData();
-      this.renderFeedback();
+  quickMarkRead(id) {
+    const index = this.messages.findIndex(m => m.id === id);
+    if (index !== -1) {
+      this.messages[index].status = 'read';
+      this.saveMessages();
+      this.renderMessages();
       this.updateStats();
-      this.showNotification(`Marked as ${item.resolved ? 'resolved' : 'unresolved'}`, 'success');
+      this.showNotification('Message marked as read');
     }
   }
 
-  deleteItem(id) {
-    if (confirm('Are you sure you want to delete this item?')) {
-      this.feedback = this.feedback.filter(item => item.id != id);
-      this.saveData();
-      this.renderFeedback();
+  deleteMessage() {
+    if (!this.currentMessage) return;
+
+    if (confirm('Are you sure you want to delete this message?')) {
+      this.messages = this.messages.filter(m => m.id !== this.currentMessage.id);
+      this.saveMessages();
+      this.renderMessages();
       this.updateStats();
-      this.showNotification('Item deleted successfully', 'success');
+      this.closeModal();
+      this.showNotification('Message deleted');
     }
   }
 
-  openReplyModal(item) {
-    console.log('Opening reply modal for:', item);
+  quickDelete(id) {
+    if (confirm('Are you sure you want to delete this message?')) {
+      this.messages = this.messages.filter(m => m.id !== id);
+      this.saveMessages();
+      this.renderMessages();
+      this.updateStats();
+      this.showNotification('Message deleted');
+    }
   }
 
   updateStats() {
-    const total = this.feedback.length;
-    const resolved = this.feedback.filter(item => item.resolved).length;
-    const pending = this.feedback.filter(item => !item.resolved).length;
-    const unread = this.feedback.filter(item => item.status === 'unread').length;
+    const total = this.messages.length;
+    const unread = this.messages.filter(m => m.status === 'unread').length;
+    const read = total - unread;
 
-    this.updateStatCard('totalMessages', total);
-    this.updateStatCard('resolvedMessages', resolved);
-    this.updateStatCard('pendingMessages', pending);
+    document.getElementById('totalMessages').textContent = total;
+    document.getElementById('unreadMessages').textContent = unread;
+    document.getElementById('readMessages').textContent = read;
+  }
+
+  getTimeAgo(timestamp) {
+    const now = new Date();
+    const past = new Date(timestamp);
+    const diffInSeconds = Math.floor((now - past) / 1000);
+
+    if (diffInSeconds < 60) return 'Just now';
+    if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)} minutes ago`;
+    if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)} hours ago`;
+    if (diffInSeconds < 604800) return `${Math.floor(diffInSeconds / 86400)} days ago`;
     
-    const badge = document.getElementById('feedbackCount');
-    if (badge) badge.textContent = unread;
+    return past.toLocaleDateString();
   }
 
-  updateStatCard(elementId, value) {
-    const element = document.getElementById(elementId);
-    if (element) {
-      this.animateCounter(element, value);
-    }
-  }
-
-  animateCounter(element, target) {
-    const current = parseInt(element.textContent) || 0;
-    const increment = target > current ? 1 : -1;
-    let currentValue = current;
-
-    const timer = setInterval(() => {
-      currentValue += increment;
-      element.textContent = currentValue;
-
-      if (currentValue === target) {
-        clearInterval(timer);
-      }
-    }, 20);
-  }
-
-  updatePagination(totalItems) {
-    const totalPages = Math.ceil(totalItems / this.itemsPerPage);
-    const pagination = document.getElementById('pagination');
-    const prevBtn = document.getElementById('prevPage');
-    const nextBtn = document.getElementById('nextPage');
-    const pagesContainer = document.getElementById('paginationPages');
-
-    if (!pagination) return;
-
-    pagination.style.display = totalPages > 1 ? 'flex' : 'none';
-
-    if (prevBtn) prevBtn.disabled = this.currentPage === 1;
-    if (nextBtn) nextBtn.disabled = this.currentPage === totalPages;
-
-    if (pagesContainer) {
-      let pagesHTML = '';
-      const maxVisiblePages = 5;
-      let startPage = Math.max(1, this.currentPage - Math.floor(maxVisiblePages / 2));
-      let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
-
-      if (endPage - startPage + 1 < maxVisiblePages) {
-        startPage = Math.max(1, endPage - maxVisiblePages + 1);
-      }
-
-      if (startPage > 1) {
-        pagesHTML += `<span class="page-ellipsis">...</span>`;
-      }
-
-      for (let i = startPage; i <= endPage; i++) {
-        pagesHTML += `
-          <button class="page-number ${i === this.currentPage ? 'active' : ''}" 
-                  data-page="${i}">${i}</button>
-        `;
-      }
-
-      if (endPage < totalPages) {
-        pagesHTML += `<span class="page-ellipsis">...</span>`;
-      }
-
-      pagesContainer.innerHTML = pagesHTML;
-
-      pagesContainer.querySelectorAll('.page-number').forEach(btn => {
-        btn.addEventListener('click', () => {
-          this.currentPage = parseInt(btn.dataset.page);
-          this.renderFeedback();
-        });
-      });
-    }
-
-    if (prevBtn) {
-      prevBtn.onclick = () => {
-        if (this.currentPage > 1) {
-          this.currentPage--;
-          this.renderFeedback();
-        }
-      };
-    }
-
-    if (nextBtn) {
-      nextBtn.onclick = () => {
-        if (this.currentPage < totalPages) {
-          this.currentPage++;
-          this.renderFeedback();
-        }
-      };
-    }
-  }
-
-  updateEmptyState(itemCount) {
-    const emptyState = document.getElementById('emptyState');
-    const feedbackList = document.getElementById('feedbackList');
-    const feedbackTable = document.getElementById('feedbackTable');
-
-    if (emptyState) {
-      emptyState.style.display = itemCount === 0 ? 'block' : 'none';
-    }
-
-    if (feedbackList) {
-      feedbackList.style.display = itemCount > 0 && this.currentView === 'card' ? 'grid' : 'none';
-    }
-    if (feedbackTable) {
-      feedbackTable.style.display = itemCount > 0 && this.currentView === 'table' ? 'block' : 'none';
-    }
-  }
-
-  initializeCharts() {
-    this.initializeMessagesChart();
-    this.initializeTypesChart();
-  }
-
-  initializeMessagesChart() {
-    const ctx = document.getElementById('messagesChart');
-    if (!ctx) return;
-
-    console.log('Initializing messages chart');
-  }
-
-  initializeTypesChart() {
-    const ctx = document.getElementById('typesChart');
-    if (!ctx) return;
-
-    console.log('Initializing types chart');
-  }
-
-  renderActivity() {
-    const container = document.getElementById('activityList');
+  showNotification(message) {
+    const container = document.getElementById('notificationContainer');
     if (!container) return;
 
-    const activities = ADMIN_CONFIG.activity.slice(0, 5);
-    const activitiesHTML = activities.map(activity => `
-      <div class="activity-item">
-        <div class="activity-icon">
-          <i class="fas fa-${this.getActivityIcon(activity.type)}"></i>
-        </div>
-        <div class="activity-content">
-          <p>${activity.description}</p>
-          <span class="activity-time">${formatRelativeTime(activity.timestamp)}</span>
-        </div>
-      </div>
-    `).join('');
+    const notification = document.createElement('div');
+    notification.className = 'notification success';
+    notification.innerHTML = `
+      <i class="fas fa-check-circle"></i>
+      <span>${message}</span>
+    `;
 
-    container.innerHTML = activitiesHTML;
-  }
+    container.appendChild(notification);
 
-  getActivityIcon(type) {
-    const icons = {
-      'new_message': 'envelope',
-      'message_resolved': 'check',
-      'export_data': 'download',
-      'login': 'sign-in-alt'
-    };
-    return icons[type] || 'circle';
-  }
-
-  exportData(format) {
-    const data = this.getFilteredFeedback();
-    exportData(data, format);
-    this.showNotification(`Data exported as ${format.toUpperCase()}`, 'success');
-  }
-
-  openExportModal() {
-    console.log('Opening export modal');
-  }
-
-  refreshData() {
-    this.loadData().then(() => {
-      this.renderFeedback();
-      this.updateStats();
-      this.showNotification('Data refreshed successfully', 'success');
-    });
-  }
-
-  toggleTheme() {
-    const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
-    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-    
-    document.documentElement.setAttribute('data-theme', newTheme);
-    localStorage.setItem('portfolio_theme', newTheme);
-    
-    const icon = document.querySelector('#themeBtn i');
-    if (icon) {
-      icon.className = newTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
-    }
-  }
-
-  logout() {
-    if (confirm('Are you sure you want to logout?')) {
-      localStorage.removeItem('admin_session');
-      window.location.href = 'index.html';
-    }
-  }
-
-  showNotification(message, type = 'info') {
-    if (window.portfolioApp) {
-      window.portfolioApp.showNotification(message, type);
-    } else {
-      alert(`${type.toUpperCase()}: ${message}`);
-    }
-  }
-
-  debounce(func, wait) {
-    let timeout;
-    return function executedFunction(...args) {
-      const later = () => {
-        clearTimeout(timeout);
-        func(...args);
-      };
-      clearTimeout(timeout);
-      timeout = setTimeout(later, wait);
-    };
+    setTimeout(() => {
+      notification.remove();
+    }, 3000);
   }
 }
 
-// ============================================
-// INITIALIZATION
-// ============================================
-
+// Initialize admin panel
 document.addEventListener('DOMContentLoaded', () => {
-  if (document.querySelector('.admin-body')) {
-    window.adminPanel = new AdminPanel();
-  }
+  new AdminPanel();
 });
