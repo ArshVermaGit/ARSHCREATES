@@ -3,19 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Arsh Verma - Creative Developer Portfolio">
-    <title>Arsh Verma - Creative Developer</title>
+    <meta name="description" content="Arsh Verma - Premium Creative Developer Portfolio">
+    <title>Arsh Verma | Creative Developer</title>
     
+    <!-- Preload Critical Resources -->
+    <link rel="preload" href="css/style.css" as="style">
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" as="style">
+    
+    <!-- Stylesheets -->
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
+    <!-- Loading Screen -->
+    <div id="loadingScreen">
+        <div class="loading-logo">
+            <div class="loading-logo-inner">
+                <i class="fas fa-code"></i>
+            </div>
+        </div>
+        <div class="loading-bar-container">
+            <div class="loading-bar" id="loadingBar"></div>
+        </div>
+        <div class="loading-text" id="loadingText">Loading Premium Experience...</div>
+    </div>
+
+    <!-- Custom Cursor -->
+    <div class="cursor-dot" id="cursorDot"></div>
+    <div class="cursor-ring" id="cursorRing"></div>
+
+    <!-- Particle Background -->
+    <div class="particles-container" id="particlesContainer"></div>
+
     <!-- Navigation -->
     <nav class="navbar" id="navbar">
         <div class="container">
             <div class="nav-content">
                 <a href="index.html" class="logo">
-                    <i class="fas fa-code"></i>
+                    <div class="logo-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
                     <span>ArshCreates</span>
                 </a>
 
@@ -45,11 +72,15 @@
 
     <!-- Hero Section -->
     <section id="home" class="hero">
+        <div class="hero-background">
+            <div class="hero-gradient"></div>
+        </div>
+        
         <div class="container">
             <div class="hero-content">
                 <div class="status-badge">
                     <span class="status-dot"></span>
-                    <span>Available for Projects</span>
+                    <span>Available for Premium Projects</span>
                 </div>
                 
                 <h1 class="hero-title">
@@ -62,18 +93,19 @@
                 </p>
                 
                 <p class="hero-description">
-                    Creative developer specializing in game development, web applications, 
-                    and innovative digital solutions. Let's build something extraordinary together.
+                    Premium creative developer specializing in cutting-edge game development, 
+                    revolutionary web applications, and innovative digital experiences. 
+                    Let's build something extraordinary together.
                 </p>
 
                 <div class="hero-actions">
-                    <a href="#games" class="btn btn-primary">
+                    <a href="#games" class="btn btn-primary btn-glow">
                         <i class="fas fa-gamepad"></i>
-                        <span>View Projects</span>
+                        <span>Explore Portfolio</span>
                     </a>
                     <a href="#contact" class="btn btn-outline">
                         <i class="fas fa-envelope"></i>
-                        <span>Get In Touch</span>
+                        <span>Start a Project</span>
                     </a>
                 </div>
 
@@ -86,6 +118,9 @@
                     </a>
                     <a href="#" class="social-link" aria-label="Twitter">
                         <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#" class="social-link" aria-label="Dribbble">
+                        <i class="fab fa-dribbble"></i>
                     </a>
                 </div>
             </div>
@@ -100,35 +135,40 @@
         <div class="container">
             <div class="section-header">
                 <h2 class="section-title">About Me</h2>
-                <p class="section-subtitle">Passionate about creating exceptional digital experiences</p>
+                <p class="section-subtitle">Crafting exceptional digital experiences with passion and precision</p>
             </div>
 
             <div class="about-content">
                 <div class="about-text">
                     <p>
-                        I'm a creative developer with expertise in game development, web applications, 
-                        and mobile solutions. I love turning ideas into reality through clean code and 
-                        thoughtful design.
+                        I'm a premium creative developer with expertise in game development, 
+                        revolutionary web applications, and cutting-edge mobile solutions. 
+                        I transform visionary ideas into reality through clean code, 
+                        thoughtful design, and innovative technology.
                     </p>
                     <p>
                         With a strong foundation in Computer Science and years of hands-on experience, 
                         I specialize in Unity game development, modern web technologies, and creating 
-                        applications that make a difference.
+                        applications that make a tangible difference in people's lives.
                     </p>
                 </div>
 
                 <div class="stats-grid">
                     <div class="stat-card">
-                        <div class="stat-number" data-target="50">0</div>
-                        <div class="stat-label">Projects</div>
+                        <div class="stat-number" data-target="75">0</div>
+                        <div class="stat-label">Premium Projects</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-number" data-target="100">0</div>
-                        <div class="stat-label">Clients</div>
+                        <div class="stat-number" data-target="150">0</div>
+                        <div class="stat-label">Satisfied Clients</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-number" data-target="5">0</div>
-                        <div class="stat-label">Years Exp</div>
+                        <div class="stat-number" data-target="7">0</div>
+                        <div class="stat-label">Years Experience</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" data-target="25">0</div>
+                        <div class="stat-label">Awards Won</div>
                     </div>
                 </div>
             </div>
@@ -140,7 +180,7 @@
         <div class="container">
             <div class="section-header">
                 <h2 class="section-title">Games Portfolio</h2>
-                <p class="section-subtitle">Interactive gaming experiences built with passion</p>
+                <p class="section-subtitle">Immersive gaming experiences built with cutting-edge technology</p>
             </div>
 
             <div class="portfolio-grid" id="gamesGrid">
@@ -154,7 +194,7 @@
         <div class="container">
             <div class="section-header">
                 <h2 class="section-title">Web Projects</h2>
-                <p class="section-subtitle">Modern web solutions that drive results</p>
+                <p class="section-subtitle">Revolutionary web solutions that drive exceptional results</p>
             </div>
 
             <div class="portfolio-grid" id="websitesGrid">
@@ -168,7 +208,7 @@
         <div class="container">
             <div class="section-header">
                 <h2 class="section-title">Applications</h2>
-                <p class="section-subtitle">Innovative apps solving real-world problems</p>
+                <p class="section-subtitle">Innovative apps solving real-world challenges</p>
             </div>
 
             <div class="portfolio-grid" id="appsGrid">
@@ -182,7 +222,7 @@
         <div class="container">
             <div class="section-header">
                 <h2 class="section-title">Skills & Expertise</h2>
-                <p class="section-subtitle">Technologies I work with</p>
+                <p class="section-subtitle">Mastering the technologies that power innovation</p>
             </div>
 
             <div class="skills-grid">
@@ -216,11 +256,20 @@
                                 <div class="skill-progress" data-progress="88"></div>
                             </div>
                         </div>
+                        <div class="skill-item">
+                            <div class="skill-info">
+                                <span>TypeScript</span>
+                                <span>85%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-progress="85"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 <div class="skill-category">
-                    <h3><i class="fas fa-tools"></i> Frameworks</h3>
+                    <h3><i class="fas fa-tools"></i> Frameworks & Engines</h3>
                     <div class="skill-list">
                         <div class="skill-item">
                             <div class="skill-info">
@@ -234,26 +283,35 @@
                         <div class="skill-item">
                             <div class="skill-info">
                                 <span>React</span>
-                                <span>88%</span>
+                                <span>90%</span>
                             </div>
                             <div class="skill-bar">
-                                <div class="skill-progress" data-progress="88"></div>
+                                <div class="skill-progress" data-progress="90"></div>
                             </div>
                         </div>
                         <div class="skill-item">
                             <div class="skill-info">
-                                <span>Node.js</span>
+                                <span>Vue.js</span>
                                 <span>85%</span>
                             </div>
                             <div class="skill-bar">
                                 <div class="skill-progress" data-progress="85"></div>
                             </div>
                         </div>
+                        <div class="skill-item">
+                            <div class="skill-info">
+                                <span>Node.js</span>
+                                <span>88%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-progress="88"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 <div class="skill-category">
-                    <h3><i class="fas fa-database"></i> Databases</h3>
+                    <h3><i class="fas fa-database"></i> Databases & Cloud</h3>
                     <div class="skill-list">
                         <div class="skill-item">
                             <div class="skill-info">
@@ -276,6 +334,15 @@
                         <div class="skill-item">
                             <div class="skill-info">
                                 <span>MySQL</span>
+                                <span>85%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-progress="85"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-info">
+                                <span>AWS</span>
                                 <span>82%</span>
                             </div>
                             <div class="skill-bar">
@@ -293,7 +360,7 @@
         <div class="container">
             <div class="section-header">
                 <h2 class="section-title">Get In Touch</h2>
-                <p class="section-subtitle">Let's discuss your next project</p>
+                <p class="section-subtitle">Let's discuss your next revolutionary project</p>
             </div>
 
             <div class="contact-container">
@@ -319,24 +386,41 @@
                         <h3>LinkedIn</h3>
                         <p>Arsh Verma</p>
                     </div>
+                    <div class="contact-card">
+                        <div class="contact-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <h3>Location</h3>
+                        <p>Available Worldwide</p>
+                    </div>
                 </div>
 
                 <form class="contact-form" id="contactForm">
                     <div class="form-group">
-                        <label>Name</label>
+                        <label>Full Name</label>
                         <input type="text" name="name" required>
                     </div>
                     <div class="form-group">
-                        <label>Email</label>
+                        <label>Email Address</label>
                         <input type="email" name="email" required>
                     </div>
                     <div class="form-group">
-                        <label>Message</label>
-                        <textarea name="message" rows="5" required></textarea>
+                        <label>Project Type</label>
+                        <select name="projectType" required>
+                            <option value="">Select a project type</option>
+                            <option value="game">Game Development</option>
+                            <option value="web">Web Application</option>
+                            <option value="mobile">Mobile App</option>
+                            <option value="other">Other</option>
+                        </select>
                     </div>
-                    <button type="submit" class="btn btn-primary">
+                    <div class="form-group">
+                        <label>Project Description</label>
+                        <textarea name="message" rows="6" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-glow">
                         <i class="fas fa-paper-plane"></i>
-                        <span>Send Message</span>
+                        <span>Send Premium Proposal</span>
                     </button>
                 </form>
             </div>
@@ -347,9 +431,11 @@
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
-                <p>&copy; 2024 Arsh Verma. All rights reserved.</p>
+                <p>&copy; 2024 Arsh Verma. All rights reserved. Crafted with <i class="fas fa-heart"></i></p>
                 <div class="footer-links">
-                    <a href="admin_feedback.html">Admin</a>
+                    <a href="admin_feedback.html">Admin Panel</a>
+                    <a href="privacy.html">Privacy Policy</a>
+                    <a href="terms.html">Terms of Service</a>
                 </div>
             </div>
         </div>
@@ -364,7 +450,10 @@
     <div id="notificationContainer"></div>
 
     <!-- Scripts -->
-    <script src="js/data.js"></script>
+    <script src="js/data/game-data.js"></script>
+    <script src="js/data/website-data.js"></script>
+    <script src="js/data/app-data.js"></script>
     <script src="js/script.js"></script>
+    <script src="js/features.js"></script>
 </body>
 </html>
