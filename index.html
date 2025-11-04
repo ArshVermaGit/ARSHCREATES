@@ -1,1083 +1,249 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
-    <!-- ============================================
-         META TAGS & SEO OPTIMIZATION
-         ============================================ -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-    <meta name="description" content="Arsh Verma - Creative Developer specializing in game development, web applications, and innovative digital solutions.">
-    <meta name="keywords" content="game developer, web developer, unity, apps, creative developer, portfolio">
-    <meta name="author" content="Arsh Verma">
-    <meta name="robots" content="index, follow">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Arsh Verma - Creative Developer Portfolio">
+    <title>Arsh Verma - Creative Developer</title>
     
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="Arsh Verma - Creative Developer">
-    <meta property="og:description" content="Explore my portfolio of games, websites, and innovative applications.">
-    <meta property="og:image" content="images/og-image.jpg">
-    
-    <!-- Twitter -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Arsh Verma - Creative Developer">
-    <meta name="twitter:description" content="Explore my portfolio of games, websites, and innovative applications.">
-    
-    <title>Arsh Verma - Creative Developer | Games, Apps & Web Solutions</title>
-    
-    <!-- ============================================
-         STYLESHEETS & ICONS
-         ============================================ -->
     <link rel="stylesheet" href="css/style.css">
-    <link rel="icon" href="images/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    
-    <!-- Preload critical assets -->
-    <link rel="preload" href="css/style.css" as="style">
-    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" as="style">
 </head>
 <body>
-    <!-- ============================================
-         ACCESSIBILITY: SKIP TO CONTENT LINK
-         ============================================ -->
-    <a href="#main-content" class="skip-link">Skip to main content</a>
-
-    <!-- ============================================
-         LOADING SCREEN WITH PROGRESS INDICATOR
-         Feature: Custom loading animation
-         ============================================ -->
-    <div class="loading-screen" id="loadingScreen">
-        <div class="loading-content">
-            <div class="loading-logo">
-                <i class="fas fa-code"></i>
-                <span class="loading-text">ArshCreates</span>
-            </div>
-            <div class="loading-bar-container">
-                <div class="loading-bar" id="loadingBar"></div>
-            </div>
-            <p class="loading-percentage" id="loadingPercentage">0%</p>
-            <p class="loading-status" id="loadingStatus">Initializing...</p>
-        </div>
-    </div>
-
-    <!-- ============================================
-         CURSOR TRAIL EFFECT CANVAS
-         Feature: Custom animated cursor trail
-         ============================================ -->
-    <canvas id="cursorCanvas"></canvas>
-
-    <!-- ============================================
-         PARTICLE BACKGROUND CANVAS
-         Feature: Interactive particle system
-         ============================================ -->
-    <canvas id="particleCanvas"></canvas>
-
-    <!-- ============================================
-         FLOATING ACTION BUTTON (FAB) MENU
-         Feature: Quick access to key actions
-         ============================================ -->
-    <div class="fab-container" id="fabContainer">
-        <button class="fab-main" id="fabMain" aria-label="Quick actions menu">
-            <i class="fas fa-plus"></i>
-        </button>
-        <div class="fab-menu" id="fabMenu">
-            <button class="fab-item" data-action="scroll-top" aria-label="Scroll to top">
-                <i class="fas fa-arrow-up"></i>
-                <span class="fab-tooltip">Top</span>
-            </button>
-            <button class="fab-item" data-action="share" aria-label="Share portfolio">
-                <i class="fas fa-share-alt"></i>
-                <span class="fab-tooltip">Share</span>
-            </button>
-            <button class="fab-item" data-action="download-cv" aria-label="Download CV">
-                <i class="fas fa-file-download"></i>
-                <span class="fab-tooltip">CV</span>
-            </button>
-            <button class="fab-item" data-action="quick-contact" aria-label="Quick contact">
-                <i class="fas fa-envelope"></i>
-                <span class="fab-tooltip">Contact</span>
-            </button>
-        </div>
-    </div>
-
-    <!-- ============================================
-         QUICK NAVIGATION BAR (SIDE NAVIGATION)
-         Feature: Sticky section navigator with progress
-         ============================================ -->
-    <div class="quick-nav" id="quickNav">
-        <div class="quick-nav-items">
-            <button class="quick-nav-btn active" data-section="games" aria-label="Navigate to games">
-                <i class="fas fa-gamepad"></i>
-                <span>Games</span>
-                <div class="progress-ring">
-                    <svg width="60" height="60">
-                        <circle class="progress-ring-circle" stroke="var(--accent)" stroke-width="2" fill="transparent" r="28" cx="30" cy="30"/>
-                    </svg>
-                </div>
-            </button>
-            <button class="quick-nav-btn" data-section="websites" aria-label="Navigate to websites">
-                <i class="fas fa-laptop-code"></i>
-                <span>Websites</span>
-                <div class="progress-ring">
-                    <svg width="60" height="60">
-                        <circle class="progress-ring-circle" stroke="var(--accent)" stroke-width="2" fill="transparent" r="28" cx="30" cy="30"/>
-                    </svg>
-                </div>
-            </button>
-            <button class="quick-nav-btn" data-section="apps" aria-label="Navigate to apps">
-                <i class="fas fa-mobile-alt"></i>
-                <span>Apps</span>
-                <div class="progress-ring">
-                    <svg width="60" height="60">
-                        <circle class="progress-ring-circle" stroke="var(--accent)" stroke-width="2" fill="transparent" r="28" cx="30" cy="30"/>
-                    </svg>
-                </div>
-            </button>
-        </div>
-    </div>
-
-    <!-- ============================================
-         COMMAND PALETTE / SEARCH
-         Feature: Keyboard-driven quick search (Ctrl+K)
-         ============================================ -->
-    <div class="command-palette" id="commandPalette">
-        <div class="command-palette-overlay"></div>
-        <div class="command-palette-container">
-            <div class="command-palette-search">
-                <i class="fas fa-search"></i>
-                <input type="text" id="commandInput" placeholder="Type to search... (Ctrl+K)" autocomplete="off">
-                <kbd>ESC</kbd>
-            </div>
-            <div class="command-palette-results" id="commandResults">
-                <!-- Dynamic search results -->
-            </div>
-            <div class="command-palette-footer">
-                <span><kbd>↑</kbd><kbd>↓</kbd> Navigate</span>
-                <span><kbd>↵</kbd> Select</span>
-                <span><kbd>ESC</kbd> Close</span>
-            </div>
-        </div>
-    </div>
-
-    <!-- ============================================
-         NAVIGATION BAR WITH FEATURES
-         - Sticky navigation with blur effect
-         - Theme toggle
-         - Search trigger
-         - Mobile responsive menu
-         ============================================ -->
+    <!-- Navigation -->
     <nav class="navbar" id="navbar">
-        <div class="nav-container">
-            <!-- Logo with animation -->
-            <a href="/" class="logo" aria-label="Home">
-                <i class="fas fa-code"></i>
-                <span>ArshCreates</span>
-                <div class="logo-pulse"></div>
-            </a>
+        <div class="container">
+            <div class="nav-content">
+                <a href="index.html" class="logo">
+                    <i class="fas fa-code"></i>
+                    <span>ArshCreates</span>
+                </a>
 
-            <!-- Desktop Navigation Menu -->
-            <ul class="nav-menu" id="navMenu" role="navigation">
-                <li><a href="#about" class="nav-link">About</a></li>
-                <li><a href="#games" class="nav-link">Games</a></li>
-                <li><a href="#websites" class="nav-link">Websites</a></li>
-                <li><a href="#apps" class="nav-link">Apps</a></li>
-                <li><a href="#skills" class="nav-link">Skills</a></li>
-                <li><a href="#testimonials" class="nav-link">Testimonials</a></li>
-                <li><a href="#contact" class="nav-link">Contact</a></li>
-            </ul>
+                <ul class="nav-menu" id="navMenu">
+                    <li><a href="#home" class="nav-link">Home</a></li>
+                    <li><a href="#about" class="nav-link">About</a></li>
+                    <li><a href="#games" class="nav-link">Games</a></li>
+                    <li><a href="#websites" class="nav-link">Websites</a></li>
+                    <li><a href="#apps" class="nav-link">Apps</a></li>
+                    <li><a href="#skills" class="nav-link">Skills</a></li>
+                    <li><a href="#contact" class="nav-link">Contact</a></li>
+                </ul>
 
-            <!-- Navigation Actions -->
-            <div class="nav-actions">
-                <!-- Search Button -->
-                <button id="searchBtn" class="btn-icon" aria-label="Search" title="Search (Ctrl+K)">
-                    <i class="fas fa-search"></i>
-                </button>
-
-                <!-- Notifications Button (NEW FEATURE) -->
-                <button id="notifBtn" class="btn-icon" aria-label="Notifications">
-                    <i class="fas fa-bell"></i>
-                    <span class="notification-badge">3</span>
-                </button>
-
-                <!-- Theme Toggle Button -->
-                <button id="themeBtn" class="btn-icon" aria-label="Toggle theme">
-                    <i class="fas fa-moon"></i>
-                </button>
-
-                <!-- Language Selector (NEW FEATURE) -->
-                <div class="language-selector">
-                    <button class="btn-icon" id="langBtn" aria-label="Change language">
-                        <i class="fas fa-globe"></i>
+                <div class="nav-actions">
+                    <button id="themeToggle" class="btn-icon" aria-label="Toggle theme">
+                        <i class="fas fa-moon"></i>
                     </button>
-                    <div class="language-menu" id="langMenu">
-                        <button data-lang="en" class="active">English</button>
-                        <button data-lang="es">Español</button>
-                        <button data-lang="fr">Français</button>
-                        <button data-lang="hi">हिंदी</button>
-                    </div>
+                    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
                 </div>
-
-                <!-- Mobile Menu Toggle -->
-                <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation menu">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </button>
-            </div>
-        </div>
-
-        <!-- Search Bar (appears when search is triggered) -->
-        <div class="nav-search-expanded" id="navSearch">
-            <div class="nav-search-container">
-                <i class="fas fa-search"></i>
-                <input type="text" placeholder="Search projects, skills, or content..." id="navSearchInput">
-                <button class="search-close" id="searchClose">
-                    <i class="fas fa-times"></i>
-                </button>
             </div>
         </div>
     </nav>
 
-    <!-- ============================================
-         BREADCRUMB NAVIGATION (NEW FEATURE)
-         Shows current position in site hierarchy
-         ============================================ -->
-    <div class="breadcrumb" id="breadcrumb">
+    <!-- Hero Section -->
+    <section id="home" class="hero">
         <div class="container">
-            <span class="breadcrumb-item">Home</span>
-            <i class="fas fa-chevron-right"></i>
-            <span class="breadcrumb-item active" id="currentSection">Portfolio</span>
+            <div class="hero-content">
+                <div class="status-badge">
+                    <span class="status-dot"></span>
+                    <span>Available for Projects</span>
+                </div>
+                
+                <h1 class="hero-title">
+                    Hi, I'm <span class="gradient-text">Arsh Verma</span>
+                </h1>
+                
+                <p class="hero-subtitle">
+                    <span id="typewriter"></span>
+                    <span class="cursor">|</span>
+                </p>
+                
+                <p class="hero-description">
+                    Creative developer specializing in game development, web applications, 
+                    and innovative digital solutions. Let's build something extraordinary together.
+                </p>
+
+                <div class="hero-actions">
+                    <a href="#games" class="btn btn-primary">
+                        <i class="fas fa-gamepad"></i>
+                        <span>View Projects</span>
+                    </a>
+                    <a href="#contact" class="btn btn-outline">
+                        <i class="fas fa-envelope"></i>
+                        <span>Get In Touch</span>
+                    </a>
+                </div>
+
+                <div class="hero-social">
+                    <a href="#" class="social-link" aria-label="GitHub">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="#" class="social-link" aria-label="LinkedIn">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    <a href="#" class="social-link" aria-label="Twitter">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                </div>
+            </div>
         </div>
-    </div>
+        <div class="scroll-indicator">
+            <i class="fas fa-chevron-down"></i>
+        </div>
+    </section>
 
-    <!-- ============================================
-         MAIN CONTENT AREA
-         ============================================ -->
-    <main id="main-content">
-        
-        <!-- ==========================================
-             HERO SECTION WITH ADVANCED FEATURES
-             - Animated gradient background
-             - Typewriter effect
-             - 3D floating elements
-             - Call-to-action buttons
-             - Social proof badges
-             - Stats counter
-             ========================================== -->
-        <section class="hero" id="hero">
-            <div class="hero-background">
-                <!-- Animated gradient mesh -->
-                <div class="gradient-mesh"></div>
-                <!-- Floating shapes -->
-                <div class="floating-shapes">
-                    <div class="shape shape-1"></div>
-                    <div class="shape shape-2"></div>
-                    <div class="shape shape-3"></div>
-                </div>
+    <!-- About Section -->
+    <section id="about" class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">About Me</h2>
+                <p class="section-subtitle">Passionate about creating exceptional digital experiences</p>
             </div>
 
-            <div class="container">
-                <div class="hero-grid">
-                    <!-- Left Column: Text Content -->
-                    <div class="hero-content">
-                        <!-- Status Badge (NEW) -->
-                        <div class="hero-status">
-                            <span class="status-dot"></span>
-                            <span class="status-text">Available for Projects</span>
-                        </div>
-
-                        <!-- Hero Tag -->
-                        <span class="hero-tag">
-                            <i class="fas fa-star"></i>
-                            Creative Developer & Innovator
-                        </span>
-
-                        <!-- Hero Title with Gradient -->
-                        <h1 class="hero-title">
-                            Hi, I'm <span class="gradient-text">Arsh Verma</span>
-                        </h1>
-
-                        <!-- Typewriter Subtitle (Dynamic) -->
-                        <p class="hero-subtitle">
-                            <span class="typewriter" id="typewriter"></span>
-                            <span class="cursor">|</span>
-                        </p>
-
-                        <!-- Hero Description -->
-                        <p class="hero-description">
-                            Transforming ideas into exceptional digital experiences through innovative game development, 
-                            cutting-edge web solutions, and powerful applications. Let's build something extraordinary together.
-                        </p>
-
-                        <!-- Stats Counter (NEW FEATURE) -->
-                        <div class="hero-stats">
-                            <div class="stat-item">
-                                <span class="stat-number" data-target="50">0</span>
-                                <span class="stat-label">Projects</span>
-                            </div>
-                            <div class="stat-item">
-                                <span class="stat-number" data-target="100">0</span>
-                                <span class="stat-label">Happy Clients</span>
-                            </div>
-                            <div class="stat-item">
-                                <span class="stat-number" data-target="5">0</span>
-                                <span class="stat-label">Years Experience</span>
-                            </div>
-                        </div>
-
-                        <!-- Call to Action Buttons -->
-                        <div class="hero-actions">
-                            <a href="#games" class="btn btn-primary btn-glow">
-                                <i class="fas fa-gamepad"></i> 
-                                <span>Explore Works</span>
-                                <div class="btn-shine"></div>
-                            </a>
-                            <a href="#contact" class="btn btn-glass">
-                                <i class="fas fa-envelope"></i> 
-                                <span>Let's Talk</span>
-                            </a>
-                            <button class="btn btn-outline" id="watchVideoBtn">
-                                <i class="fas fa-play"></i> 
-                                <span>Watch Intro</span>
-                            </button>
-                        </div>
-
-                        <!-- Social Links (NEW) -->
-                        <div class="hero-social">
-                            <span class="social-label">Follow me:</span>
-                            <a href="#" class="social-link" aria-label="LinkedIn">
-                                <i class="fab fa-linkedin-in"></i>
-                            </a>
-                            <a href="#" class="social-link" aria-label="GitHub">
-                                <i class="fab fa-github"></i>
-                            </a>
-                            <a href="#" class="social-link" aria-label="Twitter">
-                                <i class="fab fa-twitter"></i>
-                            </a>
-                            <a href="#" class="social-link" aria-label="Instagram">
-                                <i class="fab fa-instagram"></i>
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- Right Column: Visual Elements -->
-                    <div class="hero-visual">
-                        <!-- 3D Card Stack (NEW INNOVATIVE FEATURE) -->
-                        <div class="card-stack">
-                            <div class="stack-card" data-tilt>
-                                <div class="card-icon">
-                                    <i class="fab fa-unity"></i>
-                                </div>
-                                <h4>Game Development</h4>
-                                <p>Immersive 3D Experiences</p>
-                                <div class="card-glow"></div>
-                            </div>
-                            <div class="stack-card" data-tilt>
-                                <div class="card-icon">
-                                    <i class="fas fa-code"></i>
-                                </div>
-                                <h4>Web Development</h4>
-                                <p>Modern Digital Solutions</p>
-                                <div class="card-glow"></div>
-                            </div>
-                            <div class="stack-card" data-tilt>
-                                <div class="card-icon">
-                                    <i class="fas fa-mobile-alt"></i>
-                                </div>
-                                <h4>App Development</h4>
-                                <p>Innovative Applications</p>
-                                <div class="card-glow"></div>
-                            </div>
-                        </div>
-
-                        <!-- Featured Badges (NEW) -->
-                        <div class="featured-badges">
-                            <div class="badge-item">
-                                <i class="fas fa-award"></i>
-                                <span>Top Rated</span>
-                            </div>
-                            <div class="badge-item">
-                                <i class="fas fa-certificate"></i>
-                                <span>Certified</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Scroll Indicator -->
-            <div class="scroll-indicator" id="scrollIndicator">
-                <span>Discover More</span>
-                <i class="fas fa-chevron-down"></i>
-                <div class="scroll-line"></div>
-            </div>
-
-            <!-- Background Decorations -->
-            <div class="hero-decoration decoration-1"></div>
-            <div class="hero-decoration decoration-2"></div>
-        </section>
-
-        <!-- ==========================================
-             FEATURED BRANDS/CLIENTS MARQUEE (NEW)
-             Infinite scrolling logo carousel
-             ========================================== -->
-        <section class="brands-marquee">
-            <div class="container">
-                <p class="marquee-label">Trusted by leading companies and startups</p>
-            </div>
-            <div class="marquee">
-                <div class="marquee-content">
-                    <div class="brand-item">
-                        <i class="fab fa-unity"></i>
-                        <span>Unity</span>
-                    </div>
-                    <div class="brand-item">
-                        <i class="fab fa-react"></i>
-                        <span>React</span>
-                    </div>
-                    <div class="brand-item">
-                        <i class="fab fa-python"></i>
-                        <span>Python</span>
-                    </div>
-                    <div class="brand-item">
-                        <i class="fab fa-js"></i>
-                        <span>JavaScript</span>
-                    </div>
-                    <div class="brand-item">
-                        <i class="fab fa-node"></i>
-                        <span>Node.js</span>
-                    </div>
-                    <!-- Duplicate for seamless loop -->
-                    <div class="brand-item">
-                        <i class="fab fa-unity"></i>
-                        <span>Unity</span>
-                    </div>
-                    <div class="brand-item">
-                        <i class="fab fa-react"></i>
-                        <span>React</span>
-                    </div>
-                    <div class="brand-item">
-                        <i class="fab fa-python"></i>
-                        <span>Python</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- ==========================================
-             ABOUT SECTION WITH TIMELINE
-             - Personal story
-             - Skills visualization
-             - Journey timeline
-             - Certifications
-             ========================================== -->
-        <section id="about" class="section section-about">
-            <div class="container">
-                <!-- Section Header -->
-                <div class="section-header" data-aos="fade-up">
-                    <span class="section-tag">
-                        <i class="fas fa-user"></i>
-                        About Me
-                    </span>
-                    <h2 class="section-title">Crafting Digital Excellence</h2>
-                    <p class="section-description">
-                        Every pixel, every line of code, every interaction tells a story
+            <div class="about-content">
+                <div class="about-text">
+                    <p>
+                        I'm a creative developer with expertise in game development, web applications, 
+                        and mobile solutions. I love turning ideas into reality through clean code and 
+                        thoughtful design.
+                    </p>
+                    <p>
+                        With a strong foundation in Computer Science and years of hands-on experience, 
+                        I specialize in Unity game development, modern web technologies, and creating 
+                        applications that make a difference.
                     </p>
                 </div>
 
-                <!-- About Content Grid -->
-                <div class="about-grid">
-                    <!-- Left: Text Content -->
-                    <div class="about-text" data-aos="fade-right">
-                        <p class="lead">
-                            Hi, I'm Arsh Verma – a passionate Computer Science student and creative developer who transforms 
-                            innovative ideas into powerful digital realities.
-                        </p>
-                        <p>
-                            With expertise spanning game development, modern web design, and cutting-edge applications, 
-                            I bring a unique holistic approach to every project. My work isn't just about executing tasks – 
-                            it's about crafting experiences that resonate, engage, and inspire.
-                        </p>
-                        <p>
-                            I believe in the power of clean code, beautiful design, and meaningful interactions. 
-                            Whether building immersive 3D games in Unity, developing responsive web applications, 
-                            or creating mobile solutions that matter, I focus on delivering excellence at every touchpoint.
-                        </p>
-
-                        <!-- Quick Facts (NEW) -->
-                        <div class="quick-facts">
-                            <div class="fact-item">
-                                <i class="fas fa-map-marker-alt"></i>
-                                <div>
-                                    <strong>Location</strong>
-                                    <span>Ashta, Madhya Pradesh, India</span>
-                                </div>
-                            </div>
-                            <div class="fact-item">
-                                <i class="fas fa-graduation-cap"></i>
-                                <div>
-                                    <strong>Education</strong>
-                                    <span>Computer Science Student</span>
-                                </div>
-                            </div>
-                            <div class="fact-item">
-                                <i class="fas fa-briefcase"></i>
-                                <div>
-                                    <strong>Experience</strong>
-                                    <span>5+ Years</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- CTA Buttons -->
-                        <div class="about-actions">
-                            <a href="#contact" class="btn btn-primary">
-                                <i class="fas fa-paper-plane"></i>
-                                Get In Touch
-                            </a>
-                            <a href="#" class="btn btn-glass" id="downloadCVBtn">
-                                <i class="fas fa-download"></i>
-                                Download CV
-                            </a>
-                        </div>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number" data-target="50">0</div>
+                        <div class="stat-label">Projects</div>
                     </div>
-
-                    <!-- Right: Skills & Experience -->
-                    <div class="about-visual" data-aos="fade-left">
-                        <!-- Skills Radar Chart (NEW FEATURE) -->
-                        <div class="skills-radar">
-                            <canvas id="skillsChart"></canvas>
-                        </div>
-
-                        <!-- Experience Timeline (NEW) -->
-                        <div class="experience-timeline">
-                            <h3>My Journey</h3>
-                            <div class="timeline">
-                                <div class="timeline-item">
-                                    <div class="timeline-dot"></div>
-                                    <div class="timeline-content">
-                                        <span class="timeline-year">2024</span>
-                                        <h4>Senior Developer</h4>
-                                        <p>Leading innovative projects</p>
-                                    </div>
-                                </div>
-                                <div class="timeline-item">
-                                    <div class="timeline-dot"></div>
-                                    <div class="timeline-content">
-                                        <span class="timeline-year">2022</span>
-                                        <h4>Full Stack Developer</h4>
-                                        <p>Building scalable solutions</p>
-                                    </div>
-                                </div>
-                                <div class="timeline-item">
-                                    <div class="timeline-dot"></div>
-                                    <div class="timeline-content">
-                                        <span class="timeline-year">2020</span>
-                                        <h4>Started Journey</h4>
-                                        <p>First lines of code</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="stat-card">
+                        <div class="stat-number" data-target="100">0</div>
+                        <div class="stat-label">Clients</div>
                     </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- CONTINUE IN NEXT MESSAGE DUE TO LENGTH... -->
-
-    </main>
-
-    <!-- ============================================
-         FOOTER (Will be completed in next file)
-         ============================================ -->
-
-    <!-- ============================================
-         JAVASCRIPT FILES
-         ============================================ -->
-    <script src="js/data.js"></script>
-    <script src="js/script.js"></script>
-    <script src="js/main.js"></script>
-    <script src="js/features.js"></script>
-</body>
-</html>
-
-<!-- ==========================================
-     GAMES SECTION WITH ADVANCED FEATURES
-     - Filter by category/technology
-     - Sort options
-     - Grid/List view toggle
-     - Search within section
-     - Favorites system
-     ========================================== -->
-<section id="games" class="section portfolio-section active-section">
-    <div class="container">
-        <!-- Section Header with Controls -->
-        <div class="section-header" data-aos="fade-up">
-            <div class="header-content">
-                <span class="section-tag">
-                    <i class="fas fa-gamepad"></i>
-                    Games Portfolio
-                </span>
-                <h2 class="section-title">Interactive Gaming Experiences</h2>
-                <p class="section-description">
-                    Immersive 3D worlds and engaging gameplay mechanics
-                </p>
-            </div>
-
-            <!-- Section Controls (NEW FEATURE) -->
-            <div class="section-controls">
-                <!-- Search -->
-                <div class="search-box">
-                    <i class="fas fa-search"></i>
-                    <input type="text" placeholder="Search games..." id="gamesSearch">
-                </div>
-
-                <!-- View Toggle -->
-                <div class="view-toggle">
-                    <button class="view-btn active" data-view="grid" aria-label="Grid view">
-                        <i class="fas fa-th"></i>
-                    </button>
-                    <button class="view-btn" data-view="list" aria-label="List view">
-                        <i class="fas fa-list"></i>
-                    </button>
-                </div>
-
-                <!-- Filter Dropdown -->
-                <div class="filter-dropdown">
-                    <button class="filter-btn">
-                        <i class="fas fa-filter"></i>
-                        <span>Filter</span>
-                    </button>
-                    <div class="filter-menu">
-                        <label class="filter-option">
-                            <input type="checkbox" value="unity" checked>
-                            <span>Unity</span>
-                        </label>
-                        <label class="filter-option">
-                            <input type="checkbox" value="unreal" checked>
-                            <span>Unreal Engine</span>
-                        </label>
-                        <label class="filter-option">
-                            <input type="checkbox" value="3d" checked>
-                            <span>3D Games</span>
-                        </label>
-                        <label class="filter-option">
-                            <input type="checkbox" value="2d" checked>
-                            <span>2D Games</span>
-                        </label>
-                    </div>
-                </div>
-
-                <!-- Sort Dropdown -->
-                <div class="sort-dropdown">
-                    <button class="sort-btn">
-                        <i class="fas fa-sort"></i>
-                        <span>Sort By</span>
-                    </button>
-                    <div class="sort-menu">
-                        <button data-sort="date">Latest First</button>
-                        <button data-sort="name">Name A-Z</button>
-                        <button data-sort="popular">Most Popular</button>
+                    <div class="stat-card">
+                        <div class="stat-number" data-target="5">0</div>
+                        <div class="stat-label">Years Exp</div>
                     </div>
                 </div>
             </div>
         </div>
+    </section>
 
-        <!-- Active Filters Display (NEW) -->
-        <div class="active-filters" id="gamesActiveFilters"></div>
-
-        <!-- Portfolio Grid (Dynamic) -->
-        <div class="portfolio-grid" id="gamesGrid" data-view="grid">
-            <!-- Games will be dynamically injected here -->
-            <!-- Example structure (for reference): -->
-            <!--
-            <div class="portfolio-card" data-category="unity 3d">
-                <div class="card-bookmark">
-                    <button class="bookmark-btn" aria-label="Add to favorites">
-                        <i class="far fa-heart"></i>
-                    </button>
-                </div>
-                <div class="portfolio-image">
-                    <img src="images/games/game1.jpg" alt="Game Title">
-                    <div class="card-badges">
-                        <span class="badge">Unity</span>
-                        <span class="badge">3D</span>
-                    </div>
-                    <div class="portfolio-overlay">
-                        <button class="play-btn">
-                            <i class="fas fa-play"></i>
-                        </button>
-                        <div class="quick-actions">
-                            <button class="quick-btn" aria-label="Quick view">
-                                <i class="fas fa-eye"></i>
-                            </button>
-                            <button class="quick-btn" aria-label="Share">
-                                <i class="fas fa-share-alt"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <div class="portfolio-info">
-                    <div class="info-header">
-                        <span class="portfolio-badge">Playable</span>
-                        <div class="rating-stars">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star-half-alt"></i>
-                        </div>
-                    </div>
-                    <h3 class="portfolio-title">Game Title</h3>
-                    <p class="portfolio-description">Game description</p>
-                    <div class="card-meta">
-                        <span><i class="fas fa-gamepad"></i> 1.2K plays</span>
-                        <span><i class="fas fa-heart"></i> 456 likes</span>
-                    </span>
-                    </div>
-                </div>
-            </div>
-            -->
-        </div>
-
-        <!-- Load More Button (NEW) -->
-        <div class="load-more-container" data-aos="fade-up">
-            <button class="btn btn-glass btn-load-more" id="loadMoreGames">
-                <i class="fas fa-plus"></i>
-                <span>Load More Games</span>
-            </button>
-        </div>
-    </div>
-</section>
-
-<!-- ==========================================
-     WEBSITES SECTION
-     Similar structure to Games section
-     ========================================== -->
-<section id="websites" class="section portfolio-section">
-    <div class="container">
-        <div class="section-header" data-aos="fade-up">
-            <div class="header-content">
-                <span class="section-tag">
-                    <i class="fas fa-laptop-code"></i>
-                    Web Portfolio
-                </span>
-                <h2 class="section-title">Modern Web Solutions</h2>
-                <p class="section-description">
-                    Responsive, fast, and beautiful web experiences
-                </p>
+    <!-- Games Section -->
+    <section id="games" class="section section-dark">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Games Portfolio</h2>
+                <p class="section-subtitle">Interactive gaming experiences built with passion</p>
             </div>
 
-            <div class="section-controls">
-                <div class="search-box">
-                    <i class="fas fa-search"></i>
-                    <input type="text" placeholder="Search websites..." id="websitesSearch">
-                </div>
-                <div class="view-toggle">
-                    <button class="view-btn active" data-view="grid">
-                        <i class="fas fa-th"></i>
-                    </button>
-                    <button class="view-btn" data-view="list">
-                        <i class="fas fa-list"></i>
-                    </button>
-                </div>
-                <div class="filter-dropdown">
-                    <button class="filter-btn">
-                        <i class="fas fa-filter"></i>
-                        <span>Filter</span>
-                    </button>
-                    <div class="filter-menu">
-                        <label class="filter-option">
-                            <input type="checkbox" value="react" checked>
-                            <span>React</span>
-                        </label>
-                        <label class="filter-option">
-                            <input type="checkbox" value="vue" checked>
-                            <span>Vue.js</span>
-                        </label>
-                        <label class="filter-option">
-                            <input type="checkbox" value="html" checked>
-                            <span>HTML/CSS/JS</span>
-                        </label>
-                    </div>
-                </div>
-                <div class="sort-dropdown">
-                    <button class="sort-btn">
-                        <i class="fas fa-sort"></i>
-                        <span>Sort By</span>
-                    </button>
-                    <div class="sort-menu">
-                        <button data-sort="date">Latest First</button>
-                        <button data-sort="name">Name A-Z</button>
-                        <button data-sort="popular">Most Popular</button>
-                    </div>
-                </div>
+            <div class="portfolio-grid" id="gamesGrid">
+                <!-- Games will be dynamically loaded -->
             </div>
         </div>
+    </section>
 
-        <div class="active-filters" id="websitesActiveFilters"></div>
-
-        <div class="portfolio-grid websites-grid" id="websitesGrid" data-view="grid">
-            <!-- Websites dynamically injected -->
-        </div>
-
-        <div class="load-more-container" data-aos="fade-up">
-            <button class="btn btn-glass btn-load-more" id="loadMoreWebsites">
-                <i class="fas fa-plus"></i>
-                <span>Load More Websites</span>
-            </button>
-        </div>
-    </div>
-</section>
-
-<!-- ==========================================
-     APPS SECTION (REPLACING PHOTOS/VIDEOS)
-     Mobile and desktop applications showcase
-     ========================================== -->
-<section id="apps" class="section portfolio-section">
-    <div class="container">
-        <div class="section-header" data-aos="fade-up">
-            <div class="header-content">
-                <span class="section-tag">
-                    <i class="fas fa-mobile-alt"></i>
-                    Applications Portfolio
-                </span>
-                <h2 class="section-title">Innovative App Solutions</h2>
-                <p class="section-description">
-                    Cross-platform applications that solve real problems
-                </p>
+    <!-- Websites Section -->
+    <section id="websites" class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Web Projects</h2>
+                <p class="section-subtitle">Modern web solutions that drive results</p>
             </div>
 
-            <div class="section-controls">
-                <div class="search-box">
-                    <i class="fas fa-search"></i>
-                    <input type="text" placeholder="Search apps..." id="appsSearch">
-                </div>
-                <div class="view-toggle">
-                    <button class="view-btn active" data-view="grid">
-                        <i class="fas fa-th"></i>
-                    </button>
-                    <button class="view-btn" data-view="list">
-                        <i class="fas fa-list"></i>
-                    </button>
-                </div>
-                <div class="filter-dropdown">
-                    <button class="filter-btn">
-                        <i class="fas fa-filter"></i>
-                        <span>Filter</span>
-                    </button>
-                    <div class="filter-menu">
-                        <label class="filter-option">
-                            <input type="checkbox" value="mobile" checked>
-                            <span>Mobile Apps</span>
-                        </label>
-                        <label class="filter-option">
-                            <input type="checkbox" value="desktop" checked>
-                            <span>Desktop Apps</span>
-                        </label>
-                        <label class="filter-option">
-                            <input type="checkbox" value="web-app" checked>
-                            <span>Web Apps</span>
-                        </label>
-                        <label class="filter-option">
-                            <input type="checkbox" value="pwa" checked>
-                            <span>PWA</span>
-                        </label>
-                    </div>
-                </div>
-                <div class="sort-dropdown">
-                    <button class="sort-btn">
-                        <i class="fas fa-sort"></i>
-                        <span>Sort By</span>
-                    </button>
-                    <div class="sort-menu">
-                        <button data-sort="date">Latest First</button>
-                        <button data-sort="name">Name A-Z</button>
-                        <button data-sort="downloads">Most Downloads</button>
-                        <button data-sort="rating">Highest Rated</button>
-                    </div>
-                </div>
+            <div class="portfolio-grid" id="websitesGrid">
+                <!-- Websites will be dynamically loaded -->
             </div>
         </div>
+    </section>
 
-        <div class="active-filters" id="appsActiveFilters"></div>
-
-        <!-- Apps Grid with special features -->
-        <div class="portfolio-grid apps-grid" id="appsGrid" data-view="grid">
-            <!-- Apps dynamically injected -->
-            <!-- Example app card structure:
-            <div class="portfolio-card app-card" data-category="mobile android">
-                <div class="card-bookmark">
-                    <button class="bookmark-btn">
-                        <i class="far fa-heart"></i>
-                    </button>
-                </div>
-                <div class="app-icon">
-                    <img src="images/apps/app-icon.png" alt="App Icon">
-                    <div class="platform-badges">
-                        <i class="fab fa-android"></i>
-                        <i class="fab fa-apple"></i>
-                    </div>
-                </div>
-                <div class="portfolio-info">
-                    <h3 class="portfolio-title">App Name</h3>
-                    <p class="portfolio-description">App description</p>
-                    <div class="app-stats">
-                        <div class="stat">
-                            <i class="fas fa-star"></i>
-                            <span>4.8</span>
-                        </div>
-                        <div class="stat">
-                            <i class="fas fa-download"></i>
-                            <span>10K+</span>
-                        </div>
-                        <div class="stat">
-                            <i class="fas fa-users"></i>
-                            <span>5K</span>
-                        </div>
-                    </div>
-                    <div class="app-actions">
-                        <button class="btn btn-primary btn-sm">
-                            <i class="fas fa-download"></i>
-                            Download
-                        </button>
-                        <button class="btn btn-glass btn-sm">
-                            <i class="fas fa-eye"></i>
-                            Preview
-                        </button>
-                    </div>
-                </div>
+    <!-- Apps Section -->
+    <section id="apps" class="section section-dark">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Applications</h2>
+                <p class="section-subtitle">Innovative apps solving real-world problems</p>
             </div>
-            -->
-        </div>
 
-        <div class="load-more-container" data-aos="fade-up">
-            <button class="btn btn-glass btn-load-more" id="loadMoreApps">
-                <i class="fas fa-plus"></i>
-                <span>Load More Apps</span>
-            </button>
+            <div class="portfolio-grid" id="appsGrid">
+                <!-- Apps will be dynamically loaded -->
+            </div>
         </div>
-    </div>
-</section>
+    </section>
 
-<!-- ==========================================
-     SKILLS SECTION WITH INTERACTIVE VISUALS
-     - Animated skill bars
-     - Certification badges
-     - Technology stack
-     - Interactive skill explorer
-     ========================================== -->
-<section id="skills" class="section section-skills">
-    <div class="container">
-        <div class="section-header" data-aos="fade-up">
-            <span class="section-tag">
-                <i class="fas fa-code"></i>
-                Skills & Expertise
-            </span>
-            <h2 class="section-title">Technical Arsenal</h2>
-            <p class="section-description">
-                A comprehensive toolkit for building exceptional digital experiences
-            </p>
-        </div>
+    <!-- Skills Section -->
+    <section id="skills" class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Skills & Expertise</h2>
+                <p class="section-subtitle">Technologies I work with</p>
+            </div>
 
-        <!-- Skills Tabs (NEW FEATURE) -->
-        <div class="skills-tabs" data-aos="fade-up">
-            <button class="tab-btn active" data-tab="technical">
-                <i class="fas fa-laptop-code"></i>
-                Technical Skills
-            </button>
-            <button class="tab-btn" data-tab="tools">
-                <i class="fas fa-tools"></i>
-                Tools & Software
-            </button>
-            <button class="tab-btn" data-tab="soft">
-                <i class="fas fa-users"></i>
-                Soft Skills
-            </button>
-            <button class="tab-btn" data-tab="certifications">
-                <i class="fas fa-certificate"></i>
-                Certifications
-            </button>
-        </div>
-
-        <!-- Technical Skills Tab -->
-        <div class="skills-content active" data-content="technical">
             <div class="skills-grid">
-                <!-- Programming Languages -->
-                <div class="skill-category" data-aos="fade-up">
-                    <h3>
-                        <i class="fas fa-code"></i>
-                        Programming Languages
-                    </h3>
+                <div class="skill-category">
+                    <h3><i class="fas fa-code"></i> Programming</h3>
                     <div class="skill-list">
                         <div class="skill-item">
-                            <div class="skill-header">
-                                <span class="skill-name">C#</span>
-                                <span class="skill-percentage">95%</span>
+                            <div class="skill-info">
+                                <span>C#</span>
+                                <span>95%</span>
                             </div>
                             <div class="skill-bar">
                                 <div class="skill-progress" data-progress="95"></div>
                             </div>
                         </div>
                         <div class="skill-item">
-                            <div class="skill-header">
-                                <span class="skill-name">Python</span>
-                                <span class="skill-percentage">90%</span>
-                            </div>
-                            <div class="skill-bar">
-                                <div class="skill-progress" data-progress="90"></div>
-                            </div>
-                        </div>
-                        <div class="skill-item">
-                            <div class="skill-header">
-                                <span class="skill-name">JavaScript</span>
-                                <span class="skill-percentage">92%</span>
+                            <div class="skill-info">
+                                <span>JavaScript</span>
+                                <span>92%</span>
                             </div>
                             <div class="skill-bar">
                                 <div class="skill-progress" data-progress="92"></div>
                             </div>
                         </div>
                         <div class="skill-item">
-                            <div class="skill-header">
-                                <span class="skill-name">HTML/CSS</span>
-                                <span class="skill-percentage">98%</span>
+                            <div class="skill-info">
+                                <span>Python</span>
+                                <span>88%</span>
                             </div>
                             <div class="skill-bar">
-                                <div class="skill-progress" data-progress="98"></div>
+                                <div class="skill-progress" data-progress="88"></div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Frameworks & Libraries -->
-                <div class="skill-category" data-aos="fade-up" data-aos-delay="100">
-                    <h3>
-                        <i class="fas fa-layer-group"></i>
-                        Frameworks & Libraries
-                    </h3>
+                <div class="skill-category">
+                    <h3><i class="fas fa-tools"></i> Frameworks</h3>
                     <div class="skill-list">
                         <div class="skill-item">
-                            <div class="skill-header">
-                                <span class="skill-name">Unity 3D</span>
-                                <span class="skill-percentage">93%</span>
+                            <div class="skill-info">
+                                <span>Unity</span>
+                                <span>93%</span>
                             </div>
                             <div class="skill-bar">
                                 <div class="skill-progress" data-progress="93"></div>
                             </div>
                         </div>
                         <div class="skill-item">
-                            <div class="skill-header">
-                                <span class="skill-name">React</span>
-                                <span class="skill-percentage">88%</span>
+                            <div class="skill-info">
+                                <span>React</span>
+                                <span>88%</span>
                             </div>
                             <div class="skill-bar">
                                 <div class="skill-progress" data-progress="88"></div>
                             </div>
                         </div>
                         <div class="skill-item">
-                            <div class="skill-header">
-                                <span class="skill-name">Node.js</span>
-                                <span class="skill-percentage">85%</span>
+                            <div class="skill-info">
+                                <span>Node.js</span>
+                                <span>85%</span>
                             </div>
                             <div class="skill-bar">
                                 <div class="skill-progress" data-progress="85"></div>
@@ -1086,1183 +252,119 @@
                     </div>
                 </div>
 
-                <!-- Databases & Backend -->
-                <div class="skill-category" data-aos="fade-up" data-aos-delay="200">
-                    <h3>
-                        <i class="fas fa-database"></i>
-                        Databases & Backend
-                    </h3>
+                <div class="skill-category">
+                    <h3><i class="fas fa-database"></i> Databases</h3>
                     <div class="skill-list">
                         <div class="skill-item">
-                            <div class="skill-header">
-                                <span class="skill-name">MongoDB</span>
-                                <span class="skill-percentage">87%</span>
+                            <div class="skill-info">
+                                <span>MongoDB</span>
+                                <span>87%</span>
                             </div>
                             <div class="skill-bar">
                                 <div class="skill-progress" data-progress="87"></div>
                             </div>
                         </div>
                         <div class="skill-item">
-                            <div class="skill-header">
-                                <span class="skill-name">Firebase</span>
-                                <span class="skill-percentage">90%</span>
+                            <div class="skill-info">
+                                <span>Firebase</span>
+                                <span>90%</span>
                             </div>
                             <div class="skill-bar">
                                 <div class="skill-progress" data-progress="90"></div>
                             </div>
                         </div>
                         <div class="skill-item">
-                            <div class="skill-header">
-                                <span class="skill-name">REST APIs</span>
-                                <span class="skill-percentage">92%</span>
+                            <div class="skill-info">
+                                <span>MySQL</span>
+                                <span>82%</span>
                             </div>
                             <div class="skill-bar">
-                                <div class="skill-progress" data-progress="92"></div>
+                                <div class="skill-progress" data-progress="82"></div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <!-- Interactive Technology Stack Visualization (NEW) -->
-            <div class="tech-stack-visual" data-aos="zoom-in">
-                <h3>Technology Stack</h3>
-                <div class="tech-orbit">
-                    <div class="orbit-center">
-                        <i class="fas fa-code"></i>
-                    </div>
-                    <div class="orbit-ring ring-1">
-                        <div class="orbit-item"><i class="fab fa-unity"></i></div>
-                        <div class="orbit-item"><i class="fab fa-python"></i></div>
-                        <div class="orbit-item"><i class="fab fa-js"></i></div>
-                    </div>
-                    <div class="orbit-ring ring-2">
-                        <div class="orbit-item"><i class="fab fa-react"></i></div>
-                        <div class="orbit-item"><i class="fab fa-node"></i></div>
-                        <div class="orbit-item"><i class="fab fa-html5"></i></div>
-                        <div class="orbit-item"><i class="fab fa-css3"></i></div>
-                    </div>
-                </div>
-            </div>
         </div>
+    </section>
 
-        <!-- Tools Tab Content -->
-        <div class="skills-content" data-content="tools">
-            <div class="tools-grid">
-                <div class="tool-card" data-aos="flip-left">
-                    <i class="fab fa-unity"></i>
-                    <h4>Unity</h4>
-                    <p>Game Development</p>
-                </div>
-                <div class="tool-card" data-aos="flip-left" data-aos-delay="50">
-                    <i class="fab fa-github"></i>
-                    <h4>Git/GitHub</h4>
-                    <p>Version Control</p>
-                </div>
-                <div class="tool-card" data-aos="flip-left" data-aos-delay="100">
-                    <i class="fas fa-palette"></i>
-                    <h4>Figma</h4>
-                    <p>UI/UX Design</p>
-                </div>
-                <div class="tool-card" data-aos="flip-left" data-aos-delay="150">
-                    <i class="fab fa-docker"></i>
-                    <h4>Docker</h4>
-                    <p>Containerization</p>
-                </div>
-                <!-- Add more tools -->
-            </div>
-        </div>
-
-        <!-- Soft Skills Tab Content -->
-        <div class="skills-content" data-content="soft">
-            <div class="soft-skills-grid">
-                <div class="soft-skill" data-aos="fade-up">
-                    <div class="soft-skill-icon">
-                        <i class="fas fa-users"></i>
-                    </div>
-                    <h4>Team Collaboration</h4>
-                    <p>Excellent at working in cross-functional teams</p>
-                </div>
-                <div class="soft-skill" data-aos="fade-up" data-aos-delay="50">
-                    <div class="soft-skill-icon">
-                        <i class="fas fa-lightbulb"></i>
-                    </div>
-                    <h4>Problem Solving</h4>
-                    <p>Creative solutions to complex challenges</p>
-                </div>
-                <div class="soft-skill" data-aos="fade-up" data-aos-delay="100">
-                    <div class="soft-skill-icon">
-                        <i class="fas fa-comments"></i>
-                    </div>
-                    <h4>Communication</h4>
-                    <p>Clear and effective communicator</p>
-                </div>
-                <!-- Add more soft skills -->
-            </div>
-        </div>
-
-        <!-- Certifications Tab Content -->
-        <div class="skills-content" data-content="certifications">
-            <div class="certifications-grid">
-                <div class="cert-card" data-aos="zoom-in">
-                    <div class="cert-badge">
-                        <i class="fas fa-certificate"></i>
-                    </div>
-                    <h4>Unity Certified Developer</h4>
-                    <p>Unity Technologies</p>
-                    <span class="cert-year">2023</span>
-                </div>
-                <div class="cert-card" data-aos="zoom-in" data-aos-delay="50">
-                    <div class="cert-badge">
-                        <i class="fas fa-certificate"></i>
-                    </div>
-                    <h4>Full Stack Web Development</h4>
-                    <p>Coursera</p>
-                    <span class="cert-year">2023</span>
-                </div>
-                <!-- Add more certifications -->
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- ==========================================
-     TESTIMONIALS SECTION (NEW FEATURE)
-     Client reviews and feedback carousel
-     ========================================== -->
-<section id="testimonials" class="section section-testimonials">
-    <div class="container">
-        <div class="section-header" data-aos="fade-up">
-            <span class="section-tag">
-                <i class="fas fa-quote-left"></i>
-                Testimonials
-            </span>
-            <h2 class="section-title">What Clients Say</h2>
-            <p class="section-description">
-                Real feedback from amazing people I've worked with
-            </p>
-        </div>
-
-        <!-- Testimonials Carousel -->
-        <div class="testimonials-carousel" data-aos="fade-up">
-            <div class="carousel-container">
-                <button class="carousel-nav prev" id="testimonialssPrev" aria-label="Previous testimonial">
-                    <i class="fas fa-chevron-left"></i>
-                </button>
-
-                <div class="testimonials-wrapper">
-                    <!-- Testimonial cards will be injected dynamically -->
-                    <!--
-                    <div class="testimonial-card active">
-                        <div class="testimonial-header">
-                            <img src="images/clients/client1.jpg" alt="Client Name" class="client-avatar">
-                            <div class="client-info">
-                                <h4 class="client-name">John Doe</h4>
-                                <p class="client-role">CEO, Tech Company</p>
-                            </div>
-                        </div>
-                        <div class="testimonial-rating">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                        </div>
-                        <p class="testimonial-text">
-                            "Working with Arsh was an absolute pleasure. His technical expertise
-                            and creative vision transformed our project beyond expectations."
-                        </p>
-                        <div class="testimonial-project">
-                            <i class="fas fa-briefcase"></i>
-                            <span>E-Commerce Platform</span>
-                        </div>
-                    </div>
-                    -->
-                </div>
-
-                <button class="carousel-nav next" id="testimonialsNext" aria-label="Next testimonial">
-                    <i class="fas fa-chevron-right"></i>
-                </button>
+    <!-- Contact Section -->
+    <section id="contact" class="section section-dark">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Get In Touch</h2>
+                <p class="section-subtitle">Let's discuss your next project</p>
             </div>
 
-            <!-- Carousel Indicators -->
-            <div class="carousel-indicators" id="testimonialsIndicators">
-                <!-- Dots will be generated dynamically -->
-            </div>
-        </div>
-
-        <!-- Stats Banner -->
-        <div class="testimonials-stats" data-aos="fade-up">
-            <div class="stat-item">
-                <i class="fas fa-users"></i>
-                <span class="stat-number" data-target="100">0</span>
-                <span class="stat-label">Happy Clients</span>
-            </div>
-            <div class="stat-item">
-                <i class="fas fa-star"></i>
-                <span class="stat-number" data-target="4.9">0</span>
-                <span class="stat-label">Average Rating</span>
-            </div>
-            <div class="stat-item">
-                <i class="fas fa-award"></i>
-                <span class="stat-number" data-target="15">0</span>
-                <span class="stat-label">Awards Won</span>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- ==========================================
-     CONTACT SECTION WITH ENHANCED FEATURES
-     - Multi-step form
-     - Real-time validation
-     - File upload support
-     - Meeting scheduler integration
-     - Social links
-     - Contact info cards
-     ========================================== -->
-<section id="contact" class="section contact-section">
-    <div class="container">
-        <div class="section-header" data-aos="fade-up">
-            <span class="section-tag">
-                <i class="fas fa-envelope"></i>
-                Get In Touch
-            </span>
-            <h2 class="section-title">Let's Create Together</h2>
-            <p class="section-description">
-                Have a project in mind? Let's discuss how we can bring your vision to life
-            </p>
-        </div>
-
-        <div class="contact-grid">
-            <!-- Left: Contact Form -->
-            <div class="contact-form-wrapper" data-aos="fade-right">
-                <!-- Form Progress Indicator (NEW) -->
-                <div class="form-progress">
-                    <div class="progress-step active" data-step="1">
-                        <div class="step-dot">1</div>
-                        <span class="step-label">Details</span>
-                    </div>
-                    <div class="progress-line"></div>
-                    <div class="progress-step" data-step="2">
-                        <div class="step-dot">2</div>
-                        <span class="step-label">Project</span>
-                    </div>
-                    <div class="progress-line"></div>
-                    <div class="progress-step" data-step="3">
-                        <div class="step-dot">3</div>
-                        <span class="step-label">Review</span>
-                    </div>
-                </div>
-
-                <form class="contact-form" id="contactForm">
-                    <!-- Step 1: Personal Details -->
-                    <div class="form-step active" data-step="1">
-                        <h3 class="form-step-title">Tell me about yourself</h3>
-
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="full_name">
-                                    <i class="fas fa-user"></i>
-                                    Full Name *
-                                </label>
-                                <input type="text" id="full_name" name="full_name" 
-                                       class="form-input" placeholder="John Doe" required
-                                       autocomplete="name">
-                                <span class="form-error" id="full_name_error"></span>
-                            </div>
-                            <div class="form-group">
-                                <label for="email">
-                                    <i class="fas fa-envelope"></i>
-                                    Email Address *
-                                </label>
-                                <input type="email" id="email" name="email" 
-                                       class="form-input" placeholder="john@example.com" required
-                                       autocomplete="email">
-                                <span class="form-error" id="email_error"></span>
-                            </div>
-                        </div>
-
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="phone">
-                                    <i class="fas fa-phone"></i>
-                                    Phone Number
-                                </label>
-                                <input type="tel" id="phone" name="phone" 
-                                       class="form-input" placeholder="+1 (555) 123-4567"
-                                       autocomplete="tel">
-                            </div>
-                            <div class="form-group">
-                                <label for="company">
-                                    <i class="fas fa-building"></i>
-                                    Company/Organization
-                                </label>
-                                <input type="text" id="company" name="company" 
-                                       class="form-input" placeholder="Your Company"
-                                       autocomplete="organization">
-                            </div>
-                        </div>
-
-                        <div class="form-actions">
-                            <button type="button" class="btn btn-primary" id="step1Next">
-                                Next Step
-                                <i class="fas fa-arrow-right"></i>
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Step 2: Project Details -->
-                    <div class="form-step" data-step="2">
-                        <h3 class="form-step-title">Tell me about your project</h3>
-
-                        <div class="form-group">
-                            <label for="contact_type">
-                                <i class="fas fa-list"></i>
-                                Project Type *
-                            </label>
-                            <select id="contact_type" name="contact_type" class="form-select" required>
-                                <option value="">Select project type...</option>
-                                <option value="Game Development">Game Development</option>
-                                <option value="Web Development">Web Development</option>
-                                <option value="App Development">App Development</option>
-                                <option value="Consulting">Consulting</option>
-                                <option value="Collaboration">Collaboration</option>
-                                <option value="Other">Other</option>
-                            </select>
-                            <span class="form-error" id="contact_type_error"></span>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="budget">
-                                <i class="fas fa-dollar-sign"></i>
-                                Budget Range
-                            </label>
-                            <select id="budget" name="budget" class="form-select">
-                                <option value="">Select budget range...</option>
-                                <option value="< $5K">Less than $5,000</option>
-                                <option value="$5K - $10K">$5,000 - $10,000</option>
-                                <option value="$10K - $25K">$10,000 - $25,000</option>
-                                <option value="$25K - $50K">$25,000 - $50,000</option>
-                                <option value="> $50K">More than $50,000</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="timeline">
-                                <i class="fas fa-calendar"></i>
-                                Project Timeline
-                            </label>
-                            <select id="timeline" name="timeline" class="form-select">
-                                <option value="">Select timeline...</option>
-                                <option value="ASAP">As Soon As Possible</option>
-                                <option value="1-3 months">1-3 Months</option>
-                                <option value="3-6 months">3-6 Months</option>
-                                <option value="6+ months">6+ Months</option>
-                                <option value="Flexible">Flexible</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="comment">
-                                <i class="fas fa-comment-alt"></i>
-                                Project Description *
-                            </label>
-                            <textarea id="comment" name="comment" class="form-textarea" 
-                                      placeholder="Tell me more about your project, goals, and requirements..." 
-                                      required rows="5"></textarea>
-                            <span class="char-counter">
-                                <span id="charCount">0</span> / 1000 characters
-                            </span>
-                            <span class="form-error" id="comment_error"></span>
-                        </div>
-
-                        <!-- File Upload (NEW FEATURE) -->
-                        <div class="form-group">
-                            <label for="files">
-                                <i class="fas fa-paperclip"></i>
-                                Attach Files (Optional)
-                            </label>
-                            <div class="file-upload">
-                                <input type="file" id="files" name="files" multiple 
-                                       accept=".pdf,.doc,.docx,.txt,.jpg,.png">
-                                <label for="files" class="file-upload-label">
-                                    <i class="fas fa-cloud-upload-alt"></i>
-                                    <span>Click to upload or drag files here</span>
-                                    <small>PDF, DOC, Images (Max 10MB each)</small>
-                                </label>
-                                <div class="file-list" id="fileList"></div>
-                            </div>
-                        </div>
-
-                        <div class="form-actions">
-                            <button type="button" class="btn btn-glass" id="step2Back">
-                                <i class="fas fa-arrow-left"></i>
-                                Back
-                            </button>
-                            <button type="button" class="btn btn-primary" id="step2Next">
-                                Review
-                                <i class="fas fa-arrow-right"></i>
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Step 3: Review & Submit -->
-                    <div class="form-step" data-step="3">
-                        <h3 class="form-step-title">Review your submission</h3>
-
-                        <div class="form-review" id="formReview">
-                            <!-- Review content will be generated dynamically -->
-                        </div>
-
-                        <!-- Consent Checkbox (NEW) -->
-                        <div class="form-group">
-                            <label class="checkbox-label">
-                                <input type="checkbox" id="consent" name="consent" required>
-                                <span class="checkmark"></span>
-                                <span class="checkbox-text">
-                                    I agree to the <a href="#" class="link">privacy policy</a> and 
-                                    consent to being contacted about my inquiry.
-                                </span>
-                            </label>
-                        </div>
-
-                        <!-- Newsletter Subscription (NEW) -->
-                        <div class="form-group">
-                            <label class="checkbox-label">
-                                <input type="checkbox" id="newsletter" name="newsletter">
-                                <span class="checkmark"></span>
-                                <span class="checkbox-text">
-                                    Subscribe to newsletter for updates and tech insights
-                                </span>
-                            </label>
-                        </div>
-
-                        <div class="form-actions">
-                            <button type="button" class="btn btn-glass" id="step3Back">
-                                <i class="fas fa-arrow-left"></i>
-                                Back
-                            </button>
-                            <button type="submit" class="btn btn-primary btn-glow" id="submitBtn">
-                                <i class="fas fa-paper-plane"></i>
-                                <span>Send Message</span>
-                            </button>
-                        </div>
-                    </div>
-                </form>
-
-                <!-- Form Success Message -->
-                <div class="form-success" id="formSuccess" style="display: none;">
-                    <div class="success-icon">
-                        <i class="fas fa-check-circle"></i>
-                    </div>
-                    <h3>Thank You!</h3>
-                    <p>Your message has been sent successfully. I'll get back to you within 24 hours.</p>
-                    <button class="btn btn-primary" id="sendAnother">
-                        <i class="fas fa-plus"></i>
-                        Send Another Message
-                    </button>
-                </div>
-            </div>
-
-            <!-- Right: Contact Info & Options -->
-            <div class="contact-sidebar" data-aos="fade-left">
-                <!-- Contact Info Cards -->
+            <div class="contact-container">
                 <div class="contact-info">
                     <div class="contact-card">
                         <div class="contact-icon">
                             <i class="fas fa-envelope"></i>
                         </div>
-                        <div class="contact-details">
-                            <h4>Email Me</h4>
-                            <a href="mailto:arshvermadev@gmail.com">arshvermadev@gmail.com</a>
-                            <p class="contact-note">I reply within 24 hours</p>
-                        </div>
+                        <h3>Email</h3>
+                        <p>arshvermadev@gmail.com</p>
                     </div>
-
+                    <div class="contact-card">
+                        <div class="contact-icon">
+                            <i class="fab fa-github"></i>
+                        </div>
+                        <h3>GitHub</h3>
+                        <p>@ArshVermaGit</p>
+                    </div>
                     <div class="contact-card">
                         <div class="contact-icon">
                             <i class="fab fa-linkedin"></i>
                         </div>
-                        <div class="contact-details">
-                            <h4>LinkedIn</h4>
-                            <a href="https://linkedin.com/in/arshvermadev/" target="_blank" rel="noopener">
-                                Connect with me
-                            </a>
-                            <p class="contact-note">Professional networking</p>
-                        </div>
-                    </div>
-
-                    <div class="contact-card">
-                        <div class="contact-icon">
-                            <i class="fab fa-github"></i>
-                        </div>
-                        <div class="contact-details">
-                            <h4>GitHub</h4>
-                            <a href="https://github.com/ArshVermaGit" target="_blank" rel="noopener">
-                                View my work
-                            </a>
-                            <p class="contact-note">Code repositories</p>
-                        </div>
-                    </div>
-
-                    <!-- Schedule Meeting (NEW FEATURE) -->
-                    <div class="contact-card meeting-card">
-                        <div class="contact-icon">
-                            <i class="fas fa-calendar-check"></i>
-                        </div>
-                        <div class="contact-details">
-                            <h4>Schedule a Call</h4>
-                            <p>Book a free 30-minute consultation</p>
-                            <button class="btn btn-primary btn-sm" id="scheduleMeeting">
-                                <i class="fas fa-video"></i>
-                                Schedule Now
-                            </button>
-                        </div>
+                        <h3>LinkedIn</h3>
+                        <p>Arsh Verma</p>
                     </div>
                 </div>
 
-                <!-- Quick Response Time -->
-                <div class="response-time">
-                    <div class="response-icon">
-                        <i class="fas fa-clock"></i>
+                <form class="contact-form" id="contactForm">
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input type="text" name="name" required>
                     </div>
-                    <div class="response-text">
-                        <strong>Average Response Time</strong>
-                        <p>Less than 24 hours</p>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" name="email" required>
                     </div>
-                </div>
-
-                <!-- Working Hours (NEW) -->
-                <div class="working-hours">
-                    <h4><i class="fas fa-business-time"></i> Working Hours</h4>
-                    <div class="hours-list">
-                        <div class="hours-item">
-                            <span>Monday - Friday</span>
-                            <span>9:00 AM - 6:00 PM</span>
-                        </div>
-                        <div class="hours-item">
-                            <span>Saturday</span>
-                            <span>10:00 AM - 4:00 PM</span>
-                        </div>
-                        <div class="hours-item">
-                            <span>Sunday</span>
-                            <span>Closed</span>
-                        </div>
+                    <div class="form-group">
+                        <label>Message</label>
+                        <textarea name="message" rows="5" required></textarea>
                     </div>
-                    <p class="timezone">
-                        <i class="fas fa-globe"></i>
-                        IST (GMT+5:30)
-                    </p>
-                </div>
-
-                <!-- Social Media -->
-                <div class="contact-social">
-                    <h4>Follow Me</h4>
-                    <div class="social-links">
-                        <a href="#" class="social-link" aria-label="LinkedIn">
-                            <i class="fab fa-linkedin-in"></i>
-                        </a>
-                        <a href="#" class="social-link" aria-label="GitHub">
-                            <i class="fab fa-github"></i>
-                        </a>
-                        <a href="#" class="social-link" aria-label="Twitter">
-                            <i class="fab fa-twitter"></i>
-                        </a>
-                        <a href="#" class="social-link" aria-label="Instagram">
-                            <i class="fab fa-instagram"></i>
-                        </a>
-                    </div>
-                </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-paper-plane"></i>
+                        <span>Send Message</span>
+                    </button>
+                </form>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
-<!-- ==========================================
-     FOOTER WITH SITEMAP & FEATURES
-     ========================================== -->
-<footer class="footer">
-    <div class="footer-top">
+    <!-- Footer -->
+    <footer class="footer">
         <div class="container">
-            <div class="footer-grid">
-                <!-- Brand Column -->
-                <div class="footer-col footer-brand">
-                    <div class="footer-logo">
-                        <i class="fas fa-code"></i>
-                        <span>ArshCreates</span>
-                    </div>
-                    <p class="footer-description">
-                        Crafting exceptional digital experiences through innovative development, 
-                        creative design, and cutting-edge technology.
-                    </p>
-                    <div class="footer-social">
-                        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-                        <a href="#" aria-label="GitHub"><i class="fab fa-github"></i></a>
-                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-                    </div>
-                </div>
-
-                <!-- Quick Links -->
-                <div class="footer-col">
-                    <h4>Quick Links</h4>
-                    <ul class="footer-links">
-                        <li><a href="#about"><i class="fas fa-chevron-right"></i> About</a></li>
-                        <li><a href="#games"><i class="fas fa-chevron-right"></i> Games</a></li>
-                        <li><a href="#websites"><i class="fas fa-chevron-right"></i> Websites</a></li>
-                        <li><a href="#apps"><i class="fas fa-chevron-right"></i> Apps</a></li>
-                        <li><a href="#skills"><i class="fas fa-chevron-right"></i> Skills</a></li>
-                    </ul>
-                </div>
-
-                <!-- Services -->
-                <div class="footer-col">
-                    <h4>Services</h4>
-                    <ul class="footer-links">
-                        <li><a href="#"><i class="fas fa-chevron-right"></i> Game Development</a></li>
-                        <li><a href="#"><i class="fas fa-chevron-right"></i> Web Development</a></li>
-                        <li><a href="#"><i class="fas fa-chevron-right"></i> App Development</a></li>
-                        <li><a href="#"><i class="fas fa-chevron-right"></i> UI/UX Design</a></li>
-                        <li><a href="#"><i class="fas fa-chevron-right"></i> Consulting</a></li>
-                    </ul>
-                </div>
-
-                <!-- Newsletter -->
-                <div class="footer-col">
-                    <h4>Stay Updated</h4>
-                    <p>Subscribe to get the latest updates and tech insights</p>
-                    <form class="newsletter-form" id="newsletterForm">
-                        <div class="newsletter-input">
-                            <i class="fas fa-envelope"></i>
-                            <input type="email" placeholder="Your email" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary btn-sm">
-                            <i class="fas fa-paper-plane"></i>
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="footer-bottom">
-        <div class="container">
-            <div class="footer-bottom-content">
-                <p>&copy; <span id="currentYear"></span> Arsh Verma. All Rights Reserved.</p>
-                <div class="footer-bottom-links">
-                    <a href="#">Privacy Policy</a>
-                    <a href="#">Terms of Service</a>
+            <div class="footer-content">
+                <p>&copy; 2024 Arsh Verma. All rights reserved.</p>
+                <div class="footer-links">
                     <a href="admin_feedback.html">Admin</a>
                 </div>
             </div>
         </div>
-    </div>
+    </footer>
 
-    <!-- Back to Top Button -->
+    <!-- Back to Top -->
     <button class="back-to-top" id="backToTop" aria-label="Back to top">
         <i class="fas fa-arrow-up"></i>
     </button>
-</footer>
 
-<!-- ==========================================
-     ENHANCED UNIFIED PORTFOLIO MODAL
-     For viewing games, websites, and apps
-     ========================================== -->
-<div class="portfolio-modal" id="portfolioModal">
-    <div class="modal-overlay"></div>
-    <div class="modal-container modal-xl">
-        <!-- Close Button -->
-        <button class="modal-close" id="closeModal" aria-label="Close modal">
-            <i class="fas fa-times"></i>
-        </button>
-        
-        <!-- Navigation Arrows -->
-        <button class="modal-nav modal-prev" id="modalPrev" aria-label="Previous item">
-            <i class="fas fa-chevron-left"></i>
-        </button>
-        <button class="modal-nav modal-next" id="modalNext" aria-label="Next item">
-            <i class="fas fa-chevron-right"></i>
-        </button>
+    <!-- Notification Container -->
+    <div id="notificationContainer"></div>
 
-        <!-- Modal Content Grid -->
-        <div class="modal-content">
-            <!-- Left: Preview Area -->
-            <div class="modal-preview">
-                <!-- Default Item Preview -->
-                <div id="itemPreview">
-                    <img src="" alt="Preview" id="previewImage">
-                    <button class="modal-play-btn" id="playItemBtn">
-                        <i class="fas fa-play"></i>
-                        <span>Play Game</span>
-                    </button>
-                </div>
-                
-                <!-- Game Container -->
-                <div class="modal-game" id="gameContainer">
-                    <canvas id="unity-canvas"></canvas>
-                    <div class="game-loading" id="gameLoading">
-                        <div class="loading-spinner"></div>
-                        <p>Loading Game...</p>
-                        <div class="loading-bar">
-                            <div class="loading-progress" id="loadingProgress"></div>
-                        </div>
-                    </div>
-                    <!-- Game Controls (NEW) -->
-                    <div class="game-controls" id="gameControls" style="display: none;">
-                        <button class="game-control-btn" id="fullscreenBtn" title="Fullscreen">
-                            <i class="fas fa-expand"></i>
-                        </button>
-                        <button class="game-control-btn" id="muteBtn" title="Mute">
-                            <i class="fas fa-volume-up"></i>
-                        </button>
-                        <button class="game-control-btn" id="restartBtn" title="Restart">
-                            <i class="fas fa-redo"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Website Preview (NEW - Enhanced) -->
-                <div id="websitePreview">
-                    <iframe id="websiteFrame" sandbox="allow-scripts allow-same-origin" 
-                            style="width: 100%; height: 100%; border: none;"></iframe>
-                </div>
-
-                <!-- App Preview (NEW) -->
-                <div id="appPreview">
-                    <div class="app-preview-container">
-                        <div class="phone-frame">
-                            <div class="phone-notch"></div>
-                            <div class="phone-screen">
-                                <img src="" alt="App Preview" id="appPreviewImage">
-                            </div>
-                            <div class="phone-button"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Right: Info Panel -->
-            <div class="modal-info">
-                <!-- Header with Badges -->
-                <div class="modal-header">
-                    <div class="modal-badges" id="modalBadges">
-                        <!-- Dynamic badges -->
-                    </div>
-                    <h2 class="modal-title" id="modalTitle">Title</h2>
-                    <div class="modal-meta" id="modalMeta">
-                        <!-- Meta info like date, category, etc. -->
-                    </div>
-                </div>
-
-                <!-- Rating & Stats (NEW) -->
-                <div class="modal-stats" id="modalStats">
-                    <div class="stat">
-                        <i class="fas fa-star"></i>
-                        <span class="stat-value" id="rating">4.8</span>
-                        <span class="stat-label">Rating</span>
-                    </div>
-                    <div class="stat">
-                        <i class="fas fa-download"></i>
-                        <span class="stat-value" id="downloads">10K+</span>
-                        <span class="stat-label">Downloads</span>
-                    </div>
-                    <div class="stat">
-                        <i class="fas fa-heart"></i>
-                        <span class="stat-value" id="likes">2.3K</span>
-                        <span class="stat-label">Likes</span>
-                    </div>
-                </div>
-
-                <!-- Tabs for Description/Features/Reviews (NEW) -->
-                <div class="modal-tabs">
-                    <button class="modal-tab active" data-tab="description">
-                        <i class="fas fa-info-circle"></i>
-                        Description
-                    </button>
-                    <button class="modal-tab" data-tab="features">
-                        <i class="fas fa-list"></i>
-                        Features
-                    </button>
-                    <button class="modal-tab" data-tab="reviews">
-                        <i class="fas fa-star"></i>
-                        Reviews
-                    </button>
-                </div>
-
-                <!-- Tab Content -->
-                <div class="modal-tab-content">
-                    <!-- Description Tab -->
-                    <div class="tab-pane active" data-pane="description">
-                        <p class="modal-description" id="modalDescription">Description</p>
-                    </div>
-
-                    <!-- Features Tab -->
-                    <div class="tab-pane" data-pane="features">
-                        <ul class="features-list" id="featuresList">
-                            <!-- Dynamic features -->
-                        </ul>
-                    </div>
-
-                    <!-- Reviews Tab (NEW) -->
-                    <div class="tab-pane" data-pane="reviews">
-                        <div class="reviews-container" id="reviewsContainer">
-                            <!-- Dynamic reviews -->
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Technologies Used -->
-                <div class="modal-tech" id="modalTech">
-                    <!-- Technologies tags -->
-                </div>
-                
-                <!-- Action Buttons -->
-                <div class="modal-actions" id="modalActions">
-                    <!-- Dynamic action buttons -->
-                </div>
-
-                <!-- Social Share (NEW) -->
-                <div class="modal-social">
-                    <p class="social-label">Share this:</p>
-                    <div class="social-buttons">
-                        <button class="social-btn" data-share="twitter" aria-label="Share on Twitter">
-                            <i class="fab fa-twitter"></i>
-                        </button>
-                        <button class="social-btn" data-share="facebook" aria-label="Share on Facebook">
-                            <i class="fab fa-facebook-f"></i>
-                        </button>
-                        <button class="social-btn" data-share="linkedin" aria-label="Share on LinkedIn">
-                            <i class="fab fa-linkedin-in"></i>
-                        </button>
-                        <button class="social-btn" data-share="copy" aria-label="Copy link">
-                            <i class="fas fa-link"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- ==========================================
-     VIDEO INTRO MODAL (NEW FEATURE)
-     For showcasing intro/demo video
-     ========================================== -->
-<div class="modal video-modal" id="videoModal">
-    <div class="modal-overlay"></div>
-    <div class="modal-container modal-video">
-        <button class="modal-close">
-            <i class="fas fa-times"></i>
-        </button>
-        <div class="video-container">
-            <video id="introVideo" controls>
-                <source src="videos/intro.mp4" type="video/mp4">
-                Your browser does not support the video tag.
-            </video>
-        </div>
-    </div>
-</div>
-
-<!-- ==========================================
-     MEETING SCHEDULER MODAL (NEW FEATURE)
-     For booking consultations
-     ========================================== -->
-<div class="modal meeting-modal" id="meetingModal">
-    <div class="modal-overlay"></div>
-    <div class="modal-container">
-        <button class="modal-close">
-            <i class="fas fa-times"></i>
-        </button>
-
-        <div class="modal-header">
-            <h2>
-                <i class="fas fa-calendar-check"></i>
-                Schedule a Meeting
-            </h2>
-            <p class="text-muted">Book a free 30-minute consultation</p>
-        </div>
-
-        <div class="modal-body">
-            <form class="meeting-form" id="meetingForm">
-                <div class="form-group">
-                    <label for="meetingName">
-                        <i class="fas fa-user"></i>
-                        Your Name *
-                    </label>
-                    <input type="text" id="meetingName" class="form-input" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="meetingEmail">
-                        <i class="fas fa-envelope"></i>
-                        Email Address *
-                    </label>
-                    <input type="email" id="meetingEmail" class="form-input" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="meetingDate">
-                        <i class="fas fa-calendar"></i>
-                        Preferred Date *
-                    </label>
-                    <input type="date" id="meetingDate" class="form-input" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="meetingTime">
-                        <i class="fas fa-clock"></i>
-                        Preferred Time *
-                    </label>
-                    <select id="meetingTime" class="form-select" required>
-                        <option value="">Select time...</option>
-                        <option value="09:00">09:00 AM</option>
-                        <option value="10:00">10:00 AM</option>
-                        <option value="11:00">11:00 AM</option>
-                        <option value="14:00">02:00 PM</option>
-                        <option value="15:00">03:00 PM</option>
-                        <option value="16:00">04:00 PM</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="meetingTopic">
-                        <i class="fas fa-comment"></i>
-                        Meeting Topic
-                    </label>
-                    <textarea id="meetingTopic" class="form-textarea" rows="3" 
-                              placeholder="Briefly describe what you'd like to discuss..."></textarea>
-                </div>
-
-                <button type="submit" class="btn btn-primary btn-block">
-                    <i class="fas fa-calendar-plus"></i>
-                    Schedule Meeting
-                </button>
-            </form>
-        </div>
-    </div>
-</div>
-
-<!-- ==========================================
-     NOTIFICATIONS PANEL (NEW FEATURE)
-     Shows updates, messages, etc.
-     ========================================== -->
-<div class="notifications-panel" id="notificationsPanel">
-    <div class="panel-header">
-        <h3>
-            <i class="fas fa-bell"></i>
-            Notifications
-        </h3>
-        <div class="panel-actions">
-            <button class="btn-icon btn-sm" id="markAllRead">
-                <i class="fas fa-check-double"></i>
-            </button>
-            <button class="btn-icon btn-sm" id="closeNotifications">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-    </div>
-
-    <div class="panel-tabs">
-        <button class="panel-tab active" data-tab="all">All</button>
-        <button class="panel-tab" data-tab="unread">Unread <span class="badge">3</span></button>
-    </div>
-
-    <div class="notifications-list" id="notificationsList">
-        <!-- Example notification structure:
-        <div class="notification-item unread">
-            <div class="notification-icon">
-                <i class="fas fa-info-circle"></i>
-            </div>
-            <div class="notification-content">
-                <h4 class="notification-title">New Feature Available</h4>
-                <p class="notification-text">Check out the new command palette (Ctrl+K)</p>
-                <span class="notification-time">2 hours ago</span>
-            </div>
-            <button class="notification-close">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-        -->
-    </div>
-
-    <div class="panel-footer">
-        <button class="btn btn-glass btn-sm btn-block" id="viewAllNotifications">
-            View All Notifications
-        </button>
-    </div>
-</div>
-
-<!-- ==========================================
-     IMAGE LIGHTBOX (NEW FEATURE)
-     For full-screen image viewing
-     ========================================== -->
-<div class="lightbox" id="lightbox">
-    <div class="lightbox-overlay"></div>
-    <div class="lightbox-container">
-        <button class="lightbox-close">
-            <i class="fas fa-times"></i>
-        </button>
-        <button class="lightbox-nav lightbox-prev">
-            <i class="fas fa-chevron-left"></i>
-        </button>
-        <button class="lightbox-nav lightbox-next">
-            <i class="fas fa-chevron-right"></i>
-        </button>
-
-        <div class="lightbox-content">
-            <img src="" alt="Lightbox Image" id="lightboxImage">
-        </div>
-
-        <div class="lightbox-controls">
-            <button class="lightbox-control" id="zoomIn">
-                <i class="fas fa-search-plus"></i>
-            </button>
-            <button class="lightbox-control" id="zoomOut">
-                <i class="fas fa-search-minus"></i>
-            </button>
-            <button class="lightbox-control" id="resetZoom">
-                <i class="fas fa-sync-alt"></i>
-            </button>
-            <button class="lightbox-control" id="downloadImage">
-                <i class="fas fa-download"></i>
-            </button>
-        </div>
-
-        <div class="lightbox-info">
-            <p id="lightboxCaption"></p>
-            <span id="lightboxCounter">1 / 10</span>
-        </div>
-    </div>
-</div>
-
-<!-- ==========================================
-     COOKIE CONSENT BANNER (NEW FEATURE)
-     ========================================== -->
-<div class="cookie-banner" id="cookieBanner">
-    <div class="cookie-content">
-        <div class="cookie-icon">
-            <i class="fas fa-cookie-bite"></i>
-        </div>
-        <div class="cookie-text">
-            <h4>Cookie Notice</h4>
-            <p>We use cookies to enhance your browsing experience and analyze site traffic. 
-               By clicking "Accept", you consent to our use of cookies.</p>
-        </div>
-    </div>
-    <div class="cookie-actions">
-        <button class="btn btn-glass btn-sm" id="cookieSettings">
-            Settings
-        </button>
-        <button class="btn btn-primary btn-sm" id="cookieAccept">
-            Accept All
-        </button>
-    </div>
-</div>
-
-<!-- ==========================================
-     TOAST NOTIFICATIONS CONTAINER
-     For success/error/info messages
-     ========================================== -->
-<div id="notificationContainer" class="notification-container">
-    <!-- Toast notifications will be dynamically added here -->
-    <!-- Example structure:
-    <div class="notification toast success">
-        <div class="notification-icon">
-            <i class="fas fa-check-circle"></i>
-        </div>
-        <div class="notification-content">
-            <h4 class="notification-title">Success</h4>
-            <p class="notification-text">Message sent successfully!</p>
-        </div>
-        <button class="notification-close">
-            <i class="fas fa-times"></i>
-        </button>
-        <div class="notification-progress"></div>
-    </div>
-    -->
-</div>
-
-<!-- ==========================================
-     LOADING OVERLAY (NEW FEATURE)
-     For async operations
-     ========================================== -->
-<div class="loading-overlay" id="loadingOverlay">
-    <div class="loading-content">
-        <div class="loading-spinner-large"></div>
-        <p class="loading-text">Loading...</p>
-    </div>
-</div>
-
-<!-- ==========================================
-     CONFIRMATION DIALOG (NEW FEATURE)
-     For user confirmations
-     ========================================== -->
-<div class="modal confirm-dialog" id="confirmDialog">
-    <div class="modal-overlay"></div>
-    <div class="modal-container modal-sm">
-        <div class="modal-header">
-            <div class="dialog-icon" id="dialogIcon">
-                <i class="fas fa-question-circle"></i>
-            </div>
-            <h3 id="dialogTitle">Confirm Action</h3>
-        </div>
-        <div class="modal-body">
-            <p id="dialogMessage">Are you sure you want to proceed?</p>
-        </div>
-        <div class="modal-footer">
-            <button class="btn btn-glass" id="dialogCancel">Cancel</button>
-            <button class="btn btn-primary" id="dialogConfirm">Confirm</button>
-        </div>
-    </div>
-</div>
-
-<!-- ==========================================
-     QUICK CONTACT WIDGET (NEW FEATURE)
-     Floating contact form
-     ========================================== -->
-<div class="quick-contact-widget" id="quickContactWidget">
-    <button class="widget-toggle" id="widgetToggle">
-        <i class="fas fa-comment-dots"></i>
-        <span class="widget-badge">!</span>
-    </button>
-
-    <div class="widget-panel">
-        <div class="widget-header">
-            <h4>Quick Message</h4>
-            <button class="widget-close">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-        <form class="widget-form" id="quickContactForm">
-            <div class="form-group">
-                <input type="text" class="form-input" placeholder="Your name" required>
-            </div>
-            <div class="form-group">
-                <input type="email" class="form-input" placeholder="Your email" required>
-            </div>
-            <div class="form-group">
-                <textarea class="form-textarea" placeholder="Your message..." rows="3" required></textarea>
-            </div>
-            <button type="submit" class="btn btn-primary btn-block btn-sm">
-                <i class="fas fa-paper-plane"></i>
-                Send Message
-            </button>
-        </form>
-        <div class="widget-footer">
-            <p class="text-muted">We typically reply within 24 hours</p>
-        </div>
-    </div>
-</div>
-
-<!-- ==========================================
-     SCROLL PROGRESS BAR (NEW FEATURE)
-     Shows reading progress
-     ========================================== -->
-<div class="scroll-progress-bar" id="scrollProgress"></div>
-
-<!-- ==========================================
-     THEME TRANSITION OVERLAY (NEW)
-     Smooth theme switching animation
-     ========================================== -->
-<div class="theme-transition" id="themeTransition"></div>
+    <!-- Scripts -->
+    <script src="js/data.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>
