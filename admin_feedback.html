@@ -1,537 +1,129 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
-    <!-- ============================================
-         META TAGS
-         ============================================ -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="robots" content="noindex, nofollow">
-    <title>Admin Panel - Feedback Management | Arsh Verma Portfolio</title>
-    
-    <!-- ============================================
-         STYLESHEETS
-         ============================================ -->
+    <title>Admin Panel - Arsh Verma</title>
     <link rel="stylesheet" href="css/style.css">
-    <link rel="icon" href="images/favicon.ico">
+    <link rel="stylesheet" href="css/admin.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
-<body class="admin-body">
-    <!-- ============================================
-         ADMIN NAVIGATION BAR
-         ============================================ -->
-    <nav class="admin-nav">
-        <div class="admin-nav-container">
-            <div class="admin-brand">
-                <i class="fas fa-shield-alt"></i>
-                <span>Admin Panel</span>
-            </div>
-
-            <div class="admin-nav-links">
-                <a href="admin_feedback.html" class="admin-nav-link active">
-                    <i class="fas fa-comments"></i>
-                    <span>Feedback</span>
-                    <span class="badge" id="feedbackCount">0</span>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <a href="admin_feedback.html" class="logo">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Admin Panel</span>
                 </a>
-                <a href="#" class="admin-nav-link">
-                    <i class="fas fa-chart-line"></i>
-                    <span>Analytics</span>
-                </a>
-                <a href="#" class="admin-nav-link">
-                    <i class="fas fa-cog"></i>
-                    <span>Settings</span>
-                </a>
-            </div>
-
-            <div class="admin-nav-actions">
-                <button id="themeBtn" class="btn-icon" aria-label="Toggle theme">
-                    <i class="fas fa-moon"></i>
-                </button>
-                <a href="index.html" class="btn btn-glass btn-sm">
-                    <i class="fas fa-home"></i>
-                    <span>View Site</span>
-                </a>
-                <button class="btn btn-primary btn-sm" id="logoutBtn">
-                    <i class="fas fa-sign-out-alt"></i>
-                    <span>Logout</span>
-                </button>
+                <div class="nav-actions">
+                    <button id="themeToggle" class="btn-icon">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                    <a href="index.html" class="btn btn-outline btn-sm">
+                        <i class="fas fa-home"></i>
+                        <span>View Site</span>
+                    </a>
+                </div>
             </div>
         </div>
     </nav>
 
-    <!-- ============================================
-         MAIN ADMIN CONTENT
-         ============================================ -->
-    <main class="admin-main">
-        <div class="admin-container">
-            
-            <!-- ==========================================
-                 DASHBOARD HEADER WITH STATS
-                 ========================================== -->
-            <div class="admin-header">
-                <div class="header-content">
-                    <h1>
-                        <i class="fas fa-tachometer-alt"></i>
-                        Dashboard Overview
-                    </h1>
-                    <p class="text-muted">Manage your portfolio feedback and analytics</p>
-                </div>
-                <div class="header-actions">
-                    <button class="btn btn-glass" id="refreshBtn">
-                        <i class="fas fa-sync-alt"></i>
-                        <span>Refresh</span>
-                    </button>
-                    <button class="btn btn-primary" id="exportBtn">
-                        <i class="fas fa-download"></i>
-                        <span>Export Data</span>
-                    </button>
-                </div>
-            </div>
-
-            <!-- ==========================================
-                 STATISTICS CARDS
-                 ========================================== -->
-            <div class="stats-grid">
-                <div class="stat-card" data-aos="fade-up">
-                    <div class="stat-icon stat-primary">
-                        <i class="fas fa-envelope"></i>
-                    </div>
-                    <div class="stat-content">
-                        <p class="stat-label">Total Messages</p>
-                        <h3 class="stat-value" id="totalMessages">0</h3>
-                        <span class="stat-change positive">
-                            <i class="fas fa-arrow-up"></i> 12% this week
-                        </span>
-                    </div>
-                </div>
-
-                <div class="stat-card" data-aos="fade-up" data-aos-delay="50">
-                    <div class="stat-icon stat-success">
-                        <i class="fas fa-check-circle"></i>
-                    </div>
-                    <div class="stat-content">
-                        <p class="stat-label">Resolved</p>
-                        <h3 class="stat-value" id="resolvedMessages">0</h3>
-                        <span class="stat-change positive">
-                            <i class="fas fa-arrow-up"></i> 8% this week
-                        </span>
-                    </div>
-                </div>
-
-                <div class="stat-card" data-aos="fade-up" data-aos-delay="100">
-                    <div class="stat-icon stat-warning">
-                        <i class="fas fa-clock"></i>
-                    </div>
-                    <div class="stat-content">
-                        <p class="stat-label">Pending</p>
-                        <h3 class="stat-value" id="pendingMessages">0</h3>
-                        <span class="stat-change negative">
-                            <i class="fas fa-arrow-down"></i> 3% this week
-                        </span>
-                    </div>
-                </div>
-
-                <div class="stat-card" data-aos="fade-up" data-aos-delay="150">
-                    <div class="stat-icon stat-info">
-                        <i class="fas fa-star"></i>
-                    </div>
-                    <div class="stat-content">
-                        <p class="stat-label">Avg. Rating</p>
-                        <h3 class="stat-value">4.8</h3>
-                        <span class="stat-change positive">
-                            <i class="fas fa-arrow-up"></i> 0.2 points
-                        </span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ==========================================
-                 FEEDBACK MANAGEMENT PANEL
-                 ========================================== -->
-            <div class="admin-panel feedback-panel">
-                <!-- Panel Header with Filters -->
-                <div class="panel-header">
-                    <h2>
-                        <i class="fas fa-comment-alt"></i>
-                        Feedback Messages
-                    </h2>
-
-                    <!-- Control Bar -->
-                    <div class="panel-controls">
-                        <!-- Search Bar -->
-                        <div class="search-box">
-                            <i class="fas fa-search"></i>
-                            <input type="text" id="feedbackSearch" 
-                                   placeholder="Search by name, email, or message..." 
-                                   autocomplete="off">
-                        </div>
-
-                        <!-- Filter Buttons -->
-                        <div class="filter-buttons">
-                            <button class="filter-btn active" data-filter="all">
-                                <i class="fas fa-list"></i>
-                                All
-                            </button>
-                            <button class="filter-btn" data-filter="unread">
-                                <i class="fas fa-envelope"></i>
-                                Unread
-                            </button>
-                            <button class="filter-btn" data-filter="resolved">
-                                <i class="fas fa-check"></i>
-                                Resolved
-                            </button>
-                            <button class="filter-btn" data-filter="important">
-                                <i class="fas fa-star"></i>
-                                Important
-                            </button>
-                        </div>
-
-                        <!-- Sort Dropdown -->
-                        <div class="sort-dropdown">
-                            <button class="sort-btn">
-                                <i class="fas fa-sort"></i>
-                                <span>Sort</span>
-                            </button>
-                            <div class="sort-menu">
-                                <button data-sort="date-desc" class="active">
-                                    <i class="fas fa-arrow-down"></i>
-                                    Newest First
-                                </button>
-                                <button data-sort="date-asc">
-                                    <i class="fas fa-arrow-up"></i>
-                                    Oldest First
-                                </button>
-                                <button data-sort="name">
-                                    <i class="fas fa-sort-alpha-down"></i>
-                                    Name A-Z
-                                </button>
-                                <button data-sort="type">
-                                    <i class="fas fa-tag"></i>
-                                    Type
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- View Toggle -->
-                        <div class="view-toggle">
-                            <button class="view-btn active" data-view="card" aria-label="Card view">
-                                <i class="fas fa-th-large"></i>
-                            </button>
-                            <button class="view-btn" data-view="table" aria-label="Table view">
-                                <i class="fas fa-table"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Bulk Actions Bar (appears when items selected) -->
-                <div class="bulk-actions" id="bulkActions" style="display: none;">
-                    <div class="bulk-info">
-                        <span id="selectedCount">0</span> items selected
-                    </div>
-                    <div class="bulk-buttons">
-                        <button class="btn btn-glass btn-sm" id="bulkMarkRead">
-                            <i class="fas fa-check"></i>
-                            Mark as Read
-                        </button>
-                        <button class="btn btn-glass btn-sm" id="bulkMarkImportant">
-                            <i class="fas fa-star"></i>
-                            Mark Important
-                        </button>
-                        <button class="btn btn-glass btn-sm" id="bulkArchive">
-                            <i class="fas fa-archive"></i>
-                            Archive
-                        </button>
-                        <button class="btn btn-danger btn-sm" id="bulkDelete">
-                            <i class="fas fa-trash"></i>
-                            Delete
-                        </button>
-                    </div>
-                    <button class="btn btn-glass btn-sm" id="bulkCancel">
-                        <i class="fas fa-times"></i>
-                        Cancel
-                    </button>
-                </div>
-
-                <!-- Active Filters Display -->
-                <div class="active-filters" id="activeFilters"></div>
-
-                <!-- Feedback List (Card View) -->
-                <div class="feedback-list card-view" id="feedbackList">
-                    <!-- Dynamic feedback cards will be injected here -->
-                    <!-- Example structure:
-                    <div class="feedback-card" data-id="123" data-status="unread">
-                        <div class="feedback-select">
-                            <input type="checkbox" class="feedback-checkbox">
-                        </div>
-                        <div class="feedback-status">
-                            <span class="status-indicator unread"></span>
-                        </div>
-                        <div class="feedback-header">
-                            <div class="user-avatar">
-                                <i class="fas fa-user"></i>
-                            </div>
-                            <div class="user-info">
-                                <h4 class="user-name">John Doe</h4>
-                                <p class="user-email">john@example.com</p>
-                            </div>
-                            <div class="feedback-meta">
-                                <span class="feedback-time">2 hours ago</span>
-                                <span class="feedback-type">Project Inquiry</span>
-                            </div>
-                        </div>
-                        <div class="feedback-body">
-                            <p class="feedback-message">Message content here...</p>
-                        </div>
-                        <div class="feedback-footer">
-                            <button class="action-btn" data-action="reply">
-                                <i class="fas fa-reply"></i>
-                                Reply
-                            </button>
-                            <button class="action-btn" data-action="star">
-                                <i class="far fa-star"></i>
-                                Important
-                            </button>
-                            <button class="action-btn" data-action="resolve">
-                                <i class="fas fa-check"></i>
-                                Resolve
-                            </button>
-                            <button class="action-btn text-danger" data-action="delete">
-                                <i class="fas fa-trash"></i>
-                                Delete
-                            </button>
-                        </div>
-                    </div>
-                    -->
-                </div>
-
-                <!-- Feedback Table (Table View) -->
-                <div class="feedback-table" id="feedbackTable" style="display: none;">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th width="40">
-                                    <input type="checkbox" id="selectAll">
-                                </th>
-                                <th width="40"></th>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Type</th>
-                                <th>Message</th>
-                                <th>Date</th>
-                                <th width="150">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="feedbackTableBody">
-                            <!-- Dynamic table rows -->
-                        </tbody>
-                    </table>
-                </div>
-
-                <!-- Empty State -->
-                <div class="empty-state" id="emptyState" style="display: none;">
-                    <div class="empty-icon">
-                        <i class="fas fa-inbox"></i>
-                    </div>
-                    <h3>No Feedback Messages</h3>
-                    <p>Messages from your contact form will appear here</p>
-                </div>
-
-                <!-- Loading State -->
-                <div class="loading-state" id="loadingState" style="display: none;">
-                    <div class="spinner"></div>
-                    <p>Loading feedback...</p>
-                </div>
-
-                <!-- Pagination -->
-                <div class="pagination" id="pagination">
-                    <button class="pagination-btn" id="prevPage" disabled>
-                        <i class="fas fa-chevron-left"></i>
-                        Previous
-                    </button>
-                    <div class="pagination-pages" id="paginationPages">
-                        <!-- Page numbers will be generated -->
-                    </div>
-                    <button class="pagination-btn" id="nextPage">
-                        Next
-                        <i class="fas fa-chevron-right"></i>
-                    </button>
-                </div>
-            </div>
-
-            <!-- ==========================================
-                 ANALYTICS CHARTS (NEW FEATURE)
-                 ========================================== -->
-            <div class="charts-grid">
-                <div class="chart-card">
-                    <div class="chart-header">
-                        <h3>
-                            <i class="fas fa-chart-line"></i>
-                            Messages Over Time
-                        </h3>
-                        <div class="chart-actions">
-                            <button class="chart-btn active" data-period="week">Week</button>
-                            <button class="chart-btn" data-period="month">Month</button>
-                            <button class="chart-btn" data-period="year">Year</button>
-                        </div>
-                    </div>
-                    <div class="chart-body">
-                        <canvas id="messagesChart"></canvas>
-                    </div>
-                </div>
-
-                <div class="chart-card">
-                    <div class="chart-header">
-                        <h3>
-                            <i class="fas fa-chart-pie"></i>
-                            Inquiry Types
-                        </h3>
-                    </div>
-                    <div class="chart-body">
-                        <canvas id="typesChart"></canvas>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ==========================================
-                 RECENT ACTIVITY LOG (NEW FEATURE)
-                 ========================================== -->
-            <div class="admin-panel activity-panel">
-                <div class="panel-header">
-                    <h2>
-                        <i class="fas fa-history"></i>
-                        Recent Activity
-                    </h2>
-                </div>
-                <div class="activity-list" id="activityList">
-                    <!-- Activity items will be dynamically added -->
-                    <!--
-                    <div class="activity-item">
-                        <div class="activity-icon">
-                            <i class="fas fa-envelope"></i>
-                        </div>
-                        <div class="activity-content">
-                            <p><strong>New message</strong> from John Doe</p>
-                            <span class="activity-time">5 minutes ago</span>
-                        </div>
-                    </div>
-                    -->
-                </div>
-            </div>
-
+    <div class="admin-container">
+        <div class="admin-header">
+            <h1><i class="fas fa-tachometer-alt"></i> Dashboard</h1>
+            <button id="refreshBtn" class="btn btn-primary">
+                <i class="fas fa-sync-alt"></i>
+                <span>Refresh</span>
+            </button>
         </div>
-    </main>
 
-    <!-- ==========================================
-         FEEDBACK DETAIL MODAL
-         Shows full message details and reply form
-         ========================================== -->
-    <div class="modal" id="feedbackModal">
+        <!-- Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon" style="background: rgba(59, 130, 246, 0.1); color: #3B82F6;">
+                    <i class="fas fa-envelope"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-label">Total Messages</div>
+                    <div class="stat-value" id="totalMessages">0</div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon" style="background: rgba(16, 185, 129, 0.1); color: #10B981;">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-label">Read</div>
+                    <div class="stat-value" id="readMessages">0</div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon" style="background: rgba(245, 158, 11, 0.1); color: #F59E0B;">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-label">Unread</div>
+                    <div class="stat-value" id="unreadMessages">0</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Feedback List -->
+        <div class="admin-panel">
+            <div class="panel-header">
+                <h2><i class="fas fa-comments"></i> Feedback Messages</h2>
+                <div class="panel-actions">
+                    <input type="text" id="searchInput" placeholder="Search messages..." class="search-input">
+                    <button id="clearAllBtn" class="btn btn-outline btn-sm">
+                        <i class="fas fa-trash"></i>
+                        <span>Clear All</span>
+                    </button>
+                </div>
+            </div>
+
+            <div id="feedbackList" class="feedback-list">
+                <!-- Messages will be loaded here -->
+            </div>
+
+            <div id="emptyState" class="empty-state" style="display: none;">
+                <i class="fas fa-inbox"></i>
+                <h3>No Messages</h3>
+                <p>Contact form submissions will appear here</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Message Detail Modal -->
+    <div id="messageModal" class="modal">
         <div class="modal-overlay"></div>
-        <div class="modal-container modal-lg">
+        <div class="modal-container">
             <button class="modal-close" id="closeModal">
                 <i class="fas fa-times"></i>
             </button>
-
             <div class="modal-header">
-                <h2 id="modalTitle">Feedback Details</h2>
-                <div class="modal-actions">
-                    <button class="btn btn-glass btn-sm" id="modalPrev">
-                        <i class="fas fa-chevron-left"></i>
-                    </button>
-                    <button class="btn btn-glass btn-sm" id="modalNext">
-                        <i class="fas fa-chevron-right"></i>
-                    </button>
-                </div>
+                <h2>Message Details</h2>
             </div>
-
-            <div class="modal-body">
-                <div class="feedback-detail" id="feedbackDetail">
-                    <!-- Feedback content will be loaded here -->
-                </div>
-
-                <!-- Reply Form -->
-                <div class="reply-form" id="replyForm">
-                    <h3>Send Reply</h3>
-                    <form id="replyFormElement">
-                        <div class="form-group">
-                            <label>Message</label>
-                            <textarea class="form-textarea" placeholder="Type your reply..." rows="5"></textarea>
-                        </div>
-                        <div class="form-actions">
-                            <button type="submit" class="btn btn-primary">
-                                <i class="fas fa-paper-plane"></i>
-                                Send Reply
-                            </button>
-                            <button type="button" class="btn btn-glass" id="cancelReply">
-                                Cancel
-                            </button>
-                        </div>
-                    </form>
-                </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Message details will be loaded here -->
+            </div>
+            <div class="modal-footer">
+                <button id="deleteMessageBtn" class="btn btn-outline">
+                    <i class="fas fa-trash"></i>
+                    <span>Delete</span>
+                </button>
+                <button id="markReadBtn" class="btn btn-primary">
+                    <i class="fas fa-check"></i>
+                    <span>Mark as Read</span>
+                </button>
             </div>
         </div>
     </div>
 
-    <!-- ==========================================
-         EXPORT OPTIONS MODAL
-         ========================================== -->
-    <div class="modal" id="exportModal">
-        <div class="modal-overlay"></div>
-        <div class="modal-container">
-            <button class="modal-close">
-                <i class="fas fa-times"></i>
-            </button>
-
-            <div class="modal-header">
-                <h2>Export Data</h2>
-            </div>
-
-            <div class="modal-body">
-                <div class="export-options">
-                    <button class="export-option" data-format="csv">
-                        <i class="fas fa-file-csv"></i>
-                        <span>Export as CSV</span>
-                    </button>
-                    <button class="export-option" data-format="json">
-                        <i class="fas fa-file-code"></i>
-                        <span>Export as JSON</span>
-                    </button>
-                    <button class="export-option" data-format="pdf">
-                        <i class="fas fa-file-pdf"></i>
-                        <span>Export as PDF</span>
-                    </button>
-                </div>
-
-                <div class="export-filters">
-                    <h4>Export Options</h4>
-                    <label class="checkbox-label">
-                        <input type="checkbox" checked>
-                        <span>Include resolved messages</span>
-                    </label>
-                    <label class="checkbox-label">
-                        <input type="checkbox" checked>
-                        <span>Include timestamps</span>
-                    </label>
-                    <label class="checkbox-label">
-                        <input type="checkbox">
-                        <span>Include only selected items</span>
-                    </label>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ==========================================
-         NOTIFICATIONS CONTAINER
-         ========================================== -->
     <div id="notificationContainer"></div>
 
-    <!-- ==========================================
-         JAVASCRIPT FILES
-         ========================================== -->
-    <script src="js/data.js"></script>
-    <script src="js/script.js"></script>
     <script src="js/admin.js"></script>
 </body>
 </html>
