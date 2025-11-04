@@ -8,7 +8,7 @@ const PORTFOLIO_DATA = {
       overview: "Blast through a narrow canyon at top speed, relying on pure reflexes to dodge everything.",
       description: "Your plane is locked onto a relentless forward speed, and the sheer walls of the valley are closing in fast. Your only job is to weave, bank, and dive to miss the wreckage, rock formations, or other hazards shooting towards you. It's pure reflex action where one wrong twitch means an immediate, fiery stop.",
       image: "images/games/sky-surfers.jpg",
-      gameFile: "game_files/sky-surfers/index.html",
+      gameFile: "game_files/sky_surfers",
       technologies: ["Unity", "C#", "WebGL"],
       rating: 4.8,
       playCount: 12500,
