@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website Details - Arsh Verma</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <a href="index.html" class="logo">
+                    <i class="fas fa-code"></i>
+                    <span>ArshCreates</span>
+                </a>
+                <button id="themeToggle" class="btn-icon">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="detail-page">
+        <div class="detail-header">
+            <div class="container">
+                <a href="index.html#websites" class="back-link">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Back to Websites</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="detail-content">
+            <div class="website-preview-container">
+                <img id="websiteImage" src="" alt="Website Preview" class="website-image">
+                
+                <div class="website-navigation">
+                    <button id="prevWebsite" class="nav-btn">
+                        <i class="fas fa-chevron-left"></i>
+                        <span>Previous</span>
+                    </button>
+                    <button id="nextWebsite" class="nav-btn">
+                        <span>Next</span>
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="detail-info">
+                <div class="container">
+                    <h1 id="websiteTitle"></h1>
+                    
+                    <div class="detail-meta">
+                        <span class="meta-item">
+                            <i class="fas fa-tag"></i>
+                            <span id="websiteCategory"></span>
+                        </span>
+                        <span class="meta-item">
+                            <i class="fas fa-star"></i>
+                            <span id="websiteRating"></span>
+                        </span>
+                        <span class="meta-item">
+                            <i class="fas fa-calendar"></i>
+                            <span id="websiteStatus"></span>
+                        </span>
+                    </div>
+
+                    <div class="detail-description">
+                        <h2>About</h2>
+                        <p id="websiteOverview"></p>
+                        <p id="websiteDescription"></p>
+                    </div>
+
+                    <div class="detail-features">
+                        <h2>Key Features</h2>
+                        <ul id="featuresList"></ul>
+                    </div>
+
+                    <div class="detail-tech">
+                        <h2>Technologies Used</h2>
+                        <div id="techList" class="tech-tags"></div>
+                    </div>
+
+                    <div class="detail-actions">
+                        <a id="visitWebsite" href="#" target="_blank" class="btn btn-primary">
+                            <i class="fas fa-external-link-alt"></i>
+                            <span>Visit Website</span>
+                        </a>
+                        <a id="viewGithub" href="#" target="_blank" class="btn btn-outline">
+                            <i class="fab fa-github"></i>
+                            <span>View Repository</span>
+                        </a>
+                        <button id="shareBtn" class="btn btn-outline">
+                            <i class="fas fa-share-alt"></i>
+                            <span>Share</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="notificationContainer"></div>
+
+    <script src="js/data.js"></script>
+    <script src="js/website-detail.js"></script>
+</body>
+</html>
