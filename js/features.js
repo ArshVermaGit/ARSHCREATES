@@ -1,975 +1,265 @@
 // ============================================
-// INNOVATIVE FEATURES IMPLEMENTATION
+// PREMIUM FEATURES & ANIMATIONS
 // ============================================
 
-class PortfolioFeatures {
-  constructor() {
-    this.commandPaletteActive = false;
-    this.particles = [];
-    this.cursorTrail = [];
-    this.init();
-  }
-
-  init() {
-    try {
-      this.initializeCommandPalette();
-      this.initializeParticleCursor();
-      this.initializeProgressNavigation();
-      this.initialize3DEffects();
-      this.initializeLoadingScreen();
-      this.initializeFloatingActionButton();
-      this.initializeQuickNavigation();
-      this.initializeScrollAnimations();
-      this.initializeParallaxEffects();
-    } catch (error) {
-      console.error('Error initializing PortfolioFeatures:', error);
-      // If there's an error, we still want to remove the loading screen if it exists.
-      const loadingScreen = document.getElementById('loadingScreen');
-      if (loadingScreen) {
-        loadingScreen.remove();
-      }
-    }
-  }
-
-  // ============================================
-  // COMMAND PALETTE (Ctrl+K)
-  // ============================================
-
-  initializeCommandPalette() {
-    this.createCommandPalette();
-    this.setupCommandPaletteListeners();
-  }
-
-  createCommandPalette() {
-    const paletteHTML = `
-      <div id="commandPalette" class="command-palette">
-        <div class="command-palette-overlay"></div>
-        <div class="command-palette-container">
-          <div class="command-palette-header">
-            <div class="search-icon">
-              <i class="fas fa-search"></i>
-            </div>
-            <input type="text" 
-                   class="command-palette-input" 
-                   placeholder="Type a command or search...">
-            <kbd>Esc</kbd>
-          </div>
-          <div class="command-palette-results">
-            <div class="command-group">
-              <div class="command-group-title">Navigation</div>
-              <div class="command-item" data-action="navigate" data-target="#home">
-                <i class="fas fa-home"></i>
-                <span>Go to Home</span>
-                <kbd>Home</kbd>
-              </div>
-              <div class="command-item" data-action="navigate" data-target="#portfolio">
-                <i class="fas fa-briefcase"></i>
-                <span>Go to Portfolio</span>
-                <kbd>P</kbd>
-              </div>
-              <div class="command-item" data-action="navigate" data-target="#contact">
-                <i class="fas fa-envelope"></i>
-                <span>Go to Contact</span>
-                <kbd>C</kbd>
-              </div>
-            </div>
-            <div class="command-group">
-              <div class="command-group-title">Actions</div>
-              <div class="command-item" data-action="theme">
-                <i class="fas fa-palette"></i>
-                <span>Toggle Theme</span>
-                <kbd>T</kbd>
-              </div>
-              <div class="command-item" data-action="search">
-                <i class="fas fa-search"></i>
-                <span>Search Portfolio</span>
-                <kbd>S</kbd>
-              </div>
-              <div class="command-item" data-action="contact">
-                <i class="fas fa-paper-plane"></i>
-                <span>Send Message</span>
-                <kbd>M</kbd>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    `;
-
-    document.body.insertAdjacentHTML('beforeend', paletteHTML);
-  }
-
-  setupCommandPaletteListeners() {
-    document.addEventListener('keydown', (e) => {
-      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
-        e.preventDefault();
-        this.toggleCommandPalette();
-      }
-
-      if (e.key === 'Escape' && this.commandPaletteActive) {
-        this.hideCommandPalette();
-      }
-    });
-
-    const input = document.querySelector('.command-palette-input');
-    const results = document.querySelector('.command-palette-results');
-    const overlay = document.querySelector('.command-palette-overlay');
-
-    if (input) {
-      input.addEventListener('input', (e) => {
-        this.filterCommands(e.target.value);
-      });
-
-      input.addEventListener('keydown', (e) => {
-        if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
-          e.preventDefault();
-          this.navigateCommands(e.key === 'ArrowDown' ? 1 : -1);
-        }
-
-        if (e.key === 'Enter') {
-          this.executeSelectedCommand();
-        }
-      });
+class PremiumFeatures {
+    constructor() {
+        this.init();
     }
 
-    if (results) {
-      results.addEventListener('click', (e) => {
-        const commandItem = e.target.closest('.command-item');
-        if (commandItem) {
-          this.executeCommand(commandItem);
-        }
-      });
+    init() {
+        this.setupCustomCursor();
+        this.setupParticles();
+        this.setupParallaxEffects();
+        this.setupAdvancedAnimations();
+        this.setupInteractiveElements();
     }
 
-    if (overlay) {
-      overlay.addEventListener('click', () => {
-        this.hideCommandPalette();
-      });
-    }
-  }
-
-  toggleCommandPalette() {
-    const palette = document.getElementById('commandPalette');
-    if (!palette) return;
-
-    if (this.commandPaletteActive) {
-      this.hideCommandPalette();
-    } else {
-      this.showCommandPalette();
-    }
-  }
-
-  showCommandPalette() {
-    const palette = document.getElementById('commandPalette');
-    const input = document.querySelector('.command-palette-input');
-    
-    if (!palette || !input) return;
-
-    palette.classList.add('active');
-    input.value = '';
-    input.focus();
-    this.filterCommands('');
-    this.commandPaletteActive = true;
-  }
-
-  hideCommandPalette() {
-    const palette = document.getElementById('commandPalette');
-    if (palette) {
-      palette.classList.remove('active');
-    }
-    this.commandPaletteActive = false;
-  }
-
-  filterCommands(query) {
-    const commandItems = document.querySelectorAll('.command-item');
-    const groups = document.querySelectorAll('.command-group');
-
-    let hasVisibleItems = false;
-
-    commandItems.forEach(item => {
-      const text = item.textContent.toLowerCase();
-      const matches = text.includes(query.toLowerCase());
-      item.style.display = matches ? 'flex' : 'none';
-      
-      if (matches) hasVisibleItems = true;
-    });
-
-    groups.forEach(group => {
-      const visibleItems = group.querySelectorAll('.command-item[style*="display: flex"]');
-      group.style.display = visibleItems.length > 0 ? 'block' : 'none';
-    });
-
-    const firstVisible = document.querySelector('.command-item[style*="display: flex"]');
-    if (firstVisible) {
-      this.selectCommand(firstVisible);
-    }
-  }
-
-  navigateCommands(direction) {
-    const visibleItems = Array.from(document.querySelectorAll('.command-item[style*="display: flex"]'));
-    const currentIndex = visibleItems.findIndex(item => item.classList.contains('selected'));
-    let newIndex = currentIndex + direction;
-
-    if (newIndex < 0) newIndex = visibleItems.length - 1;
-    if (newIndex >= visibleItems.length) newIndex = 0;
-
-    this.selectCommand(visibleItems[newIndex]);
-  }
-
-  selectCommand(item) {
-    document.querySelectorAll('.command-item').forEach(i => {
-      i.classList.remove('selected');
-    });
-    item.classList.add('selected');
-
-    item.scrollIntoView({ block: 'nearest' });
-  }
-
-  executeSelectedCommand() {
-    const selected = document.querySelector('.command-item.selected');
-    if (selected) {
-      this.executeCommand(selected);
-    }
-  }
-
-  executeCommand(commandItem) {
-    const action = commandItem.dataset.action;
-    const target = commandItem.dataset.target;
-
-    switch (action) {
-      case 'navigate':
-        this.navigateToSection(target);
-        break;
-      case 'theme':
-        if (window.portfolioApp) {
-          window.portfolioApp.toggleTheme();
-        }
-        break;
-      case 'search':
-        this.focusSearch();
-        break;
-      case 'contact':
-        this.openContactModal();
-        break;
-    }
-
-    this.hideCommandPalette();
-  }
-
-  navigateToSection(selector) {
-    const element = document.querySelector(selector);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-  }
-
-  focusSearch() {
-    const searchInput = document.querySelector('[data-search]');
-    if (searchInput) {
-      searchInput.focus();
-    }
-  }
-
-  openContactModal() {
-    if (window.modalSystem) {
-      window.modalSystem.open('contactModal');
-    }
-  }
-
-  // ============================================
-  // PARTICLE CURSOR TRAIL
-  // ============================================
-
-  initializeParticleCursor() {
-    this.createCursorCanvas();
-    this.setupCursorParticles();
-  }
-
-  createCursorCanvas() {
-    const canvas = document.createElement('canvas');
-    canvas.id = 'cursorCanvas';
-    canvas.style.cssText = `
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 9999;
-    `;
-    document.body.appendChild(canvas);
-
-    this.cursorCanvas = canvas;
-    this.cursorCtx = canvas.getContext('2d');
-
-    window.addEventListener('resize', () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    });
-
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-  }
-
-  setupCursorParticles() {
-    let mouseX = 0;
-    let mouseY = 0;
-
-    document.addEventListener('mousemove', (e) => {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
-
-      if (this.particles.length < 20) {
-        this.addParticle(mouseX, mouseY);
-      }
-    });
-
-    const animate = () => {
-      this.cursorCtx.clearRect(0, 0, this.cursorCanvas.width, this.cursorCanvas.height);
-      
-      this.particles.forEach((particle, index) => {
-        particle.update();
-        particle.draw(this.cursorCtx);
-
-        if (particle.alpha <= 0) {
-          this.particles.splice(index, 1);
-        }
-      });
-
-      requestAnimationFrame(animate);
-    };
-
-    animate();
-  }
-
-  addParticle(x, y) {
-    const particle = {
-      x: x,
-      y: y,
-      size: Math.random() * 3 + 1,
-      speedX: Math.random() * 2 - 1,
-      speedY: Math.random() * 2 - 1,
-      alpha: 1,
-      color: `hsl(${Math.random() * 60 + 200}, 70%, 60%)`,
-
-      update: function() {
-        this.x += this.speedX;
-        this.y += this.speedY;
-        this.alpha -= 0.02;
-        this.size *= 0.98;
-      },
-
-      draw: function(ctx) {
-        ctx.save();
-        ctx.globalAlpha = this.alpha;
-        ctx.fillStyle = this.color;
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.restore();
-      }
-    };
-
-    this.particles.push(particle);
-  }
-
-  // ============================================
-  // PROGRESS RING NAVIGATION
-  // ============================================
-
-  initializeProgressNavigation() {
-    this.createProgressRing();
-    this.setupProgressTracking();
-  }
-
-  createProgressRing() {
-    const ringHTML = `
-      <div id="progressRing" class="progress-ring">
-        <svg width="60" height="60" viewBox="0 0 60 60">
-          <circle class="progress-ring-bg" cx="30" cy="30" r="26"/>
-          <circle class="progress-ring-fill" cx="30" cy="30" r="26"/>
-        </svg>
-        <div class="progress-ring-content">
-          <i class="fas fa-chevron-down"></i>
-        </div>
-      </div>
-    `;
-
-    document.body.insertAdjacentHTML('beforeend', ringHTML);
-
-    const progressRing = document.getElementById('progressRing');
-    if (progressRing) {
-      progressRing.addEventListener('click', () => {
-        this.scrollToNextSection();
-      });
-    }
-  }
-
-  setupProgressTracking() {
-    const ringFill = document.querySelector('.progress-ring-fill');
-    const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
-
-    const updateProgress = () => {
-      const scrollProgress = (window.scrollY / totalHeight) * 100;
-      const circumference = 2 * Math.PI * 26;
-      const offset = circumference - (scrollProgress / 100) * circumference;
-
-      if (ringFill) {
-        ringFill.style.strokeDasharray = `${circumference} ${circumference}`;
-        ringFill.style.strokeDashoffset = offset;
-      }
-
-      const ringContent = document.querySelector('.progress-ring-content i');
-      if (ringContent) {
-        if (scrollProgress > 90) {
-          ringContent.className = 'fas fa-chevron-up';
-        } else {
-          ringContent.className = 'fas fa-chevron-down';
-        }
-      }
-    };
-
-    window.addEventListener('scroll', this.throttle(updateProgress, 16));
-    updateProgress();
-  }
-
-  scrollToNextSection() {
-    const currentScroll = window.scrollY;
-    const sections = Array.from(document.querySelectorAll('section[id]'));
-    
-    const nextSection = sections.find(section => {
-      return section.offsetTop > currentScroll + 100;
-    });
-
-    if (nextSection) {
-      nextSection.scrollIntoView({ behavior: 'smooth' });
-    } else {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-  }
-
-  // ============================================
-  // 3D EFFECTS AND ANIMATIONS
-  // ============================================
-
-  initialize3DEffects() {
-    this.setupTiltEffects();
-    this.setupParallaxCards();
-    this.setupMagneticButtons();
-  }
-
-  setupTiltEffects() {
-    const tiltElements = document.querySelectorAll('.portfolio-card, .stat-card');
-
-    tiltElements.forEach(element => {
-      element.addEventListener('mousemove', (e) => {
-        const rect = element.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-
-        const centerX = rect.width / 2;
-        const centerY = rect.height / 2;
-
-        const rotateY = (x - centerX) / 25;
-        const rotateX = (centerY - y) / 25;
-
-        element.style.transform = `
-          perspective(1000px) 
-          rotateX(${rotateX}deg) 
-          rotateY(${rotateY}deg) 
-          scale3d(1.05, 1.05, 1.05)
-        `;
-      });
-
-      element.addEventListener('mouseleave', () => {
-        element.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
-      });
-    });
-  }
-
-  setupParallaxCards() {
-    const parallaxElements = document.querySelectorAll('.parallax-card');
-
-    const handleParallax = () => {
-      const scrolled = window.pageYOffset;
-      const rate = scrolled * -0.5;
-
-      parallaxElements.forEach(element => {
-        element.style.transform = `translateY(${rate}px)`;
-      });
-    };
-
-    window.addEventListener('scroll', this.throttle(handleParallax, 16));
-  }
-
-  setupMagneticButtons() {
-    const magneticButtons = document.querySelectorAll('.btn-magnetic');
-
-    magneticButtons.forEach(button => {
-      button.addEventListener('mousemove', (e) => {
-        const rect = button.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-
-        const centerX = rect.width / 2;
-        const centerY = rect.height / 2;
-
-        const deltaX = (x - centerX) * 0.3;
-        const deltaY = (y - centerY) * 0.3;
-
-        button.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
-      });
-
-      button.addEventListener('mouseleave', () => {
-        button.style.transform = 'translate(0, 0)';
-      });
-    });
-  }
-
-  // ============================================
-  // LOADING SCREEN
-  // ============================================
-
-  initializeLoadingScreen() {
-    // Only simulate loading if the loading screen exists
-    if (document.getElementById('loadingScreen')) {
-        this.simulateLoading();
-    }
-  }
-
-  simulateLoading() {
-    const loadingScreen = document.getElementById('loadingScreen');
-    const loadingBar = document.getElementById('loadingBar');
-    const loadingPercentage = document.getElementById('loadingPercentage');
-    const loadingStatus = document.getElementById('loadingStatus');
-    
-    if (!loadingScreen) return;
-
-    let progress = 0;
-
-    const interval = setInterval(() => {
-      progress += Math.random() * 10;
-      if (progress >= 100) {
-        progress = 100;
-        clearInterval(interval);
+    // Custom Cursor
+    setupCustomCursor() {
+        const cursorDot = document.getElementById('cursorDot');
+        const cursorRing = document.getElementById('cursorRing');
         
-        setTimeout(() => {
-          loadingScreen.classList.add('loaded');
-          setTimeout(() => {
-            loadingScreen.remove();
-          }, 500);
-        }, 500);
-      }
-
-      if (loadingBar) {
-        loadingBar.style.width = `${progress}%`;
-      }
-      if (loadingPercentage) {
-        loadingPercentage.textContent = `${Math.round(progress)}%`;
-      }
-      if (loadingStatus) {
-        // Update status text based on progress
-        if (progress < 30) {
-          loadingStatus.textContent = 'Initializing...';
-        } else if (progress < 60) {
-          loadingStatus.textContent = 'Loading assets...';
-        } else if (progress < 90) {
-          loadingStatus.textContent = 'Almost there...';
-        } else {
-          loadingStatus.textContent = 'Ready!';
-        }
-      }
-    }, 200);
-  }
-
-  // ============================================
-  // FLOATING ACTION BUTTON
-  // ============================================
-
-  initializeFloatingActionButton() {
-    this.createFloatingActionButton();
-  }
-
-  createFloatingActionButton() {
-    const fabHTML = `
-      <div id="fabContainer" class="fab-container">
-        <button class="fab-main">
-          <i class="fas fa-plus"></i>
-        </button>
-        <div class="fab-menu">
-          <button class="fab-item" data-action="theme" title="Toggle Theme">
-            <i class="fas fa-palette"></i>
-          </button>
-          <button class="fab-item" data-action="search" title="Search">
-            <i class="fas fa-search"></i>
-          </button>
-          <button class="fab-item" data-action="contact" title="Contact">
-            <i class="fas fa-envelope"></i>
-          </button>
-          <button class="fab-item" data-action="top" title="Scroll to Top">
-            <i class="fas fa-arrow-up"></i>
-          </button>
-        </div>
-      </div>
-    `;
-
-    document.body.insertAdjacentHTML('beforeend', fabHTML);
-
-    const fabMain = document.querySelector('.fab-main');
-    const fabItems = document.querySelectorAll('.fab-item');
-
-    if (fabMain) {
-      fabMain.addEventListener('click', () => {
-        document.getElementById('fabContainer').classList.toggle('active');
-      });
+        if (!cursorDot || !cursorRing) return;
+        
+        document.addEventListener('mousemove', (e) => {
+            cursorDot.style.left = e.clientX + 'px';
+            cursorDot.style.top = e.clientY + 'px';
+            
+            cursorRing.style.left = e.clientX + 'px';
+            cursorRing.style.top = e.clientY + 'px';
+        });
+        
+        document.addEventListener('mousedown', () => {
+            cursorDot.classList.add('hover');
+            cursorRing.classList.add('hover');
+        });
+        
+        document.addEventListener('mouseup', () => {
+            cursorDot.classList.remove('hover');
+            cursorRing.classList.remove('hover');
+        });
+        
+        const hoverElements = document.querySelectorAll('a, button, .portfolio-card, .nav-link');
+        hoverElements.forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                cursorDot.classList.add('hover');
+                cursorRing.classList.add('hover');
+            });
+            
+            el.addEventListener('mouseleave', () => {
+                cursorDot.classList.remove('hover');
+                cursorRing.classList.remove('hover');
+            });
+        });
     }
 
-    fabItems.forEach(item => {
-      item.addEventListener('click', () => {
-        const action = item.dataset.action;
-        this.handleFabAction(action);
-        document.getElementById('fabContainer').classList.remove('active');
-      });
-    });
-  }
+    // Particle Background
+    setupParticles() {
+        const container = document.getElementById('particlesContainer');
+        if (!container) return;
 
-  handleFabAction(action) {
-    switch (action) {
-      case 'theme':
-        if (window.portfolioApp) {
-          window.portfolioApp.toggleTheme();
+        const particleCount = 50;
+        
+        for (let i = 0; i < particleCount; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            
+            const size = Math.random() * 5 + 2;
+            particle.style.width = size + 'px';
+            particle.style.height = size + 'px';
+            
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.top = Math.random() * 100 + '%';
+            
+            const animationDuration = 15 + Math.random() * 20;
+            const animationDelay = Math.random() * 20;
+            particle.style.animationDuration = animationDuration + 's';
+            particle.style.animationDelay = animationDelay + 's';
+            
+            const opacity = Math.random() * 0.5 + 0.1;
+            particle.style.opacity = opacity;
+            
+            container.appendChild(particle);
         }
-        break;
-      case 'search':
-        this.focusSearch();
-        break;
-      case 'contact':
-        this.openContactModal();
-        break;
-      case 'top':
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-        break;
     }
-  }
 
-  // ============================================
-  // QUICK NAVIGATION
-  // ============================================
+    // Parallax Effects
+    setupParallaxEffects() {
+        const heroBackground = document.querySelector('.hero-gradient');
+        
+        if (!heroBackground) return;
+        
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const rate = scrolled * -0.5;
+            
+            heroBackground.style.transform = `rotate(${rate * 0.1}deg)`;
+        });
+    }
 
-  initializeQuickNavigation() {
-    this.createQuickNavigation();
-  }
+    // Advanced Animations
+    setupAdvancedAnimations() {
+        this.setupTiltEffects();
+        this.setupMagneticButtons();
+        this.setupScrollReveal();
+    }
 
-  createQuickNavigation() {
-    const quickNavHTML = `
-      <div id="quickNav" class="quick-nav">
-        <div class="quick-nav-items">
-          <a href="#home" class="quick-nav-item" data-section="home">
-            <i class="fas fa-home"></i>
-            <span>Home</span>
-          </a>
-          <a href="#portfolio" class="quick-nav-item" data-section="portfolio">
-            <i class="fas fa-briefcase"></i>
-            <span>Portfolio</span>
-          </a>
-          <a href="#skills" class="quick-nav-item" data-section="skills">
-            <i class="fas fa-code"></i>
-            <span>Skills</span>
-          </a>
-          <a href="#contact" class="quick-nav-item" data-section="contact">
-            <i class="fas fa-envelope"></i>
-            <span>Contact</span>
-          </a>
-        </div>
-      </div>
-    `;
+    setupTiltEffects() {
+        const tiltElements = document.querySelectorAll('.portfolio-card, .stat-card');
 
-    document.body.insertAdjacentHTML('beforeend', quickNavHTML);
+        tiltElements.forEach(element => {
+            element.addEventListener('mousemove', (e) => {
+                const rect = element.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
 
-    this.updateQuickNav();
-    window.addEventListener('scroll', this.throttle(() => this.updateQuickNav(), 100));
-  }
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
 
-  updateQuickNav() {
-    const sections = document.querySelectorAll('section[id]');
-    const quickNavItems = document.querySelectorAll('.quick-nav-item');
+                const rotateY = (x - centerX) / 25;
+                const rotateX = (centerY - y) / 25;
 
-    let currentSection = '';
+                element.style.transform = `
+                    perspective(1000px) 
+                    rotateX(${rotateX}deg) 
+                    rotateY(${rotateY}deg) 
+                    scale3d(1.05, 1.05, 1.05)
+                `;
+            });
 
-    sections.forEach(section => {
-      const rect = section.getBoundingClientRect();
-      if (rect.top <= 100 && rect.bottom >= 100) {
-        currentSection = section.id;
-      }
-    });
+            element.addEventListener('mouseleave', () => {
+                element.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
+            });
+        });
+    }
 
-    quickNavItems.forEach(item => {
-      item.classList.remove('active');
-      if (item.getAttribute('href') === `#${currentSection}`) {
-        item.classList.add('active');
-      }
-    });
-  }
+    setupMagneticButtons() {
+        const magneticButtons = document.querySelectorAll('.btn-primary, .btn-outline');
 
-  // ============================================
-  // SCROLL ANIMATIONS
-  // ============================================
+        magneticButtons.forEach(button => {
+            button.addEventListener('mousemove', (e) => {
+                const rect = button.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
 
-  initializeScrollAnimations() {
-    this.setupScrollReveal();
-    this.setupStaggerAnimations();
-  }
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
 
-  setupScrollReveal() {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('animate-in');
-        }
-      });
-    }, {
-      threshold: 0.1,
-      rootMargin: '0px 0px -50px 0px'
-    });
+                const deltaX = (x - centerX) * 0.3;
+                const deltaY = (y - centerY) * 0.3;
 
-    document.querySelectorAll('.animate-on-scroll').forEach(el => {
-      observer.observe(el);
-    });
-  }
+                button.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+            });
 
-  setupStaggerAnimations() {
-    const staggerObserver = new IntersectionObserver((entries) => {
-      entries.forEach((entry, index) => {
-        if (entry.isIntersecting) {
-          setTimeout(() => {
-            entry.target.classList.add('animate-in');
-          }, index * 100);
-        }
-      });
-    }, { threshold: 0.1 });
+            button.addEventListener('mouseleave', () => {
+                button.style.transform = 'translate(0, 0)';
+            });
+        });
+    }
 
-    document.querySelectorAll('.stagger-animate').forEach(el => {
-      staggerObserver.observe(el);
-    });
-  }
+    setupScrollReveal() {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-in');
+                }
+            });
+        }, {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        });
 
-  // ============================================
-  // PARALLAX EFFECTS
-  // ============================================
+        document.querySelectorAll('.section').forEach(section => {
+            observer.observe(section);
+        });
+    }
 
-  initializeParallaxEffects() {
-    this.setupBackgroundParallax();
-    this.setupLayeredParallax();
-  }
+    // Interactive Elements
+    setupInteractiveElements() {
+        this.setupRippleEffects();
+        this.setupHoverSounds();
+    }
 
-  setupBackgroundParallax() {
-    const parallaxBg = document.querySelector('.parallax-background');
-    if (!parallaxBg) return;
+    setupRippleEffects() {
+        const buttons = document.querySelectorAll('.btn');
+        
+        buttons.forEach(button => {
+            button.addEventListener('click', function(e) {
+                const ripple = document.createElement('span');
+                const rect = this.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                const x = e.clientX - rect.left - size / 2;
+                const y = e.clientY - rect.top - size / 2;
+                
+                ripple.style.width = ripple.style.height = size + 'px';
+                ripple.style.left = x + 'px';
+                ripple.style.top = y + 'px';
+                ripple.classList.add('ripple');
+                
+                this.appendChild(ripple);
+                
+                setTimeout(() => {
+                    ripple.remove();
+                }, 600);
+            });
+        });
+    }
 
-    window.addEventListener('scroll', () => {
-      const scrolled = window.pageYOffset;
-      const rate = scrolled * -0.5;
-      parallaxBg.style.transform = `translateY(${rate}px)`;
-    });
-  }
+    setupHoverSounds() {
+        // This would require audio files - placeholder for future implementation
+        const interactiveElements = document.querySelectorAll('.btn, .portfolio-card, .nav-link');
+        
+        interactiveElements.forEach(element => {
+            element.addEventListener('mouseenter', () => {
+                // Play subtle hover sound
+                // this.playHoverSound();
+            });
+        });
+    }
 
-  setupLayeredParallax() {
-    const layers = document.querySelectorAll('.parallax-layer');
-    
-    window.addEventListener('scroll', () => {
-      const scrolled = window.pageYOffset;
-      
-      layers.forEach((layer, index) => {
-        const speed = 0.5 + (index * 0.1);
-        const yPos = -(scrolled * speed);
-        layer.style.transform = `translateY(${yPos}px)`;
-      });
-    });
-  }
-
-  throttle(func, limit) {
-    let inThrottle;
-    return function() {
-      const args = arguments;
-      const context = this;
-      if (!inThrottle) {
-        func.apply(context, args);
-        inThrottle = true;
-        setTimeout(() => inThrottle = false, limit);
-      }
-    };
-  }
+    playHoverSound() {
+        // Implementation for hover sounds
+        // const audio = new Audio('sounds/hover.mp3');
+        // audio.volume = 0.1;
+        // audio.play();
+    }
 }
 
-// ============================================
-// ERROR HANDLING FEATURES
-// ============================================
+// Additional CSS for ripple effect
+const rippleStyles = `
+    .ripple {
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.6);
+        transform: scale(0);
+        animation: ripple-animation 0.6s linear;
+        pointer-events: none;
+    }
 
-class ErrorFeatures {
-  static setup404Features() {
-    this.setup404Search();
-    this.setupAutoRetry();
-    this.setupHelpfulSuggestions();
-  }
-
-  static setup404Search() {
-    const searchInput = document.querySelector('.error-search');
-    if (searchInput) {
-      searchInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-          this.performErrorSearch(searchInput.value);
+    @keyframes ripple-animation {
+        to {
+            transform: scale(4);
+            opacity: 0;
         }
-      });
-    }
-  }
-
-  static performErrorSearch(query) {
-    console.log('Searching for:', query);
-  }
-
-  static setupAutoRetry() {
-    const retryBtn = document.querySelector('.retry-btn');
-    if (retryBtn) {
-      retryBtn.addEventListener('click', () => {
-        this.retryPageLoad();
-      });
-    }
-  }
-
-  static retryPageLoad() {
-    window.location.reload();
-  }
-
-  static setupHelpfulSuggestions() {
-    const suggestions = [
-      'Check the URL for typos',
-      'Visit our homepage',
-      'Browse our portfolio',
-      'Contact us for help'
-    ];
-
-    const container = document.querySelector('.error-suggestions');
-    if (container) {
-      suggestions.forEach(suggestion => {
-        const li = document.createElement('li');
-        li.textContent = suggestion;
-        container.appendChild(li);
-      });
-    }
-  }
-}
-
-// ============================================
-// APP PREVIEW SYSTEM
-// ============================================
-
-class AppPreviewSystem {
-  static showAppPreview(appData) {
-    const previewHTML = `
-      <div class="app-preview-modal">
-        <div class="app-preview-container">
-          <div class="app-preview-header">
-            <div class="app-icon">
-              <img src="${appData.icon}" alt="${appData.name}">
-            </div>
-            <div class="app-info">
-              <h3>${appData.name}</h3>
-              <p>${appData.category} • ${appData.platform}</p>
-              <div class="app-rating">
-                ${this.generateStarRating(appData.rating)}
-                <span>${appData.rating} (${appData.downloads})</span>
-              </div>
-            </div>
-            <button class="close-preview">&times;</button>
-          </div>
-          <div class="app-preview-content">
-            <div class="app-screenshots">
-              <img src="${appData.image}" alt="${appData.name}">
-            </div>
-            <div class="app-details">
-              <p>${appData.description}</p>
-              <div class="app-features">
-                <h4>Features</h4>
-                <ul>
-                  ${appData.features.map(feature => `<li>${feature}</li>`).join('')}
-                </ul>
-              </div>
-              <div class="app-actions">
-                ${this.generateAppActions(appData)}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    `;
-
-    document.body.insertAdjacentHTML('beforeend', previewHTML);
-
-    const modal = document.querySelector('.app-preview-modal');
-    const closeBtn = document.querySelector('.close-preview');
-
-    if (closeBtn) {
-      closeBtn.addEventListener('click', () => {
-        if (modal) {
-          modal.remove();
-        }
-      });
     }
 
-    if (modal) {
-      modal.addEventListener('click', (e) => {
-        if (e.target === modal) {
-          modal.remove();
-        }
-      });
-    }
-  }
-
-  static generateStarRating(rating) {
-    const fullStars = Math.floor(rating);
-    const hasHalfStar = rating % 1 >= 0.5;
-    
-    let stars = '';
-    for (let i = 0; i < fullStars; i++) stars += '<i class="fas fa-star"></i>';
-    if (hasHalfStar) stars += '<i class="fas fa-star-half-alt"></i>';
-    for (let i = 0; i < (5 - fullStars - (hasHalfStar ? 1 : 0)); i++) stars += '<i class="far fa-star"></i>';
-    
-    return stars;
-  }
-
-  static generateAppActions(appData) {
-    let actions = '';
-    
-    if (appData.appStoreUrl) {
-      actions += `<a href="${appData.appStoreUrl}" class="btn btn-primary" target="_blank">
-        <i class="fab fa-apple"></i> App Store
-      </a>`;
-    }
-    
-    if (appData.playStoreUrl) {
-      actions += `<a href="${appData.playStoreUrl}" class="btn btn-primary" target="_blank">
-        <i class="fab fa-google-play"></i> Play Store
-      </a>`;
-    }
-    
-    if (appData.webUrl) {
-      actions += `<a href="${appData.webUrl}" class="btn btn-outline" target="_blank">
-        <i class="fas fa-external-link-alt"></i> Visit Website
-      </a>`;
+    .btn {
+        position: relative;
+        overflow: hidden;
     }
 
-    return actions;
-  }
-}
+    .animate-in {
+        animation: fadeInUp 0.8s ease forwards;
+    }
+`;
 
-// ============================================
-// INITIALIZATION
-// ============================================
+// Inject ripple styles
+const styleSheet = document.createElement('style');
+styleSheet.textContent = rippleStyles;
+document.head.appendChild(styleSheet);
 
+// Initialize features when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-  window.portfolioFeatures = new PortfolioFeatures();
-
-  if (document.querySelector('.error-page')) {
-    ErrorFeatures.setup404Features();
-  }
+    window.premiumFeatures = new PremiumFeatures();
 });
