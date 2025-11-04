@@ -1,0 +1,626 @@
+<!-- ==========================================
+     GAMES SECTION WITH ADVANCED FEATURES
+     - Filter by category/technology
+     - Sort options
+     - Grid/List view toggle
+     - Search within section
+     - Favorites system
+     ========================================== -->
+<section id="games" class="section portfolio-section active-section">
+    <div class="container">
+        <!-- Section Header with Controls -->
+        <div class="section-header" data-aos="fade-up">
+            <div class="header-content">
+                <span class="section-tag">
+                    <i class="fas fa-gamepad"></i>
+                    Games Portfolio
+                </span>
+                <h2 class="section-title">Interactive Gaming Experiences</h2>
+                <p class="section-description">
+                    Immersive 3D worlds and engaging gameplay mechanics
+                </p>
+            </div>
+
+            <!-- Section Controls (NEW FEATURE) -->
+            <div class="section-controls">
+                <!-- Search -->
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search games..." id="gamesSearch">
+                </div>
+
+                <!-- View Toggle -->
+                <div class="view-toggle">
+                    <button class="view-btn active" data-view="grid" aria-label="Grid view">
+                        <i class="fas fa-th"></i>
+                    </button>
+                    <button class="view-btn" data-view="list" aria-label="List view">
+                        <i class="fas fa-list"></i>
+                    </button>
+                </div>
+
+                <!-- Filter Dropdown -->
+                <div class="filter-dropdown">
+                    <button class="filter-btn">
+                        <i class="fas fa-filter"></i>
+                        <span>Filter</span>
+                    </button>
+                    <div class="filter-menu">
+                        <label class="filter-option">
+                            <input type="checkbox" value="unity" checked>
+                            <span>Unity</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox" value="unreal" checked>
+                            <span>Unreal Engine</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox" value="3d" checked>
+                            <span>3D Games</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox" value="2d" checked>
+                            <span>2D Games</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Sort Dropdown -->
+                <div class="sort-dropdown">
+                    <button class="sort-btn">
+                        <i class="fas fa-sort"></i>
+                        <span>Sort By</span>
+                    </button>
+                    <div class="sort-menu">
+                        <button data-sort="date">Latest First</button>
+                        <button data-sort="name">Name A-Z</button>
+                        <button data-sort="popular">Most Popular</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Active Filters Display (NEW) -->
+        <div class="active-filters" id="gamesActiveFilters"></div>
+
+        <!-- Portfolio Grid (Dynamic) -->
+        <div class="portfolio-grid" id="gamesGrid" data-view="grid">
+            <!-- Games will be dynamically injected here -->
+            <!-- Example structure (for reference): -->
+            <!--
+            <div class="portfolio-card" data-category="unity 3d">
+                <div class="card-bookmark">
+                    <button class="bookmark-btn" aria-label="Add to favorites">
+                        <i class="far fa-heart"></i>
+                    </button>
+                </div>
+                <div class="portfolio-image">
+                    <img src="images/games/game1.jpg" alt="Game Title">
+                    <div class="card-badges">
+                        <span class="badge">Unity</span>
+                        <span class="badge">3D</span>
+                    </div>
+                    <div class="portfolio-overlay">
+                        <button class="play-btn">
+                            <i class="fas fa-play"></i>
+                        </button>
+                        <div class="quick-actions">
+                            <button class="quick-btn" aria-label="Quick view">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="quick-btn" aria-label="Share">
+                                <i class="fas fa-share-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="portfolio-info">
+                    <div class="info-header">
+                        <span class="portfolio-badge">Playable</span>
+                        <div class="rating-stars">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </div>
+                    </div>
+                    <h3 class="portfolio-title">Game Title</h3>
+                    <p class="portfolio-description">Game description</p>
+                    <div class="card-meta">
+                        <span><i class="fas fa-gamepad"></i> 1.2K plays</span>
+                        <span><i class="fas fa-heart"></i> 456 likes</span>
+                    </span>
+                    </div>
+                </div>
+            </div>
+            -->
+        </div>
+
+        <!-- Load More Button (NEW) -->
+        <div class="load-more-container" data-aos="fade-up">
+            <button class="btn btn-glass btn-load-more" id="loadMoreGames">
+                <i class="fas fa-plus"></i>
+                <span>Load More Games</span>
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- ==========================================
+     WEBSITES SECTION
+     Similar structure to Games section
+     ========================================== -->
+<section id="websites" class="section portfolio-section">
+    <div class="container">
+        <div class="section-header" data-aos="fade-up">
+            <div class="header-content">
+                <span class="section-tag">
+                    <i class="fas fa-laptop-code"></i>
+                    Web Portfolio
+                </span>
+                <h2 class="section-title">Modern Web Solutions</h2>
+                <p class="section-description">
+                    Responsive, fast, and beautiful web experiences
+                </p>
+            </div>
+
+            <div class="section-controls">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search websites..." id="websitesSearch">
+                </div>
+                <div class="view-toggle">
+                    <button class="view-btn active" data-view="grid">
+                        <i class="fas fa-th"></i>
+                    </button>
+                    <button class="view-btn" data-view="list">
+                        <i class="fas fa-list"></i>
+                    </button>
+                </div>
+                <div class="filter-dropdown">
+                    <button class="filter-btn">
+                        <i class="fas fa-filter"></i>
+                        <span>Filter</span>
+                    </button>
+                    <div class="filter-menu">
+                        <label class="filter-option">
+                            <input type="checkbox" value="react" checked>
+                            <span>React</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox" value="vue" checked>
+                            <span>Vue.js</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox" value="html" checked>
+                            <span>HTML/CSS/JS</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="sort-dropdown">
+                    <button class="sort-btn">
+                        <i class="fas fa-sort"></i>
+                        <span>Sort By</span>
+                    </button>
+                    <div class="sort-menu">
+                        <button data-sort="date">Latest First</button>
+                        <button data-sort="name">Name A-Z</button>
+                        <button data-sort="popular">Most Popular</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="active-filters" id="websitesActiveFilters"></div>
+
+        <div class="portfolio-grid websites-grid" id="websitesGrid" data-view="grid">
+            <!-- Websites dynamically injected -->
+        </div>
+
+        <div class="load-more-container" data-aos="fade-up">
+            <button class="btn btn-glass btn-load-more" id="loadMoreWebsites">
+                <i class="fas fa-plus"></i>
+                <span>Load More Websites</span>
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- ==========================================
+     APPS SECTION (REPLACING PHOTOS/VIDEOS)
+     Mobile and desktop applications showcase
+     ========================================== -->
+<section id="apps" class="section portfolio-section">
+    <div class="container">
+        <div class="section-header" data-aos="fade-up">
+            <div class="header-content">
+                <span class="section-tag">
+                    <i class="fas fa-mobile-alt"></i>
+                    Applications Portfolio
+                </span>
+                <h2 class="section-title">Innovative App Solutions</h2>
+                <p class="section-description">
+                    Cross-platform applications that solve real problems
+                </p>
+            </div>
+
+            <div class="section-controls">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search apps..." id="appsSearch">
+                </div>
+                <div class="view-toggle">
+                    <button class="view-btn active" data-view="grid">
+                        <i class="fas fa-th"></i>
+                    </button>
+                    <button class="view-btn" data-view="list">
+                        <i class="fas fa-list"></i>
+                    </button>
+                </div>
+                <div class="filter-dropdown">
+                    <button class="filter-btn">
+                        <i class="fas fa-filter"></i>
+                        <span>Filter</span>
+                    </button>
+                    <div class="filter-menu">
+                        <label class="filter-option">
+                            <input type="checkbox" value="mobile" checked>
+                            <span>Mobile Apps</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox" value="desktop" checked>
+                            <span>Desktop Apps</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox" value="web-app" checked>
+                            <span>Web Apps</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox" value="pwa" checked>
+                            <span>PWA</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="sort-dropdown">
+                    <button class="sort-btn">
+                        <i class="fas fa-sort"></i>
+                        <span>Sort By</span>
+                    </button>
+                    <div class="sort-menu">
+                        <button data-sort="date">Latest First</button>
+                        <button data-sort="name">Name A-Z</button>
+                        <button data-sort="downloads">Most Downloads</button>
+                        <button data-sort="rating">Highest Rated</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="active-filters" id="appsActiveFilters"></div>
+
+        <!-- Apps Grid with special features -->
+        <div class="portfolio-grid apps-grid" id="appsGrid" data-view="grid">
+            <!-- Apps dynamically injected -->
+            <!-- Example app card structure:
+            <div class="portfolio-card app-card" data-category="mobile android">
+                <div class="card-bookmark">
+                    <button class="bookmark-btn">
+                        <i class="far fa-heart"></i>
+                    </button>
+                </div>
+                <div class="app-icon">
+                    <img src="images/apps/app-icon.png" alt="App Icon">
+                    <div class="platform-badges">
+                        <i class="fab fa-android"></i>
+                        <i class="fab fa-apple"></i>
+                    </div>
+                </div>
+                <div class="portfolio-info">
+                    <h3 class="portfolio-title">App Name</h3>
+                    <p class="portfolio-description">App description</p>
+                    <div class="app-stats">
+                        <div class="stat">
+                            <i class="fas fa-star"></i>
+                            <span>4.8</span>
+                        </div>
+                        <div class="stat">
+                            <i class="fas fa-download"></i>
+                            <span>10K+</span>
+                        </div>
+                        <div class="stat">
+                            <i class="fas fa-users"></i>
+                            <span>5K</span>
+                        </div>
+                    </div>
+                    <div class="app-actions">
+                        <button class="btn btn-primary btn-sm">
+                            <i class="fas fa-download"></i>
+                            Download
+                        </button>
+                        <button class="btn btn-glass btn-sm">
+                            <i class="fas fa-eye"></i>
+                            Preview
+                        </button>
+                    </div>
+                </div>
+            </div>
+            -->
+        </div>
+
+        <div class="load-more-container" data-aos="fade-up">
+            <button class="btn btn-glass btn-load-more" id="loadMoreApps">
+                <i class="fas fa-plus"></i>
+                <span>Load More Apps</span>
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- ==========================================
+     SKILLS SECTION WITH INTERACTIVE VISUALS
+     - Animated skill bars
+     - Certification badges
+     - Technology stack
+     - Interactive skill explorer
+     ========================================== -->
+<section id="skills" class="section section-skills">
+    <div class="container">
+        <div class="section-header" data-aos="fade-up">
+            <span class="section-tag">
+                <i class="fas fa-code"></i>
+                Skills & Expertise
+            </span>
+            <h2 class="section-title">Technical Arsenal</h2>
+            <p class="section-description">
+                A comprehensive toolkit for building exceptional digital experiences
+            </p>
+        </div>
+
+        <!-- Skills Tabs (NEW FEATURE) -->
+        <div class="skills-tabs" data-aos="fade-up">
+            <button class="tab-btn active" data-tab="technical">
+                <i class="fas fa-laptop-code"></i>
+                Technical Skills
+            </button>
+            <button class="tab-btn" data-tab="tools">
+                <i class="fas fa-tools"></i>
+                Tools & Software
+            </button>
+            <button class="tab-btn" data-tab="soft">
+                <i class="fas fa-users"></i>
+                Soft Skills
+            </button>
+            <button class="tab-btn" data-tab="certifications">
+                <i class="fas fa-certificate"></i>
+                Certifications
+            </button>
+        </div>
+
+        <!-- Technical Skills Tab -->
+        <div class="skills-content active" data-content="technical">
+            <div class="skills-grid">
+                <!-- Programming Languages -->
+                <div class="skill-category" data-aos="fade-up">
+                    <h3>
+                        <i class="fas fa-code"></i>
+                        Programming Languages
+                    </h3>
+                    <div class="skill-list">
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">C#</span>
+                                <span class="skill-percentage">95%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-progress="95"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">Python</span>
+                                <span class="skill-percentage">90%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-progress="90"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">JavaScript</span>
+                                <span class="skill-percentage">92%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-progress="92"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">HTML/CSS</span>
+                                <span class="skill-percentage">98%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-progress="98"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Frameworks & Libraries -->
+                <div class="skill-category" data-aos="fade-up" data-aos-delay="100">
+                    <h3>
+                        <i class="fas fa-layer-group"></i>
+                        Frameworks & Libraries
+                    </h3>
+                    <div class="skill-list">
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">Unity 3D</span>
+                                <span class="skill-percentage">93%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-progress="93"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">React</span>
+                                <span class="skill-percentage">88%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-progress="88"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">Node.js</span>
+                                <span class="skill-percentage">85%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-progress="85"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Databases & Backend -->
+                <div class="skill-category" data-aos="fade-up" data-aos-delay="200">
+                    <h3>
+                        <i class="fas fa-database"></i>
+                        Databases & Backend
+                    </h3>
+                    <div class="skill-list">
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">MongoDB</span>
+                                <span class="skill-percentage">87%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-progress="87"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">Firebase</span>
+                                <span class="skill-percentage">90%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-progress="90"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">REST APIs</span>
+                                <span class="skill-percentage">92%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-progress="92"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interactive Technology Stack Visualization (NEW) -->
+            <div class="tech-stack-visual" data-aos="zoom-in">
+                <h3>Technology Stack</h3>
+                <div class="tech-orbit">
+                    <div class="orbit-center">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <div class="orbit-ring ring-1">
+                        <div class="orbit-item"><i class="fab fa-unity"></i></div>
+                        <div class="orbit-item"><i class="fab fa-python"></i></div>
+                        <div class="orbit-item"><i class="fab fa-js"></i></div>
+                    </div>
+                    <div class="orbit-ring ring-2">
+                        <div class="orbit-item"><i class="fab fa-react"></i></div>
+                        <div class="orbit-item"><i class="fab fa-node"></i></div>
+                        <div class="orbit-item"><i class="fab fa-html5"></i></div>
+                        <div class="orbit-item"><i class="fab fa-css3"></i></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tools Tab Content -->
+        <div class="skills-content" data-content="tools">
+            <div class="tools-grid">
+                <div class="tool-card" data-aos="flip-left">
+                    <i class="fab fa-unity"></i>
+                    <h4>Unity</h4>
+                    <p>Game Development</p>
+                </div>
+                <div class="tool-card" data-aos="flip-left" data-aos-delay="50">
+                    <i class="fab fa-github"></i>
+                    <h4>Git/GitHub</h4>
+                    <p>Version Control</p>
+                </div>
+                <div class="tool-card" data-aos="flip-left" data-aos-delay="100">
+                    <i class="fas fa-palette"></i>
+                    <h4>Figma</h4>
+                    <p>UI/UX Design</p>
+                </div>
+                <div class="tool-card" data-aos="flip-left" data-aos-delay="150">
+                    <i class="fab fa-docker"></i>
+                    <h4>Docker</h4>
+                    <p>Containerization</p>
+                </div>
+                <!-- Add more tools -->
+            </div>
+        </div>
+
+        <!-- Soft Skills Tab Content -->
+        <div class="skills-content" data-content="soft">
+            <div class="soft-skills-grid">
+                <div class="soft-skill" data-aos="fade-up">
+                    <div class="soft-skill-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h4>Team Collaboration</h4>
+                    <p>Excellent at working in cross-functional teams</p>
+                </div>
+                <div class="soft-skill" data-aos="fade-up" data-aos-delay="50">
+                    <div class="soft-skill-icon">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <h4>Problem Solving</h4>
+                    <p>Creative solutions to complex challenges</p>
+                </div>
+                <div class="soft-skill" data-aos="fade-up" data-aos-delay="100">
+                    <div class="soft-skill-icon">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <h4>Communication</h4>
+                    <p>Clear and effective communicator</p>
+                </div>
+                <!-- Add more soft skills -->
+            </div>
+        </div>
+
+        <!-- Certifications Tab Content -->
+        <div class="skills-content" data-content="certifications">
+            <div class="certifications-grid">
+                <div class="cert-card" data-aos="zoom-in">
+                    <div class="cert-badge">
+                        <i class="fas fa-certificate"></i>
+                    </div>
+                    <h4>Unity Certified Developer</h4>
+                    <p>Unity Technologies</p>
+                    <span class="cert-year">2023</span>
+                </div>
+                <div class="cert-card" data-aos="zoom-in" data-aos-delay="50">
+                    <div class="cert-badge">
+                        <i class="fas fa-certificate"></i>
+                    </div>
+                    <h4>Full Stack Web Development</h4>
+                    <p>Coursera</p>
+                    <span class="cert-year">2023</span>
+                </div>
+                <!-- Add more certifications -->
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Continue in next message... -->
