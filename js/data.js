@@ -60,12 +60,12 @@ const PORTFOLIO_DATA = {
   games: [
     {
       id: 1,
-      name: "Cosmic Adventure",
-      category: "Action",
-      overview: "An immersive space exploration game with stunning visuals",
-      description: "Embark on an interstellar journey through unknown galaxies. Discover new planets, battle alien creatures, and uncover the mysteries of the universe in this epic space adventure.",
+      name: "Sky Surfers",
+      category: "Endless Runner",
+      overview: "Blast through a narrow canyon at top speed, relying on pure reflexes to dodge everything trying to wreck your plane.",
+      description: "Your plane is locked onto a relentless forward speed, and the sheer walls of the valley are closing in fast. Your only job is to weave, bank, and dive to miss the wreckage, rock formations, or other hazards shooting towards you. It's pure reflex action where one wrong twitch means an immediate, fiery stop. Can you keep your nerve and push the throttle harder?",
       image: "images/games/cosmic-adventure.jpg",
-      technologies: ["Unity", "C#", "Blender"],
+      technologies: ["Unity", "C#"],
       rating: 4.8,
       playCount: 12500,
       likes: 890,
