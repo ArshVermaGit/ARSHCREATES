@@ -9,11 +9,26 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
+    <!-- Loading Screen -->
+    <div id="loadingScreen">
+        <div class="loading-logo">
+            <div class="loading-logo-inner">
+                <i class="fas fa-shield-alt"></i>
+            </div>
+        </div>
+        <div class="loading-bar-container">
+            <div class="loading-bar" id="loadingBar"></div>
+        </div>
+        <div class="loading-text" id="loadingText">Loading Admin Panel...</div>
+    </div>
+
     <nav class="navbar">
         <div class="container">
             <div class="nav-content">
                 <a href="admin_feedback.html" class="logo">
-                    <i class="fas fa-shield-alt"></i>
+                    <div class="logo-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
                     <span>Admin Panel</span>
                 </a>
                 <div class="nav-actions">
@@ -69,6 +84,16 @@
                     <div class="stat-value" id="unreadMessages">0</div>
                 </div>
             </div>
+
+            <div class="stat-card">
+                <div class="stat-icon" style="background: rgba(239, 68, 68, 0.1); color: #EF4444;">
+                    <i class="fas fa-trash"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-label">Deleted</div>
+                    <div class="stat-value" id="deletedMessages">0</div>
+                </div>
+            </div>
         </div>
 
         <!-- Feedback List -->
@@ -77,6 +102,11 @@
                 <h2><i class="fas fa-comments"></i> Feedback Messages</h2>
                 <div class="panel-actions">
                     <input type="text" id="searchInput" placeholder="Search messages..." class="search-input">
+                    <select id="statusFilter" class="search-input">
+                        <option value="all">All Status</option>
+                        <option value="unread">Unread</option>
+                        <option value="read">Read</option>
+                    </select>
                     <button id="clearAllBtn" class="btn btn-outline btn-sm">
                         <i class="fas fa-trash"></i>
                         <span>Clear All</span>
