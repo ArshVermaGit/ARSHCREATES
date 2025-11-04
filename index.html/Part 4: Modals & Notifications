@@ -1,0 +1,501 @@
+<!-- ==========================================
+     ENHANCED UNIFIED PORTFOLIO MODAL
+     For viewing games, websites, and apps
+     ========================================== -->
+<div class="portfolio-modal" id="portfolioModal">
+    <div class="modal-overlay"></div>
+    <div class="modal-container modal-xl">
+        <!-- Close Button -->
+        <button class="modal-close" id="closeModal" aria-label="Close modal">
+            <i class="fas fa-times"></i>
+        </button>
+        
+        <!-- Navigation Arrows -->
+        <button class="modal-nav modal-prev" id="modalPrev" aria-label="Previous item">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <button class="modal-nav modal-next" id="modalNext" aria-label="Next item">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+
+        <!-- Modal Content Grid -->
+        <div class="modal-content">
+            <!-- Left: Preview Area -->
+            <div class="modal-preview">
+                <!-- Default Item Preview -->
+                <div id="itemPreview">
+                    <img src="" alt="Preview" id="previewImage">
+                    <button class="modal-play-btn" id="playItemBtn">
+                        <i class="fas fa-play"></i>
+                        <span>Play Game</span>
+                    </button>
+                </div>
+                
+                <!-- Game Container -->
+                <div class="modal-game" id="gameContainer">
+                    <canvas id="unity-canvas"></canvas>
+                    <div class="game-loading" id="gameLoading">
+                        <div class="loading-spinner"></div>
+                        <p>Loading Game...</p>
+                        <div class="loading-bar">
+                            <div class="loading-progress" id="loadingProgress"></div>
+                        </div>
+                    </div>
+                    <!-- Game Controls (NEW) -->
+                    <div class="game-controls" id="gameControls" style="display: none;">
+                        <button class="game-control-btn" id="fullscreenBtn" title="Fullscreen">
+                            <i class="fas fa-expand"></i>
+                        </button>
+                        <button class="game-control-btn" id="muteBtn" title="Mute">
+                            <i class="fas fa-volume-up"></i>
+                        </button>
+                        <button class="game-control-btn" id="restartBtn" title="Restart">
+                            <i class="fas fa-redo"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Website Preview (NEW - Enhanced) -->
+                <div id="websitePreview">
+                    <iframe id="websiteFrame" sandbox="allow-scripts allow-same-origin" 
+                            style="width: 100%; height: 100%; border: none;"></iframe>
+                </div>
+
+                <!-- App Preview (NEW) -->
+                <div id="appPreview">
+                    <div class="app-preview-container">
+                        <div class="phone-frame">
+                            <div class="phone-notch"></div>
+                            <div class="phone-screen">
+                                <img src="" alt="App Preview" id="appPreviewImage">
+                            </div>
+                            <div class="phone-button"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Right: Info Panel -->
+            <div class="modal-info">
+                <!-- Header with Badges -->
+                <div class="modal-header">
+                    <div class="modal-badges" id="modalBadges">
+                        <!-- Dynamic badges -->
+                    </div>
+                    <h2 class="modal-title" id="modalTitle">Title</h2>
+                    <div class="modal-meta" id="modalMeta">
+                        <!-- Meta info like date, category, etc. -->
+                    </div>
+                </div>
+
+                <!-- Rating & Stats (NEW) -->
+                <div class="modal-stats" id="modalStats">
+                    <div class="stat">
+                        <i class="fas fa-star"></i>
+                        <span class="stat-value" id="rating">4.8</span>
+                        <span class="stat-label">Rating</span>
+                    </div>
+                    <div class="stat">
+                        <i class="fas fa-download"></i>
+                        <span class="stat-value" id="downloads">10K+</span>
+                        <span class="stat-label">Downloads</span>
+                    </div>
+                    <div class="stat">
+                        <i class="fas fa-heart"></i>
+                        <span class="stat-value" id="likes">2.3K</span>
+                        <span class="stat-label">Likes</span>
+                    </div>
+                </div>
+
+                <!-- Tabs for Description/Features/Reviews (NEW) -->
+                <div class="modal-tabs">
+                    <button class="modal-tab active" data-tab="description">
+                        <i class="fas fa-info-circle"></i>
+                        Description
+                    </button>
+                    <button class="modal-tab" data-tab="features">
+                        <i class="fas fa-list"></i>
+                        Features
+                    </button>
+                    <button class="modal-tab" data-tab="reviews">
+                        <i class="fas fa-star"></i>
+                        Reviews
+                    </button>
+                </div>
+
+                <!-- Tab Content -->
+                <div class="modal-tab-content">
+                    <!-- Description Tab -->
+                    <div class="tab-pane active" data-pane="description">
+                        <p class="modal-description" id="modalDescription">Description</p>
+                    </div>
+
+                    <!-- Features Tab -->
+                    <div class="tab-pane" data-pane="features">
+                        <ul class="features-list" id="featuresList">
+                            <!-- Dynamic features -->
+                        </ul>
+                    </div>
+
+                    <!-- Reviews Tab (NEW) -->
+                    <div class="tab-pane" data-pane="reviews">
+                        <div class="reviews-container" id="reviewsContainer">
+                            <!-- Dynamic reviews -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Technologies Used -->
+                <div class="modal-tech" id="modalTech">
+                    <!-- Technologies tags -->
+                </div>
+                
+                <!-- Action Buttons -->
+                <div class="modal-actions" id="modalActions">
+                    <!-- Dynamic action buttons -->
+                </div>
+
+                <!-- Social Share (NEW) -->
+                <div class="modal-social">
+                    <p class="social-label">Share this:</p>
+                    <div class="social-buttons">
+                        <button class="social-btn" data-share="twitter" aria-label="Share on Twitter">
+                            <i class="fab fa-twitter"></i>
+                        </button>
+                        <button class="social-btn" data-share="facebook" aria-label="Share on Facebook">
+                            <i class="fab fa-facebook-f"></i>
+                        </button>
+                        <button class="social-btn" data-share="linkedin" aria-label="Share on LinkedIn">
+                            <i class="fab fa-linkedin-in"></i>
+                        </button>
+                        <button class="social-btn" data-share="copy" aria-label="Copy link">
+                            <i class="fas fa-link"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ==========================================
+     VIDEO INTRO MODAL (NEW FEATURE)
+     For showcasing intro/demo video
+     ========================================== -->
+<div class="modal video-modal" id="videoModal">
+    <div class="modal-overlay"></div>
+    <div class="modal-container modal-video">
+        <button class="modal-close">
+            <i class="fas fa-times"></i>
+        </button>
+        <div class="video-container">
+            <video id="introVideo" controls>
+                <source src="videos/intro.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+    </div>
+</div>
+
+<!-- ==========================================
+     MEETING SCHEDULER MODAL (NEW FEATURE)
+     For booking consultations
+     ========================================== -->
+<div class="modal meeting-modal" id="meetingModal">
+    <div class="modal-overlay"></div>
+    <div class="modal-container">
+        <button class="modal-close">
+            <i class="fas fa-times"></i>
+        </button>
+
+        <div class="modal-header">
+            <h2>
+                <i class="fas fa-calendar-check"></i>
+                Schedule a Meeting
+            </h2>
+            <p class="text-muted">Book a free 30-minute consultation</p>
+        </div>
+
+        <div class="modal-body">
+            <form class="meeting-form" id="meetingForm">
+                <div class="form-group">
+                    <label for="meetingName">
+                        <i class="fas fa-user"></i>
+                        Your Name *
+                    </label>
+                    <input type="text" id="meetingName" class="form-input" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="meetingEmail">
+                        <i class="fas fa-envelope"></i>
+                        Email Address *
+                    </label>
+                    <input type="email" id="meetingEmail" class="form-input" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="meetingDate">
+                        <i class="fas fa-calendar"></i>
+                        Preferred Date *
+                    </label>
+                    <input type="date" id="meetingDate" class="form-input" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="meetingTime">
+                        <i class="fas fa-clock"></i>
+                        Preferred Time *
+                    </label>
+                    <select id="meetingTime" class="form-select" required>
+                        <option value="">Select time...</option>
+                        <option value="09:00">09:00 AM</option>
+                        <option value="10:00">10:00 AM</option>
+                        <option value="11:00">11:00 AM</option>
+                        <option value="14:00">02:00 PM</option>
+                        <option value="15:00">03:00 PM</option>
+                        <option value="16:00">04:00 PM</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="meetingTopic">
+                        <i class="fas fa-comment"></i>
+                        Meeting Topic
+                    </label>
+                    <textarea id="meetingTopic" class="form-textarea" rows="3" 
+                              placeholder="Briefly describe what you'd like to discuss..."></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block">
+                    <i class="fas fa-calendar-plus"></i>
+                    Schedule Meeting
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- ==========================================
+     NOTIFICATIONS PANEL (NEW FEATURE)
+     Shows updates, messages, etc.
+     ========================================== -->
+<div class="notifications-panel" id="notificationsPanel">
+    <div class="panel-header">
+        <h3>
+            <i class="fas fa-bell"></i>
+            Notifications
+        </h3>
+        <div class="panel-actions">
+            <button class="btn-icon btn-sm" id="markAllRead">
+                <i class="fas fa-check-double"></i>
+            </button>
+            <button class="btn-icon btn-sm" id="closeNotifications">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
+
+    <div class="panel-tabs">
+        <button class="panel-tab active" data-tab="all">All</button>
+        <button class="panel-tab" data-tab="unread">Unread <span class="badge">3</span></button>
+    </div>
+
+    <div class="notifications-list" id="notificationsList">
+        <!-- Example notification structure:
+        <div class="notification-item unread">
+            <div class="notification-icon">
+                <i class="fas fa-info-circle"></i>
+            </div>
+            <div class="notification-content">
+                <h4 class="notification-title">New Feature Available</h4>
+                <p class="notification-text">Check out the new command palette (Ctrl+K)</p>
+                <span class="notification-time">2 hours ago</span>
+            </div>
+            <button class="notification-close">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        -->
+    </div>
+
+    <div class="panel-footer">
+        <button class="btn btn-glass btn-sm btn-block" id="viewAllNotifications">
+            View All Notifications
+        </button>
+    </div>
+</div>
+
+<!-- ==========================================
+     IMAGE LIGHTBOX (NEW FEATURE)
+     For full-screen image viewing
+     ========================================== -->
+<div class="lightbox" id="lightbox">
+    <div class="lightbox-overlay"></div>
+    <div class="lightbox-container">
+        <button class="lightbox-close">
+            <i class="fas fa-times"></i>
+        </button>
+        <button class="lightbox-nav lightbox-prev">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <button class="lightbox-nav lightbox-next">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+
+        <div class="lightbox-content">
+            <img src="" alt="Lightbox Image" id="lightboxImage">
+        </div>
+
+        <div class="lightbox-controls">
+            <button class="lightbox-control" id="zoomIn">
+                <i class="fas fa-search-plus"></i>
+            </button>
+            <button class="lightbox-control" id="zoomOut">
+                <i class="fas fa-search-minus"></i>
+            </button>
+            <button class="lightbox-control" id="resetZoom">
+                <i class="fas fa-sync-alt"></i>
+            </button>
+            <button class="lightbox-control" id="downloadImage">
+                <i class="fas fa-download"></i>
+            </button>
+        </div>
+
+        <div class="lightbox-info">
+            <p id="lightboxCaption"></p>
+            <span id="lightboxCounter">1 / 10</span>
+        </div>
+    </div>
+</div>
+
+<!-- ==========================================
+     COOKIE CONSENT BANNER (NEW FEATURE)
+     ========================================== -->
+<div class="cookie-banner" id="cookieBanner">
+    <div class="cookie-content">
+        <div class="cookie-icon">
+            <i class="fas fa-cookie-bite"></i>
+        </div>
+        <div class="cookie-text">
+            <h4>Cookie Notice</h4>
+            <p>We use cookies to enhance your browsing experience and analyze site traffic. 
+               By clicking "Accept", you consent to our use of cookies.</p>
+        </div>
+    </div>
+    <div class="cookie-actions">
+        <button class="btn btn-glass btn-sm" id="cookieSettings">
+            Settings
+        </button>
+        <button class="btn btn-primary btn-sm" id="cookieAccept">
+            Accept All
+        </button>
+    </div>
+</div>
+
+<!-- ==========================================
+     TOAST NOTIFICATIONS CONTAINER
+     For success/error/info messages
+     ========================================== -->
+<div id="notificationContainer" class="notification-container">
+    <!-- Toast notifications will be dynamically added here -->
+    <!-- Example structure:
+    <div class="notification toast success">
+        <div class="notification-icon">
+            <i class="fas fa-check-circle"></i>
+        </div>
+        <div class="notification-content">
+            <h4 class="notification-title">Success</h4>
+            <p class="notification-text">Message sent successfully!</p>
+        </div>
+        <button class="notification-close">
+            <i class="fas fa-times"></i>
+        </button>
+        <div class="notification-progress"></div>
+    </div>
+    -->
+</div>
+
+<!-- ==========================================
+     LOADING OVERLAY (NEW FEATURE)
+     For async operations
+     ========================================== -->
+<div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-content">
+        <div class="loading-spinner-large"></div>
+        <p class="loading-text">Loading...</p>
+    </div>
+</div>
+
+<!-- ==========================================
+     CONFIRMATION DIALOG (NEW FEATURE)
+     For user confirmations
+     ========================================== -->
+<div class="modal confirm-dialog" id="confirmDialog">
+    <div class="modal-overlay"></div>
+    <div class="modal-container modal-sm">
+        <div class="modal-header">
+            <div class="dialog-icon" id="dialogIcon">
+                <i class="fas fa-question-circle"></i>
+            </div>
+            <h3 id="dialogTitle">Confirm Action</h3>
+        </div>
+        <div class="modal-body">
+            <p id="dialogMessage">Are you sure you want to proceed?</p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-glass" id="dialogCancel">Cancel</button>
+            <button class="btn btn-primary" id="dialogConfirm">Confirm</button>
+        </div>
+    </div>
+</div>
+
+<!-- ==========================================
+     QUICK CONTACT WIDGET (NEW FEATURE)
+     Floating contact form
+     ========================================== -->
+<div class="quick-contact-widget" id="quickContactWidget">
+    <button class="widget-toggle" id="widgetToggle">
+        <i class="fas fa-comment-dots"></i>
+        <span class="widget-badge">!</span>
+    </button>
+
+    <div class="widget-panel">
+        <div class="widget-header">
+            <h4>Quick Message</h4>
+            <button class="widget-close">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <form class="widget-form" id="quickContactForm">
+            <div class="form-group">
+                <input type="text" class="form-input" placeholder="Your name" required>
+            </div>
+            <div class="form-group">
+                <input type="email" class="form-input" placeholder="Your email" required>
+            </div>
+            <div class="form-group">
+                <textarea class="form-textarea" placeholder="Your message..." rows="3" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block btn-sm">
+                <i class="fas fa-paper-plane"></i>
+                Send Message
+            </button>
+        </form>
+        <div class="widget-footer">
+            <p class="text-muted">We typically reply within 24 hours</p>
+        </div>
+    </div>
+</div>
+
+<!-- ==========================================
+     SCROLL PROGRESS BAR (NEW FEATURE)
+     Shows reading progress
+     ========================================== -->
+<div class="scroll-progress-bar" id="scrollProgress"></div>
+
+<!-- ==========================================
+     THEME TRANSITION OVERLAY (NEW)
+     Smooth theme switching animation
+     ========================================== -->
+<div class="theme-transition" id="themeTransition"></div>
