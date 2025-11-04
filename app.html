@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App Details - Arsh Verma</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <a href="index.html" class="logo">
+                    <i class="fas fa-code"></i>
+                    <span>ArshCreates</span>
+                </a>
+                <button id="themeToggle" class="btn-icon">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="detail-page">
+        <div class="detail-header">
+            <div class="container">
+                <a href="index.html#apps" class="back-link">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Back to Apps</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="detail-content">
+            <div class="app-preview-container">
+                <div class="app-showcase">
+                    <div class="app-icon-large">
+                        <img id="appIcon" src="" alt="App Icon">
+                    </div>
+                    <div class="app-screenshot">
+                        <img id="appImage" src="" alt="App Screenshot">
+                    </div>
+                </div>
+                
+                <div class="app-navigation">
+                    <button id="prevApp" class="nav-btn">
+                        <i class="fas fa-chevron-left"></i>
+                        <span>Previous</span>
+                    </button>
+                    <button id="nextApp" class="nav-btn">
+                        <span>Next</span>
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="detail-info">
+                <div class="container">
+                    <h1 id="appTitle"></h1>
+                    
+                    <div class="detail-meta">
+                        <span class="meta-item">
+                            <i class="fas fa-tag"></i>
+                            <span id="appCategory"></span>
+                        </span>
+                        <span class="meta-item">
+                            <i class="fas fa-mobile-alt"></i>
+                            <span id="appPlatform"></span>
+                        </span>
+                        <span class="meta-item">
+                            <i class="fas fa-star"></i>
+                            <span id="appRating"></span>
+                        </span>
+                        <span class="meta-item">
+                            <i class="fas fa-download"></i>
+                            <span id="appDownloads"></span>
+                        </span>
+                    </div>
+
+                    <div class="detail-description">
+                        <h2>About</h2>
+                        <p id="appOverview"></p>
+                        <p id="appDescription"></p>
+                    </div>
+
+                    <div class="detail-features">
+                        <h2>Key Features</h2>
+                        <ul id="featuresList"></ul>
+                    </div>
+
+                    <div class="detail-tech">
+                        <h2>Technologies Used</h2>
+                        <div id="techList" class="tech-tags"></div>
+                    </div>
+
+                    <div class="app-stats">
+                        <h2>Statistics</h2>
+                        <div class="stats-row">
+                            <div class="stat-box">
+                                <i class="fas fa-download"></i>
+                                <div>
+                                    <div class="stat-value" id="downloads"></div>
+                                    <div class="stat-label">Downloads</div>
+                                </div>
+                            </div>
+                            <div class="stat-box">
+                                <i class="fas fa-users"></i>
+                                <div>
+                                    <div class="stat-value" id="users"></div>
+                                    <div class="stat-label">Active Users</div>
+                                </div>
+                            </div>
+                            <div class="stat-box">
+                                <i class="fas fa-star"></i>
+                                <div>
+                                    <div class="stat-value" id="rating"></div>
+                                    <div class="stat-label">Rating</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="detail-actions">
+                        <a id="appStore" href="#" target="_blank" class="btn btn-primary" style="display:none;">
+                            <i class="fab fa-apple"></i>
+                            <span>App Store</span>
+                        </a>
+                        <a id="playStore" href="#" target="_blank" class="btn btn-primary" style="display:none;">
+                            <i class="fab fa-google-play"></i>
+                            <span>Play Store</span>
+                        </a>
+                        <a id="webUrl" href="#" target="_blank" class="btn btn-outline" style="display:none;">
+                            <i class="fas fa-globe"></i>
+                            <span>Visit Website</span>
+                        </a>
+                        <button id="shareBtn" class="btn btn-outline">
+                            <i class="fas fa-share-alt"></i>
+                            <span>Share</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="notificationContainer"></div>
+
+    <script src="js/data.js"></script>
+    <script src="js/app-detail.js"></script>
+</body>
+</html>
