@@ -1,25 +1,16 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
-    <!-- ============================================
-         META TAGS
-         ============================================ -->
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>404 - Page Not Found | Arsh Verma Portfolio</title>
     <meta name="robots" content="noindex, nofollow">
     
-    <!-- ============================================
-         STYLESHEETS
-         ============================================ -->
     <link rel="stylesheet" href="css/style.css">
     <link rel="icon" href="images/favicon.ico">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     
     <style>
-        /* ==========================================
-           404 PAGE SPECIFIC STYLES
-           ========================================== */
         .error-page {
             min-height: 100vh;
             display: flex;
@@ -30,7 +21,6 @@
             overflow: hidden;
         }
         
-        /* Animated Background */
         .error-background {
             position: absolute;
             top: 0;
@@ -41,49 +31,6 @@
             background: linear-gradient(135deg, #0A0A0A 0%, #1A1A1A 100%);
         }
         
-        .error-background::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 800px;
-            height: 800px;
-            background: radial-gradient(circle, rgba(161, 133, 109, 0.1) 0%, transparent 70%);
-            animation: pulse 4s ease-in-out infinite;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
-            50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.8; }
-        }
-        
-        /* Floating Particles */
-        .error-particles {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-        }
-        
-        .particle {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            background: var(--accent);
-            border-radius: 50%;
-            opacity: 0.3;
-            animation: float 15s infinite;
-        }
-        
-        @keyframes float {
-            0%, 100% { transform: translateY(0) translateX(0); }
-            25% { transform: translateY(-100px) translateX(50px); }
-            50% { transform: translateY(-200px) translateX(-50px); }
-            75% { transform: translateY(-100px) translateX(100px); }
-        }
-        
-        /* Error Container */
         .error-container {
             text-align: center;
             max-width: 700px;
@@ -91,64 +38,30 @@
             animation: fadeInUp 0.8s ease-out;
         }
         
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(40px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        /* Error Icon Container */
-        .error-icon-container {
-            position: relative;
-            margin-bottom: 2rem;
-        }
-        
         .error-icon {
             font-size: 8rem;
-            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-secondary) 100%);
+            background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            animation: iconBounce 2s ease-in-out infinite;
+            margin-bottom: 2rem;
         }
         
-        @keyframes iconBounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
-        }
-        
-        /* Glitch Effect for 404 */
         .error-code {
             font-size: clamp(8rem, 20vw, 12rem);
             font-weight: 900;
-            background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent) 50%, var(--accent-secondary) 100%);
+            background: linear-gradient(135deg, var(--text-primary), var(--accent), var(--accent-secondary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
             line-height: 1;
             margin-bottom: 1.5rem;
-            position: relative;
-            animation: glitch 3s infinite;
-        }
-        
-        @keyframes glitch {
-            0%, 90%, 100% { transform: translateX(0); }
-            91% { transform: translateX(-5px); }
-            93% { transform: translateX(5px); }
-            95% { transform: translateX(-5px); }
-            97% { transform: translateX(5px); }
         }
         
         .error-title {
             font-size: clamp(2rem, 5vw, 3rem);
             margin-bottom: 1.5rem;
             color: var(--text-primary);
-            font-weight: 700;
         }
         
         .error-message {
@@ -158,49 +71,6 @@
             line-height: 1.7;
         }
         
-        /* Search Box in Error Page */
-        .error-search {
-            max-width: 500px;
-            margin: 0 auto 2.5rem;
-        }
-        
-        .error-search-box {
-            display: flex;
-            gap: 0.75rem;
-            background: var(--glass-bg);
-            border: 1.5px solid var(--glass-border);
-            border-radius: var(--radius-lg);
-            padding: 0.5rem;
-            backdrop-filter: blur(20px);
-        }
-        
-        .error-search-input {
-            flex: 1;
-            background: transparent;
-            border: none;
-            color: var(--text-primary);
-            font-size: 1rem;
-            padding: 0.75rem 1rem;
-            outline: none;
-        }
-        
-        .error-search-btn {
-            padding: 0.75rem 1.5rem;
-            background: var(--accent);
-            color: #ffffff;
-            border: none;
-            border-radius: var(--radius-sm);
-            font-weight: 600;
-            cursor: pointer;
-            transition: all var(--transition-smooth);
-        }
-        
-        .error-search-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-glow);
-        }
-        
-        /* Action Buttons */
         .error-actions {
             display: flex;
             gap: 1.25rem;
@@ -209,19 +79,8 @@
             margin-bottom: 3rem;
         }
         
-        .error-actions .btn {
-            min-width: 180px;
-        }
-        
-        /* Popular Pages */
         .popular-pages {
             margin-top: 3rem;
-        }
-        
-        .popular-pages h3 {
-            font-size: 1.5rem;
-            color: var(--text-primary);
-            margin-bottom: 1.5rem;
         }
         
         .popular-links {
@@ -243,106 +102,34 @@
             color: var(--text-primary);
             text-decoration: none;
             transition: all var(--transition-smooth);
-            backdrop-filter: blur(20px);
+            backdrop-filter: var(--glass-blur);
         }
         
         .popular-link:hover {
-            background: var(--glass-bg-hover);
+            background: var(--glass-bg);
             border-color: var(--accent);
             transform: translateY(-3px);
-        }
-        
-        .popular-link i {
-            font-size: 1.25rem;
-            color: var(--accent);
-        }
-        
-        /* Help Text */
-        .error-help {
-            margin-top: 2rem;
-            padding: 1.5rem;
-            background: var(--glass-bg);
-            border: 1.5px solid var(--glass-border);
-            border-radius: var(--radius-lg);
-            backdrop-filter: blur(20px);
-        }
-        
-        .error-help h4 {
-            color: var(--text-primary);
-            margin-bottom: 0.75rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .error-help ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            text-align: left;
-        }
-        
-        .error-help li {
-            color: var(--text-secondary);
-            padding: 0.5rem 0;
-            padding-left: 1.5rem;
-            position: relative;
-        }
-        
-        .error-help li::before {
-            content: '→';
-            position: absolute;
-            left: 0;
-            color: var(--accent);
         }
     </style>
 </head>
 <body>
-    <!-- ============================================
-         ERROR PAGE CONTENT
-         ============================================ -->
     <div class="error-page">
-        <!-- Animated Background -->
-        <div class="error-background">
-            <div class="error-particles" id="errorParticles">
-                <!-- Particles will be generated by JavaScript -->
-            </div>
-        </div>
+        <div class="error-background"></div>
 
-        <!-- Error Container -->
         <div class="error-container">
-            <!-- Error Icon -->
-            <div class="error-icon-container">
-                <div class="error-icon">
-                    <i class="fas fa-exclamation-triangle"></i>
-                </div>
+            <div class="error-icon">
+                <i class="fas fa-exclamation-triangle"></i>
             </div>
 
-            <!-- Error Code with Glitch Effect -->
             <h1 class="error-code">404</h1>
 
-            <!-- Error Title -->
             <h2 class="error-title">Oops! Page Not Found</h2>
 
-            <!-- Error Message -->
             <p class="error-message">
                 The page you're looking for seems to have wandered off into the digital void. 
                 Don't worry though, we'll help you find your way back!
             </p>
 
-            <!-- Search Box -->
-            <div class="error-search">
-                <form class="error-search-box" id="errorSearchForm">
-                    <input type="text" class="error-search-input" 
-                           placeholder="Search for what you need..." 
-                           id="errorSearchInput">
-                    <button type="submit" class="error-search-btn">
-                        <i class="fas fa-search"></i>
-                    </button>
-                </form>
-            </div>
-
-            <!-- Action Buttons -->
             <div class="error-actions">
                 <a href="index.html" class="btn btn-primary btn-glow">
                     <i class="fas fa-home"></i>
@@ -352,90 +139,35 @@
                     <i class="fas fa-arrow-left"></i>
                     <span>Go Back</span>
                 </button>
-                <a href="#contact" class="btn btn-outline">
-                    <i class="fas fa-envelope"></i>
-                    <span>Contact Support</span>
-                </a>
             </div>
 
-            <!-- Popular Pages -->
             <div class="popular-pages">
-                <h3>Or visit one of these pages:</h3>
+                <h3>Popular Pages:</h3>
                 <div class="popular-links">
                     <a href="index.html#games" class="popular-link">
                         <i class="fas fa-gamepad"></i>
-                        <span>Games</span>
+                        <span>Games Portfolio</span>
                     </a>
                     <a href="index.html#websites" class="popular-link">
                         <i class="fas fa-laptop-code"></i>
-                        <span>Websites</span>
+                        <span>Web Projects</span>
                     </a>
                     <a href="index.html#apps" class="popular-link">
                         <i class="fas fa-mobile-alt"></i>
-                        <span>Apps</span>
+                        <span>Mobile Apps</span>
                     </a>
                     <a href="index.html#contact" class="popular-link">
                         <i class="fas fa-envelope"></i>
-                        <span>Contact</span>
+                        <span>Contact Me</span>
                     </a>
                 </div>
-            </div>
-
-            <!-- Help Text -->
-            <div class="error-help">
-                <h4>
-                    <i class="fas fa-info-circle"></i>
-                    Why am I seeing this?
-                </h4>
-                <ul>
-                    <li>The page may have been moved or deleted</li>
-                    <li>There might be a typo in the URL</li>
-                    <li>The link you followed might be outdated</li>
-                    <li>You don't have permission to access this page</li>
-                </ul>
             </div>
         </div>
     </div>
 
-    <!-- ============================================
-         JAVASCRIPT
-         ============================================ -->
-    <script src="js/script.js"></script>
     <script>
-        // ==========================================
-        // Generate Floating Particles
-        // ==========================================
-        function generateParticles() {
-            const container = document.getElementById('errorParticles');
-            const particleCount = 30;
-            
-            for (let i = 0; i < particleCount; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                particle.style.left = Math.random() * 100 + '%';
-                particle.style.top = Math.random() * 100 + '%';
-                particle.style.animationDelay = Math.random() * 15 + 's';
-                particle.style.animationDuration = (15 + Math.random() * 10) + 's';
-                container.appendChild(particle);
-            }
-        }
-        
-        // ==========================================
-        // Search Functionality
-        // ==========================================
-        document.getElementById('errorSearchForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const searchTerm = document.getElementById('errorSearchInput').value;
-            if (searchTerm.trim()) {
-                window.location.href = `index.html?search=${encodeURIComponent(searchTerm)}`;
-            }
-        });
-        
-        // ==========================================
-        // Initialize on Load
-        // ==========================================
         document.addEventListener('DOMContentLoaded', function() {
-            generateParticles();
+            // Add any 404-specific JavaScript here
         });
     </script>
 </body>
