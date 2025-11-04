@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Details - Arsh Verma</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <a href="index.html" class="logo">
+                    <i class="fas fa-code"></i>
+                    <span>ArshCreates</span>
+                </a>
+                <button id="themeToggle" class="btn-icon">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="detail-page">
+        <div class="detail-header">
+            <div class="container">
+                <a href="index.html#games" class="back-link">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Back to Games</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="detail-content">
+            <div class="game-player-container">
+                <div class="game-controls">
+                    <button id="playBtn" class="btn btn-primary">
+                        <i class="fas fa-play"></i>
+                        <span>Play Game</span>
+                    </button>
+                    <button id="fullscreenBtn" class="btn btn-outline" style="display:none;">
+                        <i class="fas fa-expand"></i>
+                    </button>
+                    <button id="restartBtn" class="btn btn-outline" style="display:none;">
+                        <i class="fas fa-redo"></i>
+                    </button>
+                    <button id="closeGameBtn" class="btn btn-outline" style="display:none;">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+
+                <div id="gamePreview" class="game-preview">
+                    <img id="previewImage" src="" alt="Game Preview">
+                </div>
+
+                <div id="gameContainer" class="game-container" style="display:none;">
+                    <iframe id="gameFrame" allowfullscreen></iframe>
+                </div>
+
+                <div class="game-navigation">
+                    <button id="prevGame" class="nav-btn">
+                        <i class="fas fa-chevron-left"></i>
+                        <span>Previous</span>
+                    </button>
+                    <button id="nextGame" class="nav-btn">
+                        <span>Next</span>
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="detail-info">
+                <div class="container">
+                    <h1 id="gameTitle"></h1>
+                    
+                    <div class="detail-meta">
+                        <span class="meta-item">
+                            <i class="fas fa-tag"></i>
+                            <span id="gameCategory"></span>
+                        </span>
+                        <span class="meta-item">
+                            <i class="fas fa-star"></i>
+                            <span id="gameRating"></span>
+                        </span>
+                        <span class="meta-item">
+                            <i class="fas fa-gamepad"></i>
+                            <span id="playCount"></span>
+                        </span>
+                    </div>
+
+                    <div class="detail-description">
+                        <h2>About</h2>
+                        <p id="gameOverview"></p>
+                        <p id="gameDescription"></p>
+                    </div>
+
+                    <div class="detail-features">
+                        <h2>Features</h2>
+                        <ul id="featuresList"></ul>
+                    </div>
+
+                    <div class="detail-tech">
+                        <h2>Technologies</h2>
+                        <div id="techList" class="tech-tags"></div>
+                    </div>
+
+                    <div class="detail-actions">
+                        <button id="shareBtn" class="btn btn-outline">
+                            <i class="fas fa-share-alt"></i>
+                            <span>Share</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="notificationContainer"></div>
+
+    <script src="js/data.js"></script>
+    <script src="js/game-detail.js"></script>
+</body>
+</html>
