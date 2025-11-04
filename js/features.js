@@ -11,15 +11,24 @@ class PortfolioFeatures {
   }
 
   init() {
-    this.initializeCommandPalette();
-    this.initializeParticleCursor();
-    this.initializeProgressNavigation();
-    this.initialize3DEffects();
-    this.initializeLoadingScreen();
-    this.initializeFloatingActionButton();
-    this.initializeQuickNavigation();
-    this.initializeScrollAnimations();
-    this.initializeParallaxEffects();
+    try {
+      this.initializeCommandPalette();
+      this.initializeParticleCursor();
+      this.initializeProgressNavigation();
+      this.initialize3DEffects();
+      this.initializeLoadingScreen();
+      this.initializeFloatingActionButton();
+      this.initializeQuickNavigation();
+      this.initializeScrollAnimations();
+      this.initializeParallaxEffects();
+    } catch (error) {
+      console.error('Error initializing PortfolioFeatures:', error);
+      // If there's an error, we still want to remove the loading screen if it exists.
+      const loadingScreen = document.getElementById('loadingScreen');
+      if (loadingScreen) {
+        loadingScreen.remove();
+      }
+    }
   }
 
   // ============================================
@@ -104,6 +113,7 @@ class PortfolioFeatures {
 
     const input = document.querySelector('.command-palette-input');
     const results = document.querySelector('.command-palette-results');
+    const overlay = document.querySelector('.command-palette-overlay');
 
     if (input) {
       input.addEventListener('input', (e) => {
@@ -122,16 +132,20 @@ class PortfolioFeatures {
       });
     }
 
-    results.addEventListener('click', (e) => {
-      const commandItem = e.target.closest('.command-item');
-      if (commandItem) {
-        this.executeCommand(commandItem);
-      }
-    });
+    if (results) {
+      results.addEventListener('click', (e) => {
+        const commandItem = e.target.closest('.command-item');
+        if (commandItem) {
+          this.executeCommand(commandItem);
+        }
+      });
+    }
 
-    document.querySelector('.command-palette-overlay').addEventListener('click', () => {
-      this.hideCommandPalette();
-    });
+    if (overlay) {
+      overlay.addEventListener('click', () => {
+        this.hideCommandPalette();
+      });
+    }
   }
 
   toggleCommandPalette() {
@@ -149,6 +163,8 @@ class PortfolioFeatures {
     const palette = document.getElementById('commandPalette');
     const input = document.querySelector('.command-palette-input');
     
+    if (!palette || !input) return;
+
     palette.classList.add('active');
     input.value = '';
     input.focus();
@@ -158,7 +174,9 @@ class PortfolioFeatures {
 
   hideCommandPalette() {
     const palette = document.getElementById('commandPalette');
-    palette.classList.remove('active');
+    if (palette) {
+      palette.classList.remove('active');
+    }
     this.commandPaletteActive = false;
   }
 
@@ -379,9 +397,12 @@ class PortfolioFeatures {
 
     document.body.insertAdjacentHTML('beforeend', ringHTML);
 
-    document.getElementById('progressRing').addEventListener('click', () => {
-      this.scrollToNextSection();
-    });
+    const progressRing = document.getElementById('progressRing');
+    if (progressRing) {
+      progressRing.addEventListener('click', () => {
+        this.scrollToNextSection();
+      });
+    }
   }
 
   setupProgressTracking() {
@@ -510,34 +531,20 @@ class PortfolioFeatures {
   // ============================================
 
   initializeLoadingScreen() {
-    this.createLoadingScreen();
-    this.simulateLoading();
-  }
-
-  createLoadingScreen() {
-    const loadingHTML = `
-      <div id="loadingScreen" class="loading-screen">
-        <div class="loading-content">
-          <div class="loading-spinner">
-            <div class="spinner-ring"></div>
-            <div class="spinner-ring"></div>
-            <div class="spinner-ring"></div>
-          </div>
-          <h3>Loading Portfolio</h3>
-          <p>Preparing amazing experience...</p>
-          <div class="loading-progress">
-            <div class="loading-bar"></div>
-          </div>
-        </div>
-      </div>
-    `;
-
-    document.body.insertAdjacentHTML('afterbegin', loadingHTML);
+    // Only simulate loading if the loading screen exists
+    if (document.getElementById('loadingScreen')) {
+        this.simulateLoading();
+    }
   }
 
   simulateLoading() {
     const loadingScreen = document.getElementById('loadingScreen');
-    const loadingBar = document.querySelector('.loading-bar');
+    const loadingBar = document.getElementById('loadingBar');
+    const loadingPercentage = document.getElementById('loadingPercentage');
+    const loadingStatus = document.getElementById('loadingStatus');
+    
+    if (!loadingScreen) return;
+
     let progress = 0;
 
     const interval = setInterval(() => {
@@ -556,6 +563,21 @@ class PortfolioFeatures {
 
       if (loadingBar) {
         loadingBar.style.width = `${progress}%`;
+      }
+      if (loadingPercentage) {
+        loadingPercentage.textContent = `${Math.round(progress)}%`;
+      }
+      if (loadingStatus) {
+        // Update status text based on progress
+        if (progress < 30) {
+          loadingStatus.textContent = 'Initializing...';
+        } else if (progress < 60) {
+          loadingStatus.textContent = 'Loading assets...';
+        } else if (progress < 90) {
+          loadingStatus.textContent = 'Almost there...';
+        } else {
+          loadingStatus.textContent = 'Ready!';
+        }
       }
     }, 200);
   }
@@ -596,9 +618,11 @@ class PortfolioFeatures {
     const fabMain = document.querySelector('.fab-main');
     const fabItems = document.querySelectorAll('.fab-item');
 
-    fabMain.addEventListener('click', () => {
-      document.getElementById('fabContainer').classList.toggle('active');
-    });
+    if (fabMain) {
+      fabMain.addEventListener('click', () => {
+        document.getElementById('fabContainer').classList.toggle('active');
+      });
+    }
 
     fabItems.forEach(item => {
       item.addEventListener('click', () => {
@@ -884,15 +908,21 @@ class AppPreviewSystem {
     const modal = document.querySelector('.app-preview-modal');
     const closeBtn = document.querySelector('.close-preview');
 
-    closeBtn.addEventListener('click', () => {
-      modal.remove();
-    });
+    if (closeBtn) {
+      closeBtn.addEventListener('click', () => {
+        if (modal) {
+          modal.remove();
+        }
+      });
+    }
 
-    modal.addEventListener('click', (e) => {
-      if (e.target === modal) {
-        modal.remove();
-      }
-    });
+    if (modal) {
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          modal.remove();
+        }
+      });
+    }
   }
 
   static generateStarRating(rating) {

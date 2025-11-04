@@ -2067,3 +2067,8 @@ select:focus-visible {
     height: 45px;
   }
 }
+
+/* TEMPORARY FIX - Remove loading screen */
+.loading-screen {
+    display: none !important;
+}
