@@ -1,25 +1,16 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
-    <!-- ============================================
-         META TAGS
-         ============================================ -->
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>500 - Server Error | Arsh Verma Portfolio</title>
     <meta name="robots" content="noindex, nofollow">
     
-    <!-- ============================================
-         STYLESHEETS
-         ============================================ -->
     <link rel="stylesheet" href="css/style.css">
     <link rel="icon" href="images/favicon.ico">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     
     <style>
-        /* ==========================================
-           500 PAGE SPECIFIC STYLES
-           ========================================== */
         .error-page {
             min-height: 100vh;
             display: flex;
@@ -30,34 +21,6 @@
             overflow: hidden;
         }
         
-        /* Animated Background with Grid */
-        .error-background {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            background: linear-gradient(135deg, #0A0A0A 0%, #1A1A1A 100%);
-        }
-        
-        .error-grid {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background-image: 
-                linear-gradient(rgba(239, 68, 68, 0.1) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(239, 68, 68, 0.1) 1px, transparent 1px);
-            background-size: 50px 50px;
-            animation: gridMove 20s linear infinite;
-        }
-        
-        @keyframes gridMove {
-            0% { transform: translate(0, 0); }
-            100% { transform: translate(50px, 50px); }
-        }
-        
-        /* Error Container */
         .error-container {
             text-align: center;
             max-width: 700px;
@@ -65,26 +28,10 @@
             animation: fadeInUp 0.8s ease-out;
         }
         
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(40px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        /* Server Icon with Animation */
-        .error-icon-container {
-            position: relative;
-            margin-bottom: 2rem;
-        }
-        
         .error-icon {
             font-size: 8rem;
-            color: #ef4444;
+            color: var(--error);
+            margin-bottom: 2rem;
             animation: serverError 2s ease-in-out infinite;
         }
         
@@ -107,326 +54,68 @@
             }
         }
         
-        /* Warning Pulses */
-        .warning-pulse {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-            border: 2px solid #ef4444;
-            animation: pulse 2s ease-out infinite;
-        }
-        
-        .warning-pulse:nth-child(2) {
-            animation-delay: 0.5s;
-        }
-        
-        @keyframes pulse {
-            0% {
-                transform: translate(-50%, -50%) scale(0.5);
-                opacity: 1;
-            }
-            100% {
-                transform: translate(-50%, -50%) scale(2);
-                opacity: 0;
-            }
-        }
-        
-        /* Error Code */
         .error-code {
             font-size: clamp(8rem, 20vw, 12rem);
             font-weight: 900;
-            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            background: linear-gradient(135deg, var(--error), #dc2626);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
             line-height: 1;
             margin-bottom: 1.5rem;
-            animation: glitchText 4s infinite;
-        }
-        
-        @keyframes glitchText {
-            0%, 95%, 100% { 
-                transform: translateX(0);
-                filter: hue-rotate(0deg);
-            }
-            96% { 
-                transform: translateX(-10px);
-                filter: hue-rotate(90deg);
-            }
-            97% { 
-                transform: translateX(10px);
-                filter: hue-rotate(180deg);
-            }
-            98% { 
-                transform: translateX(-10px);
-                filter: hue-rotate(270deg);
-            }
         }
         
         .error-title {
             font-size: clamp(2rem, 5vw, 3rem);
             margin-bottom: 1.5rem;
             color: var(--text-primary);
-            font-weight: 700;
         }
         
         .error-message {
             font-size: clamp(1.1rem, 2.5vw, 1.35rem);
             color: var(--text-secondary);
-            margin-bottom: 2rem;
+            margin-bottom: 3rem;
             line-height: 1.7;
         }
         
-        /* Status Monitor */
-        .status-monitor {
-            max-width: 500px;
-            margin: 2rem auto;
-            padding: 1.5rem;
-            background: var(--glass-bg);
-            border: 1.5px solid rgba(239, 68, 68, 0.3);
-            border-radius: var(--radius-lg);
-            backdrop-filter: blur(20px);
-        }
-        
-        .status-monitor h3 {
-            color: var(--text-primary);
-            margin-bottom: 1rem;
+        .error-actions {
             display: flex;
-            align-items: center;
-            gap: 0.5rem;
+            gap: 1.25rem;
+            justify-content: center;
+            flex-wrap: wrap;
         }
         
-        .status-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0.75rem 0;
-            border-bottom: 1px solid var(--glass-border);
-        }
-        
-        .status-item:last-child {
-            border-bottom: none;
-        }
-        
-        .status-label {
-            color: var(--text-secondary);
-            font-size: 0.95rem;
-        }
-        
-        .status-value {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-weight: 600;
-        }
-        
-        .status-indicator {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            animation: blink 1s infinite;
-        }
-        
-        .status-error {
-            background: #ef4444;
-        }
-        
-        .status-warning {
-            background: #f59e0b;
-        }
-        
-        .status-ok {
-            background: #10b981;
-        }
-        
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
-        }
-        
-        /* Auto Retry Counter */
         .retry-counter {
             margin-top: 2rem;
             padding: 1rem;
             background: var(--glass-bg);
             border: 1.5px solid var(--glass-border);
             border-radius: var(--radius-lg);
-            backdrop-filter: blur(20px);
+            backdrop-filter: var(--glass-blur);
         }
         
         .retry-text {
             color: var(--text-secondary);
             margin-bottom: 0.5rem;
         }
-        
-        .retry-progress {
-            width: 100%;
-            height: 6px;
-            background: var(--bg-secondary);
-            border-radius: 3px;
-            overflow: hidden;
-            position: relative;
-        }
-        
-        .retry-progress-bar {
-            height: 100%;
-            background: linear-gradient(90deg, #ef4444, #dc2626);
-            border-radius: 3px;
-            animation: retryProgress 10s linear;
-        }
-        
-        @keyframes retryProgress {
-            from { width: 100%; }
-            to { width: 0%; }
-        }
-        
-        /* Action Buttons */
-        .error-actions {
-            display: flex;
-            gap: 1.25rem;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-top: 2.5rem;
-        }
-        
-        .error-actions .btn {
-            min-width: 180px;
-        }
-        
-        /* Error Details Accordion */
-        .error-details {
-            margin-top: 2rem;
-            text-align: left;
-            max-width: 500px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        
-        .details-toggle {
-            width: 100%;
-            padding: 1rem;
-            background: var(--glass-bg);
-            border: 1.5px solid var(--glass-border);
-            border-radius: var(--radius-lg);
-            color: var(--text-primary);
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: all var(--transition-smooth);
-        }
-        
-        .details-toggle:hover {
-            background: var(--glass-bg-hover);
-        }
-        
-        .details-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease;
-        }
-        
-        .details-content.active {
-            max-height: 500px;
-        }
-        
-        .details-inner {
-            padding: 1rem;
-            background: var(--bg-secondary);
-            border: 1.5px solid var(--glass-border);
-            border-radius: var(--radius-lg);
-            margin-top: 0.5rem;
-        }
-        
-        .error-code-block {
-            background: #1A1A1A;
-            padding: 1rem;
-            border-radius: var(--radius-sm);
-            font-family: 'Courier New', monospace;
-            font-size: 0.85rem;
-            color: #ef4444;
-            overflow-x: auto;
-        }
     </style>
 </head>
 <body>
-    <!-- ============================================
-         ERROR PAGE CONTENT
-         ============================================ -->
     <div class="error-page">
-        <!-- Animated Background -->
-        <div class="error-background">
-            <div class="error-grid"></div>
-        </div>
-
-        <!-- Error Container -->
         <div class="error-container">
-            <!-- Error Icon with Pulses -->
-            <div class="error-icon-container">
-                <div class="warning-pulse"></div>
-                <div class="warning-pulse"></div>
-                <div class="error-icon">
-                    <i class="fas fa-server"></i>
-                </div>
+            <div class="error-icon">
+                <i class="fas fa-server"></i>
             </div>
 
-            <!-- Error Code -->
             <h1 class="error-code">500</h1>
 
-            <!-- Error Title -->
             <h2 class="error-title">Internal Server Error</h2>
 
-            <!-- Error Message -->
             <p class="error-message">
                 Something went wrong on our end. Our servers are having a moment, 
                 but we're working hard to fix it. Please try again shortly.
             </p>
 
-            <!-- Status Monitor -->
-            <div class="status-monitor">
-                <h3>
-                    <i class="fas fa-heartbeat"></i>
-                    System Status
-                </h3>
-                <div class="status-item">
-                    <span class="status-label">Server</span>
-                    <span class="status-value">
-                        <span class="status-indicator status-error"></span>
-                        Offline
-                    </span>
-                </div>
-                <div class="status-item">
-                    <span class="status-label">Database</span>
-                    <span class="status-value">
-                        <span class="status-indicator status-warning"></span>
-                        Degraded
-                    </span>
-                </div>
-                <div class="status-item">
-                    <span class="status-label">CDN</span>
-                    <span class="status-value">
-                        <span class="status-indicator status-ok"></span>
-                        Operational
-                    </span>
-                </div>
-            </div>
-
-            <!-- Auto Retry Counter -->
-            <div class="retry-counter">
-                <p class="retry-text">
-                    <i class="fas fa-sync-alt fa-spin"></i>
-                    Auto-retrying in <span id="retrySeconds">10</span> seconds...
-                </p>
-                <div class="retry-progress">
-                    <div class="retry-progress-bar" id="retryProgressBar"></div>
-                </div>
-            </div>
-
-            <!-- Action Buttons -->
             <div class="error-actions">
                 <a href="index.html" class="btn btn-primary btn-glow">
                     <i class="fas fa-home"></i>
@@ -436,49 +125,18 @@
                     <i class="fas fa-redo"></i>
                     <span>Try Again</span>
                 </button>
-                <a href="index.html#contact" class="btn btn-outline">
-                    <i class="fas fa-bug"></i>
-                    <span>Report Issue</span>
-                </a>
             </div>
 
-            <!-- Error Details Accordion -->
-            <div class="error-details">
-                <button class="details-toggle" id="detailsToggle">
-                    <span>
-                        <i class="fas fa-code"></i>
-                        Technical Details
-                    </span>
-                    <i class="fas fa-chevron-down"></i>
-                </button>
-                <div class="details-content" id="detailsContent">
-                    <div class="details-inner">
-                        <p style="color: var(--text-secondary); margin-bottom: 1rem;">
-                            Error Information:
-                        </p>
-                        <div class="error-code-block">
-                            Error: Internal Server Error<br>
-                            Status Code: 500<br>
-                            Timestamp: <span id="errorTimestamp"></span><br>
-                            Request ID: <span id="requestId"></span>
-                        </div>
-                        <p style="color: var(--text-tertiary); margin-top: 1rem; font-size: 0.85rem;">
-                            This information has been logged for our team to investigate.
-                        </p>
-                    </div>
-                </div>
+            <div class="retry-counter">
+                <p class="retry-text">
+                    <i class="fas fa-sync-alt fa-spin"></i>
+                    Auto-retrying in <span id="retrySeconds">10</span> seconds...
+                </p>
             </div>
         </div>
     </div>
 
-    <!-- ============================================
-         JAVASCRIPT
-         ============================================ -->
-    <script src="js/script.js"></script>
     <script>
-        // ==========================================
-        // Auto Retry Countdown
-        // ==========================================
         let retrySeconds = 10;
         const retryInterval = setInterval(function() {
             retrySeconds--;
@@ -490,35 +148,7 @@
             }
         }, 1000);
         
-        // ==========================================
-        // Details Toggle
-        // ==========================================
-        document.getElementById('detailsToggle').addEventListener('click', function() {
-            const content = document.getElementById('detailsContent');
-            const icon = this.querySelector('.fa-chevron-down');
-            
-            content.classList.toggle('active');
-            icon.style.transform = content.classList.contains('active') ? 
-                'rotate(180deg)' : 'rotate(0deg)';
-        });
-        
-        // ==========================================
-        // Generate Error Details
-        // ==========================================
-        document.addEventListener('DOMContentLoaded', function() {
-            // Set timestamp
-            const now = new Date();
-            document.getElementById('errorTimestamp').textContent = 
-                now.toISOString().replace('T', ' ').substr(0, 19);
-            
-            // Generate random request ID
-            const requestId = 'REQ-' + Math.random().toString(36).substr(2, 9).toUpperCase();
-            document.getElementById('requestId').textContent = requestId;
-        });
-        
-        // ==========================================
-        // Prevent Auto-Retry (if user takes action)
-        // ==========================================
+        // Prevent auto-retry if user takes action
         document.querySelectorAll('.btn').forEach(btn => {
             btn.addEventListener('click', function() {
                 clearInterval(retryInterval);
