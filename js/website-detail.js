@@ -18,7 +18,6 @@ class WebsiteDetailPage {
     setupLoadingScreen() {
         const loadingScreen = document.getElementById('loadingScreen');
         const loadingBar = document.getElementById('loadingBar');
-        const loadingText = document.getElementById('loadingText');
         
         if (!loadingScreen) return;
         
@@ -44,14 +43,14 @@ class WebsiteDetailPage {
         const websiteId = urlParams.get('id');
 
         if (!websiteId) {
-            window.location.href = 'index.html#websites';
+            window.location.href = 'websites.html';
             return;
         }
 
-        this.currentWebsite = getItemById(window.WEBSITE_DATA, parseInt(websiteId));
+        this.currentWebsite = getItemById(window.PORTFOLIO_DATA.websites, parseInt(websiteId));
 
         if (!this.currentWebsite) {
-            window.location.href = 'index.html#websites';
+            window.location.href = 'websites.html';
             return;
         }
 
@@ -67,7 +66,7 @@ class WebsiteDetailPage {
         document.getElementById('websiteTitle').textContent = website.name;
         document.getElementById('websiteCategory').textContent = website.category;
         document.getElementById('websiteRating').textContent = `${website.rating}/5`;
-        document.getElementById('launchDate').textContent = new Date(website.launchDate).toLocaleDateString();
+        document.getElementById('launchDate').textContent = formatDate(website.launchDate);
         document.getElementById('developmentTime').textContent = website.developmentTime;
         document.getElementById('websiteOverview').textContent = website.overview;
         document.getElementById('websiteDescription').textContent = website.description;
@@ -111,15 +110,15 @@ class WebsiteDetailPage {
 
         if (prevBtn) {
             prevBtn.addEventListener('click', () => {
-                const prevWebsite = getPrevItem(window.WEBSITE_DATA, this.currentWebsite.id);
-                window.location.href = `website.html?id=${prevWebsite.id}`;
+                const prevWebsite = getPrevItem(window.PORTFOLIO_DATA.websites, this.currentWebsite.id);
+                window.location.href = `website-detail.html?id=${prevWebsite.id}`;
             });
         }
 
         if (nextBtn) {
             nextBtn.addEventListener('click', () => {
-                const nextWebsite = getNextItem(window.WEBSITE_DATA, this.currentWebsite.id);
-                window.location.href = `website.html?id=${nextWebsite.id}`;
+                const nextWebsite = getNextItem(window.PORTFOLIO_DATA.websites, this.currentWebsite.id);
+                window.location.href = `website-detail.html?id=${nextWebsite.id}`;
             });
         }
 
