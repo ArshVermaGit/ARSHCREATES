@@ -3,11 +3,121 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Game Details - Arsh Verma</title>
+    <title>Cyber Runner 2077 - Game Details | Arsh Verma</title>
     <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        .game-detail-hero {
+            background: linear-gradient(135deg, var(--primary) 0%, #6a11cb 100%);
+            padding: var(--space-3xl) 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .game-trailer {
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-xl);
+            margin: var(--space-2xl) 0;
+            position: relative;
+        }
+        
+        .trailer-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 1;
+            transition: opacity var(--transition-smooth);
+        }
+        
+        .trailer-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .play-button {
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all var(--transition-smooth);
+        }
+        
+        .play-button:hover {
+            transform: scale(1.1);
+            background: white;
+        }
+        
+        .game-screenshots {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-lg);
+            margin: var(--space-2xl) 0;
+        }
+        
+        .screenshot-item {
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+            transition: transform var(--transition-smooth);
+            cursor: pointer;
+        }
+        
+        .screenshot-item:hover {
+            transform: translateY(-5px);
+        }
+        
+        .game-features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-lg);
+            margin: var(--space-2xl) 0;
+        }
+        
+        .feature-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            padding: var(--space-lg);
+            backdrop-filter: var(--glass-blur);
+            transition: all var(--transition-smooth);
+        }
+        
+        .feature-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-3px);
+        }
+        
+        .gameplay-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-lg);
+            margin: var(--space-xl) 0;
+        }
+        
+        .stat-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            padding: var(--space-lg);
+            text-align: center;
+            backdrop-filter: var(--glass-blur);
+        }
+    </style>
 </head>
 <body>
     <!-- Loading Screen -->
@@ -50,199 +160,419 @@
         </div>
     </nav>
 
-    <!-- Game Detail Section -->
-    <section class="game-detail-section">
+    <!-- Game Hero Section -->
+    <section class="game-detail-hero" id="gameHero">
         <div class="container">
-            <!-- Game Preview -->
-            <div class="game-preview-container">
-                <div class="game-preview">
-                    <div class="preview-image">
-                        <img id="previewImage" src="" alt="Game Preview" class="preview-img">
-                        <div class="preview-overlay">
-                            <button id="playBtn" class="btn-play-large">
-                                <i class="fas fa-play"></i>
-                                <span>Play Game</span>
-                            </button>
+            <div class="hero-content">
+                <div class="game-header-grid">
+                    <div class="game-cover-container">
+                        <div class="game-cover">
+                            <img src="images/games/cyber-runner-cover.jpg" alt="Cyber Runner 2077 Cover Art">
+                        </div>
+                        <div class="game-badges">
+                            <span class="badge award">Award Winner</span>
+                            <span class="badge featured">Editor's Choice</span>
+                            <span class="badge rating">4.8★</span>
                         </div>
                     </div>
                     
-                    <!-- Game Controls -->
-                    <div class="game-controls">
-                        <div class="control-group">
-                            <button id="fullscreenBtn" class="btn-control" title="Fullscreen">
-                                <i class="fas fa-expand"></i>
-                            </button>
-                            <button id="restartBtn" class="btn-control" title="Restart Game">
-                                <i class="fas fa-redo"></i>
-                            </button>
-                            <button id="closeGameBtn" class="btn-control" title="Close Game">
-                                <i class="fas fa-times"></i>
-                            </button>
+                    <div class="game-info-main">
+                        <div class="game-meta">
+                            <span class="game-category">Action RPG</span>
+                            <div class="game-rating-large">
+                                <div class="stars">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half-alt"></i>
+                                </div>
+                                <span class="rating-text">4.8 (8.9K reviews)</span>
+                            </div>
                         </div>
-                        <div class="control-info">
-                            <span class="control-text">Press ESC to exit fullscreen</span>
+                        
+                        <h1 class="game-title">Cyber Runner 2077</h1>
+                        <p class="game-tagline">Futuristic Parkour Adventure in Neo-Tokyo</p>
+                        
+                        <div class="game-stats-overview">
+                            <div class="stat">
+                                <div class="stat-value">125K+</div>
+                                <div class="stat-label">Players</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value">4.8</div>
+                                <div class="stat-label">Rating</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value">45K</div>
+                                <div class="stat-label">Downloads</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value">95%</div>
+                                <div class="stat-label">Completion</div>
+                            </div>
+                        </div>
+                        
+                        <div class="game-actions">
+                            <button class="btn btn-primary btn-large" id="playGameBtn">
+                                <i class="fas fa-play"></i>
+                                <span>Play Game Now</span>
+                            </button>
+                            <a href="#" class="btn btn-secondary btn-large">
+                                <i class="fab fa-github"></i>
+                                <span>View Source Code</span>
+                            </a>
+                        </div>
+                        
+                        <div class="platform-tags">
+                            <span class="platform-tag webgl">WebGL</span>
+                            <span class="platform-tag windows">Windows</span>
+                            <span class="platform-tag mac">macOS</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Game Detail Section -->
+    <section class="section game-detail-section">
+        <div class="container">
+            <div class="detail-content-grid">
+                <!-- Main Content -->
+                <div class="main-content">
+                    <!-- Game Description -->
+                    <div class="content-section">
+                        <h2>About Cyber Runner 2077</h2>
+                        <p class="game-description">
+                            Cyber Runner 2077 is a first-person parkour adventure set in the sprawling cyberpunk metropolis of Neo-Tokyo. 
+                            Navigate towering skyscrapers, evade corporate security, and uncover the secrets of the city's AI overlord.
+                        </p>
+                        <p>
+                            With fluid movement mechanics, stunning visuals, and an immersive storyline, Cyber Runner 2077 delivers 
+                            an unforgettable experience that pushes the boundaries of browser-based gaming.
+                        </p>
+                    </div>
+
+                    <!-- Game Trailer -->
+                    <div class="content-section">
+                        <h2>Game Trailer</h2>
+                        <div class="game-trailer">
+                            <div class="trailer-overlay" id="trailerOverlay">
+                                <button class="play-button" id="playTrailerBtn">
+                                    <i class="fas fa-play" style="font-size: 2rem; color: #333;"></i>
+                                </button>
+                            </div>
+                            <video class="trailer-video" id="gameTrailer" width="100%" poster="images/games/cyber-runner-trailer-poster.jpg">
+                                <source src="videos/cyber-runner-trailer.mp4" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
                         </div>
                     </div>
 
-                    <!-- Game Container -->
-                    <div id="gameContainer" class="game-container">
-                        <iframe id="gameFrame" allowfullscreen></iframe>
+                    <!-- Key Features -->
+                    <div class="content-section">
+                        <h2>Game Features</h2>
+                        <div class="game-features-grid">
+                            <div class="feature-card">
+                                <div class="feature-icon">
+                                    <i class="fas fa-running"></i>
+                                </div>
+                                <h3>Fluid Parkour System</h3>
+                                <p>Advanced movement mechanics with wall running, sliding, vaulting, and precision jumping.</p>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-icon">
+                                    <i class="fas fa-city"></i>
+                                </div>
+                                <h3>Open World Exploration</h3>
+                                <p>Massive cyberpunk city with distinct districts, hidden areas, and vertical exploration.</p>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-icon">
+                                    <i class="fas fa-robot"></i>
+                                </div>
+                                <h3>AI-Driven Enemies</h3>
+                                <p>Smart enemy AI with adaptive behaviors, patrol routes, and tactical responses.</p>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-icon">
+                                    <i class="fas fa-puzzle-piece"></i>
+                                </div>
+                                <h3>Environmental Puzzles</h3>
+                                <p>Challenging puzzles that require creative use of parkour skills and cybernetic abilities.</p>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-icon">
+                                    <i class="fas fa-bolt"></i>
+                                </div>
+                                <h3>Cyber Enhancements</h3>
+                                <p>Upgrade your character with cybernetic implants that grant special abilities and skills.</p>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-icon">
+                                    <i class="fas fa-history"></i>
+                                </div>
+                                <h3>Branching Narrative</h3>
+                                <p>Multiple story paths and endings based on your choices and gameplay style.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Screenshots -->
+                    <div class="content-section">
+                        <h2>Screenshots</h2>
+                        <div class="game-screenshots">
+                            <div class="screenshot-item">
+                                <img src="images/games/cyber-runner-1.jpg" alt="Cyber Runner Gameplay" loading="lazy">
+                            </div>
+                            <div class="screenshot-item">
+                                <img src="images/games/cyber-runner-2.jpg" alt="Cyber Runner Cityscape" loading="lazy">
+                            </div>
+                            <div class="screenshot-item">
+                                <img src="images/games/cyber-runner-3.jpg" alt="Cyber Runner Combat" loading="lazy">
+                            </div>
+                            <div class="screenshot-item">
+                                <img src="images/games/cyber-runner-4.jpg" alt="Cyber Runner Parkour" loading="lazy">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Gameplay Stats -->
+                    <div class="content-section">
+                        <h2>Gameplay Statistics</h2>
+                        <div class="gameplay-stats">
+                            <div class="stat-card">
+                                <div class="stat-value">15-20</div>
+                                <div class="stat-label">Hours Gameplay</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value">95%</div>
+                                <div class="stat-label">Completion Rate</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value">4.8/5</div>
+                                <div class="stat-label">Player Rating</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value">125K+</div>
+                                <div class="stat-label">Active Players</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Navigation Arrows -->
-                <div class="detail-navigation">
-                    <button id="prevGame" class="nav-arrow prev-arrow">
-                        <i class="fas fa-chevron-left"></i>
-                        <span class="arrow-text">Previous Game</span>
-                    </button>
-                    <button id="nextGame" class="nav-arrow next-arrow">
-                        <span class="arrow-text">Next Game</span>
-                        <i class="fas fa-chevron-right"></i>
-                    </button>
+                <!-- Sidebar -->
+                <div class="sidebar">
+                    <!-- Game Info -->
+                    <div class="info-card">
+                        <h3>Game Information</h3>
+                        <div class="info-list">
+                            <div class="info-item">
+                                <span class="info-label">Genre:</span>
+                                <span class="info-value">Action RPG</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Platform:</span>
+                                <span class="info-value">WebGL, Windows, macOS</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Release Date:</span>
+                                <span class="info-value">October 2023</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Engine:</span>
+                                <span class="info-value">Unity 2022.3</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Development:</span>
+                                <span class="info-value">12 Months</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Team Size:</span>
+                                <span class="info-value">6 People</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">File Size:</span>
+                                <span class="info-value">850 MB</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- System Requirements -->
+                    <div class="info-card">
+                        <h3>System Requirements</h3>
+                        <div class="requirements">
+                            <h4>Minimum</h4>
+                            <ul>
+                                <li>OS: Windows 10 / macOS 11</li>
+                                <li>CPU: Intel i5 or equivalent</li>
+                                <li>RAM: 8GB</li>
+                                <li>GPU: GTX 970 or equivalent</li>
+                                <li>Storage: 2GB available</li>
+                            </ul>
+                            <h4>Recommended</h4>
+                            <ul>
+                                <li>OS: Windows 11 / macOS 12</li>
+                                <li>CPU: Intel i7 or equivalent</li>
+                                <li>RAM: 16GB</li>
+                                <li>GPU: RTX 2060 or equivalent</li>
+                                <li>Storage: 2GB available</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Game Controls -->
+                    <div class="info-card">
+                        <h3>Controls</h3>
+                        <div class="controls-list">
+                            <div class="control-item">
+                                <span class="control-key">WASD</span>
+                                <span class="control-action">Movement</span>
+                            </div>
+                            <div class="control-item">
+                                <span class="control-key">Space</span>
+                                <span class="control-action">Jump / Vault</span>
+                            </div>
+                            <div class="control-item">
+                                <span class="control-key">Shift</span>
+                                <span class="control-action">Sprint / Slide</span>
+                            </div>
+                            <div class="control-item">
+                                <span class="control-key">Ctrl</span>
+                                <span class="control-action">Crouch</span>
+                            </div>
+                            <div class="control-item">
+                                <span class="control-key">E</span>
+                                <span class="control-action">Interact</span>
+                            </div>
+                            <div class="control-item">
+                                <span class="control-key">Mouse</span>
+                                <span class="control-action">Aim / Look</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Share Game -->
+                    <div class="info-card">
+                        <h3>Share This Game</h3>
+                        <div class="share-buttons">
+                            <button class="btn btn-share" data-platform="twitter">
+                                <i class="fab fa-twitter"></i>
+                            </button>
+                            <button class="btn btn-share" data-platform="discord">
+                                <i class="fab fa-discord"></i>
+                            </button>
+                            <button class="btn btn-share" data-platform="link">
+                                <i class="fas fa-link"></i>
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <!-- Game Information -->
-            <div class="game-info-container">
-                <div class="game-header">
-                    <div class="game-title-section">
-                        <h1 id="gameTitle" class="game-title">Game Title</h1>
-                        <div class="game-meta">
-                            <span id="gameCategory" class="game-category">Category</span>
-                            <span class="game-rating">
-                                <i class="fas fa-star"></i>
-                                <span id="gameRating">0.0</span>/5
-                            </span>
-                            <span id="gameStatus" class="game-status">Status</span>
-                        </div>
+            <!-- Navigation Arrows -->
+            <div class="detail-navigation">
+                <a href="game-detail.html?id=2" class="nav-arrow prev-arrow">
+                    <i class="fas fa-chevron-left"></i>
+                    <div class="arrow-content">
+                        <span class="arrow-label">Previous Game</span>
+                        <span class="arrow-title">Neon Racer</span>
                     </div>
-                    <div class="game-actions">
-                        <button id="shareBtn" class="btn btn-secondary">
-                            <i class="fas fa-share-alt"></i>
-                            <span>Share</span>
-                        </button>
-                        <a id="repositoryBtn" href="#" class="btn btn-primary" target="_blank">
-                            <i class="fab fa-github"></i>
-                            <span>Repository</span>
-                        </a>
+                </a>
+                <a href="game-detail.html?id=3" class="nav-arrow next-arrow">
+                    <div class="arrow-content">
+                        <span class="arrow-label">Next Game</span>
+                        <span class="arrow-title">Mythic Quest</span>
+                    </div>
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Play Game Modal -->
+    <div id="playGameModal" class="modal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h2>Play Cyber Runner 2077</h2>
+                <button class="modal-close" id="modalClose">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="game-container">
+                    <iframe src="games/cyber-runner/index.html" 
+                            frameborder="0" 
+                            class="game-iframe"
+                            id="gameIframe"></iframe>
+                </div>
+                <div class="game-controls">
+                    <button class="btn btn-control" id="fullscreenBtn">
+                        <i class="fas fa-expand"></i>
+                        Fullscreen
+                    </button>
+                    <button class="btn btn-control" id="restartBtn">
+                        <i class="fas fa-redo"></i>
+                        Restart
+                    </button>
+                    <button class="btn btn-control" id="muteBtn">
+                        <i class="fas fa-volume-up"></i>
+                        Mute
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Related Games -->
+    <section class="section related-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>More Games You Might Like</h2>
+                <p>Explore other exciting gaming experiences</p>
+            </div>
+            <div class="related-grid">
+                <div class="related-card">
+                    <div class="related-image">
+                        <img src="images/games/neon-racer.jpg" alt="Neon Racer">
+                    </div>
+                    <div class="related-content">
+                        <h3>Neon Racer</h3>
+                        <p>Futuristic arcade racing with neon aesthetics</p>
+                        <div class="related-meta">
+                            <span class="rating">4.7★</span>
+                            <span class="category">Racing</span>
+                        </div>
+                        <a href="game-detail.html?id=2" class="btn btn-outline">View Details</a>
                     </div>
                 </div>
-
-                <div class="game-content">
-                    <!-- Overview & Description -->
-                    <div class="game-description-section">
-                        <h2>About This Game</h2>
-                        <p id="gameOverview" class="game-overview">Game overview...</p>
-                        <p id="gameDescription" class="game-description">Game description...</p>
+                <div class="related-card">
+                    <div class="related-image">
+                        <img src="images/games/mythic-quest.jpg" alt="Mythic Quest">
                     </div>
-
-                    <!-- Game Details Grid -->
-                    <div class="game-details-grid">
-                        <div class="detail-card">
-                            <div class="detail-icon">
-                                <i class="fas fa-calendar"></i>
-                            </div>
-                            <div class="detail-content">
-                                <h3>Release Date</h3>
-                                <p id="releaseDate">-</p>
-                            </div>
+                    <div class="related-content">
+                        <h3>Mythic Quest</h3>
+                        <p>Epic fantasy RPG with deep storytelling</p>
+                        <div class="related-meta">
+                            <span class="rating">4.9★</span>
+                            <span class="category">RPG</span>
                         </div>
-                        <div class="detail-card">
-                            <div class="detail-icon">
-                                <i class="fas fa-clock"></i>
-                            </div>
-                            <div class="detail-content">
-                                <h3>Development Time</h3>
-                                <p id="developmentTime">-</p>
-                            </div>
-                        </div>
-                        <div class="detail-card">
-                            <div class="detail-icon">
-                                <i class="fas fa-users"></i>
-                            </div>
-                            <div class="detail-content">
-                                <h3>Team Size</h3>
-                                <p id="teamSize">-</p>
-                            </div>
-                        </div>
-                        <div class="detail-card">
-                            <div class="detail-icon">
-                                <i class="fas fa-heart"></i>
-                            </div>
-                            <div class="detail-content">
-                                <h3>Likes</h3>
-                                <p id="likes">-</p>
-                            </div>
-                        </div>
-                        <div class="detail-card">
-                            <div class="detail-icon">
-                                <i class="fas fa-gamepad"></i>
-                            </div>
-                            <div class="detail-content">
-                                <h3>Play Count</h3>
-                                <p id="playCount">-</p>
-                            </div>
-                        </div>
-                        <div class="detail-card">
-                            <div class="detail-icon">
-                                <i class="fas fa-desktop"></i>
-                            </div>
-                            <div class="detail-content">
-                                <h3>Platforms</h3>
-                                <p id="platforms">-</p>
-                            </div>
-                        </div>
+                        <a href="game-detail.html?id=3" class="btn btn-outline">View Details</a>
                     </div>
-
-                    <!-- Features Section -->
-                    <div class="features-section">
-                        <h2>Key Features</h2>
-                        <ul id="featuresList" class="features-list">
-                            <!-- Features will be populated dynamically -->
-                        </ul>
+                </div>
+                <div class="related-card">
+                    <div class="related-image">
+                        <img src="images/games/space-explorer.jpg" alt="Space Explorer">
                     </div>
-
-                    <!-- Technologies Section -->
-                    <div class="technologies-section">
-                        <h2>Technologies Used</h2>
-                        <div id="techList" class="tech-tags">
-                            <!-- Technologies will be populated dynamically -->
+                    <div class="related-content">
+                        <h3>Space Explorer</h3>
+                        <p>Procedural space exploration and survival</p>
+                        <div class="related-meta">
+                            <span class="rating">4.6★</span>
+                            <span class="category">Adventure</span>
                         </div>
-                    </div>
-
-                    <!-- Game Stats -->
-                    <div class="game-stats-section">
-                        <h2>Game Statistics</h2>
-                        <div class="stats-grid">
-                            <div class="stat-item">
-                                <div class="stat-circle">
-                                    <span id="ratingCircle" class="stat-value">0.0</span>
-                                </div>
-                                <div class="stat-info">
-                                    <h3>Rating</h3>
-                                    <p>Player Rating Score</p>
-                                </div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-circle">
-                                    <span id="playCountCircle" class="stat-value">0</span>
-                                </div>
-                                <div class="stat-info">
-                                    <h3>Plays</h3>
-                                    <p>Total Game Sessions</p>
-                                </div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-circle">
-                                    <span id="likesCircle" class="stat-value">0</span>
-                                </div>
-                                <div class="stat-info">
-                                    <h3>Likes</h3>
-                                    <p>Community Approval</p>
-                                </div>
-                            </div>
-                        </div>
+                        <a href="game-detail.html?id=4" class="btn btn-outline">View Details</a>
                     </div>
                 </div>
             </div>
@@ -292,10 +622,228 @@
         </div>
     </footer>
 
+    <!-- Screenshot Lightbox -->
+    <div id="screenshotLightbox" class="lightbox">
+        <div class="lightbox-content">
+            <button class="lightbox-close">
+                <i class="fas fa-times"></i>
+            </button>
+            <img src="" alt="Game Screenshot" class="lightbox-image">
+            <button class="lightbox-nav lightbox-prev">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="lightbox-nav lightbox-next">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+    </div>
+
     <!-- Notification Container -->
     <div id="notificationContainer"></div>
 
     <script src="js/data.js"></script>
     <script src="js/game-detail.js"></script>
+    <script>
+        // Game Detail Page Functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get game ID from URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const gameId = urlParams.get('id') || 1;
+            
+            // Load game data
+            if (window.PORTFOLIO_DATA && window.PORTFOLIO_DATA.games) {
+                const game = window.PORTFOLIO_DATA.games.find(g => g.id == gameId);
+                if (game) {
+                    updateGameDetail(game);
+                }
+            }
+            
+            // Trailer functionality
+            const trailerOverlay = document.getElementById('trailerOverlay');
+            const playTrailerBtn = document.getElementById('playTrailerBtn');
+            const gameTrailer = document.getElementById('gameTrailer');
+            
+            playTrailerBtn.addEventListener('click', function() {
+                gameTrailer.play();
+                trailerOverlay.classList.add('hidden');
+            });
+            
+            gameTrailer.addEventListener('ended', function() {
+                trailerOverlay.classList.remove('hidden');
+            });
+            
+            // Play game modal
+            const playGameBtn = document.getElementById('playGameBtn');
+            const playGameModal = document.getElementById('playGameModal');
+            const modalClose = document.getElementById('modalClose');
+            const gameIframe = document.getElementById('gameIframe');
+            const fullscreenBtn = document.getElementById('fullscreenBtn');
+            const restartBtn = document.getElementById('restartBtn');
+            const muteBtn = document.getElementById('muteBtn');
+            
+            playGameBtn.addEventListener('click', function() {
+                playGameModal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            });
+            
+            modalClose.addEventListener('click', function() {
+                playGameModal.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            });
+            
+            fullscreenBtn.addEventListener('click', function() {
+                if (gameIframe.requestFullscreen) {
+                    gameIframe.requestFullscreen();
+                } else if (gameIframe.webkitRequestFullscreen) {
+                    gameIframe.webkitRequestFullscreen();
+                } else if (gameIframe.msRequestFullscreen) {
+                    gameIframe.msRequestFullscreen();
+                }
+            });
+            
+            restartBtn.addEventListener('click', function() {
+                gameIframe.src = gameIframe.src;
+            });
+            
+            let isMuted = false;
+            muteBtn.addEventListener('click', function() {
+                isMuted = !isMuted;
+                const iframeDoc = gameIframe.contentDocument || gameIframe.contentWindow.document;
+                const audioElements = iframeDoc.querySelectorAll('audio, video');
+                
+                audioElements.forEach(audio => {
+                    audio.muted = isMuted;
+                });
+                
+                muteBtn.innerHTML = isMuted ? 
+                    '<i class="fas fa-volume-mute"></i> Unmute' : 
+                    '<i class="fas fa-volume-up"></i> Mute';
+            });
+            
+            // Screenshot lightbox functionality
+            const lightbox = document.getElementById('screenshotLightbox');
+            const lightboxImage = lightbox.querySelector('.lightbox-image');
+            const closeBtn = lightbox.querySelector('.lightbox-close');
+            const prevBtn = lightbox.querySelector('.lightbox-prev');
+            const nextBtn = lightbox.querySelector('.lightbox-next');
+            const screenshots = document.querySelectorAll('.screenshot-item');
+            
+            let currentScreenshotIndex = 0;
+            
+            screenshots.forEach((screenshot, index) => {
+                screenshot.addEventListener('click', () => {
+                    currentScreenshotIndex = index;
+                    openLightbox(screenshot.querySelector('img').src);
+                });
+            });
+            
+            function openLightbox(src) {
+                lightboxImage.src = src;
+                lightbox.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+            
+            function closeLightbox() {
+                lightbox.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+            
+            function navigateScreenshot(direction) {
+                currentScreenshotIndex += direction;
+                if (currentScreenshotIndex < 0) {
+                    currentScreenshotIndex = screenshots.length - 1;
+                } else if (currentScreenshotIndex >= screenshots.length) {
+                    currentScreenshotIndex = 0;
+                }
+                const newSrc = screenshots[currentScreenshotIndex].querySelector('img').src;
+                lightboxImage.src = newSrc;
+            }
+            
+            closeBtn.addEventListener('click', closeLightbox);
+            prevBtn.addEventListener('click', () => navigateScreenshot(-1));
+            nextBtn.addEventListener('click', () => navigateScreenshot(1));
+            
+            lightbox.addEventListener('click', (e) => {
+                if (e.target === lightbox) {
+                    closeLightbox();
+                }
+            });
+            
+            // Share functionality
+            const shareButtons = document.querySelectorAll('.btn-share');
+            shareButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const platform = this.dataset.platform;
+                    shareGame(platform);
+                });
+            });
+            
+            function shareGame(platform) {
+                const gameTitle = document.querySelector('.game-title').textContent;
+                const gameUrl = window.location.href;
+                let shareUrl = '';
+                
+                switch(platform) {
+                    case 'twitter':
+                        shareUrl = `https://twitter.com/intent/tweet?text=Check out ${gameTitle}&url=${encodeURIComponent(gameUrl)}`;
+                        break;
+                    case 'discord':
+                        shareUrl = `https://discord.com/channels/@me?message=${encodeURIComponent(`Check out ${gameTitle}: ${gameUrl}`)}`;
+                        break;
+                    case 'link':
+                        navigator.clipboard.writeText(gameUrl).then(() => {
+                            showNotification('Link copied to clipboard!', 'success');
+                        });
+                        return;
+                }
+                
+                if (shareUrl) {
+                    window.open(shareUrl, '_blank', 'width=600,height=400');
+                }
+            }
+            
+            function showNotification(message, type) {
+                const notification = document.createElement('div');
+                notification.className = `notification ${type}`;
+                notification.innerHTML = `
+                    <div class="notification-content">
+                        <i class="fas fa-${type === 'success' ? 'check' : 'info'}"></i>
+                        <span>${message}</span>
+                    </div>
+                `;
+                
+                document.getElementById('notificationContainer').appendChild(notification);
+                
+                setTimeout(() => {
+                    notification.remove();
+                }, 3000);
+            }
+            
+            function updateGameDetail(game) {
+                // Update page title
+                document.title = `${game.name} - Game Details | Arsh Verma`;
+                
+                // Update hero section
+                document.querySelector('.game-title').textContent = game.name;
+                document.querySelector('.game-tagline').textContent = game.tagline;
+                document.querySelector('.game-description').textContent = game.description;
+                
+                // Update stats
+                document.querySelector('.game-stats-overview .stat:nth-child(1) .stat-value').textContent = game.players;
+                document.querySelector('.game-stats-overview .stat:nth-child(2) .stat-value').textContent = game.rating;
+                document.querySelector('.game-stats-overview .stat:nth-child(3) .stat-value').textContent = game.downloads;
+                
+                // Update iframe source
+                const playBtn = document.getElementById('playGameBtn');
+                if (game.playable) {
+                    playBtn.style.display = 'flex';
+                    const gameIframe = document.getElementById('gameIframe');
+                    gameIframe.src = game.gameUrl;
+                } else {
+                    playBtn.style.display = 'none';
+                }
+            }
+        });
+    </script>
 </body>
 </html>
