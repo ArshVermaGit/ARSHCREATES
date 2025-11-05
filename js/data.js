@@ -94,8 +94,8 @@ const PORTFOLIO_DATA = {
     websites: [
         {
             id: 1,
-            name: "Nexus E-Commerce",
-            category: "E-commerce",
+            name: "ReelSpot",
+            category: "Media Downloader",
             overview: "Modern e-commerce platform with AI-powered recommendations",
             description: "A cutting-edge e-commerce solution featuring personalized shopping experiences, advanced inventory management, and seamless payment integration. Built with scalability and user experience at its core.",
             rating: 4.8,
@@ -103,9 +103,9 @@ const PORTFOLIO_DATA = {
             launchDate: "2024-02-01",
             developmentTime: "5 months",
             status: "Live",
-            image: "assets/images/nexus-ecommerce.jpg",
-            url: "https://nexus-ecommerce-demo.vercel.app",
-            repositoryUrl: "https://github.com/ArshVermaGit/nexus-ecommerce",
+            image: "images/websites/ReelSpot.jpg",
+            url: "https://arshvermagit.github.io/REELSPOT/",
+            repositoryUrl: "https://github.com/ArshVermaGit/REELSPOT",
             technologies: ["React", "Node.js", "MongoDB", "Stripe", "AWS"],
             features: [
                 "AI-powered product recommendations",
@@ -114,53 +114,8 @@ const PORTFOLIO_DATA = {
                 "Advanced analytics dashboard",
                 "Progressive Web App capabilities"
             ]
-        },
-        {
-            id: 2,
-            name: "HealthSync Pro",
-            category: "Health & Wellness",
-            overview: "Comprehensive healthcare management platform",
-            description: "Revolutionizing healthcare delivery with telemedicine, patient management, and medical record keeping. Designed for clinics, hospitals, and individual practitioners to streamline operations.",
-            rating: 4.9,
-            playCount: 32000,
-            launchDate: "2023-12-15",
-            developmentTime: "8 months",
-            status: "Live",
-            image: "assets/images/healthsync-pro.jpg",
-            url: "https://healthsync-pro.vercel.app",
-            repositoryUrl: "https://github.com/ArshVermaGit/healthsync-pro",
-            technologies: ["Vue.js", "Python", "PostgreSQL", "Docker", "Redis"],
-            features: [
-                "Telemedicine video consultations",
-                "Electronic health records (EHR)",
-                "Appointment scheduling and reminders",
-                "Prescription management",
-                "HIPAA compliant security"
-            ]
-        },
-        {
-            id: 3,
-            name: "FlowSpace SaaS",
-            category: "SaaS Platform",
-            overview: "Collaborative workspace for remote teams",
-            description: "A comprehensive SaaS platform that brings teams together with project management, communication tools, and workflow automation. Boost productivity and collaboration across your organization.",
-            rating: 4.7,
-            playCount: 28000,
-            launchDate: "2024-01-30",
-            developmentTime: "6 months",
-            status: "Live",
-            image: "assets/images/flowspace-saas.jpg",
-            url: "https://flowspace-saas.vercel.app",
-            repositoryUrl: "https://github.com/ArshVermaGit/flowspace-saas",
-            technologies: ["Angular", "NestJS", "MySQL", "Socket.io", "Azure"],
-            features: [
-                "Real-time collaboration tools",
-                "Project management with Kanban boards",
-                "Video conferencing integration",
-                "Automated workflow creation",
-                "Advanced reporting and analytics"
-            ]
         }
+        
     ],
     
     apps: [
