@@ -3,11 +3,101 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Client Testimonials - Arsh Verma</title>
+    <title>Client Testimonials - Arsh Verma | Premium Developer Portfolio</title>
+    <meta name="description" content="Read what clients and collaborators say about working with Arsh Verma. Real testimonials from satisfied clients across game development, web projects, and mobile apps.">
+    <meta name="keywords" content="client testimonials, reviews, feedback, Arsh Verma, game developer, web developer, mobile developer">
+    <meta name="author" content="Arsh Verma">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Client Testimonials - Arsh Verma">
+    <meta property="og:description" content="What clients and collaborators say about working with me on their digital projects">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://arshverma.com/testimonials.html">
+    <meta property="og:image" content="assets/testimonials-og-image.jpg">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Client Testimonials - Arsh Verma">
+    <meta name="twitter:description" content="Real testimonials from satisfied clients across various digital projects">
+    <meta name="twitter:image" content="assets/testimonials-twitter-image.jpg">
+    
+    <!-- Favicon -->
     <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+    
+    <!-- Preload Critical Resources -->
+    <link rel="preload" href="css/style.css" as="style">
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" as="style">
+    <link rel="preload" href="js/testimonials.js" as="script">
+    
+    <!-- Stylesheets -->
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Testimonials Specific CSS -->
+    <style>
+        .testimonials-hero {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .testimonial-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-xl);
+            padding: var(--space-2xl);
+            backdrop-filter: var(--glass-blur);
+            transition: all var(--transition-smooth);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .testimonial-card::before {
+            content: '"';
+            position: absolute;
+            top: -20px;
+            right: 20px;
+            font-size: 6rem;
+            color: var(--accent);
+            opacity: 0.1;
+            font-family: serif;
+        }
+        
+        .testimonial-card.featured {
+            border: 2px solid var(--accent);
+            background: linear-gradient(135deg, var(--glass-bg), rgba(255, 108, 71, 0.05));
+        }
+        
+        .client-verified {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-xs);
+            background: var(--success);
+            color: var(--primary);
+            padding: var(--space-xs) var(--space-sm);
+            border-radius: var(--radius-md);
+            font-size: var(--font-size-xs);
+            font-weight: 600;
+        }
+        
+        .testimonial-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: var(--space-lg);
+            margin: var(--space-2xl) 0;
+        }
+        
+        .testimonial-stat {
+            text-align: center;
+            padding: var(--space-lg);
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            backdrop-filter: var(--glass-blur);
+        }
+    </style>
 </head>
 <body>
     <!-- Loading Screen -->
@@ -21,37 +111,47 @@
                 <div class="loading-bar" id="loadingBar"></div>
             </div>
             <div class="loading-text" id="loadingText">Loading Testimonials...</div>
+            <div class="loading-dots">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
         </div>
     </div>
 
+    <!-- Custom Cursor -->
+    <div class="cursor-dot" id="cursorDot"></div>
+    <div class="cursor-ring" id="cursorRing"></div>
+
     <!-- Navigation -->
-    <nav class="navbar" id="navbar">
+    <nav class="navbar" id="navbar" aria-label="Main navigation">
         <div class="container">
             <div class="nav-content">
-                <a href="index.html" class="logo">
+                <a href="index.html" class="logo" aria-label="ArshCreates Home">
                     <div class="logo-icon">
-                        <i class="fas fa-code"></i>
+                        <i class="fas fa-code" aria-hidden="true"></i>
                     </div>
                     <span class="logo-text">ArshCreates</span>
                 </a>
 
-                <ul class="nav-menu" id="navMenu">
-                    <li><a href="index.html" class="nav-link">Home</a></li>
-                    <li><a href="index.html#about" class="nav-link">About</a></li>
-                    <li><a href="games.html" class="nav-link">Games</a></li>
-                    <li><a href="websites.html" class="nav-link">Websites</a></li>
-                    <li><a href="apps.html" class="nav-link">Apps</a></li>
-                    <li><a href="testimonials.html" class="nav-link active">Testimonials</a></li>
-                    <li><a href="index.html#contact" class="nav-link">Contact</a></li>
+                <ul class="nav-menu" id="navMenu" role="menubar">
+                    <li role="none"><a href="index.html" class="nav-link" role="menuitem" data-text="Home">Home</a></li>
+                    <li role="none"><a href="index.html#about" class="nav-link" role="menuitem" data-text="About">About</a></li>
+                    <li role="none"><a href="games.html" class="nav-link" role="menuitem" data-text="Games">Games</a></li>
+                    <li role="none"><a href="websites.html" class="nav-link" role="menuitem" data-text="Websites">Websites</a></li>
+                    <li role="none"><a href="apps.html" class="nav-link" role="menuitem" data-text="Apps">Apps</a></li>
+                    <li role="none"><a href="testimonials.html" class="nav-link active" role="menuitem" data-text="Testimonials">Testimonials</a></li>
+                    <li role="none"><a href="index.html#contact" class="nav-link" role="menuitem" data-text="Contact">Contact</a></li>
                 </ul>
 
                 <div class="nav-actions">
-                    <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
+                    <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme" aria-pressed="false">
                         <div class="theme-icon">
-                            <i class="fas fa-moon"></i>
+                            <i class="fas fa-moon" aria-hidden="true"></i>
                         </div>
+                        <span class="theme-text">Dark</span>
                     </button>
-                    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+                    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="navMenu">
                         <span></span>
                         <span></span>
                         <span></span>
@@ -62,31 +162,80 @@
     </nav>
 
     <!-- Testimonials Header -->
-    <section class="page-header">
+    <section class="page-header testimonials-hero" aria-label="Testimonials header">
         <div class="container">
             <div class="header-content">
                 <h1>Client Testimonials</h1>
                 <p>What clients and collaborators say about working with me on their digital projects</p>
+                
+                <!-- Enhanced Stats -->
                 <div class="header-stats">
-                    <div class="stat">
+                    <div class="stat" data-cursor-effect="pulse">
                         <span class="stat-number">50+</span>
                         <span class="stat-label">Happy Clients</span>
                     </div>
-                    <div class="stat">
+                    <div class="stat" data-cursor-effect="pulse">
                         <span class="stat-number">4.9</span>
                         <span class="stat-label">Average Rating</span>
                     </div>
-                    <div class="stat">
+                    <div class="stat" data-cursor-effect="pulse">
                         <span class="stat-number">98%</span>
                         <span class="stat-label">Satisfaction Rate</span>
                     </div>
+                    <div class="stat" data-cursor-effect="pulse">
+                        <span class="stat-number">100%</span>
+                        <span class="stat-label">Recommendation Rate</span>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="header-actions">
+                    <button class="btn btn-primary btn-glow" id="addTestimonialBtn" data-cursor-effect="glow">
+                        <i class="fas fa-plus"></i>
+                        <span>Add Your Testimonial</span>
+                    </button>
+                    <a href="index.html#contact" class="btn btn-secondary" data-cursor-effect="scale">
+                        <i class="fas fa-paper-plane"></i>
+                        <span>Start Project</span>
+                    </a>
+                    <button class="btn btn-glass" id="viewFeaturedTestimonials" data-cursor-effect="magnetic">
+                        <i class="fas fa-star"></i>
+                        <span>Featured Reviews</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Animated Background Elements -->
+        <div class="hero-particles" id="testimonialsParticles"></div>
+    </section>
+
+    <!-- Testimonials Stats -->
+    <section class="section" aria-label="Testimonials statistics">
+        <div class="container">
+            <div class="testimonial-stats">
+                <div class="testimonial-stat" data-cursor-effect="pulse">
+                    <div class="stat-number">4.9<span>/5</span></div>
+                    <div class="stat-label">Average Rating</div>
+                </div>
+                <div class="testimonial-stat" data-cursor-effect="pulse">
+                    <div class="stat-number" data-target="50">0</div>
+                    <div class="stat-label">Total Testimonials</div>
+                </div>
+                <div class="testimonial-stat" data-cursor-effect="pulse">
+                    <div class="stat-number">98<span>%</span></div>
+                    <div class="stat-label">Satisfaction Rate</div>
+                </div>
+                <div class="testimonial-stat" data-cursor-effect="pulse">
+                    <div class="stat-number">100<span>%</span></div>
+                    <div class="stat-label">Would Recommend</div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Testimonials Filter -->
-    <section class="section filter-section">
+    <section class="section filter-section" aria-label="Testimonials filter options">
         <div class="container">
             <div class="filter-container">
                 <div class="filter-group">
@@ -97,12 +246,15 @@
                         <option value="App">Mobile Apps</option>
                         <option value="Game">Games</option>
                         <option value="Consultation">Consultation</option>
+                        <option value="Full-Stack">Full-Stack</option>
+                        <option value="UI/UX Design">UI/UX Design</option>
                     </select>
                 </div>
                 <div class="filter-group">
                     <label for="ratingFilter">Minimum Rating</label>
                     <select id="ratingFilter" class="filter-select">
                         <option value="0">All Ratings</option>
+                        <option value="3">3+ Stars</option>
                         <option value="4">4+ Stars</option>
                         <option value="4.5">4.5+ Stars</option>
                         <option value="5">5 Stars Only</option>
@@ -115,43 +267,311 @@
                         <option value="oldest">Oldest First</option>
                         <option value="rating">Highest Rating</option>
                         <option value="project">Project Type</option>
+                        <option value="featured">Featured First</option>
+                        <option value="verified">Verified Clients</option>
                     </select>
                 </div>
+                <div class="filter-group">
+                    <label for="clientTypeFilter">Client Type</label>
+                    <select id="clientTypeFilter" class="filter-select">
+                        <option value="all">All Clients</option>
+                        <option value="startup">Startups</option>
+                        <option value="enterprise">Enterprise</option>
+                        <option value="agency">Agencies</option>
+                        <option value="individual">Individuals</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Quick Rating Filters -->
+            <div class="rating-filters">
+                <button class="rating-filter-btn active" data-rating="0">
+                    <i class="fas fa-star"></i>
+                    All Ratings
+                </button>
+                <button class="rating-filter-btn" data-rating="5">
+                    <i class="fas fa-star"></i>
+                    5 Stars
+                </button>
+                <button class="rating-filter-btn" data-rating="4">
+                    <i class="fas fa-star"></i>
+                    4+ Stars
+                </button>
+                <button class="rating-filter-btn" data-rating="3">
+                    <i class="fas fa-star"></i>
+                    3+ Stars
+                </button>
+            </div>
+
+            <!-- Search Box -->
+            <div class="search-container">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="testimonialSearch" placeholder="Search testimonials by client, project, or feedback..." aria-label="Search testimonials">
+                    <button class="search-clear" id="testimonialSearchClear" aria-label="Clear search">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Active Filters Display -->
+            <div class="active-filters" id="testimonialActiveFilters">
+                <!-- Active filters will be displayed here -->
             </div>
         </div>
     </section>
 
     <!-- Testimonials Grid -->
-    <section class="section testimonials-section">
+    <section class="section testimonials-section" aria-label="Testimonials grid">
         <div class="container">
-            <div class="testimonials-grid" id="testimonialsGrid">
+            <!-- Testimonials Counter -->
+            <div class="section-header">
+                <div class="results-info">
+                    <span id="testimonialsCount">50</span> testimonials found
+                    <button class="btn btn-sm btn-secondary" id="resetTestimonialFilters">
+                        <i class="fas fa-redo"></i>
+                        Reset Filters
+                    </button>
+                </div>
+            </div>
+
+            <!-- View Toggle -->
+            <div class="view-options">
+                <button class="view-option active" data-view="grid" aria-label="Grid view">
+                    <i class="fas fa-th"></i>
+                </button>
+                <button class="view-option" data-view="list" aria-label="List view">
+                    <i class="fas fa-list"></i>
+                </button>
+                <button class="view-option" data-view="carousel" aria-label="Carousel view">
+                    <i class="fas fa-grip-horizontal"></i>
+                </button>
+            </div>
+
+            <div class="testimonials-grid" id="testimonialsGrid" data-view="grid">
                 <!-- Testimonials will be loaded dynamically -->
+                
+                <!-- Sample Testimonial Card Structure -->
+                <div class="testimonial-card featured" data-rating="5" data-project-type="Website" data-client-type="enterprise" data-verified="true">
+                    <div class="testimonial-header">
+                        <div class="client-info">
+                            <div class="client-avatar">
+                                <img src="images/clients/sarah-johnson.jpg" alt="Sarah Johnson" loading="lazy">
+                                <div class="avatar-badge verified">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                            </div>
+                            <div class="client-details">
+                                <h3 class="client-name">Sarah Johnson</h3>
+                                <p class="client-role">CEO, TechInnovate Inc.</p>
+                                <div class="client-verified">
+                                    <i class="fas fa-check"></i>
+                                    Verified Client
+                                </div>
+                            </div>
+                        </div>
+                        <div class="testimonial-meta">
+                            <span class="project-type website">Website Development</span>
+                            <div class="rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <span class="rating-value">5.0</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="testimonial-content">
+                        <p class="testimonial-text">
+                            "Arsh delivered an exceptional web application that exceeded our expectations. The attention to detail and user experience focus resulted in a 40% increase in user engagement. His technical expertise and professional approach made the entire development process smooth and efficient."
+                        </p>
+                        <div class="testimonial-features">
+                            <div class="feature">
+                                <i class="fas fa-check"></i>
+                                <span>Exceeded Expectations</span>
+                            </div>
+                            <div class="feature">
+                                <i class="fas fa-check"></i>
+                                <span>On Time Delivery</span>
+                            </div>
+                            <div class="feature">
+                                <i class="fas fa-check"></i>
+                                <span>Great Communication</span>
+                            </div>
+                        </div>
+                        <div class="testimonial-footer">
+                            <span class="testimonial-date">February 15, 2024</span>
+                            <span class="project-name">ReelSpot - Social Media Downloader</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Client Social Proof -->
+                    <div class="client-social-proof">
+                        <div class="proof-item">
+                            <i class="fas fa-chart-line"></i>
+                            <span>40% increase in user engagement</span>
+                        </div>
+                        <div class="proof-item">
+                            <i class="fas fa-clock"></i>
+                            <span>Delivered 2 weeks ahead of schedule</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- More testimonial cards will be generated dynamically -->
+            </div>
+
+            <!-- Loading State -->
+            <div class="loading-state" id="testimonialsLoading">
+                <div class="loading-spinner"></div>
+                <p>Loading client testimonials...</p>
+            </div>
+
+            <!-- No Results State -->
+            <div class="empty-state" id="noTestimonials" style="display: none;">
+                <i class="fas fa-comment-dots"></i>
+                <h3>No Testimonials Found</h3>
+                <p>Try adjusting your filters or search terms to see more results</p>
+                <button class="btn btn-primary" id="resetTestimonialSearch">
+                    <i class="fas fa-redo"></i>
+                    Reset Search
+                </button>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination" id="testimonialsPagination">
+                <!-- Pagination will be generated dynamically -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Carousel (For Featured Testimonials) -->
+    <section class="section featured-testimonials" aria-label="Featured testimonials carousel">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">Featured</span>
+                <h2 class="section-title">Client Success Stories</h2>
+                <p class="section-subtitle">Read about the amazing results achieved through collaboration</p>
+            </div>
+
+            <div class="testimonials-carousel" id="testimonialsCarousel">
+                <div class="carousel-container">
+                    <div class="carousel-track" id="carouselTrack">
+                        <!-- Featured testimonials will be loaded here -->
+                    </div>
+                </div>
+                <div class="carousel-nav">
+                    <button class="carousel-prev" aria-label="Previous testimonial">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button class="carousel-next" aria-label="Next testimonial">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+                <div class="carousel-dots" id="carouselDots">
+                    <!-- Dots will be generated dynamically -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Client Statistics -->
+    <section class="section client-stats-section" aria-label="Client statistics">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">Statistics</span>
+                <h2 class="section-title">By The Numbers</h2>
+                <p class="section-subtitle">Real results and measurable impact across all projects</p>
+            </div>
+
+            <div class="client-stats-grid">
+                <div class="client-stat-card" data-cursor-effect="pulse">
+                    <div class="stat-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-number" data-target="98">0</div>
+                        <div class="stat-label">Project Success Rate</div>
+                    </div>
+                </div>
+                <div class="client-stat-card" data-cursor-effect="pulse">
+                    <div class="stat-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-number" data-target="95">0</div>
+                        <div class="stat-label">On-Time Delivery</div>
+                    </div>
+                </div>
+                <div class="client-stat-card" data-cursor-effect="pulse">
+                    <div class="stat-icon">
+                        <i class="fas fa-redo"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-number" data-target="85">0</div>
+                        <div class="stat-label">Repeat Clients</div>
+                    </div>
+                </div>
+                <div class="client-stat-card" data-cursor-effect="pulse">
+                    <div class="stat-icon">
+                        <i class="fas fa-headset"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-number">24/7</div>
+                        <div class="stat-label">Support Available</div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- Add Testimonial CTA -->
-    <section class="section add-testimonial-section">
+    <section class="section add-testimonial-section" aria-label="Add testimonial call to action">
         <div class="container">
             <div class="cta-content">
-                <h2>Worked With Me?</h2>
-                <p>Share your experience and help others discover the quality of my work</p>
-                <button id="addTestimonialBtn" class="btn btn-primary btn-glow">
-                    <i class="fas fa-plus"></i>
-                    <span>Add Your Testimonial</span>
-                </button>
+                <div class="cta-text">
+                    <h2>Worked With Me?</h2>
+                    <p>Share your experience and help others discover the quality of my work. Your feedback helps me improve and inspires future clients.</p>
+                    
+                    <div class="cta-features">
+                        <div class="feature">
+                            <i class="fas fa-check"></i>
+                            <span>Quick and Easy Process</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-check"></i>
+                            <span>Verified Client Badge</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-check"></i>
+                            <span>Featured Spot Opportunity</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="cta-actions">
+                    <button class="btn btn-primary btn-glow" id="addTestimonialCtaBtn" data-cursor-effect="glow">
+                        <i class="fas fa-plus"></i>
+                        <span>Add Your Testimonial</span>
+                    </button>
+                    <button class="btn btn-secondary" id="viewSubmissionGuidelines" data-cursor-effect="scale">
+                        <i class="fas fa-info-circle"></i>
+                        <span>Submission Guidelines</span>
+                    </button>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer class="footer">
+    <footer class="footer" aria-label="Footer">
         <div class="container">
             <div class="footer-content">
                 <div class="footer-brand">
-                    <a href="index.html" class="logo">
+                    <a href="index.html" class="logo" aria-label="ArshCreates Home">
                         <div class="logo-icon">
-                            <i class="fas fa-code"></i>
+                            <i class="fas fa-code" aria-hidden="true"></i>
                         </div>
                         <span class="logo-text">ArshCreates</span>
                     </a>
@@ -159,13 +579,13 @@
                         Creating exceptional digital experiences through innovative development and creative solutions.
                     </p>
                     <div class="footer-social">
-                        <a href="https://github.com/ArshVermaGit" class="social-link" target="_blank">
+                        <a href="https://github.com/ArshVermaGit" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-cursor-effect="scale">
                             <i class="fab fa-github"></i>
                         </a>
-                        <a href="https://www.linkedin.com/in/arshvermadev/" class="social-link" target="_blank">
+                        <a href="https://www.linkedin.com/in/arshvermadev/" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" data-cursor-effect="scale">
                             <i class="fab fa-linkedin"></i>
                         </a>
-                        <a href="#" class="social-link">
+                        <a href="#" class="social-link" aria-label="Twitter" data-cursor-effect="scale">
                             <i class="fab fa-twitter"></i>
                         </a>
                     </div>
@@ -185,16 +605,35 @@
                         <h4>Connect</h4>
                         <a href="index.html#contact">Contact</a>
                         <a href="testimonials.html">Testimonials</a>
-                        <a href="admin.html">Admin</a>
-                        <a href="#">Blog</a>
+                        <a href="blog.html">Blog</a>
+                        <a href="press.html">Press Kit</a>
+                    </div>
+
+                    <div class="link-group">
+                        <h4>Resources</h4>
+                        <a href="case-studies.html">Case Studies</a>
+                        <a href="portfolio.html">Full Portfolio</a>
+                        <a href="pricing.html">Pricing</a>
+                        <a href="faq.html">FAQ</a>
                     </div>
 
                     <div class="link-group">
                         <h4>Legal</h4>
-                        <a href="#">Privacy Policy</a>
-                        <a href="#">Terms of Service</a>
-                        <a href="#">Cookie Policy</a>
+                        <a href="privacy.html">Privacy Policy</a>
+                        <a href="terms.html">Terms of Service</a>
+                        <a href="cookies.html">Cookie Policy</a>
                     </div>
+                </div>
+
+                <div class="footer-newsletter">
+                    <h4>Stay Updated</h4>
+                    <p>Get the latest project updates and insights</p>
+                    <form class="footer-newsletter-form">
+                        <input type="email" placeholder="Your email address" aria-label="Email for updates">
+                        <button type="submit" aria-label="Subscribe to updates">
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </form>
                 </div>
             </div>
 
@@ -203,81 +642,204 @@
                     &copy; 2024 Arsh Verma. All rights reserved.
                 </div>
                 <div class="footer-actions">
-                    <a href="admin.html" class="admin-link">
+                    <a href="admin.html" class="admin-link" data-cursor-effect="magnetic">
                         <i class="fas fa-cog"></i>
                         <span>Admin Panel</span>
                     </a>
+                    <button class="back-to-top" id="backToTop" aria-label="Back to top" data-cursor-effect="scale">
+                        <i class="fas fa-chevron-up"></i>
+                    </button>
                 </div>
             </div>
         </div>
     </footer>
 
-    <!-- Back to Top -->
-    <button class="back-to-top" id="backToTop" aria-label="Back to top">
-        <i class="fas fa-chevron-up"></i>
-    </button>
-
     <!-- Add Testimonial Modal -->
-    <div id="testimonialModal" class="modal">
-        <div class="modal-content">
+    <div id="testimonialModal" class="modal" aria-hidden="true" role="dialog" aria-labelledby="testimonialModalTitle">
+        <div class="modal-content large">
             <div class="modal-header">
-                <h2>Add Your Testimonial</h2>
-                <button class="modal-close" id="modalClose">
+                <h2 id="testimonialModalTitle">Add Your Testimonial</h2>
+                <button class="modal-close" id="modalClose" aria-label="Close modal">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <form id="testimonialForm" class="modal-form">
-                <div class="form-group">
-                    <label for="clientName">Your Name</label>
-                    <input type="text" id="clientName" name="clientName" required>
-                </div>
-                <div class="form-group">
-                    <label for="clientRole">Your Role/Company</label>
-                    <input type="text" id="clientRole" name="clientRole" required>
-                </div>
-                <div class="form-group">
-                    <label for="projectType">Project Type</label>
-                    <select id="projectType" name="projectType" required>
-                        <option value="">Select Project Type</option>
-                        <option value="Website">Website</option>
-                        <option value="App">Mobile App</option>
-                        <option value="Game">Game</option>
-                        <option value="Consultation">Consultation</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="projectName">Project Name</label>
-                    <input type="text" id="projectName" name="projectName" required>
-                </div>
-                <div class="form-group">
-                    <label for="rating">Rating</label>
-                    <div class="rating-input">
-                        <div class="stars" id="ratingStars">
-                            <span class="star" data-rating="1">★</span>
-                            <span class="star" data-rating="2">★</span>
-                            <span class="star" data-rating="3">★</span>
-                            <span class="star" data-rating="4">★</span>
-                            <span class="star" data-rating="5">★</span>
+            <form id="testimonialForm" class="modal-form" novalidate>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="clientName">Your Name *</label>
+                        <input type="text" id="clientName" name="clientName" required aria-required="true">
+                        <div class="input-validation"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="clientRole">Your Role/Company *</label>
+                        <input type="text" id="clientRole" name="clientRole" required aria-required="true">
+                        <div class="input-validation"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="projectType">Project Type *</label>
+                        <select id="projectType" name="projectType" required aria-required="true">
+                            <option value="">Select Project Type</option>
+                            <option value="Website">Website</option>
+                            <option value="App">Mobile App</option>
+                            <option value="Game">Game</option>
+                            <option value="Consultation">Consultation</option>
+                            <option value="Full-Stack">Full-Stack Project</option>
+                            <option value="UI/UX Design">UI/UX Design</option>
+                        </select>
+                        <div class="input-validation"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="projectName">Project Name *</label>
+                        <input type="text" id="projectName" name="projectName" required aria-required="true">
+                        <div class="input-validation"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="rating">Rating *</label>
+                        <div class="rating-input">
+                            <div class="stars" id="ratingStars" role="radiogroup" aria-label="Rate your experience">
+                                <span class="star" data-rating="1" role="radio" aria-checked="false" tabindex="0">★</span>
+                                <span class="star" data-rating="2" role="radio" aria-checked="false" tabindex="0">★</span>
+                                <span class="star" data-rating="3" role="radio" aria-checked="false" tabindex="0">★</span>
+                                <span class="star" data-rating="4" role="radio" aria-checked="false" tabindex="0">★</span>
+                                <span class="star" data-rating="5" role="radio" aria-checked="false" tabindex="0">★</span>
+                            </div>
+                            <input type="hidden" id="rating" name="rating" required aria-required="true">
+                            <div class="rating-text" id="ratingText">Select your rating</div>
                         </div>
-                        <input type="hidden" id="rating" name="rating" required>
+                        <div class="input-validation"></div>
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="testimonialText">Your Testimonial *</label>
+                        <textarea id="testimonialText" name="testimonialText" rows="5" required aria-required="true" placeholder="Share your experience working together... What did you enjoy most? What were the results?"></textarea>
+                        <div class="input-validation"></div>
+                        <div class="character-count">
+                            <span id="charCount">0</span>/500 characters
+                        </div>
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="projectResults">Project Results (Optional)</label>
+                        <textarea id="projectResults" name="projectResults" rows="3" placeholder="Any measurable results? e.g., increased engagement, faster load times, revenue growth..."></textarea>
+                    </div>
+                    <div class="form-group full-width">
+                        <div class="form-checkbox">
+                            <input type="checkbox" id="featuredConsent" name="featuredConsent">
+                            <label for="featuredConsent">I consent to have my testimonial featured prominently on the website</label>
+                        </div>
+                    </div>
+                    <div class="form-group full-width">
+                        <div class="form-checkbox">
+                            <input type="checkbox" id="contactConsent" name="contactConsent">
+                            <label for="contactConsent">I'm open to being contacted for verification (optional)</label>
+                        </div>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="testimonialText">Your Testimonial</label>
-                    <textarea id="testimonialText" name="testimonialText" rows="5" required></textarea>
-                </div>
                 <div class="form-actions">
-                    <button type="button" class="btn btn-secondary" id="cancelTestimonial">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Submit Testimonial</button>
+                    <button type="button" class="btn btn-secondary" id="cancelTestimonial">
+                        Cancel
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        Submit Testimonial
+                    </button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- Notification Container -->
-    <div id="notificationContainer"></div>
+    <!-- Submission Guidelines Modal -->
+    <div id="guidelinesModal" class="modal" aria-hidden="true" role="dialog" aria-labelledby="guidelinesModalTitle">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="guidelinesModalTitle">Testimonial Guidelines</h2>
+                <button class="modal-close" id="guidelinesClose" aria-label="Close guidelines">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="guidelines-content">
+                    <h3>What makes a great testimonial?</h3>
+                    <ul class="guidelines-list">
+                        <li>
+                            <i class="fas fa-check"></i>
+                            <strong>Be specific</strong> - Mention particular aspects you appreciated
+                        </li>
+                        <li>
+                            <i class="fas fa-check"></i>
+                            <strong>Share results</strong> - How did the project impact your business?
+                        </li>
+                        <li>
+                            <i class="fas fa-check"></i>
+                            <strong>Be authentic</strong> - Write in your own voice and style
+                        </li>
+                        <li>
+                            <i class="fas fa-check"></i>
+                            <strong>Focus on collaboration</strong> - What was it like working together?
+                        </li>
+                    </ul>
+                    
+                    <h3>What to include:</h3>
+                    <ul class="guidelines-list">
+                        <li>Your name and company/role</li>
+                        <li>Project type and name</li>
+                        <li>Your experience working together</li>
+                        <li>Specific results or achievements</li>
+                        <li>What stood out about the service</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="startTestimonialFromGuidelines">
+                    Start Writing Testimonial
+                </button>
+            </div>
+        </div>
+    </div>
 
-    <script src="js/data.js"></script>
-    <script src="js/testimonials.js"></script>
+    <!-- Back to Top -->
+    <button class="back-to-top floating" id="floatingBackToTop" aria-label="Back to top" data-cursor-effect="scale">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+
+    <!-- Share Testimonials Widget -->
+    <div class="share-widget" id="shareTestimonialsWidget">
+        <button class="widget-toggle" aria-label="Share testimonials">
+            <i class="fas fa-share-alt"></i>
+        </button>
+        <div class="widget-options">
+            <button class="widget-option" id="shareTwitter" aria-label="Share on Twitter">
+                <i class="fab fa-twitter"></i>
+            </button>
+            <button class="widget-option" id="shareLinkedIn" aria-label="Share on LinkedIn">
+                <i class="fab fa-linkedin"></i>
+            </button>
+            <button class="widget-option" id="copyTestimonialLink" aria-label="Copy testimonial link">
+                <i class="fas fa-link"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Notification Container -->
+    <div id="notificationContainer" aria-live="polite" aria-atomic="true"></div>
+
+    <!-- Scripts -->
+    <script src="js/data.js" defer></script>
+    <script src="js/testimonials.js" defer></script>
+
+    <!-- Testimonials Specific Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Testimonials page specific functionality
+            console.log('Testimonials page loaded');
+            
+            // Initialize character counter
+            const testimonialText = document.getElementById('testimonialText');
+            const charCount = document.getElementById('charCount');
+            
+            if (testimonialText && charCount) {
+                testimonialText.addEventListener('input', function() {
+                    charCount.textContent = this.value.length;
+                });
+            }
+        });
+    </script>
 </body>
 </html>
