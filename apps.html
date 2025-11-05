@@ -3,180 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mobile Apps Portfolio - Arsh Verma | Premium Mobile App Developer</title>
-    <meta name="description" content="Explore innovative mobile applications built for iOS and Android. Premium app development portfolio featuring cutting-edge features, exceptional user experience, and cross-platform solutions.">
-    <meta name="keywords" content="mobile app developer, iOS developer, Android developer, React Native, Flutter, cross-platform apps, Arsh Verma">
-    <meta name="author" content="Arsh Verma">
-    
-    <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="Mobile Apps Portfolio - Arsh Verma">
-    <meta property="og:description" content="Innovative mobile solutions for iOS and Android with cutting-edge features and exceptional user experience">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://arshverma.com/apps.html">
-    <meta property="og:image" content="assets/apps-og-image.jpg">
-    
-    <!-- Twitter Card Meta Tags -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Mobile Apps Portfolio - Arsh Verma">
-    <meta name="twitter:description" content="Premium mobile app development portfolio featuring iOS and Android applications">
-    <meta name="twitter:image" content="assets/apps-twitter-image.jpg">
-    
-    <!-- Favicon -->
+    <title>Mobile Apps - Arsh Verma</title>
     <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
-    <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
-    
-    <!-- Preload Critical Resources -->
-    <link rel="preload" href="css/style.css" as="style">
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" as="style">
-    <link rel="preload" href="js/apps.js" as="script">
-    
-    <!-- Stylesheets -->
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    
-    <!-- Apps Specific CSS -->
-    <style>
-        .apps-hero {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .app-platforms-filter {
-            display: flex;
-            gap: var(--space-sm);
-            flex-wrap: wrap;
-            margin-bottom: var(--space-lg);
-        }
-        
-        .platform-filter-btn {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            padding: var(--space-sm) var(--space-md);
-            border-radius: var(--radius-lg);
-            color: var(--text-secondary);
-            cursor: pointer;
-            transition: all var(--transition-normal);
-            backdrop-filter: var(--glass-blur);
-        }
-        
-        .platform-filter-btn.active {
-            background: var(--gradient-primary);
-            color: var(--primary);
-            border-color: transparent;
-        }
-        
-        .app-card-features {
-            display: flex;
-            flex-wrap: wrap;
-            gap: var(--space-xs);
-            margin: var(--space-sm) 0;
-        }
-        
-        .app-feature {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            padding: var(--space-xs) var(--space-sm);
-            border-radius: var(--radius-md);
-            font-size: var(--font-size-xs);
-            color: var(--text-secondary);
-        }
-        
-        .app-stats-overview {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: var(--space-lg);
-            margin: var(--space-2xl) 0;
-        }
-        
-        .app-stat-card {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--radius-lg);
-            padding: var(--space-lg);
-            text-align: center;
-            backdrop-filter: var(--glass-blur);
-            transition: all var(--transition-normal);
-        }
-        
-        .app-stat-card:hover {
-            border-color: var(--accent);
-            transform: translateY(-5px);
-        }
-        
-        .app-performance {
-            display: flex;
-            align-items: center;
-            gap: var(--space-sm);
-            margin-top: var(--space-sm);
-        }
-        
-        .performance-bar {
-            flex: 1;
-            height: 4px;
-            background: var(--glass-bg);
-            border-radius: 2px;
-            overflow: hidden;
-        }
-        
-        .performance-fill {
-            height: 100%;
-            background: var(--success);
-            border-radius: 2px;
-        }
-        
-        .app-preview-container {
-            position: relative;
-            border-radius: var(--radius-lg);
-            overflow: hidden;
-            margin-bottom: var(--space-lg);
-        }
-        
-        .app-preview-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.7);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transition: all var(--transition-smooth);
-        }
-        
-        .app-card:hover .app-preview-overlay {
-            opacity: 1;
-        }
-        
-        .download-badges {
-            display: flex;
-            gap: var(--space-sm);
-            margin-top: var(--space-md);
-        }
-        
-        .download-badge {
-            display: flex;
-            align-items: center;
-            gap: var(--space-xs);
-            padding: var(--space-xs) var(--space-sm);
-            border-radius: var(--radius-md);
-            font-size: var(--font-size-xs);
-            font-weight: 600;
-        }
-        
-        .ios-badge {
-            background: #000;
-            color: #fff;
-        }
-        
-        .android-badge {
-            background: #3DDC84;
-            color: #000;
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
     <!-- Loading Screen -->
@@ -189,48 +20,38 @@
             <div class="loading-bar-container">
                 <div class="loading-bar" id="loadingBar"></div>
             </div>
-            <div class="loading-text" id="loadingText">Loading Apps Portfolio...</div>
-            <div class="loading-dots">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
+            <div class="loading-text" id="loadingText">Loading Mobile Apps...</div>
         </div>
     </div>
 
-    <!-- Custom Cursor -->
-    <div class="cursor-dot" id="cursorDot"></div>
-    <div class="cursor-ring" id="cursorRing"></div>
-
     <!-- Navigation -->
-    <nav class="navbar" id="navbar" aria-label="Main navigation">
+    <nav class="navbar" id="navbar">
         <div class="container">
             <div class="nav-content">
-                <a href="index.html" class="logo" aria-label="ArshCreates Home">
+                <a href="index.html" class="logo">
                     <div class="logo-icon">
-                        <i class="fas fa-code" aria-hidden="true"></i>
+                        <i class="fas fa-code"></i>
                     </div>
                     <span class="logo-text">ArshCreates</span>
                 </a>
 
-                <ul class="nav-menu" id="navMenu" role="menubar">
-                    <li role="none"><a href="index.html" class="nav-link" role="menuitem" data-text="Home">Home</a></li>
-                    <li role="none"><a href="index.html#about" class="nav-link" role="menuitem" data-text="About">About</a></li>
-                    <li role="none"><a href="games.html" class="nav-link" role="menuitem" data-text="Games">Games</a></li>
-                    <li role="none"><a href="websites.html" class="nav-link" role="menuitem" data-text="Websites">Websites</a></li>
-                    <li role="none"><a href="apps.html" class="nav-link active" role="menuitem" data-text="Apps">Apps</a></li>
-                    <li role="none"><a href="testimonials.html" class="nav-link" role="menuitem" data-text="Testimonials">Testimonials</a></li>
-                    <li role="none"><a href="index.html#contact" class="nav-link" role="menuitem" data-text="Contact">Contact</a></li>
+                <ul class="nav-menu" id="navMenu">
+                    <li><a href="index.html" class="nav-link">Home</a></li>
+                    <li><a href="index.html#about" class="nav-link">About</a></li>
+                    <li><a href="games.html" class="nav-link">Games</a></li>
+                    <li><a href="websites.html" class="nav-link">Websites</a></li>
+                    <li><a href="apps.html" class="nav-link active">Apps</a></li>
+                    <li><a href="testimonials.html" class="nav-link">Testimonials</a></li>
+                    <li><a href="index.html#contact" class="nav-link">Contact</a></li>
                 </ul>
 
                 <div class="nav-actions">
-                    <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme" aria-pressed="false">
+                    <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
                         <div class="theme-icon">
-                            <i class="fas fa-moon" aria-hidden="true"></i>
+                            <i class="fas fa-moon"></i>
                         </div>
-                        <span class="theme-text">Dark</span>
                     </button>
-                    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="navMenu">
+                    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
                         <span></span>
                         <span></span>
                         <span></span>
@@ -241,92 +62,31 @@
     </nav>
 
     <!-- Apps Header -->
-    <section class="page-header apps-hero" aria-label="Apps portfolio header">
+    <section class="page-header">
         <div class="container">
             <div class="header-content">
                 <h1>Mobile Applications</h1>
                 <p>Innovative mobile solutions for iOS and Android with cutting-edge features and exceptional user experience</p>
-                
-                <!-- Enhanced Stats -->
                 <div class="header-stats">
-                    <div class="stat" data-cursor-effect="pulse">
+                    <div class="stat">
                         <span class="stat-number">15+</span>
                         <span class="stat-label">Apps Developed</span>
                     </div>
-                    <div class="stat" data-cursor-effect="pulse">
+                    <div class="stat">
                         <span class="stat-number">4.9</span>
                         <span class="stat-label">Average Rating</span>
                     </div>
-                    <div class="stat" data-cursor-effect="pulse">
+                    <div class="stat">
                         <span class="stat-number">500K+</span>
                         <span class="stat-label">Downloads</span>
                     </div>
-                    <div class="stat" data-cursor-effect="pulse">
-                        <span class="stat-number">10+</span>
-                        <span class="stat-label">Awards</span>
-                    </div>
-                </div>
-
-                <!-- Quick Actions -->
-                <div class="header-actions">
-                    <a href="#featured-apps" class="btn btn-primary btn-glow" data-cursor-effect="glow">
-                        <i class="fas fa-mobile-alt"></i>
-                        <span>View Apps</span>
-                    </a>
-                    <a href="#app-stats" class="btn btn-secondary" data-cursor-effect="scale">
-                        <i class="fas fa-chart-bar"></i>
-                        <span>View Stats</span>
-                    </a>
-                    <button class="btn btn-glass" id="viewAppDemos" data-cursor-effect="magnetic">
-                        <i class="fas fa-play"></i>
-                        <span>Watch Demos</span>
-                    </button>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Animated Background Elements -->
-        <div class="hero-particles" id="appsParticles"></div>
-    </section>
-
-    <!-- Apps Stats Overview -->
-    <section id="app-stats" class="section" aria-label="App statistics overview">
-        <div class="container">
-            <div class="app-stats-overview">
-                <div class="app-stat-card" data-cursor-effect="pulse">
-                    <div class="stat-icon">
-                        <i class="fas fa-mobile-alt"></i>
-                    </div>
-                    <div class="stat-number" data-target="15">0</div>
-                    <div class="stat-label">Total Apps</div>
-                </div>
-                <div class="app-stat-card" data-cursor-effect="pulse">
-                    <div class="stat-icon">
-                        <i class="fas fa-download"></i>
-                    </div>
-                    <div class="stat-number" data-target="500000">0</div>
-                    <div class="stat-label">Total Downloads</div>
-                </div>
-                <div class="app-stat-card" data-cursor-effect="pulse">
-                    <div class="stat-icon">
-                        <i class="fas fa-star"></i>
-                    </div>
-                    <div class="stat-number">4.9<span>/5</span></div>
-                    <div class="stat-label">Average Rating</div>
-                </div>
-                <div class="app-stat-card" data-cursor-effect="pulse">
-                    <div class="stat-icon">
-                        <i class="fas fa-trophy"></i>
-                    </div>
-                    <div class="stat-number" data-target="10">0</div>
-                    <div class="stat-label">Awards Won</div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Apps Filter -->
-    <section class="section filter-section" aria-label="Apps filter options">
+    <section class="section filter-section">
         <div class="container">
             <div class="filter-container">
                 <div class="filter-group">
@@ -336,7 +96,6 @@
                         <option value="iOS">iOS</option>
                         <option value="Android">Android</option>
                         <option value="Cross-Platform">Cross-Platform</option>
-                        <option value="PWA">Progressive Web App</option>
                     </select>
                 </div>
                 <div class="filter-group">
@@ -347,10 +106,6 @@
                         <option value="Health & Fitness">Health & Fitness</option>
                         <option value="Social Media">Social Media</option>
                         <option value="E-commerce">E-commerce</option>
-                        <option value="Education">Education</option>
-                        <option value="Entertainment">Entertainment</option>
-                        <option value="Finance">Finance</option>
-                        <option value="Travel">Travel</option>
                     </select>
                 </div>
                 <div class="filter-group">
@@ -359,442 +114,57 @@
                         <option value="all">All Status</option>
                         <option value="Live">Live</option>
                         <option value="In Development">In Development</option>
-                        <option value="Beta">Beta Testing</option>
-                        <option value="Coming Soon">Coming Soon</option>
                     </select>
                 </div>
-                <div class="filter-group">
-                    <label for="sortFilter">Sort By</label>
-                    <select id="sortFilter" class="filter-select">
-                        <option value="newest">Newest First</option>
-                        <option value="oldest">Oldest First</option>
-                        <option value="rating">Highest Rating</option>
-                        <option value="popular">Most Popular</option>
-                        <option value="downloads">Most Downloads</option>
-                        <option value="a-z">A to Z</option>
-                        <option value="z-a">Z to A</option>
-                    </select>
-                </div>
-            </div>
-
-            <!-- Platform Quick Filters -->
-            <div class="app-platforms-filter">
-                <button class="platform-filter-btn active" data-platform="all">
-                    <i class="fas fa-th"></i>
-                    All Platforms
-                </button>
-                <button class="platform-filter-btn" data-platform="ios">
-                    <i class="fab fa-apple"></i>
-                    iOS
-                </button>
-                <button class="platform-filter-btn" data-platform="android">
-                    <i class="fab fa-android"></i>
-                    Android
-                </button>
-                <button class="platform-filter-btn" data-platform="cross-platform">
-                    <i class="fas fa-mobile-alt"></i>
-                    Cross-Platform
-                </button>
-                <button class="platform-filter-btn" data-platform="pwa">
-                    <i class="fas fa-globe"></i>
-                    PWA
-                </button>
-            </div>
-
-            <!-- Search Box -->
-            <div class="search-container">
-                <div class="search-box">
-                    <i class="fas fa-search"></i>
-                    <input type="text" id="appSearch" placeholder="Search apps by name, technology, or feature..." aria-label="Search apps">
-                    <button class="search-clear" id="searchClear" aria-label="Clear search">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Active Filters Display -->
-            <div class="active-filters" id="activeFilters">
-                <!-- Active filters will be displayed here -->
             </div>
         </div>
     </section>
 
     <!-- Apps Grid -->
-    <section id="featured-apps" class="section apps-section" aria-label="Apps portfolio grid">
+    <section class="section apps-section">
         <div class="container">
-            <!-- Apps Counter -->
-            <div class="section-header">
-                <div class="results-info">
-                    <span id="appsCount">15</span> apps found
-                    <button class="btn btn-sm btn-secondary" id="resetFilters">
-                        <i class="fas fa-redo"></i>
-                        Reset Filters
-                    </button>
-                </div>
-            </div>
-
-            <!-- View Toggle -->
-            <div class="view-options">
-                <button class="view-option active" data-view="grid" aria-label="Grid view">
-                    <i class="fas fa-th"></i>
-                </button>
-                <button class="view-option" data-view="list" aria-label="List view">
-                    <i class="fas fa-list"></i>
-                </button>
-                <button class="view-option" data-view="cards" aria-label="Card view">
-                    <i class="fas fa-grip-vertical"></i>
-                </button>
-            </div>
-
-            <div class="portfolio-grid" id="appsGrid" data-view="grid">
+            <div class="portfolio-grid" id="appsGrid">
                 <!-- Apps will be loaded dynamically -->
-                
-                <!-- Sample App Card Structure -->
-                <div class="portfolio-card app-card" data-category="Productivity" data-status="Live" data-platform="iOS" data-rating="4.9" data-downloads="150000">
-                    <div class="card-image">
-                        <img src="images/apps/focusflow.jpg" alt="FocusFlow - Productivity and time management app" class="portfolio-image" loading="lazy">
-                        <div class="app-preview-overlay">
-                            <div class="card-actions">
-                                <button class="btn-download" onclick="window.location.href='app-detail.html?id=1'" aria-label="Download FocusFlow app">
-                                    <i class="fas fa-download"></i>
-                                </button>
-                                <button class="btn-preview" data-app-preview="focusflow" aria-label="Preview FocusFlow app">
-                                    <i class="fas fa-eye"></i>
-                                </button>
-                                <button class="btn-bookmark" data-app-id="1" aria-label="Bookmark FocusFlow">
-                                    <i class="far fa-bookmark"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="card-badge live">
-                            <i class="fas fa-circle"></i>
-                            Live
-                        </div>
-                        <div class="app-performance">
-                            <span>Rating</span>
-                            <div class="performance-bar">
-                                <div class="performance-fill" style="width: 98%"></div>
-                            </div>
-                            <span>4.9/5</span>
-                        </div>
-                    </div>
-                    <div class="portfolio-info">
-                        <div class="app-header">
-                            <h3 class="portfolio-title">FocusFlow</h3>
-                            <div class="app-rating">
-                                <i class="fas fa-star"></i>
-                                <span>4.9</span>
-                            </div>
-                        </div>
-                        <p class="portfolio-category">Productivity</p>
-                        <p class="portfolio-description">Advanced time management and focus app with AI-powered task prioritization and distraction blocking.</p>
-                        
-                        <div class="app-card-features">
-                            <span class="app-feature">AI Task Sorting</span>
-                            <span class="app-feature">Focus Timer</span>
-                            <span class="app-feature">Analytics</span>
-                            <span class="app-feature">Cross-Device Sync</span>
-                        </div>
-                        
-                        <div class="portfolio-tags">
-                            <span class="tag">Swift</span>
-                            <span class="tag">Core Data</span>
-                            <span class="tag">AI/ML</span>
-                            <span class="tag">CloudKit</span>
-                            <span class="tag-more">+2</span>
-                        </div>
-                        
-                        <div class="portfolio-meta">
-                            <div class="meta-item">
-                                <i class="fas fa-star"></i>
-                                <span>4.9</span>
-                            </div>
-                            <div class="meta-item">
-                                <i class="fas fa-download"></i>
-                                <span>150K</span>
-                            </div>
-                            <div class="meta-item">
-                                <i class="fas fa-user"></i>
-                                <span>45K</span>
-                            </div>
-                            <div class="meta-item">
-                                <i class="fas fa-bolt"></i>
-                                <span>98%</span>
-                            </div>
-                        </div>
-                        
-                        <div class="portfolio-platforms">
-                            <span class="platform-tag ios">iOS</span>
-                        </div>
-                        
-                        <div class="download-badges">
-                            <span class="download-badge ios-badge">
-                                <i class="fab fa-apple"></i>
-                                App Store
-                            </span>
-                        </div>
-                        
-                        <div class="app-progress">
-                            <div class="progress-bar">
-                                <div class="progress-fill" style="width: 100%"></div>
-                            </div>
-                            <span class="progress-text">Fully Launched</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- More app cards will be generated dynamically -->
-            </div>
-
-            <!-- Loading State -->
-            <div class="loading-state" id="appsLoading">
-                <div class="loading-spinner"></div>
-                <p>Loading amazing apps...</p>
-            </div>
-
-            <!-- No Results State -->
-            <div class="empty-state" id="noApps" style="display: none;">
-                <i class="fas fa-mobile-alt"></i>
-                <h3>No Apps Found</h3>
-                <p>Try adjusting your filters or search terms to see more results</p>
-                <button class="btn btn-primary" id="resetSearch">
-                    <i class="fas fa-redo"></i>
-                    Reset Search
-                </button>
-            </div>
-
-            <!-- Pagination -->
-            <div class="pagination" id="appsPagination">
-                <!-- Pagination will be generated dynamically -->
-            </div>
-        </div>
-    </section>
-
-    <!-- App Development Process -->
-    <section class="section process-section" aria-label="App development process">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-badge">Process</span>
-                <h2 class="section-title">App Development Journey</h2>
-                <p class="section-subtitle">From concept to app store - see how exceptional mobile applications come to life</p>
-            </div>
-
-            <div class="process-timeline">
-                <div class="process-step" data-cursor-effect="magnetic">
-                    <div class="step-icon">
-                        <i class="fas fa-lightbulb"></i>
-                    </div>
-                    <div class="step-content">
-                        <h3>Concept & Research</h3>
-                        <p>Understanding user needs, market research, and creating detailed app specifications</p>
-                        <ul class="step-features">
-                            <li>User Research</li>
-                            <li>Market Analysis</li>
-                            <li>Feature Planning</li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <div class="process-step" data-cursor-effect="magnetic">
-                    <div class="step-icon">
-                        <i class="fas fa-pencil-alt"></i>
-                    </div>
-                    <div class="step-content">
-                        <h3>UI/UX Design</h3>
-                        <p>Creating intuitive mobile interfaces and exceptional user experiences with mobile-first design</p>
-                        <ul class="step-features">
-                            <li>Wireframing</li>
-                            <li>Prototyping</li>
-                            <li>User Testing</li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <div class="process-step" data-cursor-effect="magnetic">
-                    <div class="step-icon">
-                        <i class="fas fa-code"></i>
-                    </div>
-                    <div class="step-content">
-                        <h3>Development</h3>
-                        <p>Building robust, performant mobile applications with clean code and modern technologies</p>
-                        <ul class="step-features">
-                            <li>Native Development</li>
-                            <li>Cross-Platform</li>
-                            <li>API Integration</li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <div class="process-step" data-cursor-effect="magnetic">
-                    <div class="step-icon">
-                        <i class="fas fa-vial"></i>
-                    </div>
-                    <div class="step-content">
-                        <h3>Testing & QA</h3>
-                        <p>Comprehensive testing to ensure functionality, performance, and security on all devices</p>
-                        <ul class="step-features">
-                            <li>Device Testing</li>
-                            <li>Performance Testing</li>
-                            <li>Security Testing</li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <div class="process-step" data-cursor-effect="magnetic">
-                    <div class="step-icon">
-                        <i class="fas fa-rocket"></i>
-                    </div>
-                    <div class="step-content">
-                        <h3>Deployment & Maintenance</h3>
-                        <p>Deploying to app stores and providing ongoing updates, support, and feature enhancements</p>
-                        <ul class="step-features">
-                            <li>App Store Submission</li>
-                            <li>Store Optimization</li>
-                            <li>Ongoing Updates</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Technologies Showcase -->
-    <section class="section technologies-section" aria-label="App development technologies">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-badge">Technologies</span>
-                <h2 class="section-title">Powering Exceptional Mobile Experiences</h2>
-                <p class="section-subtitle">Cutting-edge technologies and frameworks used in mobile app development</p>
-            </div>
-
-            <div class="technologies-grid">
-                <div class="technology-card" data-cursor-effect="magnetic">
-                    <div class="tech-icon">
-                        <i class="fab fa-apple"></i>
-                    </div>
-                    <div class="tech-content">
-                        <h3>iOS Development</h3>
-                        <p>Native iOS app development with Swift and SwiftUI for premium user experiences</p>
-                        <div class="tech-features">
-                            <span class="tech-feature">Swift</span>
-                            <span class="tech-feature">SwiftUI</span>
-                            <span class="tech-feature">Core Data</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="technology-card" data-cursor-effect="magnetic">
-                    <div class="tech-icon">
-                        <i class="fab fa-android"></i>
-                    </div>
-                    <div class="tech-content">
-                        <h3>Android Development</h3>
-                        <p>Native Android app development with Kotlin and Jetpack Compose</p>
-                        <div class="tech-features">
-                            <span class="tech-feature">Kotlin</span>
-                            <span class="tech-feature">Jetpack Compose</span>
-                            <span class="tech-feature">Room DB</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="technology-card" data-cursor-effect="magnetic">
-                    <div class="tech-icon">
-                        <i class="fab fa-react"></i>
-                    </div>
-                    <div class="tech-content">
-                        <h3>React Native</h3>
-                        <p>Cross-platform app development with React Native for efficient code sharing</p>
-                        <div class="tech-features">
-                            <span class="tech-feature">JavaScript</span>
-                            <span class="tech-feature">Cross-Platform</span>
-                            <span class="tech-feature">Hot Reload</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="technology-card" data-cursor-effect="magnetic">
-                    <div class="tech-icon">
-                        <i class="fas fa-cloud"></i>
-                    </div>
-                    <div class="tech-content">
-                        <h3>Backend & APIs</h3>
-                        <p>Robust backend services and API integrations for mobile applications</p>
-                        <div class="tech-features">
-                            <span class="tech-feature">Firebase</span>
-                            <span class="tech-feature">REST APIs</span>
-                            <span class="tech-feature">Push Notifications</span>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </section>
 
     <!-- CTA Section -->
-    <section class="section cta-section" aria-label="Call to action">
+    <section class="section cta-section">
         <div class="container">
             <div class="cta-content">
-                <div class="cta-text">
-                    <h2>Ready to Build Your App?</h2>
-                    <p>Let's create a mobile experience that users will love and engage with daily. Transform your idea into a successful app.</p>
-                    
-                    <div class="cta-features">
-                        <div class="feature">
-                            <i class="fas fa-check"></i>
-                            <span>Native Performance</span>
-                        </div>
-                        <div class="feature">
-                            <i class="fas fa-check"></i>
-                            <span>Cross-Platform Support</span>
-                        </div>
-                        <div class="feature">
-                            <i class="fas fa-check"></i>
-                            <span>App Store Optimization</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="cta-actions">
-                    <a href="#contact" class="btn btn-primary btn-glow" data-cursor-effect="glow">
-                        <i class="fas fa-mobile-alt"></i>
-                        <span>Start App Project</span>
-                    </a>
-                    <button class="btn btn-secondary" id="viewAllApps" data-cursor-effect="scale">
-                        <i class="fas fa-eye"></i>
-                        <span>View All Apps</span>
-                    </button>
-                    <a href="app-detail.html?id=1" class="btn btn-glass" data-cursor-effect="magnetic">
-                        <i class="fas fa-play"></i>
-                        <span>View Demo</span>
-                    </a>
-                </div>
+                <h2>Ready to Build Your App?</h2>
+                <p>Let's create a mobile experience that users will love and engage with daily</p>
+                <a href="#contact" class="btn btn-primary btn-glow">
+                    <i class="fas fa-mobile-alt"></i>
+                    <span>Start App Project</span>
+                </a>
             </div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer class="footer" aria-label="Footer">
+    <footer class="footer">
         <div class="container">
             <div class="footer-content">
                 <div class="footer-brand">
-                    <a href="index.html" class="logo" aria-label="ArshCreates Home">
+                    <a href="index.html" class="logo">
                         <div class="logo-icon">
-                            <i class="fas fa-code" aria-hidden="true"></i>
+                            <i class="fas fa-code"></i>
                         </div>
                         <span class="logo-text">ArshCreates</span>
                     </a>
                     <p class="footer-description">
-                        Creating exceptional mobile experiences through innovative development and creative solutions.
+                        Creating exceptional digital experiences through innovative development and creative solutions.
                     </p>
                     <div class="footer-social">
-                        <a href="https://github.com/ArshVermaGit" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-cursor-effect="scale">
+                        <a href="https://github.com/ArshVermaGit" class="social-link" target="_blank">
                             <i class="fab fa-github"></i>
                         </a>
-                        <a href="https://www.linkedin.com/in/arshvermadev/" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" data-cursor-effect="scale">
+                        <a href="https://www.linkedin.com/in/arshvermadev/" class="social-link" target="_blank">
                             <i class="fab fa-linkedin"></i>
                         </a>
-                        <a href="#" class="social-link" aria-label="Twitter" data-cursor-effect="scale">
+                        <a href="#" class="social-link">
                             <i class="fab fa-twitter"></i>
                         </a>
                     </div>
@@ -802,156 +172,54 @@
 
                 <div class="footer-links">
                     <div class="link-group">
-                        <h4>App Portfolio</h4>
-                        <a href="#ios-apps">iOS Apps</a>
-                        <a href="#android-apps">Android Apps</a>
-                        <a href="#cross-platform-apps">Cross-Platform</a>
-                        <a href="#productivity-apps">Productivity</a>
-                        <a href="#upcoming-apps">Upcoming Apps</a>
-                    </div>
-
-                    <div class="link-group">
-                        <h4>Resources</h4>
-                        <a href="app-templates.html">App Templates</a>
-                        <a href="tutorials.html">App Dev Tutorials</a>
-                        <a href="documentation.html">API Documentation</a>
-                        <a href="support.html">App Support</a>
-                        <a href="blog.html">Dev Blog</a>
+                        <h4>Navigation</h4>
+                        <a href="index.html">Home</a>
+                        <a href="index.html#about">About</a>
+                        <a href="games.html">Games</a>
+                        <a href="websites.html">Websites</a>
+                        <a href="apps.html">Apps</a>
                     </div>
 
                     <div class="link-group">
                         <h4>Connect</h4>
                         <a href="index.html#contact">Contact</a>
                         <a href="testimonials.html">Testimonials</a>
-                        <a href="press-kit.html">Press Kit</a>
-                        <a href="careers.html">Careers</a>
-                        <a href="partnerships.html">Partnerships</a>
+                        <a href="admin.html">Admin</a>
+                        <a href="#">Blog</a>
                     </div>
 
                     <div class="link-group">
                         <h4>Legal</h4>
-                        <a href="privacy.html">Privacy Policy</a>
-                        <a href="terms.html">Terms of Service</a>
-                        <a href="cookies.html">Cookie Policy</a>
-                        <a href="gdpr.html">GDPR Compliance</a>
+                        <a href="#">Privacy Policy</a>
+                        <a href="#">Terms of Service</a>
+                        <a href="#">Cookie Policy</a>
                     </div>
-                </div>
-
-                <div class="footer-newsletter">
-                    <h4>App Updates</h4>
-                    <p>Get notified about new app releases and updates</p>
-                    <form class="footer-newsletter-form" id="appsNewsletter">
-                        <input type="email" placeholder="Your email address" aria-label="Email for app updates" required>
-                        <button type="submit" aria-label="Subscribe to app updates">
-                            <i class="fas fa-arrow-right"></i>
-                        </button>
-                    </form>
                 </div>
             </div>
 
             <div class="footer-bottom">
                 <div class="copyright">
-                    &copy; 2024 Arsh Verma. All rights reserved. | 
-                    <span class="apps-counter">
-                        <i class="fas fa-mobile-alt"></i>
-                        <span id="totalApps">15</span> Apps and Counting
-                    </span>
+                    &copy; 2024 Arsh Verma. All rights reserved.
                 </div>
                 <div class="footer-actions">
-                    <a href="admin.html" class="admin-link" data-cursor-effect="magnetic">
+                    <a href="admin.html" class="admin-link">
                         <i class="fas fa-cog"></i>
                         <span>Admin Panel</span>
                     </a>
-                    <button class="back-to-top" id="backToTop" aria-label="Back to top" data-cursor-effect="scale">
-                        <i class="fas fa-chevron-up"></i>
-                    </button>
                 </div>
             </div>
         </div>
     </footer>
 
-    <!-- App Preview Modal -->
-    <div id="appPreviewModal" class="modal" aria-hidden="true" role="dialog" aria-labelledby="appPreviewTitle">
-        <div class="modal-content large">
-            <div class="modal-header">
-                <h2 id="appPreviewTitle">App Preview</h2>
-                <button class="modal-close" id="appPreviewClose" aria-label="Close preview">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="app-preview-content">
-                    <div class="preview-video">
-                        <!-- App demo video will be loaded here -->
-                    </div>
-                    <div class="preview-info">
-                        <h3 id="previewAppName">App Name</h3>
-                        <p id="previewAppDescription">App description will appear here</p>
-                        <div class="preview-actions">
-                            <button class="btn btn-primary" id="downloadAppPreview">
-                                <i class="fas fa-download"></i>
-                                Download App
-                            </button>
-                            <button class="btn btn-secondary" id="viewAppDetails">
-                                <i class="fas fa-info-circle"></i>
-                                View Details
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Quick App Stats Widget -->
-    <div class="quick-stats-widget" id="quickStatsWidget">
-        <div class="widget-header">
-            <h4>Live App Stats</h4>
-            <button class="widget-toggle" aria-label="Toggle stats widget">
-                <i class="fas fa-chart-line"></i>
-            </button>
-        </div>
-        <div class="widget-content">
-            <div class="stat-item">
-                <span class="stat-label">Active Users</span>
-                <span class="stat-value" id="activeUsers">25,247</span>
-            </div>
-            <div class="stat-item">
-                <span class="stat-label">Downloads Today</span>
-                <span class="stat-value" id="downloadsToday">1,458</span>
-            </div>
-            <div class="stat-item">
-                <span class="stat-label">Top App</span>
-                <span class="stat-value">FocusFlow</span>
-            </div>
-        </div>
-    </div>
-
     <!-- Back to Top -->
-    <button class="back-to-top floating" id="floatingBackToTop" aria-label="Back to top" data-cursor-effect="scale">
+    <button class="back-to-top" id="backToTop" aria-label="Back to top">
         <i class="fas fa-chevron-up"></i>
     </button>
 
     <!-- Notification Container -->
-    <div id="notificationContainer" aria-live="polite" aria-atomic="true"></div>
+    <div id="notificationContainer"></div>
 
-    <!-- Scripts -->
-    <script src="js/data.js" defer></script>
-    <script src="js/apps.js" defer></script>
-
-    <!-- Apps Specific Script -->
-    <script>
-        // Apps page specific functionality
-        document.addEventListener('DOMContentLoaded', function() {
-            // Initialize apps page
-            console.log('Apps portfolio page loaded');
-            
-            // Add view transition for app cards
-            const appCards = document.querySelectorAll('.app-card');
-            appCards.forEach(card => {
-                card.style.viewTransitionName = 'app-card-' + Math.random().toString(36).substr(2, 9);
-            });
-        });
-    </script>
+    <script src="js/data.js"></script>
+    <script src="js/apps.js"></script>
 </body>
 </html>
