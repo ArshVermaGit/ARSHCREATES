@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website Details - Arsh Verma</title>
+    <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loadingScreen" class="loading-screen">
+        <div class="loading-content">
+            <div class="loading-logo">
+                <div class="logo-glow"></div>
+                <i class="fas fa-laptop-code"></i>
+            </div>
+            <div class="loading-bar-container">
+                <div class="loading-bar" id="loadingBar"></div>
+            </div>
+            <div class="loading-text" id="loadingText">Loading Website Details...</div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <a href="index.html" class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <span class="logo-text">ArshCreates</span>
+                </a>
+
+                <div class="nav-actions">
+                    <a href="websites.html" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i>
+                        <span>Back to Websites</span>
+                    </a>
+                    <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
+                        <div class="theme-icon">
+                            <i class="fas fa-moon"></i>
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Website Detail Section -->
+    <section class="website-detail-section">
+        <div class="container">
+            <!-- Website Preview -->
+            <div class="website-preview-container">
+                <div class="website-preview">
+                    <div class="preview-image">
+                        <img id="previewImage" src="" alt="Website Preview" class="preview-img">
+                        <div class="preview-overlay">
+                            <button id="visitBtn" class="btn-visit-large">
+                                <i class="fas fa-external-link-alt"></i>
+                                <span>Visit Website</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Website Controls -->
+                    <div class="website-controls">
+                        <div class="control-group">
+                            <button id="fullscreenBtn" class="btn-control" title="Fullscreen Preview">
+                                <i class="fas fa-expand"></i>
+                            </button>
+                            <button id="closePreviewBtn" class="btn-control" title="Close Preview">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div class="control-info">
+                            <span class="control-text">Interactive Website Preview</span>
+                        </div>
+                    </div>
+
+                    <!-- Website Container -->
+                    <div id="websiteContainer" class="website-container">
+                        <iframe id="websiteFrame" allowfullscreen></iframe>
+                    </div>
+                </div>
+
+                <!-- Navigation Arrows -->
+                <div class="detail-navigation">
+                    <button id="prevWebsite" class="nav-arrow prev-arrow">
+                        <i class="fas fa-chevron-left"></i>
+                        <span class="arrow-text">Previous Website</span>
+                    </button>
+                    <button id="nextWebsite" class="nav-arrow next-arrow">
+                        <span class="arrow-text">Next Website</span>
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Website Information -->
+            <div class="website-info-container">
+                <div class="website-header">
+                    <div class="website-title-section">
+                        <h1 id="websiteTitle" class="website-title">Website Title</h1>
+                        <div class="website-meta">
+                            <span id="websiteCategory" class="website-category">Category</span>
+                            <span class="website-rating">
+                                <i class="fas fa-star"></i>
+                                <span id="websiteRating">0.0</span>/5
+                            </span>
+                            <span id="websiteStatus" class="website-status">Status</span>
+                        </div>
+                    </div>
+                    <div class="website-actions">
+                        <button id="shareBtn" class="btn btn-secondary">
+                            <i class="fas fa-share-alt"></i>
+                            <span>Share</span>
+                        </button>
+                        <a id="repositoryBtn" href="#" class="btn btn-primary" target="_blank">
+                            <i class="fab fa-github"></i>
+                            <span>Repository</span>
+                        </a>
+                        <a id="liveUrlBtn" href="#" class="btn btn-accent" target="_blank">
+                            <i class="fas fa-external-link-alt"></i>
+                            <span>Live Site</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="website-content">
+                    <!-- Overview & Description -->
+                    <div class="website-description-section">
+                        <h2>About This Website</h2>
+                        <p id="websiteOverview" class="website-overview">Website overview...</p>
+                        <p id="websiteDescription" class="website-description">Website description...</p>
+                    </div>
+
+                    <!-- Website Details Grid -->
+                    <div class="website-details-grid">
+                        <div class="detail-card">
+                            <div class="detail-icon">
+                                <i class="fas fa-calendar"></i>
+                            </div>
+                            <div class="detail-content">
+                                <h3>Launch Date</h3>
+                                <p id="launchDate">-</p>
+                            </div>
+                        </div>
+                        <div class="detail-card">
+                            <div class="detail-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="detail-content">
+                                <h3>Development Time</h3>
+                                <p id="developmentTime">-</p>
+                            </div>
+                        </div>
+                        <div class="detail-card">
+                            <div class="detail-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="detail-content">
+                                <h3>User Base</h3>
+                                <p id="userBase">-</p>
+                            </div>
+                        </div>
+                        <div class="detail-card">
+                            <div class="detail-icon">
+                                <i class="fas fa-mobile-alt"></i>
+                            </div>
+                            <div class="detail-content">
+                                <h3>Responsive Design</h3>
+                                <p>Mobile-First</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Features Section -->
+                    <div class="features-section">
+                        <h2>Key Features</h2>
+                        <ul id="featuresList" class="features-list">
+                            <!-- Features will be populated dynamically -->
+                        </ul>
+                    </div>
+
+                    <!-- Technologies Section -->
+                    <div class="technologies-section">
+                        <h2>Technologies Used</h2>
+                        <div id="techList" class="tech-tags">
+                            <!-- Technologies will be populated dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- Website Stats -->
+                    <div class="website-stats-section">
+                        <h2>Website Statistics</h2>
+                        <div class="stats-grid">
+                            <div class="stat-item">
+                                <div class="stat-circle">
+                                    <span id="ratingCircle" class="stat-value">0.0</span>
+                                </div>
+                                <div class="stat-info">
+                                    <h3>Rating</h3>
+                                    <p>User Satisfaction Score</p>
+                                </div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-circle">
+                                    <span id="userCountCircle" class="stat-value">0</span>
+                                </div>
+                                <div class="stat-info">
+                                    <h3>Users</h3>
+                                    <p>Active User Base</p>
+                                </div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-circle">
+                                    <span id="performanceCircle" class="stat-value">98%</span>
+                                </div>
+                                <div class="stat-info">
+                                    <h3>Performance</h3>
+                                    <p>Average Uptime</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <a href="index.html" class="logo">
+                        <div class="logo-icon">
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <span class="logo-text">ArshCreates</span>
+                    </a>
+                    <p class="footer-description">
+                        Creating exceptional digital experiences through innovative development and creative solutions.
+                    </p>
+                </div>
+
+                <div class="footer-links">
+                    <div class="link-group">
+                        <h4>Navigation</h4>
+                        <a href="index.html">Home</a>
+                        <a href="index.html#about">About</a>
+                        <a href="games.html">Games</a>
+                        <a href="websites.html">Websites</a>
+                        <a href="apps.html">Apps</a>
+                    </div>
+
+                    <div class="link-group">
+                        <h4>Connect</h4>
+                        <a href="index.html#contact">Contact</a>
+                        <a href="testimonials.html">Testimonials</a>
+                        <a href="admin.html">Admin</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div class="copyright">
+                    &copy; 2024 Arsh Verma. All rights reserved.
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Notification Container -->
+    <div id="notificationContainer"></div>
+
+    <script src="js/data.js"></script>
+    <script src="js/website-detail.js"></script>
+</body>
+</html>
