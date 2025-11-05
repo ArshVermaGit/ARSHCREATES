@@ -3,11 +3,154 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Websites Portfolio - Arsh Verma</title>
+    <title>Websites Portfolio - Arsh Verma | Premium Web Developer & Full-Stack Specialist</title>
+    <meta name="description" content="Explore cutting-edge web solutions built with modern technologies. Premium web development portfolio featuring responsive websites, progressive web apps, and full-stack applications.">
+    <meta name="keywords" content="web developer, full-stack developer, React, Node.js, responsive websites, PWA, Arsh Verma">
+    <meta name="author" content="Arsh Verma">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Websites Portfolio - Arsh Verma">
+    <meta property="og:description" content="Revolutionary web solutions with modern frameworks, responsive design, and exceptional user experiences">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://arshverma.com/websites.html">
+    <meta property="og:image" content="assets/websites-og-image.jpg">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Websites Portfolio - Arsh Verma">
+    <meta name="twitter:description" content="Premium web development portfolio featuring responsive websites and progressive web apps">
+    <meta name="twitter:image" content="assets/websites-twitter-image.jpg">
+    
+    <!-- Favicon -->
     <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+    
+    <!-- Preload Critical Resources -->
+    <link rel="preload" href="css/style.css" as="style">
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" as="style">
+    <link rel="preload" href="js/websites.js" as="script">
+    
+    <!-- Stylesheets -->
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Websites Specific CSS -->
+    <style>
+        .websites-hero {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .website-platforms-filter {
+            display: flex;
+            gap: var(--space-sm);
+            flex-wrap: wrap;
+            margin-bottom: var(--space-lg);
+        }
+        
+        .platform-filter-btn {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            padding: var(--space-sm) var(--space-md);
+            border-radius: var(--radius-lg);
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            backdrop-filter: var(--glass-blur);
+        }
+        
+        .platform-filter-btn.active {
+            background: var(--gradient-primary);
+            color: var(--primary);
+            border-color: transparent;
+        }
+        
+        .website-card-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-xs);
+            margin: var(--space-sm) 0;
+        }
+        
+        .website-feature {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            padding: var(--space-xs) var(--space-sm);
+            border-radius: var(--radius-md);
+            font-size: var(--font-size-xs);
+            color: var(--text-secondary);
+        }
+        
+        .website-stats-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-lg);
+            margin: var(--space-2xl) 0;
+        }
+        
+        .website-stat-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            padding: var(--space-lg);
+            text-align: center;
+            backdrop-filter: var(--glass-blur);
+            transition: all var(--transition-normal);
+        }
+        
+        .website-stat-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-5px);
+        }
+        
+        .website-performance {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            margin-top: var(--space-sm);
+        }
+        
+        .performance-bar {
+            flex: 1;
+            height: 4px;
+            background: var(--glass-bg);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        
+        .performance-fill {
+            height: 100%;
+            background: var(--success);
+            border-radius: 2px;
+        }
+        
+        .website-preview-container {
+            position: relative;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            margin-bottom: var(--space-lg);
+        }
+        
+        .website-preview-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: all var(--transition-smooth);
+        }
+        
+        .website-card:hover .website-preview-overlay {
+            opacity: 1;
+        }
+    </style>
 </head>
 <body>
     <!-- Loading Screen -->
@@ -21,6 +164,11 @@
                 <div class="loading-bar" id="loadingBar"></div>
             </div>
             <div class="loading-text" id="loadingText">Loading Websites Portfolio...</div>
+            <div class="loading-dots">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
         </div>
     </div>
 
@@ -29,33 +177,34 @@
     <div class="cursor-ring" id="cursorRing"></div>
 
     <!-- Navigation -->
-    <nav class="navbar" id="navbar">
+    <nav class="navbar" id="navbar" aria-label="Main navigation">
         <div class="container">
             <div class="nav-content">
-                <a href="index.html" class="logo">
+                <a href="index.html" class="logo" aria-label="ArshCreates Home">
                     <div class="logo-icon">
-                        <i class="fas fa-code"></i>
+                        <i class="fas fa-code" aria-hidden="true"></i>
                     </div>
                     <span class="logo-text">ArshCreates</span>
                 </a>
 
-                <ul class="nav-menu" id="navMenu">
-                    <li><a href="index.html" class="nav-link">Home</a></li>
-                    <li><a href="index.html#about" class="nav-link">About</a></li>
-                    <li><a href="games.html" class="nav-link">Games</a></li>
-                    <li><a href="websites.html" class="nav-link active">Websites</a></li>
-                    <li><a href="apps.html" class="nav-link">Apps</a></li>
-                    <li><a href="testimonials.html" class="nav-link">Testimonials</a></li>
-                    <li><a href="index.html#contact" class="nav-link">Contact</a></li>
+                <ul class="nav-menu" id="navMenu" role="menubar">
+                    <li role="none"><a href="index.html" class="nav-link" role="menuitem" data-text="Home">Home</a></li>
+                    <li role="none"><a href="index.html#about" class="nav-link" role="menuitem" data-text="About">About</a></li>
+                    <li role="none"><a href="games.html" class="nav-link" role="menuitem" data-text="Games">Games</a></li>
+                    <li role="none"><a href="websites.html" class="nav-link active" role="menuitem" data-text="Websites">Websites</a></li>
+                    <li role="none"><a href="apps.html" class="nav-link" role="menuitem" data-text="Apps">Apps</a></li>
+                    <li role="none"><a href="testimonials.html" class="nav-link" role="menuitem" data-text="Testimonials">Testimonials</a></li>
+                    <li role="none"><a href="index.html#contact" class="nav-link" role="menuitem" data-text="Contact">Contact</a></li>
                 </ul>
 
                 <div class="nav-actions">
-                    <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
+                    <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme" aria-pressed="false">
                         <div class="theme-icon">
-                            <i class="fas fa-moon"></i>
+                            <i class="fas fa-moon" aria-hidden="true"></i>
                         </div>
+                        <span class="theme-text">Dark</span>
                     </button>
-                    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+                    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="navMenu">
                         <span></span>
                         <span></span>
                         <span></span>
@@ -66,31 +215,92 @@
     </nav>
 
     <!-- Websites Header -->
-    <section class="page-header">
+    <section class="page-header websites-hero" aria-label="Websites portfolio header">
         <div class="container">
             <div class="header-content">
                 <h1>Websites Portfolio</h1>
                 <p>Revolutionary web solutions with modern frameworks, responsive design, and exceptional user experiences</p>
+                
+                <!-- Enhanced Stats -->
                 <div class="header-stats">
-                    <div class="stat">
+                    <div class="stat" data-cursor-effect="pulse">
                         <span class="stat-number">25+</span>
                         <span class="stat-label">Websites Developed</span>
                     </div>
-                    <div class="stat">
+                    <div class="stat" data-cursor-effect="pulse">
                         <span class="stat-number">4.8</span>
                         <span class="stat-label">Average Rating</span>
                     </div>
-                    <div class="stat">
+                    <div class="stat" data-cursor-effect="pulse">
                         <span class="stat-number">100K+</span>
-                        <span class="stat-label">Users</span>
+                        <span class="stat-label">Active Users</span>
                     </div>
+                    <div class="stat" data-cursor-effect="pulse">
+                        <span class="stat-number">15+</span>
+                        <span class="stat-label">Awards</span>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="header-actions">
+                    <a href="#featured-websites" class="btn btn-primary btn-glow" data-cursor-effect="glow">
+                        <i class="fas fa-eye"></i>
+                        <span>View Projects</span>
+                    </a>
+                    <a href="#website-stats" class="btn btn-secondary" data-cursor-effect="scale">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>View Stats</span>
+                    </a>
+                    <button class="btn btn-glass" id="viewWebsiteDemos" data-cursor-effect="magnetic">
+                        <i class="fas fa-play"></i>
+                        <span>Watch Demos</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Animated Background Elements -->
+        <div class="hero-particles" id="websitesParticles"></div>
+    </section>
+
+    <!-- Websites Stats Overview -->
+    <section id="website-stats" class="section" aria-label="Website statistics overview">
+        <div class="container">
+            <div class="website-stats-overview">
+                <div class="website-stat-card" data-cursor-effect="pulse">
+                    <div class="stat-icon">
+                        <i class="fas fa-laptop-code"></i>
+                    </div>
+                    <div class="stat-number" data-target="25">0</div>
+                    <div class="stat-label">Total Websites</div>
+                </div>
+                <div class="website-stat-card" data-cursor-effect="pulse">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-number" data-target="100000">0</div>
+                    <div class="stat-label">Active Users</div>
+                </div>
+                <div class="website-stat-card" data-cursor-effect="pulse">
+                    <div class="stat-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="stat-number">4.8<span>/5</span></div>
+                    <div class="stat-label">Average Rating</div>
+                </div>
+                <div class="website-stat-card" data-cursor-effect="pulse">
+                    <div class="stat-icon">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <div class="stat-number" data-target="15">0</div>
+                    <div class="stat-label">Awards Won</div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Websites Filter -->
-    <section class="section filter-section">
+    <section class="section filter-section" aria-label="Websites filter options">
         <div class="container">
             <div class="filter-container">
                 <div class="filter-group">
@@ -98,9 +308,13 @@
                     <select id="categoryFilter" class="filter-select">
                         <option value="all">All Categories</option>
                         <option value="E-commerce">E-commerce</option>
-                        <option value="Health & Wellness">Health & Wellness</option>
                         <option value="SaaS Platform">SaaS Platform</option>
-                        <option value="Food Delivery">Food Delivery</option>
+                        <option value="Portfolio">Portfolio</option>
+                        <option value="Blog">Blog & CMS</option>
+                        <option value="Social Media">Social Media</option>
+                        <option value="Health & Wellness">Health & Wellness</option>
+                        <option value="Education">Education</option>
+                        <option value="Entertainment">Entertainment</option>
                     </select>
                 </div>
                 <div class="filter-group">
@@ -109,6 +323,8 @@
                         <option value="all">All Status</option>
                         <option value="Live">Live</option>
                         <option value="In Development">In Development</option>
+                        <option value="Beta">Beta Testing</option>
+                        <option value="Coming Soon">Coming Soon</option>
                     </select>
                 </div>
                 <div class="filter-group">
@@ -117,58 +333,439 @@
                         <option value="newest">Newest First</option>
                         <option value="oldest">Oldest First</option>
                         <option value="rating">Highest Rating</option>
+                        <option value="popular">Most Popular</option>
                         <option value="users">Most Users</option>
+                        <option value="a-z">A to Z</option>
+                        <option value="z-a">Z to A</option>
                     </select>
                 </div>
+                <div class="filter-group">
+                    <label for="techFilter">Technology</label>
+                    <select id="techFilter" class="filter-select">
+                        <option value="all">All Technologies</option>
+                        <option value="React">React</option>
+                        <option value="Vue">Vue.js</option>
+                        <option value="Angular">Angular</option>
+                        <option value="Node.js">Node.js</option>
+                        <option value="PHP">PHP</option>
+                        <option value="WordPress">WordPress</option>
+                        <option value="Shopify">Shopify</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Platform Quick Filters -->
+            <div class="website-platforms-filter">
+                <button class="platform-filter-btn active" data-platform="all">
+                    <i class="fas fa-th"></i>
+                    All Platforms
+                </button>
+                <button class="platform-filter-btn" data-platform="responsive">
+                    <i class="fas fa-mobile-alt"></i>
+                    Responsive
+                </button>
+                <button class="platform-filter-btn" data-platform="pwa">
+                    <i class="fas fa-rocket"></i>
+                    PWA
+                </button>
+                <button class="platform-filter-btn" data-platform="ecommerce">
+                    <i class="fas fa-shopping-cart"></i>
+                    E-commerce
+                </button>
+                <button class="platform-filter-btn" data-platform="saas">
+                    <i class="fas fa-cloud"></i>
+                    SaaS
+                </button>
+            </div>
+
+            <!-- Search Box -->
+            <div class="search-container">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="websiteSearch" placeholder="Search websites by name, technology, or feature..." aria-label="Search websites">
+                    <button class="search-clear" id="searchClear" aria-label="Clear search">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Active Filters Display -->
+            <div class="active-filters" id="activeFilters">
+                <!-- Active filters will be displayed here -->
             </div>
         </div>
     </section>
 
     <!-- Websites Grid -->
-    <section class="section websites-section">
+    <section id="featured-websites" class="section websites-section" aria-label="Websites portfolio grid">
         <div class="container">
-            <div class="portfolio-grid" id="websitesGrid">
+            <!-- Websites Counter -->
+            <div class="section-header">
+                <div class="results-info">
+                    <span id="websitesCount">25</span> websites found
+                    <button class="btn btn-sm btn-secondary" id="resetFilters">
+                        <i class="fas fa-redo"></i>
+                        Reset Filters
+                    </button>
+                </div>
+            </div>
+
+            <!-- View Toggle -->
+            <div class="view-options">
+                <button class="view-option active" data-view="grid" aria-label="Grid view">
+                    <i class="fas fa-th"></i>
+                </button>
+                <button class="view-option" data-view="list" aria-label="List view">
+                    <i class="fas fa-list"></i>
+                </button>
+                <button class="view-option" data-view="cards" aria-label="Card view">
+                    <i class="fas fa-grip-vertical"></i>
+                </button>
+            </div>
+
+            <div class="portfolio-grid" id="websitesGrid" data-view="grid">
                 <!-- Websites will be loaded dynamically -->
+                
+                <!-- Sample Website Card Structure -->
+                <div class="portfolio-card website-card" data-category="E-commerce" data-status="Live" data-platform="responsive" data-rating="4.9" data-users="50000">
+                    <div class="card-image">
+                        <img src="images/websites/techhaven.jpg" alt="TechHaven - Premium electronics e-commerce platform" class="portfolio-image" loading="lazy">
+                        <div class="website-preview-overlay">
+                            <div class="card-actions">
+                                <button class="btn-visit" onclick="window.location.href='website-detail.html?id=1'" aria-label="Visit TechHaven website">
+                                    <i class="fas fa-external-link-alt"></i>
+                                </button>
+                                <button class="btn-preview" data-website-preview="techhaven" aria-label="Preview TechHaven website">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="btn-bookmark" data-website-id="1" aria-label="Bookmark TechHaven">
+                                    <i class="far fa-bookmark"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-badge live">
+                            <i class="fas fa-circle"></i>
+                            Live
+                        </div>
+                        <div class="website-performance">
+                            <span>Performance</span>
+                            <div class="performance-bar">
+                                <div class="performance-fill" style="width: 95%"></div>
+                            </div>
+                            <span>95%</span>
+                        </div>
+                    </div>
+                    <div class="portfolio-info">
+                        <div class="website-header">
+                            <h3 class="portfolio-title">TechHaven</h3>
+                            <div class="website-rating">
+                                <i class="fas fa-star"></i>
+                                <span>4.9</span>
+                            </div>
+                        </div>
+                        <p class="portfolio-category">E-commerce Platform</p>
+                        <p class="portfolio-description">Premium electronics e-commerce platform with advanced filtering, secure payments, and personalized recommendations.</p>
+                        
+                        <div class="website-card-features">
+                            <span class="website-feature">Secure Payments</span>
+                            <span class="website-feature">Advanced Search</span>
+                            <span class="website-feature">User Accounts</span>
+                            <span class="website-feature">Inventory Management</span>
+                        </div>
+                        
+                        <div class="portfolio-tags">
+                            <span class="tag">React</span>
+                            <span class="tag">Node.js</span>
+                            <span class="tag">MongoDB</span>
+                            <span class="tag">Stripe</span>
+                            <span class="tag-more">+3</span>
+                        </div>
+                        
+                        <div class="portfolio-meta">
+                            <div class="meta-item">
+                                <i class="fas fa-star"></i>
+                                <span>4.9</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-users"></i>
+                                <span>50K</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-shopping-cart"></i>
+                                <span>15K</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-bolt"></i>
+                                <span>95%</span>
+                            </div>
+                        </div>
+                        
+                        <div class="portfolio-platforms">
+                            <span class="platform-tag responsive">Responsive</span>
+                            <span class="platform-tag pwa">PWA</span>
+                        </div>
+                        
+                        <div class="website-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 100%"></div>
+                            </div>
+                            <span class="progress-text">Fully Launched</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- More website cards will be generated dynamically -->
+            </div>
+
+            <!-- Loading State -->
+            <div class="loading-state" id="websitesLoading">
+                <div class="loading-spinner"></div>
+                <p>Loading amazing websites...</p>
+            </div>
+
+            <!-- No Results State -->
+            <div class="empty-state" id="noWebsites" style="display: none;">
+                <i class="fas fa-laptop-code"></i>
+                <h3>No Websites Found</h3>
+                <p>Try adjusting your filters or search terms to see more results</p>
+                <button class="btn btn-primary" id="resetSearch">
+                    <i class="fas fa-redo"></i>
+                    Reset Search
+                </button>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination" id="websitesPagination">
+                <!-- Pagination will be generated dynamically -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Web Development Process -->
+    <section class="section process-section" aria-label="Web development process">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">Process</span>
+                <h2 class="section-title">Web Development Journey</h2>
+                <p class="section-subtitle">From concept to deployment - see how exceptional websites come to life</p>
+            </div>
+
+            <div class="process-timeline">
+                <div class="process-step" data-cursor-effect="magnetic">
+                    <div class="step-icon">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <div class="step-content">
+                        <h3>Discovery & Planning</h3>
+                        <p>Understanding requirements, creating project specifications, and planning the architecture</p>
+                        <ul class="step-features">
+                            <li>Requirement Analysis</li>
+                            <li>Project Planning</li>
+                            <li>Technical Specifications</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="process-step" data-cursor-effect="magnetic">
+                    <div class="step-icon">
+                        <i class="fas fa-pencil-alt"></i>
+                    </div>
+                    <div class="step-content">
+                        <h3>UI/UX Design</h3>
+                        <p>Creating intuitive user interfaces and exceptional user experiences with modern design principles</p>
+                        <ul class="step-features">
+                            <li>Wireframing</li>
+                            <li>Prototyping</li>
+                            <li>User Testing</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="process-step" data-cursor-effect="magnetic">
+                    <div class="step-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <div class="step-content">
+                        <h3>Development</h3>
+                        <p>Building robust, scalable web applications with clean code and modern technologies</p>
+                        <ul class="step-features">
+                            <li>Frontend Development</li>
+                            <li>Backend Development</li>
+                            <li>API Integration</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="process-step" data-cursor-effect="magnetic">
+                    <div class="step-icon">
+                        <i class="fas fa-vial"></i>
+                    </div>
+                    <div class="step-content">
+                        <h3>Testing & QA</h3>
+                        <p>Comprehensive testing to ensure functionality, performance, and security standards</p>
+                        <ul class="step-features">
+                            <li>Unit Testing</li>
+                            <li>Integration Testing</li>
+                            <li>Performance Testing</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="process-step" data-cursor-effect="magnetic">
+                    <div class="step-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <div class="step-content">
+                        <h3>Deployment & Maintenance</h3>
+                        <p>Deploying to production environments and providing ongoing support and updates</p>
+                        <ul class="step-features">
+                            <li>CI/CD Pipeline</li>
+                            <li>Production Deployment</li>
+                            <li>Ongoing Support</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technologies Showcase -->
+    <section class="section technologies-section" aria-label="Web development technologies">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">Technologies</span>
+                <h2 class="section-title">Powering Modern Web Experiences</h2>
+                <p class="section-subtitle">Cutting-edge technologies and frameworks used in web development</p>
+            </div>
+
+            <div class="technologies-grid">
+                <div class="technology-card" data-cursor-effect="magnetic">
+                    <div class="tech-icon">
+                        <i class="fab fa-react"></i>
+                    </div>
+                    <div class="tech-content">
+                        <h3>React.js</h3>
+                        <p>Modern component-based library for building interactive user interfaces</p>
+                        <div class="tech-features">
+                            <span class="tech-feature">Component-Based</span>
+                            <span class="tech-feature">Virtual DOM</span>
+                            <span class="tech-feature">Hooks</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="technology-card" data-cursor-effect="magnetic">
+                    <div class="tech-icon">
+                        <i class="fab fa-node-js"></i>
+                    </div>
+                    <div class="tech-content">
+                        <h3>Node.js</h3>
+                        <p>Server-side JavaScript runtime for building scalable network applications</p>
+                        <div class="tech-features">
+                            <span class="tech-feature">Express.js</span>
+                            <span class="tech-feature">REST APIs</span>
+                            <span class="tech-feature">Real-time Apps</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="technology-card" data-cursor-effect="magnetic">
+                    <div class="tech-icon">
+                        <i class="fas fa-database"></i>
+                    </div>
+                    <div class="tech-content">
+                        <h3>MongoDB & SQL</h3>
+                        <p>Modern database solutions for structured and unstructured data storage</p>
+                        <div class="tech-features">
+                            <span class="tech-feature">NoSQL & SQL</span>
+                            <span class="tech-feature">Scalability</span>
+                            <span class="tech-feature">Performance</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="technology-card" data-cursor-effect="magnetic">
+                    <div class="tech-icon">
+                        <i class="fas fa-cloud"></i>
+                    </div>
+                    <div class="tech-content">
+                        <h3>Cloud Services</h3>
+                        <p>Scalable cloud infrastructure and deployment solutions</p>
+                        <div class="tech-features">
+                            <span class="tech-feature">AWS</span>
+                            <span class="tech-feature">Vercel</span>
+                            <span class="tech-feature">Netlify</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- CTA Section -->
-    <section class="section cta-section">
+    <section class="section cta-section" aria-label="Call to action">
         <div class="container">
             <div class="cta-content">
-                <h2>Ready to Build Your Website?</h2>
-                <p>Let's create an exceptional web experience that exceeds your expectations</p>
-                <a href="#contact" class="btn btn-primary btn-glow">
-                    <i class="fas fa-code"></i>
-                    <span>Start Web Project</span>
-                </a>
+                <div class="cta-text">
+                    <h2>Ready to Build Your Website?</h2>
+                    <p>Let's create an exceptional web experience that exceeds your expectations and drives results for your business</p>
+                    
+                    <div class="cta-features">
+                        <div class="feature">
+                            <i class="fas fa-check"></i>
+                            <span>Premium Quality Websites</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-check"></i>
+                            <span>Responsive Design</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-check"></i>
+                            <span>SEO Optimized</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="cta-actions">
+                    <a href="#contact" class="btn btn-primary btn-glow" data-cursor-effect="glow">
+                        <i class="fas fa-code"></i>
+                        <span>Start Web Project</span>
+                    </a>
+                    <button class="btn btn-secondary" id="viewAllWebsites" data-cursor-effect="scale">
+                        <i class="fas fa-eye"></i>
+                        <span>View All Websites</span>
+                    </button>
+                    <a href="website-detail.html?id=1" class="btn btn-glass" data-cursor-effect="magnetic">
+                        <i class="fas fa-play"></i>
+                        <span>View Demo</span>
+                    </a>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer class="footer">
+    <footer class="footer" aria-label="Footer">
         <div class="container">
             <div class="footer-content">
                 <div class="footer-brand">
-                    <a href="index.html" class="logo">
+                    <a href="index.html" class="logo" aria-label="ArshCreates Home">
                         <div class="logo-icon">
-                            <i class="fas fa-code"></i>
+                            <i class="fas fa-code" aria-hidden="true"></i>
                         </div>
                         <span class="logo-text">ArshCreates</span>
                     </a>
                     <p class="footer-description">
-                        Creating exceptional digital experiences through innovative development and creative solutions.
+                        Creating exceptional web experiences through innovative development and creative solutions.
                     </p>
                     <div class="footer-social">
-                        <a href="https://github.com/ArshVermaGit" class="social-link" target="_blank">
+                        <a href="https://github.com/ArshVermaGit" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-cursor-effect="scale">
                             <i class="fab fa-github"></i>
                         </a>
-                        <a href="https://www.linkedin.com/in/arshvermadev/" class="social-link" target="_blank">
+                        <a href="https://www.linkedin.com/in/arshvermadev/" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" data-cursor-effect="scale">
                             <i class="fab fa-linkedin"></i>
                         </a>
-                        <a href="#" class="social-link">
+                        <a href="#" class="social-link" aria-label="Twitter" data-cursor-effect="scale">
                             <i class="fab fa-twitter"></i>
                         </a>
                     </div>
@@ -176,54 +773,156 @@
 
                 <div class="footer-links">
                     <div class="link-group">
-                        <h4>Navigation</h4>
-                        <a href="index.html">Home</a>
-                        <a href="index.html#about">About</a>
-                        <a href="games.html">Games</a>
-                        <a href="websites.html">Websites</a>
-                        <a href="apps.html">Apps</a>
+                        <h4>Web Portfolio</h4>
+                        <a href="#ecommerce-websites">E-commerce</a>
+                        <a href="#saas-websites">SaaS Platforms</a>
+                        <a href="#portfolio-websites">Portfolio Sites</a>
+                        <a href="#blog-websites">Blog & CMS</a>
+                        <a href="#upcoming-websites">Upcoming Projects</a>
+                    </div>
+
+                    <div class="link-group">
+                        <h4>Resources</h4>
+                        <a href="web-templates.html">Web Templates</a>
+                        <a href="tutorials.html">Web Dev Tutorials</a>
+                        <a href="documentation.html">API Documentation</a>
+                        <a href="support.html">Web Support</a>
+                        <a href="blog.html">Dev Blog</a>
                     </div>
 
                     <div class="link-group">
                         <h4>Connect</h4>
                         <a href="index.html#contact">Contact</a>
                         <a href="testimonials.html">Testimonials</a>
-                        <a href="admin.html">Admin</a>
-                        <a href="#">Blog</a>
+                        <a href="press-kit.html">Press Kit</a>
+                        <a href="careers.html">Careers</a>
+                        <a href="partnerships.html">Partnerships</a>
                     </div>
 
                     <div class="link-group">
                         <h4>Legal</h4>
-                        <a href="#">Privacy Policy</a>
-                        <a href="#">Terms of Service</a>
-                        <a href="#">Cookie Policy</a>
+                        <a href="privacy.html">Privacy Policy</a>
+                        <a href="terms.html">Terms of Service</a>
+                        <a href="cookies.html">Cookie Policy</a>
+                        <a href="gdpr.html">GDPR Compliance</a>
                     </div>
+                </div>
+
+                <div class="footer-newsletter">
+                    <h4>Web Updates</h4>
+                    <p>Get notified about new website launches and updates</p>
+                    <form class="footer-newsletter-form" id="websitesNewsletter">
+                        <input type="email" placeholder="Your email address" aria-label="Email for web updates" required>
+                        <button type="submit" aria-label="Subscribe to web updates">
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </form>
                 </div>
             </div>
 
             <div class="footer-bottom">
                 <div class="copyright">
-                    &copy; 2024 Arsh Verma. All rights reserved.
+                    &copy; 2024 Arsh Verma. All rights reserved. | 
+                    <span class="websites-counter">
+                        <i class="fas fa-laptop-code"></i>
+                        <span id="totalWebsites">25</span> Websites and Counting
+                    </span>
                 </div>
                 <div class="footer-actions">
-                    <a href="admin.html" class="admin-link">
+                    <a href="admin.html" class="admin-link" data-cursor-effect="magnetic">
                         <i class="fas fa-cog"></i>
                         <span>Admin Panel</span>
                     </a>
+                    <button class="back-to-top" id="backToTop" aria-label="Back to top" data-cursor-effect="scale">
+                        <i class="fas fa-chevron-up"></i>
+                    </button>
                 </div>
             </div>
         </div>
     </footer>
 
+    <!-- Website Preview Modal -->
+    <div id="websitePreviewModal" class="modal" aria-hidden="true" role="dialog" aria-labelledby="websitePreviewTitle">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h2 id="websitePreviewTitle">Website Preview</h2>
+                <button class="modal-close" id="websitePreviewClose" aria-label="Close preview">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="website-preview-content">
+                    <div class="preview-frame">
+                        <!-- Website preview iframe will be loaded here -->
+                    </div>
+                    <div class="preview-info">
+                        <h3 id="previewWebsiteName">Website Name</h3>
+                        <p id="previewWebsiteDescription">Website description will appear here</p>
+                        <div class="preview-actions">
+                            <button class="btn btn-primary" id="visitWebsitePreview">
+                                <i class="fas fa-external-link-alt"></i>
+                                Visit Website
+                            </button>
+                            <button class="btn btn-secondary" id="viewWebsiteDetails">
+                                <i class="fas fa-info-circle"></i>
+                                View Details
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Website Stats Widget -->
+    <div class="quick-stats-widget" id="quickStatsWidget">
+        <div class="widget-header">
+            <h4>Live Website Stats</h4>
+            <button class="widget-toggle" aria-label="Toggle stats widget">
+                <i class="fas fa-chart-line"></i>
+            </button>
+        </div>
+        <div class="widget-content">
+            <div class="stat-item">
+                <span class="stat-label">Active Users</span>
+                <span class="stat-value" id="activeUsers">5,247</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Visits Today</span>
+                <span class="stat-value" id="visitsToday">12,458</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Top Website</span>
+                <span class="stat-value">TechHaven</span>
+            </div>
+        </div>
+    </div>
+
     <!-- Back to Top -->
-    <button class="back-to-top" id="backToTop" aria-label="Back to top">
+    <button class="back-to-top floating" id="floatingBackToTop" aria-label="Back to top" data-cursor-effect="scale">
         <i class="fas fa-chevron-up"></i>
     </button>
 
     <!-- Notification Container -->
-    <div id="notificationContainer"></div>
+    <div id="notificationContainer" aria-live="polite" aria-atomic="true"></div>
 
-    <script src="js/data.js"></script>
-    <script src="js/websites.js"></script>
+    <!-- Scripts -->
+    <script src="js/data.js" defer></script>
+    <script src="js/websites.js" defer></script>
+
+    <!-- Websites Specific Script -->
+    <script>
+        // Websites page specific functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize websites page
+            console.log('Websites portfolio page loaded');
+            
+            // Add view transition for website cards
+            const websiteCards = document.querySelectorAll('.website-card');
+            websiteCards.forEach(card => {
+                card.style.viewTransitionName = 'website-card-' + Math.random().toString(36).substr(2, 9);
+            });
+        });
+    </script>
 </body>
 </html>
