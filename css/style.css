@@ -5600,3 +5600,129 @@ h4 {
         box-shadow: none;
     }
 }
+
+/* ==========================================
+   LAYOUT REFINEMENTS - ORANGE PALETTE & PREMIUM LAYOUT
+   ========================================== */
+
+/* 1. BUTTONS - Enhance Gradient Look & Interaction */
+/* Applies to primary actions across all pages (.index.html, .admin.html, detail pages) */
+.btn-primary {
+    background: var(--gradient-primary); /* Use new orange gradient */
+    color: var(--primary); /* Text color is dark for contrast */
+    border: none;
+    font-weight: var(--font-weight-semibold);
+    box-shadow: 0 4px 15px rgba(255, 140, 0, 0.3);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 6px 20px rgba(255, 140, 0, 0.4);
+}
+
+.btn-outline {
+    border: 2px solid var(--accent);
+    color: var(--accent);
+    background: transparent;
+}
+
+.btn-outline:hover {
+    background: var(--accent);
+    color: var(--primary);
+    transform: translateY(-2px);
+}
+
+/* 2. NAVIGATION - Glassy & High-Contrast */
+.navbar.scrolled {
+    background: var(--glass-bg);
+    border-bottom: 1px solid var(--glass-border);
+    backdrop-filter: var(--glass-blur);
+    box-shadow: var(--shadow-xl);
+}
+
+.nav-link {
+    position: relative;
+    padding: var(--space-xs) var(--space-sm);
+}
+
+.nav-link:hover {
+    color: var(--accent);
+    transform: none; /* Override old scaling */
+}
+
+.nav-link::after {
+    content: attr(data-text); /* Ensure the 3D hover text is styled well */
+    color: var(--accent);
+}
+
+/* 3. HERO SECTION - Profile Image Glow (index.html) */
+.profile-image {
+    transition: all var(--transition-normal);
+    border: 4px solid var(--accent-secondary);
+}
+
+.image-glow {
+    box-shadow: var(--shadow-glow);
+    /* New pulse animation for a vibrant effect */
+    animation: pulseGlow 4s infinite cubic-bezier(0.4, 0, 0.6, 1);
+}
+
+@keyframes pulseGlow {
+    0%, 100% { box-shadow: 0 0 15px rgba(255, 140, 0, 0.4), 0 0 30px rgba(255, 140, 0, 0.2); }
+    50% { box-shadow: 0 0 25px rgba(255, 140, 0, 0.6), 0 0 45px rgba(255, 140, 0, 0.3); }
+}
+
+/* 4. CARDS & SECTIONS - Enhanced Glassmorphism/Elevation */
+/* Applies to .app-card, .game-card, .project-card, .skill-item, .admin-stat, .action-card, etc. */
+.project-card, .app-card, .game-card, .skill-item, .admin-stat, .action-card, .project-stat-card, .analytics-card, .testimonial-item {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-xl); /* Slightly larger radius for a modern feel */
+    box-shadow: var(--shadow-lg);
+    backdrop-filter: var(--glass-blur);
+    transition: all var(--transition-smooth);
+}
+
+/* General hover effect for all main content cards */
+.project-card:hover, .app-card:hover, .game-card:hover, .skill-item:hover, .admin-stat:hover, .action-card:hover, .project-stat-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-5px); /* Lift effect for premium feel */
+    box-shadow: var(--shadow-xl), var(--shadow-glow);
+}
+
+/* 5. FORM ELEMENTS (index.html contact form, admin.html modal forms) */
+.form-group input:focus,
+.form-group textarea:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(255, 140, 0, 0.2);
+}
+
+/* 6. ADMIN PANEL SPECIFIC STYLES (admin.html) */
+.stat-icon {
+    /* Updates the icon background to the new primary gradient */
+    color: var(--primary);
+    background: var(--gradient-primary);
+    box-shadow: var(--shadow-md);
+}
+
+.admin-header {
+    /* Uses the new hero gradient for a cohesive look */
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 50%, var(--accent) 100%);
+}
+
+.table-header {
+    /* Highlights the table header with the accent color */
+    border-bottom: 2px solid var(--accent);
+}
+
+/* 7. WIDGETS (index.html) */
+.floating-widget-toggle {
+    /* Makes the floating button highly visible and themed */
+    background: var(--gradient-primary);
+    color: var(--primary);
+}
+
+.floating-widget-toggle:hover {
+    transform: scale(1.1) rotate(5deg);
+    box-shadow: var(--shadow-glow);
+}
