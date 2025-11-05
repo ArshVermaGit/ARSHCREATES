@@ -4,23 +4,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Arsh Verma | Creative Developer</title>
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
     <!-- Loading Screen -->
-    <div id="loadingScreen">
-        <div class="loading-logo">
-            <div class="loading-logo-inner">
+    <div id="loadingScreen" class="loading-screen">
+        <div class="loading-content">
+            <div class="loading-logo">
+                <div class="logo-glow"></div>
                 <i class="fas fa-code"></i>
             </div>
+            <div class="loading-bar-container">
+                <div class="loading-bar" id="loadingBar"></div>
+            </div>
+            <div class="loading-text" id="loadingText">Initializing Premium Experience...</div>
         </div>
-        <div class="loading-bar-container">
-            <div class="loading-bar" id="loadingBar"></div>
-        </div>
-        <div class="loading-text" id="loadingText">Loading Premium Experience...</div>
     </div>
+
+    <!-- Custom Cursor -->
+    <div class="cursor-dot" id="cursorDot"></div>
+    <div class="cursor-ring" id="cursorRing"></div>
+
+    <!-- Particle Background -->
+    <div class="particles-container" id="particlesContainer"></div>
 
     <!-- Navigation -->
     <nav class="navbar" id="navbar">
@@ -30,7 +39,7 @@
                     <div class="logo-icon">
                         <i class="fas fa-code"></i>
                     </div>
-                    <span>ArshCreates</span>
+                    <span class="logo-text">ArshCreates</span>
                 </a>
 
                 <ul class="nav-menu" id="navMenu">
@@ -44,8 +53,10 @@
                 </ul>
 
                 <div class="nav-actions">
-                    <button id="themeToggle" class="btn-icon" aria-label="Toggle theme">
-                        <i class="fas fa-moon"></i>
+                    <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
+                        <div class="theme-icon">
+                            <i class="fas fa-moon"></i>
+                        </div>
                     </button>
                     <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
                         <span></span>
@@ -60,102 +71,134 @@
     <!-- Hero Section -->
     <section id="home" class="hero">
         <div class="hero-background">
-            <div class="hero-gradient"></div>
+            <div class="hero-gradient-1"></div>
+            <div class="hero-gradient-2"></div>
+            <div class="hero-gradient-3"></div>
         </div>
         
         <div class="container">
             <div class="hero-content">
                 <div class="status-badge">
-                    <span class="status-dot"></span>
-                    <span>Available for Premium Projects</span>
+                    <div class="status-pulse"></div>
+                    <span class="status-text">Available for Premium Projects</span>
                 </div>
                 
                 <h1 class="hero-title">
-                    Hi, I'm <span class="gradient-text">Arsh Verma</span>
+                    <span class="title-line">Hi, I'm</span>
+                    <span class="title-gradient">Arsh Verma</span>
                 </h1>
                 
-                <p class="hero-subtitle">
-                    <span id="typewriter"></span>
-                    <span class="cursor">|</span>
-                </p>
+                <div class="typewriter-container">
+                    <span id="typewriter" class="typewriter-text"></span>
+                    <span class="typewriter-cursor">|</span>
+                </div>
                 
                 <p class="hero-description">
-                    Premium creative developer specializing in cutting-edge game development, 
+                    Creative developer specializing in cutting-edge game development, 
                     revolutionary web applications, and innovative digital experiences. 
-                    Let's build something extraordinary together.
+                    Transforming ideas into exceptional digital solutions.
                 </p>
 
                 <div class="hero-actions">
                     <a href="#portfolio" class="btn btn-primary btn-glow">
-                        <i class="fas fa-gamepad"></i>
+                        <i class="fas fa-sparkles"></i>
                         <span>Explore Portfolio</span>
                     </a>
-                    <a href="#contact" class="btn btn-outline">
-                        <i class="fas fa-envelope"></i>
-                        <span>Start a Project</span>
+                    <a href="#contact" class="btn btn-secondary">
+                        <i class="fas fa-paper-plane"></i>
+                        <span>Start Project</span>
                     </a>
                 </div>
 
-                <div class="hero-social">
-                    <a href="#" class="social-link" aria-label="GitHub">
-                        <i class="fab fa-github"></i>
-                    </a>
-                    <a href="#" class="social-link" aria-label="LinkedIn">
-                        <i class="fab fa-linkedin-in"></i>
-                    </a>
-                    <a href="#" class="social-link" aria-label="Twitter">
-                        <i class="fab fa-twitter"></i>
-                    </a>
-                    <a href="#" class="social-link" aria-label="Dribbble">
-                        <i class="fab fa-dribbble"></i>
-                    </a>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <div class="stat-number" data-target="50">0</div>
+                        <div class="stat-label">Projects Completed</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" data-target="7">0</div>
+                        <div class="stat-label">Years Experience</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" data-target="100">0</div>
+                        <div class="stat-label">Happy Clients</div>
+                    </div>
                 </div>
             </div>
         </div>
+        
         <div class="scroll-indicator">
-            <i class="fas fa-chevron-down"></i>
+            <div class="scroll-arrow"></div>
         </div>
     </section>
 
     <!-- About Section -->
-    <section id="about" class="section">
+    <section id="about" class="section about-section">
         <div class="container">
             <div class="section-header">
-                <h2 class="section-title">About Me</h2>
-                <p class="section-subtitle">Crafting exceptional digital experiences with passion and precision</p>
+                <span class="section-badge">About Me</span>
+                <h2 class="section-title">Crafting Digital Excellence</h2>
+                <p class="section-subtitle">Passionate developer creating exceptional digital experiences with precision and innovation</p>
             </div>
 
             <div class="about-content">
-                <div class="about-text">
-                    <p>
-                        I'm a premium creative developer with expertise in game development, 
-                        revolutionary web applications, and cutting-edge mobile solutions. 
-                        I transform visionary ideas into reality through clean code, 
-                        thoughtful design, and innovative technology.
-                    </p>
-                    <p>
-                        With a strong foundation in Computer Science and years of hands-on experience, 
-                        I specialize in Unity game development, modern web technologies, and creating 
-                        applications that make a tangible difference in people's lives.
-                    </p>
+                <div class="about-image">
+                    <div class="image-container">
+                        <img src="assets/avatar.jpg" alt="Arsh Verma" class="profile-image">
+                        <div class="image-glow"></div>
+                        <div class="image-frame"></div>
+                    </div>
+                    <div class="experience-badge">
+                        <div class="exp-years">7+</div>
+                        <div class="exp-text">Years Experience</div>
+                    </div>
                 </div>
 
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-number" data-target="75">0</div>
-                        <div class="stat-label">Premium Projects</div>
+                <div class="about-text">
+                    <div class="text-content">
+                        <h3>Innovative Developer & Creative Problem Solver</h3>
+                        <p>
+                            I'm Arsh Verma, a passionate creative developer with expertise in game development, 
+                            web applications, and mobile solutions. With over 7 years of experience, I specialize 
+                            in transforming visionary ideas into reality through clean code, thoughtful design, 
+                            and innovative technology.
+                        </p>
+                        <p>
+                            My journey in development has taken me through various domains including Unity game 
+                            development, modern web technologies, and creating applications that make a tangible 
+                            difference in people's lives. I believe in crafting solutions that not only meet 
+                            requirements but exceed expectations.
+                        </p>
+                        
+                        <div class="about-features">
+                            <div class="feature-item">
+                                <i class="fas fa-rocket"></i>
+                                <span>Cutting-edge Solutions</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-code"></i>
+                                <span>Clean & Efficient Code</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-lightbulb"></i>
+                                <span>Innovative Approach</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-clock"></i>
+                                <span>Timely Delivery</span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="stat-card">
-                        <div class="stat-number" data-target="150">0</div>
-                        <div class="stat-label">Satisfied Clients</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number" data-target="7">0</div>
-                        <div class="stat-label">Years Experience</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number" data-target="25">0</div>
-                        <div class="stat-label">Awards Won</div>
+
+                    <div class="about-actions">
+                        <a href="#contact" class="btn btn-primary">
+                            <i class="fas fa-envelope"></i>
+                            <span>Get In Touch</span>
+                        </a>
+                        <a href="#" class="btn btn-secondary">
+                            <i class="fas fa-download"></i>
+                            <span>Download CV</span>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -163,148 +206,200 @@
     </section>
 
     <!-- Portfolio Overview Section -->
-    <section id="portfolio" class="section section-dark">
+    <section id="portfolio" class="section portfolio-overview">
         <div class="container">
             <div class="section-header">
+                <span class="section-badge">Portfolio</span>
                 <h2 class="section-title">Featured Work</h2>
-                <p class="section-subtitle">Explore my latest projects across different domains</p>
+                <p class="section-subtitle">Explore my latest projects across different domains and technologies</p>
             </div>
 
             <div class="portfolio-categories">
-                <div class="category-card">
+                <div class="category-card" data-category="games">
                     <div class="category-icon">
                         <i class="fas fa-gamepad"></i>
+                        <div class="icon-glow"></div>
                     </div>
-                    <h3>Games</h3>
-                    <p>Immersive gaming experiences built with cutting-edge technology</p>
-                    <a href="games.html" class="btn btn-outline">View All Games</a>
+                    <h3>Game Development</h3>
+                    <p>Immersive gaming experiences built with Unity and Unreal Engine, featuring stunning visuals and engaging gameplay</p>
+                    <div class="category-stats">
+                        <span class="stat">15+ Games</span>
+                        <span class="stat">WebGL Ready</span>
+                    </div>
+                    <a href="games.html" class="btn btn-outline">
+                        <span>Explore Games</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
                 </div>
                 
-                <div class="category-card">
+                <div class="category-card" data-category="websites">
                     <div class="category-icon">
                         <i class="fas fa-laptop-code"></i>
+                        <div class="icon-glow"></div>
                     </div>
-                    <h3>Websites</h3>
-                    <p>Revolutionary web solutions that drive exceptional results</p>
-                    <a href="websites.html" class="btn btn-outline">View All Websites</a>
+                    <h3>Web Development</h3>
+                    <p>Revolutionary web solutions with modern frameworks, responsive design, and exceptional user experiences</p>
+                    <div class="category-stats">
+                        <span class="stat">25+ Websites</span>
+                        <span class="stat">Full Stack</span>
+                    </div>
+                    <a href="websites.html" class="btn btn-outline">
+                        <span>View Websites</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
                 </div>
                 
-                <div class="category-card">
+                <div class="category-card" data-category="apps">
                     <div class="category-icon">
                         <i class="fas fa-mobile-alt"></i>
+                        <div class="icon-glow"></div>
                     </div>
-                    <h3>Apps</h3>
-                    <p>Innovative mobile and desktop applications for modern needs</p>
-                    <a href="apps.html" class="btn btn-outline">View All Apps</a>
+                    <h3>Mobile Apps</h3>
+                    <p>Innovative mobile applications for iOS and Android, solving real-world problems with elegant solutions</p>
+                    <div class="category-stats">
+                        <span class="stat">10+ Apps</span>
+                        <span class="stat">Cross-Platform</span>
+                    </div>
+                    <a href="apps.html" class="btn btn-outline">
+                        <span>Discover Apps</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Skills Section -->
-    <section id="skills" class="section">
+    <section id="skills" class="section skills-section">
         <div class="container">
             <div class="section-header">
-                <h2 class="section-title">Technical Expertise</h2>
-                <p class="section-subtitle">Mastering the tools and technologies that power innovation</p>
+                <span class="section-badge">Expertise</span>
+                <h2 class="section-title">Technical Skills</h2>
+                <p class="section-subtitle">Mastering the technologies that power innovation and drive digital transformation</p>
             </div>
 
-            <div class="skills-grid">
-                <div class="skill-category">
-                    <h3><i class="fas fa-gamepad"></i> Game Development</h3>
-                    <div class="skill-list">
-                        <div class="skill-item">
-                            <div class="skill-info">
-                                <span>Unity Engine</span>
-                                <span>95%</span>
+            <div class="skills-container">
+                <div class="skills-categories">
+                    <div class="category-tabs">
+                        <button class="tab-btn active" data-tab="development">Development</button>
+                        <button class="tab-btn" data-tab="design">Design</button>
+                        <button class="tab-btn" data-tab="tools">Tools</button>
+                    </div>
+
+                    <div class="tab-content active" id="development">
+                        <div class="skill-grid">
+                            <div class="skill-item">
+                                <div class="skill-header">
+                                    <span class="skill-name">Unity Engine</span>
+                                    <span class="skill-percent">95%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="95"></div>
+                                </div>
                             </div>
-                            <div class="skill-bar">
-                                <div class="skill-progress" data-progress="95"></div>
+                            <div class="skill-item">
+                                <div class="skill-header">
+                                    <span class="skill-name">C# Programming</span>
+                                    <span class="skill-percent">92%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="92"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-header">
+                                    <span class="skill-name">React.js</span>
+                                    <span class="skill-percent">90%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="90"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-header">
+                                    <span class="skill-name">Node.js</span>
+                                    <span class="skill-percent">88%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="88"></div>
+                                </div>
                             </div>
                         </div>
-                        <div class="skill-item">
-                            <div class="skill-info">
-                                <span>C# Programming</span>
-                                <span>90%</span>
+                    </div>
+
+                    <div class="tab-content" id="design">
+                        <div class="skill-grid">
+                            <div class="skill-item">
+                                <div class="skill-header">
+                                    <span class="skill-name">UI/UX Design</span>
+                                    <span class="skill-percent">85%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="85"></div>
+                                </div>
                             </div>
-                            <div class="skill-bar">
-                                <div class="skill-progress" data-progress="90"></div>
+                            <div class="skill-item">
+                                <div class="skill-header">
+                                    <span class="skill-name">Figma</span>
+                                    <span class="skill-percent">90%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="90"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-header">
+                                    <span class="skill-name">Adobe Creative Suite</span>
+                                    <span class="skill-percent">80%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="80"></div>
+                                </div>
                             </div>
                         </div>
-                        <div class="skill-item">
-                            <div class="skill-info">
-                                <span>3D Modeling</span>
-                                <span>80%</span>
+                    </div>
+
+                    <div class="tab-content" id="tools">
+                        <div class="tools-grid">
+                            <div class="tool-item">
+                                <i class="fab fa-git-alt"></i>
+                                <span>Git</span>
                             </div>
-                            <div class="skill-bar">
-                                <div class="skill-progress" data-progress="80"></div>
+                            <div class="tool-item">
+                                <i class="fab fa-docker"></i>
+                                <span>Docker</span>
+                            </div>
+                            <div class="tool-item">
+                                <i class="fab fa-aws"></i>
+                                <span>AWS</span>
+                            </div>
+                            <div class="tool-item">
+                                <i class="fas fa-database"></i>
+                                <span>MongoDB</span>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="skill-category">
-                    <h3><i class="fas fa-code"></i> Web Development</h3>
-                    <div class="skill-list">
-                        <div class="skill-item">
-                            <div class="skill-info">
-                                <span>React.js</span>
-                                <span>92%</span>
-                            </div>
-                            <div class="skill-bar">
-                                <div class="skill-progress" data-progress="92"></div>
-                            </div>
+                <div class="skills-visual">
+                    <div class="tech-sphere">
+                        <div class="sphere-item" style="--i:1">
+                            <i class="fab fa-unity"></i>
                         </div>
-                        <div class="skill-item">
-                            <div class="skill-info">
-                                <span>Node.js</span>
-                                <span>88%</span>
-                            </div>
-                            <div class="skill-bar">
-                                <div class="skill-progress" data-progress="88"></div>
-                            </div>
+                        <div class="sphere-item" style="--i:2">
+                            <i class="fab fa-react"></i>
                         </div>
-                        <div class="skill-item">
-                            <div class="skill-info">
-                                <span>UI/UX Design</span>
-                                <span>85%</span>
-                            </div>
-                            <div class="skill-bar">
-                                <div class="skill-progress" data-progress="85"></div>
-                            </div>
+                        <div class="sphere-item" style="--i:3">
+                            <i class="fab fa-js"></i>
                         </div>
-                    </div>
-                </div>
-
-                <div class="skill-category">
-                    <h3><i class="fas fa-mobile-alt"></i> Mobile Development</h3>
-                    <div class="skill-list">
-                        <div class="skill-item">
-                            <div class="skill-info">
-                                <span>Flutter</span>
-                                <span>90%</span>
-                            </div>
-                            <div class="skill-bar">
-                                <div class="skill-progress" data-progress="90"></div>
-                            </div>
+                        <div class="sphere-item" style="--i:4">
+                            <i class="fab fa-node-js"></i>
                         </div>
-                        <div class="skill-item">
-                            <div class="skill-info">
-                                <span>React Native</span>
-                                <span>85%</span>
-                            </div>
-                            <div class="skill-bar">
-                                <div class="skill-progress" data-progress="85"></div>
-                            </div>
+                        <div class="sphere-item" style="--i:5">
+                            <i class="fab fa-python"></i>
                         </div>
-                        <div class="skill-item">
-                            <div class="skill-info">
-                                <span>iOS Development</span>
-                                <span>75%</span>
-                            </div>
-                            <div class="skill-bar">
-                                <div class="skill-progress" data-progress="75"></div>
-                            </div>
+                        <div class="sphere-item" style="--i:6">
+                            <i class="fas fa-database"></i>
                         </div>
                     </div>
                 </div>
@@ -313,65 +408,147 @@
     </section>
 
     <!-- Contact Section -->
-    <section id="contact" class="section section-dark">
+    <section id="contact" class="section contact-section">
         <div class="container">
             <div class="section-header">
-                <h2 class="section-title">Let's Connect</h2>
-                <p class="section-subtitle">Ready to bring your vision to life? Let's discuss your project</p>
+                <span class="section-badge">Contact</span>
+                <h2 class="section-title">Let's Work Together</h2>
+                <p class="section-subtitle">Ready to bring your vision to life? Let's discuss your next project</p>
             </div>
 
             <div class="contact-container">
                 <div class="contact-info">
-                    <div class="contact-card">
-                        <div class="contact-icon">
-                            <i class="fas fa-envelope"></i>
-                        </div>
-                        <h3>Email</h3>
-                        <p>arsh@arshcreates.com</p>
+                    <div class="contact-header">
+                        <h3>Get In Touch</h3>
+                        <p>I'm always interested in new opportunities and creative projects</p>
                     </div>
-                    <div class="contact-card">
-                        <div class="contact-icon">
-                            <i class="fas fa-phone"></i>
+
+                    <div class="contact-methods">
+                        <div class="contact-method">
+                            <div class="method-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div class="method-info">
+                                <h4>Email</h4>
+                                <a href="mailto:arshvermadev@gmail.com">arshvermadev@gmail.com</a>
+                            </div>
                         </div>
-                        <h3>Phone</h3>
-                        <p>+1 (555) 123-4567</p>
+
+                        <div class="contact-method">
+                            <div class="method-icon">
+                                <i class="fab fa-github"></i>
+                            </div>
+                            <div class="method-info">
+                                <h4>GitHub</h4>
+                                <a href="https://github.com/ArshVermaGit" target="_blank">ArshVermaGit</a>
+                            </div>
+                        </div>
+
+                        <div class="contact-method">
+                            <div class="method-icon">
+                                <i class="fab fa-linkedin"></i>
+                            </div>
+                            <div class="method-info">
+                                <h4>LinkedIn</h4>
+                                <a href="https://www.linkedin.com/in/arshvermadev/" target="_blank">arshvermadev</a>
+                            </div>
+                        </div>
+
+                        <div class="contact-method">
+                            <div class="method-icon">
+                                <i class="fas fa-phone"></i>
+                            </div>
+                            <div class="method-info">
+                                <h4>Phone</h4>
+                                <a href="tel:+1234567890">+1 (234) 567-890</a>
+                            </div>
+                        </div>
                     </div>
-                    <div class="contact-card">
-                        <div class="contact-icon">
-                            <i class="fas fa-map-marker-alt"></i>
-                        </div>
-                        <h3>Location</h3>
-                        <p>New York, NY</p>
+
+                    <div class="contact-social">
+                        <a href="https://github.com/ArshVermaGit" class="social-link" target="_blank">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="https://www.linkedin.com/in/arshvermadev/" class="social-link" target="_blank">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                        <a href="#" class="social-link">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="social-link">
+                            <i class="fab fa-dribbble"></i>
+                        </a>
                     </div>
                 </div>
 
-                <form class="contact-form" id="contactForm">
-                    <div class="form-group">
-                        <label for="name">Full Name</label>
-                        <input type="text" id="name" name="name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Email Address</label>
-                        <input type="email" id="email" name="email" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="projectType">Project Type</label>
-                        <select id="projectType" name="projectType">
-                            <option value="game">Game Development</option>
-                            <option value="website">Website Development</option>
-                            <option value="app">Mobile App</option>
-                            <option value="other">Other</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="message">Project Details</label>
-                        <textarea id="message" name="message" rows="5" required></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary btn-glow">
-                        <i class="fas fa-paper-plane"></i>
-                        <span>Send Message</span>
-                    </button>
-                </form>
+                <div class="contact-form-container">
+                    <form class="contact-form" id="contactForm">
+                        <div class="form-header">
+                            <h3>Send Message</h3>
+                            <p>Let me know how I can help you</p>
+                        </div>
+
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="fullName">Full Name *</label>
+                                <input type="text" id="fullName" name="fullName" required>
+                                <div class="input-icon">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="phoneNumber">Phone Number</label>
+                                <input type="tel" id="phoneNumber" name="phoneNumber">
+                                <div class="input-icon">
+                                    <i class="fas fa-phone"></i>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="email">Email Address *</label>
+                                <input type="email" id="email" name="email" required>
+                                <div class="input-icon">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="contactType">Contact Type *</label>
+                                <select id="contactType" name="contactType" required>
+                                    <option value="">Select type</option>
+                                    <option value="project">Project Collaboration</option>
+                                    <option value="feedback">Feedback</option>
+                                    <option value="consultation">Consultation</option>
+                                    <option value="other">Other</option>
+                                </select>
+                                <div class="input-icon">
+                                    <i class="fas fa-caret-down"></i>
+                                </div>
+                            </div>
+
+                            <div class="form-group full-width" id="projectDetailsGroup" style="display: none;">
+                                <label for="projectDetails">Project Details</label>
+                                <textarea id="projectDetails" name="projectDetails" rows="4" placeholder="Tell me about your project..."></textarea>
+                            </div>
+
+                            <div class="form-group full-width" id="feedbackGroup" style="display: none;">
+                                <label for="feedback">Your Feedback</label>
+                                <textarea id="feedback" name="feedback" rows="4" placeholder="Share your thoughts..."></textarea>
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label for="message">Message *</label>
+                                <textarea id="message" name="message" rows="5" required placeholder="How can I help you?"></textarea>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-submit">
+                            <i class="fas fa-paper-plane"></i>
+                            <span>Send Message</span>
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
     </section>
@@ -380,19 +557,71 @@
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
-                <div class="copyright">
-                    &copy; 2023 ArshCreates. All rights reserved.
+                <div class="footer-brand">
+                    <a href="index.html" class="logo">
+                        <div class="logo-icon">
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <span class="logo-text">ArshCreates</span>
+                    </a>
+                    <p class="footer-description">
+                        Creating exceptional digital experiences through innovative development and creative solutions.
+                    </p>
+                    <div class="footer-social">
+                        <a href="https://github.com/ArshVermaGit" class="social-link" target="_blank">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="https://www.linkedin.com/in/arshvermadev/" class="social-link" target="_blank">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                        <a href="#" class="social-link">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                    </div>
                 </div>
+
                 <div class="footer-links">
-                    <a href="#">Privacy Policy</a>
-                    <a href="#">Terms of Service</a>
-                    <a href="#">Sitemap</a>
+                    <div class="link-group">
+                        <h4>Navigation</h4>
+                        <a href="#home">Home</a>
+                        <a href="#about">About</a>
+                        <a href="games.html">Games</a>
+                        <a href="websites.html">Websites</a>
+                        <a href="apps.html">Apps</a>
+                    </div>
+
+                    <div class="link-group">
+                        <h4>Connect</h4>
+                        <a href="#contact">Contact</a>
+                        <a href="testimonials.html">Testimonials</a>
+                        <a href="admin.html">Admin</a>
+                        <a href="#">Blog</a>
+                    </div>
+
+                    <div class="link-group">
+                        <h4>Legal</h4>
+                        <a href="#">Privacy Policy</a>
+                        <a href="#">Terms of Service</a>
+                        <a href="#">Cookie Policy</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div class="copyright">
+                    &copy; 2024 Arsh Verma. All rights reserved.
+                </div>
+                <div class="footer-actions">
+                    <a href="admin.html" class="admin-link">
+                        <i class="fas fa-cog"></i>
+                        <span>Admin Panel</span>
+                    </a>
                 </div>
             </div>
         </div>
     </footer>
 
-    <!-- Back to Top Button -->
+    <!-- Back to Top -->
     <button class="back-to-top" id="backToTop" aria-label="Back to top">
         <i class="fas fa-chevron-up"></i>
     </button>
