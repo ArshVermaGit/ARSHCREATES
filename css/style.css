@@ -3823,3 +3823,761 @@ li {
     --glass-border: rgba(0, 0, 0, 0.1);
   }
 }
+
+/* ==========================================
+   MODAL SYSTEM - COMPREHENSIVE STYLING
+   ========================================== */
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: var(--z-modal);
+  opacity: 0;
+  visibility: hidden;
+  transition: all var(--transition-smooth);
+  padding: var(--space-lg);
+}
+
+.modal.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal-content {
+  background: var(--bg-primary);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-2xl);
+  max-width: 90vw;
+  max-height: 90vh;
+  overflow: hidden;
+  transform: scale(0.9) translateY(20px);
+  transition: all var(--transition-smooth);
+  position: relative;
+}
+
+.modal.active .modal-content {
+  transform: scale(1) translateY(0);
+}
+
+.modal-content.small {
+  width: 400px;
+  max-width: 90vw;
+}
+
+.modal-content.medium {
+  width: 600px;
+  max-width: 90vw;
+}
+
+.modal-content.large {
+  width: 90vw;
+  height: 90vh;
+  max-width: 1200px;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-xl);
+  border-bottom: 1px solid var(--glass-border);
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+}
+
+.modal-header h2 {
+  margin: 0;
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  color: var(--text-tertiary);
+  cursor: pointer;
+  padding: var(--space-sm);
+  border-radius: var(--radius-full);
+  transition: all var(--transition-normal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+}
+
+.modal-close:hover {
+  background: var(--glass-bg);
+  color: var(--text-primary);
+  transform: rotate(90deg);
+}
+
+.modal-body {
+  padding: var(--space-xl);
+  overflow-y: auto;
+  max-height: calc(90vh - 80px);
+}
+
+/* Game Preview Modal Specific Styles */
+.game-container {
+  width: 100%;
+  height: 60vh;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  margin-bottom: var(--space-lg);
+}
+
+.game-iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: var(--bg-primary);
+}
+
+.game-controls {
+  display: flex;
+  gap: var(--space-md);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn-control {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  color: var(--text-primary);
+  padding: var(--space-md) var(--space-lg);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: var(--font-size-sm);
+}
+
+.btn-control:hover {
+  background: var(--accent);
+  color: var(--primary);
+  transform: translateY(-2px);
+}
+
+/* Website Preview Modal Specific Styles */
+.website-preview-content {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: var(--space-2xl);
+  height: 70vh;
+}
+
+.preview-frame {
+  background: var(--bg-secondary);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  position: relative;
+}
+
+.preview-frame iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.preview-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.preview-info h3 {
+  font-size: var(--font-size-xl);
+  margin: 0;
+  color: var(--text-primary);
+}
+
+.preview-info p {
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: var(--line-height-relaxed);
+}
+
+.preview-actions {
+  display: flex;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+}
+
+/* App Preview Modal Specific Styles */
+.app-preview-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-2xl);
+  height: 70vh;
+}
+
+.preview-video {
+  background: var(--bg-secondary);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  position: relative;
+}
+
+.preview-video video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Testimonial Modal Specific Styles */
+.modal-form {
+  width: 100%;
+}
+
+.rating-input {
+  margin-bottom: var(--space-lg);
+}
+
+.stars {
+  display: flex;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-sm);
+}
+
+.star {
+  font-size: var(--font-size-2xl);
+  color: var(--glass-border);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+}
+
+.star:hover,
+.star.active {
+  color: var(--accent);
+  transform: scale(1.2);
+}
+
+.rating-text {
+  font-size: var(--font-size-sm);
+  color: var(--text-tertiary);
+}
+
+.character-count {
+  text-align: right;
+  font-size: var(--font-size-sm);
+  color: var(--text-tertiary);
+  margin-top: var(--space-xs);
+}
+
+.guidelines-content {
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.guidelines-list {
+  list-style: none;
+  padding: 0;
+  margin: var(--space-lg) 0;
+}
+
+.guidelines-list li {
+  display: flex;
+  align-items: start;
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
+  padding: var(--space-md);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+}
+
+.guidelines-list li i {
+  color: var(--accent);
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.guidelines-list strong {
+  color: var(--text-primary);
+  display: block;
+  margin-bottom: var(--space-xs);
+}
+
+.modal-footer {
+  padding: var(--space-xl);
+  border-top: 1px solid var(--glass-border);
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-md);
+}
+
+/* ==========================================
+   LIGHTBOX SYSTEM
+   ========================================== */
+
+.lightbox {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: var(--z-modal);
+  opacity: 0;
+  visibility: hidden;
+  transition: all var(--transition-smooth);
+}
+
+.lightbox.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.lightbox-content {
+  position: relative;
+  max-width: 90vw;
+  max-height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lightbox-image {
+  max-width: 100%;
+  max-height: 90vh;
+  object-fit: contain;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-2xl);
+}
+
+.lightbox-close {
+  position: absolute;
+  top: -50px;
+  right: 0;
+  background: none;
+  border: none;
+  color: var(--white);
+  font-size: var(--font-size-2xl);
+  cursor: pointer;
+  padding: var(--space-sm);
+  transition: all var(--transition-normal);
+}
+
+.lightbox-close:hover {
+  color: var(--accent);
+  transform: scale(1.1);
+}
+
+.lightbox-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  color: var(--white);
+  width: 50px;
+  height: 50px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  backdrop-filter: var(--glass-blur);
+}
+
+.lightbox-prev {
+  left: -70px;
+}
+
+.lightbox-next {
+  right: -70px;
+}
+
+.lightbox-nav:hover {
+  background: var(--accent);
+  color: var(--primary);
+  transform: translateY(-50%) scale(1.1);
+}
+
+/* ==========================================
+   FONT SIZE OPTIMIZATIONS
+   ========================================== */
+
+/* Base font size adjustments for better readability */
+body {
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-relaxed);
+}
+
+/* Headings optimization */
+h1 {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  line-height: 1.1;
+}
+
+h2 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1.2;
+}
+
+h3 {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  line-height: 1.3;
+}
+
+h4 {
+  font-size: clamp(1.25rem, 2.5vw, 1.5rem);
+  line-height: 1.4;
+}
+
+/* Modal text optimization */
+.modal-body {
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-relaxed);
+}
+
+.modal-body h3 {
+  font-size: var(--font-size-xl);
+  margin-bottom: var(--space-md);
+}
+
+.modal-body p {
+  font-size: var(--font-size-base);
+  margin-bottom: var(--space-lg);
+}
+
+/* Button text optimization */
+.btn {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+}
+
+.btn-sm {
+  font-size: var(--font-size-sm);
+}
+
+.btn-lg {
+  font-size: var(--font-size-lg);
+}
+
+/* Form element optimization */
+.form-group input,
+.form-group select,
+.form-group textarea {
+  font-size: var(--font-size-base);
+}
+
+.form-group label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+}
+
+/* Card content optimization */
+.portfolio-title {
+  font-size: var(--font-size-lg);
+}
+
+.portfolio-description {
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-relaxed);
+}
+
+/* Testimonial text optimization */
+.testimonial-text {
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-relaxed);
+}
+
+.client-name {
+  font-size: var(--font-size-lg);
+}
+
+.client-role {
+  font-size: var(--font-size-sm);
+}
+
+/* ==========================================
+   INTERACTIVE ELEMENT ENHANCEMENTS
+   ========================================== */
+
+/* Enhanced hover states */
+.portfolio-card,
+.testimonial-card,
+.feature-card,
+.technology-card {
+  transition: all var(--transition-smooth);
+}
+
+.portfolio-card:hover,
+.testimonial-card:hover,
+.feature-card:hover,
+.technology-card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-2xl), var(--shadow-glow);
+}
+
+/* Improved button interactions */
+.btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left var(--transition-slow);
+}
+
+.btn:hover::before {
+  left: 100%;
+}
+
+/* Enhanced form interactions */
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(161, 133, 109, 0.1);
+  transform: translateY(-2px);
+}
+
+/* Improved loading states */
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-lg);
+  padding: var(--space-3xl);
+  color: var(--text-secondary);
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--glass-border);
+  border-top: 3px solid var(--accent);
+  border-radius: var(--radius-full);
+  animation: spin 1s linear infinite;
+}
+
+/* Empty state styling */
+.empty-state {
+  text-align: center;
+  padding: var(--space-4xl);
+  color: var(--text-secondary);
+}
+
+.empty-state i {
+  font-size: 4rem;
+  color: var(--glass-border);
+  margin-bottom: var(--space-lg);
+}
+
+.empty-state h3 {
+  color: var(--text-primary);
+  margin-bottom: var(--space-md);
+}
+
+/* ==========================================
+   RESPONSIVE MODAL ADJUSTMENTS
+   ========================================== */
+
+@media (max-width: 768px) {
+  .modal-content.large {
+    width: 95vw;
+    height: 95vh;
+  }
+  
+  .modal-header {
+    padding: var(--space-lg);
+  }
+  
+  .modal-body {
+    padding: var(--space-lg);
+  }
+  
+  .website-preview-content,
+  .app-preview-content {
+    grid-template-columns: 1fr;
+    height: auto;
+    gap: var(--space-lg);
+  }
+  
+  .preview-info,
+  .preview-actions {
+    text-align: center;
+  }
+  
+  .preview-actions {
+    justify-content: center;
+  }
+  
+  .game-container {
+    height: 40vh;
+  }
+  
+  .lightbox-nav {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .lightbox-prev {
+    left: 10px;
+  }
+  
+  .lightbox-next {
+    right: 10px;
+  }
+  
+  .lightbox-close {
+    top: 10px;
+    right: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .modal-content {
+    max-width: 95vw;
+    max-height: 95vh;
+  }
+  
+  .modal-header h2 {
+    font-size: var(--font-size-xl);
+  }
+  
+  .game-controls {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .btn-control {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .preview-actions {
+    flex-direction: column;
+  }
+  
+  .preview-actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* ==========================================
+   ACCESSIBILITY IMPROVEMENTS
+   ========================================== */
+
+/* Focus styles for keyboard navigation */
+.btn:focus-visible,
+.modal-close:focus-visible,
+.lightbox-nav:focus-visible,
+.form-group input:focus-visible,
+.form-group select:focus-visible,
+.form-group textarea:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .modal,
+  .modal-content,
+  .btn,
+  .portfolio-card,
+  .testimonial-card {
+    transition: none;
+  }
+  
+  .btn::before {
+    display: none;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .glass-bg {
+    background: var(--bg-secondary);
+  }
+  
+  .glass-border {
+    border-color: var(--text-primary);
+  }
+  
+  .modal {
+    background: rgba(0, 0, 0, 0.95);
+  }
+}
+
+/* ==========================================
+   BROWSER-SPECIFIC FIXES
+   ========================================== */
+
+/* Safari specific fixes */
+@supports (-webkit-touch-callout: none) {
+  .modal-content {
+    -webkit-backdrop-filter: blur(20px);
+  }
+  
+  .game-iframe,
+  .website-iframe {
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* Firefox scrollbar styling */
+@-moz-document url-prefix() {
+  .modal-body {
+    scrollbar-width: thin;
+    scrollbar-color: var(--accent) var(--glass-bg);
+  }
+}
+
+/* Webkit scrollbar styling */
+.modal-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.modal-body::-webkit-scrollbar-track {
+  background: var(--glass-bg);
+  border-radius: var(--radius-full);
+}
+
+.modal-body::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: var(--radius-full);
+}
+
+.modal-body::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-light);
+}
+
+/* ==========================================
+   PRINT STYLES FOR MODALS
+   ========================================== */
+
+@media print {
+  .modal,
+  .lightbox {
+    display: none !important;
+  }
+}
