@@ -18,7 +18,6 @@ class AppDetailPage {
     setupLoadingScreen() {
         const loadingScreen = document.getElementById('loadingScreen');
         const loadingBar = document.getElementById('loadingBar');
-        const loadingText = document.getElementById('loadingText');
         
         if (!loadingScreen) return;
         
@@ -44,14 +43,14 @@ class AppDetailPage {
         const appId = urlParams.get('id');
 
         if (!appId) {
-            window.location.href = 'index.html#apps';
+            window.location.href = 'apps.html';
             return;
         }
 
-        this.currentApp = getItemById(window.APP_DATA, parseInt(appId));
+        this.currentApp = getItemById(window.PORTFOLIO_DATA.apps, parseInt(appId));
 
         if (!this.currentApp) {
-            window.location.href = 'index.html#apps';
+            window.location.href = 'apps.html';
             return;
         }
 
@@ -93,7 +92,9 @@ class AppDetailPage {
         // Statistics
         document.getElementById('downloads').textContent = app.downloads;
         document.getElementById('users').textContent = app.users;
-        document.getElementById('lastUpdate').textContent = new Date(app.lastUpdate).toLocaleDateString();
+        document.getElementById('lastUpdate').textContent = formatDate(app.lastUpdate);
+        document.getElementById('appPrice').textContent = app.price;
+        document.getElementById('appStatus').textContent = app.status;
 
         // Action buttons
         const appStoreBtn = document.getElementById('appStore');
@@ -122,15 +123,15 @@ class AppDetailPage {
 
         if (prevBtn) {
             prevBtn.addEventListener('click', () => {
-                const prevApp = getPrevItem(window.APP_DATA, this.currentApp.id);
-                window.location.href = `app.html?id=${prevApp.id}`;
+                const prevApp = getPrevItem(window.PORTFOLIO_DATA.apps, this.currentApp.id);
+                window.location.href = `app-detail.html?id=${prevApp.id}`;
             });
         }
 
         if (nextBtn) {
             nextBtn.addEventListener('click', () => {
-                const nextApp = getNextItem(window.APP_DATA, this.currentApp.id);
-                window.location.href = `app.html?id=${nextApp.id}`;
+                const nextApp = getNextItem(window.PORTFOLIO_DATA.apps, this.currentApp.id);
+                window.location.href = `app-detail.html?id=${nextApp.id}`;
             });
         }
 
