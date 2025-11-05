@@ -98,18 +98,20 @@ class PortfolioApp {
         // Smooth scroll
         navLinks.forEach(link => {
             link.addEventListener('click', (e) => {
-                e.preventDefault();
-                const targetId = link.getAttribute('href');
-                const target = document.querySelector(targetId);
-                
-                if (target) {
-                    const offset = 80;
-                    const targetPosition = target.offsetTop - offset;
+                if (link.getAttribute('href').startsWith('#')) {
+                    e.preventDefault();
+                    const targetId = link.getAttribute('href');
+                    const target = document.querySelector(targetId);
                     
-                    window.scrollTo({
-                        top: targetPosition,
-                        behavior: 'smooth'
-                    });
+                    if (target) {
+                        const offset = 80;
+                        const targetPosition = target.offsetTop - offset;
+                        
+                        window.scrollTo({
+                            top: targetPosition,
+                            behavior: 'smooth'
+                        });
+                    }
                 }
             });
         });
@@ -240,18 +242,18 @@ class PortfolioApp {
 
     loadGames() {
         const container = document.getElementById('gamesGrid');
-        if (!container || !window.GAME_DATA) return;
+        if (!container || !window.PORTFOLIO_DATA) return;
 
-        const games = window.GAME_DATA;
+        const games = window.PORTFOLIO_DATA.games.slice(0, 3); // Show only 3 on homepage
         container.innerHTML = games.map(game => `
-            <div class="portfolio-card" onclick="window.location.href='game.html?id=${game.id}'">
+            <div class="portfolio-card" onclick="window.location.href='game-detail.html?id=${game.id}'">
                 <img src="${game.image}" alt="${game.name}" class="portfolio-image">
                 <div class="portfolio-info">
                     <h3 class="portfolio-title">${game.name}</h3>
                     <p class="portfolio-category">${game.category}</p>
                     <p class="portfolio-description">${game.overview}</p>
                     <div class="portfolio-tags">
-                        ${game.technologies.map(tech => `<span class="tag">${tech}</span>`).join('')}
+                        ${game.technologies.slice(0, 3).map(tech => `<span class="tag">${tech}</span>`).join('')}
                     </div>
                 </div>
             </div>
@@ -260,18 +262,18 @@ class PortfolioApp {
 
     loadWebsites() {
         const container = document.getElementById('websitesGrid');
-        if (!container || !window.WEBSITE_DATA) return;
+        if (!container || !window.PORTFOLIO_DATA) return;
 
-        const websites = window.WEBSITE_DATA;
+        const websites = window.PORTFOLIO_DATA.websites.slice(0, 3);
         container.innerHTML = websites.map(site => `
-            <div class="portfolio-card" onclick="window.location.href='website.html?id=${site.id}'">
+            <div class="portfolio-card" onclick="window.location.href='website-detail.html?id=${site.id}'">
                 <img src="${site.image}" alt="${site.name}" class="portfolio-image">
                 <div class="portfolio-info">
                     <h3 class="portfolio-title">${site.name}</h3>
                     <p class="portfolio-category">${site.category}</p>
                     <p class="portfolio-description">${site.overview}</p>
                     <div class="portfolio-tags">
-                        ${site.technologies.map(tech => `<span class="tag">${tech}</span>`).join('')}
+                        ${site.technologies.slice(0, 3).map(tech => `<span class="tag">${tech}</span>`).join('')}
                     </div>
                 </div>
             </div>
@@ -280,18 +282,18 @@ class PortfolioApp {
 
     loadApps() {
         const container = document.getElementById('appsGrid');
-        if (!container || !window.APP_DATA) return;
+        if (!container || !window.PORTFOLIO_DATA) return;
 
-        const apps = window.APP_DATA;
+        const apps = window.PORTFOLIO_DATA.apps.slice(0, 3);
         container.innerHTML = apps.map(app => `
-            <div class="portfolio-card" onclick="window.location.href='app.html?id=${app.id}'">
+            <div class="portfolio-card" onclick="window.location.href='app-detail.html?id=${app.id}'">
                 <img src="${app.image}" alt="${app.name}" class="portfolio-image">
                 <div class="portfolio-info">
                     <h3 class="portfolio-title">${app.name}</h3>
                     <p class="portfolio-category">${app.category} • ${app.platform}</p>
                     <p class="portfolio-description">${app.overview}</p>
                     <div class="portfolio-tags">
-                        ${app.technologies.map(tech => `<span class="tag">${tech}</span>`).join('')}
+                        ${app.technologies.slice(0, 3).map(tech => `<span class="tag">${tech}</span>`).join('')}
                     </div>
                 </div>
             </div>
@@ -312,7 +314,7 @@ class PortfolioApp {
             // Show loading state
             const submitBtn = form.querySelector('button[type="submit"]');
             const originalText = submitBtn.innerHTML;
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending Premium Proposal...';
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
             submitBtn.disabled = true;
 
             // Simulate API call
@@ -322,7 +324,7 @@ class PortfolioApp {
             this.saveContact(data);
 
             // Show success message
-            this.showNotification('Premium proposal sent successfully! We\'ll get back to you within 24 hours.', 'success');
+            this.showNotification('Message sent successfully! We\'ll get back to you within 24 hours.', 'success');
             form.reset();
 
             // Reset button
@@ -420,7 +422,7 @@ class PortfolioApp {
         }, observerOptions);
 
         // Observe elements for animation
-        document.querySelectorAll('.portfolio-card, .skill-category, .contact-card').forEach(el => {
+        document.querySelectorAll('.portfolio-card, .skill-category, .contact-card, .category-card').forEach(el => {
             observer.observe(el);
         });
     }
@@ -430,24 +432,3 @@ class PortfolioApp {
 document.addEventListener('DOMContentLoaded', () => {
     window.portfolioApp = new PortfolioApp();
 });
-
-// Utility Functions
-function getItemById(data, id) {
-    return data.find(item => item.id == id);
-}
-
-function getAllItems(data) {
-    return data || [];
-}
-
-function getNextItem(data, currentId) {
-    const currentIndex = data.findIndex(item => item.id == currentId);
-    const nextIndex = (currentIndex + 1) % data.length;
-    return data[nextIndex];
-}
-
-function getPrevItem(data, currentId) {
-    const currentIndex = data.findIndex(item => item.id == currentId);
-    const prevIndex = (currentIndex - 1 + data.length) % data.length;
-    return data[prevIndex];
-}
