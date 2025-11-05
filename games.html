@@ -3,108 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Game Development Portfolio - Arsh Verma | Premium Game Developer</title>
-    <meta name="description" content="Explore immersive gaming experiences built with cutting-edge technology. Premium game development portfolio featuring Unity, WebGL, and cross-platform games.">
-    <meta name="keywords" content="game developer, Unity developer, WebGL games, mobile games, game portfolio, Arsh Verma">
-    <meta name="author" content="Arsh Verma">
-    
-    <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="Game Development Portfolio - Arsh Verma">
-    <meta property="og:description" content="Immersive gaming experiences built with cutting-edge technology and creative innovation">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://arshverma.com/games.html">
-    <meta property="og:image" content="assets/games-og-image.jpg">
-    
-    <!-- Twitter Card Meta Tags -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Game Development Portfolio - Arsh Verma">
-    <meta name="twitter:description" content="Premium game development portfolio featuring immersive gaming experiences">
-    <meta name="twitter:image" content="assets/games-twitter-image.jpg">
-    
-    <!-- Favicon -->
+    <title>Games Portfolio - Arsh Verma</title>
     <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
-    <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
-    
-    <!-- Preload Critical Resources -->
-    <link rel="preload" href="css/style.css" as="style">
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" as="style">
-    <link rel="preload" href="js/games.js" as="script">
-    
-    <!-- Stylesheets -->
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    
-    <!-- Games Specific CSS -->
-    <style>
-        .games-hero {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .game-platforms-filter {
-            display: flex;
-            gap: var(--space-sm);
-            flex-wrap: wrap;
-            margin-bottom: var(--space-lg);
-        }
-        
-        .platform-filter-btn {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            padding: var(--space-sm) var(--space-md);
-            border-radius: var(--radius-lg);
-            color: var(--text-secondary);
-            cursor: pointer;
-            transition: all var(--transition-normal);
-            backdrop-filter: var(--glass-blur);
-        }
-        
-        .platform-filter-btn.active {
-            background: var(--gradient-primary);
-            color: var(--primary);
-            border-color: transparent;
-        }
-        
-        .game-card-features {
-            display: flex;
-            flex-wrap: wrap;
-            gap: var(--space-xs);
-            margin: var(--space-sm) 0;
-        }
-        
-        .game-feature {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            padding: var(--space-xs) var(--space-sm);
-            border-radius: var(--radius-md);
-            font-size: var(--font-size-xs);
-            color: var(--text-secondary);
-        }
-        
-        .game-stats-overview {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: var(--space-lg);
-            margin: var(--space-2xl) 0;
-        }
-        
-        .game-stat-card {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--radius-lg);
-            padding: var(--space-lg);
-            text-align: center;
-            backdrop-filter: var(--glass-blur);
-            transition: all var(--transition-normal);
-        }
-        
-        .game-stat-card:hover {
-            border-color: var(--accent);
-            transform: translateY(-5px);
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
     <!-- Loading Screen -->
@@ -118,11 +21,6 @@
                 <div class="loading-bar" id="loadingBar"></div>
             </div>
             <div class="loading-text" id="loadingText">Loading Games Portfolio...</div>
-            <div class="loading-dots">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
         </div>
     </div>
 
@@ -131,34 +29,33 @@
     <div class="cursor-ring" id="cursorRing"></div>
 
     <!-- Navigation -->
-    <nav class="navbar" id="navbar" aria-label="Main navigation">
+    <nav class="navbar" id="navbar">
         <div class="container">
             <div class="nav-content">
-                <a href="index.html" class="logo" aria-label="ArshCreates Home">
+                <a href="index.html" class="logo">
                     <div class="logo-icon">
-                        <i class="fas fa-code" aria-hidden="true"></i>
+                        <i class="fas fa-code"></i>
                     </div>
                     <span class="logo-text">ArshCreates</span>
                 </a>
 
-                <ul class="nav-menu" id="navMenu" role="menubar">
-                    <li role="none"><a href="index.html" class="nav-link" role="menuitem" data-text="Home">Home</a></li>
-                    <li role="none"><a href="index.html#about" class="nav-link" role="menuitem" data-text="About">About</a></li>
-                    <li role="none"><a href="games.html" class="nav-link active" role="menuitem" data-text="Games">Games</a></li>
-                    <li role="none"><a href="websites.html" class="nav-link" role="menuitem" data-text="Websites">Websites</a></li>
-                    <li role="none"><a href="apps.html" class="nav-link" role="menuitem" data-text="Apps">Apps</a></li>
-                    <li role="none"><a href="testimonials.html" class="nav-link" role="menuitem" data-text="Testimonials">Testimonials</a></li>
-                    <li role="none"><a href="index.html#contact" class="nav-link" role="menuitem" data-text="Contact">Contact</a></li>
+                <ul class="nav-menu" id="navMenu">
+                    <li><a href="index.html" class="nav-link">Home</a></li>
+                    <li><a href="index.html#about" class="nav-link">About</a></li>
+                    <li><a href="games.html" class="nav-link active">Games</a></li>
+                    <li><a href="websites.html" class="nav-link">Websites</a></li>
+                    <li><a href="apps.html" class="nav-link">Apps</a></li>
+                    <li><a href="testimonials.html" class="nav-link">Testimonials</a></li>
+                    <li><a href="index.html#contact" class="nav-link">Contact</a></li>
                 </ul>
 
                 <div class="nav-actions">
-                    <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme" aria-pressed="false">
+                    <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
                         <div class="theme-icon">
-                            <i class="fas fa-moon" aria-hidden="true"></i>
+                            <i class="fas fa-moon"></i>
                         </div>
-                        <span class="theme-text">Dark</span>
                     </button>
-                    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="navMenu">
+                    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
                         <span></span>
                         <span></span>
                         <span></span>
@@ -169,92 +66,31 @@
     </nav>
 
     <!-- Games Header -->
-    <section class="page-header games-hero" aria-label="Games portfolio header">
+    <section class="page-header">
         <div class="container">
             <div class="header-content">
                 <h1>Games Portfolio</h1>
                 <p>Immersive gaming experiences built with cutting-edge technology and creative innovation</p>
-                
-                <!-- Enhanced Stats -->
                 <div class="header-stats">
-                    <div class="stat" data-cursor-effect="pulse">
+                    <div class="stat">
                         <span class="stat-number">15+</span>
                         <span class="stat-label">Games Developed</span>
                     </div>
-                    <div class="stat" data-cursor-effect="pulse">
+                    <div class="stat">
                         <span class="stat-number">4.8</span>
                         <span class="stat-label">Average Rating</span>
                     </div>
-                    <div class="stat" data-cursor-effect="pulse">
+                    <div class="stat">
                         <span class="stat-number">50K+</span>
                         <span class="stat-label">Players</span>
                     </div>
-                    <div class="stat" data-cursor-effect="pulse">
-                        <span class="stat-number">10+</span>
-                        <span class="stat-label">Awards</span>
-                    </div>
-                </div>
-
-                <!-- Quick Actions -->
-                <div class="header-actions">
-                    <a href="#featured-games" class="btn btn-primary btn-glow" data-cursor-effect="glow">
-                        <i class="fas fa-play"></i>
-                        <span>Play Games</span>
-                    </a>
-                    <a href="#game-stats" class="btn btn-secondary" data-cursor-effect="scale">
-                        <i class="fas fa-chart-bar"></i>
-                        <span>View Stats</span>
-                    </a>
-                    <button class="btn btn-glass" id="viewGameTrailers" data-cursor-effect="magnetic">
-                        <i class="fas fa-video"></i>
-                        <span>Watch Trailers</span>
-                    </button>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Animated Background Elements -->
-        <div class="hero-particles" id="gamesParticles"></div>
-    </section>
-
-    <!-- Games Stats Overview -->
-    <section id="game-stats" class="section" aria-label="Game statistics overview">
-        <div class="container">
-            <div class="game-stats-overview">
-                <div class="game-stat-card" data-cursor-effect="pulse">
-                    <div class="stat-icon">
-                        <i class="fas fa-gamepad"></i>
-                    </div>
-                    <div class="stat-number" data-target="15">0</div>
-                    <div class="stat-label">Total Games</div>
-                </div>
-                <div class="game-stat-card" data-cursor-effect="pulse">
-                    <div class="stat-icon">
-                        <i class="fas fa-users"></i>
-                    </div>
-                    <div class="stat-number" data-target="50000">0</div>
-                    <div class="stat-label">Active Players</div>
-                </div>
-                <div class="game-stat-card" data-cursor-effect="pulse">
-                    <div class="stat-icon">
-                        <i class="fas fa-star"></i>
-                    </div>
-                    <div class="stat-number">4.8<span>/5</span></div>
-                    <div class="stat-label">Average Rating</div>
-                </div>
-                <div class="game-stat-card" data-cursor-effect="pulse">
-                    <div class="stat-icon">
-                        <i class="fas fa-trophy"></i>
-                    </div>
-                    <div class="stat-number" data-target="12">0</div>
-                    <div class="stat-label">Awards Won</div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Games Filter -->
-    <section class="section filter-section" aria-label="Games filter options">
+    <section class="section filter-section">
         <div class="container">
             <div class="filter-container">
                 <div class="filter-group">
@@ -265,9 +101,6 @@
                         <option value="Racing">Racing</option>
                         <option value="Platformer">Platformer</option>
                         <option value="Fantasy RPG">Fantasy RPG</option>
-                        <option value="Puzzle">Puzzle</option>
-                        <option value="Simulation">Simulation</option>
-                        <option value="Strategy">Strategy</option>
                     </select>
                 </div>
                 <div class="filter-group">
@@ -276,8 +109,6 @@
                         <option value="all">All Status</option>
                         <option value="Live">Live</option>
                         <option value="In Development">In Development</option>
-                        <option value="Beta">Beta Testing</option>
-                        <option value="Coming Soon">Coming Soon</option>
                     </select>
                 </div>
                 <div class="filter-group">
@@ -287,591 +118,112 @@
                         <option value="oldest">Oldest First</option>
                         <option value="rating">Highest Rating</option>
                         <option value="popular">Most Popular</option>
-                        <option value="players">Most Players</option>
-                        <option value="a-z">A to Z</option>
-                        <option value="z-a">Z to A</option>
                     </select>
                 </div>
-                <div class="filter-group">
-                    <label for="platformFilter">Platform</label>
-                    <select id="platformFilter" class="filter-select">
-                        <option value="all">All Platforms</option>
-                        <option value="WebGL">WebGL</option>
-                        <option value="PC">PC</option>
-                        <option value="Mobile">Mobile</option>
-                        <option value="Cross-Platform">Cross-Platform</option>
-                    </select>
-                </div>
-            </div>
-
-            <!-- Platform Quick Filters -->
-            <div class="game-platforms-filter">
-                <button class="platform-filter-btn active" data-platform="all">
-                    <i class="fas fa-th"></i>
-                    All Platforms
-                </button>
-                <button class="platform-filter-btn" data-platform="webgl">
-                    <i class="fas fa-globe"></i>
-                    WebGL
-                </button>
-                <button class="platform-filter-btn" data-platform="pc">
-                    <i class="fas fa-desktop"></i>
-                    PC
-                </button>
-                <button class="platform-filter-btn" data-platform="mobile">
-                    <i class="fas fa-mobile-alt"></i>
-                    Mobile
-                </button>
-                <button class="platform-filter-btn" data-platform="vr">
-                    <i class="fas fa-vr-cardboard"></i>
-                    VR/AR
-                </button>
-            </div>
-
-            <!-- Search Box -->
-            <div class="search-container">
-                <div class="search-box">
-                    <i class="fas fa-search"></i>
-                    <input type="text" id="gameSearch" placeholder="Search games by name, technology, or feature..." aria-label="Search games">
-                    <button class="search-clear" id="searchClear" aria-label="Clear search">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Active Filters Display -->
-            <div class="active-filters" id="activeFilters">
-                <!-- Active filters will be displayed here -->
             </div>
         </div>
     </section>
 
     <!-- Games Grid -->
-    <section id="featured-games" class="section games-section" aria-label="Games portfolio grid">
+    <section class="section games-section">
         <div class="container">
-            <!-- Games Counter -->
-            <div class="section-header">
-                <div class="results-info">
-                    <span id="gamesCount">15</span> games found
-                    <button class="btn btn-sm btn-secondary" id="resetFilters">
-                        <i class="fas fa-redo"></i>
-                        Reset Filters
-                    </button>
-                </div>
-            </div>
-
-            <!-- View Toggle -->
-            <div class="view-options">
-                <button class="view-option active" data-view="grid" aria-label="Grid view">
-                    <i class="fas fa-th"></i>
-                </button>
-                <button class="view-option" data-view="list" aria-label="List view">
-                    <i class="fas fa-list"></i>
-                </button>
-                <button class="view-option" data-view="cards" aria-label="Card view">
-                    <i class="fas fa-grip-vertical"></i>
-                </button>
-            </div>
-
-            <div class="portfolio-grid" id="gamesGrid" data-view="grid">
+            <div class="portfolio-grid" id="gamesGrid">
                 <!-- Games will be loaded dynamically -->
-                
-                <!-- Sample Game Card Structure -->
-                <div class="portfolio-card game-card" data-category="Action RPG" data-status="Live" data-platform="WebGL" data-rating="4.8" data-players="125000">
-                    <div class="card-image">
-                        <img src="images/games/cyber-runner.jpg" alt="Cyber Runner 2077 - Futuristic parkour adventure game" class="portfolio-image" loading="lazy">
-                        <div class="card-overlay">
-                            <div class="card-actions">
-                                <button class="btn-play" onclick="window.location.href='game-detail.html?id=1'" aria-label="Play Cyber Runner 2077">
-                                    <i class="fas fa-play"></i>
-                                </button>
-                                <button class="btn-preview" data-game-preview="cyber-runner" aria-label="Preview Cyber Runner 2077">
-                                    <i class="fas fa-eye"></i>
-                                </button>
-                                <button class="btn-wishlist" data-game-id="1" aria-label="Add to wishlist">
-                                    <i class="far fa-heart"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="card-badge live">
-                            <i class="fas fa-circle"></i>
-                            Live
-                        </div>
-                        <div class="game-playtime">
-                            <i class="fas fa-clock"></i>
-                            ~45 min
-                        </div>
-                    </div>
-                    <div class="portfolio-info">
-                        <div class="game-header">
-                            <h3 class="portfolio-title">Cyber Runner 2077</h3>
-                            <div class="game-rating">
-                                <i class="fas fa-star"></i>
-                                <span>4.8</span>
-                            </div>
-                        </div>
-                        <p class="portfolio-category">Action RPG</p>
-                        <p class="portfolio-description">Futuristic parkour adventure in a cyberpunk metropolis with stunning visuals and immersive gameplay.</p>
-                        
-                        <div class="game-card-features">
-                            <span class="game-feature">3D Graphics</span>
-                            <span class="game-feature">Parkour</span>
-                            <span class="game-feature">Open World</span>
-                            <span class="game-feature">Story Rich</span>
-                        </div>
-                        
-                        <div class="portfolio-tags">
-                            <span class="tag">Unity</span>
-                            <span class="tag">C#</span>
-                            <span class="tag">HLSL</span>
-                            <span class="tag-more">+5</span>
-                        </div>
-                        
-                        <div class="portfolio-meta">
-                            <div class="meta-item">
-                                <i class="fas fa-star"></i>
-                                <span>4.8</span>
-                            </div>
-                            <div class="meta-item">
-                                <i class="fas fa-play-circle"></i>
-                                <span>125K</span>
-                            </div>
-                            <div class="meta-item">
-                                <i class="fas fa-heart"></i>
-                                <span>8.9K</span>
-                            </div>
-                            <div class="meta-item">
-                                <i class="fas fa-download"></i>
-                                <span>45K</span>
-                            </div>
-                        </div>
-                        
-                        <div class="portfolio-platforms">
-                            <span class="platform-tag webgl">WebGL</span>
-                            <span class="platform-tag pc">PC</span>
-                        </div>
-                        
-                        <div class="game-progress">
-                            <div class="progress-bar">
-                                <div class="progress-fill" style="width: 95%"></div>
-                            </div>
-                            <span class="progress-text">95% Complete</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- More game cards will be generated dynamically -->
-            </div>
-
-            <!-- Loading State -->
-            <div class="loading-state" id="gamesLoading">
-                <div class="loading-spinner"></div>
-                <p>Loading amazing games...</p>
-            </div>
-
-            <!-- No Results State -->
-            <div class="empty-state" id="noGames" style="display: none;">
-                <i class="fas fa-gamepad"></i>
-                <h3>No Games Found</h3>
-                <p>Try adjusting your filters or search terms to see more results</p>
-                <button class="btn btn-primary" id="resetSearch">
-                    <i class="fas fa-redo"></i>
-                    Reset Search
-                </button>
-            </div>
-
-            <!-- Pagination -->
-            <div class="pagination" id="gamesPagination">
-                <!-- Pagination will be generated dynamically -->
-            </div>
-        </div>
-    </section>
-
-    <!-- Game Development Process -->
-    <section class="section process-section" aria-label="Game development process">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-badge">Process</span>
-                <h2 class="section-title">Game Development Journey</h2>
-                <p class="section-subtitle">From concept to launch - see how your favorite games come to life</p>
-            </div>
-
-            <div class="process-timeline">
-                <div class="process-step" data-cursor-effect="magnetic">
-                    <div class="step-icon">
-                        <i class="fas fa-lightbulb"></i>
-                    </div>
-                    <div class="step-content">
-                        <h3>Concept & Design</h3>
-                        <p>Brainstorming ideas, creating game design documents, and planning the core mechanics</p>
-                        <ul class="step-features">
-                            <li>Game Design Documents</li>
-                            <li>Concept Art</li>
-                            <li>Mechanics Planning</li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <div class="process-step" data-cursor-effect="magnetic">
-                    <div class="step-icon">
-                        <i class="fas fa-code"></i>
-                    </div>
-                    <div class="step-content">
-                        <h3>Development</h3>
-                        <p>Coding the core gameplay, implementing features, and creating the game world</p>
-                        <ul class="step-features">
-                            <li>Unity/C# Development</li>
-                            <li>Game Mechanics</li>
-                            <li>Level Design</li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <div class="process-step" data-cursor-effect="magnetic">
-                    <div class="step-icon">
-                        <i class="fas fa-paint-brush"></i>
-                    </div>
-                    <div class="step-content">
-                        <h3>Art & Assets</h3>
-                        <p>Creating stunning visuals, 3D models, animations, and sound design</p>
-                        <ul class="step-features">
-                            <li>3D Modeling</li>
-                            <li>Animation</li>
-                            <li>Sound Design</li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <div class="process-step" data-cursor-effect="magnetic">
-                    <div class="step-icon">
-                        <i class="fas fa-bug"></i>
-                    </div>
-                    <div class="step-content">
-                        <h3>Testing & QA</h3>
-                        <p>Rigorous testing to ensure smooth gameplay and fix any issues</p>
-                        <ul class="step-features">
-                            <li>Bug Fixing</li>
-                            <li>Performance Optimization</li>
-                            <li>User Testing</li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <div class="process-step" data-cursor-effect="magnetic">
-                    <div class="step-icon">
-                        <i class="fas fa-rocket"></i>
-                    </div>
-                    <div class="step-content">
-                        <h3>Launch & Support</h3>
-                        <p>Deploying the game and providing ongoing updates and support</p>
-                        <ul class="step-features">
-                            <li>WebGL Deployment</li>
-                            <li>App Store Submission</li>
-                            <li>Post-Launch Updates</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Technologies Showcase -->
-    <section class="section technologies-section" aria-label="Game development technologies">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-badge">Technologies</span>
-                <h2 class="section-title">Powering Amazing Games</h2>
-                <p class="section-subtitle">Cutting-edge technologies and tools used in game development</p>
-            </div>
-
-            <div class="technologies-grid">
-                <div class="technology-card" data-cursor-effect="magnetic">
-                    <div class="tech-icon">
-                        <i class="fab fa-unity"></i>
-                    </div>
-                    <div class="tech-content">
-                        <h3>Unity Engine</h3>
-                        <p>Advanced 3D and 2D game development with cross-platform support</p>
-                        <div class="tech-features">
-                            <span class="tech-feature">3D Rendering</span>
-                            <span class="tech-feature">Physics</span>
-                            <span class="tech-feature">Animation</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="technology-card" data-cursor-effect="magnetic">
-                    <div class="tech-icon">
-                        <i class="fas fa-code"></i>
-                    </div>
-                    <div class="tech-content">
-                        <h3>C# Programming</h3>
-                        <p>Robust game logic, AI systems, and performance optimization</p>
-                        <div class="tech-features">
-                            <span class="tech-feature">Game Logic</span>
-                            <span class="tech-feature">AI Systems</span>
-                            <span class="tech-feature">Optimization</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="technology-card" data-cursor-effect="magnetic">
-                    <div class="tech-icon">
-                        <i class="fas fa-paint-brush"></i>
-                    </div>
-                    <div class="tech-content">
-                        <h3>Blender & Maya</h3>
-                        <p>Professional 3D modeling, texturing, and animation</p>
-                        <div class="tech-features">
-                            <span class="tech-feature">3D Modeling</span>
-                            <span class="tech-feature">Texturing</span>
-                            <span class="tech-feature">Rigging</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="technology-card" data-cursor-effect="magnetic">
-                    <div class="tech-icon">
-                        <i class="fas fa-shield-alt"></i>
-                    </div>
-                    <div class="tech-content">
-                        <h3>WebGL & WebAssembly</h3>
-                        <p>High-performance browser-based gaming experiences</p>
-                        <div class="tech-features">
-                            <span class="tech-feature">Browser Games</span>
-                            <span class="tech-feature">High Performance</span>
-                            <span class="tech-feature">Cross-Platform</span>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </section>
 
     <!-- CTA Section -->
-    <section class="section cta-section" aria-label="Call to action">
+    <section class="section cta-section">
         <div class="container">
             <div class="cta-content">
-                <div class="cta-text">
-                    <h2>Ready to Play?</h2>
-                    <p>Explore my game development portfolio and experience immersive gameplay. Let's create your next gaming adventure!</p>
-                    
-                    <div class="cta-features">
-                        <div class="feature">
-                            <i class="fas fa-check"></i>
-                            <span>Premium Quality Games</span>
-                        </div>
-                        <div class="feature">
-                            <i class="fas fa-check"></i>
-                            <span>Cross-Platform Support</span>
-                        </div>
-                        <div class="feature">
-                            <i class="fas fa-check"></i>
-                            <span>Regular Updates</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="cta-actions">
-                    <a href="#contact" class="btn btn-primary btn-glow" data-cursor-effect="glow">
-                        <i class="fas fa-gamepad"></i>
-                        <span>Start a Game Project</span>
-                    </a>
-                    <button class="btn btn-secondary" id="viewAllGames" data-cursor-effect="scale">
-                        <i class="fas fa-eye"></i>
-                        <span>View All Games</span>
-                    </button>
-                    <a href="game-detail.html?id=1" class="btn btn-glass" data-cursor-effect="magnetic">
-                        <i class="fas fa-play"></i>
-                        <span>Try Demo Game</span>
-                    </a>
-                </div>
+                <h2>Ready to Play?</h2>
+                <p>Explore my game development portfolio and experience immersive gameplay</p>
+                <a href="#contact" class="btn btn-primary btn-glow">
+                    <i class="fas fa-gamepad"></i>
+                    <span>Start a Game Project</span>
+                </a>
             </div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer class="footer" aria-label="Footer">
+    <footer class="footer">
         <div class="container">
             <div class="footer-content">
                 <div class="footer-brand">
-                    <a href="index.html" class="logo" aria-label="ArshCreates Home">
+                    <a href="index.html" class="logo">
                         <div class="logo-icon">
-                            <i class="fas fa-code" aria-hidden="true"></i>
+                            <i class="fas fa-code"></i>
                         </div>
                         <span class="logo-text">ArshCreates</span>
                     </a>
                     <p class="footer-description">
-                        Creating exceptional gaming experiences through innovative development and creative solutions.
+                        Creating exceptional digital experiences through innovative development and creative solutions.
                     </p>
                     <div class="footer-social">
-                        <a href="https://github.com/ArshVermaGit" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-cursor-effect="scale">
+                        <a href="https://github.com/ArshVermaGit" class="social-link" target="_blank">
                             <i class="fab fa-github"></i>
                         </a>
-                        <a href="https://www.linkedin.com/in/arshvermadev/" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" data-cursor-effect="scale">
+                        <a href="https://www.linkedin.com/in/arshvermadev/" class="social-link" target="_blank">
                             <i class="fab fa-linkedin"></i>
                         </a>
-                        <a href="#" class="social-link" aria-label="Twitter" data-cursor-effect="scale">
+                        <a href="#" class="social-link">
                             <i class="fab fa-twitter"></i>
-                        </a>
-                        <a href="#" class="social-link" aria-label="YouTube" data-cursor-effect="scale">
-                            <i class="fab fa-youtube"></i>
                         </a>
                     </div>
                 </div>
 
                 <div class="footer-links">
                     <div class="link-group">
-                        <h4>Game Portfolio</h4>
-                        <a href="#action-games">Action Games</a>
-                        <a href="#rpg-games">RPG Games</a>
-                        <a href="#puzzle-games">Puzzle Games</a>
-                        <a href="#upcoming-games">Upcoming Games</a>
-                        <a href="#game-demos">Game Demos</a>
-                    </div>
-
-                    <div class="link-group">
-                        <h4>Resources</h4>
-                        <a href="game-assets.html">Game Assets</a>
-                        <a href="tutorials.html">Game Dev Tutorials</a>
-                        <a href="documentation.html">API Documentation</a>
-                        <a href="support.html">Game Support</a>
-                        <a href="blog.html">Dev Blog</a>
+                        <h4>Navigation</h4>
+                        <a href="index.html">Home</a>
+                        <a href="index.html#about">About</a>
+                        <a href="games.html">Games</a>
+                        <a href="websites.html">Websites</a>
+                        <a href="apps.html">Apps</a>
                     </div>
 
                     <div class="link-group">
                         <h4>Connect</h4>
                         <a href="index.html#contact">Contact</a>
                         <a href="testimonials.html">Testimonials</a>
-                        <a href="press-kit.html">Press Kit</a>
-                        <a href="careers.html">Careers</a>
-                        <a href="partnerships.html">Partnerships</a>
+                        <a href="admin.html">Admin</a>
+                        <a href="#">Blog</a>
                     </div>
 
                     <div class="link-group">
                         <h4>Legal</h4>
-                        <a href="privacy.html">Privacy Policy</a>
-                        <a href="terms.html">Terms of Service</a>
-                        <a href="cookies.html">Cookie Policy</a>
-                        <a href="eula.html">Game EULA</a>
+                        <a href="#">Privacy Policy</a>
+                        <a href="#">Terms of Service</a>
+                        <a href="#">Cookie Policy</a>
                     </div>
-                </div>
-
-                <div class="footer-newsletter">
-                    <h4>Game Updates</h4>
-                    <p>Get notified about new game releases and updates</p>
-                    <form class="footer-newsletter-form" id="gamesNewsletter">
-                        <input type="email" placeholder="Your email address" aria-label="Email for game updates" required>
-                        <button type="submit" aria-label="Subscribe to game updates">
-                            <i class="fas fa-arrow-right"></i>
-                        </button>
-                    </form>
                 </div>
             </div>
 
             <div class="footer-bottom">
                 <div class="copyright">
-                    &copy; 2024 Arsh Verma. All rights reserved. | 
-                    <span class="games-counter">
-                        <i class="fas fa-gamepad"></i>
-                        <span id="totalGames">15</span> Games and Counting
-                    </span>
+                    &copy; 2024 Arsh Verma. All rights reserved.
                 </div>
                 <div class="footer-actions">
-                    <a href="admin.html" class="admin-link" data-cursor-effect="magnetic">
+                    <a href="admin.html" class="admin-link">
                         <i class="fas fa-cog"></i>
                         <span>Admin Panel</span>
                     </a>
-                    <button class="back-to-top" id="backToTop" aria-label="Back to top" data-cursor-effect="scale">
-                        <i class="fas fa-chevron-up"></i>
-                    </button>
                 </div>
             </div>
         </div>
     </footer>
 
-    <!-- Game Preview Modal -->
-    <div id="gamePreviewModal" class="modal" aria-hidden="true" role="dialog" aria-labelledby="gamePreviewTitle">
-        <div class="modal-content large">
-            <div class="modal-header">
-                <h2 id="gamePreviewTitle">Game Preview</h2>
-                <button class="modal-close" id="gamePreviewClose" aria-label="Close preview">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="game-preview-content">
-                    <div class="preview-video">
-                        <!-- Game trailer video will be loaded here -->
-                    </div>
-                    <div class="preview-info">
-                        <h3 id="previewGameName">Game Name</h3>
-                        <p id="previewGameDescription">Game description will appear here</p>
-                        <div class="preview-actions">
-                            <button class="btn btn-primary" id="playGamePreview">
-                                <i class="fas fa-play"></i>
-                                Play Game
-                            </button>
-                            <button class="btn btn-secondary" id="viewGameDetails">
-                                <i class="fas fa-info-circle"></i>
-                                View Details
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Quick Game Stats Widget -->
-    <div class="quick-stats-widget" id="quickStatsWidget">
-        <div class="widget-header">
-            <h4>Live Game Stats</h4>
-            <button class="widget-toggle" aria-label="Toggle stats widget">
-                <i class="fas fa-chart-line"></i>
-            </button>
-        </div>
-        <div class="widget-content">
-            <div class="stat-item">
-                <span class="stat-label">Online Players</span>
-                <span class="stat-value" id="onlinePlayers">1,247</span>
-            </div>
-            <div class="stat-item">
-                <span class="stat-label">Games Today</span>
-                <span class="stat-value" id="gamesToday">3,458</span>
-            </div>
-            <div class="stat-item">
-                <span class="stat-label">Top Game</span>
-                <span class="stat-value">Cyber Runner</span>
-            </div>
-        </div>
-    </div>
-
     <!-- Back to Top -->
-    <button class="back-to-top floating" id="floatingBackToTop" aria-label="Back to top" data-cursor-effect="scale">
+    <button class="back-to-top" id="backToTop" aria-label="Back to top">
         <i class="fas fa-chevron-up"></i>
     </button>
 
     <!-- Notification Container -->
-    <div id="notificationContainer" aria-live="polite" aria-atomic="true"></div>
+    <div id="notificationContainer"></div>
 
-    <!-- Scripts -->
-    <script src="js/data.js" defer></script>
-    <script src="js/games.js" defer></script>
-
-    <!-- Games Specific Script -->
-    <script>
-        // Games page specific functionality
-        document.addEventListener('DOMContentLoaded', function() {
-            // Initialize games page
-            console.log('Games portfolio page loaded');
-            
-            // Add view transition for game cards
-            const gameCards = document.querySelectorAll('.game-card');
-            gameCards.forEach(card => {
-                card.style.viewTransitionName = 'game-card-' + Math.random().toString(36).substr(2, 9);
-            });
-        });
-    </script>
+    <script src="js/data.js"></script>
+    <script src="js/games.js"></script>
 </body>
 </html>
