@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Arsh Verma</title>
+    <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loadingScreen" class="loading-screen">
+        <div class="loading-content">
+            <div class="loading-logo">
+                <div class="logo-glow"></div>
+                <i class="fas fa-cog"></i>
+            </div>
+            <div class="loading-bar-container">
+                <div class="loading-bar" id="loadingBar"></div>
+            </div>
+            <div class="loading-text" id="loadingText">Loading Admin Panel...</div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <a href="index.html" class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <span class="logo-text">ArshCreates</span>
+                </a>
+
+                <div class="nav-actions">
+                    <a href="index.html" class="btn btn-secondary">
+                        <i class="fas fa-home"></i>
+                        <span>Back to Site</span>
+                    </a>
+                    <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
+                        <div class="theme-icon">
+                            <i class="fas fa-moon"></i>
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Admin Header -->
+    <section class="page-header admin-header">
+        <div class="container">
+            <div class="header-content">
+                <h1>Admin Panel</h1>
+                <p>Manage your portfolio content, view contact submissions, and monitor website analytics</p>
+                <div class="admin-stats">
+                    <div class="stat">
+                        <span class="stat-number" id="totalContacts">0</span>
+                        <span class="stat-label">Contact Submissions</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number" id="totalProjects">0</span>
+                        <span class="stat-label">Total Projects</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number" id="totalTestimonials">0</span>
+                        <span class="stat-label">Testimonials</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Admin Dashboard -->
+    <section class="section admin-dashboard">
+        <div class="container">
+            <!-- Quick Actions -->
+            <div class="quick-actions">
+                <h2>Quick Actions</h2>
+                <div class="actions-grid">
+                    <button class="action-card" data-action="export-data">
+                        <div class="action-icon">
+                            <i class="fas fa-download"></i>
+                        </div>
+                        <div class="action-content">
+                            <h3>Export Data</h3>
+                            <p>Download all portfolio data as JSON</p>
+                        </div>
+                    </button>
+                    <button class="action-card" data-action="clear-data">
+                        <div class="action-icon">
+                            <i class="fas fa-trash"></i>
+                        </div>
+                        <div class="action-content">
+                            <h3>Clear Data</h3>
+                            <p>Reset all stored data</p>
+                        </div>
+                    </button>
+                    <button class="action-card" data-action="refresh-data">
+                        <div class="action-icon">
+                            <i class="fas fa-sync"></i>
+                        </div>
+                        <div class="action-content">
+                            <h3>Refresh Data</h3>
+                            <p>Reload data from storage</p>
+                        </div>
+                    </button>
+                    <button class="action-card" data-action="backup-data">
+                        <div class="action-icon">
+                            <i class="fas fa-save"></i>
+                        </div>
+                        <div class="action-content">
+                            <h3>Backup Data</h3>
+                            <p>Create data backup</p>
+                        </div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Contact Submissions -->
+            <div class="admin-section">
+                <div class="section-header">
+                    <h2>Contact Submissions</h2>
+                    <div class="section-actions">
+                        <button id="clearContacts" class="btn btn-secondary">
+                            <i class="fas fa-trash"></i>
+                            <span>Clear All</span>
+                        </button>
+                        <button id="exportContacts" class="btn btn-primary">
+                            <i class="fas fa-download"></i>
+                            <span>Export CSV</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="contacts-table-container">
+                    <table class="contacts-table" id="contactsTable">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Type</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="contactsTableBody">
+                            <!-- Contact rows will be populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="table-footer">
+                    <div class="table-info">
+                        Showing <span id="contactsCount">0</span> contact submissions
+                    </div>
+                    <div class="table-pagination" id="contactsPagination">
+                        <!-- Pagination will be populated dynamically -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project Management -->
+            <div class="admin-section">
+                <div class="section-header">
+                    <h2>Project Management</h2>
+                    <div class="section-actions">
+                        <button id="addProject" class="btn btn-primary">
+                            <i class="fas fa-plus"></i>
+                            <span>Add Project</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="projects-stats">
+                    <div class="stat-card">
+                        <div class="stat-icon games">
+                            <i class="fas fa-gamepad"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="gamesCount">0</h3>
+                            <p>Games</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon websites">
+                            <i class="fas fa-laptop-code"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="websitesCount">0</h3>
+                            <p>Websites</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon apps">
+                            <i class="fas fa-mobile-alt"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="appsCount">0</h3>
+                            <p>Mobile Apps</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Testimonials Management -->
+            <div class="admin-section">
+                <div class="section-header">
+                    <h2>Testimonials Management</h2>
+                    <div class="section-actions">
+                        <button id="addTestimonial" class="btn btn-primary">
+                            <i class="fas fa-plus"></i>
+                            <span>Add Testimonial</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="testimonials-list" id="testimonialsList">
+                    <!-- Testimonials will be populated dynamically -->
+                </div>
+            </div>
+
+            <!-- Analytics -->
+            <div class="admin-section">
+                <div class="section-header">
+                    <h2>Website Analytics</h2>
+                    <div class="section-actions">
+                        <button id="refreshAnalytics" class="btn btn-secondary">
+                            <i class="fas fa-sync"></i>
+                            <span>Refresh</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="analytics-grid">
+                    <div class="analytics-card">
+                        <div class="analytics-header">
+                            <h3>Page Views</h3>
+                            <div class="analytics-trend up">
+                                <i class="fas fa-arrow-up"></i>
+                                <span>12%</span>
+                            </div>
+                        </div>
+                        <div class="analytics-value" id="pageViews">0</div>
+                        <div class="analytics-chart">
+                            <div class="chart-bar" style="height: 70%"></div>
+                            <div class="chart-bar" style="height: 85%"></div>
+                            <div class="chart-bar" style="height: 60%"></div>
+                            <div class="chart-bar" style="height: 90%"></div>
+                            <div class="chart-bar" style="height: 75%"></div>
+                            <div class="chart-bar" style="height: 95%"></div>
+                            <div class="chart-bar" style="height: 80%"></div>
+                        </div>
+                    </div>
+                    <div class="analytics-card">
+                        <div class="analytics-header">
+                            <h3>Contact Rate</h3>
+                            <div class="analytics-trend up">
+                                <i class="fas fa-arrow-up"></i>
+                                <span>8%</span>
+                            </div>
+                        </div>
+                        <div class="analytics-value" id="contactRate">0%</div>
+                        <div class="analytics-chart">
+                            <div class="chart-bar" style="height: 50%"></div>
+                            <div class="chart-bar" style="height: 65%"></div>
+                            <div class="chart-bar" style="height: 45%"></div>
+                            <div class="chart-bar" style="height: 70%"></div>
+                            <div class="chart-bar" style="height: 55%"></div>
+                            <div class="chart-bar" style="height: 75%"></div>
+                            <div class="chart-bar" style="height: 60%"></div>
+                        </div>
+                    </div>
+                    <div class="analytics-card">
+                        <div class="analytics-header">
+                            <h3>Avg. Session</h3>
+                            <div class="analytics-trend down">
+                                <i class="fas fa-arrow-down"></i>
+                                <span>3%</span>
+                            </div>
+                        </div>
+                        <div class="analytics-value" id="avgSession">0m</div>
+                        <div class="analytics-chart">
+                            <div class="chart-bar" style="height: 80%"></div>
+                            <div class="chart-bar" style="height: 75%"></div>
+                            <div class="chart-bar" style="height: 70%"></div>
+                            <div class="chart-bar" style="height: 65%"></div>
+                            <div class="chart-bar" style="height: 60%"></div>
+                            <div class="chart-bar" style="height: 55%"></div>
+                            <div class="chart-bar" style="height: 50%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <a href="index.html" class="logo">
+                        <div class="logo-icon">
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <span class="logo-text">ArshCreates</span>
+                    </a>
+                    <p class="footer-description">
+                        Creating exceptional digital experiences through innovative development and creative solutions.
+                    </p>
+                </div>
+
+                <div class="footer-links">
+                    <div class="link-group">
+                        <h4>Navigation</h4>
+                        <a href="index.html">Home</a>
+                        <a href="index.html#about">About</a>
+                        <a href="games.html">Games</a>
+                        <a href="websites.html">Websites</a>
+                        <a href="apps.html">Apps</a>
+                    </div>
+
+                    <div class="link-group">
+                        <h4>Connect</h4>
+                        <a href="index.html#contact">Contact</a>
+                        <a href="testimonials.html">Testimonials</a>
+                        <a href="admin.html">Admin</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div class="copyright">
+                    &copy; 2024 Arsh Verma. All rights reserved.
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Contact Detail Modal -->
+    <div id="contactModal" class="modal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h2>Contact Submission Details</h2>
+                <button class="modal-close" id="contactModalClose">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="contactModalBody">
+                <!-- Contact details will be populated dynamically -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="closeContactModal">Close</button>
+                <button class="btn btn-primary" id="markContactRead">Mark as Read</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Container -->
+    <div id="notificationContainer"></div>
+
+    <script src="js/data.js"></script>
+    <script src="js/admin.js"></script>
+</body>
+</html>
