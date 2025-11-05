@@ -17,8 +17,8 @@ const PORTFOLIO_DATA = {
             launchDate: "2024-01-15",
             developmentTime: "6 months",
             status: "Live",
-            image: "images/games/Game1.jpg", // Fixed path
-            gameFile: "games/sky_surfers/index.html", // Path to your game
+            image: "images/games/cyber-runner.jpg",
+            gameFile: "games/cyber-runner/index.html",
             repositoryUrl: "https://github.com/ArshVermaGit/cyber-runner",
             technologies: ["Unity", "C#", "HLSL", "Blender", "Substance Painter"],
             features: [
@@ -31,9 +31,9 @@ const PORTFOLIO_DATA = {
             platforms: ["WebGL", "PC"],
             teamSize: 3,
             screenshots: [
-                "images/games/Game1.jpg",
-                "images/games/Game1.jpg",
-                "images/games/Game1.jpg"
+                "images/games/cyber-runner-1.jpg",
+                "images/games/cyber-runner-2.jpg",
+                "images/games/cyber-runner-3.jpg"
             ]
         },
         {
@@ -48,8 +48,8 @@ const PORTFOLIO_DATA = {
             launchDate: "2024-03-20",
             developmentTime: "5 months",
             status: "Live",
-            image: "images/games/Game1.jpg",
-            gameFile: "games/sky_surfers/index.html", // Your actual game path
+            image: "images/games/sky-surfers.jpg",
+            gameFile: "games/sky-surfers/index.html",
             repositoryUrl: "https://github.com/ArshVermaGit/sky-surfers",
             technologies: ["Unity", "C#", "Shader Graph"],
             features: [
@@ -62,8 +62,8 @@ const PORTFOLIO_DATA = {
             platforms: ["WebGL"],
             teamSize: 2,
             screenshots: [
-                "images/games/Game1.jpg",
-                "images/games/Game1.jpg"
+                "images/games/sky-surfers-1.jpg",
+                "images/games/sky-surfers-2.jpg"
             ]
         }
     ],
@@ -76,11 +76,11 @@ const PORTFOLIO_DATA = {
             overview: "Modern social media video downloader with premium features",
             description: "A cutting-edge web application that allows users to download videos from various social media platforms with high quality and fast processing speeds.",
             rating: 4.8,
-            playCount: 45000, // Using as user count
+            monthlyUsers: 45000,
             launchDate: "2024-02-01",
             developmentTime: "5 months",
             status: "Live",
-            image: "images/websites/ReelSpot.jpg",
+            image: "images/websites/reelspot.jpg",
             url: "https://arshvermagit.github.io/REELSPOT/",
             repositoryUrl: "https://github.com/ArshVermaGit/REELSPOT",
             technologies: ["HTML5", "CSS3", "JavaScript", "FFmpeg", "Node.js"],
@@ -100,11 +100,11 @@ const PORTFOLIO_DATA = {
             overview: "Modern responsive portfolio website",
             description: "A fully responsive portfolio website showcasing my projects and skills with modern design and smooth animations.",
             rating: 4.9,
-            playCount: 1000,
+            monthlyUsers: 1000,
             launchDate: "2024-01-10",
             developmentTime: "3 months",
             status: "Live",
-            image: "images/websites/ReelSpot.jpg", // Add your image
+            image: "images/websites/portfolio.jpg",
             url: "https://arshverma.com",
             repositoryUrl: "https://github.com/ArshVermaGit/portfolio",
             technologies: ["HTML5", "CSS3", "JavaScript", "GSAP"],
@@ -122,32 +122,33 @@ const PORTFOLIO_DATA = {
     apps: [
         {
             id: 1,
-            name: "TaskFlow Pro",
+            name: "FocusFlow",
             category: "Productivity",
-            overview: "Intelligent task management with AI assistance",
-            description: "Transform your productivity with smart task management, automated scheduling, and intelligent prioritization. TaskFlow Pro learns your work patterns to optimize your daily workflow.",
-            rating: 4.8,
-            playCount: 125000,
-            launchDate: "2024-02-20",
-            developmentTime: "5 months",
+            overview: "AI-Powered Productivity & Focus Assistant",
+            description: "FocusFlow is an AI-powered productivity app that helps you manage your time, eliminate distractions, and achieve your goals with intelligent task prioritization and focus tracking.",
+            rating: 4.9,
+            downloads: 150000,
+            activeUsers: 45000,
+            launchDate: "2024-03-15",
+            developmentTime: "6 months",
             status: "Live",
-            platform: "Cross-Platform",
-            image: "images/apps/app1.jpg", // Add your app images
-            appStoreUrl: "https://apps.apple.com/app/taskflow-pro",
-            playStoreUrl: "https://play.google.com/store/apps/details?id=com.arshcreates.taskflowpro",
-            repositoryUrl: "https://github.com/ArshVermaGit/taskflow-pro",
-            technologies: ["React Native", "Firebase", "TensorFlow", "Redux", "Expo"],
+            platform: "iOS",
+            image: "images/apps/focusflow.jpg",
+            appStoreUrl: "https://apps.apple.com/app/focusflow",
+            playStoreUrl: "",
+            repositoryUrl: "https://github.com/ArshVermaGit/focusflow",
+            technologies: ["Swift", "Core Data", "CloudKit", "Core ML"],
             features: [
-                "AI-powered task prioritization",
-                "Natural language task input",
-                "Cross-device synchronization",
-                "Team collaboration features",
-                "Advanced analytics and insights"
+                "AI Task Prioritization",
+                "Smart Focus Timer",
+                "Productivity Analytics",
+                "Distraction Blocking",
+                "Cross-Device Sync"
             ],
             screenshots: [
-                "images/apps/screenshot1.jpg",
-                "images/apps/screenshot2.jpg",
-                "images/apps/screenshot3.jpg"
+                "images/apps/focusflow-1.jpg",
+                "images/apps/focusflow-2.jpg",
+                "images/apps/focusflow-3.jpg"
             ]
         }
     ],
@@ -160,95 +161,79 @@ const PORTFOLIO_DATA = {
             projectType: "Website",
             projectName: "ReelSpot",
             rating: 5,
-            text: "Arsh delivered an exceptional web application that exceeded our expectations. The attention to detail and user experience focus resulted in a 40% increase in user engagement. Highly recommended!",
-            date: "2024-02-15"
+            text: "Arsh delivered an exceptional web application that exceeded our expectations. The attention to detail and user experience focus resulted in a 40% increase in user engagement. His technical expertise and professional approach made the entire development process smooth and efficient.",
+            date: "2024-02-15",
+            verified: true,
+            clientType: "enterprise"
+        },
+        {
+            id: 2,
+            clientName: "Alex Thompson",
+            clientRole: "Game Director, Playful Studios",
+            projectType: "Game",
+            projectName: "Cyber Runner 2077",
+            rating: 4,
+            text: "Arsh delivered a polished game that exceeded our technical requirements. Great communication throughout the project and a solid understanding of game development principles.",
+            date: "2024-01-20",
+            verified: true,
+            clientType: "agency"
         }
     ]
 };
 
-// Helper function to get next item ID
-function getNextItemId(category) {
-    const items = PORTFOLIO_DATA[category];
-    return items.length > 0 ? Math.max(...items.map(item => item.id)) + 1 : 1;
-}
-
-// Function to add new item
-function addPortfolioItem(category, itemData) {
-    if (!PORTFOLIO_DATA[category]) {
-        PORTFOLIO_DATA[category] = [];
-    }
-    
-    const newItem = {
-        id: getNextItemId(category),
-        ...itemData,
-        timestamp: new Date().toISOString()
-    };
-    
-    PORTFOLIO_DATA[category].push(newItem);
-    updatePortfolioData(PORTFOLIO_DATA);
-    return newItem;
-}
-
-// Function to get previous and next items
-function getPrevItem(category, currentId) {
-    const items = PORTFOLIO_DATA[category];
-    const currentIndex = items.findIndex(item => item.id === currentId);
-    const prevIndex = currentIndex > 0 ? currentIndex - 1 : items.length - 1;
-    return items[prevIndex];
-}
-
-function getNextItem(category, currentId) {
-    const items = PORTFOLIO_DATA[category];
-    const currentIndex = items.findIndex(item => item.id === currentId);
-    const nextIndex = currentIndex < items.length - 1 ? currentIndex + 1 : 0;
-    return items[nextIndex];
-}
-
-// Initialize data in localStorage if not present
+// Data management functions
 function initializePortfolioData() {
     if (!localStorage.getItem('portfolioData')) {
         localStorage.setItem('portfolioData', JSON.stringify(PORTFOLIO_DATA));
     }
-    
-    // Initialize contacts array if not present
     if (!localStorage.getItem('portfolioContacts')) {
         localStorage.setItem('portfolioContacts', JSON.stringify([]));
     }
 }
 
-// Get data from localStorage
 function getPortfolioData() {
     const storedData = localStorage.getItem('portfolioData');
     return storedData ? JSON.parse(storedData) : PORTFOLIO_DATA;
 }
 
-// Update data in localStorage
 function updatePortfolioData(newData) {
     localStorage.setItem('portfolioData', JSON.stringify(newData));
 }
 
-// Get item by ID from any category
 function getItemById(category, id) {
     const data = getPortfolioData();
-    return data[category]?.find(item => item.id === parseInt(id)) || null;
+    const item = data[category]?.find(item => item.id === parseInt(id));
+    return item || null;
 }
 
-// Get all items from a category
 function getItemsByCategory(category) {
     const data = getPortfolioData();
     return data[category] || [];
 }
 
-// Add new testimonial
+function getPrevItem(category, currentId) {
+    const items = getItemsByCategory(category);
+    const currentIndex = items.findIndex(item => item.id === parseInt(currentId));
+    const prevIndex = currentIndex > 0 ? currentIndex - 1 : items.length - 1;
+    return items[prevIndex] || items[0];
+}
+
+function getNextItem(category, currentId) {
+    const items = getItemsByCategory(category);
+    const currentIndex = items.findIndex(item => item.id === parseInt(currentId));
+    const nextIndex = currentIndex < items.length - 1 ? currentIndex + 1 : 0;
+    return items[nextIndex] || items[0];
+}
+
 function addTestimonial(testimonial) {
     const data = getPortfolioData();
-    testimonial.id = Date.now(); // Simple ID generation
+    if (!data.testimonials) data.testimonials = [];
+    testimonial.id = Date.now();
     data.testimonials.unshift(testimonial);
     updatePortfolioData(data);
     return testimonial;
 }
 
-// Add new contact submission
 function addContactSubmission(contact) {
     const contacts = JSON.parse(localStorage.getItem('portfolioContacts') || '[]');
     contact.id = Date.now();
@@ -259,7 +244,6 @@ function addContactSubmission(contact) {
     return contact;
 }
 
-// Format date for display
 function formatDate(dateString) {
     const options = { year: 'numeric', month: 'short', day: 'numeric' };
     return new Date(dateString).toLocaleDateString(undefined, options);
@@ -277,4 +261,3 @@ window.addContactSubmission = addContactSubmission;
 window.formatDate = formatDate;
 window.getPrevItem = getPrevItem;
 window.getNextItem = getNextItem;
-window.addPortfolioItem = addPortfolioItem;
