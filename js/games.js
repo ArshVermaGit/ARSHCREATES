@@ -1,251 +1,446 @@
 // ============================================
-// GAMES PAGE SCRIPT
+// GAMES PORTFOLIO FUNCTIONALITY
 // ============================================
 
-class GamesPage {
+class GamesPortfolio {
     constructor() {
         this.games = [];
         this.filteredGames = [];
         this.currentFilters = {
             category: 'all',
             status: 'all',
+            platform: 'all',
             sort: 'newest'
         };
+        this.currentPage = 1;
+        this.gamesPerPage = 9;
         this.init();
     }
 
     init() {
-        this.setupLoadingScreen();
-        this.setupTheme();
-        this.setupNavigation();
         this.loadGames();
+        this.setupEventListeners();
         this.setupFilters();
-        this.setupBackToTop();
-        this.setupMobileMenu();
+        this.renderGames();
+        this.setupViewTransitions();
     }
 
-    setupLoadingScreen() {
-        const loadingScreen = document.getElementById('loadingScreen');
-        const loadingBar = document.getElementById('loadingBar');
-        
-        if (!loadingScreen) return;
-        
-        let progress = 0;
-        const interval = setInterval(() => {
-            progress += Math.random() * 20;
-            if (progress >= 100) {
-                progress = 100;
-                clearInterval(interval);
-                
-                setTimeout(() => {
-                    loadingScreen.style.opacity = '0';
-                    loadingScreen.style.visibility = 'hidden';
-                }, 500);
-            }
-            
-            if (loadingBar) loadingBar.style.width = `${progress}%`;
-        }, 200);
+    loadGames() {
+        this.games = window.PORTFOLIO_DATA.games || [];
+        this.filteredGames = [...this.games];
     }
 
-    setupTheme() {
-        const themeToggle = document.getElementById('themeToggle');
-        const currentTheme = localStorage.getItem('theme') || 'dark';
-        
-        document.documentElement.setAttribute('data-theme', currentTheme);
-        this.updateThemeIcon(currentTheme);
+    setupEventListeners() {
+        // Filter event listeners
+        document.getElementById('categoryFilter')?.addEventListener('change', (e) => {
+            this.currentFilters.category = e.target.value;
+            this.applyFilters();
+        });
 
-        if (themeToggle) {
-            themeToggle.addEventListener('click', () => {
-                const theme = document.documentElement.getAttribute('data-theme');
-                const newTheme = theme === 'dark' ? 'light' : 'dark';
-                
-                document.documentElement.setAttribute('data-theme', newTheme);
-                localStorage.setItem('theme', newTheme);
-                this.updateThemeIcon(newTheme);
-                
-                this.showNotification(`Switched to ${newTheme} mode`, 'success');
+        document.getElementById('statusFilter')?.addEventListener('change', (e) => {
+            this.currentFilters.status = e.target.value;
+            this.applyFilters();
+        });
+
+        document.getElementById('platformFilter')?.addEventListener('change', (e) => {
+            this.currentFilters.platform = e.target.value;
+            this.applyFilters();
+        });
+
+        document.getElementById('sortFilter')?.addEventListener('change', (e) => {
+            this.currentFilters.sort = e.target.value;
+            this.applyFilters();
+        });
+
+        // Platform filter buttons
+        document.querySelectorAll('.platform-filter-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                document.querySelectorAll('.platform-filter-btn').forEach(b => b.classList.remove('active'));
+                e.target.classList.add('active');
+                this.currentFilters.platform = e.target.dataset.platform;
+                this.applyFilters();
+            });
+        });
+
+        // Search functionality
+        const searchInput = document.getElementById('gameSearch');
+        const searchClear = document.getElementById('searchClear');
+        
+        if (searchInput) {
+            searchInput.addEventListener('input', (e) => {
+                this.handleSearch(e.target.value);
             });
         }
-    }
 
-    updateThemeIcon(theme) {
-        const icon = document.querySelector('#themeToggle i');
-        if (icon) {
-            icon.className = theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+        if (searchClear) {
+            searchClear.addEventListener('click', () => {
+                searchInput.value = '';
+                this.handleSearch('');
+            });
         }
-    }
 
-    setupNavigation() {
-        const navbar = document.getElementById('navbar');
+        // Reset filters
+        document.getElementById('resetFilters')?.addEventListener('click', () => {
+            this.resetFilters();
+        });
 
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 50) {
-                navbar.classList.add('scrolled');
-            } else {
-                navbar.classList.remove('scrolled');
+        // View options
+        document.querySelectorAll('.view-option').forEach(option => {
+            option.addEventListener('click', (e) => {
+                this.changeView(e.target.dataset.view);
+            });
+        });
+
+        // Game preview
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('.btn-preview')) {
+                const gameId = e.target.closest('.btn-preview').dataset.gamePreview;
+                this.openGamePreview(gameId);
             }
         });
     }
 
-    loadGames() {
-        if (!window.PORTFOLIO_DATA || !window.PORTFOLIO_DATA.games) {
-            console.error('Games data not found');
-            return;
-        }
-
-        this.games = window.PORTFOLIO_DATA.games;
-        this.filteredGames = [...this.games];
-        this.renderGames();
-    }
-
     setupFilters() {
-        const categoryFilter = document.getElementById('categoryFilter');
-        const statusFilter = document.getElementById('statusFilter');
-        const sortFilter = document.getElementById('sortFilter');
-
-        if (categoryFilter) {
-            categoryFilter.addEventListener('change', (e) => {
-                this.currentFilters.category = e.target.value;
-                this.applyFilters();
-            });
+        // Initialize filter values
+        if (document.getElementById('categoryFilter')) {
+            document.getElementById('categoryFilter').value = this.currentFilters.category;
         }
-
-        if (statusFilter) {
-            statusFilter.addEventListener('change', (e) => {
-                this.currentFilters.status = e.target.value;
-                this.applyFilters();
-            });
+        if (document.getElementById('statusFilter')) {
+            document.getElementById('statusFilter').value = this.currentFilters.status;
         }
-
-        if (sortFilter) {
-            sortFilter.addEventListener('change', (e) => {
-                this.currentFilters.sort = e.target.value;
-                this.applyFilters();
-            });
+        if (document.getElementById('platformFilter')) {
+            document.getElementById('platformFilter').value = this.currentFilters.platform;
+        }
+        if (document.getElementById('sortFilter')) {
+            document.getElementById('sortFilter').value = this.currentFilters.sort;
         }
     }
 
     applyFilters() {
-        this.filteredGames = this.games.filter(game => {
-            // Category filter
-            if (this.currentFilters.category !== 'all' && game.category !== this.currentFilters.category) {
-                return false;
-            }
+        let filtered = [...this.games];
 
-            // Status filter
-            if (this.currentFilters.status !== 'all' && game.status !== this.currentFilters.status) {
-                return false;
-            }
+        // Category filter
+        if (this.currentFilters.category !== 'all') {
+            filtered = filtered.filter(game => 
+                game.category === this.currentFilters.category
+            );
+        }
 
-            return true;
-        });
+        // Status filter
+        if (this.currentFilters.status !== 'all') {
+            filtered = filtered.filter(game => 
+                game.status.toLowerCase() === this.currentFilters.status.toLowerCase()
+            );
+        }
 
-        // Sort games
-        this.sortGames();
+        // Platform filter
+        if (this.currentFilters.platform !== 'all') {
+            filtered = filtered.filter(game => 
+                game.platforms.includes(this.currentFilters.platform)
+            );
+        }
 
+        // Search filter (if any)
+        const searchInput = document.getElementById('gameSearch');
+        if (searchInput && searchInput.value) {
+            const searchTerm = searchInput.value.toLowerCase();
+            filtered = filtered.filter(game =>
+                game.name.toLowerCase().includes(searchTerm) ||
+                game.description.toLowerCase().includes(searchTerm) ||
+                game.technologies.some(tech => tech.toLowerCase().includes(searchTerm))
+            );
+        }
+
+        // Sorting
+        filtered = this.sortGames(filtered, this.currentFilters.sort);
+
+        this.filteredGames = filtered;
+        this.currentPage = 1;
         this.renderGames();
+        this.updateResultsCount();
     }
 
-    sortGames() {
-        switch (this.currentFilters.sort) {
+    sortGames(games, sortType) {
+        switch (sortType) {
             case 'newest':
-                this.filteredGames.sort((a, b) => new Date(b.releaseDate) - new Date(a.releaseDate));
-                break;
+                return games.sort((a, b) => new Date(b.launchDate) - new Date(a.launchDate));
             case 'oldest':
-                this.filteredGames.sort((a, b) => new Date(a.releaseDate) - new Date(b.releaseDate));
-                break;
+                return games.sort((a, b) => new Date(a.launchDate) - new Date(b.launchDate));
             case 'rating':
-                this.filteredGames.sort((a, b) => b.rating - a.rating);
-                break;
+                return games.sort((a, b) => b.rating - a.rating);
             case 'popular':
-                this.filteredGames.sort((a, b) => b.playCount - a.playCount);
-                break;
+                return games.sort((a, b) => b.playCount - a.playCount);
+            case 'a-z':
+                return games.sort((a, b) => a.name.localeCompare(b.name));
+            case 'z-a':
+                return games.sort((a, b) => b.name.localeCompare(a.name));
+            default:
+                return games;
         }
+    }
+
+    handleSearch(searchTerm) {
+        this.applyFilters();
+    }
+
+    resetFilters() {
+        this.currentFilters = {
+            category: 'all',
+            status: 'all',
+            platform: 'all',
+            sort: 'newest'
+        };
+        
+        this.setupFilters();
+        
+        const searchInput = document.getElementById('gameSearch');
+        if (searchInput) searchInput.value = '';
+        
+        this.applyFilters();
+    }
+
+    changeView(viewType) {
+        const grid = document.getElementById('gamesGrid');
+        if (grid) {
+            grid.setAttribute('data-view', viewType);
+        }
+        
+        document.querySelectorAll('.view-option').forEach(option => {
+            option.classList.remove('active');
+        });
+        
+        document.querySelector(`[data-view="${viewType}"]`)?.classList.add('active');
     }
 
     renderGames() {
-        const container = document.getElementById('gamesGrid');
-        if (!container) return;
+        const grid = document.getElementById('gamesGrid');
+        if (!grid) return;
 
-        if (this.filteredGames.length === 0) {
-            container.innerHTML = `
-                <div class="empty-state">
-                    <i class="fas fa-gamepad"></i>
-                    <h3>No Games Found</h3>
-                    <p>Try adjusting your filters to see more results</p>
-                </div>
-            `;
+        const startIndex = (this.currentPage - 1) * this.gamesPerPage;
+        const endIndex = startIndex + this.gamesPerPage;
+        const gamesToShow = this.filteredGames.slice(startIndex, endIndex);
+
+        if (gamesToShow.length === 0) {
+            grid.innerHTML = this.getEmptyStateHTML();
+            this.hidePagination();
             return;
         }
 
-        container.innerHTML = this.filteredGames.map(game => `
-            <div class="portfolio-card" onclick="window.location.href='game-detail.html?id=${game.id}'">
+        grid.innerHTML = gamesToShow.map(game => this.createGameCard(game)).join('');
+        this.renderPagination();
+    }
+
+    createGameCard(game) {
+        return `
+            <div class="portfolio-card game-card" 
+                 data-category="${game.category}" 
+                 data-status="${game.status}" 
+                 data-rating="${game.rating}" 
+                 data-playcount="${game.playCount}">
                 <div class="card-image">
-                    <img src="${game.image}" alt="${game.name}" class="portfolio-image">
+                    <img src="${game.image}" alt="${game.name}" class="portfolio-image" loading="lazy">
                     <div class="card-overlay">
                         <div class="card-actions">
-                            <button class="btn-play" onclick="event.stopPropagation(); window.location.href='game-detail.html?id=${game.id}'">
+                            <button class="btn-visit" onclick="window.location.href='game-detail.html?id=${game.id}'">
                                 <i class="fas fa-play"></i>
+                            </button>
+                            <button class="btn-preview" data-game-preview="${game.id}">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn-bookmark" data-game-id="${game.id}">
+                                <i class="far fa-bookmark"></i>
                             </button>
                         </div>
                     </div>
                     <div class="card-badge ${game.status.toLowerCase()}">
+                        <i class="fas fa-circle"></i>
                         ${game.status}
                     </div>
                 </div>
                 <div class="portfolio-info">
-                    <h3 class="portfolio-title">${game.name}</h3>
+                    <div class="game-header">
+                        <h3 class="portfolio-title">${game.name}</h3>
+                        <div class="game-rating">
+                            <i class="fas fa-star"></i>
+                            <span>${game.rating}</span>
+                        </div>
+                    </div>
                     <p class="portfolio-category">${game.category}</p>
                     <p class="portfolio-description">${game.overview}</p>
-                    <div class="portfolio-tags">
-                        ${game.technologies.slice(0, 3).map(tech => `<span class="tag">${tech}</span>`).join('')}
-                        ${game.technologies.length > 3 ? `<span class="tag-more">+${game.technologies.length - 3}</span>` : ''}
+                    
+                    <div class="game-card-features">
+                        ${game.features.slice(0, 3).map(feature => 
+                            `<span class="game-feature">${feature}</span>`
+                        ).join('')}
+                        ${game.features.length > 3 ? '<span class="feature-more">+' + (game.features.length - 3) + '</span>' : ''}
                     </div>
+                    
+                    <div class="portfolio-tags">
+                        ${game.technologies.slice(0, 4).map(tech => 
+                            `<span class="tag">${tech}</span>`
+                        ).join('')}
+                        ${game.technologies.length > 4 ? '<span class="tag-more">+' + (game.technologies.length - 4) + '</span>' : ''}
+                    </div>
+                    
                     <div class="portfolio-meta">
                         <div class="meta-item">
                             <i class="fas fa-star"></i>
                             <span>${game.rating}</span>
                         </div>
                         <div class="meta-item">
-                            <i class="fas fa-play-circle"></i>
+                            <i class="fas fa-play"></i>
                             <span>${this.formatNumber(game.playCount)}</span>
                         </div>
                         <div class="meta-item">
                             <i class="fas fa-heart"></i>
                             <span>${this.formatNumber(game.likes)}</span>
                         </div>
+                        <div class="meta-item">
+                            <i class="fas fa-calendar"></i>
+                            <span>${new Date(game.launchDate).getFullYear()}</span>
+                        </div>
                     </div>
+                    
                     <div class="portfolio-platforms">
-                        ${game.platforms.map(platform => `<span class="platform-tag">${platform}</span>`).join('')}
+                        ${game.platforms.map(platform => 
+                            `<span class="platform-tag ${platform.toLowerCase()}">${platform}</span>`
+                        ).join('')}
                     </div>
                 </div>
             </div>
-        `).join('');
-
-        // Add hover effects
-        this.setupCardHoverEffects();
+        `;
     }
 
-    setupCardHoverEffects() {
-        const cards = document.querySelectorAll('.portfolio-card');
-        cards.forEach(card => {
-            card.addEventListener('mousemove', (e) => {
-                const rect = card.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                
-                const centerX = rect.width / 2;
-                const centerY = rect.height / 2;
-                
-                const rotateY = (x - centerX) / 25;
-                const rotateX = (centerY - y) / 25;
-                
-                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(10px)`;
-            });
+    getEmptyStateHTML() {
+        return `
+            <div class="empty-state">
+                <i class="fas fa-gamepad"></i>
+                <h3>No Games Found</h3>
+                <p>Try adjusting your filters or search terms to see more results</p>
+                <button class="btn btn-primary" id="resetSearch">
+                    <i class="fas fa-redo"></i>
+                    Reset Search
+                </button>
+            </div>
+        `;
+    }
 
-            card.addEventListener('mouseleave', () => {
-                card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateZ(0)';
+    renderPagination() {
+        const pagination = document.getElementById('gamesPagination');
+        if (!pagination) return;
+
+        const totalPages = Math.ceil(this.filteredGames.length / this.gamesPerPage);
+        
+        if (totalPages <= 1) {
+            this.hidePagination();
+            return;
+        }
+
+        let paginationHTML = '';
+        
+        // Previous button
+        if (this.currentPage > 1) {
+            paginationHTML += `<button class="pagination-btn" data-page="${this.currentPage - 1}">Previous</button>`;
+        }
+
+        // Page numbers
+        for (let i = 1; i <= totalPages; i++) {
+            if (i === this.currentPage) {
+                paginationHTML += `<button class="pagination-btn active" data-page="${i}">${i}</button>`;
+            } else if (i === 1 || i === totalPages || (i >= this.currentPage - 1 && i <= this.currentPage + 1)) {
+                paginationHTML += `<button class="pagination-btn" data-page="${i}">${i}</button>`;
+            } else if (i === this.currentPage - 2 || i === this.currentPage + 2) {
+                paginationHTML += `<span class="pagination-ellipsis">...</span>`;
+            }
+        }
+
+        // Next button
+        if (this.currentPage < totalPages) {
+            paginationHTML += `<button class="pagination-btn" data-page="${this.currentPage + 1}">Next</button>`;
+        }
+
+        pagination.innerHTML = paginationHTML;
+
+        // Add event listeners to pagination buttons
+        pagination.querySelectorAll('.pagination-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                this.currentPage = parseInt(e.target.dataset.page);
+                this.renderGames();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             });
+        });
+    }
+
+    hidePagination() {
+        const pagination = document.getElementById('gamesPagination');
+        if (pagination) {
+            pagination.innerHTML = '';
+        }
+    }
+
+    updateResultsCount() {
+        const countElement = document.getElementById('gamesCount');
+        if (countElement) {
+            countElement.textContent = this.filteredGames.length;
+        }
+    }
+
+    openGamePreview(gameId) {
+        const game = this.games.find(g => g.id === parseInt(gameId));
+        if (!game) return;
+
+        // Create and show game preview modal
+        const modalHTML = `
+            <div id="gamePreviewModal" class="modal active">
+                <div class="modal-content large">
+                    <div class="modal-header">
+                        <h2>${game.name} - Preview</h2>
+                        <button class="modal-close" id="gamePreviewClose">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="game-container">
+                            <iframe src="${game.gameFile}" class="game-iframe" 
+                                    allow="gamepad; fullscreen"></iframe>
+                        </div>
+                        <div class="game-controls">
+                            <button class="btn-control" onclick="document.querySelector('.game-iframe').contentWindow.location.reload()">
+                                <i class="fas fa-redo"></i>
+                                Restart Game
+                            </button>
+                            <button class="btn-control" onclick="document.querySelector('.game-iframe').requestFullscreen()">
+                                <i class="fas fa-expand"></i>
+                                Fullscreen
+                            </button>
+                            <a href="game-detail.html?id=${game.id}" class="btn-control">
+                                <i class="fas fa-info-circle"></i>
+                                View Details
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        // Remove existing modal if any
+        const existingModal = document.getElementById('gamePreviewModal');
+        if (existingModal) {
+            existingModal.remove();
+        }
+
+        document.body.insertAdjacentHTML('beforeend', modalHTML);
+
+        // Add event listener to close button
+        document.getElementById('gamePreviewClose').addEventListener('click', () => {
+            document.getElementById('gamePreviewModal').remove();
+        });
+
+        // Close modal when clicking outside
+        document.getElementById('gamePreviewModal').addEventListener('click', (e) => {
+            if (e.target.id === 'gamePreviewModal') {
+                document.getElementById('gamePreviewModal').remove();
+            }
         });
     }
 
@@ -258,80 +453,16 @@ class GamesPage {
         return num.toString();
     }
 
-    setupBackToTop() {
-        const btn = document.getElementById('backToTop');
-        if (!btn) return;
-
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 300) {
-                btn.classList.add('visible');
-            } else {
-                btn.classList.remove('visible');
-            }
+    setupViewTransitions() {
+        // Add view transition names for smooth animations
+        const gameCards = document.querySelectorAll('.game-card');
+        gameCards.forEach((card, index) => {
+            card.style.viewTransitionName = `game-card-${index}`;
         });
-
-        btn.addEventListener('click', () => {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-        });
-    }
-
-    setupMobileMenu() {
-        const toggle = document.getElementById('navToggle');
-        const menu = document.getElementById('navMenu');
-
-        if (toggle && menu) {
-            toggle.addEventListener('click', () => {
-                menu.classList.toggle('active');
-                toggle.classList.toggle('active');
-                
-                document.body.style.overflow = menu.classList.contains('active') ? 'hidden' : '';
-            });
-
-            menu.querySelectorAll('.nav-link').forEach(link => {
-                link.addEventListener('click', () => {
-                    menu.classList.remove('active');
-                    toggle.classList.remove('active');
-                    document.body.style.overflow = '';
-                });
-            });
-        }
-    }
-
-    showNotification(message, type = 'success') {
-        const container = document.getElementById('notificationContainer');
-        if (!container) return;
-
-        const notification = document.createElement('div');
-        notification.className = `notification ${type}`;
-        notification.innerHTML = `
-            <i class="fas fa-${this.getNotificationIcon(type)}"></i>
-            <span>${message}</span>
-        `;
-
-        container.appendChild(notification);
-
-        setTimeout(() => {
-            notification.style.animation = 'slideIn 0.3s ease reverse forwards';
-            setTimeout(() => {
-                notification.remove();
-            }, 300);
-        }, 5000);
-    }
-
-    getNotificationIcon(type) {
-        const icons = {
-            success: 'check-circle',
-            error: 'exclamation-circle',
-            warning: 'exclamation-triangle'
-        };
-        return icons[type] || 'info-circle';
     }
 }
 
-// Initialize when DOM is loaded
+// Initialize games portfolio when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    new GamesPage();
+    window.gamesPortfolio = new GamesPortfolio();
 });
