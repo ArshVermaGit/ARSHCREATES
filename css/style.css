@@ -1,6 +1,6 @@
 /* ==========================================
    ARSHCREATES PORTFOLIO - COMPREHENSIVE STYLES
-   Version: 3.0 | Premium Design System
+   Version: 3.0 | Premium Design System - ORANGE PALETTE UPDATE
    Features: 100+ Interactive Elements
    ========================================== */
 
@@ -16,16 +16,16 @@
      CSS CUSTOM PROPERTIES - DESIGN SYSTEM
      ========================================== */
   
-  /* Warm Color Palette - Primary */
+  /* Dark Mode Base Palette (Black BG) */
   --primary: #0A0A0A;
   --primary-light: #1A1A1A;
   --primary-lighter: #2A2A2A;
   
-  /* Accent Colors - Warm Palette */
-  --accent: #A1856D;
-  --accent-secondary: #B8A28A;
-  --accent-tertiary: #D4BFA0;
-  --accent-light: #E8D9C5;
+  /* ACCENT COLORS - ORANGISH GRADIENT PALETTE (REPLACED) */
+  --accent: #FF8C00; /* Dark Orange / Tangerine */
+  --accent-secondary: #FFB626; /* Amber / Gold */
+  --accent-tertiary: #FDBA74; /* Peach / Lighter Orange */
+  --accent-light: #FEEBC8; /* Very Light Peach */
   
   /* Neutral Colors */
   --white: #FFFFFF;
@@ -40,7 +40,7 @@
   --gray-800: #262626;
   --gray-900: #171717;
   
-  /* Semantic Colors */
+  /* Semantic Colors - Updated to use accent for highlights */
   --success: #10B981;
   --warning: #F59E0B;
   --error: #EF4444;
@@ -63,7 +63,7 @@
   --glass-blur: blur(20px);
   --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   
-  /* Gradients */
+  /* Gradients - ORANGISH GRADIENT */
   --gradient-primary: linear-gradient(135deg, var(--accent), var(--accent-secondary));
   --gradient-secondary: linear-gradient(135deg, var(--accent-secondary), var(--accent-tertiary));
   --gradient-hero: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 50%, var(--accent) 100%);
@@ -75,7 +75,7 @@
   --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
   --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.15);
   --shadow-2xl: 0 25px 50px rgba(0, 0, 0, 0.25);
-  --shadow-glow: 0 0 20px rgba(161, 133, 109, 0.3);
+  --shadow-glow: 0 0 25px rgba(255, 140, 0, 0.4); /* New Orange Glow */
   
   /* Typography */
   --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -172,7 +172,7 @@
   --text-tertiary: var(--gray-600);
   --text-muted: var(--gray-500);
   
-  --bg-primary: var(--white);
+  --bg-primary: var(--white); /* White BG in Light Mode */
   --bg-secondary: var(--gray-50);
   --bg-tertiary: var(--gray-100);
   
@@ -184,7 +184,7 @@
   --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.08);
   --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1);
   --shadow-2xl: 0 25px 50px rgba(0, 0, 0, 0.15);
-  --shadow-glow: 0 0 20px rgba(161, 133, 109, 0.2);
+  --shadow-glow: 0 0 20px rgba(255, 140, 0, 0.2); /* Adjusted Orange Glow for Light Mode */
 }
 
 /* ==========================================
