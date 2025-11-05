@@ -1,299 +1,207 @@
 // ============================================
-// WEBSITES PORTFOLIO FUNCTIONALITY
+// WEBSITES PAGE SCRIPT
 // ============================================
 
-class WebsitesPortfolio {
+class WebsitesPage {
     constructor() {
         this.websites = [];
         this.filteredWebsites = [];
         this.currentFilters = {
             category: 'all',
             status: 'all',
-            platform: 'all',
             sort: 'newest'
         };
-        this.currentPage = 1;
-        this.websitesPerPage = 9;
         this.init();
     }
 
     init() {
+        this.setupLoadingScreen();
+        this.setupTheme();
+        this.setupNavigation();
         this.loadWebsites();
-        this.setupEventListeners();
         this.setupFilters();
-        this.renderWebsites();
-        this.setupViewTransitions();
+        this.setupBackToTop();
+        this.setupMobileMenu();
+    }
+
+    setupLoadingScreen() {
+        const loadingScreen = document.getElementById('loadingScreen');
+        const loadingBar = document.getElementById('loadingBar');
+        
+        if (!loadingScreen) return;
+        
+        let progress = 0;
+        const interval = setInterval(() => {
+            progress += Math.random() * 20;
+            if (progress >= 100) {
+                progress = 100;
+                clearInterval(interval);
+                
+                setTimeout(() => {
+                    loadingScreen.style.opacity = '0';
+                    loadingScreen.style.visibility = 'hidden';
+                }, 500);
+            }
+            
+            if (loadingBar) loadingBar.style.width = `${progress}%`;
+        }, 200);
+    }
+
+    setupTheme() {
+        const themeToggle = document.getElementById('themeToggle');
+        const currentTheme = localStorage.getItem('theme') || 'dark';
+        
+        document.documentElement.setAttribute('data-theme', currentTheme);
+        this.updateThemeIcon(currentTheme);
+
+        if (themeToggle) {
+            themeToggle.addEventListener('click', () => {
+                const theme = document.documentElement.getAttribute('data-theme');
+                const newTheme = theme === 'dark' ? 'light' : 'dark';
+                
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                this.updateThemeIcon(newTheme);
+                
+                this.showNotification(`Switched to ${newTheme} mode`, 'success');
+            });
+        }
+    }
+
+    updateThemeIcon(theme) {
+        const icon = document.querySelector('#themeToggle i');
+        if (icon) {
+            icon.className = theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+        }
+    }
+
+    setupNavigation() {
+        const navbar = document.getElementById('navbar');
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
     }
 
     loadWebsites() {
-        this.websites = window.PORTFOLIO_DATA.websites || [];
-        this.filteredWebsites = [...this.websites];
-    }
-
-    setupEventListeners() {
-        // Filter event listeners
-        document.getElementById('categoryFilter')?.addEventListener('change', (e) => {
-            this.currentFilters.category = e.target.value;
-            this.applyFilters();
-        });
-
-        document.getElementById('statusFilter')?.addEventListener('change', (e) => {
-            this.currentFilters.status = e.target.value;
-            this.applyFilters();
-        });
-
-        document.getElementById('sortFilter')?.addEventListener('change', (e) => {
-            this.currentFilters.sort = e.target.value;
-            this.applyFilters();
-        });
-
-        document.getElementById('techFilter')?.addEventListener('change', (e) => {
-            this.currentFilters.technology = e.target.value;
-            this.applyFilters();
-        });
-
-        // Platform filter buttons
-        document.querySelectorAll('.platform-filter-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                document.querySelectorAll('.platform-filter-btn').forEach(b => b.classList.remove('active'));
-                e.target.classList.add('active');
-                this.currentFilters.platform = e.target.dataset.platform;
-                this.applyFilters();
-            });
-        });
-
-        // Search functionality
-        const searchInput = document.getElementById('websiteSearch');
-        const searchClear = document.getElementById('searchClear');
-        
-        if (searchInput) {
-            searchInput.addEventListener('input', (e) => {
-                this.handleSearch(e.target.value);
-            });
-        }
-
-        if (searchClear) {
-            searchClear.addEventListener('click', () => {
-                searchInput.value = '';
-                this.handleSearch('');
-            });
-        }
-
-        // Reset filters
-        document.getElementById('resetFilters')?.addEventListener('click', () => {
-            this.resetFilters();
-        });
-
-        // View options
-        document.querySelectorAll('.view-option').forEach(option => {
-            option.addEventListener('click', (e) => {
-                this.changeView(e.target.dataset.view);
-            });
-        });
-
-        // Website preview
-        document.addEventListener('click', (e) => {
-            if (e.target.closest('.btn-preview')) {
-                const websiteId = e.target.closest('.btn-preview').dataset.websitePreview;
-                this.openWebsitePreview(websiteId);
-            }
-        });
-    }
-
-    setupFilters() {
-        // Initialize filter values
-        const filters = ['categoryFilter', 'statusFilter', 'sortFilter', 'techFilter'];
-        filters.forEach(filterId => {
-            const element = document.getElementById(filterId);
-            if (element) {
-                element.value = this.currentFilters[filterId.replace('Filter', '')] || 'all';
-            }
-        });
-    }
-
-    applyFilters() {
-        let filtered = [...this.websites];
-
-        // Category filter
-        if (this.currentFilters.category !== 'all') {
-            filtered = filtered.filter(website => 
-                website.category === this.currentFilters.category
-            );
-        }
-
-        // Status filter
-        if (this.currentFilters.status !== 'all') {
-            filtered = filtered.filter(website => 
-                website.status.toLowerCase() === this.currentFilters.status.toLowerCase()
-            );
-        }
-
-        // Technology filter
-        if (this.currentFilters.technology !== 'all') {
-            filtered = filtered.filter(website => 
-                website.technologies.includes(this.currentFilters.technology)
-            );
-        }
-
-        // Platform filter
-        if (this.currentFilters.platform !== 'all') {
-            filtered = filtered.filter(website => {
-                if (this.currentFilters.platform === 'responsive') return true; // All websites are responsive
-                if (this.currentFilters.platform === 'pwa') return website.features?.includes('PWA') || false;
-                return true;
-            });
-        }
-
-        // Search filter
-        const searchInput = document.getElementById('websiteSearch');
-        if (searchInput && searchInput.value) {
-            const searchTerm = searchInput.value.toLowerCase();
-            filtered = filtered.filter(website =>
-                website.name.toLowerCase().includes(searchTerm) ||
-                website.description.toLowerCase().includes(searchTerm) ||
-                website.technologies.some(tech => tech.toLowerCase().includes(searchTerm))
-            );
-        }
-
-        // Sorting
-        filtered = this.sortWebsites(filtered, this.currentFilters.sort);
-
-        this.filteredWebsites = filtered;
-        this.currentPage = 1;
-        this.renderWebsites();
-        this.updateResultsCount();
-    }
-
-    sortWebsites(websites, sortType) {
-        switch (sortType) {
-            case 'newest':
-                return websites.sort((a, b) => new Date(b.launchDate) - new Date(a.launchDate));
-            case 'oldest':
-                return websites.sort((a, b) => new Date(a.launchDate) - new Date(b.launchDate));
-            case 'rating':
-                return websites.sort((a, b) => b.rating - a.rating);
-            case 'users':
-                return websites.sort((a, b) => b.monthlyUsers - a.monthlyUsers);
-            case 'a-z':
-                return websites.sort((a, b) => a.name.localeCompare(b.name));
-            case 'z-a':
-                return websites.sort((a, b) => b.name.localeCompare(a.name));
-            default:
-                return websites;
-        }
-    }
-
-    handleSearch(searchTerm) {
-        this.applyFilters();
-    }
-
-    resetFilters() {
-        this.currentFilters = {
-            category: 'all',
-            status: 'all',
-            platform: 'all',
-            sort: 'newest',
-            technology: 'all'
-        };
-        
-        this.setupFilters();
-        
-        const searchInput = document.getElementById('websiteSearch');
-        if (searchInput) searchInput.value = '';
-        
-        this.applyFilters();
-    }
-
-    changeView(viewType) {
-        const grid = document.getElementById('websitesGrid');
-        if (grid) {
-            grid.setAttribute('data-view', viewType);
-        }
-        
-        document.querySelectorAll('.view-option').forEach(option => {
-            option.classList.remove('active');
-        });
-        
-        document.querySelector(`[data-view="${viewType}"]`)?.classList.add('active');
-    }
-
-    renderWebsites() {
-        const grid = document.getElementById('websitesGrid');
-        if (!grid) return;
-
-        const startIndex = (this.currentPage - 1) * this.websitesPerPage;
-        const endIndex = startIndex + this.websitesPerPage;
-        const websitesToShow = this.filteredWebsites.slice(startIndex, endIndex);
-
-        if (websitesToShow.length === 0) {
-            grid.innerHTML = this.getEmptyStateHTML();
-            this.hidePagination();
+        if (!window.PORTFOLIO_DATA || !window.PORTFOLIO_DATA.websites) {
+            console.error('Websites data not found');
             return;
         }
 
-        grid.innerHTML = websitesToShow.map(website => this.createWebsiteCard(website)).join('');
-        this.renderPagination();
+        this.websites = window.PORTFOLIO_DATA.websites;
+        this.filteredWebsites = [...this.websites];
+        this.renderWebsites();
     }
 
-    createWebsiteCard(website) {
-        return `
-            <div class="portfolio-card website-card" 
-                 data-category="${website.category}" 
-                 data-status="${website.status}" 
-                 data-rating="${website.rating}" 
-                 data-users="${website.monthlyUsers}">
+    setupFilters() {
+        const categoryFilter = document.getElementById('categoryFilter');
+        const statusFilter = document.getElementById('statusFilter');
+        const sortFilter = document.getElementById('sortFilter');
+
+        if (categoryFilter) {
+            categoryFilter.addEventListener('change', (e) => {
+                this.currentFilters.category = e.target.value;
+                this.applyFilters();
+            });
+        }
+
+        if (statusFilter) {
+            statusFilter.addEventListener('change', (e) => {
+                this.currentFilters.status = e.target.value;
+                this.applyFilters();
+            });
+        }
+
+        if (sortFilter) {
+            sortFilter.addEventListener('change', (e) => {
+                this.currentFilters.sort = e.target.value;
+                this.applyFilters();
+            });
+        }
+    }
+
+    applyFilters() {
+        this.filteredWebsites = this.websites.filter(website => {
+            // Category filter
+            if (this.currentFilters.category !== 'all' && website.category !== this.currentFilters.category) {
+                return false;
+            }
+
+            // Status filter
+            if (this.currentFilters.status !== 'all' && website.status !== this.currentFilters.status) {
+                return false;
+            }
+
+            return true;
+        });
+
+        // Sort websites
+        this.sortWebsites();
+
+        this.renderWebsites();
+    }
+
+    sortWebsites() {
+        switch (this.currentFilters.sort) {
+            case 'newest':
+                this.filteredWebsites.sort((a, b) => new Date(b.launchDate) - new Date(a.launchDate));
+                break;
+            case 'oldest':
+                this.filteredWebsites.sort((a, b) => new Date(a.launchDate) - new Date(b.launchDate));
+                break;
+            case 'rating':
+                this.filteredWebsites.sort((a, b) => b.rating - a.rating);
+                break;
+            case 'users':
+                // For websites, we'll use a simulated user count based on playCount
+                this.filteredWebsites.sort((a, b) => b.playCount - a.playCount);
+                break;
+        }
+    }
+
+    renderWebsites() {
+        const container = document.getElementById('websitesGrid');
+        if (!container) return;
+
+        if (this.filteredWebsites.length === 0) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-laptop-code"></i>
+                    <h3>No Websites Found</h3>
+                    <p>Try adjusting your filters to see more results</p>
+                </div>
+            `;
+            return;
+        }
+
+        container.innerHTML = this.filteredWebsites.map(website => `
+            <div class="portfolio-card" onclick="window.location.href='website-detail.html?id=${website.id}'">
                 <div class="card-image">
-                    <img src="${website.image}" alt="${website.name}" class="portfolio-image" loading="lazy">
-                    <div class="website-preview-overlay">
+                    <img src="${website.image}" alt="${website.name}" class="portfolio-image">
+                    <div class="card-overlay">
                         <div class="card-actions">
-                            <button class="btn-visit" onclick="window.open('${website.url}', '_blank')">
+                            <button class="btn-visit" onclick="event.stopPropagation(); window.location.href='website-detail.html?id=${website.id}'">
                                 <i class="fas fa-external-link-alt"></i>
-                            </button>
-                            <button class="btn-preview" data-website-preview="${website.id}">
-                                <i class="fas fa-eye"></i>
-                            </button>
-                            <button class="btn-bookmark" data-website-id="${website.id}">
-                                <i class="far fa-bookmark"></i>
                             </button>
                         </div>
                     </div>
                     <div class="card-badge ${website.status.toLowerCase()}">
-                        <i class="fas fa-circle"></i>
                         ${website.status}
-                    </div>
-                    <div class="website-performance">
-                        <span>Performance</span>
-                        <div class="performance-bar">
-                            <div class="performance-fill" style="width: ${Math.min(website.rating * 20, 100)}%"></div>
-                        </div>
-                        <span>${Math.min(website.rating * 20, 100)}%</span>
                     </div>
                 </div>
                 <div class="portfolio-info">
-                    <div class="website-header">
-                        <h3 class="portfolio-title">${website.name}</h3>
-                        <div class="website-rating">
-                            <i class="fas fa-star"></i>
-                            <span>${website.rating}</span>
-                        </div>
-                    </div>
+                    <h3 class="portfolio-title">${website.name}</h3>
                     <p class="portfolio-category">${website.category}</p>
                     <p class="portfolio-description">${website.overview}</p>
-                    
-                    <div class="website-card-features">
-                        ${website.features.slice(0, 3).map(feature => 
-                            `<span class="website-feature">${feature}</span>`
-                        ).join('')}
-                        ${website.features.length > 3 ? '<span class="feature-more">+' + (website.features.length - 3) + '</span>' : ''}
-                    </div>
-                    
                     <div class="portfolio-tags">
-                        ${website.technologies.slice(0, 4).map(tech => 
-                            `<span class="tag">${tech}</span>`
-                        ).join('')}
-                        ${website.technologies.length > 4 ? '<span class="tag-more">+' + (website.technologies.length - 4) + '</span>' : ''}
+                        ${website.technologies.slice(0, 3).map(tech => `<span class="tag">${tech}</span>`).join('')}
+                        ${website.technologies.length > 3 ? `<span class="tag-more">+${website.technologies.length - 3}</span>` : ''}
                     </div>
-                    
                     <div class="portfolio-meta">
                         <div class="meta-item">
                             <i class="fas fa-star"></i>
@@ -301,158 +209,44 @@ class WebsitesPortfolio {
                         </div>
                         <div class="meta-item">
                             <i class="fas fa-users"></i>
-                            <span>${this.formatNumber(website.monthlyUsers)}</span>
+                            <span>${this.formatNumber(website.playCount)}</span>
                         </div>
                         <div class="meta-item">
                             <i class="fas fa-calendar"></i>
-                            <span>${new Date(website.launchDate).getFullYear()}</span>
-                        </div>
-                        <div class="meta-item">
-                            <i class="fas fa-bolt"></i>
-                            <span>${Math.min(website.rating * 20, 100)}%</span>
+                            <span>${formatDate(website.launchDate)}</span>
                         </div>
                     </div>
-                    
                     <div class="portfolio-platforms">
-                        <span class="platform-tag responsive">Responsive</span>
-                        ${website.features?.includes('PWA') ? '<span class="platform-tag pwa">PWA</span>' : ''}
-                    </div>
-                    
-                    <div class="website-progress">
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: 100%"></div>
-                        </div>
-                        <span class="progress-text">Fully Launched</span>
+                        <span class="platform-tag web">Web Platform</span>
                     </div>
                 </div>
             </div>
-        `;
+        `).join('');
+
+        // Add hover effects
+        this.setupCardHoverEffects();
     }
 
-    getEmptyStateHTML() {
-        return `
-            <div class="empty-state">
-                <i class="fas fa-laptop-code"></i>
-                <h3>No Websites Found</h3>
-                <p>Try adjusting your filters or search terms to see more results</p>
-                <button class="btn btn-primary" id="resetSearch">
-                    <i class="fas fa-redo"></i>
-                    Reset Search
-                </button>
-            </div>
-        `;
-    }
-
-    renderPagination() {
-        const pagination = document.getElementById('websitesPagination');
-        if (!pagination) return;
-
-        const totalPages = Math.ceil(this.filteredWebsites.length / this.websitesPerPage);
-        
-        if (totalPages <= 1) {
-            this.hidePagination();
-            return;
-        }
-
-        let paginationHTML = '';
-        
-        if (this.currentPage > 1) {
-            paginationHTML += `<button class="pagination-btn" data-page="${this.currentPage - 1}">Previous</button>`;
-        }
-
-        for (let i = 1; i <= totalPages; i++) {
-            if (i === this.currentPage) {
-                paginationHTML += `<button class="pagination-btn active" data-page="${i}">${i}</button>`;
-            } else if (i === 1 || i === totalPages || (i >= this.currentPage - 1 && i <= this.currentPage + 1)) {
-                paginationHTML += `<button class="pagination-btn" data-page="${i}">${i}</button>`;
-            } else if (i === this.currentPage - 2 || i === this.currentPage + 2) {
-                paginationHTML += `<span class="pagination-ellipsis">...</span>`;
-            }
-        }
-
-        if (this.currentPage < totalPages) {
-            paginationHTML += `<button class="pagination-btn" data-page="${this.currentPage + 1}">Next</button>`;
-        }
-
-        pagination.innerHTML = paginationHTML;
-
-        pagination.querySelectorAll('.pagination-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                this.currentPage = parseInt(e.target.dataset.page);
-                this.renderWebsites();
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+    setupCardHoverEffects() {
+        const cards = document.querySelectorAll('.portfolio-card');
+        cards.forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                
+                const rotateY = (x - centerX) / 25;
+                const rotateX = (centerY - y) / 25;
+                
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(10px)`;
             });
-        });
-    }
 
-    hidePagination() {
-        const pagination = document.getElementById('websitesPagination');
-        if (pagination) {
-            pagination.innerHTML = '';
-        }
-    }
-
-    updateResultsCount() {
-        const countElement = document.getElementById('websitesCount');
-        if (countElement) {
-            countElement.textContent = this.filteredWebsites.length;
-        }
-    }
-
-    openWebsitePreview(websiteId) {
-        const website = this.websites.find(w => w.id === parseInt(websiteId));
-        if (!website) return;
-
-        const modalHTML = `
-            <div id="websitePreviewModal" class="modal active">
-                <div class="modal-content large">
-                    <div class="modal-header">
-                        <h2>${website.name} - Preview</h2>
-                        <button class="modal-close" id="websitePreviewClose">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="website-preview-content">
-                            <div class="preview-frame">
-                                <iframe src="${website.url}" class="website-iframe" 
-                                        frameborder="0"></iframe>
-                            </div>
-                            <div class="preview-info">
-                                <h3>${website.name}</h3>
-                                <p>${website.description}</p>
-                                <div class="preview-actions">
-                                    <button class="btn btn-primary" onclick="window.open('${website.url}', '_blank')">
-                                        <i class="fas fa-external-link-alt"></i>
-                                        Visit Website
-                                    </button>
-                                    <button class="btn btn-secondary" onclick="window.location.href='website-detail.html?id=${website.id}'">
-                                        <i class="fas fa-info-circle"></i>
-                                        View Details
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        `;
-
-        const existingModal = document.getElementById('websitePreviewModal');
-        if (existingModal) {
-            existingModal.remove();
-        }
-
-        document.body.insertAdjacentHTML('beforeend', modalHTML);
-
-        document.getElementById('websitePreviewClose').addEventListener('click', () => {
-            document.getElementById('websitePreviewModal').remove();
-        });
-
-        document.getElementById('websitePreviewModal').addEventListener('click', (e) => {
-            if (e.target.id === 'websitePreviewModal') {
-                document.getElementById('websitePreviewModal').remove();
-            }
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateZ(0)';
+            });
         });
     }
 
@@ -465,15 +259,80 @@ class WebsitesPortfolio {
         return num.toString();
     }
 
-    setupViewTransitions() {
-        const websiteCards = document.querySelectorAll('.website-card');
-        websiteCards.forEach((card, index) => {
-            card.style.viewTransitionName = `website-card-${index}`;
+    setupBackToTop() {
+        const btn = document.getElementById('backToTop');
+        if (!btn) return;
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                btn.classList.add('visible');
+            } else {
+                btn.classList.remove('visible');
+            }
         });
+
+        btn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    }
+
+    setupMobileMenu() {
+        const toggle = document.getElementById('navToggle');
+        const menu = document.getElementById('navMenu');
+
+        if (toggle && menu) {
+            toggle.addEventListener('click', () => {
+                menu.classList.toggle('active');
+                toggle.classList.toggle('active');
+                
+                document.body.style.overflow = menu.classList.contains('active') ? 'hidden' : '';
+            });
+
+            menu.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', () => {
+                    menu.classList.remove('active');
+                    toggle.classList.remove('active');
+                    document.body.style.overflow = '';
+                });
+            });
+        }
+    }
+
+    showNotification(message, type = 'success') {
+        const container = document.getElementById('notificationContainer');
+        if (!container) return;
+
+        const notification = document.createElement('div');
+        notification.className = `notification ${type}`;
+        notification.innerHTML = `
+            <i class="fas fa-${this.getNotificationIcon(type)}"></i>
+            <span>${message}</span>
+        `;
+
+        container.appendChild(notification);
+
+        setTimeout(() => {
+            notification.style.animation = 'slideIn 0.3s ease reverse forwards';
+            setTimeout(() => {
+                notification.remove();
+            }, 300);
+        }, 5000);
+    }
+
+    getNotificationIcon(type) {
+        const icons = {
+            success: 'check-circle',
+            error: 'exclamation-circle',
+            warning: 'exclamation-triangle'
+        };
+        return icons[type] || 'info-circle';
     }
 }
 
-// Initialize websites portfolio when DOM is loaded
+// Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    window.websitesPortfolio = new WebsitesPortfolio();
+    new WebsitesPage();
 });
