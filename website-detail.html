@@ -3,73 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TechHaven - Website Details | Arsh Verma</title>
+    <title>Website Details - Arsh Verma</title>
     <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
-    <style>
-        .website-detail-hero {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--accent-secondary) 100%);
-            padding: var(--space-3xl) 0;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .website-preview {
-            border-radius: var(--radius-lg);
-            overflow: hidden;
-            box-shadow: var(--shadow-xl);
-            margin: var(--space-2xl) 0;
-            position: relative;
-        }
-        
-        .preview-controls {
-            position: absolute;
-            top: var(--space-md);
-            right: var(--space-md);
-            display: flex;
-            gap: var(--space-sm);
-            z-index: 10;
-        }
-        
-        .feature-showcase {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: var(--space-lg);
-            margin: var(--space-2xl) 0;
-        }
-        
-        .feature-item {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--radius-lg);
-            padding: var(--space-lg);
-            backdrop-filter: var(--glass-blur);
-            transition: all var(--transition-smooth);
-        }
-        
-        .feature-item:hover {
-            border-color: var(--accent);
-            transform: translateY(-3px);
-        }
-        
-        .tech-stack-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: var(--space-lg);
-            margin: var(--space-xl) 0;
-        }
-        
-        .tech-category {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--radius-lg);
-            padding: var(--space-lg);
-            backdrop-filter: var(--glass-blur);
-        }
-    </style>
 </head>
 <body>
     <!-- Loading Screen -->
@@ -112,379 +50,182 @@
         </div>
     </nav>
 
-    <!-- Website Hero Section -->
-    <section class="website-detail-hero" id="websiteHero">
+    <!-- Website Detail Section -->
+    <section class="website-detail-section">
         <div class="container">
-            <div class="hero-content">
-                <div class="website-header-grid">
-                    <div class="website-preview-main">
-                        <div class="website-mockup">
-                            <div class="browser-frame">
-                                <div class="browser-controls">
-                                    <span></span>
-                                    <span></span>
-                                    <span></span>
-                                </div>
-                                <img src="images/websites/techhaven-preview.jpg" alt="TechHaven Website Preview" class="website-preview-img">
-                            </div>
+            <!-- Website Preview -->
+            <div class="website-preview-container">
+                <div class="website-preview">
+                    <div class="preview-image">
+                        <img id="previewImage" src="" alt="Website Preview" class="preview-img">
+                        <div class="preview-overlay">
+                            <button id="visitBtn" class="btn-visit-large">
+                                <i class="fas fa-external-link-alt"></i>
+                                <span>Visit Website</span>
+                            </button>
                         </div>
                     </div>
                     
-                    <div class="website-info-main">
+                    <!-- Website Controls -->
+                    <div class="website-controls">
+                        <div class="control-group">
+                            <button id="fullscreenBtn" class="btn-control" title="Fullscreen Preview">
+                                <i class="fas fa-expand"></i>
+                            </button>
+                            <button id="closePreviewBtn" class="btn-control" title="Close Preview">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div class="control-info">
+                            <span class="control-text">Interactive Website Preview</span>
+                        </div>
+                    </div>
+
+                    <!-- Website Container -->
+                    <div id="websiteContainer" class="website-container">
+                        <iframe id="websiteFrame" allowfullscreen></iframe>
+                    </div>
+                </div>
+
+                <!-- Navigation Arrows -->
+                <div class="detail-navigation">
+                    <button id="prevWebsite" class="nav-arrow prev-arrow">
+                        <i class="fas fa-chevron-left"></i>
+                        <span class="arrow-text">Previous Website</span>
+                    </button>
+                    <button id="nextWebsite" class="nav-arrow next-arrow">
+                        <span class="arrow-text">Next Website</span>
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Website Information -->
+            <div class="website-info-container">
+                <div class="website-header">
+                    <div class="website-title-section">
+                        <h1 id="websiteTitle" class="website-title">Website Title</h1>
                         <div class="website-meta">
-                            <span class="website-category">E-commerce</span>
-                            <div class="website-rating-large">
-                                <div class="stars">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                </div>
-                                <span class="rating-text">5.0 (2.3K reviews)</span>
-                            </div>
+                            <span id="websiteCategory" class="website-category">Category</span>
+                            <span class="website-rating">
+                                <i class="fas fa-star"></i>
+                                <span id="websiteRating">0.0</span>/5
+                            </span>
+                            <span id="websiteStatus" class="website-status">Status</span>
                         </div>
-                        
-                        <h1 class="website-title">TechHaven</h1>
-                        <p class="website-tagline">Premium Electronics E-commerce Platform</p>
-                        
-                        <div class="website-stats-overview">
-                            <div class="stat">
-                                <div class="stat-value">50K+</div>
-                                <div class="stat-label">Monthly Users</div>
-                            </div>
-                            <div class="stat">
-                                <div class="stat-value">5.0</div>
-                                <div class="stat-label">Client Rating</div>
-                            </div>
-                            <div class="stat">
-                                <div class="stat-value">15K</div>
-                                <div class="stat-label">Orders/Month</div>
-                            </div>
-                            <div class="stat">
-                                <div class="stat-value">99.9%</div>
-                                <div class="stat-label">Uptime</div>
-                            </div>
-                        </div>
-                        
-                        <div class="website-actions">
-                            <a href="https://techhaven-demo.arshverma.com" class="btn btn-primary btn-large" target="_blank">
-                                <i class="fas fa-external-link-alt"></i>
-                                <span>Visit Live Website</span>
-                            </a>
-                            <a href="#" class="btn btn-secondary btn-large">
-                                <i class="fab fa-github"></i>
-                                <span>View Code</span>
-                            </a>
-                        </div>
+                    </div>
+                    <div class="website-actions">
+                        <button id="shareBtn" class="btn btn-secondary">
+                            <i class="fas fa-share-alt"></i>
+                            <span>Share</span>
+                        </button>
+                        <a id="repositoryBtn" href="#" class="btn btn-primary" target="_blank">
+                            <i class="fab fa-github"></i>
+                            <span>Repository</span>
+                        </a>
+                        <a id="liveUrlBtn" href="#" class="btn btn-accent" target="_blank">
+                            <i class="fas fa-external-link-alt"></i>
+                            <span>Live Site</span>
+                        </a>
                     </div>
                 </div>
-            </div>
-        </div>
-    </section>
 
-    <!-- Website Detail Section -->
-    <section class="section website-detail-section">
-        <div class="container">
-            <div class="detail-content-grid">
-                <!-- Main Content -->
-                <div class="main-content">
-                    <!-- Website Description -->
-                    <div class="content-section">
-                        <h2>About TechHaven</h2>
-                        <p class="website-description">
-                            TechHaven is a premium e-commerce platform specializing in high-end electronics and tech gadgets. 
-                            Built with a focus on user experience, performance, and conversion optimization.
-                        </p>
-                        <p>
-                            The platform features advanced product filtering, personalized recommendations, secure payment processing, 
-                            and a seamless mobile shopping experience that has resulted in a 40% increase in conversion rates.
-                        </p>
+                <div class="website-content">
+                    <!-- Overview & Description -->
+                    <div class="website-description-section">
+                        <h2>About This Website</h2>
+                        <p id="websiteOverview" class="website-overview">Website overview...</p>
+                        <p id="websiteDescription" class="website-description">Website description...</p>
                     </div>
 
-                    <!-- Interactive Preview -->
-                    <div class="content-section">
-                        <h2>Website Preview</h2>
-                        <div class="website-preview">
-                            <div class="preview-controls">
-                                <button class="btn btn-control" id="fullscreenPreview">
-                                    <i class="fas fa-expand"></i>
-                                </button>
-                                <button class="btn btn-control" id="refreshPreview">
-                                    <i class="fas fa-redo"></i>
-                                </button>
+                    <!-- Website Details Grid -->
+                    <div class="website-details-grid">
+                        <div class="detail-card">
+                            <div class="detail-icon">
+                                <i class="fas fa-calendar"></i>
                             </div>
-                            <div class="preview-container">
-                                <iframe src="https://techhaven-demo.arshverma.com" 
-                                        frameborder="0" 
-                                        class="website-iframe"
-                                        id="websiteIframe"></iframe>
+                            <div class="detail-content">
+                                <h3>Launch Date</h3>
+                                <p id="launchDate">-</p>
+                            </div>
+                        </div>
+                        <div class="detail-card">
+                            <div class="detail-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="detail-content">
+                                <h3>Development Time</h3>
+                                <p id="developmentTime">-</p>
+                            </div>
+                        </div>
+                        <div class="detail-card">
+                            <div class="detail-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="detail-content">
+                                <h3>User Base</h3>
+                                <p id="userBase">-</p>
+                            </div>
+                        </div>
+                        <div class="detail-card">
+                            <div class="detail-icon">
+                                <i class="fas fa-mobile-alt"></i>
+                            </div>
+                            <div class="detail-content">
+                                <h3>Responsive Design</h3>
+                                <p>Mobile-First</p>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Key Features -->
-                    <div class="content-section">
+                    <!-- Features Section -->
+                    <div class="features-section">
                         <h2>Key Features</h2>
-                        <div class="feature-showcase">
-                            <div class="feature-item">
-                                <div class="feature-icon">
-                                    <i class="fas fa-search"></i>
-                                </div>
-                                <h3>Advanced Search & Filtering</h3>
-                                <p>Intelligent product search with faceted filtering by price, brand, features, and customer ratings.</p>
-                            </div>
-                            <div class="feature-item">
-                                <div class="feature-icon">
-                                    <i class="fas fa-robot"></i>
-                                </div>
-                                <h3>AI Recommendations</h3>
-                                <p>Personalized product suggestions based on browsing history and purchase patterns.</p>
-                            </div>
-                            <div class="feature-item">
-                                <div class="feature-icon">
-                                    <i class="fas fa-mobile-alt"></i>
-                                </div>
-                                <h3>Progressive Web App</h3>
-                                <p>Fast, app-like experience with offline functionality and push notifications.</p>
-                            </div>
-                            <div class="feature-item">
-                                <div class="feature-icon">
-                                    <i class="fas fa-shield-alt"></i>
-                                </div>
-                                <h3>Secure Payments</h3>
-                                <p>Multiple payment options with PCI-compliant security and fraud detection.</p>
-                            </div>
-                            <div class="feature-item">
-                                <div class="feature-icon">
-                                    <i class="fas fa-tachometer-alt"></i>
-                                </div>
-                                <h3>Performance Optimized</h3>
-                                <p>Lightning-fast loading times with optimized images and efficient code.</p>
-                            </div>
-                            <div class="feature-item">
-                                <div class="feature-icon">
-                                    <i class="fas fa-chart-line"></i>
-                                </div>
-                                <h3>Analytics Dashboard</h3>
-                                <p>Comprehensive analytics for sales, user behavior, and inventory management.</p>
-                            </div>
+                        <ul id="featuresList" class="features-list">
+                            <!-- Features will be populated dynamically -->
+                        </ul>
+                    </div>
+
+                    <!-- Technologies Section -->
+                    <div class="technologies-section">
+                        <h2>Technologies Used</h2>
+                        <div id="techList" class="tech-tags">
+                            <!-- Technologies will be populated dynamically -->
                         </div>
                     </div>
 
-                    <!-- Technology Stack -->
-                    <div class="content-section">
-                        <h2>Technology Stack</h2>
-                        <div class="tech-stack-grid">
-                            <div class="tech-category">
-                                <h4>Frontend</h4>
-                                <ul class="tech-list">
-                                    <li>React.js</li>
-                                    <li>TypeScript</li>
-                                    <li>Tailwind CSS</li>
-                                    <li>Redux Toolkit</li>
-                                    <li>React Query</li>
-                                </ul>
-                            </div>
-                            <div class="tech-category">
-                                <h4>Backend</h4>
-                                <ul class="tech-list">
-                                    <li>Node.js</li>
-                                    <li>Express.js</li>
-                                    <li>MongoDB</li>
-                                    <li>Redis</li>
-                                    <li>JWT Auth</li>
-                                </ul>
-                            </div>
-                            <div class="tech-category">
-                                <h4>Infrastructure</h4>
-                                <ul class="tech-list">
-                                    <li>AWS EC2</li>
-                                    <li>CloudFront</li>
-                                    <li>S3</li>
-                                    <li>Route 53</li>
-                                    <li>Docker</li>
-                                </ul>
-                            </div>
-                            <div class="tech-category">
-                                <h4>Third-Party</h4>
-                                <ul class="tech-list">
-                                    <li>Stripe Payments</li>
-                                    <li>SendGrid</li>
-                                    <li>Algolia Search</li>
-                                    <li>Google Analytics</li>
-                                    <li>Hotjar</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Sidebar -->
-                <div class="sidebar">
-                    <!-- Project Info -->
-                    <div class="info-card">
-                        <h3>Project Information</h3>
-                        <div class="info-list">
-                            <div class="info-item">
-                                <span class="info-label">Category:</span>
-                                <span class="info-value">E-commerce</span>
-                            </div>
-                            <div class="info-item">
-                                <span class="info-label">Client:</span>
-                                <span class="info-value">TechHaven Inc.</span>
-                            </div>
-                            <div class="info-item">
-                                <span class="info-label">Duration:</span>
-                                <span class="info-value">6 Months</span>
-                            </div>
-                            <div class="info-item">
-                                <span class="info-label">Team Size:</span>
-                                <span class="info-value">4 Developers</span>
-                            </div>
-                            <div class="info-item">
-                                <span class="info-label">Status:</span>
-                                <span class="info-value live">Live</span>
-                            </div>
-                            <div class="info-item">
-                                <span class="info-label">Launch Date:</span>
-                                <span class="info-value">January 2023</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Performance Metrics -->
-                    <div class="info-card">
-                        <h3>Performance Metrics</h3>
-                        <div class="metrics-grid">
-                            <div class="metric">
-                                <div class="metric-value">1.2s</div>
-                                <div class="metric-label">Load Time</div>
-                            </div>
-                            <div class="metric">
-                                <div class="metric-value">40%</div>
-                                <div class="metric-label">Conversion Increase</div>
-                            </div>
-                            <div class="metric">
-                                <div class="metric-value">99.9%</div>
-                                <div class="metric-label">Uptime</div>
-                            </div>
-                            <div class="metric">
-                                <div class="metric-value">95/100</div>
-                                <div class="metric-label">Lighthouse Score</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Client Testimonial -->
-                    <div class="info-card testimonial-card">
-                        <div class="testimonial-content">
-                            <div class="stars">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                            </div>
-                            <p>"Arsh delivered an exceptional e-commerce platform that exceeded our expectations. The attention to detail and user experience focus resulted in a 40% increase in conversions."</p>
-                            <div class="client-info">
-                                <div class="client-avatar">
-                                    <img src="images/clients/sarah-johnson.jpg" alt="Sarah Johnson">
+                    <!-- Website Stats -->
+                    <div class="website-stats-section">
+                        <h2>Website Statistics</h2>
+                        <div class="stats-grid">
+                            <div class="stat-item">
+                                <div class="stat-circle">
+                                    <span id="ratingCircle" class="stat-value">0.0</span>
                                 </div>
-                                <div class="client-details">
-                                    <h4>Sarah Johnson</h4>
-                                    <p>CEO, TechHaven Inc.</p>
+                                <div class="stat-info">
+                                    <h3>Rating</h3>
+                                    <p>User Satisfaction Score</p>
+                                </div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-circle">
+                                    <span id="userCountCircle" class="stat-value">0</span>
+                                </div>
+                                <div class="stat-info">
+                                    <h3>Users</h3>
+                                    <p>Active User Base</p>
+                                </div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-circle">
+                                    <span id="performanceCircle" class="stat-value">98%</span>
+                                </div>
+                                <div class="stat-info">
+                                    <h3>Performance</h3>
+                                    <p>Average Uptime</p>
                                 </div>
                             </div>
                         </div>
-                    </div>
-
-                    <!-- Share Project -->
-                    <div class="info-card">
-                        <h3>Share This Project</h3>
-                        <div class="share-buttons">
-                            <button class="btn btn-share" data-platform="twitter">
-                                <i class="fab fa-twitter"></i>
-                            </button>
-                            <button class="btn btn-share" data-platform="linkedin">
-                                <i class="fab fa-linkedin"></i>
-                            </button>
-                            <button class="btn btn-share" data-platform="link">
-                                <i class="fas fa-link"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Navigation Arrows -->
-            <div class="detail-navigation">
-                <a href="website-detail.html?id=2" class="nav-arrow prev-arrow">
-                    <i class="fas fa-chevron-left"></i>
-                    <div class="arrow-content">
-                        <span class="arrow-label">Previous Website</span>
-                        <span class="arrow-title">HealthWell Platform</span>
-                    </div>
-                </a>
-                <a href="website-detail.html?id=3" class="nav-arrow next-arrow">
-                    <div class="arrow-content">
-                        <span class="arrow-label">Next Website</span>
-                        <span class="arrow-title">FinanceDashboard</span>
-                    </div>
-                    <i class="fas fa-chevron-right"></i>
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Related Websites -->
-    <section class="section related-section">
-        <div class="container">
-            <div class="section-header">
-                <h2>More Websites You Might Like</h2>
-                <p>Explore other innovative web solutions</p>
-            </div>
-            <div class="related-grid">
-                <div class="related-card">
-                    <div class="related-image">
-                        <img src="images/websites/healthwell.jpg" alt="HealthWell Platform">
-                    </div>
-                    <div class="related-content">
-                        <h3>HealthWell Platform</h3>
-                        <p>Healthcare management and telemedicine platform</p>
-                        <div class="related-meta">
-                            <span class="rating">4.9★</span>
-                            <span class="category">Healthcare</span>
-                        </div>
-                        <a href="website-detail.html?id=2" class="btn btn-outline">View Details</a>
-                    </div>
-                </div>
-                <div class="related-card">
-                    <div class="related-image">
-                        <img src="images/websites/financedash.jpg" alt="FinanceDashboard">
-                    </div>
-                    <div class="related-content">
-                        <h3>FinanceDashboard</h3>
-                        <p>Real-time financial analytics and reporting</p>
-                        <div class="related-meta">
-                            <span class="rating">4.8★</span>
-                            <span class="category">Finance</span>
-                        </div>
-                        <a href="website-detail.html?id=3" class="btn btn-outline">View Details</a>
-                    </div>
-                </div>
-                <div class="related-card">
-                    <div class="related-image">
-                        <img src="images/websites/learnhub.jpg" alt="LearnHub">
-                    </div>
-                    <div class="related-content">
-                        <h3>LearnHub</h3>
-                        <p>Interactive online learning platform</p>
-                        <div class="related-meta">
-                            <span class="rating">4.9★</span>
-                            <span class="category">Education</span>
-                        </div>
-                        <a href="website-detail.html?id=4" class="btn btn-outline">View Details</a>
                     </div>
                 </div>
             </div>
@@ -539,112 +280,5 @@
 
     <script src="js/data.js"></script>
     <script src="js/website-detail.js"></script>
-    <script>
-        // Website Detail Page Functionality
-        document.addEventListener('DOMContentLoaded', function() {
-            // Get website ID from URL parameters
-            const urlParams = new URLSearchParams(window.location.search);
-            const websiteId = urlParams.get('id') || 1;
-            
-            // Load website data
-            if (window.PORTFOLIO_DATA && window.PORTFOLIO_DATA.websites) {
-                const website = window.PORTFOLIO_DATA.websites.find(w => w.id == websiteId);
-                if (website) {
-                    updateWebsiteDetail(website);
-                }
-            }
-            
-            // Preview controls
-            const fullscreenBtn = document.getElementById('fullscreenPreview');
-            const refreshBtn = document.getElementById('refreshPreview');
-            const websiteIframe = document.getElementById('websiteIframe');
-            
-            fullscreenBtn.addEventListener('click', function() {
-                if (websiteIframe.requestFullscreen) {
-                    websiteIframe.requestFullscreen();
-                } else if (websiteIframe.webkitRequestFullscreen) {
-                    websiteIframe.webkitRequestFullscreen();
-                } else if (websiteIframe.msRequestFullscreen) {
-                    websiteIframe.msRequestFullscreen();
-                }
-            });
-            
-            refreshBtn.addEventListener('click', function() {
-                websiteIframe.src = websiteIframe.src;
-            });
-            
-            // Share functionality
-            const shareButtons = document.querySelectorAll('.btn-share');
-            shareButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    const platform = this.dataset.platform;
-                    shareWebsite(platform);
-                });
-            });
-            
-            function shareWebsite(platform) {
-                const websiteTitle = document.querySelector('.website-title').textContent;
-                const websiteUrl = window.location.href;
-                let shareUrl = '';
-                
-                switch(platform) {
-                    case 'twitter':
-                        shareUrl = `https://twitter.com/intent/tweet?text=Check out ${websiteTitle}&url=${encodeURIComponent(websiteUrl)}`;
-                        break;
-                    case 'linkedin':
-                        shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(websiteUrl)}`;
-                        break;
-                    case 'link':
-                        navigator.clipboard.writeText(websiteUrl).then(() => {
-                            showNotification('Link copied to clipboard!', 'success');
-                        });
-                        return;
-                }
-                
-                if (shareUrl) {
-                    window.open(shareUrl, '_blank', 'width=600,height=400');
-                }
-            }
-            
-            function showNotification(message, type) {
-                const notification = document.createElement('div');
-                notification.className = `notification ${type}`;
-                notification.innerHTML = `
-                    <div class="notification-content">
-                        <i class="fas fa-${type === 'success' ? 'check' : 'info'}"></i>
-                        <span>${message}</span>
-                    </div>
-                `;
-                
-                document.getElementById('notificationContainer').appendChild(notification);
-                
-                setTimeout(() => {
-                    notification.remove();
-                }, 3000);
-            }
-            
-            function updateWebsiteDetail(website) {
-                // Update page title
-                document.title = `${website.name} - Website Details | Arsh Verma`;
-                
-                // Update hero section
-                document.querySelector('.website-title').textContent = website.name;
-                document.querySelector('.website-tagline').textContent = website.tagline;
-                document.querySelector('.website-description').textContent = website.description;
-                
-                // Update stats
-                document.querySelector('.website-stats-overview .stat:nth-child(1) .stat-value').textContent = website.monthlyUsers;
-                document.querySelector('.website-stats-overview .stat:nth-child(2) .stat-value').textContent = website.rating;
-                document.querySelector('.website-stats-overview .stat:nth-child(3) .stat-value').textContent = website.ordersPerMonth;
-                
-                // Update iframe and links
-                const iframe = document.getElementById('websiteIframe');
-                const liveLink = document.querySelector('.website-actions .btn-primary');
-                
-                iframe.src = website.liveUrl;
-                liveLink.href = website.liveUrl;
-            }
-        });
-    </script>
 </body>
 </html>
