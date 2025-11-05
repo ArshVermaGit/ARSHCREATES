@@ -11,6 +11,7 @@ class PortfolioApp {
     init() {
         this.setupLoadingScreen();
         this.setupTheme();
+        this.setupCustomCursor();
         this.setupParticles();
         this.setupNavigation();
         this.setupTypewriter();
@@ -106,6 +107,71 @@ class PortfolioApp {
         if (icon) {
             icon.className = this.currentTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
         }
+    }
+
+    // ============================================
+    // CUSTOM CURSOR
+    // ============================================
+    setupCustomCursor() {
+        const cursorDot = document.getElementById('cursorDot');
+        const cursorRing = document.getElementById('cursorRing');
+        
+        if (!cursorDot || !cursorRing) return;
+        
+        let mouseX = 0, mouseY = 0;
+        let dotX = 0, dotY = 0;
+        let ringX = 0, ringY = 0;
+        
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+        
+        const animateCursor = () => {
+            // Dot follows cursor directly
+            dotX = mouseX;
+            dotY = mouseY;
+            
+            // Ring follows with delay
+            ringX += (mouseX - ringX) * 0.1;
+            ringY += (mouseY - ringY) * 0.1;
+            
+            cursorDot.style.left = `${dotX}px`;
+            cursorDot.style.top = `${dotY}px`;
+            
+            cursorRing.style.left = `${ringX}px`;
+            cursorRing.style.top = `${ringY}px`;
+            
+            requestAnimationFrame(animateCursor);
+        };
+        
+        animateCursor();
+        
+        // Hover effects
+        const hoverElements = document.querySelectorAll('a, button, .portfolio-card, .nav-link, .category-card, .skill-item, .contact-method, .social-link');
+        
+        hoverElements.forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                cursorDot.classList.add('hover');
+                cursorRing.classList.add('hover');
+            });
+            
+            el.addEventListener('mouseleave', () => {
+                cursorDot.classList.remove('hover');
+                cursorRing.classList.remove('hover');
+            });
+        });
+        
+        // Click effect
+        document.addEventListener('mousedown', () => {
+            cursorDot.style.transform = 'translate(-50%, -50%) scale(0.8)';
+            cursorRing.style.transform = 'translate(-50%, -50%) scale(1.2)';
+        });
+        
+        document.addEventListener('mouseup', () => {
+            cursorDot.style.transform = 'translate(-50%, -50%) scale(1)';
+            cursorRing.style.transform = 'translate(-50%, -50%) scale(1)';
+        });
     }
 
     // ============================================
