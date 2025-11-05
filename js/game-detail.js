@@ -220,7 +220,15 @@ class GameDetailPage {
         });
     }
 
+    // In the startGame method, update to:
     startGame() {
+        const game = this.currentGame;
+     
+        if (!game.gameFile) {
+            this.showNotification('Game file not available', 'error');
+            return;
+        }
+
         const preview = document.querySelector('.game-preview');
         const container = document.getElementById('gameContainer');
         const frame = document.getElementById('gameFrame');
@@ -229,16 +237,16 @@ class GameDetailPage {
 
         if (!preview || !container || !frame) return;
 
-        // Hide preview, show game
+    // Hide preview, show game
         preview.style.display = 'none';
         container.style.display = 'block';
         controls.style.display = 'flex';
 
-        // Load game
-        frame.src = this.currentGame.gameFile;
+    // Load game - use the correct path
+        frame.src = game.gameFile;
         this.isPlaying = true;
 
-        // Update UI
+    // Update UI
         if (playBtn) playBtn.style.display = 'none';
 
         this.showNotification('Game started! Press ESC to exit.', 'success');
