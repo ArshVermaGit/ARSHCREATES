@@ -3813,3 +3813,33 @@ body.preview-active .preview-image {
 .pulse {
     animation: pulse 2s ease-in-out infinite;
 }
+
+/* Fix header z-index issues */
+.navbar {
+    z-index: 1000;
+}
+
+/* Ensure content is below header */
+.section {
+    position: relative;
+    z-index: 1;
+}
+
+/* Fix image display */
+.portfolio-image, .preview-img {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+}
+
+/* Improve mobile menu */
+@media (max-width: 768px) {
+    .nav-menu {
+        background: var(--primary);
+        border: 1px solid var(--glass-border);
+    }
+    
+    [data-theme="light"] .nav-menu {
+        background: var(--primary);
+    }
+}
