@@ -20,7 +20,6 @@ class GameDetailPage {
     setupLoadingScreen() {
         const loadingScreen = document.getElementById('loadingScreen');
         const loadingBar = document.getElementById('loadingBar');
-        const loadingText = document.getElementById('loadingText');
         
         if (!loadingScreen) return;
         
@@ -46,14 +45,14 @@ class GameDetailPage {
         const gameId = urlParams.get('id');
 
         if (!gameId) {
-            window.location.href = 'index.html#games';
+            window.location.href = 'games.html';
             return;
         }
 
-        this.currentGame = getItemById(window.GAME_DATA, parseInt(gameId));
+        this.currentGame = getItemById(window.PORTFOLIO_DATA.games, parseInt(gameId));
 
         if (!this.currentGame) {
-            window.location.href = 'index.html#games';
+            window.location.href = 'games.html';
             return;
         }
 
@@ -70,7 +69,7 @@ class GameDetailPage {
         document.getElementById('gameCategory').textContent = game.category;
         document.getElementById('gameRating').textContent = `${game.rating}/5`;
         document.getElementById('playCount').textContent = `${game.playCount.toLocaleString()} plays`;
-        document.getElementById('releaseDate').textContent = new Date(game.releaseDate).toLocaleDateString();
+        document.getElementById('releaseDate').textContent = formatDate(game.releaseDate);
         document.getElementById('gameOverview').textContent = game.overview;
         document.getElementById('gameDescription').textContent = game.description;
         
@@ -94,6 +93,8 @@ class GameDetailPage {
         document.getElementById('developmentTime').textContent = game.developmentTime;
         document.getElementById('teamSize').textContent = game.teamSize;
         document.getElementById('likes').textContent = game.likes.toLocaleString();
+        document.getElementById('platforms').textContent = game.platforms.join(', ');
+        document.getElementById('gameStatus').textContent = game.status;
     }
 
     setupControls() {
@@ -187,15 +188,15 @@ class GameDetailPage {
 
         if (prevBtn) {
             prevBtn.addEventListener('click', () => {
-                const prevGame = getPrevItem(window.GAME_DATA, this.currentGame.id);
-                window.location.href = `game.html?id=${prevGame.id}`;
+                const prevGame = getPrevItem(window.PORTFOLIO_DATA.games, this.currentGame.id);
+                window.location.href = `game-detail.html?id=${prevGame.id}`;
             });
         }
 
         if (nextBtn) {
             nextBtn.addEventListener('click', () => {
-                const nextGame = getNextItem(window.GAME_DATA, this.currentGame.id);
-                window.location.href = `game.html?id=${nextGame.id}`;
+                const nextGame = getNextItem(window.PORTFOLIO_DATA.games, this.currentGame.id);
+                window.location.href = `game-detail.html?id=${nextGame.id}`;
             });
         }
 
