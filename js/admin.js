@@ -252,6 +252,18 @@ class AdminPanel {
                 this.handleQuickAction(actionType);
             });
         });
+
+        // Add new project button
+        const addProjectBtn = document.getElementById('addProject');
+        if (addProjectBtn) {
+            addProjectBtn.addEventListener('click', () => this.addNewProject());
+        }
+
+        // Add new testimonial button
+        const addTestimonialBtn = document.getElementById('addTestimonial');
+        if (addTestimonialBtn) {
+            addTestimonialBtn.addEventListener('click', () => this.addNewTestimonial());
+        }
     }
 
     handleQuickAction(actionType) {
@@ -268,6 +280,137 @@ class AdminPanel {
             case 'backup-data':
                 this.backupData();
                 break;
+            case 'add-project':
+                this.addNewProject();
+                break;
+            case 'add-testimonial':
+                this.addNewTestimonial();
+                break;
+            default:
+                this.showNotification(`Action "${actionType}" not implemented`, 'warning');
+        }
+    }
+
+    addNewProject() {
+        const category = prompt('Enter category (games/websites/apps):');
+        if (!category || !['games', 'websites', 'apps'].includes(category)) {
+            this.showNotification('Invalid category. Please enter: games, websites, or apps', 'error');
+            return;
+        }
+
+        const name = prompt('Enter project name:');
+        if (!name) {
+            this.showNotification('Project name is required', 'error');
+            return;
+        }
+
+        const overview = prompt('Enter project overview:') || 'An amazing project description';
+        const image = prompt('Enter image path (e.g., images/games/project.jpg):') || 'images/placeholder.jpg';
+
+        // Base project structure
+        const newProject = {
+            name: name,
+            category: this.getDefaultCategory(category),
+            overview: overview,
+            description: overview + ' - Full description goes here with more details about the project.',
+            rating: 4.5,
+            playCount: Math.floor(Math.random() * 10000) + 1000,
+            launchDate: new Date().toISOString().split('T')[0],
+            developmentTime: '3 months',
+            status: 'Live',
+            image: image,
+            technologies: ['JavaScript', 'HTML5', 'CSS3'],
+            features: ['Responsive Design', 'Modern UI/UX', 'Cross-Platform Compatibility']
+        };
+
+        // Category-specific properties
+        if (category === 'websites') {
+            newProject.url = prompt('Enter website URL:') || '#';
+            newProject.repositoryUrl = prompt('Enter repository URL (optional):') || '#';
+        }
+
+        if (category === 'apps') {
+            newProject.platform = 'Cross-Platform';
+            newProject.appStoreUrl = prompt('Enter App Store URL (optional):') || '#';
+            newProject.playStoreUrl = prompt('Enter Play Store URL (optional):') || '#';
+            newProject.repositoryUrl = prompt('Enter repository URL (optional):') || '#';
+        }
+
+        if (category === 'games') {
+            newProject.platforms = ['WebGL'];
+            newProject.teamSize = 1;
+            newProject.likes = Math.floor(Math.random() * 5000) + 100;
+            newProject.gameFile = prompt('Enter game file path (e.g., games/your-game/index.html):') || '#';
+            newProject.repositoryUrl = prompt('Enter repository URL (optional):') || '#';
+        }
+
+        try {
+            // Use the global function to add the project
+            if (window.addPortfolioItem) {
+                window.addPortfolioItem(category, newProject);
+                this.showNotification(`Project "${name}" added successfully to ${category}!`, 'success');
+                this.loadData(); // Refresh the data display
+                
+                // Show confirmation with next steps
+                setTimeout(() => {
+                    if (confirm('Project added! Would you like to edit the data.js file to add more details?')) {
+                        this.showNotification('Edit the data.js file to add more properties like screenshots, detailed descriptions, etc.', 'info');
+                    }
+                }, 1000);
+            } else {
+                throw new Error('addPortfolioItem function not available');
+            }
+        } catch (error) {
+            console.error('Error adding project:', error);
+            this.showNotification('Failed to add project. Please check the console for errors.', 'error');
+        }
+    }
+
+    // Helper method to get default category based on type
+    getDefaultCategory(categoryType) {
+        const categories = {
+            'games': 'Action RPG',
+            'websites': 'Web Application', 
+            'apps': 'Productivity'
+        };
+        return categories[categoryType] || 'General';
+    }
+
+    // Method to add new testimonial
+    addNewTestimonial() {
+        const clientName = prompt('Enter client name:');
+        if (!clientName) {
+            this.showNotification('Client name is required', 'error');
+            return;
+        }
+
+        const clientRole = prompt('Enter client role/company:') || 'Client';
+        const projectType = prompt('Enter project type (Website/App/Game/Consultation):') || 'Website';
+        const projectName = prompt('Enter project name:') || 'Project';
+        const rating = parseFloat(prompt('Enter rating (1-5):') || '5');
+        const text = prompt('Enter testimonial text:') || 'Great work!';
+
+        const newTestimonial = {
+            clientName: clientName,
+            clientRole: clientRole,
+            projectType: projectType,
+            projectName: projectName,
+            rating: Math.min(5, Math.max(1, rating)), // Ensure rating is between 1-5
+            text: text,
+            date: new Date().toISOString().split('T')[0]
+        };
+
+        try {
+            if (window.addTestimonial) {
+                window.addTestimonial(newTestimonial);
+                this.showNotification(`Testimonial from ${clientName} added successfully!`, 'success');
+                this.loadData(); // Refresh the data display
+            } else {
+                throw new Error('addTestimonial function not available');
+            }
+        } catch (error) {
+            console.error('Error adding testimonial:', error);
+            this.showNotification('Failed to add testimonial. Please check the console for errors.', 'error');
         }
     }
 
