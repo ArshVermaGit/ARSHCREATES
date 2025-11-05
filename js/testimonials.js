@@ -1,276 +1,201 @@
 // ============================================
-// TESTIMONIALS FUNCTIONALITY
+// TESTIMONIALS PAGE SCRIPT
 // ============================================
 
-class TestimonialsManager {
+class TestimonialsPage {
     constructor() {
         this.testimonials = [];
         this.filteredTestimonials = [];
         this.currentFilters = {
             projectType: 'all',
-            rating: 0,
-            sort: 'newest',
-            clientType: 'all'
+            minRating: 0,
+            sort: 'newest'
         };
-        this.currentPage = 1;
-        this.testimonialsPerPage = 6;
-        this.carouselIndex = 0;
+        this.currentRating = 0;
         this.init();
     }
 
     init() {
+        this.setupLoadingScreen();
+        this.setupTheme();
+        this.setupNavigation();
         this.loadTestimonials();
-        this.setupEventListeners();
         this.setupFilters();
-        this.renderTestimonials();
-        this.setupCarousel();
         this.setupModal();
+        this.setupBackToTop();
+        this.setupMobileMenu();
     }
 
-    loadTestimonials() {
-        this.testimonials = window.PORTFOLIO_DATA.testimonials || [];
-        this.filteredTestimonials = [...this.testimonials];
-    }
-
-    setupEventListeners() {
-        // Filter event listeners
-        document.getElementById('projectTypeFilter')?.addEventListener('change', (e) => {
-            this.currentFilters.projectType = e.target.value;
-            this.applyFilters();
-        });
-
-        document.getElementById('ratingFilter')?.addEventListener('change', (e) => {
-            this.currentFilters.rating = parseInt(e.target.value);
-            this.applyFilters();
-        });
-
-        document.getElementById('sortFilter')?.addEventListener('change', (e) => {
-            this.currentFilters.sort = e.target.value;
-            this.applyFilters();
-        });
-
-        document.getElementById('clientTypeFilter')?.addEventListener('change', (e) => {
-            this.currentFilters.clientType = e.target.value;
-            this.applyFilters();
-        });
-
-        // Rating filter buttons
-        document.querySelectorAll('.rating-filter-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                document.querySelectorAll('.rating-filter-btn').forEach(b => b.classList.remove('active'));
-                e.target.classList.add('active');
-                this.currentFilters.rating = parseInt(e.target.dataset.rating);
-                this.applyFilters();
-            });
-        });
-
-        // Search functionality
-        const searchInput = document.getElementById('testimonialSearch');
-        const searchClear = document.getElementById('testimonialSearchClear');
+    setupLoadingScreen() {
+        const loadingScreen = document.getElementById('loadingScreen');
+        const loadingBar = document.getElementById('loadingBar');
         
-        if (searchInput) {
-            searchInput.addEventListener('input', (e) => {
-                this.handleSearch(e.target.value);
-            });
-        }
-
-        if (searchClear) {
-            searchClear.addEventListener('click', () => {
-                searchInput.value = '';
-                this.handleSearch('');
-            });
-        }
-
-        // Reset filters
-        document.getElementById('resetTestimonialFilters')?.addEventListener('click', () => {
-            this.resetFilters();
-        });
-
-        // View options
-        document.querySelectorAll('.view-option').forEach(option => {
-            option.addEventListener('click', (e) => {
-                this.changeView(e.target.dataset.view);
-            });
-        });
-
-        // Add testimonial button
-        document.getElementById('addTestimonialBtn')?.addEventListener('click', () => {
-            this.openTestimonialModal();
-        });
-
-        document.getElementById('addTestimonialCtaBtn')?.addEventListener('click', () => {
-            this.openTestimonialModal();
-        });
-
-        // Guidelines
-        document.getElementById('viewSubmissionGuidelines')?.addEventListener('click', () => {
-            this.openGuidelinesModal();
-        });
+        if (!loadingScreen) return;
+        
+        let progress = 0;
+        const interval = setInterval(() => {
+            progress += Math.random() * 20;
+            if (progress >= 100) {
+                progress = 100;
+                clearInterval(interval);
+                
+                setTimeout(() => {
+                    loadingScreen.style.opacity = '0';
+                    loadingScreen.style.visibility = 'hidden';
+                }, 500);
+            }
+            
+            if (loadingBar) loadingBar.style.width = `${progress}%`;
+        }, 200);
     }
 
-    setupFilters() {
-        // Initialize filter values
-        const filters = ['projectTypeFilter', 'ratingFilter', 'sortFilter', 'clientTypeFilter'];
-        filters.forEach(filterId => {
-            const element = document.getElementById(filterId);
-            if (element) {
-                element.value = this.currentFilters[filterId.replace('Filter', '')] || 'all';
+    setupTheme() {
+        const themeToggle = document.getElementById('themeToggle');
+        const currentTheme = localStorage.getItem('theme') || 'dark';
+        
+        document.documentElement.setAttribute('data-theme', currentTheme);
+        this.updateThemeIcon(currentTheme);
+
+        if (themeToggle) {
+            themeToggle.addEventListener('click', () => {
+                const theme = document.documentElement.getAttribute('data-theme');
+                const newTheme = theme === 'dark' ? 'light' : 'dark';
+                
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                this.updateThemeIcon(newTheme);
+                
+                this.showNotification(`Switched to ${newTheme} mode`, 'success');
+            });
+        }
+    }
+
+    updateThemeIcon(theme) {
+        const icon = document.querySelector('#themeToggle i');
+        if (icon) {
+            icon.className = theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+        }
+    }
+
+    setupNavigation() {
+        const navbar = document.getElementById('navbar');
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
             }
         });
     }
 
-    applyFilters() {
-        let filtered = [...this.testimonials];
-
-        // Project type filter
-        if (this.currentFilters.projectType !== 'all') {
-            filtered = filtered.filter(testimonial => 
-                testimonial.projectType === this.currentFilters.projectType
-            );
-        }
-
-        // Rating filter
-        if (this.currentFilters.rating > 0) {
-            filtered = filtered.filter(testimonial => 
-                testimonial.rating >= this.currentFilters.rating
-            );
-        }
-
-        // Client type filter
-        if (this.currentFilters.clientType !== 'all') {
-            filtered = filtered.filter(testimonial => 
-                testimonial.clientType === this.currentFilters.clientType
-            );
-        }
-
-        // Search filter
-        const searchInput = document.getElementById('testimonialSearch');
-        if (searchInput && searchInput.value) {
-            const searchTerm = searchInput.value.toLowerCase();
-            filtered = filtered.filter(testimonial =>
-                testimonial.clientName.toLowerCase().includes(searchTerm) ||
-                testimonial.text.toLowerCase().includes(searchTerm) ||
-                testimonial.projectName.toLowerCase().includes(searchTerm)
-            );
-        }
-
-        // Sorting
-        filtered = this.sortTestimonials(filtered, this.currentFilters.sort);
-
-        this.filteredTestimonials = filtered;
-        this.currentPage = 1;
-        this.renderTestimonials();
-        this.updateResultsCount();
-    }
-
-    sortTestimonials(testimonials, sortType) {
-        switch (sortType) {
-            case 'newest':
-                return testimonials.sort((a, b) => new Date(b.date) - new Date(a.date));
-            case 'oldest':
-                return testimonials.sort((a, b) => new Date(a.date) - new Date(b.date));
-            case 'rating':
-                return testimonials.sort((a, b) => b.rating - a.rating);
-            case 'project':
-                return testimonials.sort((a, b) => a.projectType.localeCompare(b.projectType));
-            case 'featured':
-                return testimonials.sort((a, b) => (b.verified ? 1 : 0) - (a.verified ? 1 : 0));
-            case 'verified':
-                return testimonials.sort((a, b) => (b.verified ? 1 : 0) - (a.verified ? 1 : 0));
-            default:
-                return testimonials;
-        }
-    }
-
-    handleSearch(searchTerm) {
-        this.applyFilters();
-    }
-
-    resetFilters() {
-        this.currentFilters = {
-            projectType: 'all',
-            rating: 0,
-            sort: 'newest',
-            clientType: 'all'
-        };
-        
-        this.setupFilters();
-        
-        const searchInput = document.getElementById('testimonialSearch');
-        if (searchInput) searchInput.value = '';
-        
-        this.applyFilters();
-    }
-
-    changeView(viewType) {
-        const grid = document.getElementById('testimonialsGrid');
-        if (grid) {
-            grid.setAttribute('data-view', viewType);
-        }
-        
-        document.querySelectorAll('.view-option').forEach(option => {
-            option.classList.remove('active');
-        });
-        
-        document.querySelector(`[data-view="${viewType}"]`)?.classList.add('active');
-    }
-
-    renderTestimonials() {
-        const grid = document.getElementById('testimonialsGrid');
-        if (!grid) return;
-
-        const startIndex = (this.currentPage - 1) * this.testimonialsPerPage;
-        const endIndex = startIndex + this.testimonialsPerPage;
-        const testimonialsToShow = this.filteredTestimonials.slice(startIndex, endIndex);
-
-        if (testimonialsToShow.length === 0) {
-            grid.innerHTML = this.getEmptyStateHTML();
-            this.hidePagination();
+    loadTestimonials() {
+        if (!window.PORTFOLIO_DATA || !window.PORTFOLIO_DATA.testimonials) {
+            console.error('Testimonials data not found');
             return;
         }
 
-        grid.innerHTML = testimonialsToShow.map(testimonial => this.createTestimonialCard(testimonial)).join('');
-        this.renderPagination();
+        this.testimonials = window.PORTFOLIO_DATA.testimonials;
+        this.filteredTestimonials = [...this.testimonials];
+        this.renderTestimonials();
     }
 
-    createTestimonialCard(testimonial) {
-        const stars = '★'.repeat(testimonial.rating) + '☆'.repeat(5 - testimonial.rating);
-        const isFeatured = testimonial.verified && testimonial.rating >= 4.5;
+    setupFilters() {
+        const projectTypeFilter = document.getElementById('projectTypeFilter');
+        const ratingFilter = document.getElementById('ratingFilter');
+        const sortFilter = document.getElementById('sortFilter');
 
-        return `
-            <div class="testimonial-card ${isFeatured ? 'featured' : ''}" 
-                 data-rating="${testimonial.rating}" 
-                 data-project-type="${testimonial.projectType}" 
-                 data-client-type="${testimonial.clientType}" 
-                 data-verified="${testimonial.verified}">
+        if (projectTypeFilter) {
+            projectTypeFilter.addEventListener('change', (e) => {
+                this.currentFilters.projectType = e.target.value;
+                this.applyFilters();
+            });
+        }
+
+        if (ratingFilter) {
+            ratingFilter.addEventListener('change', (e) => {
+                this.currentFilters.minRating = parseFloat(e.target.value);
+                this.applyFilters();
+            });
+        }
+
+        if (sortFilter) {
+            sortFilter.addEventListener('change', (e) => {
+                this.currentFilters.sort = e.target.value;
+                this.applyFilters();
+            });
+        }
+    }
+
+    applyFilters() {
+        this.filteredTestimonials = this.testimonials.filter(testimonial => {
+            // Project type filter
+            if (this.currentFilters.projectType !== 'all' && testimonial.projectType !== this.currentFilters.projectType) {
+                return false;
+            }
+
+            // Rating filter
+            if (this.currentFilters.minRating > 0 && testimonial.rating < this.currentFilters.minRating) {
+                return false;
+            }
+
+            return true;
+        });
+
+        // Sort testimonials
+        this.sortTestimonials();
+
+        this.renderTestimonials();
+    }
+
+    sortTestimonials() {
+        switch (this.currentFilters.sort) {
+            case 'newest':
+                this.filteredTestimonials.sort((a, b) => new Date(b.date) - new Date(a.date));
+                break;
+            case 'oldest':
+                this.filteredTestimonials.sort((a, b) => new Date(a.date) - new Date(b.date));
+                break;
+            case 'rating':
+                this.filteredTestimonials.sort((a, b) => b.rating - a.rating);
+                break;
+            case 'project':
+                this.filteredTestimonials.sort((a, b) => a.projectType.localeCompare(b.projectType));
+                break;
+        }
+    }
+
+    renderTestimonials() {
+        const container = document.getElementById('testimonialsGrid');
+        if (!container) return;
+
+        if (this.filteredTestimonials.length === 0) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-comment-dots"></i>
+                    <h3>No Testimonials Found</h3>
+                    <p>Try adjusting your filters to see more results</p>
+                </div>
+            `;
+            return;
+        }
+
+        container.innerHTML = this.filteredTestimonials.map(testimonial => `
+            <div class="testimonial-card">
                 <div class="testimonial-header">
                     <div class="client-info">
                         <div class="client-avatar">
-                            <div class="avatar-placeholder">
-                                ${testimonial.clientName.split(' ').map(n => n[0]).join('')}
-                            </div>
-                            ${testimonial.verified ? `
-                                <div class="avatar-badge verified">
-                                    <i class="fas fa-check"></i>
-                                </div>
-                            ` : ''}
+                            <i class="fas fa-user"></i>
                         </div>
                         <div class="client-details">
                             <h3 class="client-name">${testimonial.clientName}</h3>
                             <p class="client-role">${testimonial.clientRole}</p>
-                            ${testimonial.verified ? `
-                                <div class="client-verified">
-                                    <i class="fas fa-check"></i>
-                                    Verified Client
-                                </div>
-                            ` : ''}
                         </div>
                     </div>
                     <div class="testimonial-meta">
                         <span class="project-type ${testimonial.projectType.toLowerCase()}">${testimonial.projectType}</span>
                         <div class="rating">
-                            ${stars}
-                            <span class="rating-value">${testimonial.rating.toFixed(1)}</span>
+                            ${this.renderStars(testimonial.rating)}
                         </div>
                     </div>
                 </div>
@@ -282,285 +207,260 @@ class TestimonialsManager {
                     </div>
                 </div>
             </div>
-        `;
+        `).join('');
+
+        // Add hover effects
+        this.setupCardHoverEffects();
     }
 
-    getEmptyStateHTML() {
-        return `
-            <div class="empty-state">
-                <i class="fas fa-comment-dots"></i>
-                <h3>No Testimonials Found</h3>
-                <p>Try adjusting your filters or search terms to see more results</p>
-                <button class="btn btn-primary" id="resetTestimonialSearch">
-                    <i class="fas fa-redo"></i>
-                    Reset Search
-                </button>
-            </div>
-        `;
-    }
+    renderStars(rating) {
+        const fullStars = Math.floor(rating);
+        const hasHalfStar = rating % 1 !== 0;
+        let stars = '';
 
-    renderPagination() {
-        const pagination = document.getElementById('testimonialsPagination');
-        if (!pagination) return;
-
-        const totalPages = Math.ceil(this.filteredTestimonials.length / this.testimonialsPerPage);
-        
-        if (totalPages <= 1) {
-            this.hidePagination();
-            return;
-        }
-
-        let paginationHTML = '';
-        
-        if (this.currentPage > 1) {
-            paginationHTML += `<button class="pagination-btn" data-page="${this.currentPage - 1}">Previous</button>`;
-        }
-
-        for (let i = 1; i <= totalPages; i++) {
-            if (i === this.currentPage) {
-                paginationHTML += `<button class="pagination-btn active" data-page="${i}">${i}</button>`;
-            } else if (i === 1 || i === totalPages || (i >= this.currentPage - 1 && i <= this.currentPage + 1)) {
-                paginationHTML += `<button class="pagination-btn" data-page="${i}">${i}</button>`;
-            } else if (i === this.currentPage - 2 || i === this.currentPage + 2) {
-                paginationHTML += `<span class="pagination-ellipsis">...</span>`;
+        for (let i = 1; i <= 5; i++) {
+            if (i <= fullStars) {
+                stars += '<i class="fas fa-star"></i>';
+            } else if (hasHalfStar && i === fullStars + 1) {
+                stars += '<i class="fas fa-star-half-alt"></i>';
+            } else {
+                stars += '<i class="far fa-star"></i>';
             }
         }
 
-        if (this.currentPage < totalPages) {
-            paginationHTML += `<button class="pagination-btn" data-page="${this.currentPage + 1}">Next</button>`;
-        }
+        return stars;
+    }
 
-        pagination.innerHTML = paginationHTML;
+    setupCardHoverEffects() {
+        const cards = document.querySelectorAll('.testimonial-card');
+        cards.forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                
+                const rotateY = (x - centerX) / 25;
+                const rotateX = (centerY - y) / 25;
+                
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(10px)`;
+            });
 
-        pagination.querySelectorAll('.pagination-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                this.currentPage = parseInt(e.target.dataset.page);
-                this.renderTestimonials();
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateZ(0)';
             });
         });
     }
 
-    hidePagination() {
-        const pagination = document.getElementById('testimonialsPagination');
-        if (pagination) {
-            pagination.innerHTML = '';
-        }
-    }
+    setupModal() {
+        const modal = document.getElementById('testimonialModal');
+        const addBtn = document.getElementById('addTestimonialBtn');
+        const closeBtn = document.getElementById('modalClose');
+        const cancelBtn = document.getElementById('cancelTestimonial');
+        const form = document.getElementById('testimonialForm');
 
-    updateResultsCount() {
-        const countElement = document.getElementById('testimonialsCount');
-        if (countElement) {
-            countElement.textContent = this.filteredTestimonials.length;
-        }
-    }
-
-    setupCarousel() {
-        const track = document.getElementById('carouselTrack');
-        const dots = document.getElementById('carouselDots');
-        const prevBtn = document.querySelector('.carousel-prev');
-        const nextBtn = document.querySelector('.carousel-next');
-
-        if (!track) return;
-
-        const featuredTestimonials = this.testimonials.filter(t => t.verified && t.rating >= 4.5);
-        
-        if (featuredTestimonials.length === 0) {
-            document.querySelector('.featured-testimonials').style.display = 'none';
-            return;
+        // Open modal
+        if (addBtn) {
+            addBtn.addEventListener('click', () => {
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            });
         }
 
-        // Create carousel slides
-        track.innerHTML = featuredTestimonials.map(testimonial => `
-            <div class="carousel-slide">
-                ${this.createTestimonialCard(testimonial)}
-            </div>
-        `).join('');
-
-        // Create dots
-        if (dots) {
-            dots.innerHTML = featuredTestimonials.map((_, index) => `
-                <button class="carousel-dot ${index === 0 ? 'active' : ''}" data-index="${index}"></button>
-            `).join('');
-        }
-
-        // Carousel navigation
-        const updateCarousel = () => {
-            track.style.transform = `translateX(-${this.carouselIndex * 100}%)`;
-            
-            if (dots) {
-                dots.querySelectorAll('.carousel-dot').forEach((dot, index) => {
-                    dot.classList.toggle('active', index === this.carouselIndex);
-                });
-            }
+        // Close modal
+        const closeModal = () => {
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+            form.reset();
+            this.resetRating();
         };
 
-        if (prevBtn) {
-            prevBtn.addEventListener('click', () => {
-                this.carouselIndex = (this.carouselIndex - 1 + featuredTestimonials.length) % featuredTestimonials.length;
-                updateCarousel();
-            });
-        }
+        if (closeBtn) closeBtn.addEventListener('click', closeModal);
+        if (cancelBtn) cancelBtn.addEventListener('click', closeModal);
 
-        if (nextBtn) {
-            nextBtn.addEventListener('click', () => {
-                this.carouselIndex = (this.carouselIndex + 1) % featuredTestimonials.length;
-                updateCarousel();
-            });
-        }
+        // Close modal on outside click
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                closeModal();
+            }
+        });
 
-        if (dots) {
-            dots.querySelectorAll('.carousel-dot').forEach(dot => {
-                dot.addEventListener('click', (e) => {
-                    this.carouselIndex = parseInt(e.target.dataset.index);
-                    updateCarousel();
-                });
-            });
-        }
+        // Setup rating stars
+        this.setupRatingStars();
 
-        // Auto-advance carousel
-        setInterval(() => {
-            this.carouselIndex = (this.carouselIndex + 1) % featuredTestimonials.length;
-            updateCarousel();
-        }, 5000);
-    }
-
-    setupModal() {
-        // Testimonial form submission
-        const form = document.getElementById('testimonialForm');
+        // Handle form submission
         if (form) {
             form.addEventListener('submit', (e) => {
                 e.preventDefault();
                 this.submitTestimonial(form);
             });
         }
+    }
 
-        // Rating stars
+    setupRatingStars() {
         const stars = document.querySelectorAll('#ratingStars .star');
-        stars.forEach((star, index) => {
+        const ratingInput = document.getElementById('rating');
+
+        stars.forEach(star => {
             star.addEventListener('click', () => {
-                this.setRating(index + 1);
+                const rating = parseInt(star.getAttribute('data-rating'));
+                this.setRating(rating);
+            });
+
+            star.addEventListener('mouseover', () => {
+                const rating = parseInt(star.getAttribute('data-rating'));
+                this.highlightStars(rating);
             });
         });
 
-        // Character counter
-        const textarea = document.getElementById('testimonialText');
-        const charCount = document.getElementById('charCount');
-        if (textarea && charCount) {
-            textarea.addEventListener('input', () => {
-                charCount.textContent = textarea.value.length;
-            });
-        }
-
-        // Modal close buttons
-        document.getElementById('cancelTestimonial')?.addEventListener('click', () => {
-            this.closeTestimonialModal();
+        // Reset stars on mouse leave
+        document.getElementById('ratingStars').addEventListener('mouseleave', () => {
+            this.highlightStars(this.currentRating);
         });
-
-        document.getElementById('modalClose')?.addEventListener('click', () => {
-            this.closeTestimonialModal();
-        });
-
-        document.getElementById('guidelinesClose')?.addEventListener('click', () => {
-            this.closeGuidelinesModal();
-        });
-
-        document.getElementById('startTestimonialFromGuidelines')?.addEventListener('click', () => {
-            this.closeGuidelinesModal();
-            this.openTestimonialModal();
-        });
-    }
-
-    openTestimonialModal() {
-        document.getElementById('testimonialModal').classList.add('active');
-    }
-
-    closeTestimonialModal() {
-        document.getElementById('testimonialModal').classList.remove('active');
-        document.getElementById('testimonialForm').reset();
-        this.setRating(0);
-    }
-
-    openGuidelinesModal() {
-        document.getElementById('guidelinesModal').classList.add('active');
-    }
-
-    closeGuidelinesModal() {
-        document.getElementById('guidelinesModal').classList.remove('active');
     }
 
     setRating(rating) {
+        this.currentRating = rating;
+        document.getElementById('rating').value = rating;
+        this.highlightStars(rating);
+    }
+
+    highlightStars(rating) {
         const stars = document.querySelectorAll('#ratingStars .star');
-        const ratingInput = document.getElementById('rating');
-        const ratingText = document.getElementById('ratingText');
-
-        stars.forEach((star, index) => {
-            star.classList.toggle('active', index < rating);
+        stars.forEach(star => {
+            const starRating = parseInt(star.getAttribute('data-rating'));
+            if (starRating <= rating) {
+                star.classList.add('active');
+            } else {
+                star.classList.remove('active');
+            }
         });
+    }
 
-        ratingInput.value = rating;
-        
-        const ratingTexts = ['Select your rating', 'Poor', 'Fair', 'Good', 'Very Good', 'Excellent'];
-        ratingText.textContent = ratingTexts[rating];
+    resetRating() {
+        this.currentRating = 0;
+        document.getElementById('rating').value = '';
+        this.highlightStars(0);
     }
 
     submitTestimonial(form) {
         const formData = new FormData(form);
         const testimonial = {
+            id: Date.now(),
             clientName: formData.get('clientName'),
             clientRole: formData.get('clientRole'),
             projectType: formData.get('projectType'),
             projectName: formData.get('projectName'),
-            rating: parseInt(formData.get('rating')),
+            rating: parseFloat(formData.get('rating')),
             text: formData.get('testimonialText'),
-            date: new Date().toISOString().split('T')[0],
-            verified: false
+            date: new Date().toISOString()
         };
 
-        if (this.validateTestimonial(testimonial)) {
-            window.addTestimonial(testimonial);
-            this.showNotification('Thank you for your testimonial! It will be reviewed before publishing.', 'success');
-            this.closeTestimonialModal();
-            this.loadTestimonials();
-            this.applyFilters();
+        // Add to testimonials array
+        this.testimonials.unshift(testimonial);
+        this.filteredTestimonials.unshift(testimonial);
+
+        // Update localStorage
+        this.saveTestimonials();
+
+        // Update display
+        this.renderTestimonials();
+
+        // Close modal
+        document.getElementById('testimonialModal').classList.remove('active');
+        document.body.style.overflow = '';
+
+        // Show success message
+        this.showNotification('Testimonial added successfully!', 'success');
+
+        // Reset form
+        form.reset();
+        this.resetRating();
+    }
+
+    saveTestimonials() {
+        if (window.PORTFOLIO_DATA) {
+            window.PORTFOLIO_DATA.testimonials = this.testimonials;
+            localStorage.setItem('portfolioData', JSON.stringify(window.PORTFOLIO_DATA));
         }
     }
 
-    validateTestimonial(testimonial) {
-        if (!testimonial.clientName || !testimonial.clientRole || !testimonial.projectType || 
-            !testimonial.projectName || !testimonial.rating || !testimonial.text) {
-            this.showNotification('Please fill in all required fields.', 'error');
-            return false;
-        }
+    setupBackToTop() {
+        const btn = document.getElementById('backToTop');
+        if (!btn) return;
 
-        if (testimonial.text.length < 10) {
-            this.showNotification('Please provide a more detailed testimonial.', 'error');
-            return false;
-        }
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                btn.classList.add('visible');
+            } else {
+                btn.classList.remove('visible');
+            }
+        });
 
-        return true;
+        btn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
     }
 
-    showNotification(message, type) {
-        // Create and show notification
+    setupMobileMenu() {
+        const toggle = document.getElementById('navToggle');
+        const menu = document.getElementById('navMenu');
+
+        if (toggle && menu) {
+            toggle.addEventListener('click', () => {
+                menu.classList.toggle('active');
+                toggle.classList.toggle('active');
+                
+                document.body.style.overflow = menu.classList.contains('active') ? 'hidden' : '';
+            });
+
+            menu.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', () => {
+                    menu.classList.remove('active');
+                    toggle.classList.remove('active');
+                    document.body.style.overflow = '';
+                });
+            });
+        }
+    }
+
+    showNotification(message, type = 'success') {
+        const container = document.getElementById('notificationContainer');
+        if (!container) return;
+
         const notification = document.createElement('div');
         notification.className = `notification ${type}`;
         notification.innerHTML = `
-            <div class="notification-content">
-                <i class="fas fa-${type === 'success' ? 'check' : 'exclamation-triangle'}"></i>
-                <span>${message}</span>
-            </div>
+            <i class="fas fa-${this.getNotificationIcon(type)}"></i>
+            <span>${message}</span>
         `;
 
-        document.body.appendChild(notification);
+        container.appendChild(notification);
 
         setTimeout(() => {
-            notification.remove();
+            notification.style.animation = 'slideIn 0.3s ease reverse forwards';
+            setTimeout(() => {
+                notification.remove();
+            }, 300);
         }, 5000);
+    }
+
+    getNotificationIcon(type) {
+        const icons = {
+            success: 'check-circle',
+            error: 'exclamation-circle',
+            warning: 'exclamation-triangle'
+        };
+        return icons[type] || 'info-circle';
     }
 }
 
-// Initialize testimonials manager when DOM is loaded
+// Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    window.testimonialsManager = new TestimonialsManager();
+    new TestimonialsPage();
 });
