@@ -1,27 +1,33 @@
 // ============================================
-// MAIN PORTFOLIO APP
+// MAIN PORTFOLIO APPLICATION
 // ============================================
 
 class PortfolioApp {
     constructor() {
+        this.currentTheme = localStorage.getItem('theme') || 'dark';
         this.init();
     }
 
     init() {
         this.setupLoadingScreen();
         this.setupTheme();
+        this.setupCustomCursor();
+        this.setupParticles();
         this.setupNavigation();
         this.setupTypewriter();
         this.setupCounters();
         this.setupSkillBars();
-        this.loadPortfolioItems();
+        this.setupTabSystem();
         this.setupContactForm();
         this.setupBackToTop();
         this.setupMobileMenu();
         this.setupScrollAnimations();
+        this.setupHoverEffects();
     }
 
-    // Loading Screen
+    // ============================================
+    // LOADING SCREEN
+    // ============================================
     setupLoadingScreen() {
         const loadingScreen = document.getElementById('loadingScreen');
         const loadingBar = document.getElementById('loadingBar');
@@ -30,56 +36,184 @@ class PortfolioApp {
         if (!loadingScreen) return;
         
         let progress = 0;
+        const messages = [
+            'Initializing Premium Experience...',
+            'Loading Assets...',
+            'Setting Up Animations...',
+            'Almost Ready...',
+            'Welcome!'
+        ];
+        let messageIndex = 0;
+
         const interval = setInterval(() => {
             progress += Math.random() * 15;
             if (progress >= 100) {
                 progress = 100;
                 clearInterval(interval);
                 
+                loadingBar.style.width = '100%';
+                loadingText.textContent = 'Ready to Explore!';
+                
                 setTimeout(() => {
                     loadingScreen.style.opacity = '0';
                     loadingScreen.style.visibility = 'hidden';
-                }, 500);
-            }
-            
-            if (loadingBar) loadingBar.style.width = `${progress}%`;
-            if (loadingText) {
-                if (progress < 30) loadingText.textContent = 'Loading Premium Experience...';
-                else if (progress < 60) loadingText.textContent = 'Initializing Animations...';
-                else if (progress < 90) loadingText.textContent = 'Almost Ready...';
-                else loadingText.textContent = 'Welcome!';
+                    
+                    // Initialize animations after loading
+                    setTimeout(() => {
+                        this.initializeAnimations();
+                    }, 500);
+                }, 1000);
+            } else {
+                loadingBar.style.width = `${progress}%`;
+                
+                // Update loading text based on progress
+                if (progress >= 20 && messageIndex === 0) {
+                    loadingText.textContent = messages[++messageIndex];
+                } else if (progress >= 40 && messageIndex === 1) {
+                    loadingText.textContent = messages[++messageIndex];
+                } else if (progress >= 70 && messageIndex === 2) {
+                    loadingText.textContent = messages[++messageIndex];
+                } else if (progress >= 90 && messageIndex === 3) {
+                    loadingText.textContent = messages[++messageIndex];
+                }
             }
         }, 200);
     }
 
-    // Theme Management
+    // ============================================
+    // THEME MANAGEMENT
+    // ============================================
     setupTheme() {
         const themeToggle = document.getElementById('themeToggle');
-        const currentTheme = localStorage.getItem('theme') || 'dark';
         
-        document.documentElement.setAttribute('data-theme', currentTheme);
-        this.updateThemeIcon(currentTheme);
+        // Set initial theme
+        document.documentElement.setAttribute('data-theme', this.currentTheme);
+        this.updateThemeIcon();
 
         if (themeToggle) {
             themeToggle.addEventListener('click', () => {
-                const theme = document.documentElement.getAttribute('data-theme');
-                const newTheme = theme === 'dark' ? 'light' : 'dark';
+                this.currentTheme = this.currentTheme === 'dark' ? 'light' : 'dark';
+                document.documentElement.setAttribute('data-theme', this.currentTheme);
+                localStorage.setItem('theme', this.currentTheme);
+                this.updateThemeIcon();
                 
-                document.documentElement.setAttribute('data-theme', newTheme);
-                localStorage.setItem('theme', newTheme);
-                this.updateThemeIcon(newTheme);
+                this.showNotification(`Switched to ${this.currentTheme} mode`, 'success');
             });
         }
     }
 
-    updateThemeIcon(theme) {
+    updateThemeIcon() {
         const icon = document.querySelector('#themeToggle i');
         if (icon) {
-            icon.className = theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+            icon.className = this.currentTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
         }
     }
 
-    // Navigation
+    // ============================================
+    // CUSTOM CURSOR
+    // ============================================
+    setupCustomCursor() {
+        const cursorDot = document.getElementById('cursorDot');
+        const cursorRing = document.getElementById('cursorRing');
+        
+        if (!cursorDot || !cursorRing) return;
+        
+        let mouseX = 0, mouseY = 0;
+        let dotX = 0, dotY = 0;
+        let ringX = 0, ringY = 0;
+        
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+        
+        const animateCursor = () => {
+            // Dot follows cursor directly
+            dotX = mouseX;
+            dotY = mouseY;
+            
+            // Ring follows with delay
+            ringX += (mouseX - ringX) * 0.1;
+            ringY += (mouseY - ringY) * 0.1;
+            
+            cursorDot.style.left = `${dotX}px`;
+            cursorDot.style.top = `${dotY}px`;
+            
+            cursorRing.style.left = `${ringX}px`;
+            cursorRing.style.top = `${ringY}px`;
+            
+            requestAnimationFrame(animateCursor);
+        };
+        
+        animateCursor();
+        
+        // Hover effects
+        const hoverElements = document.querySelectorAll('a, button, .portfolio-card, .nav-link, .category-card, .skill-item, .contact-method, .social-link');
+        
+        hoverElements.forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                cursorDot.classList.add('hover');
+                cursorRing.classList.add('hover');
+            });
+            
+            el.addEventListener('mouseleave', () => {
+                cursorDot.classList.remove('hover');
+                cursorRing.classList.remove('hover');
+            });
+        });
+        
+        // Click effect
+        document.addEventListener('mousedown', () => {
+            cursorDot.style.transform = 'translate(-50%, -50%) scale(0.8)';
+            cursorRing.style.transform = 'translate(-50%, -50%) scale(1.2)';
+        });
+        
+        document.addEventListener('mouseup', () => {
+            cursorDot.style.transform = 'translate(-50%, -50%) scale(1)';
+            cursorRing.style.transform = 'translate(-50%, -50%) scale(1)';
+        });
+    }
+
+    // ============================================
+    // PARTICLE BACKGROUND
+    // ============================================
+    setupParticles() {
+        const container = document.getElementById('particlesContainer');
+        if (!container) return;
+
+        const particleCount = 50;
+        
+        for (let i = 0; i < particleCount; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            
+            const size = Math.random() * 5 + 2;
+            particle.style.width = size + 'px';
+            particle.style.height = size + 'px';
+            
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.top = Math.random() * 100 + '%';
+            
+            const animationDuration = 15 + Math.random() * 20;
+            const animationDelay = Math.random() * 20;
+            particle.style.animationDuration = animationDuration + 's';
+            particle.style.animationDelay = animationDelay + 's';
+            
+            const opacity = Math.random() * 0.5 + 0.1;
+            particle.style.opacity = opacity;
+            
+            // Random color from accent palette
+            const colors = ['#FF6C47', '#FF9A3D', '#FFC93C', '#4A90E2'];
+            const randomColor = colors[Math.floor(Math.random() * colors.length)];
+            particle.style.background = randomColor;
+            
+            container.appendChild(particle);
+        }
+    }
+
+    // ============================================
+    // NAVIGATION
+    // ============================================
     setupNavigation() {
         const navbar = document.getElementById('navbar');
         const navLinks = document.querySelectorAll('.nav-link');
@@ -95,13 +229,14 @@ class PortfolioApp {
             this.updateActiveLink();
         });
 
-        // Smooth scroll
+        // Smooth scroll for anchor links
         navLinks.forEach(link => {
             link.addEventListener('click', (e) => {
-                if (link.getAttribute('href').startsWith('#')) {
+                const href = link.getAttribute('href');
+                if (href && href.startsWith('#')) {
                     e.preventDefault();
-                    const targetId = link.getAttribute('href');
-                    const target = document.querySelector(targetId);
+                    const targetId = href.substring(1);
+                    const target = document.getElementById(targetId);
                     
                     if (target) {
                         const offset = 80;
@@ -124,36 +259,43 @@ class PortfolioApp {
         let current = '';
         sections.forEach(section => {
             const sectionTop = section.offsetTop - 100;
-            if (window.scrollY >= sectionTop) {
+            const sectionHeight = section.offsetHeight;
+            if (window.scrollY >= sectionTop && window.scrollY < sectionTop + sectionHeight) {
                 current = section.getAttribute('id');
             }
         });
 
         navLinks.forEach(link => {
             link.classList.remove('active');
-            if (link.getAttribute('href') === `#${current}`) {
+            const href = link.getAttribute('href');
+            if (href && href.substring(1) === current) {
                 link.classList.add('active');
             }
         });
     }
 
-    // Typewriter Effect
+    // ============================================
+    // TYPEWRITER EFFECT
+    // ============================================
     setupTypewriter() {
         const element = document.getElementById('typewriter');
         if (!element) return;
 
         const texts = [
             'Premium Game Developer',
-            'Revolutionary Web Developer',
-            'Cutting-edge App Developer',
-            'Creative Code Innovator'
+            'Creative Web Designer',
+            'Innovative App Creator',
+            'Digital Experience Architect'
         ];
 
         let textIndex = 0;
         let charIndex = 0;
         let isDeleting = false;
+        let isPaused = false;
 
         const type = () => {
+            if (isPaused) return;
+
             const currentText = texts[textIndex];
             
             if (isDeleting) {
@@ -167,8 +309,13 @@ class PortfolioApp {
             let typeSpeed = isDeleting ? 50 : 150;
 
             if (!isDeleting && charIndex === currentText.length) {
-                typeSpeed = 2000;
-                isDeleting = true;
+                isPaused = true;
+                setTimeout(() => {
+                    isPaused = false;
+                    isDeleting = true;
+                    type();
+                }, 2000);
+                return;
             } else if (isDeleting && charIndex === 0) {
                 isDeleting = false;
                 textIndex = (textIndex + 1) % texts.length;
@@ -178,30 +325,40 @@ class PortfolioApp {
             setTimeout(type, typeSpeed);
         };
 
-        type();
+        // Start typewriter after a delay
+        setTimeout(type, 1000);
     }
 
-    // Stat Counters
+    // ============================================
+    // ANIMATED COUNTERS
+    // ============================================
     setupCounters() {
         const counters = document.querySelectorAll('.stat-number');
         
         const animateCounter = (counter) => {
             const target = parseInt(counter.getAttribute('data-target'));
             const duration = 2000;
-            const increment = target / (duration / 16);
-            let current = 0;
+            const startTime = performance.now();
+            const startValue = 0;
 
-            const updateCounter = () => {
-                current += increment;
-                if (current < target) {
-                    counter.textContent = Math.ceil(current);
+            const updateCounter = (currentTime) => {
+                const elapsedTime = currentTime - startTime;
+                const progress = Math.min(elapsedTime / duration, 1);
+                
+                // Easing function for smooth animation
+                const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+                const currentValue = Math.floor(startValue + (target - startValue) * easeOutQuart);
+                
+                counter.textContent = currentValue.toLocaleString();
+
+                if (progress < 1) {
                     requestAnimationFrame(updateCounter);
                 } else {
-                    counter.textContent = target;
+                    counter.textContent = target.toLocaleString();
                 }
             };
 
-            updateCounter();
+            requestAnimationFrame(updateCounter);
         };
 
         const observer = new IntersectionObserver((entries) => {
@@ -216,15 +373,19 @@ class PortfolioApp {
         counters.forEach(counter => observer.observe(counter));
     }
 
-    // Skill Bars
+    // ============================================
+    // SKILL BARS ANIMATION
+    // ============================================
     setupSkillBars() {
         const skillBars = document.querySelectorAll('.skill-progress');
         
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    const progress = entry.target.getAttribute('data-progress');
-                    entry.target.style.width = progress + '%';
+                    const width = entry.target.getAttribute('data-width');
+                    setTimeout(() => {
+                        entry.target.style.width = width + '%';
+                    }, 200);
                     observer.unobserve(entry.target);
                 }
             });
@@ -233,77 +394,54 @@ class PortfolioApp {
         skillBars.forEach(bar => observer.observe(bar));
     }
 
-    // Load Portfolio Items
-    loadPortfolioItems() {
-        this.loadGames();
-        this.loadWebsites();
-        this.loadApps();
+    // ============================================
+    // TAB SYSTEM
+    // ============================================
+    setupTabSystem() {
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const tabId = btn.getAttribute('data-tab');
+                
+                // Remove active class from all buttons and contents
+                tabBtns.forEach(b => b.classList.remove('active'));
+                tabContents.forEach(c => c.classList.remove('active'));
+                
+                // Add active class to current button and content
+                btn.classList.add('active');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
     }
 
-    loadGames() {
-        const container = document.getElementById('gamesGrid');
-        if (!container || !window.PORTFOLIO_DATA) return;
-
-        const games = window.PORTFOLIO_DATA.games.slice(0, 3); // Show only 3 on homepage
-        container.innerHTML = games.map(game => `
-            <div class="portfolio-card" onclick="window.location.href='game-detail.html?id=${game.id}'">
-                <img src="${game.image}" alt="${game.name}" class="portfolio-image">
-                <div class="portfolio-info">
-                    <h3 class="portfolio-title">${game.name}</h3>
-                    <p class="portfolio-category">${game.category}</p>
-                    <p class="portfolio-description">${game.overview}</p>
-                    <div class="portfolio-tags">
-                        ${game.technologies.slice(0, 3).map(tech => `<span class="tag">${tech}</span>`).join('')}
-                    </div>
-                </div>
-            </div>
-        `).join('');
-    }
-
-    loadWebsites() {
-        const container = document.getElementById('websitesGrid');
-        if (!container || !window.PORTFOLIO_DATA) return;
-
-        const websites = window.PORTFOLIO_DATA.websites.slice(0, 3);
-        container.innerHTML = websites.map(site => `
-            <div class="portfolio-card" onclick="window.location.href='website-detail.html?id=${site.id}'">
-                <img src="${site.image}" alt="${site.name}" class="portfolio-image">
-                <div class="portfolio-info">
-                    <h3 class="portfolio-title">${site.name}</h3>
-                    <p class="portfolio-category">${site.category}</p>
-                    <p class="portfolio-description">${site.overview}</p>
-                    <div class="portfolio-tags">
-                        ${site.technologies.slice(0, 3).map(tech => `<span class="tag">${tech}</span>`).join('')}
-                    </div>
-                </div>
-            </div>
-        `).join('');
-    }
-
-    loadApps() {
-        const container = document.getElementById('appsGrid');
-        if (!container || !window.PORTFOLIO_DATA) return;
-
-        const apps = window.PORTFOLIO_DATA.apps.slice(0, 3);
-        container.innerHTML = apps.map(app => `
-            <div class="portfolio-card" onclick="window.location.href='app-detail.html?id=${app.id}'">
-                <img src="${app.image}" alt="${app.name}" class="portfolio-image">
-                <div class="portfolio-info">
-                    <h3 class="portfolio-title">${app.name}</h3>
-                    <p class="portfolio-category">${app.category} • ${app.platform}</p>
-                    <p class="portfolio-description">${app.overview}</p>
-                    <div class="portfolio-tags">
-                        ${app.technologies.slice(0, 3).map(tech => `<span class="tag">${tech}</span>`).join('')}
-                    </div>
-                </div>
-            </div>
-        `).join('');
-    }
-
-    // Contact Form
+    // ============================================
+    // CONTACT FORM
+    // ============================================
     setupContactForm() {
         const form = document.getElementById('contactForm');
         if (!form) return;
+
+        // Show/hide fields based on contact type
+        const contactType = document.getElementById('contactType');
+        const projectDetailsGroup = document.getElementById('projectDetailsGroup');
+        const feedbackGroup = document.getElementById('feedbackGroup');
+
+        contactType.addEventListener('change', (e) => {
+            const value = e.target.value;
+            
+            // Hide all conditional fields
+            projectDetailsGroup.style.display = 'none';
+            feedbackGroup.style.display = 'none';
+            
+            // Show relevant field
+            if (value === 'project') {
+                projectDetailsGroup.style.display = 'block';
+            } else if (value === 'feedback') {
+                feedbackGroup.style.display = 'block';
+            }
+        });
 
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -312,24 +450,33 @@ class PortfolioApp {
             const data = Object.fromEntries(formData);
 
             // Show loading state
-            const submitBtn = form.querySelector('button[type="submit"]');
+            const submitBtn = form.querySelector('.btn-submit');
             const originalText = submitBtn.innerHTML;
             submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
             submitBtn.disabled = true;
 
-            // Simulate API call
-            await new Promise(resolve => setTimeout(resolve, 2000));
+            try {
+                // Simulate API call
+                await new Promise(resolve => setTimeout(resolve, 2000));
 
-            // Save to localStorage (for admin panel)
-            this.saveContact(data);
+                // Save to localStorage (for admin panel)
+                this.saveContact(data);
 
-            // Show success message
-            this.showNotification('Message sent successfully! We\'ll get back to you within 24 hours.', 'success');
-            form.reset();
+                // Show success message
+                this.showNotification('Message sent successfully! I\'ll get back to you within 24 hours.', 'success');
+                form.reset();
+                
+                // Hide conditional fields
+                projectDetailsGroup.style.display = 'none';
+                feedbackGroup.style.display = 'none';
 
-            // Reset button
-            submitBtn.innerHTML = originalText;
-            submitBtn.disabled = false;
+            } catch (error) {
+                this.showNotification('Failed to send message. Please try again.', 'error');
+            } finally {
+                // Reset button
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }
         });
     }
 
@@ -344,26 +491,9 @@ class PortfolioApp {
         localStorage.setItem('contacts', JSON.stringify(contacts));
     }
 
-    // Notifications
-    showNotification(message, type = 'success') {
-        const container = document.getElementById('notificationContainer');
-        if (!container) return;
-
-        const notification = document.createElement('div');
-        notification.className = `notification ${type}`;
-        notification.innerHTML = `
-            <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
-            <span>${message}</span>
-        `;
-
-        container.appendChild(notification);
-
-        setTimeout(() => {
-            notification.remove();
-        }, 5000);
-    }
-
-    // Back to Top Button
+    // ============================================
+    // BACK TO TOP BUTTON
+    // ============================================
     setupBackToTop() {
         const btn = document.getElementById('backToTop');
         if (!btn) return;
@@ -384,7 +514,9 @@ class PortfolioApp {
         });
     }
 
-    // Mobile Menu
+    // ============================================
+    // MOBILE MENU
+    // ============================================
     setupMobileMenu() {
         const toggle = document.getElementById('navToggle');
         const menu = document.getElementById('navMenu');
@@ -393,6 +525,9 @@ class PortfolioApp {
             toggle.addEventListener('click', () => {
                 menu.classList.toggle('active');
                 toggle.classList.toggle('active');
+                
+                // Prevent body scroll when menu is open
+                document.body.style.overflow = menu.classList.contains('active') ? 'hidden' : '';
             });
 
             // Close menu when clicking a link
@@ -400,12 +535,24 @@ class PortfolioApp {
                 link.addEventListener('click', () => {
                     menu.classList.remove('active');
                     toggle.classList.remove('active');
+                    document.body.style.overflow = '';
                 });
+            });
+
+            // Close menu when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!menu.contains(e.target) && !toggle.contains(e.target) && menu.classList.contains('active')) {
+                    menu.classList.remove('active');
+                    toggle.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
             });
         }
     }
 
-    // Scroll Animations
+    // ============================================
+    // SCROLL ANIMATIONS
+    // ============================================
     setupScrollAnimations() {
         const observerOptions = {
             threshold: 0.1,
@@ -422,13 +569,146 @@ class PortfolioApp {
         }, observerOptions);
 
         // Observe elements for animation
-        document.querySelectorAll('.portfolio-card, .skill-category, .contact-card, .category-card').forEach(el => {
-            observer.observe(el);
+        const animatedElements = document.querySelectorAll(
+            '.portfolio-card, .skill-item, .contact-method, .category-card, .feature-item, .tool-item'
+        );
+        
+        animatedElements.forEach(el => observer.observe(el));
+    }
+
+    // ============================================
+    // HOVER EFFECTS
+    // ============================================
+    setupHoverEffects() {
+        // Add hover effects to interactive elements
+        const interactiveElements = document.querySelectorAll(
+            '.btn, .nav-link, .portfolio-card, .category-card, .skill-item, .contact-method, .social-link, .tool-item, .feature-item'
+        );
+
+        interactiveElements.forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                el.style.transform = 'translateY(-2px)';
+            });
+
+            el.addEventListener('mouseleave', () => {
+                el.style.transform = 'translateY(0)';
+            });
         });
+
+        // Enhanced card hover effects
+        const cards = document.querySelectorAll('.portfolio-card, .category-card');
+        cards.forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                
+                const rotateY = (x - centerX) / 25;
+                const rotateX = (centerY - y) / 25;
+                
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(10px)`;
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateZ(0)';
+            });
+        });
+    }
+
+    // ============================================
+    // INITIALIZE ANIMATIONS
+    // ============================================
+    initializeAnimations() {
+        // Initialize any additional animations after page load
+        console.log('Portfolio initialized successfully!');
+    }
+
+    // ============================================
+    // NOTIFICATION SYSTEM
+    // ============================================
+    showNotification(message, type = 'success') {
+        const container = document.getElementById('notificationContainer');
+        if (!container) return;
+
+        const notification = document.createElement('div');
+        notification.className = `notification ${type}`;
+        notification.innerHTML = `
+            <i class="fas fa-${this.getNotificationIcon(type)}"></i>
+            <span>${message}</span>
+        `;
+
+        container.appendChild(notification);
+
+        // Remove notification after delay
+        setTimeout(() => {
+            notification.style.animation = 'slideIn 0.3s ease reverse forwards';
+            setTimeout(() => {
+                notification.remove();
+            }, 300);
+        }, 5000);
+    }
+
+    getNotificationIcon(type) {
+        const icons = {
+            success: 'check-circle',
+            error: 'exclamation-circle',
+            warning: 'exclamation-triangle'
+        };
+        return icons[type] || 'info-circle';
     }
 }
 
-// Initialize app when DOM is loaded
+// ============================================
+// UTILITY FUNCTIONS
+// ============================================
+
+// Format date to readable string
+function formatDate(dateString) {
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    return new Date(dateString).toLocaleDateString(undefined, options);
+}
+
+// Debounce function for performance
+function debounce(func, wait, immediate) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            timeout = null;
+            if (!immediate) func(...args);
+        };
+        const callNow = immediate && !timeout;
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+        if (callNow) func(...args);
+    };
+}
+
+// Throttle function for scroll events
+function throttle(func, limit) {
+    let inThrottle;
+    return function() {
+        const args = arguments;
+        const context = this;
+        if (!inThrottle) {
+            func.apply(context, args);
+            inThrottle = true;
+            setTimeout(() => inThrottle = false, limit);
+        }
+    };
+}
+
+// ============================================
+// INITIALIZE APPLICATION
+// ============================================
+
 document.addEventListener('DOMContentLoaded', () => {
     window.portfolioApp = new PortfolioApp();
 });
+
+// Export for use in other modules
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = { PortfolioApp, formatDate, debounce, throttle };
+}
