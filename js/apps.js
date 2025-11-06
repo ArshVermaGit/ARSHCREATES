@@ -195,8 +195,7 @@ function setupAppCardListeners() {
 
 // View App Details
 function viewAppDetails(appId) {
-    // Navigate to app detail page
-    window.location.href = `app-detail.html?id=${appId}`;
+    navigateToDetailPage('app', appId);
 }
 
 // Update App Stats
