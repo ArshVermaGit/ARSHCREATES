@@ -13,6 +13,7 @@ let currentFilters = {
 
 // Initialize Games Page
 function initializeGamesPage() {
+    console.log('Initializing games page...');
     loadGames();
     setupGameFilters();
     setupGameEventListeners();
@@ -21,9 +22,13 @@ function initializeGamesPage() {
 // Load Games
 function loadGames() {
     const gamesGrid = document.getElementById('gamesGrid');
-    if (!gamesGrid) return;
+    if (!gamesGrid) {
+        console.error('Games grid not found!');
+        return;
+    }
     
     currentGames = PORTFOLIO_DATA.games;
+    console.log('Loaded games:', currentGames);
     displayGames(currentGames);
     updateGameStats();
 }
@@ -35,10 +40,10 @@ function displayGames(games) {
     
     if (games.length === 0) {
         gamesGrid.innerHTML = `
-            <div class="no-results">
-                <i class="fas fa-gamepad"></i>
-                <h3>No games found</h3>
-                <p>Try adjusting your filters to see more results</p>
+            <div class="no-results" style="grid-column: 1 / -1; text-align: center; padding: 4rem;">
+                <i class="fas fa-gamepad" style="font-size: 4rem; color: var(--text-muted); margin-bottom: 1rem;"></i>
+                <h3 style="color: var(--text-primary); margin-bottom: 0.5rem;">No games found</h3>
+                <p style="color: var(--text-secondary);">Try adjusting your filters to see more results</p>
             </div>
         `;
         return;
@@ -47,13 +52,13 @@ function displayGames(games) {
     gamesGrid.innerHTML = games.map(game => `
         <div class="portfolio-card" data-game-id="${game.id}">
             <div class="card-image">
-                <img src="${game.image}" alt="${game.name}" loading="lazy">
+                <img src="${game.image}" alt="${game.name}" loading="lazy" onerror="this.src='https://via.placeholder.com/400x300/3c2a21/d5a46a?text=Game+Image'">
                 <div class="card-overlay">
                     <div class="card-actions">
-                        <button class="btn-play" data-game-id="${game.id}" title="Play Game">
+                        <button class="btn btn-primary btn-play" data-game-id="${game.id}" title="Play Game">
                             <i class="fas fa-play"></i>
                         </button>
-                        <button class="btn-view" data-game-id="${game.id}" title="View Details">
+                        <button class="btn btn-secondary btn-view" data-game-id="${game.id}" title="View Details">
                             <i class="fas fa-eye"></i>
                         </button>
                     </div>
@@ -131,10 +136,27 @@ function applyGameFilters() {
     }
     
     // Sort games
-    filteredGames = sortItems(filteredGames, currentFilters.sort);
+    filteredGames = sortGames(filteredGames, currentFilters.sort);
     
     currentGames = filteredGames;
     displayGames(filteredGames);
+}
+
+// Sort Games
+function sortGames(games, sortBy) {
+    const sortedGames = [...games];
+    switch (sortBy) {
+        case 'newest':
+            return sortedGames.sort((a, b) => new Date(b.releaseDate) - new Date(a.releaseDate));
+        case 'oldest':
+            return sortedGames.sort((a, b) => new Date(a.releaseDate) - new Date(b.releaseDate));
+        case 'rating':
+            return sortedGames.sort((a, b) => b.rating - a.rating);
+        case 'popular':
+            return sortedGames.sort((a, b) => b.playCount - a.playCount);
+        default:
+            return sortedGames;
+    }
 }
 
 // Setup Game Event Listeners
@@ -197,10 +219,8 @@ function playGame(gameId) {
     if (game.playUrl) {
         window.open(game.playUrl, '_blank');
         showNotification(`Opening ${game.name}...`, 'success');
-        
-        // Update play count (in a real app, this would be server-side)
-        game.playCount++;
-        updateGameStats();
+    } else {
+        showNotification('Game URL not available', 'error');
     }
 }
 
@@ -212,24 +232,14 @@ function viewGameDetails(gameId) {
 
 // Update Game Stats
 function updateGameStats() {
-    const totalGames = document.getElementById('totalGames');
-    const liveGames = document.getElementById('liveGames');
-    const totalPlayers = document.getElementById('totalPlayers');
-    
+    const totalGames = document.querySelector('.stat-number');
     if (totalGames) {
         totalGames.textContent = PORTFOLIO_DATA.games.length;
     }
-    
-    if (liveGames) {
-        const liveCount = PORTFOLIO_DATA.games.filter(game => game.status === 'Live').length;
-        liveGames.textContent = liveCount;
-    }
-    
-    if (totalPlayers) {
-        const totalPlayCount = PORTFOLIO_DATA.games.reduce((sum, game) => sum + game.playCount, 0);
-        totalPlayers.textContent = totalPlayCount.toLocaleString();
-    }
 }
+
+// Make functions globally available
+window.initializeGamesPage = initializeGamesPage;
 
 // Initialize when page loads
 if (document.readyState === 'loading') {
