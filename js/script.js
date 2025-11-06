@@ -7,39 +7,17 @@
 let currentTheme = 'dark';
 let isLoading = false;
 
-function initializePage() {
-    console.log('Initializing page...');
-    
-    // Initialize storage FIRST
-    if (typeof initializeStorage === 'function') {
-        initializeStorage();
-    }
-    
-    // Enhance portfolio data
-    if (typeof enhancePortfolioData === 'function') {
-        enhancePortfolioData();
-    }
-    
-    // Rest of your existing initialization code...
-    const savedTheme = getTheme();
-    setTheme(savedTheme);
-    updateThemeToggle(savedTheme);
-    
-}
-
 // DOM Content Loaded
 document.addEventListener('DOMContentLoaded', function() {
     console.log('DOM loaded - initializing page');
     initializePage();
-    setupEventListeners();
-    startAnimations();
 });
 
 // Initialize Page
 function initializePage() {
     console.log('Initializing page...');
     
-    // Initialize storage
+    // Initialize storage FIRST
     if (typeof initializeStorage === 'function') {
         initializeStorage();
     }
@@ -53,37 +31,56 @@ function initializePage() {
     const page = getCurrentPage();
     console.log('Current page:', page);
     
+    // Setup event listeners
+    setupEventListeners();
+    
+    // Start animations
+    startAnimations();
+    
+    // Initialize page-specific components
     switch (page) {
         case 'home':
             initializeHomePage();
             break;
         case 'games':
-            initializeGamesPage();
+            if (typeof initializeGamesPage === 'function') {
+                initializeGamesPage();
+            }
             break;
         case 'websites':
-            initializeWebsitesPage();
+            if (typeof initializeWebsitesPage === 'function') {
+                initializeWebsitesPage();
+            }
             break;
         case 'apps':
-            initializeAppsPage();
+            if (typeof initializeAppsPage === 'function') {
+                initializeAppsPage();
+            }
             break;
         case 'testimonials':
-            initializeTestimonialsPage();
+            if (typeof initializeTestimonialsPage === 'function') {
+                initializeTestimonialsPage();
+            }
             break;
         case 'admin':
-            initializeAdminPage();
+            if (typeof initializeAdminPage === 'function') {
+                initializeAdminPage();
+            }
             break;
         case 'game-detail':
-            initializeGameDetailPage();
+            if (typeof initializeGameDetailPage === 'function') {
+                initializeGameDetailPage();
+            }
             break;
         case 'website-detail':
-            initializeWebsiteDetailPage();
+            if (typeof initializeWebsiteDetailPage === 'function') {
+                initializeWebsiteDetailPage();
+            }
             break;
         case 'app-detail':
-            initializeAppDetailPage();
-            break;
-        case '404':
-        case '500':
-            // Error pages handle their own initialization
+            if (typeof initializeAppDetailPage === 'function') {
+                initializeAppDetailPage();
+            }
             break;
         default:
             console.log('Unknown page, using home initialization');
@@ -99,6 +96,7 @@ function getCurrentPage() {
     const path = window.location.pathname;
     const page = path.split('/').pop() || 'index.html';
     
+    if (page === 'index.html' || page === '' || page === '/') return 'home';
     if (page.includes('games.html')) return 'games';
     if (page.includes('websites.html')) return 'websites';
     if (page.includes('apps.html')) return 'apps';
