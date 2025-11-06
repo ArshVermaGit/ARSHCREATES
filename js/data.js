@@ -3,14 +3,14 @@
 // All games, websites, apps, and testimonials
 // ==========================================
 
+// In data.js, make sure all portfolio items have complete data
 const PORTFOLIO_DATA = {
-    // Games Data
     games: [
         {
             id: 1,
             name: "Epic Adventure Quest",
             overview: "An immersive action RPG with stunning visuals and engaging gameplay",
-            description: "Embark on an epic journey through mystical lands, battling fearsome creatures and uncovering ancient secrets. This Unity-based RPG features advanced AI, dynamic weather systems, and a compelling storyline that will keep players engaged for hours.",
+            description: "Embark on an epic journey through mystical lands, battling fearsome creatures and uncovering ancient secrets.",
             image: "assets/games/game1.jpg",
             category: "Action RPG",
             rating: 4.8,
@@ -25,10 +25,7 @@ const PORTFOLIO_DATA = {
                 "Open world exploration",
                 "Dynamic combat system",
                 "Character progression",
-                "Multiplayer support",
-                "Advanced AI enemies",
-                "Weather system",
-                "Day/night cycle"
+                "Multiplayer support"
             ],
             technologies: ["Unity", "C#", "Blender", "Photoshop"],
             repositoryUrl: "https://github.com/ArshVermaGit/epic-adventure-quest",
@@ -43,7 +40,7 @@ const PORTFOLIO_DATA = {
             id: 2,
             name: "Neon Racer X",
             overview: "High-speed futuristic racing game with stunning visual effects",
-            description: "Experience the thrill of high-speed racing in a neon-lit futuristic world. With customizable vehicles, multiple tracks, and competitive multiplayer, this game brings arcade racing to the next level.",
+            description: "Experience the thrill of high-speed racing in a neon-lit futuristic world.",
             image: "assets/games/game2.jpg",
             category: "Racing",
             rating: 4.6,
@@ -58,10 +55,7 @@ const PORTFOLIO_DATA = {
                 "Multiple game modes",
                 "Vehicle customization",
                 "Online multiplayer",
-                "Leaderboards",
-                "Power-ups system",
-                "Dynamic obstacles",
-                "Visual effects"
+                "Leaderboards"
             ],
             technologies: ["Unity", "C#", "Substance Painter", "FMOD"],
             repositoryUrl: "https://github.com/ArshVermaGit/neon-racer-x",
@@ -74,13 +68,12 @@ const PORTFOLIO_DATA = {
         }
     ],
 
-    // Websites Data
     websites: [
         {
             id: 1,
             name: "E-Commerce Pro",
             overview: "Modern e-commerce platform with advanced features and seamless UX",
-            description: "A full-featured e-commerce solution built with modern web technologies. Features include product management, shopping cart, payment integration, and admin dashboard.",
+            description: "A full-featured e-commerce solution built with modern web technologies.",
             image: "assets/websites/website1.jpg",
             category: "E-commerce",
             rating: 4.8,
@@ -93,10 +86,7 @@ const PORTFOLIO_DATA = {
                 "Product catalog",
                 "Shopping cart",
                 "Payment processing",
-                "User accounts",
-                "Order tracking",
-                "Admin dashboard",
-                "Responsive design"
+                "User accounts"
             ],
             repositoryUrl: "https://github.com/ArshVermaGit/ecommerce-pro",
             liveUrl: "https://ecommerce-pro.example.com",
@@ -105,11 +95,36 @@ const PORTFOLIO_DATA = {
                 "assets/websites/website1-2.jpg",
                 "assets/websites/website1-3.jpg"
             ]
+        },
+        {
+            id: 2,
+            name: "Health & Wellness Hub",
+            overview: "Comprehensive health tracking and wellness platform",
+            description: "A modern health platform for tracking wellness metrics and connecting with healthcare providers.",
+            image: "assets/websites/website2.jpg",
+            category: "Health & Wellness",
+            rating: 4.7,
+            status: "Live",
+            launchDate: "2023-06-15",
+            developmentTime: "5 months",
+            userBase: "25K+",
+            technologies: ["Vue.js", "Express", "PostgreSQL", "Firebase"],
+            features: [
+                "Health tracking",
+                "Appointment scheduling",
+                "Progress analytics",
+                "Community features"
+            ],
+            repositoryUrl: "https://github.com/ArshVermaGit/health-wellness-hub",
+            liveUrl: "https://healthhub.example.com",
+            screenshots: [
+                "assets/websites/website2-1.jpg",
+                "assets/websites/website2-2.jpg",
+                "assets/websites/website2-3.jpg"
+            ]
         }
     ],
 
-    // Apps Data
-    // In data.js, update the apps array to ensure all fields exist:
     apps: [
         {
             id: 1,
@@ -127,30 +142,28 @@ const PORTFOLIO_DATA = {
             technologies: ["React Native", "Firebase", "Redux"],
             features: [
                 "Task management",
-                "Time tracking", 
+                "Time tracking",
                 "Goal setting",
-                "Progress analytics",
-                "Cloud sync"
+                "Progress analytics"
             ],
             repositoryUrl: "https://github.com/ArshVermaGit/productivity-pro",
             appStoreUrl: "https://apps.apple.com/app/productivity-pro",
             playStoreUrl: "https://play.google.com/store/apps/details?id=com.productivitypro",
             screenshots: [
                 "assets/apps/app1-1.jpg",
-                "assets/apps/app1-2.jpg", 
+                "assets/apps/app1-2.jpg",
                 "assets/apps/app1-3.jpg"
             ]
         },
-        // Add more apps with complete data
         {
             id: 2,
-            name: "Fitness Tracker",
-            overview: "Comprehensive fitness tracking and workout planning app",
+            name: "Fitness Tracker Pro",
+            overview: "Advanced fitness tracking and workout planning application",
             description: "Track your workouts, set fitness goals, and monitor your progress with this intuitive fitness app.",
             image: "assets/apps/app2.jpg",
             category: "Health & Fitness",
             rating: 4.6,
-            status: "Live", 
+            status: "Live",
             launchDate: "2023-08-20",
             developmentTime: "3 months",
             downloadCount: "25K+",
@@ -160,12 +173,11 @@ const PORTFOLIO_DATA = {
                 "Workout tracking",
                 "Goal setting",
                 "Progress charts",
-                "Exercise library",
-                "Social sharing"
+                "Exercise library"
             ],
-            repositoryUrl: "https://github.com/ArshVermaGit/fitness-tracker",
-            appStoreUrl: "https://apps.apple.com/app/fitness-tracker",
-            playStoreUrl: "https://play.google.com/store/apps/details?id=com.fitnesstracker",
+            repositoryUrl: "https://github.com/ArshVermaGit/fitness-tracker-pro",
+            appStoreUrl: "https://apps.apple.com/app/fitness-tracker-pro",
+            playStoreUrl: "https://play.google.com/store/apps/details?id=com.fitnesstrackerpro",
             screenshots: [
                 "assets/apps/app2-1.jpg",
                 "assets/apps/app2-2.jpg",
@@ -174,7 +186,6 @@ const PORTFOLIO_DATA = {
         }
     ],
 
-    // Testimonials Data
     testimonials: [
         {
             id: 1,
@@ -183,9 +194,22 @@ const PORTFOLIO_DATA = {
             projectType: "Website",
             projectName: "E-Commerce Pro",
             rating: 5,
-            testimonialText: "Arsh delivered an exceptional e-commerce platform that exceeded our expectations. His attention to detail and technical expertise transformed our online business. The platform has increased our sales by 40% and customer satisfaction is at an all-time high.",
+            testimonialText: "Arsh delivered an exceptional e-commerce platform that exceeded our expectations. His attention to detail and technical expertise transformed our online business.",
             date: "2024-01-15",
-            avatar: "assets/testimonials/client1.jpg"
+            avatar: "assets/testimonials/client1.jpg",
+            approved: true
+        },
+        {
+            id: 2,
+            clientName: "Mike Rodriguez",
+            clientRole: "Product Manager, FitLife",
+            projectType: "App",
+            projectName: "Fitness Tracker Pro",
+            rating: 5,
+            testimonialText: "The fitness app developed by Arsh has been instrumental in our company's growth. The user experience is seamless and the performance is outstanding.",
+            date: "2024-02-10",
+            avatar: "assets/testimonials/client2.jpg",
+            approved: true
         }
     ]
 };
