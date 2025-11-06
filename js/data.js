@@ -109,12 +109,13 @@ const PORTFOLIO_DATA = {
     ],
 
     // Apps Data
+    // In data.js, update the apps array to ensure all fields exist:
     apps: [
         {
             id: 1,
             name: "Productivity Pro",
             overview: "All-in-one productivity app for task management and time tracking",
-            description: "A comprehensive productivity app that helps you organize tasks, track time, set goals, and boost your efficiency. With intuitive design and powerful features, it's your ultimate productivity companion.",
+            description: "A comprehensive productivity app that helps you organize tasks, track time, set goals, and boost your efficiency.",
             image: "assets/apps/app1.jpg",
             category: "Productivity",
             rating: 4.8,
@@ -126,20 +127,49 @@ const PORTFOLIO_DATA = {
             technologies: ["React Native", "Firebase", "Redux"],
             features: [
                 "Task management",
-                "Time tracking",
+                "Time tracking", 
                 "Goal setting",
                 "Progress analytics",
-                "Cloud sync",
-                "Team collaboration",
-                "Custom notifications"
+                "Cloud sync"
             ],
             repositoryUrl: "https://github.com/ArshVermaGit/productivity-pro",
             appStoreUrl: "https://apps.apple.com/app/productivity-pro",
             playStoreUrl: "https://play.google.com/store/apps/details?id=com.productivitypro",
             screenshots: [
                 "assets/apps/app1-1.jpg",
-                "assets/apps/app1-2.jpg",
+                "assets/apps/app1-2.jpg", 
                 "assets/apps/app1-3.jpg"
+            ]
+        },
+        // Add more apps with complete data
+        {
+            id: 2,
+            name: "Fitness Tracker",
+            overview: "Comprehensive fitness tracking and workout planning app",
+            description: "Track your workouts, set fitness goals, and monitor your progress with this intuitive fitness app.",
+            image: "assets/apps/app2.jpg",
+            category: "Health & Fitness",
+            rating: 4.6,
+            status: "Live", 
+            launchDate: "2023-08-20",
+            developmentTime: "3 months",
+            downloadCount: "25K+",
+            platform: "iOS & Android",
+            technologies: ["Flutter", "Firebase", "Dart"],
+            features: [
+                "Workout tracking",
+                "Goal setting",
+                "Progress charts",
+                "Exercise library",
+                "Social sharing"
+            ],
+            repositoryUrl: "https://github.com/ArshVermaGit/fitness-tracker",
+            appStoreUrl: "https://apps.apple.com/app/fitness-tracker",
+            playStoreUrl: "https://play.google.com/store/apps/details?id=com.fitnesstracker",
+            screenshots: [
+                "assets/apps/app2-1.jpg",
+                "assets/apps/app2-2.jpg",
+                "assets/apps/app2-3.jpg"
             ]
         }
     ],
