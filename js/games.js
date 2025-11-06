@@ -226,8 +226,7 @@ function playGame(gameId) {
 
 // View Game Details
 function viewGameDetails(gameId) {
-    // Navigate to game detail page
-    window.location.href = `game-detail.html?id=${gameId}`;
+    navigateToDetailPage('game', gameId);
 }
 
 // Update Game Stats
