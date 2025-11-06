@@ -23,7 +23,8 @@ function loadApps() {
     const appsGrid = document.getElementById('appsGrid');
     if (!appsGrid) return;
     
-    currentApps = PORTFOLIO_DATA.apps;
+    currentApps = getApps();
+    console.log('Loaded apps:', currentApps);
     displayApps(currentApps);
     updateAppStats();
 }
