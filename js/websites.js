@@ -23,7 +23,8 @@ function loadWebsites() {
     const websitesGrid = document.getElementById('websitesGrid');
     if (!websitesGrid) return;
     
-    currentWebsites = PORTFOLIO_DATA.websites;
+    currentWebsites = getWebsites();
+    console.log('Loaded websites:', currentWebsites);
     displayWebsites(currentWebsites);
     updateWebsiteStats();
 }
