@@ -1,398 +1,313 @@
-// ============================================
-// WEBSITE DETAIL PAGE SCRIPT
-// ============================================
+// ==========================================
+// WEBSITE DETAIL PAGE - Individual website presentation
+// Handles website preview, navigation, and interactions
+// ==========================================
 
-class WebsiteDetailPage {
-    constructor() {
-        this.currentWebsite = null;
-        this.isPreviewing = false;
-        this.isFullscreen = false;
-        this.init();
+// Global Variables
+let currentWebsiteId = null;
+let currentWebsite = null;
+let websiteImages = [];
+
+// Initialize Website Detail Page
+function initializeWebsiteDetailPage() {
+    // Get website ID from URL parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    currentWebsiteId = parseInt(urlParams.get('id'));
+    
+    if (!currentWebsiteId) {
+        showNotification('Website not found', 'error');
+        setTimeout(() => window.location.href = 'websites.html', 2000);
+        return;
     }
+    
+    loadWebsiteDetails(currentWebsiteId);
+    setupWebsiteDetailEventListeners();
+}
 
-    init() {
-        this.setupLoadingScreen();
-        this.setupTheme();
-        this.loadWebsite();
-        this.setupEventListeners();
-        this.setupKeyboardNavigation();
+// Load Website Details
+function loadWebsiteDetails(websiteId) {
+    const website = PORTFOLIO_DATA.websites.find(w => w.id === websiteId);
+    if (!website) {
+        showNotification('Website not found', 'error');
+        setTimeout(() => window.location.href = 'websites.html', 2000);
+        return;
     }
+    
+    currentWebsite = website;
+    websiteImages = [website.image, ...(website.screenshots || [])];
+    
+    displayWebsiteDetails(website);
+    setupWebsiteNavigation();
+}
 
-    setupLoadingScreen() {
-        const loadingScreen = document.getElementById('loadingScreen');
-        const loadingBar = document.getElementById('loadingBar');
-        
-        if (!loadingScreen) return;
-        
-        let progress = 0;
-        const interval = setInterval(() => {
-            progress += Math.random() * 20;
-            if (progress >= 100) {
-                progress = 100;
-                clearInterval(interval);
-                
-                setTimeout(() => {
-                    loadingScreen.style.opacity = '0';
-                    loadingScreen.style.visibility = 'hidden';
-                }, 500);
-            }
-            
-            if (loadingBar) loadingBar.style.width = `${progress}%`;
-        }, 200);
+// Display Website Details
+function displayWebsiteDetails(website) {
+    // Update page title
+    document.title = `${website.name} - Arsh Verma`;
+    
+    // Update preview image
+    const previewImage = document.getElementById('previewImage');
+    if (previewImage) {
+        previewImage.src = website.image;
+        previewImage.alt = website.name;
     }
-
-    setupTheme() {
-        const themeToggle = document.getElementById('themeToggle');
-        const currentTheme = localStorage.getItem('theme') || 'dark';
-        
-        document.documentElement.setAttribute('data-theme', currentTheme);
-        this.updateThemeIcon(currentTheme);
-
-        if (themeToggle) {
-            themeToggle.addEventListener('click', () => {
-                const theme = document.documentElement.getAttribute('data-theme');
-                const newTheme = theme === 'dark' ? 'light' : 'dark';
-                
-                document.documentElement.setAttribute('data-theme', newTheme);
-                localStorage.setItem('theme', newTheme);
-                this.updateThemeIcon(newTheme);
-            });
-        }
-    }
-
-    updateThemeIcon(theme) {
-        const icon = document.querySelector('#themeToggle i');
-        if (icon) {
-            icon.className = theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
-        }
-    }
-
-    loadWebsite() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const websiteId = urlParams.get('id');
-
-        if (!websiteId) {
-            this.redirectToWebsites();
-            return;
-        }
-
-        this.currentWebsite = getItemById('websites', parseInt(websiteId));
-
-        if (!this.currentWebsite) {
-            this.redirectToWebsites();
-            return;
-        }
-
-        this.displayWebsiteInfo();
-    }
-
-    redirectToWebsites() {
-        window.location.href = 'websites.html';
-    }
-
-    displayWebsiteInfo() {
-        const website = this.currentWebsite;
-
-        // Update page title and meta
-        document.title = `${website.name} - Arsh Verma`;
-        
-        // Update main website info
-        document.getElementById('websiteTitle').textContent = website.name;
-        document.getElementById('websiteCategory').textContent = website.category;
-        document.getElementById('websiteRating').textContent = website.rating;
-        document.getElementById('websiteStatus').textContent = website.status;
-        document.getElementById('websiteOverview').textContent = website.overview;
-        document.getElementById('websiteDescription').textContent = website.description;
-        
-        // Update preview image
-        document.getElementById('previewImage').src = website.image;
-        document.getElementById('previewImage').alt = website.name;
-
-        // Update details
-        document.getElementById('launchDate').textContent = formatDate(website.launchDate);
-        document.getElementById('developmentTime').textContent = website.developmentTime;
-        document.getElementById('userBase').textContent = this.formatNumber(website.playCount) + ' users';
-
-        // Update buttons
-        const repoBtn = document.getElementById('repositoryBtn');
-        const liveUrlBtn = document.getElementById('liveUrlBtn');
-        
-        if (website.repositoryUrl) {
-            repoBtn.href = website.repositoryUrl;
-        } else {
-            repoBtn.style.display = 'none';
-        }
-
-        if (website.url) {
-            liveUrlBtn.href = website.url;
-        } else {
-            liveUrlBtn.style.display = 'none';
-        }
-
-        // Update features list
-        const featuresList = document.getElementById('featuresList');
+    
+    // Update website information
+    document.getElementById('websiteTitle').textContent = website.name;
+    document.getElementById('websiteCategory').textContent = website.category;
+    document.getElementById('websiteRating').textContent = website.rating;
+    document.getElementById('websiteStatus').textContent = website.status;
+    
+    document.getElementById('websiteOverview').textContent = website.overview;
+    document.getElementById('websiteDescription').textContent = website.description;
+    
+    // Update details
+    document.getElementById('launchDate').textContent = formatDate(website.launchDate);
+    document.getElementById('developmentTime').textContent = website.developmentTime;
+    document.getElementById('userBase').textContent = website.userBase;
+    
+    // Update features list
+    const featuresList = document.getElementById('featuresList');
+    if (featuresList) {
         featuresList.innerHTML = website.features.map(feature => 
             `<li>${feature}</li>`
         ).join('');
-
-        // Update technologies
-        const techList = document.getElementById('techList');
+    }
+    
+    // Update technologies
+    const techList = document.getElementById('techList');
+    if (techList) {
         techList.innerHTML = website.technologies.map(tech => 
             `<span class="tech-tag">${tech}</span>`
         ).join('');
-
-        // Update stats circles
-        document.getElementById('ratingCircle').textContent = website.rating;
-        document.getElementById('userCountCircle').textContent = this.formatNumber(website.playCount);
-
-        // Animate stat circles
-        this.animateStatCircles();
     }
-
-    animateStatCircles() {
-        const circles = document.querySelectorAll('.stat-circle');
-        circles.forEach(circle => {
-            circle.style.animation = 'pulse 2s ease-in-out';
-            setTimeout(() => {
-                circle.style.animation = '';
-            }, 2000);
-        });
+    
+    // Update stats circles
+    document.getElementById('ratingCircle').textContent = website.rating;
+    document.getElementById('userCountCircle').textContent = website.userBase;
+    document.getElementById('performanceCircle').textContent = '98%';
+    
+    // Update action buttons
+    const repositoryBtn = document.getElementById('repositoryBtn');
+    const liveUrlBtn = document.getElementById('liveUrlBtn');
+    
+    if (repositoryBtn) {
+        repositoryBtn.href = website.repositoryUrl;
     }
-
-    setupEventListeners() {
-        // Visit button
-        const visitBtn = document.getElementById('visitBtn');
-        if (visitBtn) {
-            visitBtn.addEventListener('click', () => this.startPreview());
-        }
-
-        // Control buttons
-        const fullscreenBtn = document.getElementById('fullscreenBtn');
-        const closePreviewBtn = document.getElementById('closePreviewBtn');
-
-        if (fullscreenBtn) fullscreenBtn.addEventListener('click', () => this.toggleFullscreen());
-        if (closePreviewBtn) closePreviewBtn.addEventListener('click', () => this.closePreview());
-
-        // Navigation arrows
-        const prevBtn = document.getElementById('prevWebsite');
-        const nextBtn = document.getElementById('nextWebsite');
-
-        if (prevBtn) {
-            prevBtn.addEventListener('click', () => this.navigateToPrevWebsite());
-        }
-
-        if (nextBtn) {
-            nextBtn.addEventListener('click', () => this.navigateToNextWebsite());
-        }
-
-        // Share button
-        const shareBtn = document.getElementById('shareBtn');
-        if (shareBtn) {
-            shareBtn.addEventListener('click', () => this.shareWebsite());
-        }
-
-        // Fullscreen change event
-        document.addEventListener('fullscreenchange', () => {
-            this.isFullscreen = !!document.fullscreenElement;
-            this.updateFullscreenButton();
-        });
-    }
-
-    setupKeyboardNavigation() {
-        document.addEventListener('keydown', (e) => {
-            if (this.isPreviewing) {
-                switch (e.key) {
-                    case 'Escape':
-                        e.preventDefault();
-                        if (this.isFullscreen) {
-                            this.toggleFullscreen();
-                        } else {
-                            this.closePreview();
-                        }
-                        break;
-                    case 'ArrowLeft':
-                        e.preventDefault();
-                        this.navigateToPrevWebsite();
-                        break;
-                    case 'ArrowRight':
-                        e.preventDefault();
-                        this.navigateToNextWebsite();
-                        break;
-                }
-            } else {
-                switch (e.key) {
-                    case 'ArrowLeft':
-                        e.preventDefault();
-                        this.navigateToPrevWebsite();
-                        break;
-                    case 'ArrowRight':
-                        e.preventDefault();
-                        this.navigateToNextWebsite();
-                        break;
-                }
-            }
-        });
-    }
-
-    startPreview() {
-        const website = this.currentWebsite;
-        const websiteFrame = document.getElementById('websiteFrame');
-        const previewImage = document.querySelector('.preview-image');
-        const websiteContainer = document.getElementById('websiteContainer');
-
-        if (!website.url) {
-            this.showNotification('Live website URL not available', 'error');
-            return;
-        }
-
-        // Show loading state
-        websiteFrame.src = website.url;
-        previewImage.style.display = 'none';
-        websiteContainer.style.display = 'block';
-        
-        this.isPreviewing = true;
-        document.body.classList.add('preview-active');
-
-        // Show notification
-        this.showNotification('Website preview started. Use ESC to exit, arrow keys to navigate.', 'success');
-    }
-
-    closePreview() {
-        const websiteFrame = document.getElementById('websiteFrame');
-        const previewImage = document.querySelector('.preview-image');
-        const websiteContainer = document.getElementById('websiteContainer');
-
-        websiteFrame.src = '';
-        previewImage.style.display = 'block';
-        websiteContainer.style.display = 'none';
-        
-        this.isPreviewing = false;
-        document.body.classList.remove('preview-active');
-
-        // Exit fullscreen if active
-        if (this.isFullscreen) {
-            this.toggleFullscreen();
-        }
-    }
-
-    toggleFullscreen() {
-        const websiteContainer = document.getElementById('websiteContainer');
-        
-        if (!this.isFullscreen) {
-            if (websiteContainer.requestFullscreen) {
-                websiteContainer.requestFullscreen();
-            } else if (websiteContainer.webkitRequestFullscreen) {
-                websiteContainer.webkitRequestFullscreen();
-            } else if (websiteContainer.msRequestFullscreen) {
-                websiteContainer.msRequestFullscreen();
-            }
+    
+    if (liveUrlBtn) {
+        if (website.status === 'Live' && website.liveUrl && website.liveUrl !== '#') {
+            liveUrlBtn.href = website.liveUrl;
         } else {
-            if (document.exitFullscreen) {
-                document.exitFullscreen();
-            } else if (document.webkitExitFullscreen) {
-                document.webkitExitFullscreen();
-            } else if (document.msExitFullscreen) {
-                document.msExitFullscreen();
-            }
+            liveUrlBtn.style.display = 'none';
         }
     }
-
-    updateFullscreenButton() {
-        const fullscreenBtn = document.getElementById('fullscreenBtn');
-        if (fullscreenBtn) {
-            const icon = fullscreenBtn.querySelector('i');
-            icon.className = this.isFullscreen ? 'fas fa-compress' : 'fas fa-expand';
-        }
-    }
-
-    navigateToPrevWebsite() {
-        const websites = window.PORTFOLIO_DATA.websites;
-        const currentIndex = websites.findIndex(w => w.id === this.currentWebsite.id);
-        const prevIndex = currentIndex > 0 ? currentIndex - 1 : websites.length - 1;
-        const prevWebsite = websites[prevIndex];
-        
-        this.navigateToWebsite(prevWebsite);
-    }
-
-    navigateToNextWebsite() {
-        const websites = window.PORTFOLIO_DATA.websites;
-        const currentIndex = websites.findIndex(w => w.id === this.currentWebsite.id);
-        const nextIndex = currentIndex < websites.length - 1 ? currentIndex + 1 : 0;
-        const nextWebsite = websites[nextIndex];
-        
-        this.navigateToWebsite(nextWebsite);
-    }
-
-    navigateToWebsite(website) {
-        // Close preview if active
-        if (this.isPreviewing) {
-            this.closePreview();
-        }
-
-        // Navigate to new website
-        window.location.href = `website-detail.html?id=${website.id}`;
-    }
-
-    shareWebsite() {
-        const website = this.currentWebsite;
-        const shareUrl = window.location.href;
-        const shareText = `Check out ${website.name} - ${website.overview}`;
-
-        if (navigator.share) {
-            navigator.share({
-                title: website.name,
-                text: shareText,
-                url: shareUrl
-            });
+    
+    // Update visit button state
+    const visitBtn = document.getElementById('visitBtn');
+    if (visitBtn) {
+        if (website.status === 'In Development') {
+            visitBtn.innerHTML = '<i class="fas fa-clock"></i><span>Coming Soon</span>';
+            visitBtn.disabled = true;
         } else {
-            // Fallback: copy to clipboard
-            navigator.clipboard.writeText(shareUrl).then(() => {
-                this.showNotification('Website link copied to clipboard!', 'success');
-            });
+            visitBtn.innerHTML = '<i class="fas fa-external-link-alt"></i><span>Visit Website</span>';
+            visitBtn.onclick = () => visitWebsite(website);
         }
     }
+    
+    // Load screenshots
+    loadWebsiteScreenshots(website);
+}
 
-    formatNumber(num) {
-        if (num >= 1000000) {
-            return (num / 1000000).toFixed(1) + 'M';
-        } else if (num >= 1000) {
-            return (num / 1000).toFixed(1) + 'K';
-        }
-        return num.toString();
-    }
+// Load Website Screenshots
+function loadWebsiteScreenshots(website) {
+    const screenshotsContainer = document.getElementById('appScreenshots');
+    if (!screenshotsContainer || !website.screenshots) return;
+    
+    screenshotsContainer.innerHTML = website.screenshots.map((screenshot, index) => `
+        <div class="screenshot-thumbnail" data-screenshot-index="${index}">
+            <img src="${screenshot}" alt="${website.name} screenshot ${index + 1}" loading="lazy">
+        </div>
+    `).join('');
+    
+    // Add click event to thumbnails
+    document.querySelectorAll('.screenshot-thumbnail').forEach(thumb => {
+        thumb.addEventListener('click', function() {
+            const index = parseInt(this.getAttribute('data-screenshot-index'));
+            showScreenshot(index);
+        });
+    });
+}
 
-    showNotification(message, type = 'success') {
-        const container = document.getElementById('notificationContainer');
-        if (!container) return;
-
-        const notification = document.createElement('div');
-        notification.className = `notification ${type}`;
-        notification.innerHTML = `
-            <i class="fas fa-${this.getNotificationIcon(type)}"></i>
-            <span>${message}</span>
-        `;
-
-        container.appendChild(notification);
-
-        setTimeout(() => {
-            notification.style.animation = 'slideIn 0.3s ease reverse forwards';
-            setTimeout(() => {
-                notification.remove();
-            }, 300);
-        }, 5000);
-    }
-
-    getNotificationIcon(type) {
-        const icons = {
-            success: 'check-circle',
-            error: 'exclamation-circle',
-            warning: 'exclamation-triangle'
-        };
-        return icons[type] || 'info-circle';
+// Show Screenshot
+function showScreenshot(index) {
+    const previewImage = document.getElementById('previewImage');
+    if (previewImage && websiteImages[index]) {
+        previewImage.src = websiteImages[index];
     }
 }
 
-// Initialize when DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
-    new WebsiteDetailPage();
-});
+// Setup Website Detail Event Listeners
+function setupWebsiteDetailEventListeners() {
+    // Share button
+    const shareBtn = document.getElementById('shareBtn');
+    if (shareBtn) {
+        shareBtn.addEventListener('click', shareWebsite);
+    }
+    
+    // Fullscreen button
+    const fullscreenBtn = document.getElementById('fullscreenBtn');
+    if (fullscreenBtn) {
+        fullscreenBtn.addEventListener('click', toggleFullscreen);
+    }
+    
+    // Close preview button
+    const closePreviewBtn = document.getElementById('closePreviewBtn');
+    if (closePreviewBtn) {
+        closePreviewBtn.addEventListener('click', closePreview);
+    }
+    
+    // Keyboard navigation
+    document.addEventListener('keydown', handleKeyboardNavigation);
+}
+
+// Setup Website Navigation
+function setupWebsiteNavigation() {
+    const prevWebsiteBtn = document.getElementById('prevWebsite');
+    const nextWebsiteBtn = document.getElementById('nextWebsite');
+    
+    if (prevWebsiteBtn) {
+        prevWebsiteBtn.addEventListener('click', navigateToPreviousWebsite);
+    }
+    
+    if (nextWebsiteBtn) {
+        nextWebsiteBtn.addEventListener('click', navigateToNextWebsite);
+    }
+}
+
+// Navigation Functions
+function navigateToPreviousWebsite() {
+    const websites = PORTFOLIO_DATA.websites;
+    const currentIndex = websites.findIndex(w => w.id === currentWebsiteId);
+    const prevIndex = (currentIndex - 1 + websites.length) % websites.length;
+    const prevWebsite = websites[prevIndex];
+    
+    window.location.href = `website-detail.html?id=${prevWebsite.id}`;
+}
+
+function navigateToNextWebsite() {
+    const websites = PORTFOLIO_DATA.websites;
+    const currentIndex = websites.findIndex(w => w.id === currentWebsiteId);
+    const nextIndex = (currentIndex + 1) % websites.length;
+    const nextWebsite = websites[nextIndex];
+    
+    window.location.href = `website-detail.html?id=${nextWebsite.id}`;
+}
+
+// Website Interaction Functions
+function visitWebsite(website) {
+    if (website.liveUrl && website.liveUrl !== '#') {
+        window.open(website.liveUrl, '_blank');
+        showNotification(`Opening ${website.name}...`, 'success');
+    }
+}
+
+function toggleFullscreen() {
+    const websiteContainer = document.getElementById('websiteContainer');
+    if (!websiteContainer) return;
+    
+    if (!document.fullscreenElement) {
+        if (websiteContainer.requestFullscreen) {
+            websiteContainer.requestFullscreen();
+        } else if (websiteContainer.webkitRequestFullscreen) {
+            websiteContainer.webkitRequestFullscreen();
+        } else if (websiteContainer.msRequestFullscreen) {
+            websiteContainer.msRequestFullscreen();
+        }
+    } else {
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) {
+            document.webkitExitFullscreen();
+        } else if (document.msExitFullscreen) {
+            document.msExitFullscreen();
+        }
+    }
+}
+
+function closePreview() {
+    window.location.href = 'websites.html';
+}
+
+// Share Functionality
+function shareWebsite() {
+    if (navigator.share) {
+        navigator.share({
+            title: currentWebsite.name,
+            text: currentWebsite.overview,
+            url: window.location.href
+        }).then(() => {
+            showNotification('Website shared successfully', 'success');
+        }).catch(() => {
+            fallbackShare();
+        });
+    } else {
+        fallbackShare();
+    }
+}
+
+function fallbackShare() {
+    // Copy URL to clipboard
+    navigator.clipboard.writeText(window.location.href).then(() => {
+        showNotification('Website link copied to clipboard', 'success');
+    }).catch(() => {
+        showNotification('Could not share website', 'error');
+    });
+}
+
+// Keyboard Navigation
+function handleKeyboardNavigation(e) {
+    switch (e.key) {
+        case 'ArrowLeft':
+            e.preventDefault();
+            navigateToPreviousWebsite();
+            break;
+        case 'ArrowRight':
+            e.preventDefault();
+            navigateToNextWebsite();
+            break;
+        case 'Escape':
+            closePreview();
+            break;
+        case ' ':
+        case 'Enter':
+            if (currentWebsite.status === 'Live') {
+                e.preventDefault();
+                visitWebsite(currentWebsite);
+            }
+            break;
+    }
+}
+
+// Fullscreen change handler
+document.addEventListener('fullscreenchange', handleFullscreenChange);
+document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+document.addEventListener('msfullscreenchange', handleFullscreenChange);
+
+function handleFullscreenChange() {
+    const fullscreenBtn = document.getElementById('fullscreenBtn');
+    if (fullscreenBtn) {
+        const isFullscreen = !!document.fullscreenElement;
+        fullscreenBtn.innerHTML = isFullscreen ? 
+            '<i class="fas fa-compress"></i>' : 
+            '<i class="fas fa-expand"></i>';
+        fullscreenBtn.title = isFullscreen ? 'Exit Fullscreen' : 'Fullscreen';
+    }
+}
+
+// Initialize when page loads
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeWebsiteDetailPage);
+} else {
+    initializeWebsiteDetailPage();
+}
