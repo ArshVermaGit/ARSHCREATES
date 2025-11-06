@@ -1,5 +1,5 @@
-/* Master CSS File - ArshCreates Perfectly Balanced Design */
-/* Clean, Professional with Perfect Sizing & iOS Glass Effects */
+/* Master CSS File - ArshCreates Hero Section Redesign */
+/* Perfect Layout with Left-Aligned Hero & Right Content */
 
 :root {
   /* Clean Color Palette */
@@ -55,6 +55,7 @@
   --text-3xl: 2rem;
   --text-4xl: 2.5rem;
   --text-5xl: 3rem;
+  --text-6xl: 3.5rem;
 }
 
 /* === CLEAN BASE RESET === */
@@ -371,20 +372,29 @@ body.dark-mode {
   border-radius: var(--border-radius-xs);
 }
 
-/* === PERFECT HERO SECTION === */
+/* === REDESIGNED HERO SECTION - Split Layout === */
 .hero {
   min-height: 100vh;
   display: flex;
   align-items: center;
-  justify-content: center;
-  position: relative;
   padding: var(--space-4xl) 0;
+  position: relative;
 }
 
 .hero-content {
-  text-align: center;
-  max-width: 800px;
-  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3xl);
+  align-items: center;
+  width: 100%;
+}
+
+/* Left Side - Name & Title */
+.hero-left {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  animation: slideInLeft 0.8s ease-out both;
 }
 
 .status-badge {
@@ -397,7 +407,7 @@ body.dark-mode {
   margin-bottom: var(--space-xl);
   backdrop-filter: var(--glass-blur);
   border: var(--border-light);
-  animation: slideDown 0.6s ease-out;
+  width: fit-content;
 }
 
 .dark-mode .status-badge {
@@ -414,15 +424,23 @@ body.dark-mode {
 }
 
 .hero-title {
-  font-size: var(--text-4xl);
-  font-weight: 800;
-  margin-bottom: var(--space-lg);
+  font-size: var(--text-6xl);
+  font-weight: 900;
   line-height: 1.1;
-  animation: slideUp 0.8s ease-out 0.2s both;
+  margin-bottom: var(--space-lg);
 }
 
 .title-line {
   display: block;
+  font-size: var(--text-2xl);
+  font-weight: 600;
+  color: var(--text-light);
+  opacity: 0.8;
+  margin-bottom: var(--space-xs);
+}
+
+.dark-mode .title-line {
+  color: var(--text-dark);
 }
 
 .title-gradient {
@@ -430,41 +448,64 @@ body.dark-mode {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  font-size: var(--text-6xl);
+  display: block;
+  line-height: 1;
+  margin-top: var(--space-xs);
+}
+
+/* Right Side - Content */
+.hero-right {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--space-xl);
+  animation: slideInRight 0.8s ease-out 0.3s both;
+  padding: var(--space-2xl);
+  background: var(--glass-bg-light);
+  backdrop-filter: var(--glass-blur);
+  border-radius: var(--border-radius-xl);
+  border: var(--border-light);
+  box-shadow: var(--shadow-light);
+}
+
+.dark-mode .hero-right {
+  background: var(--glass-bg-dark);
+  border: var(--border-dark);
+  box-shadow: var(--shadow-dark);
 }
 
 .typewriter-container {
-  font-size: var(--text-xl);
-  font-weight: 600;
-  margin-bottom: var(--space-xl);
+  font-size: var(--text-2xl);
+  font-weight: 700;
   min-height: 60px;
   display: flex;
   align-items: center;
-  justify-content: center;
-  animation: slideUp 0.8s ease-out 0.4s both;
+  color: var(--primary-orange);
+}
+
+.dark-mode .typewriter-container {
+  color: var(--secondary-yellow);
 }
 
 .typewriter-cursor {
   color: var(--secondary-yellow);
   animation: blink 1s infinite;
+  margin-left: var(--space-xs);
 }
 
 .hero-description {
   font-size: var(--text-lg);
-  margin-bottom: var(--space-2xl);
   opacity: 0.9;
-  max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
-  animation: slideUp 0.8s ease-out 0.6s both;
+  line-height: 1.7;
+  margin-bottom: var(--space-lg);
 }
 
 .hero-actions {
   display: flex;
   gap: var(--space-md);
-  justify-content: center;
-  margin-bottom: var(--space-3xl);
+  margin-bottom: var(--space-xl);
   flex-wrap: wrap;
-  animation: slideUp 0.8s ease-out 0.8s both;
 }
 
 .btn {
@@ -485,6 +526,7 @@ body.dark-mode {
   background: linear-gradient(135deg, var(--primary-orange), var(--secondary-yellow));
   color: white;
   box-shadow: var(--shadow-light);
+  border: 2px solid transparent;
 }
 
 .btn-primary:hover {
@@ -505,18 +547,18 @@ body.dark-mode {
 .btn-secondary:hover {
   transform: translateY(-2px);
   background: rgba(255, 107, 53, 0.1);
+  border-color: var(--primary-orange);
 }
 
 .dark-mode .btn-secondary:hover {
   background: rgba(255, 209, 102, 0.1);
+  border-color: var(--secondary-yellow);
 }
 
 .hero-stats {
   display: flex;
-  justify-content: center;
   gap: var(--space-2xl);
   flex-wrap: wrap;
-  animation: slideUp 0.8s ease-out 1s both;
 }
 
 .stat-item {
@@ -527,6 +569,8 @@ body.dark-mode {
   min-width: 120px;
   background: var(--glass-bg-light);
   border: var(--border-light);
+  flex: 1;
+  min-width: 140px;
 }
 
 .dark-mode .stat-item {
@@ -614,6 +658,20 @@ body.dark-mode {
 }
 
 /* === ABOUT SECTION === */
+.about-section {
+  background: var(--glass-bg-light);
+  backdrop-filter: var(--glass-blur);
+  border-radius: var(--border-radius-xl);
+  border: var(--border-light);
+  margin: var(--space-xl) 0;
+  padding: var(--space-3xl) 0;
+}
+
+.dark-mode .about-section {
+  background: var(--glass-bg-dark);
+  border: var(--border-dark);
+}
+
 .about-content {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -632,10 +690,12 @@ body.dark-mode {
   border-radius: var(--border-radius-xl);
   overflow: hidden;
   box-shadow: var(--shadow-light);
+  border: var(--border-light);
 }
 
 .dark-mode .image-container {
   box-shadow: var(--shadow-dark);
+  border: var(--border-dark);
 }
 
 .profile-image {
@@ -656,6 +716,11 @@ body.dark-mode {
   border-radius: var(--border-radius-md);
   text-align: center;
   box-shadow: var(--shadow-light);
+  border: var(--border-light);
+}
+
+.dark-mode .experience-badge {
+  border: var(--border-dark);
 }
 
 .exp-years {
@@ -840,6 +905,7 @@ body.dark-mode {
 .btn-outline:hover {
   background: var(--primary-orange);
   color: white;
+  transform: translateY(-2px);
 }
 
 .dark-mode .btn-outline:hover {
@@ -848,6 +914,20 @@ body.dark-mode {
 }
 
 /* === SKILLS SECTION === */
+.skills-section {
+  background: var(--glass-bg-light);
+  backdrop-filter: var(--glass-blur);
+  border-radius: var(--border-radius-xl);
+  border: var(--border-light);
+  margin: var(--space-xl) 0;
+  padding: var(--space-3xl) 0;
+}
+
+.dark-mode .skills-section {
+  background: var(--glass-bg-dark);
+  border: var(--border-dark);
+}
+
 .skills-container {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -952,10 +1032,12 @@ body.dark-mode {
   background: rgba(255, 107, 53, 0.2);
   border-radius: var(--border-radius-xs);
   overflow: hidden;
+  border: var(--border-light);
 }
 
 .dark-mode .skill-bar {
   background: rgba(255, 209, 102, 0.2);
+  border: var(--border-dark);
 }
 
 .skill-progress {
@@ -1063,6 +1145,10 @@ body.dark-mode {
 }
 
 /* === CONTACT SECTION === */
+.contact-section {
+  padding: var(--space-3xl) 0;
+}
+
 .contact-container {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -1528,7 +1614,30 @@ body.dark-mode {
   background: rgba(59, 130, 246, 0.1);
 }
 
-/* === CLEAN ANIMATIONS === */
+/* === NEW ANIMATIONS FOR SPLIT HERO === */
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* === EXISTING ANIMATIONS === */
 @keyframes pulse {
   0%, 100% { opacity: 0.4; }
   50% { opacity: 0.8; }
@@ -1550,39 +1659,6 @@ body.dark-mode {
   100% { transform: rotateY(360deg); }
 }
 
-@keyframes slideInRight {
-  from {
-    transform: translateX(100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
-}
-
-@keyframes slideUp {
-  from {
-    transform: translateY(30px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
-@keyframes slideDown {
-  from {
-    transform: translateY(-30px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -1594,6 +1670,14 @@ body.dark-mode {
 
 /* === RESPONSIVE DESIGN === */
 @media (max-width: 1024px) {
+  .hero-title {
+    font-size: var(--text-5xl);
+  }
+  
+  .title-gradient {
+    font-size: var(--text-5xl);
+  }
+  
   .about-content,
   .skills-container,
   .contact-container {
@@ -1605,13 +1689,32 @@ body.dark-mode {
     grid-template-columns: 1fr;
     gap: var(--space-2xl);
   }
-  
-  .hero-title {
-    font-size: var(--text-3xl);
-  }
 }
 
 @media (max-width: 768px) {
+  .hero-content {
+    grid-template-columns: 1fr;
+    gap: var(--space-2xl);
+    text-align: center;
+  }
+  
+  .hero-left {
+    align-items: center;
+  }
+  
+  .status-badge {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .hero-title {
+    font-size: var(--text-4xl);
+  }
+  
+  .title-gradient {
+    font-size: var(--text-4xl);
+  }
+  
   .nav-menu {
     position: fixed;
     top: 100%;
@@ -1661,10 +1764,6 @@ body.dark-mode {
     gap: var(--space-xl);
   }
   
-  .hero-title {
-    font-size: var(--text-2xl);
-  }
-  
   .portfolio-categories {
     grid-template-columns: 1fr;
   }
@@ -1696,6 +1795,14 @@ body.dark-mode {
     --space-2xl: 2rem;
   }
   
+  .hero-title {
+    font-size: var(--text-3xl);
+  }
+  
+  .title-gradient {
+    font-size: var(--text-3xl);
+  }
+  
   .hero-stats {
     flex-direction: column;
     align-items: center;
@@ -1708,10 +1815,6 @@ body.dark-mode {
   
   .tools-grid {
     grid-template-columns: 1fr;
-  }
-  
-  .hero-title {
-    font-size: var(--text-xl);
   }
   
   .section-title {
