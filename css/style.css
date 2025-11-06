@@ -8278,3 +8278,314 @@ body {
         color: var(--bg-primary);
     }
 }
+
+/* ==========================================
+   INCREMENTAL CSS FOR 404.html
+   New styles for error page components
+   ========================================== */
+
+/* ==========================================
+   ERROR PAGE LAYOUT
+   ========================================== */
+.error-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
+}
+
+.error-container {
+    text-align: center;
+    max-width: 800px;
+    z-index: var(--z-content);
+    animation: fadeInUp 0.8s ease-out;
+    background: var(--glass-bg);
+    backdrop-filter: blur(30px) saturate(180%);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-xl);
+    padding: var(--space-2xl);
+    box-shadow: var(--shadow-xl);
+}
+
+.error-icon {
+    font-size: 8rem;
+    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 2rem;
+}
+
+.error-code {
+    font-size: clamp(8rem, 20vw, 12rem);
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--text-primary), var(--accent-primary), var(--accent-secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+    margin-bottom: 1.5rem;
+}
+
+.error-title {
+    font-size: clamp(2rem, 5vw, 3rem);
+    margin-bottom: 1.5rem;
+    color: var(--text-primary);
+    font-weight: 700;
+}
+
+.error-message {
+    font-size: clamp(1.1rem, 2.5vw, 1.35rem);
+    color: var(--text-secondary);
+    margin-bottom: 3rem;
+    line-height: 1.7;
+    opacity: 0.9;
+}
+
+.error-actions {
+    display: flex;
+    gap: 1.25rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 3rem;
+}
+
+/* ==========================================
+   POPULAR PAGES SECTION
+   ========================================== */
+.popular-pages {
+    margin-top: 3rem;
+    padding-top: 3rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.popular-pages h3 {
+    margin-bottom: 1.5rem;
+    color: var(--text-primary);
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.popular-links {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.popular-link {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 1.25rem;
+    background: var(--glass-bg);
+    backdrop-filter: blur(30px) saturate(180%);
+    border: 1.5px solid var(--border-color);
+    border-radius: var(--border-radius-lg);
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: all var(--transition-smooth);
+    box-shadow: 0 5px 15px var(--shadow-color);
+}
+
+.popular-link:hover {
+    background: var(--accent-primary);
+    border-color: var(--accent-primary);
+    color: #fff;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px var(--shadow-color);
+}
+
+.popular-link i {
+    font-size: 1.25rem;
+    transition: transform var(--transition-base);
+}
+
+.popular-link:hover i {
+    transform: scale(1.2);
+}
+
+/* ==========================================
+   ERROR PARTICLES ANIMATION
+   ========================================== */
+.error-particles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: var(--z-particles);
+    pointer-events: none;
+}
+
+.particle {
+    position: absolute;
+    background: var(--accent-secondary);
+    border-radius: 50%;
+    opacity: 0.3;
+    animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { 
+        transform: translateY(0) rotate(0deg); 
+    }
+    50% { 
+        transform: translateY(-20px) rotate(180deg); 
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ==========================================
+   ERROR PAGE SPECIFIC BUTTON STYLES
+   ========================================== */
+.error-actions .btn {
+    padding: 1rem 2rem;
+    font-size: 1rem;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 10px 30px var(--shadow-color);
+    transition: all var(--transition-base);
+}
+
+.error-actions .btn-glow {
+    animation: buttonGlow 2s ease-in-out infinite;
+}
+
+@keyframes buttonGlow {
+    0%, 100% { 
+        box-shadow: 0 10px 30px var(--shadow-color); 
+    }
+    50% { 
+        box-shadow: 0 15px 40px var(--accent-secondary); 
+    }
+}
+
+/* ==========================================
+   RESPONSIVE DESIGN FOR 404 PAGE
+   ========================================== */
+@media (max-width: 768px) {
+    .error-page {
+        padding: 1rem;
+    }
+    
+    .error-container {
+        padding: 2rem;
+    }
+    
+    .error-icon {
+        font-size: 6rem;
+    }
+    
+    .error-code {
+        font-size: clamp(6rem, 15vw, 8rem);
+    }
+    
+    .error-actions {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .error-actions .btn {
+        width: 100%;
+        max-width: 300px;
+        justify-content: center;
+    }
+    
+    .popular-links {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .error-container {
+        padding: 1.5rem;
+    }
+    
+    .error-icon {
+        font-size: 4rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .error-title {
+        font-size: 1.75rem;
+    }
+    
+    .error-message {
+        font-size: 1rem;
+        margin-bottom: 2rem;
+    }
+    
+    .popular-pages {
+        margin-top: 2rem;
+        padding-top: 2rem;
+    }
+    
+    .popular-pages h3 {
+        font-size: 1.25rem;
+        margin-bottom: 1rem;
+    }
+    
+    .popular-link {
+        padding: 0.875rem 1rem;
+    }
+}
+
+/* ==========================================
+   ACCESSIBILITY ENHANCEMENTS
+   ========================================== */
+@media (prefers-reduced-motion: reduce) {
+    .error-container,
+    .particle,
+    .popular-link,
+    .btn {
+        animation: none;
+        transition: none;
+    }
+    
+    .particle {
+        opacity: 0.1;
+    }
+}
+
+/* Focus styles for better accessibility */
+.error-container:focus-within {
+    outline: 2px solid var(--accent-primary);
+    outline-offset: 2px;
+}
+
+.popular-link:focus,
+.error-actions .btn:focus {
+    outline: 2px solid var(--accent-primary);
+    outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .error-container {
+        border: 2px solid var(--text-primary);
+        background: var(--bg-primary);
+    }
+    
+    .popular-link {
+        border: 2px solid var(--text-primary);
+    }
+    
+    .particle {
+        background: var(--text-primary);
+    }
+}
