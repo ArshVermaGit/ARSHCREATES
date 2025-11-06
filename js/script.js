@@ -4,8 +4,8 @@
 // ==========================================
 
 // Global Variables
-let currentTheme = 'dark';
-let isLoading = false;
+var currentTheme = 'dark';
+var isLoading = false;
 
 // DOM Content Loaded
 document.addEventListener('DOMContentLoaded', function() {
@@ -17,17 +17,12 @@ document.addEventListener('DOMContentLoaded', function() {
 function initializePage() {
     console.log('Initializing page...');
     
-    // Initialize storage FIRST
-    if (typeof initializeStorage === 'function') {
-        initializeStorage();
-    }
-    
     // Set theme
     const savedTheme = getTheme();
     setTheme(savedTheme);
     updateThemeToggle(savedTheme);
     
-    // Initialize components based on page
+    // Get current page
     const page = getCurrentPage();
     console.log('Current page:', page);
     
@@ -38,57 +33,46 @@ function initializePage() {
     startAnimations();
     
     // Initialize page-specific components
+    initializePageComponents(page);
+    
+    // Hide loading screen
+    setTimeout(hideLoadingScreen, 1000);
+}
+
+// Initialize Page-Specific Components
+function initializePageComponents(page) {
     switch (page) {
         case 'home':
             initializeHomePage();
             break;
         case 'games':
-            if (typeof initializeGamesPage === 'function') {
-                initializeGamesPage();
-            }
+            initializeGamesPage();
             break;
         case 'websites':
-            if (typeof initializeWebsitesPage === 'function') {
-                initializeWebsitesPage();
-            }
+            initializeWebsitesPage();
             break;
         case 'apps':
-            if (typeof initializeAppsPage === 'function') {
-                initializeAppsPage();
-            }
+            initializeAppsPage();
             break;
         case 'testimonials':
-            if (typeof initializeTestimonialsPage === 'function') {
-                initializeTestimonialsPage();
-            }
+            initializeTestimonialsPage();
             break;
         case 'admin':
-            if (typeof initializeAdminPage === 'function') {
-                initializeAdminPage();
-            }
+            initializeAdminPage();
             break;
         case 'game-detail':
-            if (typeof initializeGameDetailPage === 'function') {
-                initializeGameDetailPage();
-            }
+            initializeGameDetailPage();
             break;
         case 'website-detail':
-            if (typeof initializeWebsiteDetailPage === 'function') {
-                initializeWebsiteDetailPage();
-            }
+            initializeWebsiteDetailPage();
             break;
         case 'app-detail':
-            if (typeof initializeAppDetailPage === 'function') {
-                initializeAppDetailPage();
-            }
+            initializeAppDetailPage();
             break;
         default:
             console.log('Unknown page, using home initialization');
             initializeHomePage();
     }
-    
-    // Hide loading screen
-    setTimeout(hideLoadingScreen, 1000);
 }
 
 // Get Current Page
@@ -129,13 +113,22 @@ function setupEventListeners() {
             navMenu.classList.toggle('active');
             navToggle.classList.toggle('active');
         });
+        
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!navToggle.contains(e.target) && !navMenu.contains(e.target)) {
+                navMenu.classList.remove('active');
+                navToggle.classList.remove('active');
+            }
+        });
+        
         console.log('Mobile menu initialized');
     }
     
     // Back to top button
     const backToTop = document.getElementById('backToTop');
     if (backToTop) {
-        window.addEventListener('scroll', toggleBackToTop);
+        window.addEventListener('scroll', throttle(toggleBackToTop, 100));
         backToTop.addEventListener('click', scrollToTop);
         console.log('Back to top initialized');
     }
@@ -147,14 +140,16 @@ function setupEventListeners() {
         console.log('Contact form initialized');
     }
     
-    // Navigation links
+    // Navigation links - smooth scroll
     setupSmoothScroll();
     
     // Particle system
     initializeParticles();
     
-    // Custom cursor
-    initializeCustomCursor();
+    // Custom cursor (desktop only)
+    if (window.innerWidth > 768) {
+        initializeCustomCursor();
+    }
 }
 
 // Loading Screen
@@ -171,10 +166,10 @@ function hideLoadingScreen() {
 function showLoadingScreen(message = 'Loading...') {
     const loadingScreen = document.getElementById('loadingScreen');
     const loadingText = document.getElementById('loadingText');
-    if (loadingScreen && loadingText) {
-        loadingText.textContent = message;
+    if (loadingScreen) {
+        if (loadingText) loadingText.textContent = message;
         loadingScreen.style.display = 'flex';
-        loadingScreen.style.opacity = '1';
+        setTimeout(() => loadingScreen.style.opacity = '1', 10);
     }
 }
 
@@ -218,7 +213,7 @@ function setupSmoothScroll() {
     links.forEach(link => {
         link.addEventListener('click', function(e) {
             const targetId = this.getAttribute('href');
-            if (targetId === '#') return;
+            if (targetId === '#' || targetId === '#!') return;
             
             const targetElement = document.querySelector(targetId);
             if (targetElement) {
@@ -234,7 +229,7 @@ function setupSmoothScroll() {
                 const navToggle = document.getElementById('navToggle');
                 if (navMenu && navMenu.classList.contains('active')) {
                     navMenu.classList.remove('active');
-                    navToggle.classList.remove('active');
+                    navToggle?.classList.remove('active');
                 }
             }
         });
@@ -327,7 +322,7 @@ function handleFormSubmission(form) {
                 id: Date.now(),
                 ...data,
                 date: new Date().toISOString(),
-                status: 'unread',
+                status: 'new',
                 important: false
             };
             contacts.unshift(newContact);
@@ -359,13 +354,11 @@ function isValidEmail(email) {
 
 // Notifications
 function showNotification(message, type = 'info', duration = 5000) {
-    const container = document.getElementById('notificationContainer');
+    let container = document.getElementById('notificationContainer');
     if (!container) {
-        // Create notification container if it doesn't exist
-        const newContainer = document.createElement('div');
-        newContainer.id = 'notificationContainer';
-        document.body.appendChild(newContainer);
-        return showNotification(message, type, duration);
+        container = document.createElement('div');
+        container.id = 'notificationContainer';
+        document.body.appendChild(container);
     }
     
     const notification = document.createElement('div');
@@ -376,7 +369,7 @@ function showNotification(message, type = 'info', duration = 5000) {
         </div>
         <div class="notification-content">
             <div class="notification-title">${getNotificationTitle(type)}</div>
-            <div class="notification-message">${message}</div>
+            <div class="notification-message">${escapeHtml(message)}</div>
         </div>
         <button class="notification-close">
             <i class="fas fa-times"></i>
@@ -487,55 +480,65 @@ function initializeTypewriter() {
 }
 
 function initializeCounters() {
-    const counters = document.querySelectorAll('.stat-number');
-    counters.forEach(counter => {
-        const target = parseInt(counter.getAttribute('data-target'));
-        const duration = 2000;
-        const step = target / (duration / 16);
-        let current = 0;
-        
-        const updateCounter = () => {
-            current += step;
-            if (current < target) {
-                counter.textContent = Math.ceil(current);
-                requestAnimationFrame(updateCounter);
-            } else {
-                counter.textContent = target;
+    const counters = document.querySelectorAll('.stat-number[data-target]');
+    
+    const observerOptions = {
+        threshold: 0.5,
+        rootMargin: '0px'
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const counter = entry.target;
+                const target = parseInt(counter.getAttribute('data-target'));
+                const duration = 2000;
+                const step = target / (duration / 16);
+                let current = 0;
+                
+                const updateCounter = () => {
+                    current += step;
+                    if (current < target) {
+                        counter.textContent = Math.ceil(current);
+                        requestAnimationFrame(updateCounter);
+                    } else {
+                        counter.textContent = target;
+                    }
+                };
+                
+                updateCounter();
+                observer.unobserve(counter);
             }
-        };
-        
-        // Start counter when in viewport
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    updateCounter();
-                    observer.unobserve(entry.target);
-                }
-            });
         });
-        
-        observer.observe(counter);
-    });
+    }, observerOptions);
+    
+    counters.forEach(counter => observer.observe(counter));
 }
 
 function initializeSkillBars() {
-    const skillBars = document.querySelectorAll('.skill-progress');
-    skillBars.forEach(bar => {
-        const width = bar.getAttribute('data-width');
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    bar.style.width = width + '%';
-                    observer.unobserve(entry.target);
-                }
-            });
+    const skillBars = document.querySelectorAll('.skill-progress[data-width]');
+    
+    const observerOptions = {
+        threshold: 0.5,
+        rootMargin: '0px'
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const bar = entry.target;
+                const width = bar.getAttribute('data-width');
+                bar.style.width = width + '%';
+                observer.unobserve(bar);
+            }
         });
-        observer.observe(bar);
-    });
+    }, observerOptions);
+    
+    skillBars.forEach(bar => observer.observe(bar));
 }
 
 function initializeScrollAnimations() {
-    const animatedElements = document.querySelectorAll('.section, .portfolio-card, .category-card');
+    const animatedElements = document.querySelectorAll('.section, .portfolio-card, .category-card, .game-card, .website-card, .app-card, .testimonial-card');
     
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -545,7 +548,8 @@ function initializeScrollAnimations() {
             }
         });
     }, {
-        threshold: 0.1
+        threshold: 0.1,
+        rootMargin: '0px'
     });
     
     animatedElements.forEach(el => {
@@ -561,7 +565,7 @@ function initializeParticles() {
     const container = document.getElementById('particlesContainer');
     if (!container) return;
     
-    const particleCount = 15;
+    const particleCount = window.innerWidth < 768 ? 8 : 15;
     
     for (let i = 0; i < particleCount; i++) {
         createParticle(container);
@@ -587,7 +591,7 @@ function createParticle(container) {
     particle.style.animationDuration = `${duration}s`;
     
     // Random color variation
-    const colors = ['var(--accent)', 'var(--accent-secondary)', 'var(--primary)'];
+    const colors = ['var(--accent-primary)', 'var(--accent-secondary)', 'rgba(59, 130, 246, 0.3)'];
     const randomColor = colors[Math.floor(Math.random() * colors.length)];
     particle.style.background = randomColor;
     
@@ -628,31 +632,19 @@ function initializeCustomCursor() {
     animateCursor();
     
     // Cursor effects for interactive elements
-    const interactiveElements = document.querySelectorAll('a, button, [data-cursor-effect]');
+    const interactiveElements = document.querySelectorAll('a, button, input, select, textarea, [data-cursor-effect]');
     
     interactiveElements.forEach(el => {
         el.addEventListener('mouseenter', () => {
-            const effect = el.getAttribute('data-cursor-effect');
-            
-            if (effect === 'glow') {
-                cursorRing.style.width = '40px';
-                cursorRing.style.height = '40px';
-                cursorRing.style.background = 'var(--accent)';
-                cursorRing.style.opacity = '0.2';
-            } else if (effect === 'scale') {
-                cursorDot.style.transform = `translate3d(${dotX}px, ${dotY}px, 0) scale(1.5)`;
-            } else if (effect === 'magnetic') {
-                cursorRing.style.width = '60px';
-                cursorRing.style.height = '60px';
-            }
+            cursorRing.style.width = '50px';
+            cursorRing.style.height = '50px';
+            cursorRing.style.borderColor = 'var(--accent-primary)';
         });
         
         el.addEventListener('mouseleave', () => {
-            cursorRing.style.width = '30px';
-            cursorRing.style.height = '30px';
-            cursorRing.style.background = 'var(--accent)';
-            cursorRing.style.opacity = '0.5';
-            cursorDot.style.transform = `translate3d(${dotX}px, ${dotY}px, 0) scale(1)`;
+            cursorRing.style.width = '40px';
+            cursorRing.style.height = '40px';
+            cursorRing.style.borderColor = 'var(--accent-primary)';
         });
     });
 }
@@ -660,71 +652,47 @@ function initializeCustomCursor() {
 // Page-specific Initializers
 function initializeHomePage() {
     console.log('Initializing home page...');
-    // Home page specific initialization
+    // Home page is mostly handled by global animations
 }
 
 function initializeGamesPage() {
     console.log('Initializing games page...');
-    // Games page will be handled by games.js
-    if (typeof initializeGamesPage === 'function') {
-        window.initializeGamesPage();
-    }
+    // Games page initialization will be in games.js
 }
 
 function initializeWebsitesPage() {
     console.log('Initializing websites page...');
-    // Websites page will be handled by websites.js
-    if (typeof initializeWebsitesPage === 'function') {
-        window.initializeWebsitesPage();
-    }
+    // Websites page initialization will be in websites.js
 }
 
 function initializeAppsPage() {
     console.log('Initializing apps page...');
-    // Apps page will be handled by apps.js
-    if (typeof initializeAppsPage === 'function') {
-        window.initializeAppsPage();
-    }
+    // Apps page initialization will be in apps.js
 }
 
 function initializeTestimonialsPage() {
     console.log('Initializing testimonials page...');
-    // Testimonials page will be handled by testimonials.js
-    if (typeof initializeTestimonialsPage === 'function') {
-        window.initializeTestimonialsPage();
-    }
+    // Testimonials page initialization will be in testimonials.js
 }
 
 function initializeAdminPage() {
     console.log('Initializing admin page...');
-    // Admin page will be handled by admin.js
-    if (typeof initializeAdminPage === 'function') {
-        window.initializeAdminPage();
-    }
+    // Admin page initialization will be in admin.js
 }
 
 function initializeGameDetailPage() {
     console.log('Initializing game detail page...');
-    // Game detail page will be handled by game-detail.js
-    if (typeof initializeGameDetailPage === 'function') {
-        window.initializeGameDetailPage();
-    }
+    // Game detail page initialization will be in game-detail.js
 }
 
 function initializeWebsiteDetailPage() {
     console.log('Initializing website detail page...');
-    // Website detail page will be handled by website-detail.js
-    if (typeof initializeWebsiteDetailPage === 'function') {
-        window.initializeWebsiteDetailPage();
-    }
+    // Website detail page initialization will be in website-detail.js
 }
 
 function initializeAppDetailPage() {
     console.log('Initializing app detail page...');
-    // App detail page will be handled by app-detail.js
-    if (typeof initializeAppDetailPage === 'function') {
-        window.initializeAppDetailPage();
-    }
+    // App detail page initialization will be in app-detail.js
 }
 
 // Utility Functions
@@ -742,15 +710,50 @@ function debounce(func, wait) {
 
 function throttle(func, limit) {
     let inThrottle;
-    return function() {
-        const args = arguments;
-        const context = this;
+    return function(...args) {
         if (!inThrottle) {
-            func.apply(context, args);
+            func.apply(this, args);
             inThrottle = true;
             setTimeout(() => inThrottle = false, limit);
         }
     };
+}
+
+function escapeHtml(text) {
+    const map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+    };
+    return text.replace(/[&<>"']/g, m => map[m]);
+}
+
+function formatDate(dateString) {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diff = now - date;
+    const seconds = Math.floor(diff / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+    
+    if (days > 7) {
+        return date.toLocaleDateString('en-US', { 
+            year: 'numeric', 
+            month: 'short', 
+            day: 'numeric' 
+        });
+    } else if (days > 0) {
+        return `${days} day${days > 1 ? 's' : ''} ago`;
+    } else if (hours > 0) {
+        return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+    } else if (minutes > 0) {
+        return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
+    } else {
+        return 'Just now';
+    }
 }
 
 // Make functions globally available for other scripts
@@ -759,3 +762,20 @@ window.hideLoadingScreen = hideLoadingScreen;
 window.showLoadingScreen = showLoadingScreen;
 window.debounce = debounce;
 window.throttle = throttle;
+window.escapeHtml = escapeHtml;
+window.formatDate = formatDate;
+window.isValidEmail = isValidEmail;
+
+// Export for module usage if needed
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+        showNotification,
+        hideLoadingScreen,
+        showLoadingScreen,
+        debounce,
+        throttle,
+        escapeHtml,
+        formatDate,
+        isValidEmail
+    };
+}
