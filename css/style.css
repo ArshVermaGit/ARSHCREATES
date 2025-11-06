@@ -5567,3 +5567,972 @@ body {
     outline: 2px solid #22C55E;
     outline-offset: 2px;
 }
+
+/* ==========================================
+   INCREMENTAL CSS FOR app-detail.html
+   New styles for app detail page components
+   ========================================== */
+
+/* ==========================================
+   APP DETAIL SECTION
+   ========================================== */
+.app-detail-section {
+    padding: 8rem 0 4rem;
+    position: relative;
+    min-height: 100vh;
+}
+
+/* ==========================================
+   APP PREVIEW CONTAINER
+   ========================================== */
+.app-preview-container {
+    position: relative;
+    margin-bottom: 4rem;
+}
+
+.app-preview {
+    background: var(--glass-bg);
+    backdrop-filter: blur(30px) saturate(180%);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    box-shadow: 0 20px 60px var(--shadow-color);
+    overflow: hidden;
+    position: relative;
+}
+
+.preview-image {
+    position: relative;
+    width: 100%;
+    height: 500px;
+    overflow: hidden;
+    background: linear-gradient(135deg, 
+        rgba(34, 197, 94, 0.1) 0%, 
+        rgba(16, 185, 129, 0.05) 50%, 
+        rgba(5, 150, 105, 0.1) 100%);
+}
+
+.preview-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--transition-slow);
+}
+
+.preview-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(10, 10, 10, 0.8);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: all var(--transition-base);
+}
+
+.preview-image:hover .preview-overlay {
+    opacity: 1;
+}
+
+.preview-image:hover .preview-img {
+    transform: scale(1.05);
+}
+
+.download-buttons {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 2rem;
+}
+
+.btn-download {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.25rem 2.5rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all var(--transition-base);
+    box-shadow: 0 10px 30px var(--shadow-color);
+    min-width: 200px;
+    justify-content: center;
+}
+
+.btn-download.ios {
+    background: linear-gradient(135deg, #000000, #333333);
+    color: #fff;
+}
+
+.btn-download.ios:hover {
+    background: linear-gradient(135deg, #333333, #666666);
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 15px 40px var(--shadow-color), 0 0 30px rgba(0, 0, 0, 0.3);
+}
+
+.btn-download.android {
+    background: linear-gradient(135deg, #4285F4, #34A853);
+    color: #fff;
+}
+
+.btn-download.android:hover {
+    background: linear-gradient(135deg, #3367D6, #2E8B57);
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 15px 40px var(--shadow-color), 0 0 30px rgba(66, 133, 244, 0.3);
+}
+
+.btn-download i {
+    font-size: 1.5rem;
+}
+
+/* ==========================================
+   APP CONTROLS
+   ========================================== */
+.app-controls {
+    position: absolute;
+    bottom: 2rem;
+    left: 2rem;
+    right: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 10;
+}
+
+.control-group {
+    display: flex;
+    gap: 1rem;
+}
+
+.btn-control {
+    width: 50px;
+    height: 50px;
+    background: var(--glass-bg);
+    backdrop-filter: blur(30px) saturate(180%);
+    border: 1px solid var(--border-color);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all var(--transition-base);
+    box-shadow: 0 5px 15px var(--shadow-color);
+}
+
+.btn-control:hover {
+    background: #22C55E;
+    color: #fff;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px var(--shadow-color);
+}
+
+.control-info {
+    background: var(--glass-bg);
+    backdrop-filter: blur(30px) saturate(180%);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    padding: 0.75rem 1.5rem;
+    box-shadow: 0 5px 15px var(--shadow-color);
+}
+
+.control-text {
+    font-size: 0.9rem;
+    opacity: 0.8;
+    font-weight: 500;
+}
+
+/* ==========================================
+   APP SCREENSHOTS CAROUSEL
+   ========================================== */
+.app-screenshots {
+    display: flex;
+    gap: 1rem;
+    padding: 2rem;
+    overflow-x: auto;
+    background: var(--glass-bg);
+    backdrop-filter: blur(30px) saturate(180%);
+    border-top: 1px solid var(--border-color);
+    scrollbar-width: thin;
+    scrollbar-color: #22C55E var(--border-color);
+}
+
+.app-screenshots::-webkit-scrollbar {
+    height: 8px;
+}
+
+.app-screenshots::-webkit-scrollbar-track {
+    background: var(--border-color);
+    border-radius: 10px;
+}
+
+.app-screenshots::-webkit-scrollbar-thumb {
+    background: #22C55E;
+    border-radius: 10px;
+}
+
+.screenshot-item {
+    flex: 0 0 auto;
+    width: 200px;
+    height: 350px;
+    border-radius: var(--border-radius-sm);
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 5px 15px var(--shadow-color);
+    cursor: pointer;
+    transition: all var(--transition-base);
+    position: relative;
+}
+
+.screenshot-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px var(--shadow-color);
+}
+
+.screenshot-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--transition-slow);
+}
+
+.screenshot-item:hover img {
+    transform: scale(1.1);
+}
+
+/* ==========================================
+   APP-SPECIFIC BUTTON STYLES
+   ========================================== */
+.btn-app {
+    background: linear-gradient(135deg, #22C55E, #10B981);
+    color: #fff;
+    border-color: #22C55E;
+}
+
+.btn-app:hover {
+    background: linear-gradient(135deg, #16A34A, #0D9488);
+    transform: translateY(-3px);
+    box-shadow: 0 15px 40px var(--shadow-color), 0 0 30px rgba(34, 197, 94, 0.3);
+}
+
+/* ==========================================
+   APP INFO CONTAINER
+   ========================================== */
+.app-info-container {
+    background: var(--glass-bg);
+    backdrop-filter: blur(30px) saturate(180%);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    box-shadow: 0 20px 60px var(--shadow-color);
+    overflow: hidden;
+}
+
+/* ==========================================
+   APP HEADER SECTION
+   ========================================== */
+.app-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 3rem;
+    border-bottom: 1px solid var(--border-color);
+    background: linear-gradient(135deg, 
+        rgba(34, 197, 94, 0.05) 0%, 
+        rgba(16, 185, 129, 0.02) 100%);
+}
+
+.app-title-section {
+    flex: 1;
+}
+
+.app-title {
+    font-size: 3.5rem;
+    font-weight: 900;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, #22C55E, #10B981);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.1;
+}
+
+.app-meta {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.app-category,
+.app-rating,
+.app-status {
+    padding: 0.5rem 1.25rem;
+    background: var(--glass-bg);
+    backdrop-filter: blur(30px) saturate(180%);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    font-weight: 600;
+    box-shadow: 0 5px 15px var(--shadow-color);
+}
+
+.app-category {
+    color: #22C55E;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 0.5px;
+}
+
+.app-rating {
+    color: #F59E0B;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.app-status {
+    color: #10B981;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 0.5px;
+}
+
+.app-actions {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.app-actions .btn {
+    padding: 1rem 2rem;
+    font-size: 0.95rem;
+}
+
+/* ==========================================
+   APP CONTENT SECTIONS
+   ========================================== */
+.app-content {
+    padding: 3rem;
+}
+
+.app-content h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    color: var(--text-primary);
+    position: relative;
+}
+
+.app-content h2::after {
+    content: '';
+    position: absolute;
+    bottom: -0.5rem;
+    left: 0;
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, #22C55E, #10B981);
+    border-radius: 2px;
+}
+
+/* Description Section */
+.app-description-section {
+    margin-bottom: 3rem;
+}
+
+.app-overview {
+    font-size: 1.25rem;
+    line-height: 1.7;
+    opacity: 0.9;
+    margin-bottom: 1.5rem;
+    font-weight: 500;
+}
+
+.app-description {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    opacity: 0.8;
+}
+
+/* ==========================================
+   APP DETAILS GRID
+   ========================================== */
+.app-details-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+}
+
+.detail-card {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 2rem;
+    background: var(--glass-bg);
+    backdrop-filter: blur(30px) saturate(180%);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    box-shadow: 0 5px 15px var(--shadow-color);
+    transition: all var(--transition-base);
+}
+
+.detail-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px var(--shadow-color);
+}
+
+.detail-icon {
+    width: 70px;
+    height: 70px;
+    background: linear-gradient(135deg, #22C55E, #10B981);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 5px 15px var(--shadow-color);
+}
+
+.detail-icon i {
+    font-size: 1.75rem;
+    color: #fff;
+}
+
+.detail-content h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #22C55E;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.detail-content p {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+/* ==========================================
+   FEATURES SECTION
+   ========================================== */
+.features-section {
+    margin-bottom: 3rem;
+}
+
+.features-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1rem;
+    list-style: none;
+}
+
+.features-list li {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.25rem;
+    background: var(--glass-bg);
+    backdrop-filter: blur(30px) saturate(180%);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    box-shadow: 0 5px 15px var(--shadow-color);
+    transition: all var(--transition-base);
+}
+
+.features-list li:hover {
+    transform: translateX(10px);
+    box-shadow: 0 8px 20px var(--shadow-color);
+}
+
+.features-list li::before {
+    content: '✓';
+    color: #22C55E;
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.features-list li span {
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+/* ==========================================
+   TECHNOLOGIES SECTION
+   ========================================== */
+.technologies-section {
+    margin-bottom: 3rem;
+}
+
+.tech-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.tech-tags span {
+    padding: 0.75rem 1.5rem;
+    background: var(--glass-bg);
+    backdrop-filter: blur(30px) saturate(180%);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    font-weight: 600;
+    color: #22C55E;
+    box-shadow: 0 5px 15px var(--shadow-color);
+    transition: all var(--transition-base);
+}
+
+.tech-tags span:hover {
+    background: #22C55E;
+    color: #fff;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px var(--shadow-color);
+}
+
+/* ==========================================
+   APP STATS SECTION
+   ========================================== */
+.app-stats-section {
+    margin-bottom: 0;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+}
+
+.stat-item {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 2rem;
+    background: var(--glass-bg);
+    backdrop-filter: blur(30px) saturate(180%);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    box-shadow: 0 5px 15px var(--shadow-color);
+    transition: all var(--transition-base);
+}
+
+.stat-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px var(--shadow-color);
+}
+
+.stat-circle {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #22C55E, #10B981);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 5px 15px var(--shadow-color);
+    flex-shrink: 0;
+}
+
+.stat-value {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #fff;
+}
+
+.stat-info h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.stat-info p {
+    font-size: 0.9rem;
+    opacity: 0.7;
+    margin: 0;
+}
+
+/* ==========================================
+   DETAIL NAVIGATION ARROWS (App-specific)
+   ========================================== */
+.detail-navigation {
+    position: absolute;
+    top: 50%;
+    left: -80px;
+    right: -80px;
+    display: flex;
+    justify-content: space-between;
+    transform: translateY(-50%);
+    z-index: 5;
+}
+
+.nav-arrow {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.5rem 2rem;
+    background: var(--glass-bg);
+    backdrop-filter: blur(30px) saturate(180%);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    color: var(--text-primary);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-base);
+    box-shadow: 0 10px 30px var(--shadow-color);
+    opacity: 0.7;
+}
+
+.nav-arrow:hover {
+    opacity: 1;
+    transform: translateY(-3px);
+    background: #22C55E;
+    color: #fff;
+    box-shadow: 0 15px 40px var(--shadow-color);
+}
+
+.prev-arrow {
+    padding-left: 2.5rem;
+}
+
+.next-arrow {
+    padding-right: 2.5rem;
+}
+
+.arrow-text {
+    font-size: 0.95rem;
+}
+
+/* ==========================================
+   NAVIGATION BACK BUTTON
+   ========================================== */
+.navbar .btn-secondary {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1.5rem;
+    background: var(--glass-bg);
+    backdrop-filter: blur(30px) saturate(180%);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    color: var(--text-primary);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all var(--transition-base);
+    box-shadow: 0 5px 15px var(--shadow-color);
+}
+
+.navbar .btn-secondary:hover {
+    background: var(--accent-primary);
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px var(--shadow-color);
+}
+
+/* ==========================================
+   RESPONSIVE DESIGN FOR APP DETAIL
+   ========================================== */
+@media (max-width: 1200px) {
+    .detail-navigation {
+        left: -40px;
+        right: -40px;
+    }
+    
+    .app-title {
+        font-size: 3rem;
+    }
+}
+
+@media (max-width: 992px) {
+    .app-detail-section {
+        padding: 6rem 0 3rem;
+    }
+    
+    .detail-navigation {
+        position: static;
+        transform: none;
+        margin-top: 2rem;
+        justify-content: center;
+        gap: 2rem;
+    }
+    
+    .nav-arrow {
+        position: static;
+        opacity: 1;
+    }
+    
+    .app-header {
+        flex-direction: column;
+        gap: 2rem;
+        align-items: flex-start;
+    }
+    
+    .app-actions {
+        width: 100%;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+    }
+    
+    .app-title {
+        font-size: 2.5rem;
+    }
+    
+    .preview-image {
+        height: 400px;
+    }
+    
+    .download-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .btn-download {
+        width: 100%;
+        max-width: 300px;
+    }
+}
+
+@media (max-width: 768px) {
+    .app-detail-section {
+        padding: 5rem 0 2rem;
+    }
+    
+    .app-preview-container {
+        margin-bottom: 2rem;
+    }
+    
+    .preview-image {
+        height: 300px;
+    }
+    
+    .app-controls {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+    
+    .control-info {
+        align-self: stretch;
+        text-align: center;
+    }
+    
+    .app-header {
+        padding: 2rem;
+    }
+    
+    .app-content {
+        padding: 2rem;
+    }
+    
+    .app-title {
+        font-size: 2rem;
+    }
+    
+    .app-meta {
+        gap: 1rem;
+    }
+    
+    .app-details-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .detail-card {
+        padding: 1.5rem;
+    }
+    
+    .features-list {
+        grid-template-columns: 1fr;
+    }
+    
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .btn-download {
+        padding: 1rem 2rem;
+        font-size: 1rem;
+        min-width: auto;
+    }
+    
+    .nav-arrow {
+        padding: 1rem 1.5rem;
+    }
+    
+    .arrow-text {
+        font-size: 0.85rem;
+    }
+    
+    .app-actions {
+        flex-direction: column;
+    }
+    
+    .app-actions .btn {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .screenshot-item {
+        width: 150px;
+        height: 260px;
+    }
+}
+
+@media (max-width: 480px) {
+    .app-title {
+        font-size: 1.75rem;
+    }
+    
+    .preview-image {
+        height: 250px;
+    }
+    
+    .app-meta {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .detail-card {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+    }
+    
+    .stat-item {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+    }
+    
+    .btn-download {
+        flex-direction: column;
+        gap: 0.5rem;
+        padding: 1rem 1.5rem;
+    }
+    
+    .control-group {
+        gap: 0.5rem;
+    }
+    
+    .btn-control {
+        width: 45px;
+        height: 45px;
+    }
+    
+    .app-content h2 {
+        font-size: 1.5rem;
+    }
+    
+    .screenshot-item {
+        width: 120px;
+        height: 210px;
+    }
+}
+
+/* ==========================================
+   ANIMATIONS FOR APP DETAIL
+   ========================================== */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.app-info-container {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.detail-card,
+.features-list li,
+.tech-tags span,
+.stat-item,
+.screenshot-item {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.detail-card:nth-child(1) { animation-delay: 0.1s; }
+.detail-card:nth-child(2) { animation-delay: 0.2s; }
+.detail-card:nth-child(3) { animation-delay: 0.3s; }
+.detail-card:nth-child(4) { animation-delay: 0.4s; }
+
+/* ==========================================
+   ACCESSIBILITY ENHANCEMENTS
+   ========================================== */
+@media (prefers-reduced-motion: reduce) {
+    .app-info-container,
+    .detail-card,
+    .features-list li,
+    .tech-tags span,
+    .stat-item,
+    .screenshot-item,
+    .btn-download,
+    .nav-arrow {
+        animation: none;
+        transition: none;
+    }
+}
+
+/* Focus styles for better accessibility */
+.app-info-container:focus-within {
+    outline: 2px solid #22C55E;
+    outline-offset: 2px;
+}
+
+.btn-download:focus,
+.nav-arrow:focus,
+.screenshot-item:focus {
+    outline: 2px solid #22C55E;
+    outline-offset: 2px;
+}
+
+/* ==========================================
+   SCREENSHOT MODAL (For future use)
+   ========================================== */
+.screenshot-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(10, 10, 10, 0.95);
+    backdrop-filter: blur(20px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: var(--z-modal);
+    opacity: 0;
+    visibility: hidden;
+    transition: all var(--transition-base);
+}
+
+.screenshot-modal.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content {
+    max-width: 90%;
+    max-height: 90%;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: 0 20px 60px var(--shadow-color);
+}
+
+.modal-content img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
