@@ -193,9 +193,30 @@ function setupAppCardListeners() {
     });
 }
 
-// View App Details
+// In apps.js, update the viewAppDetails function:
 function viewAppDetails(appId) {
     navigateToDetailPage('app', appId);
+}
+
+// Add missing functions to apps.js
+function sortItems(items, sortBy) {
+    const sortedItems = [...items];
+    switch (sortBy) {
+        case 'newest':
+            return sortedItems.sort((a, b) => new Date(b.launchDate) - new Date(a.launchDate));
+        case 'oldest':
+            return sortedItems.sort((a, b) => new Date(a.launchDate) - new Date(b.launchDate));
+        case 'rating':
+            return sortedItems.sort((a, b) => b.rating - a.rating);
+        case 'downloads':
+            return sortedItems.sort((a, b) => {
+                const aDownloads = parseInt(a.downloadCount) || 0;
+                const bDownloads = parseInt(b.downloadCount) || 0;
+                return bDownloads - aDownloads;
+            });
+        default:
+            return sortedItems;
+    }
 }
 
 // Update App Stats
