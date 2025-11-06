@@ -177,8 +177,7 @@ function setupWebsiteCardListeners() {
 
 // View Website Details
 function viewWebsiteDetails(websiteId) {
-    // Navigate to website detail page
-    window.location.href = `website-detail.html?id=${websiteId}`;
+    navigateToDetailPage('website', websiteId);
 }
 
 // Update Website Stats
