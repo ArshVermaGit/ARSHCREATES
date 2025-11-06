@@ -159,6 +159,62 @@ function navigateToDetailPage(type, id) {
     }
 }
 
+// Enhanced portfolio data validation
+function validatePortfolioData() {
+    if (!window.PORTFOLIO_DATA) {
+        console.error('PORTFOLIO_DATA is not defined!');
+        return false;
+    }
+    
+    // Ensure all arrays exist
+    if (!PORTFOLIO_DATA.games) PORTFOLIO_DATA.games = [];
+    if (!PORTFOLIO_DATA.websites) PORTFOLIO_DATA.websites = [];
+    if (!PORTFOLIO_DATA.apps) PORTFOLIO_DATA.apps = [];
+    if (!PORTFOLIO_DATA.testimonials) PORTFOLIO_DATA.testimonials = [];
+    
+    // Ensure all items have required fields
+    PORTFOLIO_DATA.games.forEach((game, index) => {
+        if (!game.id) game.id = index + 1;
+        if (!game.screenshots) game.screenshots = [];
+        if (!game.playUrl) game.playUrl = '#';
+    });
+    
+    PORTFOLIO_DATA.websites.forEach((website, index) => {
+        if (!website.id) website.id = index + 1;
+        if (!website.screenshots) website.screenshots = [];
+        if (!website.liveUrl) website.liveUrl = '#';
+    });
+    
+    PORTFOLIO_DATA.apps.forEach((app, index) => {
+        if (!app.id) app.id = index + 1;
+        if (!app.screenshots) app.screenshots = [];
+        if (!app.appStoreUrl) app.appStoreUrl = '#';
+        if (!app.playStoreUrl) app.playStoreUrl = '#';
+    });
+    
+    return true;
+}
+
+// Safe data access
+function getGames() {
+    return PORTFOLIO_DATA?.games || [];
+}
+
+function getWebsites() {
+    return PORTFOLIO_DATA?.websites || [];
+}
+
+function getApps() {
+    return PORTFOLIO_DATA?.apps || [];
+}
+
+// Make sure to call validatePortfolioData when the page loads
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.PORTFOLIO_DATA) {
+        validatePortfolioData();
+    }
+});
+
 // Make functions globally available
 window.STORAGE_KEYS = STORAGE_KEYS;
 window.initializeStorage = initializeStorage;
@@ -172,3 +228,7 @@ window.getAnalytics = getAnalytics;
 window.updateAnalytics = updateAnalytics;
 window.enhancePortfolioData = enhancePortfolioData;
 window.navigateToDetailPage = navigateToDetailPage;
+window.validatePortfolioData = validatePortfolioData;
+window.getGames = getGames;
+window.getWebsites = getWebsites;
+window.getApps = getApps;
