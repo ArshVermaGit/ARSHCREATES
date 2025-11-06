@@ -71,14 +71,14 @@ const PORTFOLIO_DATA = {
     websites: [
         {
             id: 1,
-            name: "E-Commerce Pro",
+            name: "ReelSpot",
             overview: "Modern e-commerce platform with advanced features and seamless UX",
             description: "A full-featured e-commerce solution built with modern web technologies.",
-            image: "assets/websites/website1.jpg",
-            category: "E-commerce",
+            image: "static/images/websites/ReelSpot.jpg",
+            category: "Media Downloader",
             rating: 4.8,
             status: "Live",
-            launchDate: "2023-09-10",
+            launchDate: "2025-10-25",
             developmentTime: "3 months",
             userBase: "50K+",
             technologies: ["React", "Node.js", "MongoDB", "Stripe"],
@@ -88,8 +88,8 @@ const PORTFOLIO_DATA = {
                 "Payment processing",
                 "User accounts"
             ],
-            repositoryUrl: "https://github.com/ArshVermaGit/ecommerce-pro",
-            liveUrl: "https://ecommerce-pro.example.com",
+            repositoryUrl: "https://github.com/ArshVermaGit/REELSPOT",
+            liveUrl: "https://arshvermagit.github.io/REELSPOT/",
             screenshots: [
                 "assets/websites/website1-1.jpg",
                 "assets/websites/website1-2.jpg",
