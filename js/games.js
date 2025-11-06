@@ -130,7 +130,7 @@ function setupGameFilters() {
 
 // Apply Filters
 function applyGameFilters() {
-    let filteredGames = [...PORTFOLIO_DATA.games];
+    let filteredGames = getGames();
     
     // Category filter
     if (currentFilters.category !== 'all') {
