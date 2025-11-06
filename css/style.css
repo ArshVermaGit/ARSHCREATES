@@ -6536,3 +6536,782 @@ body {
     height: 100%;
     object-fit: contain;
 }
+
+/* ==========================================
+   INCREMENTAL CSS FOR testimonials.html
+   New styles for testimonials page components
+   ========================================== */
+
+/* ==========================================
+   PAGE HEADER - TESTIMONIALS SPECIFIC
+   ========================================== */
+.page-header {
+    padding: 12rem 0 6rem;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, 
+        rgba(139, 92, 246, 0.1) 0%, 
+        rgba(168, 85, 247, 0.05) 50%, 
+        rgba(192, 132, 252, 0.1) 100%);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.page-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(circle at 20% 80%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(192, 132, 252, 0.15) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+.header-content {
+    text-align: center;
+    position: relative;
+    z-index: var(--z-content);
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.header-content h1 {
+    font-size: 4.5rem;
+    font-weight: 900;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(135deg, #8B5CF6, #C084FC);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.header-content p {
+    font-size: 1.25rem;
+    opacity: 0.85;
+    line-height: 1.7;
+    margin-bottom: 3rem;
+}
+
+.header-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    padding: 2.5rem;
+    background: var(--glass-bg);
+    backdrop-filter: blur(30px) saturate(180%);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    box-shadow: 0 10px 30px var(--shadow-color);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.stat {
+    text-align: center;
+    padding: 1rem;
+}
+
+.stat-number {
+    display: block;
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #8B5CF6;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    opacity: 0.7;
+    font-weight: 500;
+}
+
+/* ==========================================
+   TESTIMONIALS GRID SECTION
+   ========================================== */
+.testimonials-section {
+    padding: 6rem 0;
+}
+
+.testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    gap: 3rem;
+}
+
+/* Testimonial Card Styles */
+.testimonial-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(30px) saturate(180%);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    box-shadow: 0 10px 30px var(--shadow-color);
+    overflow: hidden;
+    transition: all var(--transition-base);
+    position: relative;
+}
+
+.testimonial-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 60px var(--shadow-color);
+}
+
+.testimonial-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #8B5CF6, #C084FC);
+    opacity: 0;
+    transition: opacity var(--transition-base);
+    z-index: 1;
+}
+
+.testimonial-card:hover::before {
+    opacity: 0.05;
+}
+
+.testimonial-card > * {
+    position: relative;
+    z-index: 2;
+}
+
+.testimonial-content {
+    padding: 2.5rem;
+    position: relative;
+}
+
+.testimonial-quote {
+    position: absolute;
+    top: 2rem;
+    left: 2rem;
+    font-size: 3rem;
+    color: #8B5CF6;
+    opacity: 0.3;
+    font-family: serif;
+    line-height: 1;
+}
+
+.testimonial-text {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    opacity: 0.9;
+    margin-bottom: 2rem;
+    font-style: italic;
+    position: relative;
+    z-index: 2;
+}
+
+.testimonial-meta {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.client-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #8B5CF6, #C084FC);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border: 2px solid var(--border-color);
+    box-shadow: 0 5px 15px var(--shadow-color);
+}
+
+.client-avatar i {
+    font-size: 1.5rem;
+    color: #fff;
+}
+
+.client-info {
+    flex: 1;
+}
+
+.client-name {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.25rem;
+}
+
+.client-role {
+    font-size: 0.9rem;
+    opacity: 0.7;
+    margin-bottom: 0.5rem;
+}
+
+.testimonial-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 2.5rem;
+    background: var(--glass-bg);
+    backdrop-filter: blur(30px) saturate(180%);
+    border-top: 1px solid var(--border-color);
+}
+
+.project-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.project-type {
+    padding: 0.5rem 1rem;
+    background: var(--glass-bg);
+    backdrop-filter: blur(30px) saturate(180%);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #8B5CF6;
+    box-shadow: 0 3px 10px var(--shadow-color);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.project-name {
+    font-size: 0.9rem;
+    opacity: 0.8;
+    font-weight: 500;
+}
+
+.rating-display {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.rating-stars {
+    color: #F59E0B;
+    font-size: 1rem;
+    letter-spacing: 2px;
+}
+
+.rating-value {
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--text-primary);
+}
+
+/* ==========================================
+   ADD TESTIMONIAL SECTION
+   ========================================== */
+.add-testimonial-section {
+    background: linear-gradient(135deg, 
+        rgba(139, 92, 246, 0.1) 0%, 
+        rgba(168, 85, 247, 0.05) 50%, 
+        rgba(192, 132, 252, 0.1) 100%);
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.add-testimonial-section .cta-content {
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 4rem 0;
+}
+
+.add-testimonial-section h2 {
+    font-size: 3rem;
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(135deg, #8B5CF6, #C084FC);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.add-testimonial-section p {
+    font-size: 1.15rem;
+    opacity: 0.85;
+    line-height: 1.7;
+    margin-bottom: 2.5rem;
+}
+
+.add-testimonial-section .btn {
+    padding: 1.25rem 3rem;
+    font-size: 1.1rem;
+}
+
+/* Testimonial-specific button variant */
+.btn-testimonial {
+    background: linear-gradient(135deg, #8B5CF6, #C084FC);
+    color: #fff;
+    border-color: #8B5CF6;
+}
+
+.btn-testimonial:hover {
+    background: linear-gradient(135deg, #7C3AED, #A855F7);
+    transform: translateY(-3px);
+    box-shadow: 0 15px 40px var(--shadow-color), 0 0 30px rgba(139, 92, 246, 0.3);
+}
+
+/* ==========================================
+   TESTIMONIAL MODAL
+   ========================================== */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(10, 10, 10, 0.9);
+    backdrop-filter: blur(20px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: var(--z-modal);
+    opacity: 0;
+    visibility: hidden;
+    transition: all var(--transition-base);
+    padding: 2rem;
+}
+
+.modal.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content {
+    background: var(--glass-bg);
+    backdrop-filter: blur(30px) saturate(180%);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    box-shadow: 0 20px 60px var(--shadow-color);
+    max-width: 600px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    animation: modalSlideIn 0.3s ease-out;
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-50px) scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2.5rem 2.5rem 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.modal-header h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.modal-close {
+    width: 45px;
+    height: 45px;
+    background: var(--glass-bg);
+    backdrop-filter: blur(30px) saturate(180%);
+    border: 1px solid var(--border-color);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all var(--transition-base);
+    box-shadow: 0 5px 15px var(--shadow-color);
+}
+
+.modal-close:hover {
+    background: #EF4444;
+    color: #fff;
+    transform: rotate(90deg);
+    box-shadow: 0 8px 20px var(--shadow-color);
+}
+
+.modal-form {
+    padding: 2.5rem;
+}
+
+.modal-form .form-group {
+    margin-bottom: 2rem;
+}
+
+.modal-form label {
+    display: block;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--text-primary);
+    margin-bottom: 0.75rem;
+}
+
+.modal-form input,
+.modal-form select,
+.modal-form textarea {
+    width: 100%;
+    padding: 1.25rem 1.5rem;
+    background: var(--glass-bg);
+    backdrop-filter: blur(30px) saturate(180%);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    font-size: 1rem;
+    color: var(--text-primary);
+    font-family: inherit;
+    transition: all var(--transition-base);
+    box-shadow: 0 5px 15px var(--shadow-color);
+    resize: none;
+}
+
+.modal-form input:focus,
+.modal-form select:focus,
+.modal-form textarea:focus {
+    outline: none;
+    border-color: #8B5CF6;
+    box-shadow: 0 8px 25px var(--shadow-color), 0 0 0 3px rgba(139, 92, 246, 0.1);
+}
+
+.modal-form input::placeholder,
+.modal-form textarea::placeholder {
+    color: var(--text-primary);
+    opacity: 0.5;
+}
+
+.modal-form select {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%238B5CF6'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1.5rem center;
+    background-size: 1rem;
+}
+
+/* Rating Input Styles */
+.rating-input {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.stars {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.star {
+    font-size: 2rem;
+    color: var(--border-color);
+    cursor: pointer;
+    transition: all var(--transition-base);
+    text-shadow: 0 2px 5px var(--shadow-color);
+}
+
+.star:hover,
+.star.active {
+    color: #F59E0B;
+    transform: scale(1.2);
+    text-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
+}
+
+.star:hover ~ .star {
+    color: var(--border-color);
+    transform: scale(1);
+}
+
+/* Form Actions */
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.form-actions .btn {
+    padding: 1rem 2rem;
+    font-size: 0.95rem;
+    min-width: 140px;
+    justify-content: center;
+}
+
+/* ==========================================
+   LOADING STATES & EMPTY STATES
+   ========================================== */
+.loading-testimonials,
+.no-testimonials {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: var(--glass-bg);
+    backdrop-filter: blur(30px) saturate(180%);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    box-shadow: 0 10px 30px var(--shadow-color);
+    grid-column: 1 / -1;
+}
+
+.loading-testimonials i,
+.no-testimonials i {
+    font-size: 4rem;
+    color: #8B5CF6;
+    margin-bottom: 2rem;
+    opacity: 0.7;
+}
+
+.loading-testimonials p,
+.no-testimonials p {
+    font-size: 1.1rem;
+    opacity: 0.8;
+    margin-bottom: 2rem;
+}
+
+/* ==========================================
+   RESPONSIVE DESIGN FOR TESTIMONIALS PAGE
+   ========================================== */
+@media (max-width: 1200px) {
+    .testimonials-grid {
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 2.5rem;
+    }
+    
+    .header-content h1 {
+        font-size: 4rem;
+    }
+}
+
+@media (max-width: 992px) {
+    .page-header {
+        padding: 10rem 0 4rem;
+    }
+    
+    .header-content h1 {
+        font-size: 3.5rem;
+    }
+    
+    .header-stats {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        padding: 2rem;
+    }
+    
+    .testimonials-grid {
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 2rem;
+    }
+    
+    .testimonial-content {
+        padding: 2rem;
+    }
+    
+    .testimonial-footer {
+        padding: 1.5rem 2rem;
+    }
+    
+    .add-testimonial-section h2 {
+        font-size: 2.5rem;
+    }
+    
+    .modal-content {
+        max-width: 90%;
+    }
+}
+
+@media (max-width: 768px) {
+    .page-header {
+        padding: 8rem 0 3rem;
+    }
+    
+    .header-content h1 {
+        font-size: 2.5rem;
+    }
+    
+    .header-content p {
+        font-size: 1.1rem;
+    }
+    
+    .filter-container {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .testimonials-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .testimonial-meta {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+    }
+    
+    .testimonial-footer {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+    
+    .project-info {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+    
+    .add-testimonial-section h2 {
+        font-size: 2rem;
+    }
+    
+    .add-testimonial-section p {
+        font-size: 1rem;
+    }
+    
+    .modal-header {
+        padding: 2rem 2rem 1rem;
+    }
+    
+    .modal-form {
+        padding: 2rem;
+    }
+    
+    .form-actions {
+        flex-direction: column;
+    }
+    
+    .form-actions .btn {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .header-content h1 {
+        font-size: 2rem;
+    }
+    
+    .stat-number {
+        font-size: 2rem;
+    }
+    
+    .testimonial-content {
+        padding: 1.5rem;
+    }
+    
+    .testimonial-quote {
+        top: 1.5rem;
+        left: 1.5rem;
+        font-size: 2.5rem;
+    }
+    
+    .testimonial-text {
+        font-size: 1rem;
+    }
+    
+    .client-avatar {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .client-avatar i {
+        font-size: 1.25rem;
+    }
+    
+    .stars {
+        gap: 0.25rem;
+    }
+    
+    .star {
+        font-size: 1.75rem;
+    }
+    
+    .modal-header h2 {
+        font-size: 1.5rem;
+    }
+    
+    .modal-close {
+        width: 40px;
+        height: 40px;
+    }
+}
+
+/* ==========================================
+   ANIMATIONS FOR TESTIMONIALS PAGE
+   ========================================== */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.testimonial-card {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.testimonial-card:nth-child(1) { animation-delay: 0.1s; }
+.testimonial-card:nth-child(2) { animation-delay: 0.2s; }
+.testimonial-card:nth-child(3) { animation-delay: 0.3s; }
+.testimonial-card:nth-child(4) { animation-delay: 0.4s; }
+.testimonial-card:nth-child(5) { animation-delay: 0.5s; }
+.testimonial-card:nth-child(6) { animation-delay: 0.6s; }
+
+/* ==========================================
+   ACCESSIBILITY ENHANCEMENTS
+   ========================================== */
+@media (prefers-reduced-motion: reduce) {
+    .testimonial-card,
+    .modal-content,
+    .star,
+    .btn {
+        animation: none;
+        transition: none;
+    }
+}
+
+/* Focus styles for better accessibility */
+.testimonial-card:focus-within {
+    outline: 2px solid #8B5CF6;
+    outline-offset: 2px;
+}
+
+.modal:focus-within {
+    outline: none;
+}
+
+.modal-content:focus {
+    outline: none;
+}
+
+.star:focus {
+    outline: 2px solid #8B5CF6;
+    outline-offset: 2px;
+    border-radius: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .testimonial-card {
+        border: 2px solid var(--text-primary);
+    }
+    
+    .testimonial-card::before {
+        display: none;
+    }
+}
