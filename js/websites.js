@@ -175,9 +175,30 @@ function setupWebsiteCardListeners() {
     });
 }
 
-// View Website Details
+// In websites.js, update the viewWebsiteDetails function:
 function viewWebsiteDetails(websiteId) {
     navigateToDetailPage('website', websiteId);
+}
+
+// Add missing sort function to websites.js
+function sortItems(items, sortBy) {
+    const sortedItems = [...items];
+    switch (sortBy) {
+        case 'newest':
+            return sortedItems.sort((a, b) => new Date(b.launchDate) - new Date(a.launchDate));
+        case 'oldest':
+            return sortedItems.sort((a, b) => new Date(a.launchDate) - new Date(b.launchDate));
+        case 'rating':
+            return sortedItems.sort((a, b) => b.rating - a.rating);
+        case 'users':
+            return sortedItems.sort((a, b) => {
+                const aUsers = parseInt(a.userBase) || 0;
+                const bUsers = parseInt(b.userBase) || 0;
+                return bUsers - aUsers;
+            });
+        default:
+            return sortedItems;
+    }
 }
 
 // Update Website Stats
