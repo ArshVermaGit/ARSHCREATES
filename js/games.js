@@ -27,11 +27,18 @@ function loadGames() {
         return;
     }
     
-    currentGames = PORTFOLIO_DATA.games;
+    // Use safe data access
+    currentGames = getGames();
     console.log('Loaded games:', currentGames);
+    
+    if (currentGames.length === 0) {
+        console.warn('No games found in portfolio data');
+    }
+    
     displayGames(currentGames);
     updateGameStats();
 }
+
 
 // Display Games
 function displayGames(games) {
