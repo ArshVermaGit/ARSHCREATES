@@ -7,6 +7,26 @@
 let currentTheme = 'dark';
 let isLoading = false;
 
+function initializePage() {
+    console.log('Initializing page...');
+    
+    // Initialize storage FIRST
+    if (typeof initializeStorage === 'function') {
+        initializeStorage();
+    }
+    
+    // Enhance portfolio data
+    if (typeof enhancePortfolioData === 'function') {
+        enhancePortfolioData();
+    }
+    
+    // Rest of your existing initialization code...
+    const savedTheme = getTheme();
+    setTheme(savedTheme);
+    updateThemeToggle(savedTheme);
+    
+}
+
 // DOM Content Loaded
 document.addEventListener('DOMContentLoaded', function() {
     console.log('DOM loaded - initializing page');
