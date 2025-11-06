@@ -9,6 +9,7 @@ let isLoading = false;
 
 // DOM Content Loaded
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM loaded - initializing page');
     initializePage();
     setupEventListeners();
     startAnimations();
@@ -16,6 +17,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Initialize Page
 function initializePage() {
+    console.log('Initializing page...');
+    
     // Initialize storage
     if (typeof initializeStorage === 'function') {
         initializeStorage();
@@ -27,7 +30,8 @@ function initializePage() {
     updateThemeToggle(savedTheme);
     
     // Initialize components based on page
-    const page = document.body.dataset.page || getCurrentPage();
+    const page = getCurrentPage();
+    console.log('Current page:', page);
     
     switch (page) {
         case 'home':
@@ -57,6 +61,13 @@ function initializePage() {
         case 'app-detail':
             initializeAppDetailPage();
             break;
+        case '404':
+        case '500':
+            // Error pages handle their own initialization
+            break;
+        default:
+            console.log('Unknown page, using home initialization');
+            initializeHomePage();
     }
     
     // Hide loading screen
@@ -66,25 +77,30 @@ function initializePage() {
 // Get Current Page
 function getCurrentPage() {
     const path = window.location.pathname;
-    if (path.includes('games.html')) return 'games';
-    if (path.includes('websites.html')) return 'websites';
-    if (path.includes('apps.html')) return 'apps';
-    if (path.includes('testimonials.html')) return 'testimonials';
-    if (path.includes('admin.html')) return 'admin';
-    if (path.includes('game-detail.html')) return 'game-detail';
-    if (path.includes('website-detail.html')) return 'website-detail';
-    if (path.includes('app-detail.html')) return 'app-detail';
-    if (path.includes('404.html')) return '404';
-    if (path.includes('500.html')) return '500';
+    const page = path.split('/').pop() || 'index.html';
+    
+    if (page.includes('games.html')) return 'games';
+    if (page.includes('websites.html')) return 'websites';
+    if (page.includes('apps.html')) return 'apps';
+    if (page.includes('testimonials.html')) return 'testimonials';
+    if (page.includes('admin.html')) return 'admin';
+    if (page.includes('game-detail.html')) return 'game-detail';
+    if (page.includes('website-detail.html')) return 'website-detail';
+    if (page.includes('app-detail.html')) return 'app-detail';
+    if (page.includes('404.html')) return '404';
+    if (page.includes('500.html')) return '500';
     return 'home';
 }
 
 // Setup Event Listeners
 function setupEventListeners() {
+    console.log('Setting up event listeners...');
+    
     // Theme toggle
     const themeToggle = document.getElementById('themeToggle');
     if (themeToggle) {
         themeToggle.addEventListener('click', toggleTheme);
+        console.log('Theme toggle initialized');
     }
     
     // Mobile menu toggle
@@ -95,6 +111,7 @@ function setupEventListeners() {
             navMenu.classList.toggle('active');
             navToggle.classList.toggle('active');
         });
+        console.log('Mobile menu initialized');
     }
     
     // Back to top button
@@ -102,12 +119,14 @@ function setupEventListeners() {
     if (backToTop) {
         window.addEventListener('scroll', toggleBackToTop);
         backToTop.addEventListener('click', scrollToTop);
+        console.log('Back to top initialized');
     }
     
     // Contact form
     const contactForm = document.getElementById('contactForm');
     if (contactForm) {
         setupContactForm(contactForm);
+        console.log('Contact form initialized');
     }
     
     // Navigation links
@@ -149,6 +168,16 @@ function toggleTheme() {
     showNotification(`Theme changed to ${newTheme} mode`, 'success');
 }
 
+function setTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('portfolio_theme', theme);
+    currentTheme = theme;
+}
+
+function getTheme() {
+    return localStorage.getItem('portfolio_theme') || 'dark';
+}
+
 function updateThemeToggle(theme) {
     currentTheme = theme;
     const themeToggle = document.getElementById('themeToggle');
@@ -170,12 +199,12 @@ function setupSmoothScroll() {
     const links = document.querySelectorAll('a[href^="#"]');
     links.forEach(link => {
         link.addEventListener('click', function(e) {
-            e.preventDefault();
             const targetId = this.getAttribute('href');
             if (targetId === '#') return;
             
             const targetElement = document.querySelector(targetId);
             if (targetElement) {
+                e.preventDefault();
                 const offsetTop = targetElement.offsetTop - 80;
                 window.scrollTo({
                     top: offsetTop,
@@ -274,9 +303,17 @@ function handleFormSubmission(form) {
     // Simulate API call
     setTimeout(() => {
         try {
-            if (typeof saveContact === 'function') {
-                saveContact(data);
-            }
+            // Save to localStorage
+            const contacts = JSON.parse(localStorage.getItem('portfolio_contacts') || '[]');
+            const newContact = {
+                id: Date.now(),
+                ...data,
+                date: new Date().toISOString(),
+                status: 'unread',
+                important: false
+            };
+            contacts.unshift(newContact);
+            localStorage.setItem('portfolio_contacts', JSON.stringify(contacts));
             
             showNotification('Thank you for your message! I\'ll get back to you soon.', 'success');
             form.reset();
@@ -305,7 +342,13 @@ function isValidEmail(email) {
 // Notifications
 function showNotification(message, type = 'info', duration = 5000) {
     const container = document.getElementById('notificationContainer');
-    if (!container) return;
+    if (!container) {
+        // Create notification container if it doesn't exist
+        const newContainer = document.createElement('div');
+        newContainer.id = 'notificationContainer';
+        document.body.appendChild(newContainer);
+        return showNotification(message, type, duration);
+    }
     
     const notification = document.createElement('div');
     notification.className = `notification ${type}`;
@@ -598,48 +641,72 @@ function initializeCustomCursor() {
 
 // Page-specific Initializers
 function initializeHomePage() {
-    // Home page specific initialization
     console.log('Initializing home page...');
+    // Home page specific initialization
 }
 
 function initializeGamesPage() {
-    // Games page will be handled by games.js
     console.log('Initializing games page...');
+    // Games page will be handled by games.js
+    if (typeof initializeGamesPage === 'function') {
+        window.initializeGamesPage();
+    }
 }
 
 function initializeWebsitesPage() {
-    // Websites page will be handled by websites.js
     console.log('Initializing websites page...');
+    // Websites page will be handled by websites.js
+    if (typeof initializeWebsitesPage === 'function') {
+        window.initializeWebsitesPage();
+    }
 }
 
 function initializeAppsPage() {
-    // Apps page will be handled by apps.js
     console.log('Initializing apps page...');
+    // Apps page will be handled by apps.js
+    if (typeof initializeAppsPage === 'function') {
+        window.initializeAppsPage();
+    }
 }
 
 function initializeTestimonialsPage() {
-    // Testimonials page will be handled by testimonials.js
     console.log('Initializing testimonials page...');
+    // Testimonials page will be handled by testimonials.js
+    if (typeof initializeTestimonialsPage === 'function') {
+        window.initializeTestimonialsPage();
+    }
 }
 
 function initializeAdminPage() {
-    // Admin page will be handled by admin.js
     console.log('Initializing admin page...');
+    // Admin page will be handled by admin.js
+    if (typeof initializeAdminPage === 'function') {
+        window.initializeAdminPage();
+    }
 }
 
 function initializeGameDetailPage() {
-    // Game detail page will be handled by game-detail.js
     console.log('Initializing game detail page...');
+    // Game detail page will be handled by game-detail.js
+    if (typeof initializeGameDetailPage === 'function') {
+        window.initializeGameDetailPage();
+    }
 }
 
 function initializeWebsiteDetailPage() {
-    // Website detail page will be handled by website-detail.js
     console.log('Initializing website detail page...');
+    // Website detail page will be handled by website-detail.js
+    if (typeof initializeWebsiteDetailPage === 'function') {
+        window.initializeWebsiteDetailPage();
+    }
 }
 
 function initializeAppDetailPage() {
-    // App detail page will be handled by app-detail.js
     console.log('Initializing app detail page...');
+    // App detail page will be handled by app-detail.js
+    if (typeof initializeAppDetailPage === 'function') {
+        window.initializeAppDetailPage();
+    }
 }
 
 // Utility Functions
@@ -668,14 +735,9 @@ function throttle(func, limit) {
     };
 }
 
-// Export for use in other modules
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = {
-        initializePage,
-        showNotification,
-        hideLoadingScreen,
-        showLoadingScreen,
-        debounce,
-        throttle
-    };
-}
+// Make functions globally available for other scripts
+window.showNotification = showNotification;
+window.hideLoadingScreen = hideLoadingScreen;
+window.showLoadingScreen = showLoadingScreen;
+window.debounce = debounce;
+window.throttle = throttle;
