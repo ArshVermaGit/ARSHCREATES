@@ -29,41 +29,11 @@ const PORTFOLIO_DATA = {
             ],
             technologies: ["Unity", "C#", "Blender", "Photoshop"],
             repositoryUrl: "https://github.com/ArshVermaGit/epic-adventure-quest",
-            playUrl: "games/epic-adventure-quest/index.html",
+            playUrl: "static/games_files/sky_surfers",
             screenshots: [
                 "assets/games/game1-1.jpg",
                 "assets/games/game1-2.jpg",
                 "assets/games/game1-3.jpg"
-            ]
-        },
-        {
-            id: 2,
-            name: "Neon Racer X",
-            overview: "High-speed futuristic racing game with stunning visual effects",
-            description: "Experience the thrill of high-speed racing in a neon-lit futuristic world.",
-            image: "assets/games/game2.jpg",
-            category: "Racing",
-            rating: 4.6,
-            status: "Live",
-            releaseDate: "2023-08-22",
-            developmentTime: "4 months",
-            teamSize: "3 developers",
-            likes: 890,
-            playCount: 5600,
-            platforms: ["WebGL", "Android", "iOS"],
-            features: [
-                "Multiple game modes",
-                "Vehicle customization",
-                "Online multiplayer",
-                "Leaderboards"
-            ],
-            technologies: ["Unity", "C#", "Substance Painter", "FMOD"],
-            repositoryUrl: "https://github.com/ArshVermaGit/neon-racer-x",
-            playUrl: "games/neon-racer-x/index.html",
-            screenshots: [
-                "assets/games/game2-1.jpg",
-                "assets/games/game2-2.jpg",
-                "assets/games/game2-3.jpg"
             ]
         }
     ],
