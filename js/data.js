@@ -45,7 +45,7 @@ const PORTFOLIO_DATA = {
             name: "ReelSpot",
             overview: "Modern social media downloader with advanced features and seamless UX",
             description: "ReelSpot is a comprehensive social media content downloader that allows users to save their favorite videos, images, and reels from multiple platforms. Built with modern web technologies, it features a clean interface, fast processing, and support for multiple formats. The platform prioritizes user privacy and doesn't require login for most features.",
-            image: "static/images/websites/ReelSpot.jpg",
+            image: "static/images/websites/ReelSpot/ReelSpot.jpg",
             category: "Media Downloader",
             rating: 4.8,
             status: "Live",
@@ -63,13 +63,13 @@ const PORTFOLIO_DATA = {
                 "Format conversion options",
                 "Privacy-focused design"
             ],
-            repositoryUrl: "file:///Users/arshverma/GitHub/REELSPOT/index.html",
-            liveUrl: "https://arshvermagit.github.io/REELSPOT/",
+            repositoryUrl: "https://github.com/ArshVermaGit/REELSPOT",
+            liveUrl: "file:///Users/arshverma/GitHub/REELSPOT/index.html",
             screenshots: [
-                "assets/websites/1.jpg",
-                "assets/websites/2.jpg",
-                "assets/websites/3.jpg",
-                "assets/websites/4.jpg"
+                "static/images/websites/ReelSpot/1.jpg",
+                "static/images/websites/ReelSpot/2.jpg",
+                "static/images/websites/ReelSpot/3.jpg",
+                "static/images/websites/ReelSpot/4.jpg"
             ]
         }
     ],
