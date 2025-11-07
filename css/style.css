@@ -65,12 +65,12 @@
 
 [data-theme="dark"] {
     /* Dark Mode Colors */
-    --bg-dark: #0A0A0A;
+    --bg-dark: #000000;
     --text-dark: #F0EFEA;
     --primary-accent-dark: #FF9F68;
     --border-dark: rgba(255, 255, 255, 0.2);
     --shadow-dark: rgba(0, 0, 0, 0.3);
-    --glass-bg-dark: rgba(10, 10, 10, 0.7);
+    --glass-bg-dark: rgba(0, 0, 0, 0.7);
  
     /* Apply Dark Theme */
     --bg-primary: var(--bg-dark);
@@ -3321,6 +3321,173 @@ select:focus-visible,
     ::-webkit-scrollbar-thumb:hover {
         background: var(--accent-secondary);
     }
+}
+
+/* ==========================================
+   ADDITIONAL SHAPE ENHANCEMENTS
+   ========================================== */
+
+/* Enhanced shape variations */
+.hero-gradient-1 {
+    border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+}
+
+.hero-gradient-2 {
+    border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+}
+
+.hero-gradient-3 {
+    border-radius: 70% 30% 50% 50% / 30% 30% 70% 70%;
+}
+
+.category-icon {
+    border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+}
+
+.service-icon {
+    border-radius: 40% 60% 60% 40% / 40% 40% 60% 60%;
+}
+
+.feature-icon {
+    border-radius: 25% 75% 25% 75% / 50% 50% 50% 50%;
+}
+
+.method-icon {
+    border-radius: 60% 40% 40% 60% / 60% 40% 60% 40%;
+}
+
+/* Enhanced button shapes */
+.btn-primary {
+    border-radius: 20px 50px 50px 20px;
+}
+
+.btn-secondary {
+    border-radius: 50px 20px 20px 50px;
+}
+
+.btn-outline {
+    border-radius: 30px 30px 30px 30px;
+}
+
+/* Enhanced card shapes */
+.category-card {
+    border-radius: 40px 20px 40px 20px;
+}
+
+.service-card {
+    border-radius: 20px 40px 20px 40px;
+}
+
+.testimonial-card {
+    border-radius: 30px 10px 30px 10px;
+}
+
+.portfolio-item {
+    border-radius: 25px 25px 25px 25px;
+}
+
+/* Enhanced navbar shape */
+.navbar {
+    border-radius: 0 0 40px 40px;
+}
+
+/* Enhanced footer shape */
+.footer {
+    border-radius: 40px 40px 0 0;
+}
+
+/* Enhanced section badges */
+.section-badge {
+    border-radius: 15px 5px 15px 5px;
+}
+
+/* Enhanced loading screen shapes */
+.loading-logo {
+    border-radius: 40% 60% 60% 40% / 40% 40% 60% 60%;
+}
+
+/* Enhanced particles with varied shapes */
+.particle:nth-child(3n) {
+    border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+}
+
+.particle:nth-child(3n+1) {
+    border-radius: 60% 40% 40% 60% / 60% 40% 60% 40%;
+}
+
+.particle:nth-child(3n+2) {
+    border-radius: 50% 50% 50% 50% / 50% 50% 50% 50%;
+}
+
+/* Enhanced form elements */
+.form-group input,
+.form-group textarea,
+.form-group select {
+    border-radius: 15px 5px 15px 5px;
+}
+
+/* Enhanced social links */
+.social-link {
+    border-radius: 40% 60% 60% 40% / 40% 40% 60% 60%;
+}
+
+/* Enhanced back to top button */
+.back-to-top {
+    border-radius: 50% 50% 50% 50% / 50% 50% 50% 50%;
+}
+
+/* Enhanced notification shapes */
+.notification {
+    border-radius: 20px 5px 20px 5px;
+}
+
+/* Enhanced skill bars */
+.skill-bar {
+    border-radius: 10px 5px 5px 10px;
+}
+
+.skill-progress {
+    border-radius: 10px 5px 5px 10px;
+}
+
+/* Enhanced tool items */
+.tool-item {
+    border-radius: 20px 10px 20px 10px;
+}
+
+/* Enhanced contact methods */
+.contact-method {
+    border-radius: 15px 25px 15px 25px;
+}
+
+/* Enhanced feature items */
+.feature-item {
+    border-radius: 25px 15px 25px 15px;
+}
+
+/* Enhanced experience badge */
+.experience-badge {
+    border-radius: 30px 10px 30px 10px;
+}
+
+/* Enhanced image container */
+.image-container {
+    border-radius: 35px 15px 35px 15px;
+}
+
+/* Enhanced hero stats */
+.hero-stats {
+    border-radius: 30px 20px 30px 20px;
+}
+
+/* Enhanced status badge */
+.status-badge {
+    border-radius: 25px 50px 25px 50px;
+}
+
+/* Enhanced typewriter container */
+.typewriter-container {
+    border-radius: 20px 40px 20px 40px;
 }
 
 /* ==========================================
