@@ -80,7 +80,7 @@ const PORTFOLIO_DATA = {
             name: "Productivity Pro",
             overview: "All-in-one productivity app for task management and time tracking",
             description: "Productivity Pro is a comprehensive productivity application designed to help users organize their tasks, track time, set goals, and boost overall efficiency. With intuitive interfaces, powerful features, and seamless synchronization across devices, it's the perfect companion for professionals, students, and anyone looking to maximize their productivity. Features include task management with priorities, time tracking with detailed analytics, goal setting with progress monitoring, and customizable workflows.",
-            image: "assets/apps/app1.jpg",
+            image: "static/apps/app1.jpg",
             category: "Productivity",
             rating: 4.8,
             status: "Live",
