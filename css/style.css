@@ -24,13 +24,20 @@
     --shadow-color: var(--shadow-light);
     --glass-bg: var(--glass-bg-light);
     
-    /* Spacing & Sizing */
-    --section-padding: 6rem;
-    --container-padding: 4rem;
-    --component-padding: 1.75rem;
-    --border-radius: 45px;
-    --border-radius-sm: 30px;
-    --border-radius-lg: 50px;
+    /* Spacing & Sizing - REDUCED */
+    --section-padding: 4rem;
+    --container-padding: 2rem;
+    --component-padding: 1.25rem;
+    --border-radius: 35px;
+    --border-radius-sm: 20px;
+    --border-radius-lg: 40px;
+    
+    /* Font Sizes - REDUCED */
+    --font-size-xl: 3rem;
+    --font-size-lg: 2rem;
+    --font-size-md: 1.5rem;
+    --font-size-base: 1rem;
+    --font-size-sm: 0.875rem;
     
     /* Transitions */
     --transition-fast: 0.2s ease;
