@@ -46,7 +46,7 @@ function loadWebsites() {
     displayWebsites(currentWebsites);
 }
 
-// Display Websites
+// Display Websites - SIMPLIFIED: Only image, title, status, rating
 function displayWebsites(websites) {
     const websitesGrid = document.getElementById('websitesGrid');
     if (!websitesGrid) return;
@@ -66,42 +66,29 @@ function displayWebsites(websites) {
     }
     
     websitesGrid.innerHTML = websites.map(website => `
-        <div class="game-card" data-website-id="${website.id}">
+        <div class="game-card" data-website-id="${website.id}" data-category="${website.category}" data-status="${website.status}" data-rating="${website.rating}">
             <div class="game-image">
                 <img src="${website.image}" alt="${website.name}" loading="lazy" 
                      onerror="this.src='https://via.placeholder.com/400x250/E4572E/FFFFFF?text=${encodeURIComponent(website.name)}'">
-                ${website.status === 'Live' ? `<span class="game-badge">Live</span>` : ''}
+                <div class="game-overlay">
+                    <div class="overlay-content">
+                        <a href="website-detail.html?id=${website.id}" class="view-details-btn">
+                            <i class="fas fa-eye"></i>
+                            <span>View Details</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="game-badge status-${website.status.toLowerCase().replace(' ', '-')}">${website.status}</div>
             </div>
             
             <div class="game-content">
-                <div class="game-header">
-                    <h3 class="game-title">${website.name}</h3>
+                <h3 class="game-title">${website.name}</h3>
+                <div class="game-meta">
                     <div class="game-rating">
-                        <span class="rating-stars">${generateStars(website.rating)}</span>
+                        <div class="rating-stars">${generateStars(website.rating)}</div>
                         <span class="rating-value">${website.rating}</span>
                     </div>
-                </div>
-                
-                <span class="game-category">${website.category}</span>
-                
-                <p class="game-description">${truncateText(website.overview, 120)}</p>
-                
-                <div class="game-features">
-                    ${website.features.slice(0, 3).map(feature => 
-                        `<span class="game-feature">${feature}</span>`
-                    ).join('')}
-                </div>
-                
-                <div class="game-actions">
-                    <a href="${website.liveUrl || '#'}" class="btn btn-primary btn-visit-website" 
-                       ${website.status === 'In Development' || !website.liveUrl || website.liveUrl === '#' ? 'onclick="event.preventDefault(); showNotification(\'Coming Soon!\', \'info\')"' : 'target="_blank"'}>
-                        <i class="fas fa-external-link-alt"></i>
-                        <span>${website.status === 'In Development' ? 'Coming Soon' : 'Visit Site'}</span>
-                    </a>
-                    <button class="btn btn-secondary btn-view-website-details" data-website-id="${website.id}">
-                        <i class="fas fa-info-circle"></i>
-                        <span>Details</span>
-                    </button>
+                    <span class="game-status status-${website.status.toLowerCase().replace(' ', '-')}">${website.status}</span>
                 </div>
             </div>
         </div>
@@ -256,22 +243,11 @@ function setupWebsiteEventListeners() {
 
 // Setup Website Card Listeners
 function setupWebsiteCardListeners() {
-    // View detail buttons
-    document.querySelectorAll('.btn-view-website-details').forEach(btn => {
-        btn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            const websiteId = parseInt(this.getAttribute('data-website-id'));
-            viewWebsiteDetails(websiteId);
-        });
-    });
-    
     // Card click (for whole card interaction)
     document.querySelectorAll('.game-card').forEach(card => {
         card.addEventListener('click', function(e) {
-            if (!e.target.closest('.game-actions')) {
-                const websiteId = parseInt(this.getAttribute('data-website-id'));
-                viewWebsiteDetails(websiteId);
-            }
+            const websiteId = parseInt(this.getAttribute('data-website-id'));
+            viewWebsiteDetails(websiteId);
         });
         
         // Add hover effect
@@ -327,12 +303,6 @@ function animateWebsiteCards() {
             });
         }, index * 100);
     });
-}
-
-// Utility: Truncate Text
-function truncateText(text, maxLength) {
-    if (text.length <= maxLength) return text;
-    return text.substring(0, maxLength).trim() + '...';
 }
 
 // Utility: Generate Stars
