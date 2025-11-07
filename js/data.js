@@ -10,7 +10,7 @@ const PORTFOLIO_DATA = {
             name: "Sky Surfers",
             overview: "Fast-paced endless runner with stunning aerial gameplay",
             description: "Soar through the skies in this thrilling endless runner game. Navigate through clouds, avoid obstacles, collect power-ups, and compete for the highest score on global leaderboards.",
-            image: "assets/games/game2.jpg",
+            image: "static/images/games/Game1.jpg",
             category: "Endless Runner",
             rating: 4.6,
             status: "Live",

@@ -46,7 +46,7 @@ function loadGames() {
     displayGames(currentGames);
 }
 
-// Display Games
+// Display Games - SIMPLIFIED: Only image, title, status, rating
 function displayGames(games) {
     const gamesGrid = document.getElementById('gamesGrid');
     if (!gamesGrid) return;
@@ -66,42 +66,29 @@ function displayGames(games) {
     }
     
     gamesGrid.innerHTML = games.map(game => `
-        <div class="game-card" data-game-id="${game.id}">
+        <div class="game-card" data-game-id="${game.id}" data-category="${game.category}" data-status="${game.status}" data-rating="${game.rating}">
             <div class="game-image">
                 <img src="${game.image}" alt="${game.name}" loading="lazy" 
                      onerror="this.src='https://via.placeholder.com/400x250/E4572E/FFFFFF?text=${encodeURIComponent(game.name)}'">
-                ${game.status === 'Live' ? `<span class="game-badge">New</span>` : ''}
+                <div class="game-overlay">
+                    <div class="overlay-content">
+                        <a href="game-detail.html?id=${game.id}" class="view-details-btn">
+                            <i class="fas fa-eye"></i>
+                            <span>View Details</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="game-badge status-${game.status.toLowerCase().replace(' ', '-')}">${game.status}</div>
             </div>
             
             <div class="game-content">
-                <div class="game-header">
-                    <h3 class="game-title">${game.name}</h3>
+                <h3 class="game-title">${game.name}</h3>
+                <div class="game-meta">
                     <div class="game-rating">
-                        <span class="rating-stars">${generateStars(game.rating)}</span>
+                        <div class="rating-stars">${generateStars(game.rating)}</div>
                         <span class="rating-value">${game.rating}</span>
                     </div>
-                </div>
-                
-                <span class="game-category">${game.category}</span>
-                
-                <p class="game-description">${truncateText(game.overview, 120)}</p>
-                
-                <div class="game-features">
-                    ${game.features.slice(0, 3).map(feature => 
-                        `<span class="game-feature">${feature}</span>`
-                    ).join('')}
-                </div>
-                
-                <div class="game-actions">
-                    <button class="btn btn-primary btn-play-game" data-game-id="${game.id}" 
-                            ${game.status === 'In Development' ? 'disabled' : ''}>
-                        <i class="fas fa-play"></i>
-                        <span>${game.status === 'In Development' ? 'Coming Soon' : 'Play Now'}</span>
-                    </button>
-                    <button class="btn btn-secondary btn-view-details" data-game-id="${game.id}">
-                        <i class="fas fa-info-circle"></i>
-                        <span>Details</span>
-                    </button>
+                    <span class="game-status status-${game.status.toLowerCase().replace(' ', '-')}">${game.status}</span>
                 </div>
             </div>
         </div>
@@ -236,31 +223,11 @@ function setupGameEventListeners() {
 
 // Setup Game Card Listeners
 function setupGameCardListeners() {
-    // Play buttons
-    document.querySelectorAll('.btn-play-game').forEach(btn => {
-        btn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            const gameId = parseInt(this.getAttribute('data-game-id'));
-            playGame(gameId);
-        });
-    });
-    
-    // View detail buttons
-    document.querySelectorAll('.btn-view-details').forEach(btn => {
-        btn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            const gameId = parseInt(this.getAttribute('data-game-id'));
-            viewGameDetails(gameId);
-        });
-    });
-    
     // Card click (for whole card interaction)
     document.querySelectorAll('.game-card').forEach(card => {
         card.addEventListener('click', function(e) {
-            if (!e.target.closest('.game-actions')) {
-                const gameId = parseInt(this.getAttribute('data-game-id'));
-                viewGameDetails(gameId);
-            }
+            const gameId = parseInt(this.getAttribute('data-game-id'));
+            viewGameDetails(gameId);
         });
         
         // Add hover effect
@@ -272,27 +239,6 @@ function setupGameCardListeners() {
             this.style.transform = 'translateY(0)';
         });
     });
-}
-
-// Play Game
-function playGame(gameId) {
-    const game = getGames().find(g => g.id === gameId);
-    if (!game) {
-        showNotification('Game not found', 'error');
-        return;
-    }
-    
-    if (game.status === 'In Development') {
-        showNotification('This game is still in development. Coming soon!', 'info');
-        return;
-    }
-    
-    // Navigate to game detail page with play parameter
-    if (game.playUrl) {
-        window.location.href = `game-detail.html?id=${gameId}&play=true`;
-    } else {
-        showNotification('Play URL not available for this game', 'error');
-    }
 }
 
 // View Game Details
@@ -337,12 +283,6 @@ function animateGameCards() {
     });
 }
 
-// Utility: Truncate Text
-function truncateText(text, maxLength) {
-    if (text.length <= maxLength) return text;
-    return text.substring(0, maxLength).trim() + '...';
-}
-
 // Utility: Generate Stars
 function generateStars(rating) {
     const fullStars = Math.floor(rating);
@@ -379,7 +319,6 @@ function formatNumber(num) {
 // Make functions globally available
 window.initializeGamesPage = initializeGamesPage;
 window.resetFilters = resetFilters;
-window.playGame = playGame;
 window.viewGameDetails = viewGameDetails;
 
 // Initialize when page loads
