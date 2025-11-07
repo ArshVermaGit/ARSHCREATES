@@ -18,6 +18,17 @@ function initializeGamesPage() {
     setupGameFilters();
     setupGameEventListeners();
     updateHeaderStats();
+    
+    // Hide loading screen
+    setTimeout(() => {
+        const loadingScreen = document.getElementById('loadingScreen');
+        if (loadingScreen) {
+            loadingScreen.style.opacity = '0';
+            setTimeout(() => {
+                loadingScreen.style.display = 'none';
+            }, 500);
+        }
+    }, 1000);
 }
 
 // Load Games
@@ -69,13 +80,19 @@ function displayGames(games) {
         <div class="game-card" data-game-id="${game.id}" data-category="${game.category}" data-status="${game.status}" data-rating="${game.rating}">
             <div class="game-image">
                 <img src="${game.image}" alt="${game.name}" loading="lazy" 
-                     onerror="this.src='https://via.placeholder.com/400x250/E4572E/FFFFFF?text=${encodeURIComponent(game.name)}'">
+                     onerror="this.src='https://via.placeholder.com/400x250/393E41/FFFFFF?text=${encodeURIComponent(game.name)}'">
                 <div class="game-overlay">
                     <div class="overlay-content">
                         <a href="game-detail.html?id=${game.id}" class="view-details-btn">
                             <i class="fas fa-eye"></i>
                             <span>View Details</span>
                         </a>
+                        ${game.status === 'Live' ? `
+                        <button class="play-now-btn" onclick="event.stopPropagation(); window.location.href='game-detail.html?id=${game.id}&play=true'">
+                            <i class="fas fa-play"></i>
+                            <span>Play Now</span>
+                        </button>
+                        ` : ''}
                     </div>
                 </div>
                 <div class="game-badge status-${game.status.toLowerCase().replace(' ', '-')}">${game.status}</div>
@@ -83,12 +100,13 @@ function displayGames(games) {
             
             <div class="game-content">
                 <h3 class="game-title">${game.name}</h3>
+                <p class="game-overview">${game.overview}</p>
                 <div class="game-meta">
                     <div class="game-rating">
                         <div class="rating-stars">${generateStars(game.rating)}</div>
                         <span class="rating-value">${game.rating}</span>
                     </div>
-                    <span class="game-status status-${game.status.toLowerCase().replace(' ', '-')}">${game.status}</span>
+                    <span class="game-category">${game.category}</span>
                 </div>
             </div>
         </div>
@@ -107,11 +125,19 @@ function setupGameFilters() {
     const statusFilter = document.getElementById('statusFilter');
     const sortFilter = document.getElementById('sortFilter');
     
+    // Populate category filter
     if (categoryFilter) {
+        const categories = [...new Set(getGames().map(game => game.category))];
+        categories.forEach(category => {
+            const option = document.createElement('option');
+            option.value = category;
+            option.textContent = category;
+            categoryFilter.appendChild(option);
+        });
+        
         categoryFilter.addEventListener('change', function() {
             currentFilters.category = this.value;
             applyGameFilters();
-            showNotification(`Filtered by category: ${this.options[this.selectedIndex].text}`, 'info');
         });
     }
     
@@ -119,7 +145,6 @@ function setupGameFilters() {
         statusFilter.addEventListener('change', function() {
             currentFilters.status = this.value;
             applyGameFilters();
-            showNotification(`Filtered by status: ${this.options[this.selectedIndex].text}`, 'info');
         });
     }
     
@@ -127,7 +152,6 @@ function setupGameFilters() {
         sortFilter.addEventListener('change', function() {
             currentFilters.sort = this.value;
             applyGameFilters();
-            showNotification(`Sorted by: ${this.options[this.selectedIndex].text}`, 'info');
         });
     }
 }
@@ -188,9 +212,13 @@ function resetFilters() {
     };
     
     // Reset select elements
-    document.getElementById('categoryFilter').value = 'all';
-    document.getElementById('statusFilter').value = 'all';
-    document.getElementById('sortFilter').value = 'newest';
+    const categoryFilter = document.getElementById('categoryFilter');
+    const statusFilter = document.getElementById('statusFilter');
+    const sortFilter = document.getElementById('sortFilter');
+    
+    if (categoryFilter) categoryFilter.value = 'all';
+    if (statusFilter) statusFilter.value = 'all';
+    if (sortFilter) sortFilter.value = 'newest';
     
     applyGameFilters();
     showNotification('Filters reset', 'success');
@@ -211,9 +239,9 @@ function setupGameEventListeners() {
             
             const filteredGames = getGames().filter(game => 
                 game.name.toLowerCase().includes(searchTerm) ||
-                game.overview.toLowerCase().includes(searchTerm) ||
+                (game.overview && game.overview.toLowerCase().includes(searchTerm)) ||
                 game.category.toLowerCase().includes(searchTerm) ||
-                game.description.toLowerCase().includes(searchTerm)
+                (game.description && game.description.toLowerCase().includes(searchTerm))
             );
             
             displayGames(filteredGames);
@@ -221,18 +249,34 @@ function setupGameEventListeners() {
     }
 }
 
+// Debounce function
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
 // Setup Game Card Listeners
 function setupGameCardListeners() {
     // Card click (for whole card interaction)
     document.querySelectorAll('.game-card').forEach(card => {
         card.addEventListener('click', function(e) {
-            const gameId = parseInt(this.getAttribute('data-game-id'));
-            viewGameDetails(gameId);
+            // Don't trigger if clicking on buttons inside the card
+            if (!e.target.closest('.view-details-btn') && !e.target.closest('.play-now-btn')) {
+                const gameId = parseInt(this.getAttribute('data-game-id'));
+                viewGameDetails(gameId);
+            }
         });
         
         // Add hover effect
         card.addEventListener('mouseenter', function() {
-            this.style.transform = 'translateY(-10px)';
+            this.style.transform = 'translateY(-5px)';
         });
         
         card.addEventListener('mouseleave', function() {
@@ -255,7 +299,7 @@ function updateHeaderStats() {
     const averageRating = totalGames > 0 
         ? (allGames.reduce((sum, game) => sum + game.rating, 0) / totalGames).toFixed(1)
         : '0.0';
-    const totalPlayers = allGames.reduce((sum, game) => sum + game.playCount, 0);
+    const totalPlayers = allGames.reduce((sum, game) => sum + (game.playCount || 0), 0);
     
     // Update stat numbers
     const statNumbers = document.querySelectorAll('.header-stats .stat-number');
@@ -270,15 +314,13 @@ function updateHeaderStats() {
 function animateGameCards() {
     const cards = document.querySelectorAll('.game-card');
     cards.forEach((card, index) => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(30px)';
+        
         setTimeout(() => {
-            card.style.opacity = '0';
-            card.style.transform = 'translateY(30px)';
-            
-            requestAnimationFrame(() => {
-                card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-                card.style.opacity = '1';
-                card.style.transform = 'translateY(0)';
-            });
+            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            card.style.opacity = '1';
+            card.style.transform = 'translateY(0)';
         }, index * 100);
     });
 }
@@ -314,6 +356,30 @@ function formatNumber(num) {
         return (num / 1000).toFixed(1) + 'K';
     }
     return num.toString();
+}
+
+// Show Notification
+function showNotification(message, type = 'info') {
+    console.log(`${type}: ${message}`);
+    // Simple notification implementation
+    const notification = document.createElement('div');
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 12px 20px;
+        background: ${type === 'error' ? '#dc3545' : type === 'success' ? '#28a745' : '#17a2b8'};
+        color: white;
+        border-radius: 4px;
+        z-index: 10000;
+        font-weight: 500;
+    `;
+    notification.textContent = message;
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        document.body.removeChild(notification);
+    }, 3000);
 }
 
 // Make functions globally available
