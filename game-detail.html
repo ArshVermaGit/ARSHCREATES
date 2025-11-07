@@ -6,6 +6,7 @@
     <title>Game Details - Arsh Verma</title>
     <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/game-detail.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
@@ -86,7 +87,18 @@
 
                     <!-- Game Container -->
                     <div id="gameContainer" class="game-container">
-                        <iframe id="gameFrame" allowfullscreen></iframe>
+                        <div id="unityContainer" class="unity-container">
+                            <div id="unityLoading" class="unity-loading">
+                                <div class="unity-loading-content">
+                                    <i class="fas fa-spinner fa-spin"></i>
+                                    <p>Loading Game...</p>
+                                    <div class="unity-progress">
+                                        <div class="unity-progress-bar" id="unityProgressBar"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <canvas id="unityCanvas" class="unity-canvas"></canvas>
+                        </div>
                     </div>
                 </div>
 

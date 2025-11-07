@@ -6,12 +6,29 @@
 // Global Variables
 let currentGameId = null;
 let currentGame = null;
-let gameImages = [];
 let isGamePlaying = false;
+let unityInstance = null;
+
+// Unity WebGL Build Configuration
+const unityBuilds = {
+    "sky-surfers": {
+        loaderUrl: "static/games_files/sky_surfers/Build/sky_surfers.loader.js",
+        dataUrl: "static/games_files/sky_surfers/Build/sky_surfers.data",
+        frameworkUrl: "static/games_files/sky_surfers/Build/sky_surfers.framework.js",
+        codeUrl: "static/games_files/sky_surfers/Build/sky_surfers.wasm",
+        companyName: "ArshCreates",
+        productName: "Sky Surfers",
+        productVersion: "1.0"
+    }
+    // Add more games here as needed
+};
 
 // Initialize Game Detail Page
 function initializeGameDetailPage() {
     console.log('Initializing game detail page...');
+    
+    // Initialize theme first
+    initializeTheme();
     
     // Get game ID from URL parameters
     const urlParams = new URLSearchParams(window.location.search);
@@ -31,9 +48,55 @@ function initializeGameDetailPage() {
     if (autoPlay) {
         setTimeout(() => {
             if (currentGame && currentGame.status === 'Live') {
-                playGameEmbed(currentGame);
+                playGameUnity(currentGame);
             }
         }, 500);
+    }
+    
+    // Hide loading screen
+    setTimeout(() => {
+        const loadingScreen = document.getElementById('loadingScreen');
+        if (loadingScreen) {
+            loadingScreen.style.opacity = '0';
+            setTimeout(() => {
+                loadingScreen.style.display = 'none';
+            }, 500);
+        }
+    }, 1000);
+}
+
+// Initialize Theme
+function initializeTheme() {
+    const themeToggle = document.getElementById('themeToggle');
+    const themeIcon = themeToggle?.querySelector('.theme-icon i');
+    
+    // Load saved theme or default to dark
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    
+    // Update theme icon
+    if (themeIcon) {
+        themeIcon.className = savedTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+    }
+    
+    // Add theme toggle event listener
+    if (themeToggle) {
+        themeToggle.addEventListener('click', toggleTheme);
+    }
+}
+
+// Toggle Theme
+function toggleTheme() {
+    const currentTheme = document.documentElement.getAttribute('data-theme');
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    const themeIcon = document.querySelector('.theme-icon i');
+    
+    document.documentElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+    
+    // Update theme icon
+    if (themeIcon) {
+        themeIcon.className = newTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
     }
 }
 
@@ -49,8 +112,6 @@ function loadGameDetails(gameId) {
     }
     
     currentGame = game;
-    gameImages = [game.image, ...(game.screenshots || [])];
-    
     displayGameDetails(game);
     setupGameNavigation();
 }
@@ -65,6 +126,9 @@ function displayGameDetails(game) {
     if (previewImage) {
         previewImage.src = game.image;
         previewImage.alt = game.name;
+        previewImage.onerror = function() {
+            this.src = 'assets/placeholder-game.jpg';
+        };
     }
     
     // Update game title and meta
@@ -166,7 +230,7 @@ function updatePlayButton(game) {
         playBtn.disabled = false;
         playBtn.style.cursor = 'pointer';
         playBtn.style.opacity = '1';
-        playBtn.onclick = () => playGameEmbed(game);
+        playBtn.onclick = () => playGameUnity(game);
     }
 }
 
@@ -245,21 +309,28 @@ function navigateToNextGame() {
     window.location.href = `game-detail.html?id=${nextGame.id}`;
 }
 
-// Game Interaction Functions
-function playGameEmbed(game) {
-    if (!game.playUrl) {
-        showNotification('Game URL not available', 'error');
+// Unity WebGL Game Functions
+function playGameUnity(game) {
+    console.log('Attempting to play game:', game.name);
+    
+    if (!game.unityBuild) {
+        showNotification('This game is not available for WebGL play', 'error');
+        return;
+    }
+    
+    const buildConfig = unityBuilds[game.unityBuild];
+    if (!buildConfig) {
+        showNotification('Game build configuration not found', 'error');
         return;
     }
     
     const gameContainer = document.getElementById('gameContainer');
-    const gameFrame = document.getElementById('gameFrame');
+    const unityContainer = document.getElementById('unityContainer');
     const previewImage = document.querySelector('.preview-image');
     
-    if (gameContainer && gameFrame) {
+    if (gameContainer && unityContainer) {
         // Show game container
         gameContainer.classList.add('active');
-        gameFrame.src = game.playUrl;
         isGamePlaying = true;
         
         // Hide preview overlay
@@ -268,29 +339,111 @@ function playGameEmbed(game) {
             if (overlay) overlay.style.display = 'none';
         }
         
+        // Load Unity WebGL build
+        loadUnityBuild(buildConfig);
+        
         showNotification(`Starting ${game.name}...`, 'success');
-    } else {
-        // Fallback: open in new tab
-        window.open(game.playUrl, '_blank');
-        showNotification(`Opening ${game.name} in new tab`, 'info');
     }
 }
 
-function toggleFullscreen() {
-    const gamePreview = document.querySelector('.game-preview');
-    if (!gamePreview) return;
+function loadUnityBuild(buildConfig) {
+    const canvas = document.getElementById("unityCanvas");
+    const loadingBar = document.getElementById("unityProgressBar");
+    const unityLoading = document.getElementById("unityLoading");
     
-    if (!document.fullscreenElement && !document.webkitFullscreenElement && 
-        !document.mozFullScreenElement && !document.msFullscreenElement) {
+    // Show loading screen
+    if (unityLoading) {
+        unityLoading.style.display = 'flex';
+    }
+    
+    // Clear any existing Unity instance
+    if (window.unityInstance) {
+        window.unityInstance.Quit();
+        window.unityInstance = null;
+    }
+    
+    // Remove existing Unity loader script
+    const existingScript = document.querySelector('script[src*="unity"]');
+    if (existingScript) {
+        existingScript.remove();
+    }
+    
+    // Create script tag for Unity loader
+    const script = document.createElement("script");
+    script.src = buildConfig.loaderUrl;
+    script.onload = () => {
+        console.log('Unity loader loaded successfully');
+        
+        if (typeof createUnityInstance !== "function") {
+            showNotification('Unity WebGL loader failed to load', 'error');
+            if (unityLoading) unityLoading.style.display = 'none';
+            return;
+        }
+        
+        const config = {
+            dataUrl: buildConfig.dataUrl,
+            frameworkUrl: buildConfig.frameworkUrl,
+            codeUrl: buildConfig.codeUrl,
+            streamingAssetsUrl: buildConfig.streamingAssetsUrl || "StreamingAssets",
+            companyName: buildConfig.companyName || "ArshCreates",
+            productName: buildConfig.productName || currentGame.name,
+            productVersion: buildConfig.productVersion || "1.0",
+            showBanner: () => {} // Suppress default banner
+        };
+        
+        createUnityInstance(canvas, config, (progress) => {
+            // Update progress bar
+            if (loadingBar) {
+                loadingBar.style.width = `${progress * 100}%`;
+            }
+        }).then((instance) => {
+            console.log('Unity instance created successfully');
+            window.unityInstance = instance;
+            unityInstance = instance;
+            
+            // Hide loading screen when game is ready
+            if (unityLoading) {
+                unityLoading.style.display = 'none';
+            }
+            showNotification('Game loaded successfully!', 'success');
+        }).catch((message) => {
+            console.error('Failed to create Unity instance:', message);
+            showNotification('Failed to load game: ' + message, 'error');
+            if (unityLoading) {
+                unityLoading.style.display = 'none';
+            }
+        });
+    };
+    
+    script.onerror = (error) => {
+        console.error('Failed to load Unity loader:', error);
+        showNotification('Failed to load Unity WebGL build. Check console for details.', 'error');
+        if (unityLoading) {
+            unityLoading.style.display = 'none';
+        }
+    };
+    
+    document.body.appendChild(script);
+}
+
+// Game Interaction Functions
+function toggleFullscreen() {
+    const gameContainer = document.getElementById('gameContainer');
+    if (!gameContainer) return;
+    
+    if (!document.fullscreenElement && 
+        !document.webkitFullscreenElement && 
+        !document.mozFullScreenElement && 
+        !document.msFullscreenElement) {
         // Enter fullscreen
-        if (gamePreview.requestFullscreen) {
-            gamePreview.requestFullscreen();
-        } else if (gamePreview.webkitRequestFullscreen) {
-            gamePreview.webkitRequestFullscreen();
-        } else if (gamePreview.mozRequestFullScreen) {
-            gamePreview.mozRequestFullScreen();
-        } else if (gamePreview.msRequestFullscreen) {
-            gamePreview.msRequestFullscreen();
+        if (gameContainer.requestFullscreen) {
+            gameContainer.requestFullscreen();
+        } else if (gameContainer.webkitRequestFullscreen) {
+            gameContainer.webkitRequestFullscreen();
+        } else if (gameContainer.mozRequestFullScreen) {
+            gameContainer.mozRequestFullScreen();
+        } else if (gameContainer.msRequestFullscreen) {
+            gameContainer.msRequestFullscreen();
         }
     } else {
         // Exit fullscreen
@@ -307,14 +460,13 @@ function toggleFullscreen() {
 }
 
 function restartGame() {
-    const gameFrame = document.getElementById('gameFrame');
-    if (gameFrame && gameFrame.src && isGamePlaying) {
-        const currentSrc = gameFrame.src;
-        gameFrame.src = '';
-        setTimeout(() => {
-            gameFrame.src = currentSrc;
-        }, 100);
-        showNotification('Game restarted', 'info');
+    if (unityInstance) {
+        unityInstance.Quit().then(() => {
+            setTimeout(() => {
+                playGameUnity(currentGame);
+            }, 500);
+        });
+        showNotification('Restarting game...', 'info');
     } else {
         showNotification('No game is currently playing', 'warning');
     }
@@ -322,17 +474,34 @@ function restartGame() {
 
 function closeGame() {
     const gameContainer = document.getElementById('gameContainer');
-    const gameFrame = document.getElementById('gameFrame');
+    const unityContainer = document.getElementById('unityContainer');
     const previewImage = document.querySelector('.preview-image');
+    
+    if (unityInstance) {
+        unityInstance.Quit();
+        unityInstance = null;
+        window.unityInstance = null;
+    }
     
     if (gameContainer) {
         gameContainer.classList.remove('active');
     }
     
-    if (gameFrame) {
-        gameFrame.src = '';
+    // Clear Unity container
+    if (unityContainer) {
+        const canvas = document.getElementById('unityCanvas');
+        if (canvas) {
+            canvas.width = 0;
+            canvas.height = 0;
+        }
+        
+        const loading = document.getElementById('unityLoading');
+        if (loading) {
+            loading.style.display = 'none';
+        }
     }
     
+    // Show preview overlay
     if (previewImage) {
         const overlay = previewImage.querySelector('.preview-overlay');
         if (overlay) overlay.style.display = 'flex';
@@ -341,8 +510,19 @@ function closeGame() {
     isGamePlaying = false;
     
     // Exit fullscreen if active
-    if (document.fullscreenElement) {
-        document.exitFullscreen();
+    if (document.fullscreenElement || 
+        document.webkitFullscreenElement || 
+        document.mozFullScreenElement || 
+        document.msFullscreenElement) {
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) {
+            document.webkitExitFullscreen();
+        } else if (document.mozCancelFullScreen) {
+            document.mozCancelFullScreen();
+        } else if (document.msExitFullscreen) {
+            document.msExitFullscreen();
+        }
     }
     
     showNotification('Game closed', 'info');
@@ -374,7 +554,6 @@ function shareGame() {
 }
 
 function fallbackShare() {
-    // Copy URL to clipboard
     const url = window.location.href;
     
     if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -408,7 +587,6 @@ function fallbackShare() {
 
 // Keyboard Navigation
 function handleKeyboardNavigation(e) {
-    // Ignore if user is typing in an input field
     if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
         return;
     }
@@ -431,7 +609,7 @@ function handleKeyboardNavigation(e) {
         case 'Enter':
             if (!isGamePlaying && currentGame && currentGame.status === 'Live') {
                 e.preventDefault();
-                playGameEmbed(currentGame);
+                playGameUnity(currentGame);
             }
             break;
         case 'f':
@@ -456,12 +634,15 @@ function handleFullscreenChange() {
     const fullscreenBtn = document.getElementById('fullscreenBtn');
     if (!fullscreenBtn) return;
     
-    const isFullscreen = !!(document.fullscreenElement || document.webkitFullscreenElement || 
-                            document.mozFullScreenElement || document.msFullscreenElement);
+    const isFullscreen = !!(document.fullscreenElement || 
+                            document.webkitFullscreenElement || 
+                            document.mozFullScreenElement || 
+                            document.msFullscreenElement);
     
-    fullscreenBtn.innerHTML = isFullscreen ? 
-        '<i class="fas fa-compress"></i>' : 
-        '<i class="fas fa-expand"></i>';
+    const icon = fullscreenBtn.querySelector('i');
+    if (icon) {
+        icon.className = isFullscreen ? 'fas fa-compress' : 'fas fa-expand';
+    }
     fullscreenBtn.title = isFullscreen ? 'Exit Fullscreen' : 'Enter Fullscreen';
 }
 
@@ -483,9 +664,13 @@ function animateGameDetails() {
 
 // Utility Functions
 function formatDate(dateString) {
-    const date = new Date(dateString);
-    const options = { year: 'numeric', month: 'long', day: 'numeric' };
-    return date.toLocaleDateString('en-US', options);
+    try {
+        const date = new Date(dateString);
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        return date.toLocaleDateString('en-US', options);
+    } catch (error) {
+        return 'Invalid Date';
+    }
 }
 
 function formatStatNumber(num) {
@@ -497,12 +682,43 @@ function formatStatNumber(num) {
     return num.toString();
 }
 
+function showNotification(message, type = 'info') {
+    // Use existing notification function or create a simple one
+    if (typeof window.showNotification === 'function') {
+        window.showNotification(message, type);
+    } else {
+        console.log(`${type}: ${message}`);
+        // Create a simple notification
+        const notification = document.createElement('div');
+        notification.className = `notification notification-${type}`;
+        notification.textContent = message;
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            background: ${type === 'error' ? '#dc3545' : type === 'success' ? '#28a745' : '#17a2b8'};
+            color: white;
+            border-radius: 4px;
+            z-index: 1000;
+            font-weight: 500;
+        `;
+        
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.remove();
+        }, 3000);
+    }
+}
+
 // Make functions globally available
 window.initializeGameDetailPage = initializeGameDetailPage;
-window.playGameEmbed = playGameEmbed;
+window.playGameUnity = playGameUnity;
 window.shareGame = shareGame;
 window.navigateToPreviousGame = navigateToPreviousGame;
 window.navigateToNextGame = navigateToNextGame;
+window.toggleTheme = toggleTheme;
 
 // Initialize when page loads
 if (document.readyState === 'loading') {
