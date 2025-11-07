@@ -121,13 +121,27 @@
     </section>
 
     <!-- Apps Grid -->
-    <section class="section apps-section">
-        <div class="container">
-            <div class="portfolio-grid" id="appsGrid">
-                <!-- Apps will be loaded dynamically -->
+<section class="section apps-section">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Featured Mobile Apps</h2>
+            <p class="section-subtitle">Explore my collection of innovative mobile applications for iOS and Android</p>
+            <div class="section-decoration">
+                <div class="decoration-line"></div>
+                <i class="fas fa-mobile-alt"></i>
+                <div class="decoration-line"></div>
             </div>
         </div>
-    </section>
+        
+        <div class="portfolio-grid" id="appsGrid">
+            <!-- Apps will be loaded dynamically from data.js -->
+            <div class="loading-games">
+                <i class="fas fa-spinner fa-spin"></i>
+                <p>Loading apps...</p>
+            </div>
+        </div>
+    </div>
+</section>
 
     <!-- CTA Section -->
     <section class="section cta-section">

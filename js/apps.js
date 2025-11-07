@@ -46,7 +46,7 @@ function loadApps() {
     displayApps(currentApps);
 }
 
-// Display Apps
+// Display Apps - SIMPLIFIED: Only image, title, status, rating
 function displayApps(apps) {
     const appsGrid = document.getElementById('appsGrid');
     if (!appsGrid) return;
@@ -66,38 +66,29 @@ function displayApps(apps) {
     }
     
     appsGrid.innerHTML = apps.map(app => `
-        <div class="game-card" data-app-id="${app.id}">
+        <div class="game-card" data-app-id="${app.id}" data-platform="${app.platform}" data-category="${app.category}" data-status="${app.status}" data-rating="${app.rating}">
             <div class="game-image">
                 <img src="${app.image}" alt="${app.name}" loading="lazy" 
                      onerror="this.src='https://via.placeholder.com/400x250/E4572E/FFFFFF?text=${encodeURIComponent(app.name)}'">
-                ${app.status === 'Live' ? `<span class="game-badge">Live</span>` : ''}
+                <div class="game-overlay">
+                    <div class="overlay-content">
+                        <a href="app-detail.html?id=${app.id}" class="view-details-btn">
+                            <i class="fas fa-eye"></i>
+                            <span>View Details</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="game-badge status-${app.status.toLowerCase().replace(' ', '-')}">${app.status}</div>
             </div>
             
             <div class="game-content">
-                <div class="game-header">
-                    <h3 class="game-title">${app.name}</h3>
+                <h3 class="game-title">${app.name}</h3>
+                <div class="game-meta">
                     <div class="game-rating">
-                        <span class="rating-stars">${generateStars(app.rating)}</span>
+                        <div class="rating-stars">${generateStars(app.rating)}</div>
                         <span class="rating-value">${app.rating}</span>
                     </div>
-                </div>
-                
-                <span class="game-category">${app.category}</span>
-                
-                <p class="game-description">${truncateText(app.overview, 120)}</p>
-                
-                <div class="game-features">
-                    <span class="game-feature"><i class="fas fa-download"></i> ${app.downloadCount}</span>
-                    <span class="game-feature"><i class="fas fa-mobile-alt"></i> ${app.platform}</span>
-                    ${app.features && app.features[0] ? `<span class="game-feature">${app.features[0]}</span>` : ''}
-                </div>
-                
-                <div class="game-actions">
-                    ${getDownloadButton(app)}
-                    <button class="btn btn-secondary btn-view-app-details" data-app-id="${app.id}">
-                        <i class="fas fa-info-circle"></i>
-                        <span>Details</span>
-                    </button>
+                    <span class="game-status status-${app.status.toLowerCase().replace(' ', '-')}">${app.status}</span>
                 </div>
             </div>
         </div>
@@ -108,38 +99,6 @@ function displayApps(apps) {
     
     // Animate cards on load
     animateAppCards();
-}
-
-// Get Download Button HTML
-function getDownloadButton(app) {
-    if (app.status === 'In Development') {
-        return `
-            <button class="btn btn-primary" disabled style="opacity: 0.6; cursor: not-allowed;">
-                <i class="fas fa-clock"></i>
-                <span>Coming Soon</span>
-            </button>
-        `;
-    }
-    
-    // Check for available download links
-    const hasAppStore = app.appStoreUrl && app.appStoreUrl !== '#';
-    const hasPlayStore = app.playStoreUrl && app.playStoreUrl !== '#';
-    
-    if (hasAppStore || hasPlayStore) {
-        return `
-            <button class="btn btn-primary btn-download-app" data-app-id="${app.id}">
-                <i class="fas fa-download"></i>
-                <span>Download</span>
-            </button>
-        `;
-    }
-    
-    return `
-        <button class="btn btn-primary" disabled style="opacity: 0.6; cursor: not-allowed;">
-            <i class="fas fa-link"></i>
-            <span>No Link</span>
-        </button>
-    `;
 }
 
 // Setup App Filters
@@ -253,31 +212,11 @@ function setupAppEventListeners() {
 
 // Setup App Card Listeners
 function setupAppCardListeners() {
-    // Download buttons
-    document.querySelectorAll('.btn-download-app').forEach(btn => {
-        btn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            const appId = parseInt(this.getAttribute('data-app-id'));
-            showDownloadOptions(appId);
-        });
-    });
-    
-    // View detail buttons
-    document.querySelectorAll('.btn-view-app-details').forEach(btn => {
-        btn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            const appId = parseInt(this.getAttribute('data-app-id'));
-            viewAppDetails(appId);
-        });
-    });
-    
     // Card click (for whole card interaction)
     document.querySelectorAll('.game-card').forEach(card => {
         card.addEventListener('click', function(e) {
-            if (!e.target.closest('.game-actions')) {
-                const appId = parseInt(this.getAttribute('data-app-id'));
-                viewAppDetails(appId);
-            }
+            const appId = parseInt(this.getAttribute('data-app-id'));
+            viewAppDetails(appId);
         });
         
         // Add hover effect
@@ -289,38 +228,6 @@ function setupAppCardListeners() {
             this.style.transform = 'translateY(0)';
         });
     });
-}
-
-// Show Download Options
-function showDownloadOptions(appId) {
-    const app = getApps().find(a => a.id === appId);
-    if (!app) {
-        showNotification('App not found', 'error');
-        return;
-    }
-    
-    const hasAppStore = app.appStoreUrl && app.appStoreUrl !== '#';
-    const hasPlayStore = app.playStoreUrl && app.playStoreUrl !== '#';
-    
-    if (hasAppStore && hasPlayStore) {
-        // Show both options
-        const choice = confirm(`Download ${app.name}:\n\nClick OK for App Store\nClick Cancel for Google Play`);
-        if (choice) {
-            window.open(app.appStoreUrl, '_blank');
-            showNotification('Opening App Store...', 'success');
-        } else {
-            window.open(app.playStoreUrl, '_blank');
-            showNotification('Opening Google Play...', 'success');
-        }
-    } else if (hasAppStore) {
-        window.open(app.appStoreUrl, '_blank');
-        showNotification('Opening App Store...', 'success');
-    } else if (hasPlayStore) {
-        window.open(app.playStoreUrl, '_blank');
-        showNotification('Opening Google Play...', 'success');
-    } else {
-        showNotification('Download links not available', 'error');
-    }
 }
 
 // View App Details
@@ -383,12 +290,6 @@ function animateAppCards() {
     });
 }
 
-// Utility: Truncate Text
-function truncateText(text, maxLength) {
-    if (text.length <= maxLength) return text;
-    return text.substring(0, maxLength).trim() + '...';
-}
-
 // Utility: Generate Stars
 function generateStars(rating) {
     const fullStars = Math.floor(rating);
@@ -426,7 +327,6 @@ function formatNumber(num) {
 window.initializeAppsPage = initializeAppsPage;
 window.resetAppFilters = resetAppFilters;
 window.viewAppDetails = viewAppDetails;
-window.showDownloadOptions = showDownloadOptions;
 
 // Initialize when page loads
 if (document.readyState === 'loading') {
