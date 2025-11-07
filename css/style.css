@@ -724,10 +724,12 @@ body {
 
 .title-line {
     display: block;
+    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
     font-size: 2rem;
-    font-weight: 600;
-    opacity: 0.9;
-    letter-spacing: -0.5px;
+    position: relative;
 }
 
 .title-gradient {
@@ -1161,7 +1163,6 @@ body {
     box-shadow: 
         0 25px 60px var(--shadow-color),
         0 0 0 1px rgba(255, 255, 255, 0.1) inset;
-    transform-style: preserve-3d;
     transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
