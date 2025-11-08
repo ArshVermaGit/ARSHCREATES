@@ -1,77 +1,63 @@
 // ==========================================
-// MAIN SCRIPT - Core functionality for all pages
-// Handles loading, navigation, theme, and common features
+// PORTFOLIO MASTER SCRIPT - COMPLETE & FUNCTIONAL
+// All features implemented with proper error handling
 // ==========================================
 
-// Global Variables
-var currentTheme = 'dark';
-var isLoading = false;
+// ==========================================
+// GLOBAL STATE & CONFIGURATION
+// ==========================================
+const STATE = {
+    currentTheme: 'dark',
+    isLoading: false,
+    currentPage: '',
+    menuOpen: false,
+    modalOpen: false
+};
 
-console.log('=== CONTACT FORM DEBUG ===');
-console.log('Script.js loaded');
-console.log('Utils.js available:', typeof window.saveContact);
-console.log('Storage keys:', typeof STORAGE_KEYS);
+const CONFIG = {
+    ANIMATION_DURATION: 300,
+    DEBOUNCE_DELAY: 300,
+    NOTIFICATION_DURATION: 5000,
+    PARTICLE_COUNT: 15,
+    TYPEWRITER_SPEED: 100
+};
 
-// DOM Content Loaded
+// ==========================================
+// INITIALIZATION - PAGE LOAD
+// ==========================================
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('DOM loaded - initializing page');
+    console.log('🚀 Portfolio initializing...');
     initializePage();
 });
 
-// Initialize Page
 function initializePage() {
-    console.log('Initializing page...');
-    
-    // Set theme
+    // 1. Initialize theme
     const savedTheme = getTheme();
     setTheme(savedTheme);
     updateThemeToggle(savedTheme);
     
-    // Get current page
-    const page = getCurrentPage();
-    console.log('Current page:', page);
+    // 2. Detect current page
+    STATE.currentPage = getCurrentPage();
+    console.log('📄 Current page:', STATE.currentPage);
     
-    // Setup event listeners
+    // 3. Setup all event listeners
     setupEventListeners();
     
-    // Start animations
+    // 4. Start animations
     startAnimations();
     
-    // Initialize page-specific components
-    initializePageComponents(page);
+    // 5. Initialize particles
+    initializeParticles();
     
-    // Hide loading screen
+    // 6. Hide loading screen
     setTimeout(hideLoadingScreen, 1000);
-}
-
-// Initialize Page-Specific Components
-function initializePageComponents(page) {
-    // Page-specific initializations are handled by their own scripts
-    // This function is kept for compatibility
-    console.log('Page type:', page);
     
-    // Only initialize common page types here
-    switch (page) {
-        case 'home':
-            initializeHomePage();
-            break;
-        case 'games':
-        case 'websites':
-        case 'apps':
-        case 'testimonials':
-        case 'admin':
-        case 'game-detail':
-        case 'website-detail':
-        case 'app-detail':
-            // These are initialized by their own scripts
-            console.log('Waiting for page-specific script to initialize...');
-            break;
-        default:
-            console.log('Unknown page, using default initialization');
-    }
+    console.log('✅ Portfolio initialized successfully');
 }
 
-// Get Current Page
+// ==========================================
+// PAGE DETECTION
+// ==========================================
 function getCurrentPage() {
     const path = window.location.pathname;
     const page = path.split('/').pop() || 'index.html';
@@ -87,68 +73,122 @@ function getCurrentPage() {
     if (page.includes('app-detail.html')) return 'app-detail';
     if (page.includes('404.html')) return '404';
     if (page.includes('500.html')) return '500';
+    
     return 'home';
 }
 
-// Setup Event Listeners
+// ==========================================
+// EVENT LISTENERS SETUP
+// ==========================================
 function setupEventListeners() {
-    console.log('Setting up event listeners...');
+    console.log('🎯 Setting up event listeners...');
     
-    // Theme toggle
+    // Theme toggle button
+    setupThemeToggle();
+    
+    // Mobile menu toggle
+    setupMobileMenu();
+    
+    // Back to top button
+    setupBackToTop();
+    
+    // Contact form
+    setupContactForm();
+    
+    // Smooth scroll for navigation
+    setupSmoothScroll();
+    
+    // Custom cursor (desktop only)
+    if (window.innerWidth > 768) {
+        initializeCustomCursor();
+    }
+    
+    // Tab switching (skills section)
+    setupTabSwitching();
+    
+    console.log('✅ Event listeners setup complete');
+}
+
+// ==========================================
+// THEME MANAGEMENT
+// ==========================================
+function setupThemeToggle() {
     const themeToggle = document.getElementById('themeToggle');
     if (themeToggle) {
         themeToggle.addEventListener('click', toggleTheme);
-        console.log('Theme toggle initialized');
+        console.log('✅ Theme toggle initialized');
     }
+}
+
+function toggleTheme() {
+    const newTheme = STATE.currentTheme === 'dark' ? 'light' : 'dark';
+    setTheme(newTheme);
+    updateThemeToggle(newTheme);
+    showNotification(`Theme changed to ${newTheme} mode`, 'success');
+}
+
+function setTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('portfolio_theme', theme);
+    STATE.currentTheme = theme;
+}
+
+function getTheme() {
+    return localStorage.getItem('portfolio_theme') || 'dark';
+}
+
+function updateThemeToggle(theme) {
+    STATE.currentTheme = theme;
+    const themeToggle = document.getElementById('themeToggle');
+    const themeIcon = themeToggle?.querySelector('.theme-icon i');
     
-    // Mobile menu toggle
+    if (themeIcon) {
+        themeIcon.className = theme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
+    }
+}
+
+// ==========================================
+// MOBILE MENU
+// ==========================================
+function setupMobileMenu() {
     const navToggle = document.getElementById('navToggle');
     const navMenu = document.getElementById('navMenu');
+    
     if (navToggle && navMenu) {
+        // Toggle menu
         navToggle.addEventListener('click', () => {
+            STATE.menuOpen = !STATE.menuOpen;
             navMenu.classList.toggle('active');
             navToggle.classList.toggle('active');
         });
         
         // Close menu when clicking outside
         document.addEventListener('click', (e) => {
-            if (!navToggle.contains(e.target) && !navMenu.contains(e.target)) {
+            if (STATE.menuOpen && 
+                !navToggle.contains(e.target) && 
+                !navMenu.contains(e.target)) {
                 navMenu.classList.remove('active');
                 navToggle.classList.remove('active');
+                STATE.menuOpen = false;
             }
         });
         
-        console.log('Mobile menu initialized');
-    }
-    
-    // Back to top button
-    const backToTop = document.getElementById('backToTop');
-    if (backToTop) {
-        window.addEventListener('scroll', throttle(toggleBackToTop, 100));
-        backToTop.addEventListener('click', scrollToTop);
-        console.log('Back to top initialized');
-    }
-    
-    // Contact form
-    const contactForm = document.getElementById('contactForm');
-    if (contactForm) {
-        setupContactForm(contactForm);
-        console.log('Contact form initialized');
-    }
-    
-    // Navigation links - smooth scroll
-    setupSmoothScroll();
-    
-    // Particle system
-    initializeParticles();
-    
-    // Custom cursor (desktop only)
-    if (window.innerWidth > 768) {
-        initializeCustomCursor();
+        // Close menu when clicking a link
+        navMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('active');
+                navToggle.classList.remove('active');
+                STATE.menuOpen = false;
+            });
+        });
+        
+        console.log('✅ Mobile menu initialized');
     }
 }
 
-// Loading Screen
+// ==========================================
+// LOADING SCREEN
+// ==========================================
 function hideLoadingScreen() {
     const loadingScreen = document.getElementById('loadingScreen');
     if (loadingScreen) {
@@ -162,6 +202,7 @@ function hideLoadingScreen() {
 function showLoadingScreen(message = 'Loading...') {
     const loadingScreen = document.getElementById('loadingScreen');
     const loadingText = document.getElementById('loadingText');
+    
     if (loadingScreen) {
         if (loadingText) loadingText.textContent = message;
         loadingScreen.style.display = 'flex';
@@ -169,67 +210,51 @@ function showLoadingScreen(message = 'Loading...') {
     }
 }
 
-// Theme Management
-function toggleTheme() {
-    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-    setTheme(newTheme);
-    updateThemeToggle(newTheme);
-    showNotification(`Theme changed to ${newTheme} mode`, 'success');
-}
-
-function setTheme(theme) {
-    document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem('portfolio_theme', theme);
-    currentTheme = theme;
-}
-
-function getTheme() {
-    return localStorage.getItem('portfolio_theme') || 'dark';
-}
-
-function updateThemeToggle(theme) {
-    currentTheme = theme;
-    const themeToggle = document.getElementById('themeToggle');
-    const themeIcon = themeToggle?.querySelector('.theme-icon i');
-    
-    if (themeIcon) {
-        themeIcon.className = theme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
-    }
-    
-    // Update theme text if exists
-    const themeText = themeToggle?.querySelector('.theme-text');
-    if (themeText) {
-        themeText.textContent = theme === 'dark' ? 'Dark' : 'Light';
-    }
-}
-
-// Navigation
+// ==========================================
+// SMOOTH SCROLL NAVIGATION
+// ==========================================
 function setupSmoothScroll() {
     const links = document.querySelectorAll('a[href^="#"]');
+    
     links.forEach(link => {
         link.addEventListener('click', function(e) {
             const targetId = this.getAttribute('href');
+            
+            // Skip empty anchors
             if (targetId === '#' || targetId === '#!') return;
             
             const targetElement = document.querySelector(targetId);
+            
             if (targetElement) {
                 e.preventDefault();
                 const offsetTop = targetElement.offsetTop - 80;
+                
                 window.scrollTo({
                     top: offsetTop,
                     behavior: 'smooth'
                 });
-                
-                // Close mobile menu if open
-                const navMenu = document.getElementById('navMenu');
-                const navToggle = document.getElementById('navToggle');
-                if (navMenu && navMenu.classList.contains('active')) {
-                    navMenu.classList.remove('active');
-                    navToggle?.classList.remove('active');
-                }
             }
         });
     });
+    
+    console.log('✅ Smooth scroll initialized');
+}
+
+// ==========================================
+// BACK TO TOP BUTTON
+// ==========================================
+function setupBackToTop() {
+    const backToTop = document.getElementById('backToTop');
+    
+    if (backToTop) {
+        // Show/hide on scroll
+        window.addEventListener('scroll', throttle(toggleBackToTop, 100));
+        
+        // Scroll to top on click
+        backToTop.addEventListener('click', scrollToTop);
+        
+        console.log('✅ Back to top initialized');
+    }
 }
 
 function toggleBackToTop() {
@@ -250,28 +275,30 @@ function scrollToTop() {
     });
 }
 
-// Contact Form Setup
-function setupContactForm(form) {
-    console.log('Setting up contact form...', form);
+// ==========================================
+// CONTACT FORM HANDLING
+// ==========================================
+function setupContactForm() {
+    const contactForm = document.getElementById('contactForm');
     
-    if (!form) {
-        console.error('Contact form not found!');
-        return;
-    }
+    if (!contactForm) return;
     
+    console.log('📝 Setting up contact form...');
+    
+    // Setup contact type change handler
     const contactType = document.getElementById('contactType');
     const projectDetailsGroup = document.getElementById('projectDetailsGroup');
     const feedbackGroup = document.getElementById('feedbackGroup');
     
-    // Show/hide additional fields based on contact type
     if (contactType) {
         contactType.addEventListener('change', function() {
-            console.log('Contact type changed:', this.value);
             const value = this.value;
             
+            // Hide all conditional fields
             if (projectDetailsGroup) projectDetailsGroup.style.display = 'none';
             if (feedbackGroup) feedbackGroup.style.display = 'none';
             
+            // Show relevant field
             if (value === 'project' && projectDetailsGroup) {
                 projectDetailsGroup.style.display = 'block';
             } else if (value === 'feedback' && feedbackGroup) {
@@ -280,23 +307,26 @@ function setupContactForm(form) {
         });
     }
     
-    // Form submission with debugging
-    form.addEventListener('submit', async function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        
-        console.log('=== FORM SUBMITTED ===');
-        console.log('Event:', e);
-        console.log('Form:', this);
-        
-        await handleFormSubmission(this);
-    });
+    // Setup form submission
+    contactForm.addEventListener('submit', handleContactFormSubmit);
     
-    console.log('✓ Contact form setup complete');
+    console.log('✅ Contact form initialized');
 }
 
-function handleFormSubmission(form) {
+async function handleContactFormSubmit(e) {
+    e.preventDefault();
+    
+    console.log('📧 Processing contact form submission...');
+    
+    const form = e.target;
     const formData = new FormData(form);
+    
+    // Validate form
+    if (!validateContactForm(formData)) {
+        return;
+    }
+    
+    // Create contact object
     const contact = {
         id: Date.now(),
         fullName: formData.get('fullName'),
@@ -304,42 +334,124 @@ function handleFormSubmission(form) {
         phone: formData.get('phoneNumber') || '',
         contactType: formData.get('contactType'),
         message: formData.get('message'),
+        projectDetails: formData.get('projectDetails') || '',
+        feedback: formData.get('feedback') || '',
         date: new Date().toISOString(),
         status: 'unread'
     };
     
-    // Save to localStorage directly
-    const contacts = JSON.parse(localStorage.getItem('portfolio_contacts') || '[]');
-    contacts.unshift(contact);
-    localStorage.setItem('portfolio_contacts', JSON.stringify(contacts));
-    
-    alert('Message sent successfully!');
-    form.reset();
+    try {
+        // Save to localStorage
+        saveContact(contact);
+        
+        // Show success notification
+        showNotification('Message sent successfully! We\'ll get back to you soon.', 'success');
+        
+        // Reset form
+        form.reset();
+        
+        // Hide conditional fields
+        const projectDetailsGroup = document.getElementById('projectDetailsGroup');
+        const feedbackGroup = document.getElementById('feedbackGroup');
+        if (projectDetailsGroup) projectDetailsGroup.style.display = 'none';
+        if (feedbackGroup) feedbackGroup.style.display = 'none';
+        
+        console.log('✅ Contact saved successfully');
+        
+    } catch (error) {
+        console.error('❌ Error saving contact:', error);
+        showNotification('Failed to send message. Please try again.', 'error');
+    }
 }
 
+function validateContactForm(formData) {
+    const fullName = formData.get('fullName');
+    const email = formData.get('email');
+    const contactType = formData.get('contactType');
+    const message = formData.get('message');
+    
+    // Validate required fields
+    if (!fullName || fullName.trim().length < 2) {
+        showNotification('Please enter a valid name', 'error');
+        return false;
+    }
+    
+    if (!email || !isValidEmail(email)) {
+        showNotification('Please enter a valid email address', 'error');
+        return false;
+    }
+    
+    if (!contactType) {
+        showNotification('Please select a contact type', 'error');
+        return false;
+    }
+    
+    if (!message || message.trim().length < 10) {
+        showNotification('Please enter a message (at least 10 characters)', 'error');
+        return false;
+    }
+    
+    return true;
+}
+
+function saveContact(contact) {
+    const contacts = getContacts();
+    contacts.unshift(contact);
+    localStorage.setItem('portfolio_contacts', JSON.stringify(contacts));
+}
+
+function getContacts() {
+    try {
+        const contacts = localStorage.getItem('portfolio_contacts');
+        return contacts ? JSON.parse(contacts) : [];
+    } catch (error) {
+        console.error('Error loading contacts:', error);
+        return [];
+    }
+}
 
 function isValidEmail(email) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
 }
 
-// Notifications
+// ==========================================
+// NOTIFICATIONS SYSTEM
+// ==========================================
 function showNotification(message, type = 'info', duration = 5000) {
     let container = document.getElementById('notificationContainer');
+    
+    // Create container if it doesn't exist
     if (!container) {
         container = document.createElement('div');
         container.id = 'notificationContainer';
         document.body.appendChild(container);
     }
     
+    // Create notification element
     const notification = document.createElement('div');
     notification.className = `notification ${type}`;
+    
+    const iconMap = {
+        success: 'check-circle',
+        error: 'exclamation-circle',
+        warning: 'exclamation-triangle',
+        info: 'info-circle'
+    };
+    
+    const titleMap = {
+        success: 'Success',
+        error: 'Error',
+        warning: 'Warning',
+        info: 'Information'
+    };
+    
     notification.innerHTML = `
         <div class="notification-icon">
-            <i class="fas fa-${getNotificationIcon(type)}"></i>
+            <i class="fas fa-${iconMap[type] || 'info-circle'}"></i>
         </div>
         <div class="notification-content">
-            <div class="notification-title">${getNotificationTitle(type)}</div>
+            <div class="notification-title">${titleMap[type] || 'Notification'}</div>
             <div class="notification-message">${escapeHtml(message)}</div>
         </div>
         <button class="notification-close">
@@ -349,18 +461,18 @@ function showNotification(message, type = 'info', duration = 5000) {
     
     container.appendChild(notification);
     
-    // Add close functionality
+    // Close button functionality
     const closeBtn = notification.querySelector('.notification-close');
     closeBtn.addEventListener('click', () => {
-        notification.style.animation = 'slideInRight 0.3s ease reverse';
+        notification.style.animation = 'slideOut 0.3s ease forwards';
         setTimeout(() => notification.remove(), 300);
     });
     
-    // Auto remove after duration
+    // Auto remove
     if (duration > 0) {
         setTimeout(() => {
             if (notification.parentNode) {
-                notification.style.animation = 'slideInRight 0.3s ease reverse';
+                notification.style.animation = 'slideOut 0.3s ease forwards';
                 setTimeout(() => notification.remove(), 300);
             }
         }, duration);
@@ -369,27 +481,9 @@ function showNotification(message, type = 'info', duration = 5000) {
     return notification;
 }
 
-function getNotificationIcon(type) {
-    const icons = {
-        success: 'check-circle',
-        error: 'exclamation-circle',
-        warning: 'exclamation-triangle',
-        info: 'info-circle'
-    };
-    return icons[type] || 'info-circle';
-}
-
-function getNotificationTitle(type) {
-    const titles = {
-        success: 'Success',
-        error: 'Error',
-        warning: 'Warning',
-        info: 'Information'
-    };
-    return titles[type] || 'Notification';
-}
-
-// Animations
+// ==========================================
+// ANIMATIONS
+// ==========================================
 function startAnimations() {
     // Typewriter effect
     initializeTypewriter();
@@ -436,7 +530,7 @@ function initializeTypewriter() {
         
         if (!isDeleting && charIndex === currentText.length) {
             isDeleting = true;
-            typingSpeed = 1000;
+            typingSpeed = 2000;
         } else if (isDeleting && charIndex === 0) {
             isDeleting = false;
             textIndex = (textIndex + 1) % texts.length;
@@ -446,12 +540,13 @@ function initializeTypewriter() {
         setTimeout(type, typingSpeed);
     }
     
-    // Start typing after a delay
     setTimeout(type, 1000);
 }
 
 function initializeCounters() {
     const counters = document.querySelectorAll('.stat-number[data-target]');
+    
+    if (counters.length === 0) return;
     
     const observerOptions = {
         threshold: 0.5,
@@ -489,6 +584,8 @@ function initializeCounters() {
 function initializeSkillBars() {
     const skillBars = document.querySelectorAll('.skill-progress[data-width]');
     
+    if (skillBars.length === 0) return;
+    
     const observerOptions = {
         threshold: 0.5,
         rootMargin: '0px'
@@ -499,7 +596,9 @@ function initializeSkillBars() {
             if (entry.isIntersecting) {
                 const bar = entry.target;
                 const width = bar.getAttribute('data-width');
-                bar.style.width = width + '%';
+                setTimeout(() => {
+                    bar.style.width = width + '%';
+                }, 100);
                 observer.unobserve(bar);
             }
         });
@@ -509,7 +608,12 @@ function initializeSkillBars() {
 }
 
 function initializeScrollAnimations() {
-    const animatedElements = document.querySelectorAll('.section, .portfolio-card, .category-card, .game-card, .website-card, .app-card, .testimonial-card');
+    const animatedElements = document.querySelectorAll(
+        '.section, .portfolio-card, .category-card, .game-card, ' +
+        '.website-card, .app-card, .testimonial-card, .service-card'
+    );
+    
+    if (animatedElements.length === 0) return;
     
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -531,16 +635,52 @@ function initializeScrollAnimations() {
     });
 }
 
-// Particle System
+// ==========================================
+// TAB SWITCHING (Skills Section)
+// ==========================================
+function setupTabSwitching() {
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    const tabContents = document.querySelectorAll('.tab-content');
+    
+    if (tabButtons.length === 0) return;
+    
+    tabButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const targetTab = this.getAttribute('data-tab');
+            
+            // Remove active class from all buttons and contents
+            tabButtons.forEach(btn => btn.classList.remove('active'));
+            tabContents.forEach(content => content.classList.remove('active'));
+            
+            // Add active class to clicked button and target content
+            this.classList.add('active');
+            const targetContent = document.getElementById(targetTab);
+            if (targetContent) {
+                targetContent.classList.add('active');
+            }
+        });
+    });
+    
+    console.log('✅ Tab switching initialized');
+}
+
+// ==========================================
+// PARTICLE SYSTEM
+// ==========================================
 function initializeParticles() {
     const container = document.getElementById('particlesContainer');
     if (!container) return;
     
-    const particleCount = window.innerWidth < 768 ? 8 : 15;
+    const particleCount = window.innerWidth < 768 ? 8 : CONFIG.PARTICLE_COUNT;
+    
+    // Clear existing particles
+    container.innerHTML = '';
     
     for (let i = 0; i < particleCount; i++) {
         createParticle(container);
     }
+    
+    console.log('✅ Particles initialized');
 }
 
 function createParticle(container) {
@@ -561,15 +701,21 @@ function createParticle(container) {
     particle.style.animationDelay = `${delay}s`;
     particle.style.animationDuration = `${duration}s`;
     
-    // Random color variation
-    const colors = ['var(--accent-primary)', 'var(--accent-secondary)', 'rgba(59, 130, 246, 0.3)'];
+    // Random color
+    const colors = [
+        'var(--accent-primary)', 
+        'var(--accent-secondary)', 
+        'rgba(59, 130, 246, 0.3)'
+    ];
     const randomColor = colors[Math.floor(Math.random() * colors.length)];
     particle.style.background = randomColor;
     
     container.appendChild(particle);
 }
 
-// Custom Cursor
+// ==========================================
+// CUSTOM CURSOR (Desktop only)
+// ==========================================
 function initializeCustomCursor() {
     const cursorDot = document.getElementById('cursorDot');
     const cursorRing = document.getElementById('cursorRing');
@@ -586,11 +732,9 @@ function initializeCustomCursor() {
     });
     
     function animateCursor() {
-        // Dot follows cursor directly
         dotX = mouseX;
         dotY = mouseY;
         
-        // Ring follows with delay
         ringX += (mouseX - ringX) * 0.15;
         ringY += (mouseY - ringY) * 0.15;
         
@@ -602,8 +746,10 @@ function initializeCustomCursor() {
     
     animateCursor();
     
-    // Cursor effects for interactive elements
-    const interactiveElements = document.querySelectorAll('a, button, input, select, textarea, [data-cursor-effect]');
+    // Cursor hover effects
+    const interactiveElements = document.querySelectorAll(
+        'a, button, input, select, textarea, [data-cursor-effect]'
+    );
     
     interactiveElements.forEach(el => {
         el.addEventListener('mouseenter', () => {
@@ -618,55 +764,13 @@ function initializeCustomCursor() {
             cursorRing.style.borderColor = 'var(--accent-primary)';
         });
     });
+    
+    console.log('✅ Custom cursor initialized');
 }
 
-// Page-specific Initializers
-function initializeHomePage() {
-    console.log('Initializing home page...');
-    // Home page is mostly handled by global animations
-}
-
-function initializeGamesPage() {
-    console.log('Initializing games page...');
-    // Games page initialization will be in games.js
-}
-
-function initializeWebsitesPage() {
-    console.log('Initializing websites page...');
-    // Websites page initialization will be in websites.js
-}
-
-function initializeAppsPage() {
-    console.log('Initializing apps page...');
-    // Apps page initialization will be in apps.js
-}
-
-function initializeTestimonialsPage() {
-    console.log('Initializing testimonials page...');
-    // Testimonials page initialization will be in testimonials.js
-}
-
-function initializeAdminPage() {
-    console.log('Initializing admin page...');
-    // Admin page initialization will be in admin.js
-}
-
-function initializeGameDetailPage() {
-    console.log('Initializing game detail page...');
-    // Game detail page initialization will be in game-detail.js
-}
-
-function initializeWebsiteDetailPage() {
-    console.log('Initializing website detail page...');
-    // Website detail page initialization will be in website-detail.js
-}
-
-function initializeAppDetailPage() {
-    console.log('Initializing app detail page...');
-    // App detail page initialization will be in app-detail.js
-}
-
-// Utility Functions
+// ==========================================
+// UTILITY FUNCTIONS
+// ==========================================
 function debounce(func, wait) {
     let timeout;
     return function executedFunction(...args) {
@@ -727,7 +831,10 @@ function formatDate(dateString) {
     }
 }
 
-// Make functions globally available for other scripts
+// ==========================================
+// GLOBAL EXPORTS
+// Make functions available globally for other scripts
+// ==========================================
 window.showNotification = showNotification;
 window.hideLoadingScreen = hideLoadingScreen;
 window.showLoadingScreen = showLoadingScreen;
@@ -736,8 +843,46 @@ window.throttle = throttle;
 window.escapeHtml = escapeHtml;
 window.formatDate = formatDate;
 window.isValidEmail = isValidEmail;
+window.getContacts = getContacts;
+window.saveContact = saveContact;
 
-// Export for module usage if needed
+// ==========================================
+// ERROR HANDLING
+// ==========================================
+window.addEventListener('error', function(e) {
+    console.error('Global error:', e.error);
+});
+
+window.addEventListener('unhandledrejection', function(e) {
+    console.error('Unhandled promise rejection:', e.reason);
+});
+
+// ==========================================
+// RESIZE HANDLER
+// ==========================================
+window.addEventListener('resize', debounce(function() {
+    // Reinitialize particles on resize
+    initializeParticles();
+    
+    // Reinitialize custom cursor if needed
+    if (window.innerWidth > 768) {
+        const cursorDot = document.getElementById('cursorDot');
+        if (!cursorDot) {
+            initializeCustomCursor();
+        }
+    }
+}, 250));
+
+// ==========================================
+// CONSOLE WELCOME MESSAGE
+// ==========================================
+console.log('%c🚀 ArshCreates Portfolio', 'font-size: 20px; font-weight: bold; color: #E4572E;');
+console.log('%cDeveloped by Arsh Verma', 'font-size: 12px; color: #888;');
+console.log('%c━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', 'color: #E4572E;');
+
+// ==========================================
+// MODULE EXPORTS (for compatibility)
+// ==========================================
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = {
         showNotification,
@@ -747,6 +892,8 @@ if (typeof module !== 'undefined' && module.exports) {
         throttle,
         escapeHtml,
         formatDate,
-        isValidEmail
+        isValidEmail,
+        getContacts,
+        saveContact
     };
 }
