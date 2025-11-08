@@ -54,71 +54,78 @@
     <!-- Game Detail Section -->
     <section class="game-detail-section">
         <div class="container">
-            <!-- Game Preview -->
-            <div class="game-preview-container">
-                <div class="game-preview">
-                    <div class="preview-image">
-                        <img id="previewImage" src="" alt="Game Preview" class="preview-img">
-                        <div class="preview-overlay">
-                            <button id="playBtn" class="btn-play-large">
-                                <i class="fas fa-play"></i>
-                                <span>Play Game</span>
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <!-- Game Controls -->
-                    <div class="game-controls">
-                        <div class="control-group">
-                            <button id="fullscreenBtn" class="btn-control" title="Fullscreen">
-                                <i class="fas fa-expand"></i>
-                            </button>
-                            <button id="restartBtn" class="btn-control" title="Restart Game">
-                                <i class="fas fa-redo"></i>
-                            </button>
-                            <button id="closeGameBtn" class="btn-control" title="Close Game">
-                                <i class="fas fa-times"></i>
-                            </button>
-                        </div>
-                        <div class="control-info">
-                            <span class="control-text">Press ESC to exit fullscreen</span>
-                        </div>
-                    </div>
-
-                    <!-- Game Container -->
-                    <div id="gameContainer" class="game-container">
-                        <div id="unityContainer" class="unity-container">
-                            <div id="unityLoading" class="unity-loading">
-                                <div class="unity-loading-content">
-                                    <i class="fas fa-spinner fa-spin"></i>
-                                    <p>Loading Game...</p>
-                                    <div class="unity-progress">
-                                        <div class="unity-progress-bar" id="unityProgressBar"></div>
-                                    </div>
+            <!-- YouTube-style Layout -->
+            <div class="game-detail-container">
+                <!-- Left Column - Game Preview (4:3) -->
+                <div class="game-preview-column">
+                    <div class="game-preview-container">
+                        <div class="game-preview">
+                            <div class="preview-image">
+                                <img id="previewImage" src="" alt="Game Preview" class="preview-img">
+                                <div class="preview-overlay">
+                                    <button id="playBtn" class="btn-play-large">
+                                        <i class="fas fa-play"></i>
+                                        <span>Play Game</span>
+                                    </button>
                                 </div>
                             </div>
-                            <canvas id="unityCanvas" class="unity-canvas"></canvas>
+                            
+                            <!-- Game Container (4:3 aspect ratio) -->
+                            <div id="gameContainer" class="game-container">
+                                <div id="unityContainer" class="unity-container">
+                                    <div id="unityLoading" class="unity-loading">
+                                        <div class="unity-loading-content">
+                                            <i class="fas fa-spinner fa-spin"></i>
+                                            <p>Loading Game...</p>
+                                            <div class="unity-progress">
+                                                <div class="unity-progress-bar" id="unityProgressBar"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <canvas id="unityCanvas" class="unity-canvas"></canvas>
+                                </div>
+                            </div>
                         </div>
+
+                        <!-- Game Controls -->
+                        <div class="game-controls">
+                            <div class="control-group">
+                                <button id="fullscreenBtn" class="btn-control" title="Fullscreen">
+                                    <i class="fas fa-expand"></i>
+                                    <span>Fullscreen</span>
+                                </button>
+                                <button id="restartBtn" class="btn-control" title="Restart Game">
+                                    <i class="fas fa-redo"></i>
+                                    <span>Restart</span>
+                                </button>
+                                <button id="closeGameBtn" class="btn-control" title="Close Game">
+                                    <i class="fas fa-times"></i>
+                                    <span>Close</span>
+                                </button>
+                            </div>
+                            <div class="control-info">
+                                <span class="control-text">Press ESC to exit fullscreen</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Navigation Arrows -->
+                    <div class="detail-navigation">
+                        <button id="prevGame" class="nav-arrow prev-arrow">
+                            <i class="fas fa-chevron-left"></i>
+                            <span class="arrow-text">Previous Game</span>
+                        </button>
+                        <button id="nextGame" class="nav-arrow next-arrow">
+                            <span class="arrow-text">Next Game</span>
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
                     </div>
                 </div>
 
-                <!-- Navigation Arrows -->
-                <div class="detail-navigation">
-                    <button id="prevGame" class="nav-arrow prev-arrow">
-                        <i class="fas fa-chevron-left"></i>
-                        <span class="arrow-text">Previous Game</span>
-                    </button>
-                    <button id="nextGame" class="nav-arrow next-arrow">
-                        <span class="arrow-text">Next Game</span>
-                        <i class="fas fa-chevron-right"></i>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Game Information -->
-            <div class="game-info-container">
-                <div class="game-header">
-                    <div class="game-title-section">
+                <!-- Right Column - Game Info -->
+                <div class="game-info-column">
+                    <!-- Game Header -->
+                    <div class="game-header">
                         <h1 id="gameTitle" class="game-title">Game Title</h1>
                         <div class="game-meta">
                             <span id="gameCategory" class="game-category">Category</span>
@@ -126,31 +133,23 @@
                                 <i class="fas fa-star"></i>
                                 <span id="gameRating">0.0</span>/5
                             </span>
-                            <span id="gameStatus" class="game-status">Status</span>
+                            <span id="gameStatus" class="game-status status-live">Live</span>
+                        </div>
+                        
+                        <div class="game-actions">
+                            <button id="shareBtn" class="btn btn-secondary">
+                                <i class="fas fa-share-alt"></i>
+                                <span>Share</span>
+                            </button>
+                            <a id="repositoryBtn" href="#" class="btn btn-primary" target="_blank">
+                                <i class="fab fa-github"></i>
+                                <span>Repository</span>
+                            </a>
                         </div>
                     </div>
-                    <div class="game-actions">
-                        <button id="shareBtn" class="btn btn-secondary">
-                            <i class="fas fa-share-alt"></i>
-                            <span>Share</span>
-                        </button>
-                        <a id="repositoryBtn" href="#" class="btn btn-primary" target="_blank">
-                            <i class="fab fa-github"></i>
-                            <span>Repository</span>
-                        </a>
-                    </div>
-                </div>
 
-                <div class="game-content">
-                    <!-- Overview & Description -->
-                    <div class="game-description-section">
-                        <h2>About This Game</h2>
-                        <p id="gameOverview" class="game-overview">Game overview...</p>
-                        <p id="gameDescription" class="game-description">Game description...</p>
-                    </div>
-
-                    <!-- Game Details Grid -->
-                    <div class="game-details-grid">
+                    <!-- Game Details Cards -->
+                    <div class="game-details-cards">
                         <div class="detail-card">
                             <div class="detail-icon">
                                 <i class="fas fa-calendar"></i>
@@ -206,53 +205,63 @@
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
 
-                    <!-- Features Section -->
-                    <div class="features-section">
-                        <h2>Key Features</h2>
-                        <ul id="featuresList" class="features-list">
-                            <!-- Features will be populated dynamically -->
-                        </ul>
+            <!-- Full Width Content Below -->
+            <div class="game-full-content">
+                <!-- Description Section -->
+                <div class="game-description-section">
+                    <h2>About This Game</h2>
+                    <p id="gameOverview" class="game-overview">Game overview...</p>
+                    <p id="gameDescription" class="game-description">Game description...</p>
+                </div>
+
+                <!-- Features Section -->
+                <div class="features-section">
+                    <h2>Key Features</h2>
+                    <ul id="featuresList" class="features-list">
+                        <!-- Features will be populated dynamically -->
+                    </ul>
+                </div>
+
+                <!-- Technologies Section -->
+                <div class="technologies-section">
+                    <h2>Technologies Used</h2>
+                    <div id="techList" class="tech-tags">
+                        <!-- Technologies will be populated dynamically -->
                     </div>
+                </div>
 
-                    <!-- Technologies Section -->
-                    <div class="technologies-section">
-                        <h2>Technologies Used</h2>
-                        <div id="techList" class="tech-tags">
-                            <!-- Technologies will be populated dynamically -->
+                <!-- Game Stats -->
+                <div class="game-stats-section">
+                    <h2>Game Statistics</h2>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-circle">
+                                <span id="ratingCircle" class="stat-value">0.0</span>
+                            </div>
+                            <div class="stat-info">
+                                <h3>Rating</h3>
+                                <p>Player Rating Score</p>
+                            </div>
                         </div>
-                    </div>
-
-                    <!-- Game Stats -->
-                    <div class="game-stats-section">
-                        <h2>Game Statistics</h2>
-                        <div class="stats-grid">
-                            <div class="stat-item">
-                                <div class="stat-circle">
-                                    <span id="ratingCircle" class="stat-value">0.0</span>
-                                </div>
-                                <div class="stat-info">
-                                    <h3>Rating</h3>
-                                    <p>Player Rating Score</p>
-                                </div>
+                        <div class="stat-item">
+                            <div class="stat-circle">
+                                <span id="playCountCircle" class="stat-value">0</span>
                             </div>
-                            <div class="stat-item">
-                                <div class="stat-circle">
-                                    <span id="playCountCircle" class="stat-value">0</span>
-                                </div>
-                                <div class="stat-info">
-                                    <h3>Plays</h3>
-                                    <p>Total Game Sessions</p>
-                                </div>
+                            <div class="stat-info">
+                                <h3>Plays</h3>
+                                <p>Total Game Sessions</p>
                             </div>
-                            <div class="stat-item">
-                                <div class="stat-circle">
-                                    <span id="likesCircle" class="stat-value">0</span>
-                                </div>
-                                <div class="stat-info">
-                                    <h3>Likes</h3>
-                                    <p>Community Approval</p>
-                                </div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-circle">
+                                <span id="likesCircle" class="stat-value">0</span>
+                            </div>
+                            <div class="stat-info">
+                                <h3>Likes</h3>
+                                <p>Community Approval</p>
                             </div>
                         </div>
                     </div>
@@ -283,15 +292,12 @@
                         <a href="index.html">Home</a>
                         <a href="index.html#about">About</a>
                         <a href="games.html">Games</a>
-                        <a href="websites.html">Websites</a>
-                        <a href="apps.html">Apps</a>
                     </div>
 
                     <div class="link-group">
                         <h4>Connect</h4>
                         <a href="index.html#contact">Contact</a>
                         <a href="testimonials.html">Testimonials</a>
-                        <a href="admin.html">Admin</a>
                     </div>
                 </div>
             </div>

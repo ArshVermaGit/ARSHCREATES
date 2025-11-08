@@ -1,6 +1,6 @@
 // ==========================================
-// GAME DETAIL PAGE - Individual game presentation
-// Handles game preview, navigation, and interactions
+// GAME DETAIL PAGE - FIXED VERSION
+// Handles Unity WebGL game loading and display
 // ==========================================
 
 // Global Variables
@@ -9,7 +9,7 @@ let currentGame = null;
 let isGamePlaying = false;
 let unityInstance = null;
 
-// Unity WebGL Build Configuration - FIXED PATHS
+// Unity WebGL Build Configuration - CORRECTED PATHS
 const unityBuilds = {
     "static/games_files/sky_surfers/": {
         loaderUrl: "static/games_files/sky_surfers/Build/sky_surfers.loader.js",
@@ -20,7 +20,6 @@ const unityBuilds = {
         productName: "Sky Surfers",
         productVersion: "1.0"
     }
-    // Add more games here as needed
 };
 
 // Initialize Game Detail Page
@@ -48,10 +47,10 @@ function initializeGameDetailPage() {
         // Auto-play if requested
         if (autoPlay) {
             setTimeout(() => {
-                if (currentGame && currentGame.status === 'Live') {
+                if (currentGame && currentGame.status === 'Live' && currentGame.unityBuild) {
                     playGameUnity(currentGame);
                 }
-            }, 1000);
+            }, 1500);
         }
         
         // Hide loading screen
@@ -76,16 +75,13 @@ function initializeTheme() {
     const themeIcon = themeToggle?.querySelector('.theme-icon i');
     
     try {
-        // Load saved theme or default to dark
         const savedTheme = localStorage.getItem('theme') || 'dark';
         document.documentElement.setAttribute('data-theme', savedTheme);
         
-        // Update theme icon
         if (themeIcon) {
             themeIcon.className = savedTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
         }
         
-        // Add theme toggle event listener
         if (themeToggle) {
             themeToggle.addEventListener('click', toggleTheme);
         }
@@ -104,7 +100,6 @@ function toggleTheme() {
         document.documentElement.setAttribute('data-theme', newTheme);
         localStorage.setItem('theme', newTheme);
         
-        // Update theme icon
         if (themeIcon) {
             themeIcon.className = newTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
         }
@@ -144,14 +139,13 @@ function displayGameDetails(game) {
         // Update page title
         document.title = `${game.name} - Arsh Verma`;
         
-        // Update preview image with fallback
+        // Update preview image
         const previewImage = document.getElementById('previewImage');
         if (previewImage) {
-            // Use placeholder if image doesn't exist
-            previewImage.src = game.image || 'https://via.placeholder.com/800x450/393E41/FFFFFF?text=Game+Preview';
+            previewImage.src = game.image || 'https://via.placeholder.com/1200x675/393E41/FFFFFF?text=Game+Preview';
             previewImage.alt = game.name;
             previewImage.onerror = function() {
-                this.src = 'https://via.placeholder.com/800x450/393E41/FFFFFF?text=Game+Preview';
+                this.src = 'https://via.placeholder.com/1200x675/393E41/FFFFFF?text=Game+Preview';
             };
         }
         
@@ -192,8 +186,6 @@ function displayGameDetails(game) {
             featuresList.innerHTML = game.features.map(feature => 
                 `<li><i class="fas fa-check"></i><span>${feature}</span></li>`
             ).join('');
-        } else if (featuresList) {
-            featuresList.innerHTML = '<li><i class="fas fa-info-circle"></i><span>No features listed</span></li>';
         }
         
         // Update technologies
@@ -202,8 +194,6 @@ function displayGameDetails(game) {
             techList.innerHTML = game.technologies.map(tech => 
                 `<span class="tech-tag">${tech}</span>`
             ).join('');
-        } else if (techList) {
-            techList.innerHTML = '<span class="tech-tag">Not specified</span>';
         }
         
         // Update stats circles
@@ -223,9 +213,6 @@ function displayGameDetails(game) {
         
         // Update play button state
         updatePlayButton(game);
-        
-        // Animate content
-        animateGameDetails();
     } catch (error) {
         console.error('Error displaying game details:', error);
     }
@@ -310,25 +297,12 @@ function setupGameDetailEventListeners() {
             closeGameBtn.addEventListener('click', closeGame);
         }
         
-        // Preview image click to play
-        const previewImage = document.querySelector('.preview-image');
-        if (previewImage) {
-            previewImage.addEventListener('click', (e) => {
-                // Only trigger if not clicking on the play button
-                if (!e.target.closest('.btn-play-large') && currentGame && currentGame.status === 'Live' && !isGamePlaying) {
-                    playGameUnity(currentGame);
-                }
-            });
-        }
-        
         // Keyboard navigation
         document.addEventListener('keydown', handleKeyboardNavigation);
         
         // Fullscreen change handlers
         document.addEventListener('fullscreenchange', handleFullscreenChange);
         document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
-        document.addEventListener('mozfullscreenchange', handleFullscreenChange);
-        document.addEventListener('msfullscreenchange', handleFullscreenChange);
     } catch (error) {
         console.error('Error setting up event listeners:', error);
     }
@@ -359,7 +333,6 @@ function navigateToPreviousGame() {
         if (!games || !Array.isArray(games)) return;
         
         const currentIndex = games.findIndex(g => g.id === currentGameId);
-        
         if (currentIndex === -1) return;
         
         const prevIndex = (currentIndex - 1 + games.length) % games.length;
@@ -377,7 +350,6 @@ function navigateToNextGame() {
         if (!games || !Array.isArray(games)) return;
         
         const currentIndex = games.findIndex(g => g.id === currentGameId);
-        
         if (currentIndex === -1) return;
         
         const nextIndex = (currentIndex + 1) % games.length;
@@ -389,15 +361,13 @@ function navigateToNextGame() {
     }
 }
 
-// Unity WebGL Game Functions - IMPROVED ERROR HANDLING
+// Unity WebGL Game Functions
 function playGameUnity(game) {
     console.log('Attempting to play game:', game.name);
     
     try {
         if (!game.unityBuild) {
             showNotification('This game is not available for WebGL play', 'info');
-            
-            // Fallback: Open repository or show message
             if (game.repositoryUrl) {
                 window.open(game.repositoryUrl, '_blank');
             }
@@ -408,23 +378,20 @@ function playGameUnity(game) {
         if (!buildConfig) {
             showNotification('Game build configuration not found', 'error');
             console.error('Build config not found for:', game.unityBuild);
-            console.log('Available builds:', Object.keys(unityBuilds));
             return;
         }
         
         const gameContainer = document.getElementById('gameContainer');
-        const unityContainer = document.getElementById('unityContainer');
-        const previewImage = document.querySelector('.preview-image');
+        const previewOverlay = document.querySelector('.preview-overlay');
         
-        if (gameContainer && unityContainer) {
+        if (gameContainer) {
             // Show game container
             gameContainer.classList.add('active');
             isGamePlaying = true;
             
             // Hide preview overlay
-            if (previewImage) {
-                const overlay = previewImage.querySelector('.preview-overlay');
-                if (overlay) overlay.style.display = 'none';
+            if (previewOverlay) {
+                previewOverlay.style.display = 'none';
             }
             
             // Load Unity WebGL build
@@ -466,15 +433,10 @@ function loadUnityBuild(buildConfig) {
             window.unityInstance = null;
         }
         
-        // Remove existing Unity loader script
-        const existingScript = document.querySelector('script[src*="unity"], script[src*="Build"]');
-        if (existingScript) {
-            existingScript.remove();
-        }
-        
         // Create script tag for Unity loader
         const script = document.createElement("script");
         script.src = buildConfig.loaderUrl;
+        
         script.onload = () => {
             console.log('Unity loader loaded successfully');
             
@@ -488,15 +450,13 @@ function loadUnityBuild(buildConfig) {
                 dataUrl: buildConfig.dataUrl,
                 frameworkUrl: buildConfig.frameworkUrl,
                 codeUrl: buildConfig.codeUrl,
-                streamingAssetsUrl: buildConfig.streamingAssetsUrl || "StreamingAssets",
-                companyName: buildConfig.companyName || "ArshCreates",
-                productName: buildConfig.productName || (currentGame ? currentGame.name : "Game"),
-                productVersion: buildConfig.productVersion || "1.0",
-                showBanner: () => {} // Suppress default banner
+                streamingAssetsUrl: "StreamingAssets",
+                companyName: buildConfig.companyName,
+                productName: buildConfig.productName,
+                productVersion: buildConfig.productVersion,
             };
             
             createUnityInstance(canvas, config, (progress) => {
-                // Update progress bar
                 if (loadingBar) {
                     loadingBar.style.width = `${progress * 100}%`;
                 }
@@ -505,50 +465,21 @@ function loadUnityBuild(buildConfig) {
                 window.unityInstance = instance;
                 unityInstance = instance;
                 
-                // Hide loading screen when game is ready
                 if (unityLoading) {
                     unityLoading.style.display = 'none';
                 }
                 showNotification('Game loaded successfully!', 'success');
             }).catch((message) => {
                 console.error('Failed to create Unity instance:', message);
-                showNotification('Failed to load game. Please check console for details.', 'error');
-                if (unityLoading) {
-                    unityLoading.style.display = 'none';
-                }
-                // Reset game state on error
-                isGamePlaying = false;
-                const gameContainer = document.getElementById('gameContainer');
-                if (gameContainer) {
-                    gameContainer.classList.remove('active');
-                }
-                // Show preview overlay again
-                const previewImage = document.querySelector('.preview-image');
-                if (previewImage) {
-                    const overlay = previewImage.querySelector('.preview-overlay');
-                    if (overlay) overlay.style.display = 'flex';
-                }
+                showNotification('Failed to load game', 'error');
+                resetGameState();
             });
         };
         
         script.onerror = (error) => {
             console.error('Failed to load Unity loader:', error);
-            showNotification('Failed to load Unity WebGL build. The game files might be missing.', 'error');
-            if (unityLoading) {
-                unityLoading.style.display = 'none';
-            }
-            // Reset game state on error
-            isGamePlaying = false;
-            const gameContainer = document.getElementById('gameContainer');
-            if (gameContainer) {
-                gameContainer.classList.remove('active');
-            }
-            // Show preview overlay again
-            const previewImage = document.querySelector('.preview-image');
-            if (previewImage) {
-                const overlay = previewImage.querySelector('.preview-overlay');
-                if (overlay) overlay.style.display = 'flex';
-            }
+            showNotification('Failed to load Unity WebGL build', 'error');
+            resetGameState();
         };
         
         document.body.appendChild(script);
@@ -558,126 +489,87 @@ function loadUnityBuild(buildConfig) {
     }
 }
 
-// Game Interaction Functions
+function resetGameState() {
+    isGamePlaying = false;
+    const gameContainer = document.getElementById('gameContainer');
+    const previewOverlay = document.querySelector('.preview-overlay');
+    const unityLoading = document.getElementById('unityLoading');
+    
+    if (gameContainer) gameContainer.classList.remove('active');
+    if (previewOverlay) previewOverlay.style.display = 'flex';
+    if (unityLoading) unityLoading.style.display = 'none';
+}
+
+// Game Control Functions
 function toggleFullscreen() {
     try {
-        const gameContainer = document.getElementById('gameContainer');
-        if (!gameContainer) return;
+        const gamePreview = document.querySelector('.game-preview');
+        if (!gamePreview) return;
         
-        if (!document.fullscreenElement && 
-            !document.webkitFullscreenElement && 
-            !document.mozFullScreenElement && 
-            !document.msFullscreenElement) {
-            // Enter fullscreen
-            if (gameContainer.requestFullscreen) {
-                gameContainer.requestFullscreen();
-            } else if (gameContainer.webkitRequestFullscreen) {
-                gameContainer.webkitRequestFullscreen();
-            } else if (gameContainer.mozRequestFullScreen) {
-                gameContainer.mozRequestFullScreen();
-            } else if (gameContainer.msRequestFullscreen) {
-                gameContainer.msRequestFullscreen();
+        if (!document.fullscreenElement) {
+            if (gamePreview.requestFullscreen) {
+                gamePreview.requestFullscreen();
+            } else if (gamePreview.webkitRequestFullscreen) {
+                gamePreview.webkitRequestFullscreen();
+            } else if (gamePreview.mozRequestFullScreen) {
+                gamePreview.mozRequestFullScreen();
             }
         } else {
-            // Exit fullscreen
             if (document.exitFullscreen) {
                 document.exitFullscreen();
             } else if (document.webkitExitFullscreen) {
                 document.webkitExitFullscreen();
             } else if (document.mozCancelFullScreen) {
                 document.mozCancelFullScreen();
-            } else if (document.msExitFullscreen) {
-                document.msExitFullscreen();
             }
         }
     } catch (error) {
         console.error('Error toggling fullscreen:', error);
-        showNotification('Error toggling fullscreen', 'error');
     }
 }
 
 function restartGame() {
     try {
-        if (unityInstance) {
+        if (unityInstance && currentGame) {
             unityInstance.Quit().then(() => {
-                setTimeout(() => {
-                    if (currentGame) {
-                        playGameUnity(currentGame);
-                    }
-                }, 500);
+                setTimeout(() => playGameUnity(currentGame), 500);
             });
             showNotification('Restarting game...', 'info');
-        } else {
-            showNotification('No game is currently playing', 'warning');
         }
     } catch (error) {
         console.error('Error restarting game:', error);
-        showNotification('Error restarting game', 'error');
     }
 }
 
 function closeGame() {
     try {
         const gameContainer = document.getElementById('gameContainer');
-        const unityContainer = document.getElementById('unityContainer');
-        const previewImage = document.querySelector('.preview-image');
+        const previewOverlay = document.querySelector('.preview-overlay');
+        const unityLoading = document.getElementById('unityLoading');
         
         if (unityInstance) {
             try {
                 unityInstance.Quit();
             } catch (e) {
-                console.warn('Error quitting Unity instance:', e);
+                console.warn('Error quitting Unity:', e);
             }
             unityInstance = null;
             window.unityInstance = null;
         }
         
-        if (gameContainer) {
-            gameContainer.classList.remove('active');
-        }
-        
-        // Clear Unity container
-        if (unityContainer) {
-            const canvas = document.getElementById('unityCanvas');
-            if (canvas) {
-                canvas.width = 0;
-                canvas.height = 0;
-            }
-            
-            const loading = document.getElementById('unityLoading');
-            if (loading) {
-                loading.style.display = 'none';
-            }
-        }
-        
-        // Show preview overlay
-        if (previewImage) {
-            const overlay = previewImage.querySelector('.preview-overlay');
-            if (overlay) overlay.style.display = 'flex';
-        }
+        if (gameContainer) gameContainer.classList.remove('active');
+        if (previewOverlay) previewOverlay.style.display = 'flex';
+        if (unityLoading) unityLoading.style.display = 'none';
         
         isGamePlaying = false;
         
-        // Exit fullscreen if active
-        if (document.fullscreenElement || 
-            document.webkitFullscreenElement || 
-            document.mozFullScreenElement || 
-            document.msFullscreenElement) {
-            if (document.exitFullscreen) {
-                document.exitFullscreen();
-            } else if (document.webkitExitFullscreen) {
-                document.webkitExitFullscreen();
-            } else if (document.mozCancelFullScreen) {
-                document.mozCancelFullScreen();
-            } else if (document.msExitFullscreen) {
-                document.msExitFullscreen();
-            }
+        if (document.fullscreenElement) {
+            document.exitFullscreen();
         }
         
         showNotification('Game closed', 'info');
     } catch (error) {
         console.error('Error closing game:', error);
-        showNotification('Error closing game', 'error');
     }
 }
 
@@ -693,233 +585,108 @@ function shareGame() {
         };
         
         if (navigator.share) {
-            navigator.share(shareData)
-                .then(() => {
-                    showNotification('Game shared successfully', 'success');
-                })
-                .catch((error) => {
-                    if (error.name !== 'AbortError') {
-                        fallbackShare();
-                    }
-                });
+            navigator.share(shareData).then(() => {
+                showNotification('Game shared successfully', 'success');
+            }).catch((error) => {
+                if (error.name !== 'AbortError') {
+                    fallbackShare();
+                }
+            });
         } else {
             fallbackShare();
         }
     } catch (error) {
-        console.error('Error sharing game:', error);
         fallbackShare();
     }
 }
 
 function fallbackShare() {
-    try {
-        const url = window.location.href;
-        
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-            navigator.clipboard.writeText(url)
-                .then(() => {
-                    showNotification('Game link copied to clipboard', 'success');
-                })
-                .catch(() => {
-                    showNotification('Could not copy link', 'error');
-                });
-        } else {
-            // Fallback for older browsers
-            const textArea = document.createElement('textarea');
-            textArea.value = url;
-            textArea.style.position = 'fixed';
-            textArea.style.left = '-999999px';
-            document.body.appendChild(textArea);
-            textArea.focus();
-            textArea.select();
-            
-            try {
-                document.execCommand('copy');
-                showNotification('Game link copied to clipboard', 'success');
-            } catch (err) {
-                showNotification('Could not copy link', 'error');
-            }
-            
-            document.body.removeChild(textArea);
-        }
-    } catch (error) {
-        console.error('Error in fallback share:', error);
-        showNotification('Could not share game', 'error');
-    }
+    const url = window.location.href;
+    navigator.clipboard.writeText(url).then(() => {
+        showNotification('Link copied to clipboard', 'success');
+    }).catch(() => {
+        showNotification('Could not copy link', 'error');
+    });
 }
 
 // Keyboard Navigation
 function handleKeyboardNavigation(e) {
-    try {
-        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
-            return;
-        }
-        
-        switch (e.key) {
-            case 'ArrowLeft':
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    
+    switch (e.key) {
+        case 'ArrowLeft':
+            e.preventDefault();
+            navigateToPreviousGame();
+            break;
+        case 'ArrowRight':
+            e.preventDefault();
+            navigateToNextGame();
+            break;
+        case 'Escape':
+            if (isGamePlaying) {
                 e.preventDefault();
-                navigateToPreviousGame();
-                break;
-            case 'ArrowRight':
+                closeGame();
+            }
+            break;
+        case 'f':
+        case 'F':
+            if (isGamePlaying) {
                 e.preventDefault();
-                navigateToNextGame();
-                break;
-            case 'Escape':
-                if (isGamePlaying) {
-                    e.preventDefault();
-                    closeGame();
-                }
-                break;
-            case ' ':
-            case 'Enter':
-                if (!isGamePlaying && currentGame && currentGame.status === 'Live') {
-                    e.preventDefault();
-                    playGameUnity(currentGame);
-                }
-                break;
-            case 'f':
-            case 'F':
-                if (isGamePlaying) {
-                    e.preventDefault();
-                    toggleFullscreen();
-                }
-                break;
-            case 'r':
-            case 'R':
-                if (isGamePlaying) {
-                    e.preventDefault();
-                    restartGame();
-                }
-                break;
-        }
-    } catch (error) {
-        console.error('Error handling keyboard navigation:', error);
+                toggleFullscreen();
+            }
+            break;
     }
 }
 
 // Fullscreen Change Handler
 function handleFullscreenChange() {
-    try {
-        const fullscreenBtn = document.getElementById('fullscreenBtn');
-        if (!fullscreenBtn) return;
-        
-        const isFullscreen = !!(document.fullscreenElement || 
-                                document.webkitFullscreenElement || 
-                                document.mozFullScreenElement || 
-                                document.msFullscreenElement);
-        
-        const icon = fullscreenBtn.querySelector('i');
-        if (icon) {
-            icon.className = isFullscreen ? 'fas fa-compress' : 'fas fa-expand';
-        }
-        fullscreenBtn.title = isFullscreen ? 'Exit Fullscreen' : 'Enter Fullscreen';
-    } catch (error) {
-        console.error('Error handling fullscreen change:', error);
-    }
-}
-
-// Animate Game Details
-function animateGameDetails() {
-    try {
-        const elements = document.querySelectorAll('.detail-card, .features-list li, .tech-tags span, .stat-item');
-        
-        elements.forEach((element, index) => {
-            element.style.opacity = '0';
-            element.style.transform = 'translateY(30px)';
-            
-            setTimeout(() => {
-                element.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-                element.style.opacity = '1';
-                element.style.transform = 'translateY(0)';
-            }, index * 50);
-        });
-    } catch (error) {
-        console.error('Error animating game details:', error);
+    const fullscreenBtn = document.getElementById('fullscreenBtn');
+    if (!fullscreenBtn) return;
+    
+    const isFullscreen = !!document.fullscreenElement;
+    const icon = fullscreenBtn.querySelector('i');
+    if (icon) {
+        icon.className = isFullscreen ? 'fas fa-compress' : 'fas fa-expand';
     }
 }
 
 // Utility Functions
 function formatDate(dateString) {
-    try {
-        if (!dateString) return 'Not specified';
-        const date = new Date(dateString);
-        if (isNaN(date.getTime())) return 'Invalid Date';
-        const options = { year: 'numeric', month: 'long', day: 'numeric' };
-        return date.toLocaleDateString('en-US', options);
-    } catch (error) {
-        return 'Invalid Date';
-    }
+    if (!dateString) return 'Not specified';
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) return 'Invalid Date';
+    return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 }
 
 function formatStatNumber(num) {
     if (typeof num !== 'number') return '0';
-    
-    if (num >= 1000000) {
-        return (num / 1000000).toFixed(1) + 'M';
-    } else if (num >= 1000) {
-        return (num / 1000).toFixed(1) + 'K';
-    }
+    if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
+    if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
     return num.toString();
 }
 
 function showNotification(message, type = 'info') {
-    try {
-        // Use existing notification function or create a simple one
-        if (typeof window.showNotification === 'function') {
-            window.showNotification(message, type);
-        } else {
-            console.log(`${type}: ${message}`);
-            // Create a simple notification
-            const notification = document.createElement('div');
-            notification.className = `notification notification-${type}`;
-            notification.textContent = message;
-            notification.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                padding: 12px 20px;
-                background: ${type === 'error' ? '#dc3545' : type === 'success' ? '#28a745' : '#17a2b8'};
-                color: white;
-                border-radius: 4px;
-                z-index: 10000;
-                font-weight: 500;
-                max-width: 300px;
-                word-wrap: break-word;
-            `;
-            
-            document.body.appendChild(notification);
-            
-            setTimeout(() => {
-                if (notification.parentNode) {
-                    notification.parentNode.removeChild(notification);
-                }
-            }, 3000);
-        }
-    } catch (error) {
-        console.error('Error showing notification:', error);
-    }
-}
-
-// Fallback for getGames if not defined
-if (typeof getGames === 'undefined') {
-    window.getGames = function() {
-        console.warn('getGames function not defined. Using fallback.');
-        try {
-            // Try to get from PORTFOLIO_DATA first
-            if (window.PORTFOLIO_DATA && window.PORTFOLIO_DATA.games) {
-                return window.PORTFOLIO_DATA.games;
-            }
-            
-            // Fallback to localStorage
-            const storedGames = localStorage.getItem('games');
-            if (storedGames) {
-                return JSON.parse(storedGames);
-            }
-        } catch (error) {
-            console.error('Error getting games:', error);
-        }
-        return [];
-    };
+    const notification = document.createElement('div');
+    notification.style.cssText = `
+        position: fixed;
+        top: 6rem;
+        right: 2rem;
+        padding: 1rem 1.5rem;
+        background: ${type === 'error' ? '#dc3545' : type === 'success' ? '#28a745' : '#17a2b8'};
+        color: white;
+        border-radius: 12px;
+        z-index: 10000;
+        font-weight: 600;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        animation: slideIn 0.3s ease;
+    `;
+    notification.textContent = message;
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.style.animation = 'slideOut 0.3s ease';
+        setTimeout(() => notification.remove(), 300);
+    }, 3000);
 }
 
 // Make functions globally available
@@ -929,9 +696,6 @@ window.shareGame = shareGame;
 window.navigateToPreviousGame = navigateToPreviousGame;
 window.navigateToNextGame = navigateToNextGame;
 window.toggleTheme = toggleTheme;
-window.closeGame = closeGame;
-window.restartGame = restartGame;
-window.toggleFullscreen = toggleFullscreen;
 
 // Initialize when page loads
 if (document.readyState === 'loading') {
