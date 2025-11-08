@@ -56,8 +56,9 @@
         <div class="container">
             <!-- YouTube-style Layout -->
             <div class="game-detail-container">
-                <!-- Left Column - Game Preview (4:3) -->
+                <!-- Left Column - Game Preview + Header Info -->
                 <div class="game-preview-column">
+                    <!-- 1. GAME PREVIEW FIRST -->
                     <div class="game-preview-container">
                         <div class="game-preview">
                             <div class="preview-image">
@@ -70,7 +71,7 @@
                                 </div>
                             </div>
                             
-                            <!-- Game Container (4:3 aspect ratio) -->
+                            <!-- Game Container -->
                             <div id="gameContainer" class="game-container">
                                 <div id="unityContainer" class="unity-container">
                                     <div id="unityLoading" class="unity-loading">
@@ -107,24 +108,21 @@
                                 <span class="control-text">Press ESC to exit fullscreen</span>
                             </div>
                         </div>
+
+                        <!-- Navigation Arrows -->
+                        <div class="detail-navigation">
+                            <button id="prevGame" class="nav-arrow prev-arrow">
+                                <i class="fas fa-chevron-left"></i>
+                                <span class="arrow-text">Previous Game</span>
+                            </button>
+                            <button id="nextGame" class="nav-arrow next-arrow">
+                                <span class="arrow-text">Next Game</span>
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
                     </div>
 
-                    <!-- Navigation Arrows -->
-                    <div class="detail-navigation">
-                        <button id="prevGame" class="nav-arrow prev-arrow">
-                            <i class="fas fa-chevron-left"></i>
-                            <span class="arrow-text">Previous Game</span>
-                        </button>
-                        <button id="nextGame" class="nav-arrow next-arrow">
-                            <span class="arrow-text">Next Game</span>
-                            <i class="fas fa-chevron-right"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Right Column - Game Info -->
-                <div class="game-info-column">
-                    <!-- Game Header -->
+                    <!-- 2. GAME HEADER BELOW PREVIEW -->
                     <div class="game-header">
                         <h1 id="gameTitle" class="game-title">Game Title</h1>
                         <div class="game-meta">
@@ -147,8 +145,10 @@
                             </a>
                         </div>
                     </div>
+                </div>
 
-                    <!-- Game Details Cards -->
+                <!-- Right Column - Game Details Cards (Sidebar) -->
+                <div class="game-info-column">
                     <div class="game-details-cards">
                         <div class="detail-card">
                             <div class="detail-icon">
