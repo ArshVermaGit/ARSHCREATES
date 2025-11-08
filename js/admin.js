@@ -538,3 +538,13 @@ function loadAnalytics() {
 
 // Make function globally available
 window.initializeAdminPage = initializeAdminPage;
+
+// Initialize when page loads (after DOM and all scripts)
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() {
+        // Small delay to ensure script.js has finished
+        setTimeout(initializeAdminPage, 100);
+    });
+} else {
+    setTimeout(initializeAdminPage, 100);
+}
