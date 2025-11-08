@@ -555,10 +555,3 @@ window.initializeTestimonialsPage = initializeTestimonialsPage;
 window.resetTestimonialFilters = resetTestimonialFilters;
 window.openTestimonialModal = openTestimonialModal;
 window.closeTestimonialModal = closeTestimonialModal;
-
-// Initialize when page loads
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initializeTestimonialsPage);
-} else {
-    initializeTestimonialsPage();
-}
