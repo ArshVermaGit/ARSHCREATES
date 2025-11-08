@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certificate Details - Arsh Verma</title>
+    <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loadingScreen" class="loading-screen">
+        <div class="loading-content">
+            <div class="loading-logo">
+                <div class="logo-glow"></div>
+                <i class="fas fa-certificate"></i>
+            </div>
+            <div class="loading-bar-container">
+                <div class="loading-bar" id="loadingBar"></div>
+            </div>
+            <div class="loading-text" id="loadingText">Loading Certificate Details...</div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <a href="index.html" class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <span class="logo-text">ArshCreates</span>
+                </a>
+
+                <div class="nav-actions">
+                    <a href="certificates.html" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i>
+                        <span>Back to Certificates</span>
+                    </a>
+                    <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
+                        <div class="theme-icon">
+                            <i class="fas fa-moon"></i>
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Certificate Detail Section -->
+    <section class="app-detail-section">
+        <div class="container">
+            <!-- Certificate Preview -->
+            <div class="app-preview-container">
+                <div class="app-preview">
+                    <div class="preview-image">
+                        <img id="previewImage" src="" alt="Certificate Preview" class="preview-img">
+                        <div class="preview-overlay">
+                            <div class="download-buttons">
+                                <a id="verifyCredentialBtn" href="#" class="btn-download ios" target="_blank">
+                                    <i class="fas fa-external-link-alt"></i>
+                                    <span>Verify Credential</span>
+                                </a>
+                                <button id="downloadCertificateBtn" class="btn-download android">
+                                    <i class="fas fa-download"></i>
+                                    <span>Download</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Certificate Controls -->
+                    <div class="app-controls">
+                        <div class="control-group">
+                            <button id="closePreviewBtn" class="btn-control" title="Close Preview">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div class="control-info">
+                            <span class="control-text">Professional Certificate</span>
+                        </div>
+                    </div>
+
+                    <!-- Certificate Badges -->
+                    <div id="certificateBadges" class="app-screenshots">
+                        <!-- Badges will be populated dynamically -->
+                    </div>
+                </div>
+
+                <!-- Navigation Arrows -->
+                <div class="detail-navigation">
+                    <button id="prevCertificate" class="nav-arrow prev-arrow">
+                        <i class="fas fa-chevron-left"></i>
+                        <span class="arrow-text">Previous Certificate</span>
+                    </button>
+                    <button id="nextCertificate" class="nav-arrow next-arrow">
+                        <span class="arrow-text">Next Certificate</span>
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Certificate Information -->
+            <div class="app-info-container">
+                <div class="app-header">
+                    <div class="app-title-section">
+                        <h1 id="certificateTitle" class="app-title">Certificate Title</h1>
+                        <div class="app-meta">
+                            <span id="certificateCategory" class="app-category">Category</span>
+                            <span class="app-rating">
+                                <i class="fas fa-award"></i>
+                                <span id="certificateIssuer">Issuer</span>
+                            </span>
+                            <span id="certificateDate" class="app-status">Date</span>
+                        </div>
+                    </div>
+                    <div class="app-actions">
+                        <button id="shareBtn" class="btn btn-secondary">
+                            <i class="fas fa-share-alt"></i>
+                            <span>Share</span>
+                        </button>
+                        <a id="credentialUrlBtn" href="#" class="btn btn-primary" target="_blank">
+                            <i class="fas fa-external-link-alt"></i>
+                            <span>Verify Online</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="app-content">
+                    <!-- Overview & Description -->
+                    <div class="app-description-section">
+                        <h2>About This Certificate</h2>
+                        <p id="certificateDescription" class="app-overview">Certificate description...</p>
+                        <p id="certificateDetails" class="app-description">Certificate details...</p>
+                    </div>
+
+                    <!-- Certificate Details Grid -->
+                    <div class="app-details-grid">
+                        <div class="detail-card">
+                            <div class="detail-icon">
+                                <i class="fas fa-calendar"></i>
+                            </div>
+                            <div class="detail-content">
+                                <h3>Issue Date</h3>
+                                <p id="issueDate">-</p>
+                            </div>
+                        </div>
+                        <div class="detail-card">
+                            <div class="detail-icon">
+                                <i class="fas fa-id-card"></i>
+                            </div>
+                            <div class="detail-content">
+                                <h3>Credential ID</h3>
+                                <p id="credentialId">-</p>
+                            </div>
+                        </div>
+                        <div class="detail-card">
+                            <div class="detail-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="detail-content">
+                                <h3>Validity</h3>
+                                <p id="certificateValidity">-</p>
+                            </div>
+                        </div>
+                        <div class="detail-card">
+                            <div class="detail-icon">
+                                <i class="fas fa-university"></i>
+                            </div>
+                            <div class="detail-content">
+                                <h3>Issuing Organization</h3>
+                                <p id="issuingOrganization">-</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Skills Section -->
+                    <div class="features-section">
+                        <h2>Skills Validated</h2>
+                        <ul id="skillsList" class="features-list">
+                            <!-- Skills will be populated dynamically -->
+                        </ul>
+                    </div>
+
+                    <!-- Technologies Section -->
+                    <div class="technologies-section">
+                        <h2>Technologies Covered</h2>
+                        <div id="techList" class="tech-tags">
+                            <!-- Technologies will be populated dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- Certificate Stats -->
+                    <div class="app-stats-section">
+                        <h2>Certificate Information</h2>
+                        <div class="stats-grid">
+                            <div class="stat-item">
+                                <div class="stat-circle">
+                                    <span id="difficultyCircle" class="stat-value">Intermediate</span>
+                                </div>
+                                <div class="stat-info">
+                                    <h3>Difficulty Level</h3>
+                                    <p>Certificate Complexity</p>
+                                </div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-circle">
+                                    <span id="durationCircle" class="stat-value">3 Months</span>
+                                </div>
+                                <div class="stat-info">
+                                    <h3>Study Duration</h3>
+                                    <p>Time to Complete</p>
+                                </div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-circle">
+                                    <span id="recognitionCircle" class="stat-value">Global</span>
+                                </div>
+                                <div class="stat-info">
+                                    <h3>Recognition</h3>
+                                    <p>Industry Recognition</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <a href="index.html" class="logo">
+                        <div class="logo-icon">
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <span class="logo-text">ArshCreates</span>
+                    </a>
+                    <p class="footer-description">
+                        Creating exceptional digital experiences through innovative development and creative solutions.
+                    </p>
+                </div>
+
+                <div class="footer-links">
+                    <div class="link-group">
+                        <h4>Navigation</h4>
+                        <a href="index.html">Home</a>
+                        <a href="index.html#about">About</a>
+                        <a href="games.html">Games</a>
+                        <a href="websites.html">Websites</a>
+                        <a href="apps.html">Apps</a>
+                        <a href="certificates.html">Certificates</a>
+                    </div>
+
+                    <div class="link-group">
+                        <h4>Connect</h4>
+                        <a href="index.html#contact">Contact</a>
+                        <a href="testimonials.html">Testimonials</a>
+                        <a href="admin.html">Admin</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div class="copyright">
+                    &copy; 2024 Arsh Verma. All rights reserved.
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Notification Container -->
+    <div id="notificationContainer"></div>
+    
+    <script src="js/utils.js"></script>
+    <script src="js/data.js"></script>
+    <script src="js/script.js"></script>
+    <script src="js/certificate-detail.js"></script>
+</body>
+</html>
