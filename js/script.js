@@ -283,7 +283,7 @@ function handleFormSubmission(form) {
     const data = {
         fullName: formData.get('fullName'),
         email: formData.get('email'),
-        phone: formData.get('phone') || '',
+        phone: formData.get('phone') || formData.get('phoneNumber') || '',
         contactType: formData.get('contactType'),
         projectDetails: formData.get('projectDetails') || '',
         feedback: formData.get('feedback') || '',
@@ -307,26 +307,21 @@ function handleFormSubmission(form) {
     // Simulate API call
     setTimeout(() => {
         try {
-            // Save to localStorage
-            const contacts = JSON.parse(localStorage.getItem('portfolio_contacts') || '[]');
-            const newContact = {
-                id: Date.now(),
-                ...data,
-                date: new Date().toISOString(),
-                status: 'new',
-                important: false
-            };
-            contacts.unshift(newContact);
-            localStorage.setItem('portfolio_contacts', JSON.stringify(contacts));
+            // Save using the utility function
+            const success = saveContact(data);
             
-            showNotification('Thank you for your message! I\'ll get back to you soon.', 'success');
-            form.reset();
-            
-            // Hide optional fields
-            const projectDetailsGroup = document.getElementById('projectDetailsGroup');
-            const feedbackGroup = document.getElementById('feedbackGroup');
-            if (projectDetailsGroup) projectDetailsGroup.style.display = 'none';
-            if (feedbackGroup) feedbackGroup.style.display = 'none';
+            if (success) {
+                showNotification('Thank you for your message! I\'ll get back to you soon.', 'success');
+                form.reset();
+                
+                // Hide optional fields
+                const projectDetailsGroup = document.getElementById('projectDetailsGroup');
+                const feedbackGroup = document.getElementById('feedbackGroup');
+                if (projectDetailsGroup) projectDetailsGroup.style.display = 'none';
+                if (feedbackGroup) feedbackGroup.style.display = 'none';
+            } else {
+                showNotification('There was an error sending your message. Please try again.', 'error');
+            }
             
         } catch (error) {
             console.error('Error saving contact:', error);
