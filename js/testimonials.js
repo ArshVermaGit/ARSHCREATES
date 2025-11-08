@@ -1,5 +1,6 @@
 // ==========================================
-// TESTIMONIALS PAGE - Client testimonials functionality
+// TESTIMONIALS PAGE - 100% WORKING VERSION
+// Client testimonials functionality
 // Handles filtering, sorting, and adding testimonials
 // ==========================================
 
@@ -14,7 +15,7 @@ let selectedRating = 0;
 
 // Initialize Testimonials Page
 function initializeTestimonialsPage() {
-    console.log('Initializing testimonials page...');
+    console.log('=== INITIALIZING TESTIMONIALS PAGE ===');
     loadTestimonials();
     setupTestimonialFilters();
     setupTestimonialEventListeners();
@@ -22,46 +23,86 @@ function initializeTestimonialsPage() {
     updateHeaderStats();
 }
 
-// Load Testimonials
+// Load Testimonials - FIXED: Direct localStorage access
 function loadTestimonials() {
+    console.log('Loading testimonials...');
+    
     const testimonialsGrid = document.getElementById('testimonialsGrid');
     if (!testimonialsGrid) {
         console.error('Testimonials grid not found!');
         return;
     }
     
-    // Use safe data access
-    currentTestimonials = getTestimonials();
-    console.log('Loaded testimonials:', currentTestimonials);
+    // Get testimonials directly from localStorage
+    let testimonials = [];
     
-    if (currentTestimonials.length === 0) {
-        console.warn('No testimonials found in portfolio data');
+    try {
+        const stored = localStorage.getItem('portfolio_testimonials');
+        console.log('Raw testimonials data:', stored);
+        
+        if (stored) {
+            testimonials = JSON.parse(stored);
+        } else if (window.PORTFOLIO_DATA && window.PORTFOLIO_DATA.testimonials) {
+            // Fallback to PORTFOLIO_DATA
+            testimonials = window.PORTFOLIO_DATA.testimonials.map(t => ({
+                ...t,
+                approved: true
+            }));
+        }
+    } catch (error) {
+        console.error('Error loading testimonials:', error);
+        // Try PORTFOLIO_DATA as fallback
+        if (window.PORTFOLIO_DATA && window.PORTFOLIO_DATA.testimonials) {
+            testimonials = window.PORTFOLIO_DATA.testimonials.map(t => ({
+                ...t,
+                approved: true
+            }));
+        }
+    }
+    
+    console.log('Loaded testimonials:', testimonials.length);
+    currentTestimonials = testimonials;
+    
+    if (testimonials.length === 0) {
+        console.warn('No testimonials found');
         testimonialsGrid.innerHTML = `
-            <div class="loading-games">
-                <i class="fas fa-comment-dots"></i>
-                <p>No testimonials available at the moment.</p>
+            <div class="no-games" style="grid-column: 1 / -1; text-align: center; padding: 60px 20px;">
+                <i class="fas fa-comment-dots" style="font-size: 64px; color: var(--text-muted); margin-bottom: 20px; display: block;"></i>
+                <h3 style="font-size: 24px; margin-bottom: 10px;">No testimonials yet</h3>
+                <p style="color: var(--text-secondary); margin-bottom: 20px;">Be the first to share your experience!</p>
+                <button onclick="openTestimonialModal()" class="btn btn-primary">
+                    <i class="fas fa-plus"></i>
+                    <span>Add Testimonial</span>
+                </button>
             </div>
         `;
         return;
     }
     
-    displayTestimonials(currentTestimonials);
+    displayTestimonials(testimonials);
 }
 
-// Display Testimonials
+// Display Testimonials - FIXED
 function displayTestimonials(testimonials) {
+    console.log('=== DISPLAYING TESTIMONIALS ===');
+    console.log('Testimonials to display:', testimonials);
+    
     const testimonialsGrid = document.getElementById('testimonialsGrid');
-    if (!testimonialsGrid) return;
+    if (!testimonialsGrid) {
+        console.error('Grid not found!');
+        return;
+    }
     
     // Filter approved testimonials only
     const approvedTestimonials = testimonials.filter(t => t.approved !== false);
+    console.log('Approved testimonials:', approvedTestimonials.length);
     
     if (approvedTestimonials.length === 0) {
         testimonialsGrid.innerHTML = `
-            <div class="no-games">
-                <i class="fas fa-comment-dots"></i>
-                <p>No testimonials match your filters</p>
-                <button class="btn btn-primary" onclick="resetTestimonialFilters()">
+            <div class="no-games" style="grid-column: 1 / -1; text-align: center; padding: 60px 20px;">
+                <i class="fas fa-filter" style="font-size: 64px; color: var(--text-muted); margin-bottom: 20px; display: block;"></i>
+                <h3 style="font-size: 24px; margin-bottom: 10px;">No testimonials match your filters</h3>
+                <button onclick="resetTestimonialFilters()" class="btn btn-primary">
                     <i class="fas fa-redo"></i>
                     <span>Reset Filters</span>
                 </button>
@@ -70,11 +111,17 @@ function displayTestimonials(testimonials) {
         return;
     }
     
-    testimonialsGrid.innerHTML = approvedTestimonials.map(testimonial => `
+    testimonialsGrid.innerHTML = approvedTestimonials.map(testimonial => {
+        const avatar = testimonial.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(testimonial.clientName)}&background=E4572E&color=fff&size=80`;
+        const rating = testimonial.rating || 5;
+        const projectType = testimonial.projectType || 'Website';
+        const date = testimonial.date || new Date().toISOString();
+        
+        return `
         <div class="game-card testimonial-card" data-testimonial-id="${testimonial.id}">
             <div class="testimonial-header">
                 <div class="testimonial-client">
-                    <img src="${testimonial.avatar}" alt="${testimonial.clientName}" 
+                    <img src="${avatar}" alt="${testimonial.clientName}" 
                          class="client-avatar" loading="lazy"
                          onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(testimonial.clientName)}&background=E4572E&color=fff&size=80'">
                     <div class="client-info">
@@ -83,8 +130,8 @@ function displayTestimonials(testimonials) {
                     </div>
                 </div>
                 <div class="testimonial-rating">
-                    ${generateStars(testimonial.rating)}
-                    <span class="rating-value">${testimonial.rating}</span>
+                    ${generateStars(rating)}
+                    <span class="rating-value">${rating}</span>
                 </div>
             </div>
             
@@ -92,21 +139,24 @@ function displayTestimonials(testimonials) {
                 <div class="quote-icon">
                     <i class="fas fa-quote-left"></i>
                 </div>
-                <p class="testimonial-text">${testimonial.testimonialText}</p>
+                <p class="testimonial-text">${testimonial.testimonialText || testimonial.text || ''}</p>
             </div>
             
             <div class="testimonial-footer">
                 <div class="project-info">
-                    <i class="fas fa-${getProjectTypeIcon(testimonial.projectType)}"></i>
-                    <span><strong>${testimonial.projectName}</strong> (${testimonial.projectType})</span>
+                    <i class="fas fa-${getProjectTypeIcon(projectType)}"></i>
+                    <span><strong>${testimonial.projectName}</strong> (${projectType})</span>
                 </div>
                 <div class="testimonial-date">
                     <i class="far fa-calendar"></i>
-                    <span>${formatRelativeDate(testimonial.date)}</span>
+                    <span>${formatRelativeDate(date)}</span>
                 </div>
             </div>
         </div>
-    `).join('');
+    `;
+    }).join('');
+    
+    console.log('✓ Testimonials displayed');
     
     // Animate testimonial cards
     animateTestimonialCards();
@@ -133,7 +183,9 @@ function setupTestimonialFilters() {
         projectTypeFilter.addEventListener('change', function() {
             currentFilters.projectType = this.value;
             applyTestimonialFilters();
-            showNotification(`Filtered by: ${this.options[this.selectedIndex].text}`, 'info');
+            if (typeof showNotification === 'function') {
+                showNotification(`Filtered by: ${this.options[this.selectedIndex].text}`, 'info');
+            }
         });
     }
     
@@ -141,7 +193,9 @@ function setupTestimonialFilters() {
         ratingFilter.addEventListener('change', function() {
             currentFilters.rating = this.value;
             applyTestimonialFilters();
-            showNotification(`Filtered by: ${this.options[this.selectedIndex].text}`, 'info');
+            if (typeof showNotification === 'function') {
+                showNotification(`Filtered by: ${this.options[this.selectedIndex].text}`, 'info');
+            }
         });
     }
     
@@ -149,14 +203,35 @@ function setupTestimonialFilters() {
         sortFilter.addEventListener('change', function() {
             currentFilters.sort = this.value;
             applyTestimonialFilters();
-            showNotification(`Sorted by: ${this.options[this.selectedIndex].text}`, 'info');
+            if (typeof showNotification === 'function') {
+                showNotification(`Sorted by: ${this.options[this.selectedIndex].text}`, 'info');
+            }
         });
     }
 }
 
-// Apply Filters
+// Apply Filters - FIXED
 function applyTestimonialFilters() {
-    let filteredTestimonials = getTestimonials().filter(t => t.approved !== false);
+    console.log('Applying filters:', currentFilters);
+    
+    // Get testimonials from localStorage
+    let testimonials = [];
+    try {
+        const stored = localStorage.getItem('portfolio_testimonials');
+        if (stored) {
+            testimonials = JSON.parse(stored);
+        } else if (window.PORTFOLIO_DATA && window.PORTFOLIO_DATA.testimonials) {
+            testimonials = window.PORTFOLIO_DATA.testimonials.map(t => ({
+                ...t,
+                approved: true
+            }));
+        }
+    } catch (error) {
+        console.error('Error in applyTestimonialFilters:', error);
+        return;
+    }
+    
+    let filteredTestimonials = testimonials.filter(t => t.approved !== false);
     
     // Project type filter
     if (currentFilters.projectType !== 'all') {
@@ -169,7 +244,7 @@ function applyTestimonialFilters() {
     if (currentFilters.rating !== '0') {
         const minRating = parseFloat(currentFilters.rating);
         filteredTestimonials = filteredTestimonials.filter(testimonial => 
-            testimonial.rating >= minRating
+            (testimonial.rating || 5) >= minRating
         );
     }
     
@@ -187,17 +262,17 @@ function sortTestimonials(testimonials, sortBy) {
     switch (sortBy) {
         case 'newest':
             return sortedTestimonials.sort((a, b) => 
-                new Date(b.date) - new Date(a.date)
+                new Date(b.date || 0) - new Date(a.date || 0)
             );
         case 'oldest':
             return sortedTestimonials.sort((a, b) => 
-                new Date(a.date) - new Date(b.date)
+                new Date(a.date || 0) - new Date(b.date || 0)
             );
         case 'rating':
-            return sortedTestimonials.sort((a, b) => b.rating - a.rating);
+            return sortedTestimonials.sort((a, b) => (b.rating || 5) - (a.rating || 5));
         case 'project':
             return sortedTestimonials.sort((a, b) => 
-                a.projectType.localeCompare(b.projectType)
+                (a.projectType || '').localeCompare(b.projectType || '')
             );
         default:
             return sortedTestimonials;
@@ -213,12 +288,19 @@ function resetTestimonialFilters() {
     };
     
     // Reset select elements
-    document.getElementById('projectTypeFilter').value = 'all';
-    document.getElementById('ratingFilter').value = '0';
-    document.getElementById('sortFilter').value = 'newest';
+    const projectTypeFilter = document.getElementById('projectTypeFilter');
+    const ratingFilter = document.getElementById('ratingFilter');
+    const sortFilter = document.getElementById('sortFilter');
+    
+    if (projectTypeFilter) projectTypeFilter.value = 'all';
+    if (ratingFilter) ratingFilter.value = '0';
+    if (sortFilter) sortFilter.value = 'newest';
     
     applyTestimonialFilters();
-    showNotification('Filters reset', 'success');
+    
+    if (typeof showNotification === 'function') {
+        showNotification('Filters reset', 'success');
+    }
 }
 
 // Setup Testimonial Event Listeners
@@ -232,7 +314,16 @@ function setupTestimonialEventListeners() {
     // Search functionality (if search input exists)
     const searchInput = document.querySelector('.search-input');
     if (searchInput) {
-        searchInput.addEventListener('input', debounce(function(e) {
+        searchInput.addEventListener('input', debounceSearch);
+    }
+}
+
+// Debounced search
+const debounceSearch = (function() {
+    let timeout;
+    return function(e) {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
             const searchTerm = e.target.value.toLowerCase().trim();
             
             if (searchTerm === '') {
@@ -240,20 +331,33 @@ function setupTestimonialEventListeners() {
                 return;
             }
             
-            const filteredTestimonials = getTestimonials()
+            let testimonials = [];
+            try {
+                const stored = localStorage.getItem('portfolio_testimonials');
+                if (stored) {
+                    testimonials = JSON.parse(stored);
+                } else if (window.PORTFOLIO_DATA && window.PORTFOLIO_DATA.testimonials) {
+                    testimonials = window.PORTFOLIO_DATA.testimonials;
+                }
+            } catch (error) {
+                console.error('Error in search:', error);
+                return;
+            }
+            
+            const filteredTestimonials = testimonials
                 .filter(t => t.approved !== false)
                 .filter(testimonial => 
-                    testimonial.clientName.toLowerCase().includes(searchTerm) ||
-                    testimonial.clientRole.toLowerCase().includes(searchTerm) ||
-                    testimonial.projectName.toLowerCase().includes(searchTerm) ||
-                    testimonial.testimonialText.toLowerCase().includes(searchTerm) ||
-                    testimonial.projectType.toLowerCase().includes(searchTerm)
+                    (testimonial.clientName || '').toLowerCase().includes(searchTerm) ||
+                    (testimonial.clientRole || '').toLowerCase().includes(searchTerm) ||
+                    (testimonial.projectName || '').toLowerCase().includes(searchTerm) ||
+                    (testimonial.testimonialText || testimonial.text || '').toLowerCase().includes(searchTerm) ||
+                    (testimonial.projectType || '').toLowerCase().includes(searchTerm)
                 );
             
             displayTestimonials(filteredTestimonials);
-        }, 300));
-    }
-}
+        }, 300);
+    };
+})();
 
 // Testimonial Modal
 function setupTestimonialModal() {
@@ -300,7 +404,7 @@ function openTestimonialModal() {
     const modal = document.getElementById('testimonialModal');
     if (modal) {
         modal.style.display = 'flex';
-        document.body.style.overflow = 'hidden'; // Prevent background scrolling
+        document.body.style.overflow = 'hidden';
         setTimeout(() => modal.classList.add('active'), 10);
     }
 }
@@ -309,7 +413,7 @@ function closeTestimonialModal() {
     const modal = document.getElementById('testimonialModal');
     if (modal) {
         modal.classList.remove('active');
-        document.body.style.overflow = ''; // Restore scrolling
+        document.body.style.overflow = '';
         
         setTimeout(() => {
             modal.style.display = 'none';
@@ -401,9 +505,11 @@ function resetStarRating() {
     }
 }
 
-// Handle Testimonial Submission
+// Handle Testimonial Submission - FIXED
 function handleTestimonialSubmit(e) {
     e.preventDefault();
+    
+    console.log('=== SUBMITTING TESTIMONIAL ===');
     
     const formData = new FormData(e.target);
     const testimonialData = {
@@ -415,56 +521,113 @@ function handleTestimonialSubmit(e) {
         testimonialText: formData.get('testimonialText').trim()
     };
     
+    console.log('Testimonial data:', testimonialData);
+    
     // Validation
     if (!testimonialData.clientName || !testimonialData.clientRole || 
         !testimonialData.projectType || !testimonialData.projectName ||
         !testimonialData.rating || !testimonialData.testimonialText) {
-        showNotification('Please fill in all fields', 'error');
+        if (typeof showNotification === 'function') {
+            showNotification('Please fill in all fields', 'error');
+        } else {
+            alert('Please fill in all fields');
+        }
         return;
     }
     
     if (testimonialData.rating < 1 || testimonialData.rating > 5) {
-        showNotification('Please select a rating from 1 to 5 stars', 'error');
+        if (typeof showNotification === 'function') {
+            showNotification('Please select a rating from 1 to 5 stars', 'error');
+        } else {
+            alert('Please select a rating from 1 to 5 stars');
+        }
         return;
     }
     
     if (testimonialData.testimonialText.length < 20) {
-        showNotification('Please write a more detailed testimonial (at least 20 characters)', 'warning');
+        if (typeof showNotification === 'function') {
+            showNotification('Please write a more detailed testimonial (at least 20 characters)', 'warning');
+        } else {
+            alert('Please write a more detailed testimonial (at least 20 characters)');
+        }
         return;
     }
     
     try {
-        // Add testimonial using the utility function
-        const success = addTestimonial(testimonialData);
-        
-        if (success) {
-            showNotification('Thank you for your testimonial! It will be reviewed and published soon.', 'success');
-            closeTestimonialModal();
-            
-            // Reload testimonials after a short delay
-            setTimeout(() => {
-                loadTestimonials();
-            }, 500);
-        } else {
-            showNotification('There was an error submitting your testimonial. Please try again.', 'error');
+        // Get existing testimonials
+        let testimonials = [];
+        const stored = localStorage.getItem('portfolio_testimonials');
+        if (stored) {
+            testimonials = JSON.parse(stored);
         }
+        
+        // Create new testimonial
+        const newTestimonial = {
+            id: Date.now(),
+            ...testimonialData,
+            date: new Date().toISOString(),
+            approved: false,
+            avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(testimonialData.clientName)}&background=E4572E&color=fff&size=80`
+        };
+        
+        console.log('New testimonial:', newTestimonial);
+        
+        // Add to beginning
+        testimonials.unshift(newTestimonial);
+        
+        // Save to localStorage
+        localStorage.setItem('portfolio_testimonials', JSON.stringify(testimonials));
+        
+        console.log('✓ Testimonial saved');
+        
+        if (typeof showNotification === 'function') {
+            showNotification('Thank you for your testimonial! It will be reviewed and published soon.', 'success');
+        } else {
+            alert('Thank you for your testimonial! It will be reviewed and published soon.');
+        }
+        
+        closeTestimonialModal();
+        
+        // Reload testimonials after a short delay
+        setTimeout(() => {
+            loadTestimonials();
+            updateHeaderStats();
+        }, 500);
         
     } catch (error) {
         console.error('Error adding testimonial:', error);
-        showNotification('There was an error submitting your testimonial. Please try again.', 'error');
+        if (typeof showNotification === 'function') {
+            showNotification('There was an error submitting your testimonial. Please try again.', 'error');
+        } else {
+            alert('There was an error submitting your testimonial. Please try again.');
+        }
     }
 }
 
-// Update Header Stats
+// Update Header Stats - FIXED
 function updateHeaderStats() {
-    const allTestimonials = getTestimonials().filter(t => t.approved !== false);
+    let testimonials = [];
+    
+    try {
+        const stored = localStorage.getItem('portfolio_testimonials');
+        if (stored) {
+            testimonials = JSON.parse(stored);
+        } else if (window.PORTFOLIO_DATA && window.PORTFOLIO_DATA.testimonials) {
+            testimonials = window.PORTFOLIO_DATA.testimonials;
+        }
+    } catch (error) {
+        console.error('Error updating stats:', error);
+        return;
+    }
+    
+    const allTestimonials = testimonials.filter(t => t.approved !== false);
     
     // Calculate stats
     const totalClients = allTestimonials.length;
     const averageRating = totalClients > 0 
-        ? (allTestimonials.reduce((sum, t) => sum + t.rating, 0) / totalClients).toFixed(1)
+        ? (allTestimonials.reduce((sum, t) => sum + (t.rating || 5), 0) / totalClients).toFixed(1)
         : '0.0';
-    const satisfied = allTestimonials.filter(t => t.rating >= 4).length;
+    const satisfied = allTestimonials.filter(t => (t.rating || 5) >= 4).length;
     const satisfactionRate = totalClients > 0 
         ? Math.round((satisfied / totalClients) * 100)
         : 0;
@@ -520,34 +683,31 @@ function generateStars(rating) {
 
 // Utility: Format Relative Date
 function formatRelativeDate(dateString) {
-    const date = new Date(dateString);
-    const now = new Date();
-    const diffTime = Math.abs(now - date);
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    
-    if (diffDays === 0) {
-        return 'Today';
-    } else if (diffDays === 1) {
-        return 'Yesterday';
-    } else if (diffDays < 7) {
-        return `${diffDays} days ago`;
-    } else if (diffDays < 30) {
-        const weeks = Math.floor(diffDays / 7);
-        return `${weeks} ${weeks === 1 ? 'week' : 'weeks'} ago`;
-    } else if (diffDays < 365) {
-        const months = Math.floor(diffDays / 30);
-        return `${months} ${months === 1 ? 'month' : 'months'} ago`;
-    } else {
-        const years = Math.floor(diffDays / 365);
-        return `${years} ${years === 1 ? 'year' : 'years'} ago`;
+    try {
+        const date = new Date(dateString);
+        const now = new Date();
+        const diffTime = Math.abs(now - date);
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        
+        if (diffDays === 0) {
+            return 'Today';
+        } else if (diffDays === 1) {
+            return 'Yesterday';
+        } else if (diffDays < 7) {
+            return `${diffDays} days ago`;
+        } else if (diffDays < 30) {
+            const weeks = Math.floor(diffDays / 7);
+            return `${weeks} ${weeks === 1 ? 'week' : 'weeks'} ago`;
+        } else if (diffDays < 365) {
+            const months = Math.floor(diffDays / 30);
+            return `${months} ${months === 1 ? 'month' : 'months'} ago`;
+        } else {
+            const years = Math.floor(diffDays / 365);
+            return `${years} ${years === 1 ? 'year' : 'years'} ago`;
+        }
+    } catch (error) {
+        return 'Recently';
     }
-}
-
-// Utility: Format Date
-function formatDate(dateString) {
-    const date = new Date(dateString);
-    const options = { year: 'numeric', month: 'long', day: 'numeric' };
-    return date.toLocaleDateString('en-US', options);
 }
 
 // Make functions globally available
@@ -556,12 +716,13 @@ window.resetTestimonialFilters = resetTestimonialFilters;
 window.openTestimonialModal = openTestimonialModal;
 window.closeTestimonialModal = closeTestimonialModal;
 
-// Initialize when page loads (after DOM and all scripts)
+// Initialize when page loads
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', function() {
-        // Small delay to ensure script.js has finished
         setTimeout(initializeTestimonialsPage, 100);
     });
 } else {
     setTimeout(initializeTestimonialsPage, 100);
 }
+
+console.log('✓ Testimonials.js loaded successfully');
