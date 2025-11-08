@@ -83,26 +83,54 @@ async function initializeStorage() {
 // CONTACT MANAGEMENT
 // ==========================================
 async function getContacts() {
+    console.log('=== GET CONTACTS CALLED ===');
+    
     try {
         if (!hasWindowStorage) {
+            console.log('Using localStorage to get contacts...');
             const contacts = localStorage.getItem(STORAGE_KEYS.CONTACTS);
-            return contacts ? JSON.parse(contacts) : [];
+            console.log('Raw localStorage data:', contacts);
+            const parsed = contacts ? JSON.parse(contacts) : [];
+            console.log('Parsed contacts:', parsed);
+            return parsed;
         }
         
-        const result = await window.storage.get(STORAGE_KEYS.CONTACTS);
-        if (result && result.value) {
-            return JSON.parse(result.value);
+        console.log('Using window.storage to get contacts...');
+        try {
+            const result = await window.storage.get(STORAGE_KEYS.CONTACTS);
+            console.log('window.storage.get result:', result);
+            
+            if (result && result.value) {
+                const parsed = JSON.parse(result.value);
+                console.log('Parsed contacts from window.storage:', parsed);
+                return parsed;
+            }
+            console.log('No contacts found, returning empty array');
+            return [];
+        } catch (storageError) {
+            console.log('window.storage.get threw error (key might not exist):', storageError);
+            return [];
         }
-        return [];
     } catch (error) {
-        console.error('Error loading contacts:', error);
+        console.error('=== ERROR IN GET CONTACTS ===');
+        console.error('Error:', error);
         return [];
     }
 }
 
 async function saveContact(contactData) {
+    console.log('=== SAVE CONTACT CALLED ===');
+    console.log('Contact data:', contactData);
+    console.log('hasWindowStorage:', hasWindowStorage);
+    console.log('STORAGE_KEYS:', STORAGE_KEYS);
+    
     try {
+        // Get existing contacts
+        console.log('Getting existing contacts...');
         const contacts = await getContacts();
+        console.log('Existing contacts:', contacts);
+        
+        // Create new contact
         const newContact = {
             id: Date.now(),
             ...contactData,
@@ -111,18 +139,53 @@ async function saveContact(contactData) {
             important: false
         };
         
-        contacts.unshift(newContact);
+        console.log('New contact:', newContact);
         
+        // Add to beginning of array
+        contacts.unshift(newContact);
+        console.log('Updated contacts array:', contacts);
+        
+        // Save based on storage type
         if (!hasWindowStorage) {
+            console.log('Using localStorage...');
             localStorage.setItem(STORAGE_KEYS.CONTACTS, JSON.stringify(contacts));
+            
+            // Verify it was saved
+            const saved = localStorage.getItem(STORAGE_KEYS.CONTACTS);
+            console.log('Verified localStorage save:', saved ? 'SUCCESS' : 'FAILED');
+            console.log('Saved data:', saved);
+            
+            return true;
+        } else {
+            console.log('Using window.storage...');
+            const result = await window.storage.set(STORAGE_KEYS.CONTACTS, JSON.stringify(contacts));
+            console.log('window.storage.set result:', result);
             return true;
         }
         
-        await window.storage.set(STORAGE_KEYS.CONTACTS, JSON.stringify(contacts));
-        return true;
     } catch (error) {
-        console.error('Error saving contact:', error);
-        return false;
+        console.error('=== ERROR IN SAVE CONTACT ===');
+        console.error('Error:', error);
+        console.error('Stack:', error.stack);
+        
+        // Try localStorage as fallback
+        try {
+            console.log('Attempting localStorage fallback...');
+            const contacts = JSON.parse(localStorage.getItem(STORAGE_KEYS.CONTACTS) || '[]');
+            contacts.unshift({
+                id: Date.now(),
+                ...contactData,
+                date: new Date().toISOString(),
+                status: 'unread',
+                important: false
+            });
+            localStorage.setItem(STORAGE_KEYS.CONTACTS, JSON.stringify(contacts));
+            console.log('✓ Saved via localStorage fallback');
+            return true;
+        } catch (fallbackError) {
+            console.error('Fallback also failed:', fallbackError);
+            return false;
+        }
     }
 }
 
@@ -626,6 +689,33 @@ if (document.readyState === 'loading') {
         await initializeStorage();
     })();
 }
+
+window.testContactSave = async function() {
+    console.log('=== TESTING CONTACT SAVE ===');
+    
+    const testData = {
+        fullName: 'Test User',
+        email: 'test@example.com',
+        phone: '1234567890',
+        contactType: 'project',
+        message: 'This is a test message'
+    };
+    
+    console.log('Test data:', testData);
+    
+    try {
+        const result = await saveContact(testData);
+        console.log('Save result:', result);
+        
+        const contacts = await getContacts();
+        console.log('All contacts after save:', contacts);
+        
+        return result;
+    } catch (error) {
+        console.error('Test failed:', error);
+        return false;
+    }
+};
 
 // ==========================================
 // MAKE FUNCTIONS GLOBALLY AVAILABLE
