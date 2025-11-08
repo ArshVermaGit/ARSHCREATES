@@ -538,11 +538,12 @@ function loadAnalytics() {
 
 // Make function globally available
 window.initializeAdminPage = initializeAdminPage;
+window.deleteContact = deleteContact;
+window.approveTestimonial = approveTestimonial;
 
-// Initialize when page loads (after DOM and all scripts)
+// Initialize when page loads
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', function() {
-        // Small delay to ensure script.js has finished
         setTimeout(initializeAdminPage, 100);
     });
 } else {
