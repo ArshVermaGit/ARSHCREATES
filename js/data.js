@@ -1,6 +1,6 @@
 // ==========================================
 // PORTFOLIO DATA - Complete Dataset
-// All games, websites, apps, and testimonials
+// All games, websites, apps, certificates, and testimonials
 // ==========================================
 
 const PORTFOLIO_DATA = {
@@ -296,6 +296,365 @@ const PORTFOLIO_DATA = {
         }
     ],
 
+    certificates: [
+        {
+            id: 1,
+            title: "AWS Certified Solutions Architect - Associate",
+            issuer: "Amazon Web Services",
+            date: "2024-01-15",
+            category: "Cloud Computing",
+            image: "assets/certificates/aws-saa.jpg",
+            description: "Demonstrated expertise in designing distributed systems on AWS platform including compute, networking, storage, and database AWS services as well as deployment and management services.",
+            skills: [
+                "AWS Services Architecture",
+                "Cloud Infrastructure Design",
+                "Security & Compliance",
+                "Cost Optimization",
+                "High Availability Systems",
+                "Scalable Solutions"
+            ],
+            technologies: ["AWS", "EC2", "S3", "RDS", "Lambda", "CloudFormation", "VPC"],
+            credentialId: "AWS-ASA-12345-67890",
+            credentialUrl: "https://www.credly.com/badges/aws-certified-solutions-architect-associate",
+            year: "2024",
+            validity: "3 Years",
+            difficulty: "Advanced",
+            duration: "3 Months",
+            recognition: "Global",
+            additionalImages: [
+                "assets/certificates/aws-saa-badge.jpg",
+                "assets/certificates/aws-saa-transcript.jpg"
+            ],
+            verified: true,
+            featured: true
+        },
+        {
+            id: 2,
+            title: "Google Professional Cloud Architect",
+            issuer: "Google Cloud",
+            date: "2023-11-20",
+            category: "Cloud Computing",
+            image: "assets/certificates/google-cloud-architect.jpg",
+            description: "Validated skills in designing, developing, and managing robust, secure, scalable, highly available, and dynamic solutions on Google Cloud Platform.",
+            skills: [
+                "Google Cloud Platform",
+                "Cloud Architecture",
+                "Solution Design",
+                "Infrastructure as Code",
+                "Security Best Practices",
+                "Performance Optimization"
+            ],
+            technologies: ["GCP", "Compute Engine", "Cloud Storage", "BigQuery", "Kubernetes", "Terraform"],
+            credentialId: "GCP-PCA-98765-43210",
+            credentialUrl: "https://www.credly.com/badges/google-cloud-professional-cloud-architect",
+            year: "2023",
+            validity: "2 Years",
+            difficulty: "Advanced",
+            duration: "4 Months",
+            recognition: "Global",
+            additionalImages: [
+                "assets/certificates/google-cloud-architect-badge.jpg"
+            ],
+            verified: true,
+            featured: true
+        },
+        {
+            id: 3,
+            title: "Full Stack Web Development",
+            issuer: "freeCodeCamp",
+            date: "2023-09-10",
+            category: "Programming",
+            image: "assets/certificates/fcc-fullstack.jpg",
+            description: "Completed 300+ hours of comprehensive coursework in full stack JavaScript development, including front-end libraries, back-end development, databases, and DevOps.",
+            skills: [
+                "JavaScript ES6+",
+                "React.js",
+                "Node.js",
+                "Express.js",
+                "MongoDB",
+                "RESTful APIs",
+                "Git & GitHub",
+                "Agile Development"
+            ],
+            technologies: ["JavaScript", "React", "Node.js", "Express", "MongoDB", "Git", "REST APIs"],
+            credentialId: "FCC-FSWD-54321",
+            credentialUrl: "https://freecodecamp.org/certification/arshverma/full-stack-web-development",
+            year: "2023",
+            validity: "Lifetime",
+            difficulty: "Intermediate",
+            duration: "6 Months",
+            recognition: "Industry Standard",
+            additionalImages: [
+                "assets/certificates/fcc-fullstack-curriculum.jpg"
+            ],
+            verified: true,
+            featured: false
+        },
+        {
+            id: 4,
+            title: "Microsoft Certified: Azure Fundamentals",
+            issuer: "Microsoft",
+            date: "2023-07-05",
+            category: "Cloud Computing",
+            image: "assets/certificates/azure-fundamentals.jpg",
+            description: "Demonstrated foundational knowledge of cloud services and how those services are provided with Microsoft Azure, including compute, network, storage, and security.",
+            skills: [
+                "Azure Services",
+                "Cloud Concepts",
+                "Azure Pricing & Support",
+                "Core Solutions",
+                "Security & Privacy",
+                "Trust & Compliance"
+            ],
+            technologies: ["Azure", "Virtual Machines", "Storage Accounts", "Azure AD", "Security Center"],
+            credentialId: "MS-AZ-900-12345",
+            credentialUrl: "https://learn.microsoft.com/en-us/users/arshverma/certifications/azure-fundamentals",
+            year: "2023",
+            validity: "Lifetime",
+            difficulty: "Beginner",
+            duration: "1 Month",
+            recognition: "Global",
+            additionalImages: [],
+            verified: true,
+            featured: false
+        },
+        {
+            id: 5,
+            title: "UI/UX Design Specialization",
+            issuer: "Google",
+            date: "2023-05-20",
+            category: "Design",
+            image: "assets/certificates/google-ux-design.jpg",
+            description: "Professional certification in user experience design covering user research, wireframing, prototyping, and usability testing to create user-centered digital products.",
+            skills: [
+                "User Research",
+                "Wireframing",
+                "Prototyping",
+                "Usability Testing",
+                "Design Thinking",
+                "Figma & Adobe XD"
+            ],
+            technologies: ["Figma", "Adobe XD", "User Research", "Prototyping", "Usability Testing"],
+            credentialId: "GOOG-UX-98765",
+            credentialUrl: "https://coursera.org/verify/specialization/google-ux-design",
+            year: "2023",
+            validity: "Lifetime",
+            difficulty: "Intermediate",
+            duration: "6 Months",
+            recognition: "Industry Standard",
+            additionalImages: [
+                "assets/certificates/google-ux-design-projects.jpg"
+            ],
+            verified: true,
+            featured: true
+        },
+        {
+            id: 6,
+            title: "Python for Data Science and Machine Learning",
+            issuer: "IBM",
+            date: "2023-03-15",
+            category: "Programming",
+            image: "assets/certificates/ibm-python-ds.jpg",
+            description: "Comprehensive certification in Python programming for data science, covering data analysis, visualization, machine learning algorithms, and statistical modeling.",
+            skills: [
+                "Python Programming",
+                "Data Analysis",
+                "Machine Learning",
+                "Data Visualization",
+                "Statistical Modeling",
+                "Pandas & NumPy"
+            ],
+            technologies: ["Python", "Pandas", "NumPy", "Scikit-learn", "Matplotlib", "Seaborn"],
+            credentialId: "IBM-PY-DS-45678",
+            credentialUrl: "https://coursera.org/verify/python-data-science-machine-learning",
+            year: "2023",
+            validity: "Lifetime",
+            difficulty: "Intermediate",
+            duration: "4 Months",
+            recognition: "Industry Standard",
+            additionalImages: [
+                "assets/certificates/ibm-python-ds-projects.jpg"
+            ],
+            verified: true,
+            featured: false
+        },
+        {
+            id: 7,
+            title: "JavaScript Algorithms and Data Structures",
+            issuer: "freeCodeCamp",
+            date: "2023-02-10",
+            category: "Programming",
+            image: "assets/certificates/fcc-javascript.jpg",
+            description: "Mastered JavaScript fundamentals including algorithms, data structures, functional programming, and object-oriented programming concepts.",
+            skills: [
+                "JavaScript ES6+",
+                "Algorithms",
+                "Data Structures",
+                "Functional Programming",
+                "OOP Concepts",
+                "Problem Solving"
+            ],
+            technologies: ["JavaScript", "Algorithms", "Data Structures", "ES6+", "Problem Solving"],
+            credentialId: "FCC-JS-ALGO-32109",
+            credentialUrl: "https://freecodecamp.org/certification/arshverma/javascript-algorithms-and-data-structures",
+            year: "2023",
+            validity: "Lifetime",
+            difficulty: "Intermediate",
+            duration: "3 Months",
+            recognition: "Industry Standard",
+            additionalImages: [],
+            verified: true,
+            featured: false
+        },
+        {
+            id: 8,
+            title: "React Development Professional Certificate",
+            issuer: "Meta",
+            date: "2022-12-01",
+            category: "Programming",
+            image: "assets/certificates/meta-react.jpg",
+            description: "Professional certification in React development covering advanced React concepts, state management, testing, and building scalable front-end applications.",
+            skills: [
+                "React.js",
+                "Redux",
+                "React Hooks",
+                "Component Architecture",
+                "Testing",
+                "Performance Optimization"
+            ],
+            technologies: ["React", "Redux", "Jest", "React Testing Library", "Webpack", "Babel"],
+            credentialId: "META-REACT-87654",
+            credentialUrl: "https://coursera.org/verify/professional-certificate/meta-react-developer",
+            year: "2022",
+            validity: "Lifetime",
+            difficulty: "Intermediate",
+            duration: "5 Months",
+            recognition: "Industry Standard",
+            additionalImages: [
+                "assets/certificates/meta-react-projects.jpg"
+            ],
+            verified: true,
+            featured: false
+        },
+        {
+            id: 9,
+            title: "Cybersecurity Fundamentals",
+            issuer: "IBM",
+            date: "2022-10-20",
+            category: "Security",
+            image: "assets/certificates/ibm-cybersecurity.jpg",
+            description: "Fundamental knowledge of cybersecurity principles, including network security, cryptography, threat intelligence, and security operations.",
+            skills: [
+                "Network Security",
+                "Cryptography",
+                "Threat Intelligence",
+                "Security Operations",
+                "Risk Management",
+                "Incident Response"
+            ],
+            technologies: ["Network Security", "Cryptography", "SIEM", "Firewalls", "VPN", "IDS/IPS"],
+            credentialId: "IBM-CYB-23456",
+            credentialUrl: "https://coursera.org/verify/cybersecurity-fundamentals",
+            year: "2022",
+            validity: "Lifetime",
+            difficulty: "Beginner",
+            duration: "2 Months",
+            recognition: "Industry Standard",
+            additionalImages: [],
+            verified: true,
+            featured: false
+        },
+        {
+            id: 10,
+            title: "Japanese Language Proficiency N3",
+            issuer: "Japan Foundation",
+            date: "2022-08-15",
+            category: "Language",
+            image: "assets/certificates/jlpt-n3.jpg",
+            description: "Japanese Language Proficiency Test Level N3 certification, demonstrating intermediate proficiency in reading, writing, listening, and speaking Japanese.",
+            skills: [
+                "Japanese Reading",
+                "Japanese Writing",
+                "Japanese Listening",
+                "Japanese Speaking",
+                "Kanji (650 characters)",
+                "Grammar & Vocabulary"
+            ],
+            technologies: ["Japanese Language", "Kanji", "Grammar", "Vocabulary", "Communication"],
+            credentialId: "JLPT-N3-2022-12345",
+            credentialUrl: "https://www.jlpt.jp/certificate/2022-N3-12345",
+            year: "2022",
+            validity: "Lifetime",
+            difficulty: "Intermediate",
+            duration: "2 Years",
+            recognition: "International",
+            additionalImages: [
+                "assets/certificates/jlpt-n3-score.jpg"
+            ],
+            verified: true,
+            featured: false
+        },
+        {
+            id: 11,
+            title: "Docker Certified Associate",
+            issuer: "Docker",
+            date: "2022-06-10",
+            category: "Cloud Computing",
+            image: "assets/certificates/docker-ca.jpg",
+            description: "Validated skills in containerization using Docker, including image creation, container orchestration, networking, security, and Docker in production environments.",
+            skills: [
+                "Containerization",
+                "Docker Orchestration",
+                "Image Management",
+                "Docker Networking",
+                "Container Security",
+                "Docker Compose"
+            ],
+            technologies: ["Docker", "Containerization", "Kubernetes", "Docker Swarm", "CI/CD"],
+            credentialId: "DCA-78901-23456",
+            credentialUrl: "https://certified.docker.com/certificate/dca-78901-23456",
+            year: "2022",
+            validity: "3 Years",
+            difficulty: "Intermediate",
+            duration: "2 Months",
+            recognition: "Global",
+            additionalImages: [
+                "assets/certificates/docker-ca-badge.jpg"
+            ],
+            verified: true,
+            featured: false
+        },
+        {
+            id: 12,
+            title: "Responsive Web Design",
+            issuer: "freeCodeCamp",
+            date: "2022-04-05",
+            category: "Design",
+            image: "assets/certificates/fcc-responsive.jpg",
+            description: "Certification in creating responsive web designs that work across all devices and screen sizes using HTML5, CSS3, and modern layout techniques.",
+            skills: [
+                "HTML5",
+                "CSS3",
+                "Responsive Design",
+                "Flexbox",
+                "CSS Grid",
+                "Accessibility",
+                "Cross-browser Compatibility"
+            ],
+            technologies: ["HTML5", "CSS3", "Flexbox", "CSS Grid", "Media Queries", "Accessibility"],
+            credentialId: "FCC-RWD-65432",
+            credentialUrl: "https://freecodecamp.org/certification/arshverma/responsive-web-design",
+            year: "2022",
+            validity: "Lifetime",
+            difficulty: "Beginner",
+            duration: "2 Months",
+            recognition: "Industry Standard",
+            additionalImages: [],
+            verified: true,
+            featured: false
+        }
+    ],
+
     testimonials: [
         {
             id: 1,
@@ -444,7 +803,234 @@ const PORTFOLIO_DATA = {
     ]
 };
 
-// Utility Functions
+// ==========================================
+// CERTIFICATE-SPECIFIC UTILITY FUNCTIONS
+// ==========================================
+
+/**
+ * Get all certificates
+ * @returns {Array} Array of certificate objects
+ */
+function getCertificates() {
+    return PORTFOLIO_DATA.certificates;
+}
+
+/**
+ * Get certificate by ID
+ * @param {number} id - Certificate ID
+ * @returns {Object|null} Certificate object or null if not found
+ */
+function getCertificateById(id) {
+    return PORTFOLIO_DATA.certificates.find(cert => cert.id === parseInt(id)) || null;
+}
+
+/**
+ * Get certificates by category
+ * @param {string} category - Category to filter by
+ * @returns {Array} Filtered certificates array
+ */
+function getCertificatesByCategory(category) {
+    if (category === 'all') return PORTFOLIO_DATA.certificates;
+    return PORTFOLIO_DATA.certificates.filter(cert => 
+        cert.category.toLowerCase() === category.toLowerCase()
+    );
+}
+
+/**
+ * Get certificates by issuer
+ * @param {string} issuer - Issuer to filter by
+ * @returns {Array} Filtered certificates array
+ */
+function getCertificatesByIssuer(issuer) {
+    if (issuer === 'all') return PORTFOLIO_DATA.certificates;
+    return PORTFOLIO_DATA.certificates.filter(cert => 
+        cert.issuer.toLowerCase().includes(issuer.toLowerCase())
+    );
+}
+
+/**
+ * Get certificates by year
+ * @param {string} year - Year to filter by
+ * @returns {Array} Filtered certificates array
+ */
+function getCertificatesByYear(year) {
+    if (year === 'all') return PORTFOLIO_DATA.certificates;
+    return PORTFOLIO_DATA.certificates.filter(cert => cert.year === year);
+}
+
+/**
+ * Get featured certificates
+ * @returns {Array} Array of featured certificates
+ */
+function getFeaturedCertificates() {
+    return PORTFOLIO_DATA.certificates.filter(cert => cert.featured);
+}
+
+/**
+ * Get certificate categories
+ * @returns {Array} Array of unique certificate categories
+ */
+function getCertificateCategories() {
+    const categories = [...new Set(PORTFOLIO_DATA.certificates.map(cert => cert.category))];
+    return categories.sort();
+}
+
+/**
+ * Get certificate issuers
+ * @returns {Array} Array of unique certificate issuers
+ */
+function getCertificateIssuers() {
+    const issuers = [...new Set(PORTFOLIO_DATA.certificates.map(cert => cert.issuer))];
+    return issuers.sort();
+}
+
+/**
+ * Get certificate years
+ * @returns {Array} Array of unique certificate years
+ */
+function getCertificateYears() {
+    const years = [...new Set(PORTFOLIO_DATA.certificates.map(cert => cert.year))];
+    return years.sort((a, b) => b - a); // Descending order
+}
+
+/**
+ * Filter certificates based on multiple criteria
+ * @param {Object} filters - Filter criteria
+ * @returns {Array} Filtered certificates array
+ */
+function filterCertificates(filters = {}) {
+    let certificates = [...PORTFOLIO_DATA.certificates];
+    
+    // Filter by category
+    if (filters.category && filters.category !== 'all') {
+        certificates = certificates.filter(cert => 
+            cert.category.toLowerCase() === filters.category.toLowerCase()
+        );
+    }
+    
+    // Filter by issuer
+    if (filters.issuer && filters.issuer !== 'all') {
+        certificates = certificates.filter(cert => 
+            cert.issuer.toLowerCase().includes(filters.issuer.toLowerCase())
+        );
+    }
+    
+    // Filter by year
+    if (filters.year && filters.year !== 'all') {
+        certificates = certificates.filter(cert => cert.year === filters.year);
+    }
+    
+    // Filter by difficulty
+    if (filters.difficulty && filters.difficulty !== 'all') {
+        certificates = certificates.filter(cert => 
+            cert.difficulty.toLowerCase() === filters.difficulty.toLowerCase()
+        );
+    }
+    
+    // Filter by featured
+    if (filters.featured) {
+        certificates = certificates.filter(cert => cert.featured);
+    }
+    
+    // Filter by verified
+    if (filters.verified) {
+        certificates = certificates.filter(cert => cert.verified);
+    }
+    
+    // Sort certificates
+    if (filters.sortBy) {
+        switch(filters.sortBy) {
+            case 'newest':
+                certificates.sort((a, b) => new Date(b.date) - new Date(a.date));
+                break;
+            case 'oldest':
+                certificates.sort((a, b) => new Date(a.date) - new Date(b.date));
+                break;
+            case 'difficulty':
+                const difficultyOrder = { 'Beginner': 1, 'Intermediate': 2, 'Advanced': 3 };
+                certificates.sort((a, b) => difficultyOrder[b.difficulty] - difficultyOrder[a.difficulty]);
+                break;
+            case 'issuer':
+                certificates.sort((a, b) => a.issuer.localeCompare(b.issuer));
+                break;
+            default:
+                // Default sort by ID
+                certificates.sort((a, b) => a.id - b.id);
+        }
+    }
+    
+    return certificates;
+}
+
+/**
+ * Search certificates by keyword
+ * @param {string} searchTerm - Search term
+ * @returns {Array} Filtered certificates array
+ */
+function searchCertificates(searchTerm) {
+    if (!searchTerm || searchTerm.trim() === '') {
+        return PORTFOLIO_DATA.certificates;
+    }
+    
+    const term = searchTerm.toLowerCase();
+    return PORTFOLIO_DATA.certificates.filter(cert => {
+        return (
+            cert.title.toLowerCase().includes(term) ||
+            cert.issuer.toLowerCase().includes(term) ||
+            cert.description.toLowerCase().includes(term) ||
+            cert.category.toLowerCase().includes(term) ||
+            cert.skills.some(skill => skill.toLowerCase().includes(term)) ||
+            cert.technologies.some(tech => tech.toLowerCase().includes(term))
+        );
+    });
+}
+
+/**
+ * Get certificate statistics
+ * @returns {Object} Certificate statistics
+ */
+function getCertificateStats() {
+    const certificates = PORTFOLIO_DATA.certificates;
+    const total = certificates.length;
+    const categories = getCertificateCategories();
+    const issuers = getCertificateIssuers();
+    
+    // Count by category
+    const categoryCount = {};
+    categories.forEach(category => {
+        categoryCount[category] = certificates.filter(cert => cert.category === category).length;
+    });
+    
+    // Count by year
+    const yearCount = {};
+    const years = getCertificateYears();
+    years.forEach(year => {
+        yearCount[year] = certificates.filter(cert => cert.year === year).length;
+    });
+    
+    // Count by difficulty
+    const difficultyCount = {
+        'Beginner': certificates.filter(cert => cert.difficulty === 'Beginner').length,
+        'Intermediate': certificates.filter(cert => cert.difficulty === 'Intermediate').length,
+        'Advanced': certificates.filter(cert => cert.difficulty === 'Advanced').length
+    };
+    
+    return {
+        totalCertificates: total,
+        totalCategories: categories.length,
+        totalIssuers: issuers.length,
+        featuredCount: certificates.filter(cert => cert.featured).length,
+        verifiedCount: certificates.filter(cert => cert.verified).length,
+        categoryCount: categoryCount,
+        yearCount: yearCount,
+        difficultyCount: difficultyCount
+    };
+}
+
+// ==========================================
+// EXISTING UTILITY FUNCTIONS (Updated)
+// ==========================================
+
 function formatDate(dateString) {
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
     return new Date(dateString).toLocaleDateString('en-US', options);
@@ -500,6 +1086,14 @@ function getProjectById(type, id) {
 
 function getGames() {
     return PORTFOLIO_DATA.games;
+}
+
+function getApps() {
+    return PORTFOLIO_DATA.apps;
+}
+
+function getWebsites() {
+    return PORTFOLIO_DATA.websites;
 }
 
 function getTestimonialsByType(type) {
@@ -624,17 +1218,21 @@ function getTechnologies(type) {
 }
 
 function getStats() {
+    const certificateStats = getCertificateStats();
+    
     return {
         totalGames: PORTFOLIO_DATA.games.length,
         totalWebsites: PORTFOLIO_DATA.websites.length,
         totalApps: PORTFOLIO_DATA.apps.length,
+        totalCertificates: certificateStats.totalCertificates,
         totalTestimonials: PORTFOLIO_DATA.testimonials.filter(t => t.approved).length,
         totalProjects: PORTFOLIO_DATA.games.length + 
                       PORTFOLIO_DATA.websites.length + 
                       PORTFOLIO_DATA.apps.length,
         averageRating: calculateAverageRating(),
         totalDownloads: calculateTotalDownloads(),
-        totalUsers: calculateTotalUsers()
+        totalUsers: calculateTotalUsers(),
+        certificateStats: certificateStats
     };
 }
 
@@ -721,7 +1319,8 @@ function validateProjectData(type, data) {
     const requiredFields = {
         games: ['name', 'description', 'category', 'rating', 'status', 'technologies'],
         websites: ['name', 'description', 'category', 'rating', 'status', 'technologies'],
-        apps: ['name', 'description', 'category', 'rating', 'status', 'platform', 'technologies']
+        apps: ['name', 'description', 'category', 'rating', 'status', 'platform', 'technologies'],
+        certificates: ['title', 'issuer', 'date', 'category', 'description', 'skills', 'technologies']
     };
     
     const required = requiredFields[type] || [];
@@ -733,7 +1332,10 @@ function validateProjectData(type, data) {
     };
 }
 
-// Make data and functions globally available
+// ==========================================
+// MAKE FUNCTIONS GLOBALLY AVAILABLE
+// ==========================================
+
 window.PORTFOLIO_DATA = PORTFOLIO_DATA;
 window.formatDate = formatDate;
 window.formatDateShort = formatDateShort;
@@ -741,6 +1343,20 @@ window.formatRelativeTime = formatRelativeTime;
 window.generateStars = generateStars;
 window.getProjectById = getProjectById;
 window.getGames = getGames;
+window.getApps = getApps;
+window.getWebsites = getWebsites;
+window.getCertificates = getCertificates;
+window.getCertificateById = getCertificateById;
+window.getCertificatesByCategory = getCertificatesByCategory;
+window.getCertificatesByIssuer = getCertificatesByIssuer;
+window.getCertificatesByYear = getCertificatesByYear;
+window.getFeaturedCertificates = getFeaturedCertificates;
+window.getCertificateCategories = getCertificateCategories;
+window.getCertificateIssuers = getCertificateIssuers;
+window.getCertificateYears = getCertificateYears;
+window.filterCertificates = filterCertificates;
+window.searchCertificates = searchCertificates;
+window.getCertificateStats = getCertificateStats;
 window.getTestimonialsByType = getTestimonialsByType;
 window.getTestimonialsByRating = getTestimonialsByRating;
 window.filterProjects = filterProjects;
@@ -762,6 +1378,20 @@ if (typeof module !== 'undefined' && module.exports) {
         generateStars,
         getProjectById,
         getGames,
+        getApps,
+        getWebsites,
+        getCertificates,
+        getCertificateById,
+        getCertificatesByCategory,
+        getCertificatesByIssuer,
+        getCertificatesByYear,
+        getFeaturedCertificates,
+        getCertificateCategories,
+        getCertificateIssuers,
+        getCertificateYears,
+        filterCertificates,
+        searchCertificates,
+        getCertificateStats,
         getTestimonialsByType,
         getTestimonialsByRating,
         filterProjects,
