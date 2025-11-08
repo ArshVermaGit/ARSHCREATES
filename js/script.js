@@ -41,37 +41,28 @@ function initializePage() {
 
 // Initialize Page-Specific Components
 function initializePageComponents(page) {
+    // Page-specific initializations are handled by their own scripts
+    // This function is kept for compatibility
+    console.log('Page type:', page);
+    
+    // Only initialize common page types here
     switch (page) {
         case 'home':
             initializeHomePage();
             break;
         case 'games':
-            initializeGamesPage();
-            break;
         case 'websites':
-            initializeWebsitesPage();
-            break;
         case 'apps':
-            initializeAppsPage();
-            break;
         case 'testimonials':
-            initializeTestimonialsPage();
-            break;
         case 'admin':
-            initializeAdminPage();
-            break;
         case 'game-detail':
-            initializeGameDetailPage();
-            break;
         case 'website-detail':
-            initializeWebsiteDetailPage();
-            break;
         case 'app-detail':
-            initializeAppDetailPage();
+            // These are initialized by their own scripts
+            console.log('Waiting for page-specific script to initialize...');
             break;
         default:
-            console.log('Unknown page, using home initialization');
-            initializeHomePage();
+            console.log('Unknown page, using default initialization');
     }
 }
 
