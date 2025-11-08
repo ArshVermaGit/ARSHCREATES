@@ -1,72 +1,120 @@
 // ==========================================
-// GAMES PAGE - Games portfolio functionality
-// Handles filtering, sorting, and game display
+// GAMES PAGE - COMPLETE & PERFECT IMPLEMENTATION
+// Handles all game portfolio functionality
 // ==========================================
 
-// Global Variables
-let currentGames = [];
-let currentFilters = {
-    category: 'all',
-    status: 'all',
-    sort: 'newest'
+// ==========================================
+// GLOBAL STATE
+// ==========================================
+const GAMES_STATE = {
+    allGames: [],
+    filteredGames: [],
+    currentFilters: {
+        category: 'all',
+        status: 'all',
+        sort: 'newest',
+        search: ''
+    },
+    isLoading: false,
+    animationDelay: 100
 };
 
-// Initialize Games Page
+// ==========================================
+// INITIALIZATION
+// ==========================================
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('🎮 Games page initializing...');
+    initializeGamesPage();
+});
+
 function initializeGamesPage() {
-    console.log('Initializing games page...');
-    loadGames();
-    setupGameFilters();
-    setupGameEventListeners();
-    updateHeaderStats();
-    
-    // Hide loading screen
-    setTimeout(() => {
-        const loadingScreen = document.getElementById('loadingScreen');
-        if (loadingScreen) {
-            loadingScreen.style.opacity = '0';
-            setTimeout(() => {
-                loadingScreen.style.display = 'none';
-            }, 500);
-        }
-    }, 1000);
+    try {
+        // 1. Load all games from data.js
+        loadGamesData();
+        
+        // 2. Setup filter controls
+        setupGameFilters();
+        
+        // 3. Setup search functionality
+        setupGameSearch();
+        
+        // 4. Setup event listeners
+        setupGameEventListeners();
+        
+        // 5. Update header statistics
+        updateHeaderStats();
+        
+        // 6. Display games
+        displayGames(GAMES_STATE.allGames);
+        
+        // 7. Hide loading screen
+        setTimeout(hideLoadingScreen, 800);
+        
+        console.log('✅ Games page initialized successfully');
+        console.log(`📊 Loaded ${GAMES_STATE.allGames.length} games`);
+        
+    } catch (error) {
+        console.error('❌ Error initializing games page:', error);
+        showNotification('Failed to load games', 'error');
+        hideLoadingScreen();
+    }
 }
 
-// Load Games
-function loadGames() {
+// ==========================================
+// DATA LOADING
+// ==========================================
+function loadGamesData() {
+    try {
+        // Get games from data.js (using global PORTFOLIO_DATA or window.getGames())
+        if (typeof window.getGames === 'function') {
+            GAMES_STATE.allGames = window.getGames();
+        } else if (typeof PORTFOLIO_DATA !== 'undefined' && PORTFOLIO_DATA.games) {
+            GAMES_STATE.allGames = PORTFOLIO_DATA.games;
+        } else {
+            // Fallback: Create sample data if no data exists
+            console.warn('⚠️ No games data found, using fallback');
+            GAMES_STATE.allGames = createSampleGames();
+        }
+        
+        GAMES_STATE.filteredGames = [...GAMES_STATE.allGames];
+        
+        console.log('📦 Games loaded:', GAMES_STATE.allGames.length);
+        
+    } catch (error) {
+        console.error('❌ Error loading games:', error);
+        GAMES_STATE.allGames = [];
+        GAMES_STATE.filteredGames = [];
+    }
+}
+
+// ==========================================
+// DISPLAY GAMES
+// ==========================================
+function displayGames(games) {
     const gamesGrid = document.getElementById('gamesGrid');
+    
     if (!gamesGrid) {
-        console.error('Games grid not found!');
+        console.error('❌ Games grid element not found');
         return;
     }
     
-    // Use safe data access
-    currentGames = getGames();
-    console.log('Loaded games:', currentGames);
-    
-    if (currentGames.length === 0) {
-        console.warn('No games found in portfolio data');
+    // Show loading state
+    if (GAMES_STATE.isLoading) {
         gamesGrid.innerHTML = `
             <div class="loading-games">
-                <i class="fas fa-gamepad"></i>
-                <p>No games available at the moment.</p>
+                <i class="fas fa-spinner fa-spin"></i>
+                <p>Loading amazing games...</p>
             </div>
         `;
         return;
     }
     
-    displayGames(currentGames);
-}
-
-// Display Games - SIMPLIFIED: Only image, title, status, rating
-function displayGames(games) {
-    const gamesGrid = document.getElementById('gamesGrid');
-    if (!gamesGrid) return;
-    
-    if (games.length === 0) {
+    // Show empty state
+    if (!games || games.length === 0) {
         gamesGrid.innerHTML = `
             <div class="no-games">
                 <i class="fas fa-gamepad"></i>
-                <p>No games match your filters</p>
+                <p>No games match your current filters</p>
                 <button class="btn btn-primary" onclick="resetFilters()">
                     <i class="fas fa-redo"></i>
                     <span>Reset Filters</span>
@@ -76,180 +124,521 @@ function displayGames(games) {
         return;
     }
     
-    gamesGrid.innerHTML = games.map(game => `
-        <div class="game-card" data-game-id="${game.id}" data-category="${game.category}" data-status="${game.status}" data-rating="${game.rating}">
+    // Generate game cards HTML
+    gamesGrid.innerHTML = games.map(game => createGameCard(game)).join('');
+    
+    // Setup card interactions
+    setupGameCardListeners();
+    
+    // Animate cards entrance
+    animateGameCards();
+    
+    console.log(`✅ Displayed ${games.length} games`);
+}
+
+// ==========================================
+// CREATE GAME CARD HTML
+// ==========================================
+function createGameCard(game) {
+    const statusClass = game.status.toLowerCase().replace(/\s+/g, '-');
+    const starsHTML = generateStars(game.rating);
+    
+    return `
+        <div class="game-card" 
+             data-game-id="${game.id}" 
+             data-category="${game.category}" 
+             data-status="${game.status}" 
+             data-rating="${game.rating}">
+            
+            <!-- Game Image -->
             <div class="game-image">
-                <img src="${game.image}" alt="${game.name}" loading="lazy" 
-                     onerror="this.src='https://via.placeholder.com/400x250/393E41/FFFFFF?text=${encodeURIComponent(game.name)}'">
+                <img src="${game.image || 'assets/images/games/default.jpg'}" 
+                     alt="${game.name}"
+                     loading="lazy"
+                     onerror="this.src='https://via.placeholder.com/400x250/E4572E/FFFFFF?text=${encodeURIComponent(game.name)}'">
+                
+                <!-- Hover Overlay -->
                 <div class="game-overlay">
                     <div class="overlay-content">
-                        <a href="game-detail.html?id=${game.id}" class="view-details-btn">
+                        <button class="btn btn-primary btn-view-details" 
+                                data-game-id="${game.id}"
+                                aria-label="View ${game.name} details">
                             <i class="fas fa-eye"></i>
                             <span>View Details</span>
-                        </a>
-                        ${game.status === 'Live' ? `
-                        <button class="play-now-btn" onclick="event.stopPropagation(); window.location.href='game-detail.html?id=${game.id}&play=true'">
-                            <i class="fas fa-play"></i>
-                            <span>Play Now</span>
                         </button>
+                        ${game.status === 'Live' ? `
+                            <button class="btn btn-secondary btn-play-now" 
+                                    data-game-id="${game.id}"
+                                    aria-label="Play ${game.name}">
+                                <i class="fas fa-play"></i>
+                                <span>Play Now</span>
+                            </button>
                         ` : ''}
                     </div>
                 </div>
-                <div class="game-badge status-${game.status.toLowerCase().replace(' ', '-')}">${game.status}</div>
+                
+                <!-- Status Badge -->
+                <div class="game-badge status-${statusClass}">${game.status}</div>
             </div>
             
+            <!-- Game Content -->
             <div class="game-content">
-                <h3 class="game-title">${game.name}</h3>
-                <p class="game-overview">${game.overview}</p>
-                <div class="game-meta">
+                <div class="game-header">
+                    <h3 class="game-title">${game.name}</h3>
                     <div class="game-rating">
-                        <div class="rating-stars">${generateStars(game.rating)}</div>
+                        <div class="rating-stars">${starsHTML}</div>
                         <span class="rating-value">${game.rating}</span>
                     </div>
-                    <span class="game-category">${game.category}</span>
+                </div>
+                
+                <div class="game-meta">
+                    <span class="game-category">
+                        <i class="fas fa-tag"></i>
+                        ${game.category}
+                    </span>
+                    ${game.releaseDate ? `
+                        <span class="game-date">
+                            <i class="fas fa-calendar"></i>
+                            ${formatDate(game.releaseDate)}
+                        </span>
+                    ` : ''}
+                </div>
+                
+                <p class="game-description">${game.overview || game.description || 'An exciting gaming experience awaits!'}</p>
+                
+                ${game.features && game.features.length > 0 ? `
+                    <div class="game-features">
+                        ${game.features.slice(0, 3).map(feature => `
+                            <span class="game-feature">
+                                <i class="fas fa-check"></i>
+                                ${feature}
+                            </span>
+                        `).join('')}
+                    </div>
+                ` : ''}
+                
+                <div class="game-actions">
+                    <button class="btn btn-primary btn-view-game" 
+                            data-game-id="${game.id}"
+                            aria-label="View ${game.name}">
+                        <i class="fas fa-info-circle"></i>
+                        <span>Learn More</span>
+                    </button>
+                    ${game.repositoryUrl ? `
+                        <a href="${game.repositoryUrl}" 
+                           class="btn btn-secondary"
+                           target="_blank"
+                           rel="noopener noreferrer"
+                           aria-label="View ${game.name} source code">
+                            <i class="fab fa-github"></i>
+                            <span>View Code</span>
+                        </a>
+                    ` : ''}
                 </div>
             </div>
         </div>
-    `).join('');
-    
-    // Add event listeners to game cards
-    setupGameCardListeners();
-    
-    // Animate cards on load
-    animateGameCards();
+    `;
 }
 
-// Setup Game Filters
+// ==========================================
+// FILTER SETUP
+// ==========================================
 function setupGameFilters() {
+    console.log('🔧 Setting up game filters...');
+    
+    // Category Filter
+    setupCategoryFilter();
+    
+    // Status Filter
+    setupStatusFilter();
+    
+    // Sort Filter
+    setupSortFilter();
+    
+    console.log('✅ Filters initialized');
+}
+
+function setupCategoryFilter() {
     const categoryFilter = document.getElementById('categoryFilter');
+    
+    if (!categoryFilter) return;
+    
+    // Get unique categories
+    const categories = [...new Set(GAMES_STATE.allGames.map(game => game.category))];
+    
+    // Clear existing options except "All"
+    categoryFilter.innerHTML = '<option value="all">All Categories</option>';
+    
+    // Add category options
+    categories.forEach(category => {
+        const option = document.createElement('option');
+        option.value = category;
+        option.textContent = category;
+        categoryFilter.appendChild(option);
+    });
+    
+    // Event listener
+    categoryFilter.addEventListener('change', function() {
+        GAMES_STATE.currentFilters.category = this.value;
+        applyFilters();
+        
+        console.log('📂 Category filter changed:', this.value);
+    });
+}
+
+function setupStatusFilter() {
     const statusFilter = document.getElementById('statusFilter');
+    
+    if (!statusFilter) return;
+    
+    statusFilter.addEventListener('change', function() {
+        GAMES_STATE.currentFilters.status = this.value;
+        applyFilters();
+        
+        console.log('📊 Status filter changed:', this.value);
+    });
+}
+
+function setupSortFilter() {
     const sortFilter = document.getElementById('sortFilter');
     
-    // Populate category filter
-    if (categoryFilter) {
-        const categories = [...new Set(getGames().map(game => game.category))];
-        categories.forEach(category => {
-            const option = document.createElement('option');
-            option.value = category;
-            option.textContent = category;
-            categoryFilter.appendChild(option);
-        });
+    if (!sortFilter) return;
+    
+    sortFilter.addEventListener('change', function() {
+        GAMES_STATE.currentFilters.sort = this.value;
+        applyFilters();
         
-        categoryFilter.addEventListener('change', function() {
-            currentFilters.category = this.value;
-            applyGameFilters();
-        });
-    }
-    
-    if (statusFilter) {
-        statusFilter.addEventListener('change', function() {
-            currentFilters.status = this.value;
-            applyGameFilters();
-        });
-    }
-    
-    if (sortFilter) {
-        sortFilter.addEventListener('change', function() {
-            currentFilters.sort = this.value;
-            applyGameFilters();
-        });
-    }
+        console.log('🔄 Sort changed:', this.value);
+    });
 }
 
-// Apply Filters
-function applyGameFilters() {
-    let filteredGames = getGames();
+// ==========================================
+// SEARCH SETUP
+// ==========================================
+function setupGameSearch() {
+    const searchInput = document.querySelector('.search-input');
     
-    // Category filter
-    if (currentFilters.category !== 'all') {
-        filteredGames = filteredGames.filter(game => 
-            game.category === currentFilters.category
+    if (!searchInput) return;
+    
+    searchInput.addEventListener('input', debounce(function(e) {
+        const searchTerm = e.target.value.toLowerCase().trim();
+        GAMES_STATE.currentFilters.search = searchTerm;
+        
+        applyFilters();
+        
+        console.log('🔍 Search:', searchTerm || '(cleared)');
+    }, 300));
+    
+    console.log('✅ Search initialized');
+}
+
+// ==========================================
+// APPLY FILTERS
+// ==========================================
+function applyFilters() {
+    let filtered = [...GAMES_STATE.allGames];
+    
+    // Apply category filter
+    if (GAMES_STATE.currentFilters.category !== 'all') {
+        filtered = filtered.filter(game => 
+            game.category === GAMES_STATE.currentFilters.category
         );
     }
     
-    // Status filter
-    if (currentFilters.status !== 'all') {
-        filteredGames = filteredGames.filter(game => 
-            game.status === currentFilters.status
+    // Apply status filter
+    if (GAMES_STATE.currentFilters.status !== 'all') {
+        filtered = filtered.filter(game => 
+            game.status === GAMES_STATE.currentFilters.status
         );
     }
     
-    // Sort games
-    filteredGames = sortGames(filteredGames, currentFilters.sort);
+    // Apply search filter
+    if (GAMES_STATE.currentFilters.search) {
+        const searchTerm = GAMES_STATE.currentFilters.search;
+        filtered = filtered.filter(game => 
+            game.name.toLowerCase().includes(searchTerm) ||
+            (game.overview && game.overview.toLowerCase().includes(searchTerm)) ||
+            (game.description && game.description.toLowerCase().includes(searchTerm)) ||
+            game.category.toLowerCase().includes(searchTerm) ||
+            (game.features && game.features.some(f => f.toLowerCase().includes(searchTerm)))
+        );
+    }
     
-    currentGames = filteredGames;
-    displayGames(filteredGames);
+    // Apply sorting
+    filtered = sortGames(filtered, GAMES_STATE.currentFilters.sort);
+    
+    GAMES_STATE.filteredGames = filtered;
+    displayGames(filtered);
+    
+    console.log(`🎯 Filters applied: ${filtered.length} games shown`);
 }
 
-// Sort Games
+// ==========================================
+// SORT GAMES
+// ==========================================
 function sortGames(games, sortBy) {
-    const sortedGames = [...games];
+    const sorted = [...games];
     
     switch (sortBy) {
         case 'newest':
-            return sortedGames.sort((a, b) => 
-                new Date(b.releaseDate) - new Date(a.releaseDate)
+            return sorted.sort((a, b) => 
+                new Date(b.releaseDate || 0) - new Date(a.releaseDate || 0)
             );
+            
         case 'oldest':
-            return sortedGames.sort((a, b) => 
-                new Date(a.releaseDate) - new Date(b.releaseDate)
+            return sorted.sort((a, b) => 
+                new Date(a.releaseDate || 0) - new Date(b.releaseDate || 0)
             );
+            
         case 'rating':
-            return sortedGames.sort((a, b) => b.rating - a.rating);
+            return sorted.sort((a, b) => b.rating - a.rating);
+            
         case 'popular':
-            return sortedGames.sort((a, b) => b.playCount - a.playCount);
+            return sorted.sort((a, b) => 
+                (b.playCount || 0) - (a.playCount || 0)
+            );
+            
         default:
-            return sortedGames;
+            return sorted;
     }
 }
 
-// Reset Filters
+// ==========================================
+// RESET FILTERS
+// ==========================================
 function resetFilters() {
-    currentFilters = {
+    console.log('🔄 Resetting all filters...');
+    
+    // Reset state
+    GAMES_STATE.currentFilters = {
         category: 'all',
         status: 'all',
-        sort: 'newest'
+        sort: 'newest',
+        search: ''
     };
     
-    // Reset select elements
+    // Reset UI elements
     const categoryFilter = document.getElementById('categoryFilter');
     const statusFilter = document.getElementById('statusFilter');
     const sortFilter = document.getElementById('sortFilter');
+    const searchInput = document.querySelector('.search-input');
     
     if (categoryFilter) categoryFilter.value = 'all';
     if (statusFilter) statusFilter.value = 'all';
     if (sortFilter) sortFilter.value = 'newest';
+    if (searchInput) searchInput.value = '';
     
-    applyGameFilters();
-    showNotification('Filters reset', 'success');
+    // Reapply filters (which will show all games)
+    applyFilters();
+    
+    showNotification('Filters reset successfully', 'success');
 }
 
-// Setup Game Event Listeners
-function setupGameEventListeners() {
-    // Search functionality (if search input exists)
-    const searchInput = document.querySelector('.search-input');
-    if (searchInput) {
-        searchInput.addEventListener('input', debounce(function(e) {
-            const searchTerm = e.target.value.toLowerCase().trim();
-            
-            if (searchTerm === '') {
-                applyGameFilters();
-                return;
+// ==========================================
+// GAME CARD INTERACTIONS
+// ==========================================
+function setupGameCardListeners() {
+    // View Details Buttons
+    document.querySelectorAll('.btn-view-details, .btn-view-game').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const gameId = this.getAttribute('data-game-id');
+            viewGameDetails(gameId);
+        });
+    });
+    
+    // Play Now Buttons
+    document.querySelectorAll('.btn-play-now').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const gameId = this.getAttribute('data-game-id');
+            playGame(gameId);
+        });
+    });
+    
+    // Card Click (entire card clickable)
+    document.querySelectorAll('.game-card').forEach(card => {
+        // Click handler
+        card.addEventListener('click', function(e) {
+            // Don't trigger if clicking on buttons or links
+            if (!e.target.closest('button') && !e.target.closest('a')) {
+                const gameId = this.getAttribute('data-game-id');
+                viewGameDetails(gameId);
             }
+        });
+        
+        // Hover effects (desktop only)
+        if (window.innerWidth > 768) {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-8px)';
+            });
             
-            const filteredGames = getGames().filter(game => 
-                game.name.toLowerCase().includes(searchTerm) ||
-                (game.overview && game.overview.toLowerCase().includes(searchTerm)) ||
-                game.category.toLowerCase().includes(searchTerm) ||
-                (game.description && game.description.toLowerCase().includes(searchTerm))
-            );
-            
-            displayGames(filteredGames);
-        }, 300));
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        }
+    });
+    
+    console.log('✅ Game card listeners attached');
+}
+
+// ==========================================
+// EVENT LISTENERS
+// ==========================================
+function setupGameEventListeners() {
+    // Window resize handler
+    window.addEventListener('resize', debounce(function() {
+        // Reattach listeners if needed
+        setupGameCardListeners();
+    }, 250));
+    
+    // Keyboard shortcuts
+    document.addEventListener('keydown', function(e) {
+        // Press 'R' to reset filters
+        if (e.key === 'r' || e.key === 'R') {
+            if (!e.target.matches('input, textarea')) {
+                resetFilters();
+            }
+        }
+    });
+    
+    console.log('✅ Event listeners initialized');
+}
+
+// ==========================================
+// NAVIGATION FUNCTIONS
+// ==========================================
+function viewGameDetails(gameId) {
+    console.log('🎮 Viewing game details:', gameId);
+    
+    if (!gameId) {
+        showNotification('Invalid game ID', 'error');
+        return;
+    }
+    
+    // Navigate to game detail page
+    window.location.href = `game-detail.html?id=${gameId}`;
+}
+
+function playGame(gameId) {
+    console.log('▶️ Playing game:', gameId);
+    
+    if (!gameId) {
+        showNotification('Invalid game ID', 'error');
+        return;
+    }
+    
+    // Navigate to game detail page with play parameter
+    window.location.href = `game-detail.html?id=${gameId}&play=true`;
+}
+
+// ==========================================
+// HEADER STATISTICS
+// ==========================================
+function updateHeaderStats() {
+    const allGames = GAMES_STATE.allGames;
+    
+    if (allGames.length === 0) return;
+    
+    // Calculate statistics
+    const totalGames = allGames.length;
+    const averageRating = (allGames.reduce((sum, game) => sum + game.rating, 0) / totalGames).toFixed(1);
+    const totalPlayers = allGames.reduce((sum, game) => sum + (game.playCount || 0), 0);
+    
+    // Update UI
+    const statNumbers = document.querySelectorAll('.header-stats .stat-number');
+    
+    if (statNumbers.length >= 3) {
+        statNumbers[0].textContent = `${totalGames}+`;
+        statNumbers[1].textContent = averageRating;
+        statNumbers[2].textContent = formatNumber(totalPlayers);
+    }
+    
+    console.log('📊 Stats updated:', { totalGames, averageRating, totalPlayers });
+}
+
+// ==========================================
+// ANIMATIONS
+// ==========================================
+function animateGameCards() {
+    const cards = document.querySelectorAll('.game-card');
+    
+    cards.forEach((card, index) => {
+        // Set initial state
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(30px)';
+        
+        // Animate with stagger
+        setTimeout(() => {
+            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            card.style.opacity = '1';
+            card.style.transform = 'translateY(0)';
+        }, index * GAMES_STATE.animationDelay);
+    });
+}
+
+function hideLoadingScreen() {
+    const loadingScreen = document.getElementById('loadingScreen');
+    
+    if (loadingScreen) {
+        loadingScreen.style.opacity = '0';
+        setTimeout(() => {
+            loadingScreen.style.display = 'none';
+        }, 500);
     }
 }
 
-// Debounce function
+// ==========================================
+// UTILITY FUNCTIONS
+// ==========================================
+function generateStars(rating) {
+    const fullStars = Math.floor(rating);
+    const hasHalfStar = rating % 1 >= 0.5;
+    const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+    
+    let html = '';
+    
+    // Full stars
+    for (let i = 0; i < fullStars; i++) {
+        html += '<i class="fas fa-star"></i>';
+    }
+    
+    // Half star
+    if (hasHalfStar) {
+        html += '<i class="fas fa-star-half-alt"></i>';
+    }
+    
+    // Empty stars
+    for (let i = 0; i < emptyStars; i++) {
+        html += '<i class="far fa-star"></i>';
+    }
+    
+    return html;
+}
+
+function formatNumber(num) {
+    if (!num) return '0';
+    
+    if (num >= 1000000) {
+        return (num / 1000000).toFixed(1) + 'M';
+    } else if (num >= 1000) {
+        return (num / 1000).toFixed(1) + 'K';
+    }
+    
+    return num.toString();
+}
+
+function formatDate(dateString) {
+    if (!dateString) return 'N/A';
+    
+    const date = new Date(dateString);
+    
+    if (isNaN(date.getTime())) return 'N/A';
+    
+    const options = { year: 'numeric', month: 'short' };
+    return date.toLocaleDateString('en-US', options);
+}
+
 function debounce(func, wait) {
     let timeout;
     return function executedFunction(...args) {
@@ -262,134 +651,91 @@ function debounce(func, wait) {
     };
 }
 
-// Setup Game Card Listeners
-function setupGameCardListeners() {
-    // Card click (for whole card interaction)
-    document.querySelectorAll('.game-card').forEach(card => {
-        card.addEventListener('click', function(e) {
-            // Don't trigger if clicking on buttons inside the card
-            if (!e.target.closest('.view-details-btn') && !e.target.closest('.play-now-btn')) {
-                const gameId = parseInt(this.getAttribute('data-game-id'));
-                viewGameDetails(gameId);
-            }
-        });
-        
-        // Add hover effect
-        card.addEventListener('mouseenter', function() {
-            this.style.transform = 'translateY(-5px)';
-        });
-        
-        card.addEventListener('mouseleave', function() {
-            this.style.transform = 'translateY(0)';
-        });
-    });
-}
-
-// View Game Details
-function viewGameDetails(gameId) {
-    window.location.href = `game-detail.html?id=${gameId}`;
-}
-
-// Update Header Stats
-function updateHeaderStats() {
-    const allGames = getGames();
-    
-    // Calculate stats
-    const totalGames = allGames.length;
-    const averageRating = totalGames > 0 
-        ? (allGames.reduce((sum, game) => sum + game.rating, 0) / totalGames).toFixed(1)
-        : '0.0';
-    const totalPlayers = allGames.reduce((sum, game) => sum + (game.playCount || 0), 0);
-    
-    // Update stat numbers
-    const statNumbers = document.querySelectorAll('.header-stats .stat-number');
-    if (statNumbers.length >= 3) {
-        statNumbers[0].textContent = `${totalGames}+`;
-        statNumbers[1].textContent = averageRating;
-        statNumbers[2].textContent = formatNumber(totalPlayers);
-    }
-}
-
-// Animate Game Cards
-function animateGameCards() {
-    const cards = document.querySelectorAll('.game-card');
-    cards.forEach((card, index) => {
-        card.style.opacity = '0';
-        card.style.transform = 'translateY(30px)';
-        
-        setTimeout(() => {
-            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-            card.style.opacity = '1';
-            card.style.transform = 'translateY(0)';
-        }, index * 100);
-    });
-}
-
-// Utility: Generate Stars
-function generateStars(rating) {
-    const fullStars = Math.floor(rating);
-    const hasHalfStar = rating % 1 >= 0.5;
-    const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
-    
-    let starsHTML = '';
-    
-    for (let i = 0; i < fullStars; i++) {
-        starsHTML += '<i class="fas fa-star"></i>';
-    }
-    
-    if (hasHalfStar) {
-        starsHTML += '<i class="fas fa-star-half-alt"></i>';
-    }
-    
-    for (let i = 0; i < emptyStars; i++) {
-        starsHTML += '<i class="far fa-star"></i>';
-    }
-    
-    return starsHTML;
-}
-
-// Utility: Format Number
-function formatNumber(num) {
-    if (num >= 1000000) {
-        return (num / 1000000).toFixed(1) + 'M';
-    } else if (num >= 1000) {
-        return (num / 1000).toFixed(1) + 'K';
-    }
-    return num.toString();
-}
-
-// Show Notification
 function showNotification(message, type = 'info') {
-    console.log(`${type}: ${message}`);
-    // Simple notification implementation
+    // Use global notification function if available
+    if (typeof window.showNotification === 'function') {
+        window.showNotification(message, type);
+        return;
+    }
+    
+    // Fallback notification
+    console.log(`[${type.toUpperCase()}] ${message}`);
+    
     const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
     notification.style.cssText = `
         position: fixed;
-        top: 20px;
+        top: 100px;
         right: 20px;
-        padding: 12px 20px;
-        background: ${type === 'error' ? '#dc3545' : type === 'success' ? '#28a745' : '#17a2b8'};
+        padding: 1rem 1.5rem;
+        background: ${getNotificationColor(type)};
         color: white;
-        border-radius: 4px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         z-index: 10000;
         font-weight: 500;
+        animation: slideInRight 0.3s ease;
     `;
     notification.textContent = message;
+    
     document.body.appendChild(notification);
     
     setTimeout(() => {
-        document.body.removeChild(notification);
+        notification.style.animation = 'slideOutRight 0.3s ease';
+        setTimeout(() => notification.remove(), 300);
     }, 3000);
 }
 
-// Make functions globally available
+function getNotificationColor(type) {
+    const colors = {
+        success: '#10B981',
+        error: '#EF4444',
+        warning: '#F59E0B',
+        info: '#3B82F6'
+    };
+    return colors[type] || colors.info;
+}
+
+// ==========================================
+// SAMPLE DATA FALLBACK
+// ==========================================
+function createSampleGames() {
+    return [
+        {
+            id: 1,
+            name: "Sample Game 1",
+            category: "Action RPG",
+            status: "Live",
+            rating: 4.5,
+            overview: "An exciting action RPG adventure",
+            releaseDate: "2024-01-15",
+            playCount: 5000,
+            image: "https://via.placeholder.com/400x250/E4572E/FFFFFF?text=Sample+Game+1"
+        },
+        {
+            id: 2,
+            name: "Sample Game 2",
+            category: "Racing",
+            status: "Live",
+            rating: 4.8,
+            overview: "Fast-paced racing action",
+            releaseDate: "2024-02-20",
+            playCount: 8000,
+            image: "https://via.placeholder.com/400x250/E4572E/FFFFFF?text=Sample+Game+2"
+        }
+    ];
+}
+
+// ==========================================
+// GLOBAL EXPORTS
+// ==========================================
 window.initializeGamesPage = initializeGamesPage;
 window.resetFilters = resetFilters;
 window.viewGameDetails = viewGameDetails;
+window.playGame = playGame;
+window.applyFilters = applyFilters;
 
-// Initialize when page loads
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initializeGamesPage);
-} else {
-    initializeGamesPage();
-}
+// ==========================================
+// AUTO-INITIALIZE
+// ==========================================
+console.log('✅ Games.js loaded successfully');
