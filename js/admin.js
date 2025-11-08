@@ -536,9 +536,5 @@ function loadAnalytics() {
     if (avgSession) avgSession.textContent = analytics.averageSession || '4m 30s';
 }
 
-// Initialize when page loads
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initializeAdminPage);
-} else {
-    initializeAdminPage();
-}
+// Make function globally available
+window.initializeAdminPage = initializeAdminPage;
