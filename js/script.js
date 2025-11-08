@@ -7,6 +7,11 @@
 var currentTheme = 'dark';
 var isLoading = false;
 
+console.log('=== CONTACT FORM DEBUG ===');
+console.log('Script.js loaded');
+console.log('Utils.js available:', typeof window.saveContact);
+console.log('Storage keys:', typeof STORAGE_KEYS);
+
 // DOM Content Loaded
 document.addEventListener('DOMContentLoaded', function() {
     console.log('DOM loaded - initializing page');
@@ -245,8 +250,15 @@ function scrollToTop() {
     });
 }
 
-// Contact Form
+// Contact Form Setup
 function setupContactForm(form) {
+    console.log('Setting up contact form...', form);
+    
+    if (!form) {
+        console.error('Contact form not found!');
+        return;
+    }
+    
     const contactType = document.getElementById('contactType');
     const projectDetailsGroup = document.getElementById('projectDetailsGroup');
     const feedbackGroup = document.getElementById('feedbackGroup');
@@ -254,13 +266,12 @@ function setupContactForm(form) {
     // Show/hide additional fields based on contact type
     if (contactType) {
         contactType.addEventListener('change', function() {
+            console.log('Contact type changed:', this.value);
             const value = this.value;
             
-            // Hide all optional groups
             if (projectDetailsGroup) projectDetailsGroup.style.display = 'none';
             if (feedbackGroup) feedbackGroup.style.display = 'none';
             
-            // Show relevant group
             if (value === 'project' && projectDetailsGroup) {
                 projectDetailsGroup.style.display = 'block';
             } else if (value === 'feedback' && feedbackGroup) {
@@ -269,69 +280,43 @@ function setupContactForm(form) {
         });
     }
     
-    // Form submission
-    form.addEventListener('submit', function(e) {
+    // Form submission with debugging
+    form.addEventListener('submit', async function(e) {
         e.preventDefault();
-        handleFormSubmission(this);
+        e.stopPropagation();
+        
+        console.log('=== FORM SUBMITTED ===');
+        console.log('Event:', e);
+        console.log('Form:', this);
+        
+        await handleFormSubmission(this);
     });
+    
+    console.log('✓ Contact form setup complete');
 }
 
 function handleFormSubmission(form) {
-    if (isLoading) return;
-    
     const formData = new FormData(form);
-    const data = {
+    const contact = {
+        id: Date.now(),
         fullName: formData.get('fullName'),
         email: formData.get('email'),
-        phone: formData.get('phone') || formData.get('phoneNumber') || '',
+        phone: formData.get('phoneNumber') || '',
         contactType: formData.get('contactType'),
-        projectDetails: formData.get('projectDetails') || '',
-        feedback: formData.get('feedback') || '',
-        message: formData.get('message')
+        message: formData.get('message'),
+        date: new Date().toISOString(),
+        status: 'unread'
     };
     
-    // Basic validation
-    if (!data.fullName || !data.email || !data.contactType || !data.message) {
-        showNotification('Please fill in all required fields', 'error');
-        return;
-    }
+    // Save to localStorage directly
+    const contacts = JSON.parse(localStorage.getItem('portfolio_contacts') || '[]');
+    contacts.unshift(contact);
+    localStorage.setItem('portfolio_contacts', JSON.stringify(contacts));
     
-    if (!isValidEmail(data.email)) {
-        showNotification('Please enter a valid email address', 'error');
-        return;
-    }
-    
-    isLoading = true;
-    showLoadingScreen('Sending your message...');
-    
-    // Simulate API call
-    setTimeout(() => {
-        try {
-            // Save using the utility function
-            const success = saveContact(data);
-            
-            if (success) {
-                showNotification('Thank you for your message! I\'ll get back to you soon.', 'success');
-                form.reset();
-                
-                // Hide optional fields
-                const projectDetailsGroup = document.getElementById('projectDetailsGroup');
-                const feedbackGroup = document.getElementById('feedbackGroup');
-                if (projectDetailsGroup) projectDetailsGroup.style.display = 'none';
-                if (feedbackGroup) feedbackGroup.style.display = 'none';
-            } else {
-                showNotification('There was an error sending your message. Please try again.', 'error');
-            }
-            
-        } catch (error) {
-            console.error('Error saving contact:', error);
-            showNotification('There was an error sending your message. Please try again.', 'error');
-        } finally {
-            isLoading = false;
-            hideLoadingScreen();
-        }
-    }, 1500);
+    alert('Message sent successfully!');
+    form.reset();
 }
+
 
 function isValidEmail(email) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
