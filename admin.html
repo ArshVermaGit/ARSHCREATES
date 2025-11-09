@@ -221,6 +221,90 @@
                 </div>
             </div>
 
+            <!-- Certificates Management -->
+<div class="admin-section">
+    <div class="section-header">
+        <h2>Certificates Management</h2>
+        <div class="section-actions">
+            <button id="addCertificate" class="btn btn-primary">
+                <i class="fas fa-plus"></i>
+                <span>Add Certificate</span>
+            </button>
+            <button id="refreshCertificates" class="btn btn-secondary">
+                <i class="fas fa-sync"></i>
+                <span>Refresh</span>
+            </button>
+        </div>
+    </div>
+    
+    <!-- Certificates Stats -->
+    <div class="certificates-stats">
+        <div class="stat-card">
+            <div class="stat-icon development">
+                <i class="fas fa-code"></i>
+            </div>
+            <div class="stat-content">
+                <h3 id="developmentCerts">0</h3>
+                <p>Development</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon design">
+                <i class="fas fa-palette"></i>
+            </div>
+            <div class="stat-content">
+                <h3 id="designCerts">0</h3>
+                <p>Design</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon security">
+                <i class="fas fa-shield-alt"></i>
+            </div>
+            <div class="stat-content">
+                <h3 id="securityCerts">0</h3>
+                <p>Security</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon cloud">
+                <i class="fas fa-cloud"></i>
+            </div>
+            <div class="stat-content">
+                <h3 id="cloudCerts">0</h3>
+                <p>Cloud</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Certificates Table -->
+    <div class="certificates-table-container">
+        <table class="certificates-table" id="certificatesTable">
+            <thead>
+                <tr>
+                    <th>Certificate</th>
+                    <th>Issuer</th>
+                    <th>Category</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="certificatesTableBody">
+                <!-- Certificate rows will be populated dynamically -->
+            </tbody>
+        </table>
+    </div>
+    <div class="table-footer">
+        <div class="table-info">
+            Showing <span id="certificatesCount">0</span> certificates
+        </div>
+        <div class="table-pagination" id="certificatesPagination">
+            <!-- Pagination will be populated dynamically -->
+        </div>
+    </div>
+</div>
+
             <!-- Analytics -->
             <div class="admin-section">
                 <div class="section-header">
@@ -319,6 +403,7 @@
                         <a href="games.html">Games</a>
                         <a href="websites.html">Websites</a>
                         <a href="apps.html">Apps</a>
+                        <a href="certificates.html">Certificates</a>
                     </div>
 
                     <div class="link-group">
