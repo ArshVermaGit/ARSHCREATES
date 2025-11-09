@@ -41,6 +41,7 @@ function initializeAdminPage() {
         loadContacts();
         loadProjects();
         loadTestimonialsAdmin();
+        loadCertificatesAdmin(); // Add this line
         loadAnalytics();
         
         console.log('✅ Admin panel initialized successfully');
@@ -221,6 +222,9 @@ function setupAddButtons() {
             showNotification('Testimonial creation coming soon', 'info');
         });
     }
+    
+    // Add Certificate button (new)
+    setupCertificateButtons();
 }
 
 // ==========================================
@@ -1243,6 +1247,300 @@ function loadAnalytics() {
         
     } catch (error) {
         console.error('❌ Error loading analytics:', error);
+    }
+}
+
+// ==========================================
+// CERTIFICATES MANAGEMENT
+// ==========================================
+
+/**
+ * Load Certificates for Admin Management
+ */
+function loadCertificatesAdmin() {
+    console.log('📜 Loading certificates...');
+    
+    const certificatesTableBody = document.getElementById('certificatesTableBody');
+    if (!certificatesTableBody) {
+        console.warn('⚠️ Certificates table body not found');
+        return;
+    }
+    
+    let certificates = [];
+    
+    try {
+        // Try to get from localStorage first
+        const stored = localStorage.getItem('portfolio_certificates');
+        if (stored) {
+            certificates = JSON.parse(stored);
+        } 
+        // Fallback to PORTFOLIO_DATA
+        else if (window.PORTFOLIO_DATA && window.PORTFOLIO_DATA.certificates) {
+            certificates = window.PORTFOLIO_DATA.certificates;
+        }
+        
+        console.log(`✅ Loaded ${certificates.length} certificates`);
+        
+        // Update certificate statistics
+        updateCertificateStats(certificates);
+        
+    } catch (error) {
+        console.error('❌ Error loading certificates:', error);
+        certificates = [];
+    }
+    
+    // Display certificates
+    displayCertificates(certificates);
+}
+
+/**
+ * Update Certificate Statistics
+ * @param {Array} certificates - Array of certificate objects
+ */
+function updateCertificateStats(certificates) {
+    const developmentCerts = document.getElementById('developmentCerts');
+    const designCerts = document.getElementById('designCerts');
+    const securityCerts = document.getElementById('securityCerts');
+    const cloudCerts = document.getElementById('cloudCerts');
+    
+    if (!developmentCerts) return;
+    
+    const counts = {
+        development: 0,
+        design: 0,
+        security: 0,
+        cloud: 0
+    };
+    
+    certificates.forEach(cert => {
+        const category = cert.category?.toLowerCase() || 'development';
+        if (counts.hasOwnProperty(category)) {
+            counts[category]++;
+        } else {
+            counts.development++;
+        }
+    });
+    
+    developmentCerts.textContent = counts.development;
+    designCerts.textContent = counts.design;
+    securityCerts.textContent = counts.security;
+    cloudCerts.textContent = counts.cloud;
+    
+    console.log(`📊 Certificate stats: ${JSON.stringify(counts)}`);
+}
+
+/**
+ * Display Certificates in Table
+ * @param {Array} certificates - Array of certificate objects
+ */
+function displayCertificates(certificates) {
+    const tableBody = document.getElementById('certificatesTableBody');
+    if (!tableBody) return;
+    
+    // Handle empty state
+    if (certificates.length === 0) {
+        tableBody.innerHTML = `
+            <tr>
+                <td colspan="6" style="text-align: center; padding: 60px 20px;">
+                    <div class="no-certificates" style="opacity: 0.6;">
+                        <i class="fas fa-award" style="font-size: 64px; margin-bottom: 20px; display: block; color: var(--text-secondary);"></i>
+                        <p style="font-size: 18px; color: var(--text-secondary); margin: 0;">No certificates added yet</p>
+                        <p style="font-size: 14px; color: var(--text-muted); margin-top: 8px;">Add certificates to showcase your achievements</p>
+                    </div>
+                </td>
+            </tr>
+        `;
+        return;
+    }
+    
+    // Generate table rows
+    tableBody.innerHTML = certificates.map(certificate => {
+        // Format date
+        let formattedDate = 'Recent';
+        try {
+            const date = new Date(certificate.date);
+            formattedDate = date.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short'
+            });
+        } catch (e) {
+            console.warn('⚠️ Error formatting certificate date:', e);
+        }
+        
+        // Determine status and styling
+        const isActive = !certificate.expiryDate || new Date(certificate.expiryDate) > new Date();
+        const statusText = isActive ? 'Active' : 'Expired';
+        const statusClass = isActive ? 'active' : 'expired';
+        
+        return `
+            <tr data-certificate-id="${certificate.id}">
+                <td>
+                    <div class="certificate-info" style="display: flex; align-items: center; gap: 12px;">
+                        <div class="certificate-icon" style="width: 40px; height: 40px; background: linear-gradient(135deg, #3B82F6, #8B5CF6); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-size: 16px;">
+                            <i class="fas fa-award"></i>
+                        </div>
+                        <div>
+                            <strong style="color: var(--text-primary); display: block; margin-bottom: 4px;">${certificate.title}</strong>
+                            <small style="color: var(--text-muted);">${certificate.credentialId || 'No ID'}</small>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <span style="color: var(--text-primary);">${certificate.issuer}</span>
+                </td>
+                <td>
+                    <span class="certificate-category ${certificate.category?.toLowerCase() || 'development'}" 
+                          style="padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 600; text-transform: capitalize; background: var(--primary-transparent); color: var(--primary);">
+                        ${certificate.category || 'Development'}
+                    </span>
+                </td>
+                <td>
+                    <span style="color: var(--text-primary);">${formattedDate}</span>
+                </td>
+                <td>
+                    <span class="status-badge ${statusClass}" 
+                          style="padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 600; text-transform: capitalize; background: ${isActive ? '#28a745' : '#dc3545'}22; color: ${isActive ? '#28a745' : '#dc3545'};">
+                        ${statusText}
+                    </span>
+                </td>
+                <td>
+                    <div class="certificate-actions" style="display: flex; gap: 8px; justify-content: center;">
+                        <button class="btn-view-certificate" data-certificate-id="${certificate.id}" 
+                                title="View Details"
+                                style="padding: 8px 12px; background: var(--primary); color: white; border: none; border-radius: 6px; cursor: pointer; transition: all 0.3s;">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="btn-edit-certificate" data-certificate-id="${certificate.id}" 
+                                title="Edit"
+                                style="padding: 8px 12px; background: var(--secondary); color: white; border: none; border-radius: 6px; cursor: pointer; transition: all 0.3s;">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn-delete-certificate" data-certificate-id="${certificate.id}" 
+                                title="Delete"
+                                style="padding: 8px 12px; background: #dc3545; color: white; border: none; border-radius: 6px; cursor: pointer; transition: all 0.3s;">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        `;
+    }).join('');
+    
+    // Setup event listeners
+    setupCertificateEventListeners();
+}
+
+/**
+ * Setup Certificate Event Listeners
+ */
+function setupCertificateEventListeners() {
+    // View certificate details
+    document.querySelectorAll('.btn-view-certificate').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const certificateId = parseInt(this.getAttribute('data-certificate-id'));
+            viewCertificateDetails(certificateId);
+        });
+    });
+    
+    // Edit certificate
+    document.querySelectorAll('.btn-edit-certificate').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const certificateId = parseInt(this.getAttribute('data-certificate-id'));
+            editCertificate(certificateId);
+        });
+    });
+    
+    // Delete certificate
+    document.querySelectorAll('.btn-delete-certificate').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const certificateId = parseInt(this.getAttribute('data-certificate-id'));
+            deleteCertificate(certificateId);
+        });
+    });
+}
+
+/**
+ * View Certificate Details
+ * @param {number} certificateId - The certificate ID
+ */
+function viewCertificateDetails(certificateId) {
+    console.log(`👁️ Viewing certificate: ${certificateId}`);
+    
+    const certificates = JSON.parse(localStorage.getItem('portfolio_certificates') || '[]');
+    const certificate = certificates.find(c => c.id === certificateId);
+    
+    if (!certificate) {
+        console.error('❌ Certificate not found');
+        showNotification('Certificate not found', 'error');
+        return;
+    }
+    
+    // Redirect to certificate detail page
+    window.location.href = `certificate-detail.html?id=${certificateId}`;
+}
+
+/**
+ * Edit Certificate
+ * @param {number} certificateId - The certificate ID
+ */
+function editCertificate(certificateId) {
+    console.log(`✏️ Editing certificate: ${certificateId}`);
+    showNotification('Certificate editing feature coming soon', 'info');
+    // Future implementation: Open certificate edit modal/form
+}
+
+/**
+ * Delete Certificate
+ * @param {number} certificateId - The certificate ID
+ */
+function deleteCertificate(certificateId) {
+    if (!confirm('⚠️ Are you sure you want to delete this certificate?\n\nThis action cannot be undone.')) {
+        return;
+    }
+    
+    console.log(`🗑️ Deleting certificate: ${certificateId}`);
+    
+    try {
+        const certificates = JSON.parse(localStorage.getItem('portfolio_certificates') || '[]');
+        const filteredCertificates = certificates.filter(c => c.id !== certificateId);
+        
+        localStorage.setItem('portfolio_certificates', JSON.stringify(filteredCertificates));
+        
+        // Reload certificates
+        loadCertificatesAdmin();
+        
+        console.log('✅ Certificate deleted successfully');
+        showNotification('Certificate deleted successfully', 'success');
+        
+    } catch (error) {
+        console.error('❌ Error deleting certificate:', error);
+        showNotification('Error deleting certificate', 'error');
+    }
+}
+
+/**
+ * Setup Certificate Buttons
+ */
+function setupCertificateButtons() {
+    // Add certificate button
+    const addCertificateBtn = document.getElementById('addCertificate');
+    if (addCertificateBtn) {
+        addCertificateBtn.addEventListener('click', () => {
+            showNotification('Certificate creation coming soon', 'info');
+            // Future implementation: Open certificate creation modal/form
+        });
+    }
+    
+    // Refresh certificates button
+    const refreshCertificatesBtn = document.getElementById('refreshCertificates');
+    if (refreshCertificatesBtn) {
+        refreshCertificatesBtn.addEventListener('click', () => {
+            loadCertificatesAdmin();
+            showNotification('Certificates refreshed', 'success');
+        });
     }
 }
 
