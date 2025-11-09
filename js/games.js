@@ -35,19 +35,16 @@ function initializeGamesPage() {
         // 2. Setup filter controls
         setupGameFilters();
         
-        // 3. Setup search functionality
-        setupGameSearch();
-        
-        // 4. Setup event listeners
+        // 3. Setup event listeners
         setupGameEventListeners();
         
-        // 5. Update header statistics
+        // 4. Update header statistics
         updateHeaderStats();
         
-        // 6. Display games
+        // 5. Display games
         displayGames(GAMES_STATE.allGames);
         
-        // 7. Hide loading screen
+        // 6. Hide loading screen
         setTimeout(hideLoadingScreen, 800);
         
         console.log('✅ Games page initialized successfully');
@@ -313,26 +310,6 @@ function setupSortFilter() {
 }
 
 // ==========================================
-// SEARCH SETUP
-// ==========================================
-function setupGameSearch() {
-    const searchInput = document.querySelector('.search-input');
-    
-    if (!searchInput) return;
-    
-    searchInput.addEventListener('input', debounce(function(e) {
-        const searchTerm = e.target.value.toLowerCase().trim();
-        GAMES_STATE.currentFilters.search = searchTerm;
-        
-        applyFilters();
-        
-        console.log('🔍 Search:', searchTerm || '(cleared)');
-    }, 300));
-    
-    console.log('✅ Search initialized');
-}
-
-// ==========================================
 // APPLY FILTERS
 // ==========================================
 function applyFilters() {
@@ -421,12 +398,10 @@ function resetFilters() {
     const categoryFilter = document.getElementById('categoryFilter');
     const statusFilter = document.getElementById('statusFilter');
     const sortFilter = document.getElementById('sortFilter');
-    const searchInput = document.querySelector('.search-input');
     
     if (categoryFilter) categoryFilter.value = 'all';
     if (statusFilter) statusFilter.value = 'all';
     if (sortFilter) sortFilter.value = 'newest';
-    if (searchInput) searchInput.value = '';
     
     // Reapply filters (which will show all games)
     applyFilters();
@@ -703,25 +678,79 @@ function createSampleGames() {
     return [
         {
             id: 1,
-            name: "Sample Game 1",
+            name: "Dragon Quest RPG",
             category: "Action RPG",
             status: "Live",
-            rating: 4.5,
-            overview: "An exciting action RPG adventure",
+            rating: 4.7,
+            overview: "An epic fantasy adventure with deep combat mechanics and rich storytelling.",
             releaseDate: "2024-01-15",
-            playCount: 5000,
-            image: "https://via.placeholder.com/400x250/E4572E/FFFFFF?text=Sample+Game+1"
+            playCount: 15000,
+            image: "https://via.placeholder.com/400x250/E4572E/FFFFFF?text=Dragon+Quest+RPG",
+            features: ["Open World", "Character Customization", "Real-time Combat", "Multiplayer"],
+            repositoryUrl: "https://github.com/ArshVermaGit/dragon-quest-rpg"
         },
         {
             id: 2,
-            name: "Sample Game 2",
+            name: "Neon Drift Racer",
             category: "Racing",
             status: "Live",
-            rating: 4.8,
-            overview: "Fast-paced racing action",
+            rating: 4.9,
+            overview: "High-speed futuristic racing with stunning visuals and intense competition.",
             releaseDate: "2024-02-20",
-            playCount: 8000,
-            image: "https://via.placeholder.com/400x250/E4572E/FFFFFF?text=Sample+Game+2"
+            playCount: 22000,
+            image: "https://via.placeholder.com/400x250/E4572E/FFFFFF?text=Neon+Drift+Racer",
+            features: ["Multiplayer Racing", "Vehicle Customization", "Dynamic Weather", "VR Support"],
+            repositoryUrl: "https://github.com/ArshVermaGit/neon-drift-racer"
+        },
+        {
+            id: 3,
+            name: "Pixel Platformer Pro",
+            category: "Platformer",
+            status: "In Development",
+            rating: 4.5,
+            overview: "Challenging retro-style platformer with modern mechanics and pixel-perfect controls.",
+            releaseDate: "2024-06-30",
+            playCount: 5000,
+            image: "https://via.placeholder.com/400x250/E4572E/FFFFFF?text=Pixel+Platformer+Pro",
+            features: ["Retro Graphics", "Level Editor", "Speedrun Mode", "Online Leaderboards"]
+        },
+        {
+            id: 4,
+            name: "Mythic Legends",
+            category: "Fantasy RPG",
+            status: "Live",
+            rating: 4.8,
+            overview: "Build your legend in this massive multiplayer fantasy RPG with deep lore.",
+            releaseDate: "2023-11-10",
+            playCount: 35000,
+            image: "https://via.placeholder.com/400x250/E4572E/FFFFFF?text=Mythic+Legends",
+            features: ["MMO Gameplay", "Class System", "Guild Wars", "Regular Updates"],
+            repositoryUrl: "https://github.com/ArshVermaGit/mythic-legends"
+        },
+        {
+            id: 5,
+            name: "Space Explorers",
+            category: "Action RPG",
+            status: "In Development",
+            rating: 4.3,
+            overview: "Explore the cosmos in this procedurally generated space adventure.",
+            releaseDate: "2024-08-15",
+            playCount: 2000,
+            image: "https://via.placeholder.com/400x250/E4572E/FFFFFF?text=Space+Explorers",
+            features: ["Procedural Generation", "Base Building", "Space Combat", "Co-op Mode"]
+        },
+        {
+            id: 6,
+            name: "Cyber Strike",
+            category: "Action RPG",
+            status: "Live",
+            rating: 4.6,
+            overview: "Tactical cyberpunk shooter with RPG elements and immersive world-building.",
+            releaseDate: "2023-09-05",
+            playCount: 18000,
+            image: "https://via.placeholder.com/400x250/E4572E/FFFFFF?text=Cyber+Strike",
+            features: ["Tactical Combat", "Cyberware Upgrades", "Branching Story", "Multiplayer"],
+            repositoryUrl: "https://github.com/ArshVermaGit/cyber-strike"
         }
     ];
 }
