@@ -1,51 +1,81 @@
 // ==========================================
-// WEBSITES PAGE - COMPLETE & PERFECT IMPLEMENTATION
+// WEBSITES PAGE - COMPLETE IMPLEMENTATION
 // Handles all website portfolio functionality
 // Author: Arsh Verma
+// Version: 1.0.0
+// Last Updated: 2024
 // ==========================================
 
+/**
+ * TABLE OF CONTENTS
+ * 1. Global State Management
+ * 2. Initialization
+ * 3. Data Loading
+ * 4. Display & Rendering
+ * 5. Filtering System
+ * 6. Sorting Functions
+ * 7. Card Interactions
+ * 8. Event Listeners
+ * 9. Navigation Functions
+ * 10. Statistics & Analytics
+ * 11. Animations
+ * 12. Utility Functions
+ * 13. Sample Data Fallback
+ */
+
 // ==========================================
-// GLOBAL STATE
+// 1. GLOBAL STATE MANAGEMENT
+// Central state object for websites page
 // ==========================================
 const WEBSITES_STATE = {
-    allWebsites: [],
-    filteredWebsites: [],
+    allWebsites: [],           // All websites from data source
+    filteredWebsites: [],      // Filtered results
     currentFilters: {
-        category: 'all',
-        status: 'all',
-        sort: 'newest',
-        search: ''
+        category: 'all',       // Selected category filter
+        status: 'all',         // Selected status filter
+        sort: 'newest',        // Current sort order
+        search: ''             // Search query (future enhancement)
     },
-    isLoading: false,
-    animationDelay: 100
+    isLoading: false,          // Loading state flag
+    animationDelay: 100        // Stagger delay for card animations (ms)
 };
 
 // ==========================================
-// INITIALIZATION
+// 2. INITIALIZATION
+// Initialize page when DOM is ready
 // ==========================================
+
+/**
+ * Main initialization function
+ * Called when DOM content is loaded
+ */
 document.addEventListener('DOMContentLoaded', function() {
     console.log('🌐 Websites page initializing...');
     initializeWebsitesPage();
 });
 
+/**
+ * Initialize all website page components
+ * @returns {void}
+ */
 function initializeWebsitesPage() {
     try {
-        // 1. Load all websites from data.js
+        // Step 1: Load websites data from data source
         loadWebsitesData();
         
-        // 2. Setup filter controls
+        // Step 2: Setup filter controls
         setupWebsiteFilters();
         
-        // 3. Setup event listeners
+        // Step 3: Setup event listeners
         setupWebsiteEventListeners();
         
-        // 4. Update header statistics
+        // Step 4: Update header statistics
         updateHeaderStats();
         
-        // 5. Display websites
+        // Step 5: Display websites
         displayWebsites(WEBSITES_STATE.allWebsites);
         
-        // 6. Hide loading screen
+        // Step 6: Hide loading screen after delay
         setTimeout(hideLoadingScreen, 800);
         
         console.log('✅ Websites page initialized successfully');
@@ -53,27 +83,38 @@ function initializeWebsitesPage() {
         
     } catch (error) {
         console.error('❌ Error initializing websites page:', error);
-        showNotification('Failed to load websites', 'error');
+        showNotification('Failed to load websites. Please refresh the page.', 'error');
         hideLoadingScreen();
     }
 }
 
 // ==========================================
-// DATA LOADING
+// 3. DATA LOADING
+// Load websites from data source
 // ==========================================
+
+/**
+ * Load websites data from global data source
+ * Supports multiple data source formats
+ * @returns {void}
+ */
 function loadWebsitesData() {
     try {
-        // Get websites from data.js (using global PORTFOLIO_DATA or window.getWebsites())
+        // Try to get websites from global function
         if (typeof window.getWebsites === 'function') {
             WEBSITES_STATE.allWebsites = window.getWebsites();
-        } else if (typeof PORTFOLIO_DATA !== 'undefined' && PORTFOLIO_DATA.websites) {
+        } 
+        // Try to get from PORTFOLIO_DATA object
+        else if (typeof PORTFOLIO_DATA !== 'undefined' && PORTFOLIO_DATA.websites) {
             WEBSITES_STATE.allWebsites = PORTFOLIO_DATA.websites;
-        } else {
-            // Fallback: Create sample data if no data exists
-            console.warn('⚠️ No websites data found, using fallback');
+        } 
+        // Fallback to sample data
+        else {
+            console.warn('⚠️ No websites data found, using fallback sample data');
             WEBSITES_STATE.allWebsites = createSampleWebsites();
         }
         
+        // Initialize filtered websites with all websites
         WEBSITES_STATE.filteredWebsites = [...WEBSITES_STATE.allWebsites];
         
         console.log('📦 Websites loaded:', WEBSITES_STATE.allWebsites.length);
@@ -86,8 +127,16 @@ function loadWebsitesData() {
 }
 
 // ==========================================
-// DISPLAY WEBSITES
+// 4. DISPLAY & RENDERING
+// Render websites to the DOM
 // ==========================================
+
+/**
+ * Display websites in the grid
+ * Handles loading, empty, and populated states
+ * @param {Array} websites - Array of website objects to display
+ * @returns {void}
+ */
 function displayWebsites(websites) {
     const websitesGrid = document.getElementById('websitesGrid');
     
@@ -122,7 +171,7 @@ function displayWebsites(websites) {
         return;
     }
     
-    // Generate website cards HTML
+    // Generate and display website cards
     websitesGrid.innerHTML = websites.map(website => createWebsiteCard(website)).join('');
     
     // Setup card interactions
@@ -134,9 +183,11 @@ function displayWebsites(websites) {
     console.log(`✅ Displayed ${websites.length} websites`);
 }
 
-// ==========================================
-// CREATE WEBSITE CARD HTML
-// ==========================================
+/**
+ * Create HTML for a single website card
+ * @param {Object} website - Website data object
+ * @returns {string} HTML string for the card
+ */
 function createWebsiteCard(website) {
     const statusClass = website.status.toLowerCase().replace(/\s+/g, '-');
     const starsHTML = generateStars(website.rating);
@@ -146,16 +197,19 @@ function createWebsiteCard(website) {
              data-website-id="${website.id}" 
              data-category="${website.category}" 
              data-status="${website.status}" 
-             data-rating="${website.rating}">
+             data-rating="${website.rating}"
+             tabindex="0"
+             role="article"
+             aria-label="${website.name} website">
             
-            <!-- Website Image -->
+            <!-- Website Image Section -->
             <div class="game-image">
                 <img src="${website.image || 'assets/images/websites/default.jpg'}" 
-                     alt="${website.name}"
+                     alt="${website.name} screenshot"
                      loading="lazy"
                      onerror="this.src='https://via.placeholder.com/400x250/3B82F6/FFFFFF?text=${encodeURIComponent(website.name)}'">
                 
-                <!-- Hover Overlay -->
+                <!-- Hover Overlay with Actions -->
                 <div class="game-overlay">
                     <div class="overlay-content">
                         <button class="btn btn-primary btn-view-details" 
@@ -169,7 +223,7 @@ function createWebsiteCard(website) {
                                class="btn btn-secondary btn-visit-site"
                                target="_blank"
                                rel="noopener noreferrer"
-                               aria-label="Visit ${website.name}">
+                               aria-label="Visit ${website.name} live">
                                 <i class="fas fa-external-link-alt"></i>
                                 <span>Visit Site</span>
                             </a>
@@ -187,16 +241,18 @@ function createWebsiteCard(website) {
                 </div>
             </div>
             
-            <!-- Website Content -->
+            <!-- Website Content Section -->
             <div class="game-content">
+                <!-- Header with Title and Rating -->
                 <div class="game-header">
                     <h3 class="game-title">${website.name}</h3>
-                    <div class="game-rating">
+                    <div class="game-rating" aria-label="Rating: ${website.rating} out of 5">
                         <div class="rating-stars">${starsHTML}</div>
                         <span class="rating-value">${website.rating}</span>
                     </div>
                 </div>
                 
+                <!-- Metadata -->
                 <div class="game-meta">
                     <span class="game-category">
                         <i class="fas fa-tag"></i>
@@ -210,8 +266,10 @@ function createWebsiteCard(website) {
                     ` : ''}
                 </div>
                 
+                <!-- Description -->
                 <p class="game-description">${website.overview || website.description || 'A professional web solution with modern design and functionality.'}</p>
                 
+                <!-- Technology Stack -->
                 ${website.technologies && website.technologies.length > 0 ? `
                     <div class="website-tech">
                         ${website.technologies.slice(0, 4).map(tech => `
@@ -223,6 +281,7 @@ function createWebsiteCard(website) {
                     </div>
                 ` : ''}
                 
+                <!-- Statistics -->
                 <div class="website-stats">
                     ${website.userBase ? `
                         <div class="website-stat">
@@ -250,10 +309,11 @@ function createWebsiteCard(website) {
                     ` : ''}
                 </div>
                 
+                <!-- Action Buttons -->
                 <div class="game-actions">
                     <button class="btn btn-primary btn-view-website" 
                             data-website-id="${website.id}"
-                            aria-label="View ${website.name}">
+                            aria-label="Learn more about ${website.name}">
                         <i class="fas fa-info-circle"></i>
                         <span>Learn More</span>
                     </button>
@@ -262,7 +322,7 @@ function createWebsiteCard(website) {
                            class="btn btn-secondary"
                            target="_blank"
                            rel="noopener noreferrer"
-                           aria-label="View ${website.name} source code">
+                           aria-label="View ${website.name} source code on GitHub">
                             <i class="fab fa-github"></i>
                             <span>View Code</span>
                         </a>
@@ -274,35 +334,41 @@ function createWebsiteCard(website) {
 }
 
 // ==========================================
-// FILTER SETUP
+// 5. FILTERING SYSTEM
+// Setup and apply filters
 // ==========================================
+
+/**
+ * Setup all filter controls
+ * @returns {void}
+ */
 function setupWebsiteFilters() {
     console.log('🔧 Setting up website filters...');
     
-    // Category Filter
+    // Initialize each filter type
     setupCategoryFilter();
-    
-    // Status Filter
     setupStatusFilter();
-    
-    // Sort Filter
     setupSortFilter();
     
     console.log('✅ Filters initialized');
 }
 
+/**
+ * Setup category filter dropdown
+ * @returns {void}
+ */
 function setupCategoryFilter() {
     const categoryFilter = document.getElementById('categoryFilter');
     
     if (!categoryFilter) return;
     
-    // Get unique categories
+    // Get unique categories from websites
     const categories = [...new Set(WEBSITES_STATE.allWebsites.map(website => website.category))];
     
     // Clear existing options except "All"
     categoryFilter.innerHTML = '<option value="all">All Categories</option>';
     
-    // Add category options
+    // Add category options dynamically
     categories.forEach(category => {
         const option = document.createElement('option');
         option.value = category;
@@ -310,15 +376,18 @@ function setupCategoryFilter() {
         categoryFilter.appendChild(option);
     });
     
-    // Event listener
+    // Add change event listener
     categoryFilter.addEventListener('change', function() {
         WEBSITES_STATE.currentFilters.category = this.value;
         applyWebsiteFilters();
-        
         console.log('📂 Category filter changed:', this.value);
     });
 }
 
+/**
+ * Setup status filter dropdown
+ * @returns {void}
+ */
 function setupStatusFilter() {
     const statusFilter = document.getElementById('statusFilter');
     
@@ -327,11 +396,14 @@ function setupStatusFilter() {
     statusFilter.addEventListener('change', function() {
         WEBSITES_STATE.currentFilters.status = this.value;
         applyWebsiteFilters();
-        
         console.log('📊 Status filter changed:', this.value);
     });
 }
 
+/**
+ * Setup sort filter dropdown
+ * @returns {void}
+ */
 function setupSortFilter() {
     const sortFilter = document.getElementById('sortFilter');
     
@@ -340,14 +412,14 @@ function setupSortFilter() {
     sortFilter.addEventListener('change', function() {
         WEBSITES_STATE.currentFilters.sort = this.value;
         applyWebsiteFilters();
-        
         console.log('🔄 Sort changed:', this.value);
     });
 }
 
-// ==========================================
-// APPLY FILTERS
-// ==========================================
+/**
+ * Apply all active filters to websites
+ * @returns {void}
+ */
 function applyWebsiteFilters() {
     let filtered = [...WEBSITES_STATE.allWebsites];
     
@@ -365,30 +437,71 @@ function applyWebsiteFilters() {
         );
     }
     
-    // Apply search filter
+    // Apply search filter (if implemented)
     if (WEBSITES_STATE.currentFilters.search) {
-        const searchTerm = WEBSITES_STATE.currentFilters.search;
+        const searchTerm = WEBSITES_STATE.currentFilters.search.toLowerCase();
         filtered = filtered.filter(website => 
             website.name.toLowerCase().includes(searchTerm) ||
             (website.overview && website.overview.toLowerCase().includes(searchTerm)) ||
             (website.description && website.description.toLowerCase().includes(searchTerm)) ||
             website.category.toLowerCase().includes(searchTerm) ||
-            (website.technologies && website.technologies.some(tech => tech.toLowerCase().includes(searchTerm)))
+            (website.technologies && website.technologies.some(tech => 
+                tech.toLowerCase().includes(searchTerm)
+            ))
         );
     }
     
     // Apply sorting
     filtered = sortWebsites(filtered, WEBSITES_STATE.currentFilters.sort);
     
+    // Update state and display
     WEBSITES_STATE.filteredWebsites = filtered;
     displayWebsites(filtered);
     
     console.log(`🎯 Filters applied: ${filtered.length} websites shown`);
 }
 
+/**
+ * Reset all filters to default values
+ * @returns {void}
+ */
+function resetWebsiteFilters() {
+    console.log('🔄 Resetting all filters...');
+    
+    // Reset state
+    WEBSITES_STATE.currentFilters = {
+        category: 'all',
+        status: 'all',
+        sort: 'newest',
+        search: ''
+    };
+    
+    // Reset UI elements
+    const categoryFilter = document.getElementById('categoryFilter');
+    const statusFilter = document.getElementById('statusFilter');
+    const sortFilter = document.getElementById('sortFilter');
+    
+    if (categoryFilter) categoryFilter.value = 'all';
+    if (statusFilter) statusFilter.value = 'all';
+    if (sortFilter) sortFilter.value = 'newest';
+    
+    // Reapply filters (will show all websites)
+    applyWebsiteFilters();
+    
+    showNotification('Filters reset successfully', 'success');
+}
+
 // ==========================================
-// SORT WEBSITES
+// 6. SORTING FUNCTIONS
+// Sort websites by various criteria
 // ==========================================
+
+/**
+ * Sort websites array by specified criteria
+ * @param {Array} websites - Array of websites to sort
+ * @param {string} sortBy - Sort criteria
+ * @returns {Array} Sorted array
+ */
 function sortWebsites(websites, sortBy) {
     const sorted = [...websites];
     
@@ -417,37 +530,14 @@ function sortWebsites(websites, sortBy) {
 }
 
 // ==========================================
-// RESET FILTERS
+// 7. CARD INTERACTIONS
+// Setup interactive elements on cards
 // ==========================================
-function resetWebsiteFilters() {
-    console.log('🔄 Resetting all filters...');
-    
-    // Reset state
-    WEBSITES_STATE.currentFilters = {
-        category: 'all',
-        status: 'all',
-        sort: 'newest',
-        search: ''
-    };
-    
-    // Reset UI elements
-    const categoryFilter = document.getElementById('categoryFilter');
-    const statusFilter = document.getElementById('statusFilter');
-    const sortFilter = document.getElementById('sortFilter');
-    
-    if (categoryFilter) categoryFilter.value = 'all';
-    if (statusFilter) statusFilter.value = 'all';
-    if (sortFilter) sortFilter.value = 'newest';
-    
-    // Reapply filters (which will show all websites)
-    applyWebsiteFilters();
-    
-    showNotification('Filters reset successfully', 'success');
-}
 
-// ==========================================
-// WEBSITE CARD INTERACTIONS
-// ==========================================
+/**
+ * Setup event listeners for website cards
+ * @returns {void}
+ */
 function setupWebsiteCardListeners() {
     // View Details Buttons
     document.querySelectorAll('.btn-view-details, .btn-view-website').forEach(button => {
@@ -458,7 +548,7 @@ function setupWebsiteCardListeners() {
         });
     });
     
-    // Visit Site Buttons (prevent default behavior setup)
+    // Visit Site Buttons
     document.querySelectorAll('.btn-visit-site').forEach(link => {
         link.addEventListener('click', function(e) {
             e.stopPropagation();
@@ -472,6 +562,15 @@ function setupWebsiteCardListeners() {
         card.addEventListener('click', function(e) {
             // Don't trigger if clicking on buttons or links
             if (!e.target.closest('button') && !e.target.closest('a')) {
+                const websiteId = this.getAttribute('data-website-id');
+                viewWebsiteDetails(websiteId);
+            }
+        });
+        
+        // Keyboard support
+        card.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
                 const websiteId = this.getAttribute('data-website-id');
                 viewWebsiteDetails(websiteId);
             }
@@ -493,20 +592,26 @@ function setupWebsiteCardListeners() {
 }
 
 // ==========================================
-// EVENT LISTENERS
+// 8. EVENT LISTENERS
+// Global event listeners
 // ==========================================
+
+/**
+ * Setup global event listeners
+ * @returns {void}
+ */
 function setupWebsiteEventListeners() {
-    // Window resize handler
+    // Window resize handler (debounced)
     window.addEventListener('resize', debounce(function() {
-        // Reattach listeners if needed
         setupWebsiteCardListeners();
     }, 250));
     
     // Keyboard shortcuts
     document.addEventListener('keydown', function(e) {
         // Press 'R' to reset filters
-        if (e.key === 'r' || e.key === 'R') {
-            if (!e.target.matches('input, textarea')) {
+        if ((e.key === 'r' || e.key === 'R') && !e.ctrlKey && !e.metaKey) {
+            if (!e.target.matches('input, textarea, select')) {
+                e.preventDefault();
                 resetWebsiteFilters();
             }
         }
@@ -516,8 +621,15 @@ function setupWebsiteEventListeners() {
 }
 
 // ==========================================
-// NAVIGATION FUNCTIONS
+// 9. NAVIGATION FUNCTIONS
+// Handle page navigation
 // ==========================================
+
+/**
+ * Navigate to website detail page
+ * @param {string|number} websiteId - Website ID
+ * @returns {void}
+ */
 function viewWebsiteDetails(websiteId) {
     console.log('🌐 Viewing website details:', websiteId);
     
@@ -531,8 +643,14 @@ function viewWebsiteDetails(websiteId) {
 }
 
 // ==========================================
-// HEADER STATISTICS
+// 10. STATISTICS & ANALYTICS
+// Update header statistics
 // ==========================================
+
+/**
+ * Update header statistics display
+ * @returns {void}
+ */
 function updateHeaderStats() {
     const allWebsites = WEBSITES_STATE.allWebsites;
     
@@ -540,8 +658,12 @@ function updateHeaderStats() {
     
     // Calculate statistics
     const totalWebsites = allWebsites.length;
-    const averageRating = (allWebsites.reduce((sum, website) => sum + website.rating, 0) / totalWebsites).toFixed(1);
-    const totalUsers = allWebsites.reduce((sum, website) => sum + parseUserBase(website.userBase || '0'), 0);
+    const averageRating = (
+        allWebsites.reduce((sum, website) => sum + website.rating, 0) / totalWebsites
+    ).toFixed(1);
+    const totalUsers = allWebsites.reduce(
+        (sum, website) => sum + parseUserBase(website.userBase || '0'), 0
+    );
     
     // Update UI
     const statNumbers = document.querySelectorAll('.header-stats .stat-number');
@@ -556,8 +678,14 @@ function updateHeaderStats() {
 }
 
 // ==========================================
-// ANIMATIONS
+// 11. ANIMATIONS
+// Handle card animations
 // ==========================================
+
+/**
+ * Animate website cards entrance
+ * @returns {void}
+ */
 function animateWebsiteCards() {
     const cards = document.querySelectorAll('.website-card');
     
@@ -575,6 +703,10 @@ function animateWebsiteCards() {
     });
 }
 
+/**
+ * Hide loading screen with fade effect
+ * @returns {void}
+ */
 function hideLoadingScreen() {
     const loadingScreen = document.getElementById('loadingScreen');
     
@@ -587,8 +719,15 @@ function hideLoadingScreen() {
 }
 
 // ==========================================
-// UTILITY FUNCTIONS
+// 12. UTILITY FUNCTIONS
+// Helper functions for data formatting
 // ==========================================
+
+/**
+ * Generate star rating HTML
+ * @param {number} rating - Rating value (0-5)
+ * @returns {string} HTML string with star icons
+ */
 function generateStars(rating) {
     const fullStars = Math.floor(rating);
     const hasHalfStar = rating % 1 >= 0.5;
@@ -614,6 +753,12 @@ function generateStars(rating) {
     return html;
 }
 
+/**
+ * Parse user base string to number
+ * Handles K (thousands) and M (millions) suffixes
+ * @param {string} userBase - User base string (e.g., "50K", "1.5M")
+ * @returns {number} Numeric value
+ */
 function parseUserBase(userBase) {
     if (!userBase || typeof userBase !== 'string') return 0;
     
@@ -624,15 +769,21 @@ function parseUserBase(userBase) {
     if (isNaN(num)) return 0;
     
     // Check for K (thousands) or M (millions) suffix
-    if (userBase.toUpperCase().includes('M')) {
+    const upperCase = userBase.toUpperCase();
+    if (upperCase.includes('M')) {
         return num * 1000000;
-    } else if (userBase.toUpperCase().includes('K')) {
+    } else if (upperCase.includes('K')) {
         return num * 1000;
     }
     
     return num;
 }
 
+/**
+ * Format large numbers with K/M suffixes
+ * @param {number} num - Number to format
+ * @returns {string} Formatted string
+ */
 function formatNumber(num) {
     if (!num) return '0';
     
@@ -645,6 +796,11 @@ function formatNumber(num) {
     return num.toString();
 }
 
+/**
+ * Format date string to readable format
+ * @param {string} dateString - ISO date string
+ * @returns {string} Formatted date (e.g., "Jan 2024")
+ */
 function formatDate(dateString) {
     if (!dateString) return 'N/A';
     
@@ -656,6 +812,12 @@ function formatDate(dateString) {
     return date.toLocaleDateString('en-US', options);
 }
 
+/**
+ * Debounce function to limit execution rate
+ * @param {Function} func - Function to debounce
+ * @param {number} wait - Wait time in milliseconds
+ * @returns {Function} Debounced function
+ */
 function debounce(func, wait) {
     let timeout;
     return function executedFunction(...args) {
@@ -668,6 +830,12 @@ function debounce(func, wait) {
     };
 }
 
+/**
+ * Show notification to user
+ * @param {string} message - Notification message
+ * @param {string} type - Notification type (success, error, warning, info)
+ * @returns {void}
+ */
 function showNotification(message, type = 'info') {
     // Use global notification function if available
     if (typeof window.showNotification === 'function') {
@@ -675,7 +843,7 @@ function showNotification(message, type = 'info') {
         return;
     }
     
-    // Fallback notification
+    // Fallback notification implementation
     console.log(`[${type.toUpperCase()}] ${message}`);
     
     const notification = document.createElement('div');
@@ -692,17 +860,24 @@ function showNotification(message, type = 'info') {
         z-index: 10000;
         font-weight: 500;
         animation: slideInRight 0.3s ease;
+        max-width: 300px;
     `;
     notification.textContent = message;
     
     document.body.appendChild(notification);
     
+    // Auto-remove after 3 seconds
     setTimeout(() => {
         notification.style.animation = 'slideOutRight 0.3s ease';
         setTimeout(() => notification.remove(), 300);
     }, 3000);
 }
 
+/**
+ * Get notification background color by type
+ * @param {string} type - Notification type
+ * @returns {string} Hex color code
+ */
 function getNotificationColor(type) {
     const colors = {
         success: '#10B981',
@@ -714,31 +889,20 @@ function getNotificationColor(type) {
 }
 
 // ==========================================
-// SAMPLE DATA FALLBACK
+// 13. SAMPLE DATA FALLBACK
+// Fallback data when no external source available
 // ==========================================
+
+/**
+ * Create sample websites for fallback
+ * @returns {Array} Array of sample website objects
+ */
 function createSampleWebsites() {
     return [
         {
             id: 1,
             name: "E-Shop Pro",
             category: "E-commerce",
-            status: "Live",
-            rating: 4.8,
-            overview: "A modern e-commerce platform with advanced features and seamless user experience.",
-            launchDate: "2024-01-15",
-            userBase: "50K+",
-            pageViews: 250000,
-            conversionRate: 3.2,
-            loadTime: 1.8,
-            image: "https://via.placeholder.com/400x250/3B82F6/FFFFFF?text=E-Shop+Pro",
-            technologies: ["React", "Node.js", "MongoDB", "Stripe", "AWS"],
-            liveUrl: "https://example-eshop.com",
-            repositoryUrl: "https://github.com/ArshVermaGit/eshop-pro"
-        },
-        {
-            id: 2,
-            name: "HealthTrack Plus",
-            category: "Health & Wellness",
             status: "Live",
             rating: 4.9,
             overview: "Comprehensive health tracking platform with AI-powered insights and analytics.",
@@ -821,6 +985,7 @@ function createSampleWebsites() {
 
 // ==========================================
 // GLOBAL EXPORTS
+// Export functions for external use
 // ==========================================
 window.initializeWebsitesPage = initializeWebsitesPage;
 window.resetWebsiteFilters = resetWebsiteFilters;
@@ -828,6 +993,14 @@ window.viewWebsiteDetails = viewWebsiteDetails;
 window.applyWebsiteFilters = applyWebsiteFilters;
 
 // ==========================================
-// AUTO-INITIALIZE
+// AUTO-INITIALIZE CONFIRMATION
+// Log successful script load
 // ==========================================
 console.log('✅ Websites.js loaded successfully');
+console.log('📝 Created by: Arsh Verma');
+console.log('🔧 Version: 1.0.0');
+
+// ==========================================
+// END OF SCRIPT
+// Author: Arsh Verma
+// ==========================================",
