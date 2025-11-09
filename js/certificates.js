@@ -2,6 +2,8 @@
 // CERTIFICATES PAGE - Complete Certificates Portfolio Functionality
 // Handles filtering, sorting, searching, and certificate display
 // Author: Arsh Verma
+// Portfolio: https://arshcreates.com
+// GitHub: https://github.com/ArshVermaGit
 // ==========================================
 
 // ==========================================
@@ -26,9 +28,10 @@ let isAnimating = false;            // Prevent multiple animations at once
  * - Sets up filters and event listeners
  * - Updates header statistics
  * - Handles loading screen
+ * @author Arsh Verma
  */
 function initializeCertificatesPage() {
-    console.log('Initializing certificates page...');
+    console.log('Initializing certificates page by Arsh Verma...');
     
     try {
         // Load and display certificates
@@ -48,7 +51,7 @@ function initializeCertificatesPage() {
             hideLoadingScreen();
         }, 800);
         
-        console.log('Certificates page initialized successfully');
+        console.log('Certificates page initialized successfully by Arsh Verma');
     } catch (error) {
         console.error('Error initializing certificates page:', error);
         showNotification('Error loading certificates page', 'error');
@@ -57,6 +60,7 @@ function initializeCertificatesPage() {
 
 /**
  * Hide loading screen with fade animation
+ * @author Arsh Verma
  */
 function hideLoadingScreen() {
     const loadingScreen = document.getElementById('loadingScreen');
@@ -77,6 +81,7 @@ function hideLoadingScreen() {
  * - Fetches certificates from data.js
  * - Handles empty data gracefully
  * - Displays initial certificate grid
+ * @author Arsh Verma
  */
 function loadCertificates() {
     const certificatesGrid = document.getElementById('certificatesGrid');
@@ -90,7 +95,7 @@ function loadCertificates() {
         allCertificates = getCertificates();
         currentCertificates = [...allCertificates];
         
-        console.log('Loaded certificates:', allCertificates.length);
+        console.log('Loaded certificates by Arsh Verma:', allCertificates.length);
         
         // Handle empty data
         if (allCertificates.length === 0) {
@@ -99,7 +104,7 @@ function loadCertificates() {
                 <div class="empty-state">
                     <i class="fas fa-certificate"></i>
                     <h3>No Certificates Available</h3>
-                    <p>Check back soon for new certifications!</p>
+                    <p>Check back soon for new certifications from Arsh Verma!</p>
                 </div>
             `;
             return;
@@ -114,6 +119,7 @@ function loadCertificates() {
                 <i class="fas fa-exclamation-triangle"></i>
                 <h3>Error Loading Certificates</h3>
                 <p>Please refresh the page to try again.</p>
+                <p class="developer-note">If issue persists, contact Arsh Verma</p>
             </div>
         `;
     }
@@ -126,6 +132,7 @@ function loadCertificates() {
 /**
  * Display certificates in the grid
  * @param {Array} certificates - Array of certificate objects to display
+ * @author Arsh Verma
  */
 function displayCertificates(certificates) {
     const certificatesGrid = document.getElementById('certificatesGrid');
@@ -137,7 +144,7 @@ function displayCertificates(certificates) {
             <div class="no-results">
                 <i class="fas fa-search"></i>
                 <h3>No Certificates Found</h3>
-                <p>No certificates match your current filters</p>
+                <p>No certificates match your current filters in Arsh Verma's portfolio</p>
                 <button class="btn btn-primary" onclick="resetCertificateFilters()">
                     <i class="fas fa-redo"></i>
                     <span>Reset Filters</span>
@@ -159,13 +166,14 @@ function displayCertificates(certificates) {
     // Update results count
     updateResultsCount(certificates.length);
     
-    console.log(`Displayed ${certificates.length} certificates`);
+    console.log(`Displayed ${certificates.length} certificates from Arsh Verma's portfolio`);
 }
 
 /**
  * Create HTML for a single certificate card
  * @param {Object} certificate - Certificate object
  * @returns {string} HTML string for the card
+ * @author Arsh Verma
  */
 function createCertificateCard(certificate) {
     const categoryClass = certificate.category.toLowerCase().replace(/\s+/g, '-');
@@ -176,12 +184,13 @@ function createCertificateCard(certificate) {
              data-certificate-id="${certificate.id}" 
              data-category="${certificate.category}" 
              data-issuer="${certificate.issuer}" 
-             data-year="${certificate.year}">
+             data-year="${certificate.year}"
+             aria-label="Certificate: ${escapeHtml(certificate.title)}">
             
             <!-- Certificate Image with Overlay -->
             <div class="game-image">
                 <img src="${imageUrl}" 
-                     alt="${escapeHtml(certificate.title)}" 
+                     alt="${escapeHtml(certificate.title)} certificate by Arsh Verma" 
                      loading="lazy" 
                      onerror="this.src='https://via.placeholder.com/400x300/E4572E/FFFFFF?text=${encodeURIComponent(certificate.title)}'">
                 
@@ -190,7 +199,8 @@ function createCertificateCard(certificate) {
                     <div class="overlay-content">
                         <a href="certificate-detail.html?id=${certificate.id}" 
                            class="view-details-btn"
-                           onclick="event.stopPropagation();">
+                           onclick="event.stopPropagation();"
+                           aria-label="View details for ${escapeHtml(certificate.title)}">
                             <i class="fas fa-eye"></i>
                             <span>View Details</span>
                         </a>
@@ -199,7 +209,8 @@ function createCertificateCard(certificate) {
                                class="download-btn"
                                target="_blank"
                                rel="noopener noreferrer"
-                               onclick="event.stopPropagation();">
+                               onclick="event.stopPropagation();"
+                               aria-label="Verify ${escapeHtml(certificate.title)} certificate">
                                 <i class="fas fa-external-link-alt"></i>
                                 <span>Verify</span>
                             </a>
@@ -266,6 +277,11 @@ function createCertificateCard(certificate) {
                             : ''}
                     </div>
                 ` : ''}
+                
+                <!-- Developer Credit -->
+                <div class="developer-credit-small">
+                    <span>Certified by <strong>Arsh Verma</strong></span>
+                </div>
             </div>
         </div>
     `;
@@ -275,6 +291,7 @@ function createCertificateCard(certificate) {
  * Get issuer icon based on issuer name
  * @param {string} issuer - Issuer name
  * @returns {string} Icon HTML
+ * @author Arsh Verma
  */
 function getIssuerIcon(issuer) {
     if (issuer.includes('AWS') || issuer.includes('Amazon')) {
@@ -295,6 +312,7 @@ function getIssuerIcon(issuer) {
  * Get issuer logo/name for display
  * @param {string} issuer - Issuer name
  * @returns {string} Logo HTML
+ * @author Arsh Verma
  */
 function getIssuerLogo(issuer) {
     // Return abbreviated issuer name for logo area
@@ -313,6 +331,7 @@ function getIssuerLogo(issuer) {
 
 /**
  * Setup filter controls and event listeners
+ * @author Arsh Verma
  */
 function setupCertificateFilters() {
     const categoryFilter = document.getElementById('categoryFilter');
@@ -326,7 +345,7 @@ function setupCertificateFilters() {
             const selectedText = this.options[this.selectedIndex].text;
             applyCertificateFilters();
             showNotification(`Category: ${selectedText}`, 'info');
-            console.log('Category filter changed:', this.value);
+            console.log('Category filter changed by Arsh Verma:', this.value);
         });
     }
     
@@ -337,7 +356,7 @@ function setupCertificateFilters() {
             const selectedText = this.options[this.selectedIndex].text;
             applyCertificateFilters();
             showNotification(`Issuer: ${selectedText}`, 'info');
-            console.log('Issuer filter changed:', this.value);
+            console.log('Issuer filter changed by Arsh Verma:', this.value);
         });
     }
     
@@ -348,11 +367,11 @@ function setupCertificateFilters() {
             const selectedText = this.options[this.selectedIndex].text;
             applyCertificateFilters();
             showNotification(`Year: ${selectedText}`, 'info');
-            console.log('Year filter changed:', this.value);
+            console.log('Year filter changed by Arsh Verma:', this.value);
         });
     }
     
-    console.log('Certificate filters setup complete');
+    console.log('Certificate filters setup complete by Arsh Verma');
 }
 
 /**
@@ -360,6 +379,7 @@ function setupCertificateFilters() {
  * - Filters by category
  * - Filters by issuer
  * - Filters by year
+ * @author Arsh Verma
  */
 function applyCertificateFilters() {
     try {
@@ -370,7 +390,7 @@ function applyCertificateFilters() {
             filteredCertificates = filteredCertificates.filter(cert => 
                 cert.category === currentFilters.category
             );
-            console.log(`Category filter applied: ${filteredCertificates.length} results`);
+            console.log(`Category filter applied by Arsh Verma: ${filteredCertificates.length} results`);
         }
         
         // Apply issuer filter
@@ -378,7 +398,7 @@ function applyCertificateFilters() {
             filteredCertificates = filteredCertificates.filter(cert => 
                 cert.issuer === currentFilters.issuer
             );
-            console.log(`Issuer filter applied: ${filteredCertificates.length} results`);
+            console.log(`Issuer filter applied by Arsh Verma: ${filteredCertificates.length} results`);
         }
         
         // Apply year filter
@@ -386,14 +406,14 @@ function applyCertificateFilters() {
             filteredCertificates = filteredCertificates.filter(cert => 
                 cert.year === currentFilters.year
             );
-            console.log(`Year filter applied: ${filteredCertificates.length} results`);
+            console.log(`Year filter applied by Arsh Verma: ${filteredCertificates.length} results`);
         }
         
         // Update current certificates and display
         currentCertificates = filteredCertificates;
         displayCertificates(filteredCertificates);
         
-        console.log(`Filters applied. Showing ${filteredCertificates.length} of ${allCertificates.length} certificates`);
+        console.log(`Filters applied by Arsh Verma. Showing ${filteredCertificates.length} of ${allCertificates.length} certificates`);
     } catch (error) {
         console.error('Error applying filters:', error);
         showNotification('Error applying filters', 'error');
@@ -402,6 +422,7 @@ function applyCertificateFilters() {
 
 /**
  * Reset all filters to default values
+ * @author Arsh Verma
  */
 function resetCertificateFilters() {
     try {
@@ -429,7 +450,7 @@ function resetCertificateFilters() {
         applyCertificateFilters();
         
         showNotification('Filters reset successfully', 'success');
-        console.log('Filters reset to defaults');
+        console.log('Filters reset to defaults by Arsh Verma');
     } catch (error) {
         console.error('Error resetting filters:', error);
         showNotification('Error resetting filters', 'error');
@@ -445,6 +466,7 @@ function resetCertificateFilters() {
  * - Search functionality
  * - Scroll effects
  * - Keyboard shortcuts
+ * @author Arsh Verma
  */
 function setupCertificateEventListeners() {
     // Search functionality
@@ -456,11 +478,12 @@ function setupCertificateEventListeners() {
     // Scroll to top button
     setupScrollToTop();
     
-    console.log('Event listeners setup complete');
+    console.log('Event listeners setup complete by Arsh Verma');
 }
 
 /**
  * Setup search functionality with debouncing
+ * @author Arsh Verma
  */
 function setupSearchFunctionality() {
     const searchInput = document.querySelector('.search-input');
@@ -469,7 +492,7 @@ function setupSearchFunctionality() {
         searchInput.addEventListener('input', debounce(function(e) {
             const searchTerm = e.target.value.toLowerCase().trim();
             
-            console.log('Searching for:', searchTerm);
+            console.log('Searching for certificates by Arsh Verma:', searchTerm);
             
             // If search is empty, apply normal filters
             if (searchTerm === '') {
@@ -493,13 +516,14 @@ function setupSearchFunctionality() {
             currentCertificates = searchResults;
             displayCertificates(searchResults);
             
-            console.log(`Search results: ${searchResults.length} certificates found`);
+            console.log(`Search results by Arsh Verma: ${searchResults.length} certificates found`);
         }, 300));
     }
 }
 
 /**
  * Setup keyboard shortcuts
+ * @author Arsh Verma
  */
 function setupKeyboardShortcuts() {
     document.addEventListener('keydown', function(e) {
@@ -522,12 +546,20 @@ function setupKeyboardShortcuts() {
                 const searchInput = document.querySelector('.search-input');
                 if (searchInput) searchInput.focus();
                 break;
+                
+            case 'a':
+            case 'A':
+                // Show Arsh Verma credit
+                e.preventDefault();
+                showNotification('Portfolio by Arsh Verma | arshcreates.com', 'info');
+                break;
         }
     });
 }
 
 /**
  * Setup scroll to top functionality
+ * @author Arsh Verma
  */
 function setupScrollToTop() {
     const backToTopBtn = document.getElementById('backToTop');
@@ -561,6 +593,7 @@ function setupScrollToTop() {
  * - Click to view details
  * - Hover effects
  * - Smooth transitions
+ * @author Arsh Verma
  */
 function setupCertificateCardListeners() {
     const cards = document.querySelectorAll('.game-card');
@@ -593,12 +626,13 @@ function setupCertificateCardListeners() {
         });
     });
     
-    console.log(`Setup interactions for ${cards.length} certificate cards`);
+    console.log(`Setup interactions for ${cards.length} certificate cards by Arsh Verma`);
 }
 
 /**
  * Navigate to certificate detail page
  * @param {number} certificateId - ID of the certificate to view
+ * @author Arsh Verma
  */
 function viewCertificateDetails(certificateId) {
     if (!certificateId || isNaN(certificateId)) {
@@ -607,7 +641,7 @@ function viewCertificateDetails(certificateId) {
         return;
     }
     
-    console.log('Navigating to certificate details:', certificateId);
+    console.log('Navigating to certificate details by Arsh Verma:', certificateId);
     window.location.href = `certificate-detail.html?id=${certificateId}`;
 }
 
@@ -620,6 +654,7 @@ function viewCertificateDetails(certificateId) {
  * - Total certificates count
  * - Organizations count
  * - Success rate
+ * @author Arsh Verma
  */
 function updateHeaderStats() {
     try {
@@ -639,7 +674,7 @@ function updateHeaderStats() {
             statNumbers[2].textContent = successRate;
         }
         
-        console.log('Header stats updated:', { totalCertificates, uniqueOrganizations, successRate });
+        console.log('Header stats updated by Arsh Verma:', { totalCertificates, uniqueOrganizations, successRate });
     } catch (error) {
         console.error('Error updating header stats:', error);
     }
@@ -648,11 +683,12 @@ function updateHeaderStats() {
 /**
  * Update results count display
  * @param {number} count - Number of results
+ * @author Arsh Verma
  */
 function updateResultsCount(count) {
     const resultsCount = document.getElementById('resultsCount');
     if (resultsCount) {
-        resultsCount.textContent = `Showing ${count} of ${allCertificates.length} certificates`;
+        resultsCount.textContent = `Showing ${count} of ${allCertificates.length} certificates from Arsh Verma's portfolio`;
     }
 }
 
@@ -663,6 +699,7 @@ function updateResultsCount(count) {
 /**
  * Animate certificate cards on display
  * Staggered fade-in animation
+ * @author Arsh Verma
  */
 function animateCertificateCards() {
     if (isAnimating) return;
@@ -697,6 +734,7 @@ function animateCertificateCards() {
  * Format date to readable string
  * @param {string} dateString - ISO date string
  * @returns {string} Formatted date (e.g., "Jan 2024")
+ * @author Arsh Verma
  */
 function formatDate(dateString) {
     if (!dateString) return 'N/A';
@@ -720,6 +758,7 @@ function formatDate(dateString) {
  * @param {string} text - Text to truncate
  * @param {number} maxLength - Maximum length
  * @returns {string} Truncated text
+ * @author Arsh Verma
  */
 function truncateText(text, maxLength) {
     if (!text || typeof text !== 'string') return '';
@@ -732,6 +771,7 @@ function truncateText(text, maxLength) {
  * Escape HTML special characters
  * @param {string} text - Text to escape
  * @returns {string} Escaped text
+ * @author Arsh Verma
  */
 function escapeHtml(text) {
     if (typeof text !== 'string') return '';
@@ -752,6 +792,7 @@ function escapeHtml(text) {
  * @param {Function} func - Function to debounce
  * @param {number} wait - Wait time in milliseconds
  * @returns {Function} Debounced function
+ * @author Arsh Verma
  */
 function debounce(func, wait) {
     let timeout;
@@ -769,6 +810,7 @@ function debounce(func, wait) {
  * Show notification toast
  * @param {string} message - Notification message
  * @param {string} type - Type: 'success', 'error', 'info', 'warning'
+ * @author Arsh Verma
  */
 function showNotification(message, type = 'info') {
     try {
@@ -847,7 +889,7 @@ window.applyCertificateFilters = applyCertificateFilters;
 // ==========================================
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initializeCertificatesPage);
-    console.log('Waiting for DOM to load...');
+    console.log('Waiting for DOM to load by Arsh Verma...');
 } else {
     initializeCertificatesPage();
 }
@@ -859,9 +901,10 @@ if (document.readyState === 'loading') {
 /**
  * Debug function to check certificates state
  * Call window.debugCertificatesState() in console
+ * @author Arsh Verma
  */
 window.debugCertificatesState = function() {
-    console.log('=== CERTIFICATES STATE DEBUG ===');
+    console.log('=== CERTIFICATES STATE DEBUG BY ARSH VERMA ===');
     console.log('All Certificates:', allCertificates);
     console.log('Current Certificates:', currentCertificates);
     console.log('Current Filters:', currentFilters);
@@ -870,6 +913,16 @@ window.debugCertificatesState = function() {
     console.log('========================');
 };
 
+// Developer signature in console
+console.log(`
+╔══════════════════════════════════════════════╗
+║           CERTIFICATES PORTFOLIO             ║
+║            Developed by Arsh Verma           ║
+║      GitHub: https://github.com/ArshVermaGit ║
+║    Portfolio: https://arshcreates.com        ║
+╚══════════════════════════════════════════════╝
+`);
+
 // Log initialization
-console.log('certificates.js loaded successfully');
+console.log('certificates.js loaded successfully by Arsh Verma');
 console.log('Available functions:', ['initializeCertificatesPage', 'resetCertificateFilters', 'viewCertificateDetails', 'applyCertificateFilters', 'debugCertificatesState']);
