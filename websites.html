@@ -24,10 +24,6 @@
         </div>
     </div>
 
-    <!-- Custom Cursor -->
-    <div class="cursor-dot" id="cursorDot"></div>
-    <div class="cursor-ring" id="cursorRing"></div>
-
     <!-- Navigation -->
     <nav class="navbar" id="navbar">
         <div class="container">
@@ -45,6 +41,7 @@
                     <li><a href="games.html" class="nav-link">Games</a></li>
                     <li><a href="websites.html" class="nav-link active">Websites</a></li>
                     <li><a href="apps.html" class="nav-link">Apps</a></li>
+                    <li><a href="certificates.html" class="nav-link">Certificates</a></li>
                     <li><a href="testimonials.html" class="nav-link">Testimonials</a></li>
                     <li><a href="index.html#contact" class="nav-link">Contact</a></li>
                 </ul>
@@ -120,32 +117,38 @@
                         <option value="users">Most Users</option>
                     </select>
                 </div>
+                <div class="filter-group">
+                    <button class="btn btn-secondary" onclick="resetWebsiteFilters()">
+                        <i class="fas fa-redo"></i>
+                        <span>Reset Filters</span>
+                    </button>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- Websites Grid -->
-<section class="section websites-section">
-    <div class="container">
-        <div class="section-header">
-            <h2 class="section-title">Featured Websites</h2>
-            <p class="section-subtitle">Explore my collection of modern web solutions and digital experiences</p>
-            <div class="section-decoration">
-                <div class="decoration-line"></div>
-                <i class="fas fa-laptop-code"></i>
-                <div class="decoration-line"></div>
+    <section class="section websites-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Featured Websites</h2>
+                <p class="section-subtitle">Explore my collection of modern web solutions and digital experiences</p>
+                <div class="section-decoration">
+                    <div class="decoration-line"></div>
+                    <i class="fas fa-laptop-code"></i>
+                    <div class="decoration-line"></div>
+                </div>
+            </div>
+            
+            <div class="portfolio-grid" id="websitesGrid">
+                <!-- Websites will be loaded dynamically from data.js -->
+                <div class="loading-games">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <p>Loading websites...</p>
+                </div>
             </div>
         </div>
-        
-        <div class="portfolio-grid" id="websitesGrid">
-            <!-- Websites will be loaded dynamically from data.js -->
-            <div class="loading-games">
-                <i class="fas fa-spinner fa-spin"></i>
-                <p>Loading websites...</p>
-            </div>
-        </div>
-    </div>
-</section>
+    </section>
 
     <!-- CTA Section -->
     <section class="section cta-section">
@@ -153,7 +156,7 @@
             <div class="cta-content">
                 <h2>Ready to Build Your Website?</h2>
                 <p>Let's create an exceptional web experience that exceeds your expectations</p>
-                <a href="#contact" class="btn btn-primary btn-glow">
+                <a href="index.html#contact" class="btn btn-primary btn-glow">
                     <i class="fas fa-code"></i>
                     <span>Start Web Project</span>
                 </a>
@@ -182,8 +185,8 @@
                         <a href="https://www.linkedin.com/in/arshvermadev/" class="social-link" target="_blank">
                             <i class="fab fa-linkedin"></i>
                         </a>
-                        <a href="#" class="social-link">
-                            <i class="fab fa-twitter"></i>
+                        <a href="https://x.com/TheArshVerma" class="social-link">
+                            <i class="fab fa-x"></i>
                         </a>
                     </div>
                 </div>
@@ -196,6 +199,8 @@
                         <a href="games.html">Games</a>
                         <a href="websites.html">Websites</a>
                         <a href="apps.html">Apps</a>
+                        <a href="certificates.html">Certificates</a>
+
                     </div>
 
                     <div class="link-group">
