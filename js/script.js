@@ -67,10 +67,12 @@ function getCurrentPage() {
     if (page.includes('websites.html')) return 'websites';
     if (page.includes('apps.html')) return 'apps';
     if (page.includes('testimonials.html')) return 'testimonials';
+    if (page.includes('certificates.html')) return 'certificates';
     if (page.includes('admin.html')) return 'admin';
     if (page.includes('game-detail.html')) return 'game-detail';
     if (page.includes('website-detail.html')) return 'website-detail';
     if (page.includes('app-detail.html')) return 'app-detail';
+    if (page.includes('certificate-detail.html')) return 'certificate-detail';
     if (page.includes('404.html')) return '404';
     if (page.includes('500.html')) return '500';
     
@@ -98,13 +100,11 @@ function setupEventListeners() {
     // Smooth scroll for navigation
     setupSmoothScroll();
     
-    // Custom cursor (desktop only)
-    if (window.innerWidth > 768) {
-        initializeCustomCursor();
-    }
-    
     // Tab switching (skills section)
     setupTabSwitching();
+    
+    // Download CV button
+    setupDownloadCV();
     
     console.log('✅ Event listeners setup complete');
 }
@@ -416,6 +416,19 @@ function isValidEmail(email) {
 }
 
 // ==========================================
+// DOWNLOAD CV FUNCTIONALITY
+// ==========================================
+function setupDownloadCV() {
+    const downloadCVBtn = document.getElementById('downloadCV');
+    if (downloadCVBtn) {
+        downloadCVBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            showNotification('CV download feature coming soon!', 'info');
+        });
+    }
+}
+
+// ==========================================
 // NOTIFICATIONS SYSTEM
 // ==========================================
 function showNotification(message, type = 'info', duration = 5000) {
@@ -425,6 +438,7 @@ function showNotification(message, type = 'info', duration = 5000) {
     if (!container) {
         container = document.createElement('div');
         container.id = 'notificationContainer';
+        container.style.cssText = 'position: fixed; top: 20px; right: 20px; z-index: 10000;';
         document.body.appendChild(container);
     }
     
@@ -714,61 +728,6 @@ function createParticle(container) {
 }
 
 // ==========================================
-// CUSTOM CURSOR (Desktop only)
-// ==========================================
-function initializeCustomCursor() {
-    const cursorDot = document.getElementById('cursorDot');
-    const cursorRing = document.getElementById('cursorRing');
-    
-    if (!cursorDot || !cursorRing) return;
-    
-    let mouseX = 0, mouseY = 0;
-    let dotX = 0, dotY = 0;
-    let ringX = 0, ringY = 0;
-    
-    document.addEventListener('mousemove', (e) => {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
-    });
-    
-    function animateCursor() {
-        dotX = mouseX;
-        dotY = mouseY;
-        
-        ringX += (mouseX - ringX) * 0.15;
-        ringY += (mouseY - ringY) * 0.15;
-        
-        cursorDot.style.transform = `translate3d(${dotX}px, ${dotY}px, 0)`;
-        cursorRing.style.transform = `translate3d(${ringX}px, ${ringY}px, 0)`;
-        
-        requestAnimationFrame(animateCursor);
-    }
-    
-    animateCursor();
-    
-    // Cursor hover effects
-    const interactiveElements = document.querySelectorAll(
-        'a, button, input, select, textarea, [data-cursor-effect]'
-    );
-    
-    interactiveElements.forEach(el => {
-        el.addEventListener('mouseenter', () => {
-            cursorRing.style.width = '50px';
-            cursorRing.style.height = '50px';
-            cursorRing.style.borderColor = 'var(--accent-primary)';
-        });
-        
-        el.addEventListener('mouseleave', () => {
-            cursorRing.style.width = '40px';
-            cursorRing.style.height = '40px';
-            cursorRing.style.borderColor = 'var(--accent-primary)';
-        });
-    });
-    
-    console.log('✅ Custom cursor initialized');
-}
-
-// ==========================================
 // UTILITY FUNCTIONS
 // ==========================================
 function debounce(func, wait) {
@@ -863,14 +822,6 @@ window.addEventListener('unhandledrejection', function(e) {
 window.addEventListener('resize', debounce(function() {
     // Reinitialize particles on resize
     initializeParticles();
-    
-    // Reinitialize custom cursor if needed
-    if (window.innerWidth > 768) {
-        const cursorDot = document.getElementById('cursorDot');
-        if (!cursorDot) {
-            initializeCustomCursor();
-        }
-    }
 }, 250));
 
 // ==========================================
