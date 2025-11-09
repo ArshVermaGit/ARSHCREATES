@@ -6792,9 +6792,14 @@ body:has(.websites-section) .filter-select:focus {
 /* ==========================================
    APPS PAGE SPECIFIC STYLES
    Optimized for mobile apps portfolio
+   Author: Arsh Verma
+   Version: 1.0.0
    ========================================== */
 
-/* Apps Page Header */
+/* ==========================================
+   APPS PAGE HEADER
+   Hero section with gradient background
+   ========================================== */
 body:has(.apps-section) .page-header {
     padding: 12rem 0 6rem;
     position: relative;
@@ -6806,6 +6811,7 @@ body:has(.apps-section) .page-header {
     border-bottom: 1px solid var(--border-color);
 }
 
+/* Animated background effects */
 body:has(.apps-section) .page-header::before {
     content: '';
     position: absolute;
@@ -6835,6 +6841,7 @@ body:has(.apps-section) .header-content h1 {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    line-height: 1.2;
 }
 
 body:has(.apps-section) .header-content p {
@@ -6842,8 +6849,10 @@ body:has(.apps-section) .header-content p {
     opacity: 0.85;
     line-height: 1.7;
     margin-bottom: 3rem;
+    color: var(--text-secondary);
 }
 
+/* Header Statistics Grid */
 body:has(.apps-section) .header-stats {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -6876,9 +6885,13 @@ body:has(.apps-section) .stat-label {
     font-size: 0.9rem;
     opacity: 0.7;
     font-weight: 500;
+    color: var(--text-secondary);
 }
 
-/* Apps Filter Section */
+/* ==========================================
+   FILTER SECTION
+   Search and filter controls
+   ========================================== */
 body:has(.apps-section) .filter-section {
     padding: 3rem 0;
     background: var(--glass-bg);
@@ -6892,12 +6905,13 @@ body:has(.apps-section) .filter-container {
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 2rem;
     align-items: end;
+    margin-bottom: 2rem;
 }
 
 body:has(.apps-section) .filter-group {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 0.5rem;
 }
 
 body:has(.apps-section) .filter-group label {
@@ -6907,7 +6921,9 @@ body:has(.apps-section) .filter-group label {
     margin-bottom: 0.5rem;
 }
 
-body:has(.apps-section) .filter-select {
+/* Filter Select Styling */
+body:has(.apps-section) .filter-select,
+body:has(.apps-section) .search-input {
     width: 100%;
     padding: 1.25rem 1.5rem;
     background: var(--glass-bg);
@@ -6920,20 +6936,31 @@ body:has(.apps-section) .filter-select {
     cursor: pointer;
     transition: all var(--transition-base);
     box-shadow: 0 5px 15px var(--shadow-color);
+}
+
+body:has(.apps-section) .search-input {
+    cursor: text;
+}
+
+/* Custom dropdown arrow for select */
+body:has(.apps-section) .filter-select {
     appearance: none;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2322C55E'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 1.5rem center;
     background-size: 1rem;
+    padding-right: 3.5rem;
 }
 
-body:has(.apps-section) .filter-select:hover {
+body:has(.apps-section) .filter-select:hover,
+body:has(.apps-section) .search-input:hover {
     border-color: #22C55E;
     transform: translateY(-2px);
     box-shadow: 0 8px 25px var(--shadow-color);
 }
 
-body:has(.apps-section) .filter-select:focus {
+body:has(.apps-section) .filter-select:focus,
+body:has(.apps-section) .search-input:focus {
     outline: none;
     border-color: #22C55E;
     box-shadow: 0 8px 25px var(--shadow-color), 0 0 0 3px rgba(34, 197, 94, 0.1);
@@ -6946,18 +6973,76 @@ body:has(.apps-section) .filter-select option {
     font-size: 1rem;
 }
 
-/* Apps Grid Section */
+/* Results Info */
+body:has(.apps-section) .results-info {
+    text-align: center;
+    margin-top: 1.5rem;
+}
+
+body:has(.apps-section) .results-count {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+/* ==========================================
+   APPS GRID SECTION
+   Main portfolio display
+   ========================================== */
 .apps-section {
     padding: 6rem 0;
 }
 
+body:has(.apps-section) .section-header {
+    text-align: center;
+    margin-bottom: 4rem;
+}
+
+body:has(.apps-section) .section-title {
+    font-size: 3rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+}
+
+body:has(.apps-section) .section-subtitle {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    max-width: 600px;
+    margin: 0 auto 2rem;
+    line-height: 1.6;
+}
+
+body:has(.apps-section) .section-decoration {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+body:has(.apps-section) .decoration-line {
+    width: 60px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #22C55E, transparent);
+}
+
+body:has(.apps-section) .section-decoration i {
+    color: #22C55E;
+    font-size: 1.5rem;
+}
+
+/* Portfolio Grid Layout */
 body:has(.apps-section) .portfolio-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
     gap: 3rem;
 }
 
-/* App Card Styles */
+/* ==========================================
+   APP CARD STYLES
+   Individual app card design
+   ========================================== */
 body:has(.apps-section) .app-card {
     background: var(--glass-bg);
     backdrop-filter: blur(30px) saturate(180%);
@@ -6967,6 +7052,7 @@ body:has(.apps-section) .app-card {
     overflow: hidden;
     transition: all var(--transition-base);
     position: relative;
+    cursor: pointer;
 }
 
 body:has(.apps-section) .app-card:hover {
@@ -6974,6 +7060,7 @@ body:has(.apps-section) .app-card:hover {
     box-shadow: 0 20px 60px var(--shadow-color);
 }
 
+/* Hover overlay effect */
 body:has(.apps-section) .app-card::before {
     content: '';
     position: absolute;
@@ -6985,6 +7072,7 @@ body:has(.apps-section) .app-card::before {
     opacity: 0;
     transition: opacity var(--transition-base);
     z-index: 1;
+    pointer-events: none;
 }
 
 body:has(.apps-section) .app-card:hover::before {
@@ -6996,6 +7084,7 @@ body:has(.apps-section) .app-card > * {
     z-index: 2;
 }
 
+/* App Image Container */
 body:has(.apps-section) .app-image {
     position: relative;
     width: 100%;
@@ -7015,6 +7104,62 @@ body:has(.apps-section) .app-card:hover .app-image img {
     transform: scale(1.1);
 }
 
+/* Image Overlay on Hover */
+body:has(.apps-section) .app-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity var(--transition-base);
+    z-index: 3;
+}
+
+body:has(.apps-section) .app-card:hover .app-overlay {
+    opacity: 1;
+}
+
+body:has(.apps-section) .overlay-content {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 1rem;
+}
+
+body:has(.apps-section) .view-details-btn,
+body:has(.apps-section) .download-btn {
+    padding: 0.75rem 1.5rem;
+    background: #22C55E;
+    color: white;
+    text-decoration: none;
+    border: none;
+    border-radius: var(--border-radius-sm);
+    font-weight: 600;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all var(--transition-base);
+    cursor: pointer;
+}
+
+body:has(.apps-section) .download-btn {
+    background: #10B981;
+}
+
+body:has(.apps-section) .view-details-btn:hover,
+body:has(.apps-section) .download-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(34, 197, 94, 0.4);
+}
+
+/* Status Badge */
 body:has(.apps-section) .app-badge {
     position: absolute;
     top: 1rem;
@@ -7022,15 +7167,50 @@ body:has(.apps-section) .app-badge {
     padding: 0.5rem 1rem;
     background: linear-gradient(135deg, #22C55E, #10B981);
     color: #fff;
-    font-size: 0.8rem;
-    font-weight: 600;
+    font-size: 0.75rem;
+    font-weight: 700;
     border-radius: var(--border-radius-sm);
-    border: 1px solid var(--border-color);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     box-shadow: 0 5px 15px var(--shadow-color);
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    z-index: 4;
 }
 
+/* Status-specific badge colors */
+body:has(.apps-section) .status-live {
+    background: linear-gradient(135deg, #22C55E, #10B981);
+}
+
+body:has(.apps-section) .status-in-development {
+    background: linear-gradient(135deg, #F59E0B, #D97706);
+}
+
+body:has(.apps-section) .status-beta {
+    background: linear-gradient(135deg, #3B82F6, #2563EB);
+}
+
+/* Platform Badge */
+body:has(.apps-section) .platform-badge {
+    position: absolute;
+    bottom: 1rem;
+    left: 1rem;
+    padding: 0.5rem 1rem;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(10px);
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: var(--border-radius-sm);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    z-index: 4;
+}
+
+/* App Content Container */
 body:has(.apps-section) .app-content {
     padding: 2.5rem;
 }
@@ -7039,6 +7219,7 @@ body:has(.apps-section) .app-header {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
+    gap: 1rem;
     margin-bottom: 1rem;
 }
 
@@ -7048,8 +7229,10 @@ body:has(.apps-section) .app-title {
     color: var(--text-primary);
     margin-bottom: 0.5rem;
     flex: 1;
+    line-height: 1.3;
 }
 
+/* Rating Display */
 body:has(.apps-section) .app-rating {
     display: flex;
     align-items: center;
@@ -7060,11 +7243,14 @@ body:has(.apps-section) .app-rating {
     border-radius: var(--border-radius-sm);
     padding: 0.5rem 1rem;
     box-shadow: 0 5px 15px var(--shadow-color);
+    flex-shrink: 0;
 }
 
 body:has(.apps-section) .rating-stars {
     color: #F59E0B;
     font-size: 0.9rem;
+    display: flex;
+    gap: 2px;
 }
 
 body:has(.apps-section) .rating-value {
@@ -7073,14 +7259,17 @@ body:has(.apps-section) .rating-value {
     color: var(--text-primary);
 }
 
+/* Platform Display */
 body:has(.apps-section) .app-platform {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
     padding: 0.5rem 1rem;
     background: var(--glass-bg);
     backdrop-filter: blur(30px) saturate(180%);
     border: 1px solid var(--border-color);
     border-radius: var(--border-radius-sm);
-    font-size: 0.8rem;
+    font-size: 0.85rem;
     font-weight: 600;
     color: #22C55E;
     margin-bottom: 1rem;
@@ -7089,37 +7278,21 @@ body:has(.apps-section) .app-platform {
     letter-spacing: 0.5px;
 }
 
+/* App Description */
 body:has(.apps-section) .app-description {
     font-size: 1rem;
     line-height: 1.7;
     opacity: 0.8;
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
+    color: var(--text-secondary);
 }
 
-body:has(.apps-section) .app-features {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem;
-    margin-bottom: 2rem;
-}
-
-body:has(.apps-section) .app-feature {
-    padding: 0.5rem 1rem;
-    background: var(--glass-bg);
-    backdrop-filter: blur(30px) saturate(180%);
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius-sm);
-    font-size: 0.85rem;
-    font-weight: 500;
-    color: var(--text-primary);
-    box-shadow: 0 3px 10px var(--shadow-color);
-}
-
+/* App Stats Grid */
 body:has(.apps-section) .app-stats {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 1rem;
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
     padding: 1.5rem;
     background: var(--glass-bg);
     backdrop-filter: blur(30px) saturate(180%);
@@ -7147,8 +7320,42 @@ body:has(.apps-section) .app-stat-label {
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    color: var(--text-secondary);
 }
 
+/* Technology/Feature Tags */
+body:has(.apps-section) .app-features {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+
+body:has(.apps-section) .app-feature {
+    padding: 0.5rem 1rem;
+    background: var(--glass-bg);
+    backdrop-filter: blur(30px) saturate(180%);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    box-shadow: 0 3px 10px var(--shadow-color);
+    transition: all var(--transition-base);
+}
+
+body:has(.apps-section) .app-feature:hover {
+    background: rgba(34, 197, 94, 0.1);
+    border-color: #22C55E;
+}
+
+body:has(.apps-section) .app-feature.more {
+    background: #22C55E;
+    color: white;
+    font-weight: 600;
+}
+
+/* App Actions Buttons */
 body:has(.apps-section) .app-actions {
     display: flex;
     gap: 1rem;
@@ -7159,121 +7366,34 @@ body:has(.apps-section) .app-actions .btn {
     justify-content: center;
     padding: 1rem 1.5rem;
     font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
 }
 
-/* App-specific button variants */
+/* App-specific button variant */
 body:has(.apps-section) .btn-app {
     background: linear-gradient(135deg, #22C55E, #10B981);
     color: #fff;
-    border-color: #22C55E;
+    border: 1px solid #22C55E;
 }
 
-body:has(.apps-section) .btn-app:hover {
+body:has(.apps-section) .btn-app:hover:not(:disabled) {
     background: linear-gradient(135deg, #16A34A, #0D9488);
     transform: translateY(-3px);
     box-shadow: 0 15px 40px var(--shadow-color), 0 0 30px rgba(34, 197, 94, 0.3);
 }
 
-/* Platform Badges */
-body:has(.apps-section) .platform-badges {
-    display: flex;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
+body:has(.apps-section) .btn-app:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
-body:has(.apps-section) .platform-badge {
-    padding: 0.4rem 0.8rem;
-    background: var(--glass-bg);
-    backdrop-filter: blur(30px) saturate(180%);
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius-sm);
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: #22C55E;
-    box-shadow: 0 3px 10px var(--shadow-color);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-body:has(.apps-section) .platform-badge.ios {
-    background: linear-gradient(135deg, #22C55E, #10B981);
-    color: #fff;
-}
-
-body:has(.apps-section) .platform-badge.android {
-    background: linear-gradient(135deg, #84CC16, #65A30D);
-    color: #fff;
-}
-
-body:has(.apps-section) .platform-badge.cross-platform {
-    background: linear-gradient(135deg, #EAB308, #CA8A04);
-    color: #fff;
-}
-
-/* App Store Badges */
-body:has(.apps-section) .store-badges {
-    display: flex;
-    gap: 1rem;
-    margin-bottom: 1.5rem;
-}
-
-body:has(.apps-section) .store-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.75rem 1.25rem;
-    background: var(--glass-bg);
-    backdrop-filter: blur(30px) saturate(180%);
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius-sm);
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: var(--text-primary);
-    text-decoration: none;
-    box-shadow: 0 3px 10px var(--shadow-color);
-    transition: all var(--transition-base);
-}
-
-body:has(.apps-section) .store-badge:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px var(--shadow-color);
-}
-
-body:has(.apps-section) .store-badge.apple {
-    background: linear-gradient(135deg, #000000, #333333);
-    color: #fff;
-}
-
-body:has(.apps-section) .store-badge.google {
-    background: linear-gradient(135deg, #4285F4, #34A853);
-    color: #fff;
-}
-
-body:has(.apps-section) .store-badge i {
-    font-size: 1.1rem;
-}
-
-/* App Technology Tags */
-body:has(.apps-section) .app-tech {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-bottom: 1.5rem;
-}
-
-body:has(.apps-section) .tech-tag {
-    padding: 0.4rem 0.8rem;
-    background: var(--glass-bg);
-    backdrop-filter: blur(30px) saturate(180%);
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius-sm);
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: #22C55E;
-    box-shadow: 0 3px 10px var(--shadow-color);
-}
-
-/* CTA Section */
+/* ==========================================
+   CTA SECTION
+   Call to action area
+   ========================================== */
 body:has(.apps-section) .cta-section {
     background: linear-gradient(135deg, 
         rgba(34, 197, 94, 0.1) 0%, 
@@ -7281,13 +7401,13 @@ body:has(.apps-section) .cta-section {
         rgba(5, 150, 105, 0.1) 100%);
     border-top: 1px solid var(--border-color);
     border-bottom: 1px solid var(--border-color);
+    padding: 4rem 0;
 }
 
 body:has(.apps-section) .cta-content {
     text-align: center;
     max-width: 600px;
     margin: 0 auto;
-    padding: 4rem 0;
 }
 
 body:has(.apps-section) .cta-content h2 {
@@ -7298,6 +7418,7 @@ body:has(.apps-section) .cta-content h2 {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    line-height: 1.2;
 }
 
 body:has(.apps-section) .cta-content p {
@@ -7305,6 +7426,7 @@ body:has(.apps-section) .cta-content p {
     opacity: 0.85;
     line-height: 1.7;
     margin-bottom: 2.5rem;
+    color: var(--text-secondary);
 }
 
 body:has(.apps-section) .cta-content .btn {
@@ -7312,9 +7434,14 @@ body:has(.apps-section) .cta-content .btn {
     font-size: 1.1rem;
 }
 
-/* Loading & Empty States */
+/* ==========================================
+   LOADING & EMPTY STATES
+   States for no content
+   ========================================== */
 body:has(.apps-section) .loading-apps,
-body:has(.apps-section) .no-apps {
+body:has(.apps-section) .no-results,
+body:has(.apps-section) .empty-state,
+body:has(.apps-section) .error-state {
     text-align: center;
     padding: 4rem 2rem;
     background: var(--glass-bg);
@@ -7326,21 +7453,46 @@ body:has(.apps-section) .no-apps {
 }
 
 body:has(.apps-section) .loading-apps i,
-body:has(.apps-section) .no-apps i {
+body:has(.apps-section) .no-results i,
+body:has(.apps-section) .empty-state i,
+body:has(.apps-section) .error-state i {
     font-size: 4rem;
     color: #22C55E;
     margin-bottom: 2rem;
     opacity: 0.7;
 }
 
+body:has(.apps-section) .loading-apps i {
+    animation: spin 1.5s linear infinite;
+}
+
+body:has(.apps-section) .no-results h3,
+body:has(.apps-section) .empty-state h3,
+body:has(.apps-section) .error-state h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+}
+
 body:has(.apps-section) .loading-apps p,
-body:has(.apps-section) .no-apps p {
+body:has(.apps-section) .no-results p,
+body:has(.apps-section) .empty-state p,
+body:has(.apps-section) .error-state p {
     font-size: 1.1rem;
     opacity: 0.8;
     margin-bottom: 2rem;
+    color: var(--text-secondary);
 }
 
-/* Animations */
+body:has(.apps-section) .no-results .btn {
+    margin-top: 1rem;
+}
+
+/* ==========================================
+   ANIMATIONS
+   Card entrance animations
+   ========================================== */
 @keyframes slideInFade {
     from {
         opacity: 0;
@@ -7352,29 +7504,122 @@ body:has(.apps-section) .no-apps p {
     }
 }
 
-body:has(.apps-section) .app-card {
-    animation: slideInFade 0.6s ease-out;
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
+body:has(.apps-section) .app-card {
+    animation: slideInFade 0.6s ease-out backwards;
+}
+
+/* Staggered animation delays */
 body:has(.apps-section) .app-card:nth-child(1) { animation-delay: 0.1s; }
 body:has(.apps-section) .app-card:nth-child(2) { animation-delay: 0.2s; }
 body:has(.apps-section) .app-card:nth-child(3) { animation-delay: 0.3s; }
 body:has(.apps-section) .app-card:nth-child(4) { animation-delay: 0.4s; }
 body:has(.apps-section) .app-card:nth-child(5) { animation-delay: 0.5s; }
 body:has(.apps-section) .app-card:nth-child(6) { animation-delay: 0.6s; }
+body:has(.apps-section) .app-card:nth-child(7) { animation-delay: 0.7s; }
+body:has(.apps-section) .app-card:nth-child(8) { animation-delay: 0.8s; }
+body:has(.apps-section) .app-card:nth-child(9) { animation-delay: 0.9s; }
 
-/* Responsive Design */
+/* ==========================================
+   RESPONSIVE DESIGN
+   Mobile optimization
+   ========================================== */
+
+/* Large Desktops */
 @media (max-width: 1200px) {
-    body:has(.apps-section) .portfolio-grid {
-        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-        gap: 2.5rem;
+    body:has(.apps-section) .overlay-content {
+        flex-direction: column;
     }
     
-    body:has(.apps-section) .header-content h1 {
-        font-size: 4rem;
+    body:has(.apps-section) .view-details-btn,
+    body:has(.apps-section) .download-btn {
+        width: 100%;
+        justify-content: center;
     }
 }
 
+/* ==========================================
+   ACCESSIBILITY ENHANCEMENTS
+   Better experience for all users
+   ========================================== */
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+    body:has(.apps-section) .app-card,
+    body:has(.apps-section) .app-card:hover .app-image img,
+    body:has(.apps-section) .filter-select,
+    body:has(.apps-section) .btn,
+    body:has(.apps-section) .app-feature {
+        animation: none;
+        transition: none;
+    }
+}
+
+/* Focus styles for keyboard navigation */
+body:has(.apps-section) .app-card:focus-within {
+    outline: 3px solid #22C55E;
+    outline-offset: 3px;
+}
+
+body:has(.apps-section) .filter-select:focus,
+body:has(.apps-section) .search-input:focus {
+    outline: 3px solid #22C55E;
+    outline-offset: 2px;
+}
+
+body:has(.apps-section) .btn:focus,
+body:has(.apps-section) .view-details-btn:focus,
+body:has(.apps-section) .download-btn:focus {
+    outline: 3px solid #22C55E;
+    outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    body:has(.apps-section) .app-card {
+        border: 2px solid var(--text-primary);
+    }
+    
+    body:has(.apps-section) .app-badge,
+    body:has(.apps-section) .platform-badge {
+        border: 2px solid white;
+    }
+}
+
+/* ==========================================
+   PRINT STYLES
+   Optimized for printing
+   ========================================== */
+@media print {
+    body:has(.apps-section) .navbar,
+    body:has(.apps-section) .filter-section,
+    body:has(.apps-section) .cta-section,
+    body:has(.apps-section) .footer,
+    body:has(.apps-section) .back-to-top,
+    body:has(.apps-section) .app-overlay {
+        display: none !important;
+    }
+    
+    body:has(.apps-section) .app-card {
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+    
+    body:has(.apps-section) .portfolio-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+}
+
+/* Tablets */
 @media (max-width: 992px) {
     body:has(.apps-section) .page-header {
         padding: 10rem 0 4rem;
@@ -7399,17 +7644,12 @@ body:has(.apps-section) .app-card:nth-child(6) { animation-delay: 0.6s; }
         padding: 2rem;
     }
     
-    body:has(.apps-section) .app-stats {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 1rem;
-        padding: 1.25rem;
-    }
-    
     body:has(.apps-section) .cta-content h2 {
         font-size: 2.5rem;
     }
 }
 
+/* Mobile Devices */
 @media (max-width: 768px) {
     body:has(.apps-section) .page-header {
         padding: 8rem 0 3rem;
@@ -7451,16 +7691,6 @@ body:has(.apps-section) .app-card:nth-child(6) { animation-delay: 0.6s; }
         grid-template-columns: repeat(2, 1fr);
     }
     
-    body:has(.apps-section) .store-badges {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-    
-    body:has(.apps-section) .store-badge {
-        width: 100%;
-        justify-content: center;
-    }
-    
     body:has(.apps-section) .cta-content h2 {
         font-size: 2rem;
     }
@@ -7470,6 +7700,7 @@ body:has(.apps-section) .app-card:nth-child(6) { animation-delay: 0.6s; }
     }
 }
 
+/* Small mobile devices (max-width: 480px) */
 @media (max-width: 480px) {
     body:has(.apps-section) .header-content h1 {
         font-size: 2rem;
@@ -7479,60 +7710,85 @@ body:has(.apps-section) .app-card:nth-child(6) { animation-delay: 0.6s; }
         font-size: 2rem;
     }
     
-    body:has(.apps-section) .app-content {
+    body:has(.apps-section) .game-content {
         padding: 1.5rem;
     }
     
-    body:has(.apps-section) .app-title {
+    body:has(.apps-section) .game-title {
         font-size: 1.25rem;
     }
     
-    body:has(.apps-section) .app-features {
-        gap: 0.5rem;
-    }
-    
-    body:has(.apps-section) .app-feature {
-        font-size: 0.8rem;
-        padding: 0.4rem 0.8rem;
-    }
-    
-    body:has(.apps-section) .app-stats {
+    .app-stats {
         grid-template-columns: 1fr;
         gap: 1rem;
     }
     
-    body:has(.apps-section) .app-stat-value {
+    .app-stat-value {
         font-size: 1.25rem;
     }
     
-    body:has(.apps-section) .platform-badges {
-        flex-direction: column;
-        align-items: flex-start;
+    body:has(.apps-section) .cta-content h2 {
+        font-size: 1.75rem;
+    }
+    
+    body:has(.apps-section) .overlay-content {
+        padding: 1rem;
     }
 }
 
-/* Accessibility Enhancements */
+/* ==========================================
+   9. ACCESSIBILITY FEATURES
+   Enhanced accessibility and reduced motion
+   ========================================== */
+
+/* Reduce motion for users with vestibular disorders */
 @media (prefers-reduced-motion: reduce) {
-    body:has(.apps-section) .app-card,
-    body:has(.apps-section) .app-card:hover .app-image img,
+    .app-card,
+    .app-card:hover .game-image img,
     body:has(.apps-section) .filter-select,
-    body:has(.apps-section) .btn,
-    body:has(.apps-section) .store-badge {
+    body:has(.apps-section) .btn {
         animation: none;
         transition: none;
     }
+    
+    .app-card:hover {
+        transform: none;
+    }
 }
 
-/* Focus styles for better accessibility */
-body:has(.apps-section) .app-card:focus-within {
-    outline: 2px solid #22C55E;
+/* Focus styles for keyboard navigation */
+.app-card:focus-within {
+    outline: 2px solid #3B82F6;
     outline-offset: 2px;
 }
 
-body:has(.apps-section) .filter-select:focus,
-body:has(.apps-section) .store-badge:focus {
-    outline: 2px solid #22C55E;
+body:has(.apps-section) .filter-select:focus {
+    outline: 2px solid #3B82F6;
     outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    body:has(.apps-section) .game-badge,
+    .category-badge,
+    .tech-tag {
+        border-width: 2px;
+    }
+}
+
+/* Print styles */
+@media print {
+    body:has(.apps-section) .filter-section,
+    body:has(.apps-section) .cta-section,
+    .game-overlay {
+        display: none;
+    }
+    
+    .app-card {
+        page-break-inside: avoid;
+        box-shadow: none;
+        border: 1px solid #000;
+    }
 }
 
 /* ==========================================
