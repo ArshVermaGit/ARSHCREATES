@@ -1,65 +1,715 @@
 // ==========================================
-// APPS PAGE - Complete Mobile Apps Portfolio Functionality
-// Handles filtering, sorting, searching, and app display
+// WEBSITES PAGE - COMPLETE IMPLEMENTATION
+// Handles all website portfolio functionality
 // Author: Arsh Verma
-// ==========================================
-
-// ==========================================
-// GLOBAL VARIABLES
-// ==========================================
-let currentApps = [];              // Currently displayed apps after filters
-let allApps = [];                  // All apps from data source
-let currentFilters = {             // Current filter state
-    platform: 'all',
-    category: 'all',
-    status: 'all'
-};
-let isAnimating = false;           // Prevent multiple animations at once
-
-// ==========================================
-// PAGE INITIALIZATION
+// Version: 1.0.0
+// Last Updated: 2024
 // ==========================================
 
 /**
- * Initialize the apps portfolio page
- * - Loads app data
- * - Sets up filters and event listeners
- * - Updates header statistics
- * - Handles loading screen
+ * TABLE OF CONTENTS
+ * 1. Global State Management
+ * 2. Initialization
+ * 3. Data Loading
+ * 4. Display & Rendering
+ * 5. Filtering System
+ * 6. Sorting Functions
+ * 7. Card Interactions
+ * 8. Event Listeners
+ * 9. Navigation Functions
+ * 10. Statistics & Analytics
+ * 11. Animations
+ * 12. Utility Functions
+ * 13. Sample Data Fallback
  */
-function initializeAppsPage() {
-    console.log('Initializing apps page...');
-    
+
+// ==========================================
+// 1. GLOBAL STATE MANAGEMENT
+// Central state object for websites page
+// ==========================================
+const WEBSITES_STATE = {
+    allWebsites: [],           // All websites from data source
+    filteredWebsites: [],      // Filtered results
+    currentFilters: {
+        category: 'all',       // Selected category filter
+        status: 'all',         // Selected status filter
+        sort: 'newest',        // Current sort order
+        search: ''             // Search query (future enhancement)
+    },
+    isLoading: false,          // Loading state flag
+    animationDelay: 100        // Stagger delay for card animations (ms)
+};
+
+// ==========================================
+// 2. INITIALIZATION
+// Initialize page when DOM is ready
+// ==========================================
+
+/**
+ * Main initialization function
+ * Called when DOM content is loaded
+ */
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('🌐 Websites page initializing...');
+    initializeWebsitesPage();
+});
+
+/**
+ * Initialize all website page components
+ * @returns {void}
+ */
+function initializeWebsitesPage() {
     try {
-        // Load and display apps
-        loadApps();
+        // Step 1: Load websites data from data source
+        loadWebsitesData();
         
-        // Setup filter controls
-        setupAppFilters();
+        // Step 2: Setup filter controls
+        setupWebsiteFilters();
         
-        // Setup event listeners
-        setupAppEventListeners();
+        // Step 3: Setup event listeners
+        setupWebsiteEventListeners();
         
-        // Update header statistics
+        // Step 4: Update header statistics
         updateHeaderStats();
         
-        // Hide loading screen after delay
-        setTimeout(() => {
-            hideLoadingScreen();
-        }, 800);
+        // Step 5: Display websites
+        displayWebsites(WEBSITES_STATE.allWebsites);
         
-        console.log('Apps page initialized successfully');
+        // Step 6: Hide loading screen after delay
+        setTimeout(hideLoadingScreen, 800);
+        
+        console.log('✅ Websites page initialized successfully');
+        console.log(`📊 Loaded ${WEBSITES_STATE.allWebsites.length} websites`);
+        
     } catch (error) {
-        console.error('Error initializing apps page:', error);
-        showNotification('Error loading apps page', 'error');
+        console.error('❌ Error initializing websites page:', error);
+        showNotification('Failed to load websites. Please refresh the page.', 'error');
+        hideLoadingScreen();
     }
 }
 
+// ==========================================
+// 3. DATA LOADING
+// Load websites from data source
+// ==========================================
+
 /**
- * Hide loading screen with fade animation
+ * Load websites data from global data source
+ * Supports multiple data source formats
+ * @returns {void}
+ */
+function loadWebsitesData() {
+    try {
+        // Try to get websites from global function
+        if (typeof window.getWebsites === 'function') {
+            WEBSITES_STATE.allWebsites = window.getWebsites();
+        } 
+        // Try to get from PORTFOLIO_DATA object
+        else if (typeof PORTFOLIO_DATA !== 'undefined' && PORTFOLIO_DATA.websites) {
+            WEBSITES_STATE.allWebsites = PORTFOLIO_DATA.websites;
+        } 
+        // Fallback to sample data
+        else {
+            console.warn('⚠️ No websites data found, using fallback sample data');
+            WEBSITES_STATE.allWebsites = createSampleWebsites();
+        }
+        
+        // Initialize filtered websites with all websites
+        WEBSITES_STATE.filteredWebsites = [...WEBSITES_STATE.allWebsites];
+        
+        console.log('📦 Websites loaded:', WEBSITES_STATE.allWebsites.length);
+        
+    } catch (error) {
+        console.error('❌ Error loading websites:', error);
+        WEBSITES_STATE.allWebsites = [];
+        WEBSITES_STATE.filteredWebsites = [];
+    }
+}
+
+// ==========================================
+// 4. DISPLAY & RENDERING
+// Render websites to the DOM
+// ==========================================
+
+/**
+ * Display websites in the grid
+ * Handles loading, empty, and populated states
+ * @param {Array} websites - Array of website objects to display
+ * @returns {void}
+ */
+function displayWebsites(websites) {
+    const websitesGrid = document.getElementById('websitesGrid');
+    
+    if (!websitesGrid) {
+        console.error('❌ Websites grid element not found');
+        return;
+    }
+    
+    // Show loading state
+    if (WEBSITES_STATE.isLoading) {
+        websitesGrid.innerHTML = `
+            <div class="loading-games">
+                <i class="fas fa-spinner fa-spin"></i>
+                <p>Loading amazing websites...</p>
+            </div>
+        `;
+        return;
+    }
+    
+    // Show empty state
+    if (!websites || websites.length === 0) {
+        websitesGrid.innerHTML = `
+            <div class="no-games">
+                <i class="fas fa-laptop-code"></i>
+                <p>No websites match your current filters</p>
+                <button class="btn btn-primary" onclick="resetWebsiteFilters()">
+                    <i class="fas fa-redo"></i>
+                    <span>Reset Filters</span>
+                </button>
+            </div>
+        `;
+        return;
+    }
+    
+    // Generate and display website cards
+    websitesGrid.innerHTML = websites.map(website => createWebsiteCard(website)).join('');
+    
+    // Setup card interactions
+    setupWebsiteCardListeners();
+    
+    // Animate cards entrance
+    animateWebsiteCards();
+    
+    console.log(`✅ Displayed ${websites.length} websites`);
+}
+
+/**
+ * Create HTML for a single website card
+ * @param {Object} website - Website data object
+ * @returns {string} HTML string for the card
+ */
+function createWebsiteCard(website) {
+    const statusClass = website.status.toLowerCase().replace(/\s+/g, '-');
+    const starsHTML = generateStars(website.rating);
+    
+    return `
+        <div class="game-card website-card" 
+             data-website-id="${website.id}" 
+             data-category="${website.category}" 
+             data-status="${website.status}" 
+             data-rating="${website.rating}"
+             tabindex="0"
+             role="article"
+             aria-label="${website.name} website">
+            
+            <!-- Website Image Section -->
+            <div class="game-image">
+                <img src="${website.image || 'assets/images/websites/default.jpg'}" 
+                     alt="${website.name} screenshot"
+                     loading="lazy"
+                     onerror="this.src='https://via.placeholder.com/400x250/3B82F6/FFFFFF?text=${encodeURIComponent(website.name)}'">
+                
+                <!-- Hover Overlay with Actions -->
+                <div class="game-overlay">
+                    <div class="overlay-content">
+                        <button class="btn btn-primary btn-view-details" 
+                                data-website-id="${website.id}"
+                                aria-label="View ${website.name} details">
+                            <i class="fas fa-eye"></i>
+                            <span>View Details</span>
+                        </button>
+                        ${website.liveUrl ? `
+                            <a href="${website.liveUrl}" 
+                               class="btn btn-secondary btn-visit-site"
+                               target="_blank"
+                               rel="noopener noreferrer"
+                               aria-label="Visit ${website.name} live">
+                                <i class="fas fa-external-link-alt"></i>
+                                <span>Visit Site</span>
+                            </a>
+                        ` : ''}
+                    </div>
+                </div>
+                
+                <!-- Status Badge -->
+                <div class="game-badge status-${statusClass}">${website.status}</div>
+                
+                <!-- Category Badge -->
+                <div class="category-badge">
+                    <i class="fas fa-tag"></i>
+                    ${website.category}
+                </div>
+            </div>
+            
+            <!-- Website Content Section -->
+            <div class="game-content">
+                <!-- Header with Title and Rating -->
+                <div class="game-header">
+                    <h3 class="game-title">${website.name}</h3>
+                    <div class="game-rating" aria-label="Rating: ${website.rating} out of 5">
+                        <div class="rating-stars">${starsHTML}</div>
+                        <span class="rating-value">${website.rating}</span>
+                    </div>
+                </div>
+                
+                <!-- Metadata -->
+                <div class="game-meta">
+                    <span class="game-category">
+                        <i class="fas fa-tag"></i>
+                        ${website.category}
+                    </span>
+                    ${website.launchDate ? `
+                        <span class="game-date">
+                            <i class="fas fa-calendar"></i>
+                            ${formatDate(website.launchDate)}
+                        </span>
+                    ` : ''}
+                </div>
+                
+                <!-- Description -->
+                <p class="game-description">${website.overview || website.description || 'A professional web solution with modern design and functionality.'}</p>
+                
+                <!-- Technology Stack -->
+                ${website.technologies && website.technologies.length > 0 ? `
+                    <div class="website-tech">
+                        ${website.technologies.slice(0, 4).map(tech => `
+                            <span class="tech-tag">${tech}</span>
+                        `).join('')}
+                        ${website.technologies.length > 4 ? 
+                            `<span class="tech-tag more">+${website.technologies.length - 4}</span>` 
+                            : ''}
+                    </div>
+                ` : ''}
+                
+                <!-- Statistics -->
+                <div class="website-stats">
+                    ${website.userBase ? `
+                        <div class="website-stat">
+                            <span class="website-stat-value">${website.userBase}</span>
+                            <span class="website-stat-label">Users</span>
+                        </div>
+                    ` : ''}
+                    ${website.pageViews ? `
+                        <div class="website-stat">
+                            <span class="website-stat-value">${formatNumber(website.pageViews)}</span>
+                            <span class="website-stat-label">Page Views</span>
+                        </div>
+                    ` : ''}
+                    ${website.conversionRate ? `
+                        <div class="website-stat">
+                            <span class="website-stat-value">${website.conversionRate}%</span>
+                            <span class="website-stat-label">Conversion</span>
+                        </div>
+                    ` : ''}
+                    ${website.loadTime ? `
+                        <div class="website-stat">
+                            <span class="website-stat-value">${website.loadTime}s</span>
+                            <span class="website-stat-label">Load Time</span>
+                        </div>
+                    ` : ''}
+                </div>
+                
+                <!-- Action Buttons -->
+                <div class="game-actions">
+                    <button class="btn btn-primary btn-view-website" 
+                            data-website-id="${website.id}"
+                            aria-label="Learn more about ${website.name}">
+                        <i class="fas fa-info-circle"></i>
+                        <span>Learn More</span>
+                    </button>
+                    ${website.repositoryUrl ? `
+                        <a href="${website.repositoryUrl}" 
+                           class="btn btn-secondary"
+                           target="_blank"
+                           rel="noopener noreferrer"
+                           aria-label="View ${website.name} source code on GitHub">
+                            <i class="fab fa-github"></i>
+                            <span>View Code</span>
+                        </a>
+                    ` : ''}
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+// ==========================================
+// 5. FILTERING SYSTEM
+// Setup and apply filters
+// ==========================================
+
+/**
+ * Setup all filter controls
+ * @returns {void}
+ */
+function setupWebsiteFilters() {
+    console.log('🔧 Setting up website filters...');
+    
+    // Initialize each filter type
+    setupCategoryFilter();
+    setupStatusFilter();
+    setupSortFilter();
+    
+    console.log('✅ Filters initialized');
+}
+
+/**
+ * Setup category filter dropdown
+ * @returns {void}
+ */
+function setupCategoryFilter() {
+    const categoryFilter = document.getElementById('categoryFilter');
+    
+    if (!categoryFilter) return;
+    
+    // Get unique categories from websites
+    const categories = [...new Set(WEBSITES_STATE.allWebsites.map(website => website.category))];
+    
+    // Clear existing options except "All"
+    categoryFilter.innerHTML = '<option value="all">All Categories</option>';
+    
+    // Add category options dynamically
+    categories.forEach(category => {
+        const option = document.createElement('option');
+        option.value = category;
+        option.textContent = category;
+        categoryFilter.appendChild(option);
+    });
+    
+    // Add change event listener
+    categoryFilter.addEventListener('change', function() {
+        WEBSITES_STATE.currentFilters.category = this.value;
+        applyWebsiteFilters();
+        console.log('📂 Category filter changed:', this.value);
+    });
+}
+
+/**
+ * Setup status filter dropdown
+ * @returns {void}
+ */
+function setupStatusFilter() {
+    const statusFilter = document.getElementById('statusFilter');
+    
+    if (!statusFilter) return;
+    
+    statusFilter.addEventListener('change', function() {
+        WEBSITES_STATE.currentFilters.status = this.value;
+        applyWebsiteFilters();
+        console.log('📊 Status filter changed:', this.value);
+    });
+}
+
+/**
+ * Setup sort filter dropdown
+ * @returns {void}
+ */
+function setupSortFilter() {
+    const sortFilter = document.getElementById('sortFilter');
+    
+    if (!sortFilter) return;
+    
+    sortFilter.addEventListener('change', function() {
+        WEBSITES_STATE.currentFilters.sort = this.value;
+        applyWebsiteFilters();
+        console.log('🔄 Sort changed:', this.value);
+    });
+}
+
+/**
+ * Apply all active filters to websites
+ * @returns {void}
+ */
+function applyWebsiteFilters() {
+    let filtered = [...WEBSITES_STATE.allWebsites];
+    
+    // Apply category filter
+    if (WEBSITES_STATE.currentFilters.category !== 'all') {
+        filtered = filtered.filter(website => 
+            website.category === WEBSITES_STATE.currentFilters.category
+        );
+    }
+    
+    // Apply status filter
+    if (WEBSITES_STATE.currentFilters.status !== 'all') {
+        filtered = filtered.filter(website => 
+            website.status === WEBSITES_STATE.currentFilters.status
+        );
+    }
+    
+    // Apply search filter (if implemented)
+    if (WEBSITES_STATE.currentFilters.search) {
+        const searchTerm = WEBSITES_STATE.currentFilters.search.toLowerCase();
+        filtered = filtered.filter(website => 
+            website.name.toLowerCase().includes(searchTerm) ||
+            (website.overview && website.overview.toLowerCase().includes(searchTerm)) ||
+            (website.description && website.description.toLowerCase().includes(searchTerm)) ||
+            website.category.toLowerCase().includes(searchTerm) ||
+            (website.technologies && website.technologies.some(tech => 
+                tech.toLowerCase().includes(searchTerm)
+            ))
+        );
+    }
+    
+    // Apply sorting
+    filtered = sortWebsites(filtered, WEBSITES_STATE.currentFilters.sort);
+    
+    // Update state and display
+    WEBSITES_STATE.filteredWebsites = filtered;
+    displayWebsites(filtered);
+    
+    console.log(`🎯 Filters applied: ${filtered.length} websites shown`);
+}
+
+/**
+ * Reset all filters to default values
+ * @returns {void}
+ */
+function resetWebsiteFilters() {
+    console.log('🔄 Resetting all filters...');
+    
+    // Reset state
+    WEBSITES_STATE.currentFilters = {
+        category: 'all',
+        status: 'all',
+        sort: 'newest',
+        search: ''
+    };
+    
+    // Reset UI elements
+    const categoryFilter = document.getElementById('categoryFilter');
+    const statusFilter = document.getElementById('statusFilter');
+    const sortFilter = document.getElementById('sortFilter');
+    
+    if (categoryFilter) categoryFilter.value = 'all';
+    if (statusFilter) statusFilter.value = 'all';
+    if (sortFilter) sortFilter.value = 'newest';
+    
+    // Reapply filters (will show all websites)
+    applyWebsiteFilters();
+    
+    showNotification('Filters reset successfully', 'success');
+}
+
+// ==========================================
+// 6. SORTING FUNCTIONS
+// Sort websites by various criteria
+// ==========================================
+
+/**
+ * Sort websites array by specified criteria
+ * @param {Array} websites - Array of websites to sort
+ * @param {string} sortBy - Sort criteria
+ * @returns {Array} Sorted array
+ */
+function sortWebsites(websites, sortBy) {
+    const sorted = [...websites];
+    
+    switch (sortBy) {
+        case 'newest':
+            return sorted.sort((a, b) => 
+                new Date(b.launchDate || 0) - new Date(a.launchDate || 0)
+            );
+            
+        case 'oldest':
+            return sorted.sort((a, b) => 
+                new Date(a.launchDate || 0) - new Date(b.launchDate || 0)
+            );
+            
+        case 'rating':
+            return sorted.sort((a, b) => b.rating - a.rating);
+            
+        case 'users':
+            return sorted.sort((a, b) => 
+                parseUserBase(b.userBase || '0') - parseUserBase(a.userBase || '0')
+            );
+            
+        default:
+            return sorted;
+    }
+}
+
+// ==========================================
+// 7. CARD INTERACTIONS
+// Setup interactive elements on cards
+// ==========================================
+
+/**
+ * Setup event listeners for website cards
+ * @returns {void}
+ */
+function setupWebsiteCardListeners() {
+    // View Details Buttons
+    document.querySelectorAll('.btn-view-details, .btn-view-website').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const websiteId = this.getAttribute('data-website-id');
+            viewWebsiteDetails(websiteId);
+        });
+    });
+    
+    // Visit Site Buttons
+    document.querySelectorAll('.btn-visit-site').forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.stopPropagation();
+            // Let the natural link behavior happen
+        });
+    });
+    
+    // Card Click (entire card clickable)
+    document.querySelectorAll('.website-card').forEach(card => {
+        // Click handler
+        card.addEventListener('click', function(e) {
+            // Don't trigger if clicking on buttons or links
+            if (!e.target.closest('button') && !e.target.closest('a')) {
+                const websiteId = this.getAttribute('data-website-id');
+                viewWebsiteDetails(websiteId);
+            }
+        });
+        
+        // Keyboard support
+        card.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                const websiteId = this.getAttribute('data-website-id');
+                viewWebsiteDetails(websiteId);
+            }
+        });
+        
+        // Hover effects (desktop only)
+        if (window.innerWidth > 768) {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-8px)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        }
+    });
+    
+    console.log('✅ Website card listeners attached');
+}
+
+// ==========================================
+// 8. EVENT LISTENERS
+// Global event listeners
+// ==========================================
+
+/**
+ * Setup global event listeners
+ * @returns {void}
+ */
+function setupWebsiteEventListeners() {
+    // Window resize handler (debounced)
+    window.addEventListener('resize', debounce(function() {
+        setupWebsiteCardListeners();
+    }, 250));
+    
+    // Keyboard shortcuts
+    document.addEventListener('keydown', function(e) {
+        // Press 'R' to reset filters
+        if ((e.key === 'r' || e.key === 'R') && !e.ctrlKey && !e.metaKey) {
+            if (!e.target.matches('input, textarea, select')) {
+                e.preventDefault();
+                resetWebsiteFilters();
+            }
+        }
+    });
+    
+    console.log('✅ Event listeners initialized');
+}
+
+// ==========================================
+// 9. NAVIGATION FUNCTIONS
+// Handle page navigation
+// ==========================================
+
+/**
+ * Navigate to website detail page
+ * @param {string|number} websiteId - Website ID
+ * @returns {void}
+ */
+function viewWebsiteDetails(websiteId) {
+    console.log('🌐 Viewing website details:', websiteId);
+    
+    if (!websiteId) {
+        showNotification('Invalid website ID', 'error');
+        return;
+    }
+    
+    // Navigate to website detail page
+    window.location.href = `website-detail.html?id=${websiteId}`;
+}
+
+// ==========================================
+// 10. STATISTICS & ANALYTICS
+// Update header statistics
+// ==========================================
+
+/**
+ * Update header statistics display
+ * @returns {void}
+ */
+function updateHeaderStats() {
+    const allWebsites = WEBSITES_STATE.allWebsites;
+    
+    if (allWebsites.length === 0) return;
+    
+    // Calculate statistics
+    const totalWebsites = allWebsites.length;
+    const averageRating = (
+        allWebsites.reduce((sum, website) => sum + website.rating, 0) / totalWebsites
+    ).toFixed(1);
+    const totalUsers = allWebsites.reduce(
+        (sum, website) => sum + parseUserBase(website.userBase || '0'), 0
+    );
+    
+    // Update UI
+    const statNumbers = document.querySelectorAll('.header-stats .stat-number');
+    
+    if (statNumbers.length >= 3) {
+        statNumbers[0].textContent = `${totalWebsites}+`;
+        statNumbers[1].textContent = averageRating;
+        statNumbers[2].textContent = formatNumber(totalUsers) + '+';
+    }
+    
+    console.log('📊 Stats updated:', { totalWebsites, averageRating, totalUsers });
+}
+
+// ==========================================
+// 11. ANIMATIONS
+// Handle card animations
+// ==========================================
+
+/**
+ * Animate website cards entrance
+ * @returns {void}
+ */
+function animateWebsiteCards() {
+    const cards = document.querySelectorAll('.website-card');
+    
+    cards.forEach((card, index) => {
+        // Set initial state
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(30px)';
+        
+        // Animate with stagger
+        setTimeout(() => {
+            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            card.style.opacity = '1';
+            card.style.transform = 'translateY(0)';
+        }, index * WEBSITES_STATE.animationDelay);
+    });
+}
+
+/**
+ * Hide loading screen with fade effect
+ * @returns {void}
  */
 function hideLoadingScreen() {
     const loadingScreen = document.getElementById('loadingScreen');
+    
     if (loadingScreen) {
         loadingScreen.style.opacity = '0';
         setTimeout(() => {
@@ -69,647 +719,60 @@ function hideLoadingScreen() {
 }
 
 // ==========================================
-// APP DATA LOADING
+// 12. UTILITY FUNCTIONS
+// Helper functions for data formatting
 // ==========================================
 
 /**
- * Load apps from data source
- * - Fetches apps from data.js
- * - Handles empty data gracefully
- * - Displays initial app grid
+ * Generate star rating HTML
+ * @param {number} rating - Rating value (0-5)
+ * @returns {string} HTML string with star icons
  */
-function loadApps() {
-    const appsGrid = document.getElementById('appsGrid');
-    if (!appsGrid) {
-        console.error('Apps grid element not found!');
-        return;
+function generateStars(rating) {
+    const fullStars = Math.floor(rating);
+    const hasHalfStar = rating % 1 >= 0.5;
+    const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+    
+    let html = '';
+    
+    // Full stars
+    for (let i = 0; i < fullStars; i++) {
+        html += '<i class="fas fa-star"></i>';
     }
     
-    try {
-        // Get apps from data.js
-        allApps = getApps();
-        currentApps = [...allApps];
-        
-        console.log('Loaded apps:', allApps.length);
-        
-        // Handle empty data
-        if (allApps.length === 0) {
-            console.warn('No apps found in portfolio data');
-            appsGrid.innerHTML = `
-                <div class="empty-state">
-                    <i class="fas fa-mobile-alt"></i>
-                    <h3>No Apps Available</h3>
-                    <p>Check back soon for new mobile app projects!</p>
-                </div>
-            `;
-            return;
-        }
-        
-        // Display all apps initially
-        displayApps(currentApps);
-    } catch (error) {
-        console.error('Error loading apps:', error);
-        appsGrid.innerHTML = `
-            <div class="error-state">
-                <i class="fas fa-exclamation-triangle"></i>
-                <h3>Error Loading Apps</h3>
-                <p>Please refresh the page to try again.</p>
-            </div>
-        `;
-    }
-}
-
-// ==========================================
-// APP DISPLAY
-// ==========================================
-
-/**
- * Display apps in the grid
- * @param {Array} apps - Array of app objects to display
- */
-function displayApps(apps) {
-    const appsGrid = document.getElementById('appsGrid');
-    if (!appsGrid) return;
-    
-    // Handle no results
-    if (apps.length === 0) {
-        appsGrid.innerHTML = `
-            <div class="no-results">
-                <i class="fas fa-search"></i>
-                <h3>No Apps Found</h3>
-                <p>No apps match your current filters</p>
-                <button class="btn btn-primary" onclick="resetAppFilters()">
-                    <i class="fas fa-redo"></i>
-                    <span>Reset Filters</span>
-                </button>
-            </div>
-        `;
-        return;
+    // Half star
+    if (hasHalfStar) {
+        html += '<i class="fas fa-star-half-alt"></i>';
     }
     
-    // Generate app cards HTML
-    appsGrid.innerHTML = apps.map(app => createAppCard(app)).join('');
-    
-    // Setup card interactions
-    setupAppCardListeners();
-    
-    // Animate cards entrance
-    animateAppCards();
-    
-    // Update results count
-    updateResultsCount(apps.length);
-    
-    console.log(`Displayed ${apps.length} apps`);
-}
-
-/**
- * Create HTML for a single app card
- * @param {Object} app - App object
- * @returns {string} HTML string for the card
- */
-function createAppCard(app) {
-    const statusClass = app.status.toLowerCase().replace(/\s+/g, '-');
-    const imageUrl = app.image || `https://via.placeholder.com/400x250/E4572E/FFFFFF?text=${encodeURIComponent(app.name)}`;
-    
-    return `
-        <div class="game-card app-card" 
-             data-app-id="${app.id}" 
-             data-platform="${app.platform}" 
-             data-category="${app.category}" 
-             data-status="${app.status}" 
-             data-rating="${app.rating}">
-            
-            <!-- App Image with Overlay -->
-            <div class="game-image">
-                <img src="${imageUrl}" 
-                     alt="${escapeHtml(app.name)}" 
-                     loading="lazy" 
-                     onerror="this.src='https://via.placeholder.com/400x250/E4572E/FFFFFF?text=${encodeURIComponent(app.name)}'">
-                
-                <!-- Hover Overlay -->
-                <div class="game-overlay">
-                    <div class="overlay-content">
-                        <a href="app-detail.html?id=${app.id}" 
-                           class="view-details-btn"
-                           onclick="event.stopPropagation();">
-                            <i class="fas fa-eye"></i>
-                            <span>View Details</span>
-                        </a>
-                        ${app.storeUrl ? `
-                            <a href="${app.storeUrl}" 
-                               class="download-btn"
-                               target="_blank"
-                               rel="noopener noreferrer"
-                               onclick="event.stopPropagation();">
-                                <i class="fas fa-download"></i>
-                                <span>Download</span>
-                            </a>
-                        ` : ''}
-                    </div>
-                </div>
-                
-                <!-- Status Badge -->
-                <div class="game-badge status-${statusClass}">
-                    ${app.status}
-                </div>
-                
-                <!-- Platform Badge -->
-                <div class="platform-badge">
-                    ${getPlatformIcon(app.platform)}
-                    <span>${app.platform}</span>
-                </div>
-            </div>
-            
-            <!-- App Content -->
-            <div class="game-content">
-                <h3 class="game-title">${escapeHtml(app.name)}</h3>
-                
-                <!-- Meta Information -->
-                <div class="game-meta">
-                    <div class="game-rating">
-                        <div class="rating-stars">${generateStars(app.rating)}</div>
-                        <span class="rating-value">${app.rating}</span>
-                    </div>
-                    <span class="game-status status-${statusClass}">
-                        ${app.status}
-                    </span>
-                </div>
-                
-                <!-- Brief Description -->
-                ${app.overview ? `
-                    <p class="app-overview">${escapeHtml(truncateText(app.overview, 80))}</p>
-                ` : ''}
-                
-                <!-- Quick Stats -->
-                <div class="app-quick-stats">
-                    ${app.downloadCount ? `
-                        <div class="quick-stat">
-                            <i class="fas fa-download"></i>
-                            <span>${app.downloadCount} downloads</span>
-                        </div>
-                    ` : ''}
-                    ${app.launchDate ? `
-                        <div class="quick-stat">
-                            <i class="fas fa-calendar"></i>
-                            <span>${formatDate(app.launchDate)}</span>
-                        </div>
-                    ` : ''}
-                </div>
-                
-                <!-- Technologies Used -->
-                ${app.technologies && app.technologies.length > 0 ? `
-                    <div class="tech-preview">
-                        ${app.technologies.slice(0, 3).map(tech => 
-                            `<span class="tech-badge">${escapeHtml(tech)}</span>`
-                        ).join('')}
-                        ${app.technologies.length > 3 ? 
-                            `<span class="tech-badge more">+${app.technologies.length - 3}</span>` 
-                            : ''}
-                    </div>
-                ` : ''}
-            </div>
-        </div>
-    `;
-}
-
-/**
- * Get platform icon based on platform name
- * @param {string} platform - Platform name
- * @returns {string} Icon HTML
- */
-function getPlatformIcon(platform) {
-    if (platform.includes('iOS')) {
-        return '<i class="fab fa-apple"></i>';
-    } else if (platform.includes('Android')) {
-        return '<i class="fab fa-android"></i>';
-    } else if (platform === 'Cross-Platform') {
-        return '<i class="fas fa-mobile-alt"></i>';
-    }
-    return '<i class="fas fa-mobile-alt"></i>';
-}
-
-// ==========================================
-// FILTER FUNCTIONALITY
-// ==========================================
-
-/**
- * Setup filter controls and event listeners
- */
-function setupAppFilters() {
-    const platformFilter = document.getElementById('platformFilter');
-    const categoryFilter = document.getElementById('categoryFilter');
-    const statusFilter = document.getElementById('statusFilter');
-    
-    // Platform Filter
-    if (platformFilter) {
-        platformFilter.addEventListener('change', function() {
-            currentFilters.platform = this.value;
-            const selectedText = this.options[this.selectedIndex].text;
-            applyAppFilters();
-            showNotification(`Platform: ${selectedText}`, 'info');
-            console.log('Platform filter changed:', this.value);
-        });
+    // Empty stars
+    for (let i = 0; i < emptyStars; i++) {
+        html += '<i class="far fa-star"></i>';
     }
     
-    // Category Filter
-    if (categoryFilter) {
-        categoryFilter.addEventListener('change', function() {
-            currentFilters.category = this.value;
-            const selectedText = this.options[this.selectedIndex].text;
-            applyAppFilters();
-            showNotification(`Category: ${selectedText}`, 'info');
-            console.log('Category filter changed:', this.value);
-        });
-    }
-    
-    // Status Filter
-    if (statusFilter) {
-        statusFilter.addEventListener('change', function() {
-            currentFilters.status = this.value;
-            const selectedText = this.options[this.selectedIndex].text;
-            applyAppFilters();
-            showNotification(`Status: ${selectedText}`, 'info');
-            console.log('Status filter changed:', this.value);
-        });
-    }
-    
-    console.log('App filters setup complete');
+    return html;
 }
 
 /**
- * Apply all current filters to apps
- * - Filters by platform (with smart matching)
- * - Filters by category
- * - Filters by status
+ * Parse user base string to number
+ * Handles K (thousands) and M (millions) suffixes
+ * @param {string} userBase - User base string (e.g., "50K", "1.5M")
+ * @returns {number} Numeric value
  */
-function applyAppFilters() {
-    try {
-        let filteredApps = [...allApps];
-        
-        // Apply platform filter with smart matching
-        if (currentFilters.platform !== 'all') {
-            filteredApps = filteredApps.filter(app => {
-                const appPlatform = app.platform || '';
-                
-                if (currentFilters.platform === 'Cross-Platform') {
-                    return appPlatform === 'Cross-Platform' || 
-                           appPlatform.includes('iOS') && appPlatform.includes('Android');
-                } else if (currentFilters.platform === 'iOS') {
-                    return appPlatform.includes('iOS') || appPlatform === 'Cross-Platform';
-                } else if (currentFilters.platform === 'Android') {
-                    return appPlatform.includes('Android') || appPlatform === 'Cross-Platform';
-                }
-                
-                return appPlatform === currentFilters.platform;
-            });
-            console.log(`Platform filter applied: ${filteredApps.length} results`);
-        }
-        
-        // Apply category filter
-        if (currentFilters.category !== 'all') {
-            filteredApps = filteredApps.filter(app => 
-                app.category === currentFilters.category
-            );
-            console.log(`Category filter applied: ${filteredApps.length} results`);
-        }
-        
-        // Apply status filter
-        if (currentFilters.status !== 'all') {
-            filteredApps = filteredApps.filter(app => 
-                app.status === currentFilters.status
-            );
-            console.log(`Status filter applied: ${filteredApps.length} results`);
-        }
-        
-        // Update current apps and display
-        currentApps = filteredApps;
-        displayApps(filteredApps);
-        
-        console.log(`Filters applied. Showing ${filteredApps.length} of ${allApps.length} apps`);
-    } catch (error) {
-        console.error('Error applying filters:', error);
-        showNotification('Error applying filters', 'error');
-    }
-}
-
-/**
- * Reset all filters to default values
- */
-function resetAppFilters() {
-    try {
-        // Reset filter values
-        currentFilters = {
-            platform: 'all',
-            category: 'all',
-            status: 'all'
-        };
-        
-        // Reset select elements
-        const platformFilter = document.getElementById('platformFilter');
-        const categoryFilter = document.getElementById('categoryFilter');
-        const statusFilter = document.getElementById('statusFilter');
-        
-        if (platformFilter) platformFilter.value = 'all';
-        if (categoryFilter) categoryFilter.value = 'all';
-        if (statusFilter) statusFilter.value = 'all';
-        
-        // Clear search if exists
-        const searchInput = document.querySelector('.search-input');
-        if (searchInput) searchInput.value = '';
-        
-        // Reapply filters (will show all)
-        applyAppFilters();
-        
-        showNotification('Filters reset successfully', 'success');
-        console.log('Filters reset to defaults');
-    } catch (error) {
-        console.error('Error resetting filters:', error);
-        showNotification('Error resetting filters', 'error');
-    }
-}
-
-// ==========================================
-// EVENT LISTENERS
-// ==========================================
-
-/**
- * Setup additional event listeners
- * - Search functionality
- * - Scroll effects
- * - Keyboard shortcuts
- */
-function setupAppEventListeners() {
-    // Search functionality
-    setupSearchFunctionality();
-    
-    // Keyboard shortcuts
-    setupKeyboardShortcuts();
-    
-    // Scroll to top button
-    setupScrollToTop();
-    
-    console.log('Event listeners setup complete');
-}
-
-/**
- * Setup search functionality with debouncing
- */
-function setupSearchFunctionality() {
-    const searchInput = document.querySelector('.search-input');
-    
-    if (searchInput) {
-        searchInput.addEventListener('input', debounce(function(e) {
-            const searchTerm = e.target.value.toLowerCase().trim();
-            
-            console.log('Searching for:', searchTerm);
-            
-            // If search is empty, apply normal filters
-            if (searchTerm === '') {
-                applyAppFilters();
-                return;
-            }
-            
-            // Search in app properties
-            const searchResults = allApps.filter(app => {
-                const searchableText = [
-                    app.name,
-                    app.overview,
-                    app.description,
-                    app.category,
-                    app.platform,
-                    app.status,
-                    ...(app.technologies || []),
-                    ...(app.features || [])
-                ].join(' ').toLowerCase();
-                
-                return searchableText.includes(searchTerm);
-            });
-            
-            currentApps = searchResults;
-            displayApps(searchResults);
-            
-            console.log(`Search results: ${searchResults.length} apps found`);
-        }, 300));
-    }
-}
-
-/**
- * Setup keyboard shortcuts
- */
-function setupKeyboardShortcuts() {
-    document.addEventListener('keydown', function(e) {
-        // Don't trigger if user is typing in an input
-        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
-            return;
-        }
-        
-        switch(e.key) {
-            case 'r':
-            case 'R':
-                // Reset filters
-                e.preventDefault();
-                resetAppFilters();
-                break;
-                
-            case '/':
-                // Focus search
-                e.preventDefault();
-                const searchInput = document.querySelector('.search-input');
-                if (searchInput) searchInput.focus();
-                break;
-        }
-    });
-}
-
-/**
- * Setup scroll to top functionality
- */
-function setupScrollToTop() {
-    const backToTopBtn = document.getElementById('backToTop');
-    
-    if (backToTopBtn) {
-        // Show/hide button based on scroll position
-        window.addEventListener('scroll', function() {
-            if (window.pageYOffset > 300) {
-                backToTopBtn.classList.add('visible');
-            } else {
-                backToTopBtn.classList.remove('visible');
-            }
-        });
-        
-        // Scroll to top on click
-        backToTopBtn.addEventListener('click', function() {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-        });
-    }
-}
-
-// ==========================================
-// APP CARD INTERACTIONS
-// ==========================================
-
-/**
- * Setup interactive behaviors for app cards
- * - Click to view details
- * - Hover effects
- * - Smooth transitions
- */
-function setupAppCardListeners() {
-    const cards = document.querySelectorAll('.game-card');
-    
-    cards.forEach(card => {
-        // Click to view details
-        card.addEventListener('click', function(e) {
-            // Don't navigate if clicking on a button or link
-            if (e.target.closest('a, button')) {
-                return;
-            }
-            
-            const appId = parseInt(this.getAttribute('data-app-id'));
-            if (appId) {
-                viewAppDetails(appId);
-            }
-        });
-        
-        // Hover effect - lift card
-        card.addEventListener('mouseenter', function() {
-            if (!isAnimating) {
-                this.style.transform = 'translateY(-10px)';
-            }
-        });
-        
-        card.addEventListener('mouseleave', function() {
-            if (!isAnimating) {
-                this.style.transform = 'translateY(0)';
-            }
-        });
-    });
-    
-    console.log(`Setup interactions for ${cards.length} app cards`);
-}
-
-/**
- * Navigate to app detail page
- * @param {number} appId - ID of the app to view
- */
-function viewAppDetails(appId) {
-    if (!appId || isNaN(appId)) {
-        console.error('Invalid app ID:', appId);
-        showNotification('Invalid app', 'error');
-        return;
-    }
-    
-    console.log('Navigating to app details:', appId);
-    window.location.href = `app-detail.html?id=${appId}`;
-}
-
-// ==========================================
-// HEADER STATISTICS
-// ==========================================
-
-/**
- * Update header statistics based on app data
- * - Total apps count
- * - Average rating
- * - Total downloads
- */
-function updateHeaderStats() {
-    try {
-        const totalApps = allApps.length;
-        
-        // Calculate average rating
-        const averageRating = totalApps > 0 
-            ? (allApps.reduce((sum, app) => sum + (app.rating || 0), 0) / totalApps).toFixed(1)
-            : '0.0';
-        
-        // Calculate total downloads
-        const totalDownloads = allApps.reduce((sum, app) => 
-            sum + parseDownloadCount(app.downloadCount || '0'), 0
-        );
-        
-        // Update stat displays
-        const statNumbers = document.querySelectorAll('.header-stats .stat-number');
-        if (statNumbers.length >= 3) {
-            statNumbers[0].textContent = totalApps > 0 ? `${totalApps}+` : '0';
-            statNumbers[1].textContent = averageRating;
-            statNumbers[2].textContent = formatNumber(totalDownloads) + '+';
-        }
-        
-        console.log('Header stats updated:', { totalApps, averageRating, totalDownloads });
-    } catch (error) {
-        console.error('Error updating header stats:', error);
-    }
-}
-
-/**
- * Update results count display
- * @param {number} count - Number of results
- */
-function updateResultsCount(count) {
-    const resultsCount = document.getElementById('resultsCount');
-    if (resultsCount) {
-        resultsCount.textContent = `Showing ${count} of ${allApps.length} apps`;
-    }
-}
-
-// ==========================================
-// ANIMATIONS
-// ==========================================
-
-/**
- * Animate app cards on display
- * Staggered fade-in animation
- */
-function animateAppCards() {
-    if (isAnimating) return;
-    
-    isAnimating = true;
-    const cards = document.querySelectorAll('.game-card');
-    
-    cards.forEach((card, index) => {
-        // Set initial state
-        card.style.opacity = '0';
-        card.style.transform = 'translateY(30px)';
-        
-        // Animate with delay based on index
-        setTimeout(() => {
-            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-            card.style.opacity = '1';
-            card.style.transform = 'translateY(0)';
-        }, index * 50); // 50ms delay between each card
-    });
-    
-    // Reset animation flag after all cards have animated
-    setTimeout(() => {
-        isAnimating = false;
-    }, cards.length * 50 + 600);
-}
-
-// ==========================================
-// UTILITY FUNCTIONS
-// ==========================================
-
-/**
- * Parse download count string to number
- * @param {string} downloadCount - Download count string (e.g., "50K+", "1.2M+")
- * @returns {number} Parsed number value
- */
-function parseDownloadCount(downloadCount) {
-    if (!downloadCount || typeof downloadCount !== 'string') return 0;
+function parseUserBase(userBase) {
+    if (!userBase || typeof userBase !== 'string') return 0;
     
     // Remove non-numeric characters except decimal point
-    const numStr = downloadCount.replace(/[^0-9.]/g, '');
+    const numStr = userBase.replace(/[^0-9.]/g, '');
     const num = parseFloat(numStr);
     
     if (isNaN(num)) return 0;
     
     // Check for K (thousands) or M (millions) suffix
-    if (downloadCount.toUpperCase().includes('M')) {
+    const upperCase = userBase.toUpperCase();
+    if (upperCase.includes('M')) {
         return num * 1000000;
-    } else if (downloadCount.toUpperCase().includes('K')) {
+    } else if (upperCase.includes('K')) {
         return num * 1000;
     }
     
@@ -717,12 +780,12 @@ function parseDownloadCount(downloadCount) {
 }
 
 /**
- * Format number with K/M suffix
+ * Format large numbers with K/M suffixes
  * @param {number} num - Number to format
- * @returns {string} Formatted number string
+ * @returns {string} Formatted string
  */
 function formatNumber(num) {
-    if (typeof num !== 'number' || isNaN(num)) return '0';
+    if (!num) return '0';
     
     if (num >= 1000000) {
         return (num / 1000000).toFixed(1) + 'M';
@@ -734,89 +797,19 @@ function formatNumber(num) {
 }
 
 /**
- * Generate star rating HTML
- * @param {number} rating - Rating value (0-5)
- * @returns {string} HTML string for stars
- */
-function generateStars(rating) {
-    if (typeof rating !== 'number' || isNaN(rating)) rating = 0;
-    
-    const fullStars = Math.floor(rating);
-    const hasHalfStar = (rating % 1) >= 0.5;
-    const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
-    
-    let starsHTML = '';
-    
-    // Full stars
-    for (let i = 0; i < fullStars; i++) {
-        starsHTML += '<i class="fas fa-star"></i>';
-    }
-    
-    // Half star
-    if (hasHalfStar) {
-        starsHTML += '<i class="fas fa-star-half-alt"></i>';
-    }
-    
-    // Empty stars
-    for (let i = 0; i < emptyStars; i++) {
-        starsHTML += '<i class="far fa-star"></i>';
-    }
-    
-    return starsHTML;
-}
-
-/**
- * Format date to readable string
+ * Format date string to readable format
  * @param {string} dateString - ISO date string
  * @returns {string} Formatted date (e.g., "Jan 2024")
  */
 function formatDate(dateString) {
     if (!dateString) return 'N/A';
     
-    try {
-        const date = new Date(dateString);
-        if (isNaN(date.getTime())) return 'Invalid Date';
-        
-        return date.toLocaleDateString('en-US', { 
-            year: 'numeric', 
-            month: 'short'
-        });
-    } catch (error) {
-        console.error('Error formatting date:', error);
-        return 'Invalid Date';
-    }
-}
-
-/**
- * Truncate text to specified length
- * @param {string} text - Text to truncate
- * @param {number} maxLength - Maximum length
- * @returns {string} Truncated text
- */
-function truncateText(text, maxLength) {
-    if (!text || typeof text !== 'string') return '';
-    if (text.length <= maxLength) return text;
+    const date = new Date(dateString);
     
-    return text.substring(0, maxLength).trim() + '...';
-}
-
-/**
- * Escape HTML special characters
- * @param {string} text - Text to escape
- * @returns {string} Escaped text
- */
-function escapeHtml(text) {
-    if (typeof text !== 'string') return '';
+    if (isNaN(date.getTime())) return 'N/A';
     
-    const map = {
-        '&': '&amp;',
-        '<': '&lt;',
-        '>': '&gt;',
-        '"': '&quot;',
-        "'": '&#039;'
-    };
-    
-    return text.replace(/[&<>"']/g, m => map[m]);
+    const options = { year: 'numeric', month: 'short' };
+    return date.toLocaleDateString('en-US', options);
 }
 
 /**
@@ -838,110 +831,176 @@ function debounce(func, wait) {
 }
 
 /**
- * Show notification toast
+ * Show notification to user
  * @param {string} message - Notification message
- * @param {string} type - Type: 'success', 'error', 'info', 'warning'
+ * @param {string} type - Notification type (success, error, warning, info)
+ * @returns {void}
  */
 function showNotification(message, type = 'info') {
-    try {
-        // Check if utils.js has showNotification
-        if (typeof window.showNotification === 'function') {
-            window.showNotification(message, type);
-            return;
-        }
-        
-        // Fallback notification system
-        const notification = document.createElement('div');
-        notification.className = 'notification-toast';
-        
-        let backgroundColor, icon;
-        switch (type) {
-            case 'error':
-                backgroundColor = '#dc3545';
-                icon = '<i class="fas fa-exclamation-circle"></i>';
-                break;
-            case 'success':
-                backgroundColor = '#28a745';
-                icon = '<i class="fas fa-check-circle"></i>';
-                break;
-            case 'warning':
-                backgroundColor = '#ffc107';
-                icon = '<i class="fas fa-exclamation-triangle"></i>';
-                break;
-            case 'info':
-            default:
-                backgroundColor = '#17a2b8';
-                icon = '<i class="fas fa-info-circle"></i>';
-                break;
-        }
-        
-        notification.style.cssText = `
-            position: fixed;
-            top: 6rem;
-            right: 2rem;
-            padding: 1rem 1.5rem;
-            background: ${backgroundColor};
-            color: white;
-            border-radius: 12px;
-            z-index: 10000;
-            font-weight: 600;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            animation: slideInRight 0.3s ease;
-        `;
-        
-        notification.innerHTML = `${icon}<span>${escapeHtml(message)}</span>`;
-        document.body.appendChild(notification);
-        
-        setTimeout(() => {
-            notification.style.animation = 'slideOutRight 0.3s ease';
-            setTimeout(() => notification.remove(), 300);
-        }, 3000);
-    } catch (error) {
-        console.error('Error showing notification:', error);
+    // Use global notification function if available
+    if (typeof window.showNotification === 'function') {
+        window.showNotification(message, type);
+        return;
     }
+    
+    // Fallback notification implementation
+    console.log(`[${type.toUpperCase()}] ${message}`);
+    
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    notification.style.cssText = `
+        position: fixed;
+        top: 100px;
+        right: 20px;
+        padding: 1rem 1.5rem;
+        background: ${getNotificationColor(type)};
+        color: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        z-index: 10000;
+        font-weight: 500;
+        animation: slideInRight 0.3s ease;
+        max-width: 300px;
+    `;
+    notification.textContent = message;
+    
+    document.body.appendChild(notification);
+    
+    // Auto-remove after 3 seconds
+    setTimeout(() => {
+        notification.style.animation = 'slideOutRight 0.3s ease';
+        setTimeout(() => notification.remove(), 300);
+    }, 3000);
+}
+
+/**
+ * Get notification background color by type
+ * @param {string} type - Notification type
+ * @returns {string} Hex color code
+ */
+function getNotificationColor(type) {
+    const colors = {
+        success: '#10B981',
+        error: '#EF4444',
+        warning: '#F59E0B',
+        info: '#3B82F6'
+    };
+    return colors[type] || colors.info;
 }
 
 // ==========================================
-// GLOBAL FUNCTION EXPORTS
-// Make functions available globally
-// ==========================================
-window.initializeAppsPage = initializeAppsPage;
-window.resetAppFilters = resetAppFilters;
-window.viewAppDetails = viewAppDetails;
-window.applyAppFilters = applyAppFilters;
-
-// ==========================================
-// AUTO-INITIALIZATION
-// Initialize when DOM is ready
-// ==========================================
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initializeAppsPage);
-    console.log('Waiting for DOM to load...');
-} else {
-    initializeAppsPage();
-}
-
-// ==========================================
-// DEBUG HELPERS
+// 13. SAMPLE DATA FALLBACK
+// Fallback data when no external source available
 // ==========================================
 
 /**
- * Debug function to check apps state
- * Call window.debugAppsState() in console
+ * Create sample websites for fallback
+ * @returns {Array} Array of sample website objects
  */
-window.debugAppsState = function() {
-    console.log('=== APPS STATE DEBUG ===');
-    console.log('All Apps:', allApps);
-    console.log('Current Apps:', currentApps);
-    console.log('Current Filters:', currentFilters);
-    console.log('Total Count:', allApps.length);
-    console.log('Filtered Count:', currentApps.length);
-    console.log('========================');
-};
+function createSampleWebsites() {
+    return [
+        {
+            id: 1,
+            name: "E-Shop Pro",
+            category: "E-commerce",
+            status: "Live",
+            rating: 4.9,
+            overview: "Comprehensive health tracking platform with AI-powered insights and analytics.",
+            launchDate: "2024-02-20",
+            userBase: "25K+",
+            pageViews: 180000,
+            conversionRate: 4.1,
+            loadTime: 2.1,
+            image: "https://via.placeholder.com/400x250/3B82F6/FFFFFF?text=HealthTrack+Plus",
+            technologies: ["Vue.js", "Python", "PostgreSQL", "Django", "Docker"],
+            liveUrl: "https://healthtrackplus.com",
+            repositoryUrl: "https://github.com/ArshVermaGit/healthtrack-plus"
+        },
+        {
+            id: 3,
+            name: "CloudSuite SaaS",
+            category: "SaaS Platform",
+            status: "In Development",
+            rating: 4.6,
+            overview: "All-in-one SaaS platform for business management and team collaboration.",
+            launchDate: "2024-06-30",
+            userBase: "10K+",
+            pageViews: 75000,
+            conversionRate: 2.8,
+            loadTime: 2.4,
+            image: "https://via.placeholder.com/400x250/3B82F6/FFFFFF?text=CloudSuite+SaaS",
+            technologies: ["Angular", "Java", "MySQL", "Spring Boot", "Azure"]
+        },
+        {
+            id: 4,
+            name: "FoodExpress",
+            category: "Food Delivery",
+            status: "Live",
+            rating: 4.7,
+            overview: "Fast and reliable food delivery service with real-time tracking and multiple payment options.",
+            launchDate: "2023-11-10",
+            userBase: "100K+",
+            pageViews: 500000,
+            conversionRate: 5.2,
+            loadTime: 1.5,
+            image: "https://via.placeholder.com/400x250/3B82F6/FFFFFF?text=FoodExpress",
+            technologies: ["React Native", "Express.js", "MongoDB", "Redis", "Firebase"],
+            liveUrl: "https://foodexpress.com",
+            repositoryUrl: "https://github.com/ArshVermaGit/foodexpress"
+        },
+        {
+            id: 5,
+            name: "EduLearn Pro",
+            category: "SaaS Platform",
+            status: "Live",
+            rating: 4.9,
+            overview: "Interactive learning platform with video courses, quizzes, and progress tracking.",
+            launchDate: "2023-09-05",
+            userBase: "75K+",
+            pageViews: 320000,
+            conversionRate: 4.8,
+            loadTime: 1.9,
+            image: "https://via.placeholder.com/400x250/3B82F6/FFFFFF?text=EduLearn+Pro",
+            technologies: ["Next.js", "Python", "PostgreSQL", "FastAPI", "AWS"],
+            liveUrl: "https://edulearnpro.com",
+            repositoryUrl: "https://github.com/ArshVermaGit/edulearn-pro"
+        },
+        {
+            id: 6,
+            name: "FitLife Tracker",
+            category: "Health & Wellness",
+            status: "In Development",
+            rating: 4.4,
+            overview: "Advanced fitness tracking app with workout plans, nutrition guides, and community features.",
+            launchDate: "2024-08-15",
+            userBase: "5K+",
+            pageViews: 45000,
+            conversionRate: 3.5,
+            loadTime: 2.2,
+            image: "https://via.placeholder.com/400x250/3B82F6/FFFFFF?text=FitLife+Tracker",
+            technologies: ["Flutter", "Node.js", "MongoDB", "GraphQL", "Google Cloud"]
+        }
+    ];
+}
 
-// Log initialization
-console.log('apps.js loaded successfully');
-console.log('Available functions:', ['initializeAppsPage', 'resetAppFilters', 'viewAppDetails', 'applyAppFilters', 'debugAppsState']);
+// ==========================================
+// GLOBAL EXPORTS
+// Export functions for external use
+// ==========================================
+window.initializeWebsitesPage = initializeWebsitesPage;
+window.resetWebsiteFilters = resetWebsiteFilters;
+window.viewWebsiteDetails = viewWebsiteDetails;
+window.applyWebsiteFilters = applyWebsiteFilters;
+
+// ==========================================
+// AUTO-INITIALIZE CONFIRMATION
+// Log successful script load
+// ==========================================
+console.log('✅ Websites.js loaded successfully');
+console.log('📝 Created by: Arsh Verma');
+console.log('🔧 Version: 1.0.0');
+
+// ==========================================
+// END OF SCRIPT
+// Author: Arsh Verma
+// ==========================================
