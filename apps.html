@@ -1,57 +1,92 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
+    <!-- ==========================================
+         META TAGS & SEO
+         ========================================== -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mobile Apps - Arsh Verma</title>
+    <meta name="description" content="Explore Arsh Verma's portfolio of modern web solutions, including e-commerce platforms, SaaS applications, and custom websites built with cutting-edge technologies.">
+    <meta name="keywords" content="web development, portfolio, websites, React, Node.js, SaaS, e-commerce">
+    <meta name="author" content="Arsh Verma">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Websites Portfolio - Arsh Verma">
+    <meta property="og:description" content="Revolutionary web solutions with modern frameworks and exceptional user experiences">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://arshverma.com/websites.html">
+    
+    <title>Websites Portfolio - Arsh Verma | Modern Web Solutions</title>
+    
+    <!-- ==========================================
+         STYLESHEETS & FONTS
+         ========================================== -->
     <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-Avb2QiuDEEvB4bZJYdft2mNjVShBftLdPG8FJ0V7irTLQ8Uo0qcPxh4Plq7G5tGm0rU+1SPhVotteLpBERwTkw==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Loading Screen -->
+    <!-- ==========================================
+         LOADING SCREEN
+         Displayed while page resources load
+         Author: Arsh Verma
+         ========================================== -->
     <div id="loadingScreen" class="loading-screen">
         <div class="loading-content">
             <div class="loading-logo">
                 <div class="logo-glow"></div>
-                <i class="fas fa-mobile-alt"></i>
+                <i class="fas fa-laptop-code"></i>
             </div>
             <div class="loading-bar-container">
                 <div class="loading-bar" id="loadingBar"></div>
             </div>
-            <div class="loading-text" id="loadingText">Loading Mobile Apps...</div>
+            <div class="loading-text" id="loadingText">Loading Websites Portfolio...</div>
         </div>
     </div>
 
-    <!-- Navigation -->
+    <!-- ==========================================
+         NAVIGATION BAR
+         Responsive navigation with theme toggle
+         Author: Arsh Verma
+         ========================================== -->
     <nav class="navbar" id="navbar">
         <div class="container">
             <div class="nav-content">
-                <a href="index.html" class="logo">
+                <!-- Logo -->
+                <a href="index.html" class="logo" aria-label="ArshCreates Home">
                     <div class="logo-icon">
                         <i class="fas fa-code"></i>
                     </div>
                     <span class="logo-text">ArshCreates</span>
                 </a>
 
+                <!-- Navigation Menu -->
                 <ul class="nav-menu" id="navMenu">
                     <li><a href="index.html" class="nav-link">Home</a></li>
                     <li><a href="index.html#about" class="nav-link">About</a></li>
                     <li><a href="games.html" class="nav-link">Games</a></li>
-                    <li><a href="websites.html" class="nav-link">Websites</a></li>
-                    <li><a href="apps.html" class="nav-link active">Apps</a></li>
+                    <li><a href="websites.html" class="nav-link active" aria-current="page">Websites</a></li>
+                    <li><a href="apps.html" class="nav-link">Apps</a></li>
+                    <li><a href="certificates.html" class="nav-link">Certificates</a></li>
                     <li><a href="testimonials.html" class="nav-link">Testimonials</a></li>
                     <li><a href="index.html#contact" class="nav-link">Contact</a></li>
                 </ul>
 
+                <!-- Navigation Actions -->
                 <div class="nav-actions">
-                    <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
+                    <!-- Theme Toggle Button -->
+                    <button id="themeToggle" class="theme-toggle" aria-label="Toggle dark/light theme">
                         <div class="theme-icon">
                             <i class="fas fa-moon"></i>
                         </div>
                     </button>
-                    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+                    
+                    <!-- Mobile Menu Toggle -->
+                    <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation menu">
                         <span></span>
                         <span></span>
                         <span></span>
@@ -61,108 +96,146 @@
         </div>
     </nav>
 
-    <!-- Apps Header -->
+    <!-- ==========================================
+         PAGE HEADER
+         Hero section with statistics
+         Author: Arsh Verma
+         ========================================== -->
     <section class="page-header">
         <div class="container">
             <div class="header-content">
-                <h1>Mobile Applications</h1>
-                <p>Innovative mobile solutions for iOS and Android with cutting-edge features and exceptional user experience</p>
+                <h1>Websites Portfolio</h1>
+                <p>Revolutionary web solutions with modern frameworks, responsive design, and exceptional user experiences</p>
+                
+                <!-- Header Statistics -->
                 <div class="header-stats">
                     <div class="stat">
-                        <span class="stat-number">15+</span>
-                        <span class="stat-label">Apps Developed</span>
+                        <span class="stat-number">25+</span>
+                        <span class="stat-label">Websites Developed</span>
                     </div>
                     <div class="stat">
-                        <span class="stat-number">4.9</span>
+                        <span class="stat-number">4.8</span>
                         <span class="stat-label">Average Rating</span>
                     </div>
                     <div class="stat">
-                        <span class="stat-number">500K+</span>
-                        <span class="stat-label">Downloads</span>
+                        <span class="stat-number">100K+</span>
+                        <span class="stat-label">Users</span>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Apps Filter -->
+    <!-- ==========================================
+         FILTER SECTION
+         Dynamic filtering controls for websites
+         Author: Arsh Verma
+         ========================================== -->
     <section class="section filter-section">
         <div class="container">
             <div class="filter-container">
-                <div class="filter-group">
-                    <label for="platformFilter">Platform</label>
-                    <select id="platformFilter" class="filter-select">
-                        <option value="all">All Platforms</option>
-                        <option value="iOS">iOS</option>
-                        <option value="Android">Android</option>
-                        <option value="Cross-Platform">Cross-Platform</option>
-                    </select>
-                </div>
+                <!-- Category Filter -->
                 <div class="filter-group">
                     <label for="categoryFilter">Category</label>
-                    <select id="categoryFilter" class="filter-select">
+                    <select id="categoryFilter" class="filter-select" aria-label="Filter by category">
                         <option value="all">All Categories</option>
-                        <option value="Productivity">Productivity</option>
-                        <option value="Health & Fitness">Health & Fitness</option>
-                        <option value="Social Media">Social Media</option>
                         <option value="E-commerce">E-commerce</option>
+                        <option value="Health & Wellness">Health & Wellness</option>
+                        <option value="SaaS Platform">SaaS Platform</option>
+                        <option value="Food Delivery">Food Delivery</option>
                     </select>
                 </div>
+                
+                <!-- Status Filter -->
                 <div class="filter-group">
                     <label for="statusFilter">Status</label>
-                    <select id="statusFilter" class="filter-select">
+                    <select id="statusFilter" class="filter-select" aria-label="Filter by status">
                         <option value="all">All Status</option>
                         <option value="Live">Live</option>
                         <option value="In Development">In Development</option>
                     </select>
                 </div>
+                
+                <!-- Sort Filter -->
+                <div class="filter-group">
+                    <label for="sortFilter">Sort By</label>
+                    <select id="sortFilter" class="filter-select" aria-label="Sort websites">
+                        <option value="newest">Newest First</option>
+                        <option value="oldest">Oldest First</option>
+                        <option value="rating">Highest Rating</option>
+                        <option value="users">Most Users</option>
+                    </select>
+                </div>
+                
+                <!-- Reset Button -->
+                <div class="filter-group">
+                    <button class="btn btn-secondary" onclick="resetWebsiteFilters()" aria-label="Reset all filters">
+                        <i class="fas fa-redo"></i>
+                        <span>Reset Filters</span>
+                    </button>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Apps Grid -->
-<section class="section apps-section">
-    <div class="container">
-        <div class="section-header">
-            <h2 class="section-title">Featured Mobile Apps</h2>
-            <p class="section-subtitle">Explore my collection of innovative mobile applications for iOS and Android</p>
-            <div class="section-decoration">
-                <div class="decoration-line"></div>
-                <i class="fas fa-mobile-alt"></i>
-                <div class="decoration-line"></div>
+    <!-- ==========================================
+         WEBSITES GRID SECTION
+         Main portfolio display area
+         Author: Arsh Verma
+         ========================================== -->
+    <section class="section websites-section">
+        <div class="container">
+            <!-- Section Header -->
+            <div class="section-header">
+                <h2 class="section-title">Featured Websites</h2>
+                <p class="section-subtitle">Explore my collection of modern web solutions and digital experiences</p>
+                <div class="section-decoration">
+                    <div class="decoration-line"></div>
+                    <i class="fas fa-laptop-code"></i>
+                    <div class="decoration-line"></div>
+                </div>
+            </div>
+            
+            <!-- Websites Grid Container -->
+            <div class="portfolio-grid" id="websitesGrid">
+                <!-- Initial Loading State -->
+                <div class="loading-games">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <p>Loading websites...</p>
+                </div>
             </div>
         </div>
-        
-        <div class="portfolio-grid" id="appsGrid">
-            <!-- Apps will be loaded dynamically from data.js -->
-            <div class="loading-games">
-                <i class="fas fa-spinner fa-spin"></i>
-                <p>Loading apps...</p>
-            </div>
-        </div>
-    </div>
-</section>
+    </section>
 
-    <!-- CTA Section -->
+    <!-- ==========================================
+         CALL TO ACTION SECTION
+         Encourages visitor engagement
+         Author: Arsh Verma
+         ========================================== -->
     <section class="section cta-section">
         <div class="container">
             <div class="cta-content">
-                <h2>Ready to Build Your App?</h2>
-                <p>Let's create a mobile experience that users will love and engage with daily</p>
-                <a href="#contact" class="btn btn-primary btn-glow">
-                    <i class="fas fa-mobile-alt"></i>
-                    <span>Start App Project</span>
+                <h2>Ready to Build Your Website?</h2>
+                <p>Let's create an exceptional web experience that exceeds your expectations</p>
+                <a href="index.html#contact" class="btn btn-primary btn-glow">
+                    <i class="fas fa-code"></i>
+                    <span>Start Web Project</span>
                 </a>
             </div>
         </div>
     </section>
 
-    <!-- Footer -->
+    <!-- ==========================================
+         FOOTER
+         Site footer with links and social media
+         Author: Arsh Verma
+         ========================================== -->
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
+                <!-- Footer Brand -->
                 <div class="footer-brand">
-                    <a href="index.html" class="logo">
+                    <a href="index.html" class="logo" aria-label="ArshCreates Home">
                         <div class="logo-icon">
                             <i class="fas fa-code"></i>
                         </div>
@@ -171,20 +244,24 @@
                     <p class="footer-description">
                         Creating exceptional digital experiences through innovative development and creative solutions.
                     </p>
+                    
+                    <!-- Social Links -->
                     <div class="footer-social">
-                        <a href="https://github.com/ArshVermaGit" class="social-link" target="_blank">
+                        <a href="https://github.com/ArshVermaGit" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="GitHub Profile">
                             <i class="fab fa-github"></i>
                         </a>
-                        <a href="https://www.linkedin.com/in/arshvermadev/" class="social-link" target="_blank">
+                        <a href="https://www.linkedin.com/in/arshvermadev/" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn Profile">
                             <i class="fab fa-linkedin"></i>
                         </a>
-                        <a href="#" class="social-link">
-                            <i class="fab fa-twitter"></i>
+                        <a href="https://x.com/TheArshVerma" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter) Profile">
+                            <i class="fab fa-x-twitter"></i>
                         </a>
                     </div>
                 </div>
 
+                <!-- Footer Links -->
                 <div class="footer-links">
+                    <!-- Navigation Links -->
                     <div class="link-group">
                         <h4>Navigation</h4>
                         <a href="index.html">Home</a>
@@ -192,8 +269,10 @@
                         <a href="games.html">Games</a>
                         <a href="websites.html">Websites</a>
                         <a href="apps.html">Apps</a>
+                        <a href="certificates.html">Certificates</a>
                     </div>
 
+                    <!-- Connect Links -->
                     <div class="link-group">
                         <h4>Connect</h4>
                         <a href="index.html#contact">Contact</a>
@@ -202,6 +281,7 @@
                         <a href="#">Blog</a>
                     </div>
 
+                    <!-- Legal Links -->
                     <div class="link-group">
                         <h4>Legal</h4>
                         <a href="#">Privacy Policy</a>
@@ -211,6 +291,7 @@
                 </div>
             </div>
 
+            <!-- Footer Bottom -->
             <div class="footer-bottom">
                 <div class="copyright">
                     &copy; 2024 Arsh Verma. All rights reserved.
@@ -225,17 +306,30 @@
         </div>
     </footer>
 
-    <!-- Back to Top -->
-    <button class="back-to-top" id="backToTop" aria-label="Back to top">
+    <!-- ==========================================
+         BACK TO TOP BUTTON
+         Smooth scroll to top functionality
+         Author: Arsh Verma
+         ========================================== -->
+    <button class="back-to-top" id="backToTop" aria-label="Scroll back to top">
         <i class="fas fa-chevron-up"></i>
     </button>
 
-    <!-- Notification Container -->
+    <!-- ==========================================
+         NOTIFICATION CONTAINER
+         For displaying user notifications
+         Author: Arsh Verma
+         ========================================== -->
     <div id="notificationContainer"></div>
-    
+
+    <!-- ==========================================
+         JAVASCRIPT FILES
+         Load in specific order for dependencies
+         Author: Arsh Verma
+         ========================================== -->
     <script src="js/utils.js"></script>
     <script src="js/data.js"></script>
     <script src="js/script.js"></script>
-    <script src="js/apps.js"></script>
+    <script src="js/websites.js"></script>
 </body>
 </html>
