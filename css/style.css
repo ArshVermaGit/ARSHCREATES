@@ -5114,12 +5114,28 @@ html {
 }
 
 /* ==========================================
-   WEBSITES PORTFOLIO SPECIFIC STYLES
-   These styles only affect the websites.html page
+   WEBSITES PORTFOLIO - COMPLETE STYLESHEET
+   Professional styling for websites.html page
+   Author: Arsh Verma
+   Version: 1.0.0
    ========================================== */
 
 /* ==========================================
-   WEBSITES PAGE HEADER
+   TABLE OF CONTENTS
+   1. Page Header & Hero Section
+   2. Filter Section
+   3. Websites Grid & Cards
+   4. Website Statistics
+   5. Call to Action Section
+   6. Loading & Empty States
+   7. Animations
+   8. Responsive Design
+   9. Accessibility Features
+   ========================================== */
+
+/* ==========================================
+   1. PAGE HEADER & HERO SECTION
+   Styled hero area with gradient background
    ========================================== */
 body:has(.websites-section) .page-header {
     padding: 12rem 0 6rem;
@@ -5132,6 +5148,7 @@ body:has(.websites-section) .page-header {
     border-bottom: 1px solid var(--border-color);
 }
 
+/* Decorative gradient overlays */
 body:has(.websites-section) .page-header::before {
     content: '';
     position: absolute;
@@ -5145,6 +5162,7 @@ body:has(.websites-section) .page-header::before {
     pointer-events: none;
 }
 
+/* Header content container */
 body:has(.websites-section) .header-content {
     text-align: center;
     position: relative;
@@ -5153,6 +5171,7 @@ body:has(.websites-section) .header-content {
     margin: 0 auto;
 }
 
+/* Main heading with gradient text */
 body:has(.websites-section) .header-content h1 {
     font-size: 4.5rem;
     font-weight: 900;
@@ -5161,15 +5180,21 @@ body:has(.websites-section) .header-content h1 {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    line-height: 1.2;
 }
 
+/* Header description text */
 body:has(.websites-section) .header-content p {
     font-size: 1.25rem;
     opacity: 0.85;
     line-height: 1.7;
     margin-bottom: 3rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
+/* Statistics grid in header */
 body:has(.websites-section) .header-stats {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -5184,11 +5209,13 @@ body:has(.websites-section) .header-stats {
     margin: 0 auto;
 }
 
+/* Individual stat item */
 body:has(.websites-section) .stat {
     text-align: center;
     padding: 1rem;
 }
 
+/* Stat number styling */
 body:has(.websites-section) .stat-number {
     display: block;
     font-size: 2.5rem;
@@ -5198,26 +5225,109 @@ body:has(.websites-section) .stat-number {
     margin-bottom: 0.5rem;
 }
 
+/* Stat label styling */
 body:has(.websites-section) .stat-label {
     font-size: 0.9rem;
     opacity: 0.7;
     font-weight: 500;
+    display: block;
 }
 
 /* ==========================================
-   WEBSITES GRID SECTION
+   2. FILTER SECTION
+   Dynamic filtering controls
+   ========================================== */
+body:has(.websites-section) .filter-section {
+    padding: 3rem 0;
+    background: var(--glass-bg);
+    backdrop-filter: blur(30px) saturate(180%);
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* Filter container grid */
+body:has(.websites-section) .filter-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    align-items: end;
+}
+
+/* Individual filter group */
+body:has(.websites-section) .filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+/* Filter labels */
+body:has(.websites-section) .filter-group label {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--text-primary);
+}
+
+/* Filter select dropdown styling */
+body:has(.websites-section) .filter-select {
+    width: 100%;
+    padding: 1.25rem 1.5rem;
+    background: var(--glass-bg);
+    backdrop-filter: blur(30px) saturate(180%);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    font-size: 1rem;
+    font-family: inherit;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all var(--transition-base);
+    box-shadow: 0 5px 15px var(--shadow-color);
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%233B82F6'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1.5rem center;
+    background-size: 1rem;
+    padding-right: 3rem;
+}
+
+/* Filter select hover state */
+body:has(.websites-section) .filter-select:hover {
+    border-color: #3B82F6;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px var(--shadow-color);
+}
+
+/* Filter select focus state */
+body:has(.websites-section) .filter-select:focus {
+    outline: none;
+    border-color: #3B82F6;
+    box-shadow: 0 8px 25px var(--shadow-color), 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Filter select options */
+body:has(.websites-section) .filter-select option {
+    background: var(--bg-primary);
+    padding: 1rem;
+    font-size: 1rem;
+    color: var(--text-primary);
+}
+
+/* ==========================================
+   3. WEBSITES GRID & CARDS
+   Portfolio display grid and card styling
    ========================================== */
 .websites-section {
     padding: 6rem 0;
 }
 
+/* Responsive grid layout */
 body:has(.websites-section) .portfolio-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
     gap: 3rem;
+    margin-top: 3rem;
 }
 
-/* Website Card Styles */
+/* Individual website card */
 .website-card {
     background: var(--glass-bg);
     backdrop-filter: blur(30px) saturate(180%);
@@ -5227,13 +5337,16 @@ body:has(.websites-section) .portfolio-grid {
     overflow: hidden;
     transition: all var(--transition-base);
     position: relative;
+    cursor: pointer;
 }
 
+/* Card hover effect */
 .website-card:hover {
     transform: translateY(-10px);
     box-shadow: 0 20px 60px var(--shadow-color);
 }
 
+/* Gradient overlay on hover */
 .website-card::before {
     content: '';
     position: absolute;
@@ -5245,17 +5358,20 @@ body:has(.websites-section) .portfolio-grid {
     opacity: 0;
     transition: opacity var(--transition-base);
     z-index: 1;
+    pointer-events: none;
 }
 
 .website-card:hover::before {
     opacity: 0.05;
 }
 
+/* Ensure content stays above overlay */
 .website-card > * {
     position: relative;
     z-index: 2;
 }
 
+/* Website image container */
 body:has(.websites-section) .game-image {
     position: relative;
     width: 100%;
@@ -5264,6 +5380,7 @@ body:has(.websites-section) .game-image {
     background: linear-gradient(135deg, #3B82F6, #EC4899);
 }
 
+/* Website image */
 body:has(.websites-section) .game-image img {
     width: 100%;
     height: 100%;
@@ -5271,11 +5388,70 @@ body:has(.websites-section) .game-image img {
     transition: transform var(--transition-slow);
 }
 
+/* Image zoom effect on hover */
 .website-card:hover .game-image img {
     transform: scale(1.1);
 }
 
-/* Category Badge for Websites */
+/* Image overlay for buttons */
+body:has(.websites-section) .game-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity var(--transition-base);
+    z-index: 3;
+}
+
+.website-card:hover .game-overlay {
+    opacity: 1;
+}
+
+/* Overlay button container */
+body:has(.websites-section) .overlay-content {
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
+    padding: 2rem;
+}
+
+/* Status badge */
+body:has(.websites-section) .game-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    padding: 0.5rem 1rem;
+    background: var(--glass-bg);
+    backdrop-filter: blur(30px) saturate(180%);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    font-size: 0.75rem;
+    font-weight: 600;
+    box-shadow: 0 5px 15px var(--shadow-color);
+    z-index: 3;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Status badge color variants */
+.status-live {
+    color: #10B981;
+    border-color: rgba(16, 185, 129, 0.3);
+}
+
+.status-in-development {
+    color: #F59E0B;
+    border-color: rgba(245, 158, 11, 0.3);
+}
+
+/* Category badge */
 .category-badge {
     position: absolute;
     top: 1rem;
@@ -5290,26 +5466,36 @@ body:has(.websites-section) .game-image img {
     color: #3B82F6;
     box-shadow: 0 5px 15px var(--shadow-color);
     z-index: 3;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
+/* Website card content area */
 body:has(.websites-section) .game-content {
     padding: 2.5rem;
 }
 
+/* Card header with title and rating */
 body:has(.websites-section) .game-header {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
     margin-bottom: 1rem;
+    gap: 1rem;
 }
 
+/* Website title */
 body:has(.websites-section) .game-title {
     font-size: 1.5rem;
     font-weight: 700;
-    margin-bottom: 0.5rem;
+    margin: 0;
     flex: 1;
+    color: var(--text-primary);
+    line-height: 1.3;
 }
 
+/* Rating container */
 body:has(.websites-section) .game-rating {
     display: flex;
     align-items: center;
@@ -5320,24 +5506,38 @@ body:has(.websites-section) .game-rating {
     border-radius: var(--border-radius-sm);
     padding: 0.5rem 1rem;
     box-shadow: 0 5px 15px var(--shadow-color);
+    flex-shrink: 0;
 }
 
+/* Rating stars */
 body:has(.websites-section) .rating-stars {
     color: #F59E0B;
     font-size: 0.9rem;
+    display: flex;
+    gap: 2px;
 }
 
+/* Rating numerical value */
 body:has(.websites-section) .rating-value {
     font-weight: 700;
     font-size: 0.9rem;
+    color: var(--text-primary);
 }
 
+/* Metadata section */
 body:has(.websites-section) .game-meta {
     margin-bottom: 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: center;
 }
 
+/* Category tag in meta */
 body:has(.websites-section) .game-category {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
     padding: 0.5rem 1rem;
     background: var(--glass-bg);
     backdrop-filter: blur(30px) saturate(180%);
@@ -5346,18 +5546,28 @@ body:has(.websites-section) .game-category {
     font-size: 0.8rem;
     font-weight: 600;
     color: #3B82F6;
-    margin-bottom: 1rem;
     box-shadow: 0 5px 15px var(--shadow-color);
 }
 
+/* Date display in meta */
+body:has(.websites-section) .game-date {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+/* Website description */
 body:has(.websites-section) .game-description {
     font-size: 1rem;
     line-height: 1.7;
     opacity: 0.8;
     margin-bottom: 2rem;
+    color: var(--text-primary);
 }
 
-/* Website Technology Tags */
+/* Technology tags container */
 .website-tech {
     display: flex;
     flex-wrap: wrap;
@@ -5365,6 +5575,7 @@ body:has(.websites-section) .game-description {
     margin-bottom: 1.5rem;
 }
 
+/* Individual technology tag */
 .tech-tag {
     padding: 0.4rem 0.8rem;
     background: var(--glass-bg);
@@ -5383,13 +5594,17 @@ body:has(.websites-section) .game-description {
     transform: translateY(-1px);
 }
 
+/* "More" tag for additional technologies */
 .tech-tag.more {
     background: linear-gradient(135deg, #3B82F6, #EC4899);
     color: white;
     border-color: rgba(255, 255, 255, 0.2);
 }
 
-/* Website Statistics */
+/* ==========================================
+   4. WEBSITE STATISTICS
+   Display key metrics for each website
+   ========================================== */
 .website-stats {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -5403,11 +5618,13 @@ body:has(.websites-section) .game-description {
     box-shadow: 0 5px 15px var(--shadow-color);
 }
 
+/* Individual stat item */
 .website-stat {
     text-align: center;
     padding: 0.5rem;
 }
 
+/* Stat value */
 .website-stat-value {
     display: block;
     font-size: 1.5rem;
@@ -5417,14 +5634,17 @@ body:has(.websites-section) .game-description {
     margin-bottom: 0.25rem;
 }
 
+/* Stat label */
 .website-stat-label {
     font-size: 0.75rem;
     opacity: 0.7;
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    color: var(--text-secondary);
 }
 
+/* Action buttons container */
 body:has(.websites-section) .game-actions {
     display: flex;
     gap: 1rem;
@@ -5437,21 +5657,9 @@ body:has(.websites-section) .game-actions .btn {
     font-size: 0.9rem;
 }
 
-/* Website-specific button variants */
-.btn-website {
-    background: linear-gradient(135deg, #3B82F6, #EC4899);
-    color: #fff;
-    border-color: #3B82F6;
-}
-
-.btn-website:hover {
-    background: linear-gradient(135deg, #1D4ED8, #DB2777);
-    transform: translateY(-3px);
-    box-shadow: 0 15px 40px var(--shadow-color), 0 0 30px rgba(59, 130, 246, 0.3);
-}
-
 /* ==========================================
-   WEBSITES CTA SECTION
+   5. CALL TO ACTION SECTION
+   Engagement section at bottom of page
    ========================================== */
 body:has(.websites-section) .cta-section {
     background: linear-gradient(135deg, 
@@ -5460,13 +5668,13 @@ body:has(.websites-section) .cta-section {
         rgba(236, 72, 153, 0.1) 100%);
     border-top: 1px solid var(--border-color);
     border-bottom: 1px solid var(--border-color);
+    padding: 6rem 0;
 }
 
 body:has(.websites-section) .cta-content {
     text-align: center;
     max-width: 600px;
     margin: 0 auto;
-    padding: 4rem 0;
 }
 
 body:has(.websites-section) .cta-content h2 {
@@ -5484,6 +5692,7 @@ body:has(.websites-section) .cta-content p {
     opacity: 0.85;
     line-height: 1.7;
     margin-bottom: 2.5rem;
+    color: var(--text-primary);
 }
 
 body:has(.websites-section) .cta-content .btn {
@@ -5492,74 +5701,8 @@ body:has(.websites-section) .cta-content .btn {
 }
 
 /* ==========================================
-   WEBSITE-SPECIFIC FILTER STYLES
-   ========================================== */
-body:has(.websites-section) .filter-section {
-    padding: 3rem 0;
-    background: var(--glass-bg);
-    backdrop-filter: blur(30px) saturate(180%);
-    border-top: 1px solid var(--border-color);
-    border-bottom: 1px solid var(--border-color);
-}
-
-body:has(.websites-section) .filter-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 2rem;
-    align-items: end;
-}
-
-body:has(.websites-section) .filter-group {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-
-body:has(.websites-section) .filter-group label {
-    font-weight: 600;
-    font-size: 0.95rem;
-    margin-bottom: 0.5rem;
-}
-
-body:has(.websites-section) .filter-select {
-    width: 100%;
-    padding: 1.25rem 1.5rem;
-    background: var(--glass-bg);
-    backdrop-filter: blur(30px) saturate(180%);
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius-sm);
-    font-size: 1rem;
-    font-family: inherit;
-    cursor: pointer;
-    transition: all var(--transition-base);
-    box-shadow: 0 5px 15px var(--shadow-color);
-    appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%233B82F6'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 1.5rem center;
-    background-size: 1rem;
-}
-
-body:has(.websites-section) .filter-select:hover {
-    border-color: #3B82F6;
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px var(--shadow-color);
-}
-
-body:has(.websites-section) .filter-select:focus {
-    outline: none;
-    border-color: #3B82F6;
-    box-shadow: 0 8px 25px var(--shadow-color), 0 0 0 3px rgba(59, 130, 246, 0.1);
-}
-
-body:has(.websites-section) .filter-select option {
-    background: var(--bg-primary);
-    padding: 1rem;
-    font-size: 1rem;
-}
-
-/* ==========================================
-   LOADING STATES & EMPTY STATES
+   6. LOADING & EMPTY STATES
+   User feedback for data loading
    ========================================== */
 body:has(.websites-section) .loading-games,
 body:has(.websites-section) .no-games {
@@ -5586,10 +5729,22 @@ body:has(.websites-section) .no-games p {
     font-size: 1.1rem;
     opacity: 0.8;
     margin-bottom: 2rem;
+    color: var(--text-primary);
+}
+
+/* Spinner animation */
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.loading-games .fa-spin {
+    animation: spin 1s linear infinite;
 }
 
 /* ==========================================
-   ANIMATIONS FOR WEBSITES PAGE
+   7. ANIMATIONS
+   Smooth entrance animations
    ========================================== */
 @keyframes slideInFade {
     from {
@@ -5602,8 +5757,9 @@ body:has(.websites-section) .no-games p {
     }
 }
 
+/* Staggered animation for cards */
 .website-card {
-    animation: slideInFade 0.6s ease-out;
+    animation: slideInFade 0.6s ease-out both;
 }
 
 .website-card:nth-child(1) { animation-delay: 0.1s; }
@@ -5614,8 +5770,11 @@ body:has(.websites-section) .no-games p {
 .website-card:nth-child(6) { animation-delay: 0.6s; }
 
 /* ==========================================
-   RESPONSIVE DESIGN FOR WEBSITES PAGE
+   8. RESPONSIVE DESIGN
+   Tablet and mobile optimizations
    ========================================== */
+
+/* Large tablets and small desktops (max-width: 1200px) */
 @media (max-width: 1200px) {
     body:has(.websites-section) .portfolio-grid {
         grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
@@ -5627,6 +5786,7 @@ body:has(.websites-section) .no-games p {
     }
 }
 
+/* Tablets (max-width: 992px) */
 @media (max-width: 992px) {
     body:has(.websites-section) .page-header {
         padding: 10rem 0 4rem;
@@ -5662,6 +5822,7 @@ body:has(.websites-section) .no-games p {
     }
 }
 
+/* Mobile devices (max-width: 768px) */
 @media (max-width: 768px) {
     body:has(.websites-section) .page-header {
         padding: 8rem 0 3rem;
@@ -5712,6 +5873,7 @@ body:has(.websites-section) .no-games p {
     }
 }
 
+/* Small mobile devices (max-width: 480px) */
 @media (max-width: 480px) {
     body:has(.websites-section) .header-content h1 {
         font-size: 2rem;
@@ -5741,11 +5903,18 @@ body:has(.websites-section) .no-games p {
     body:has(.websites-section) .cta-content h2 {
         font-size: 1.75rem;
     }
+    
+    body:has(.websites-section) .overlay-content {
+        padding: 1rem;
+    }
 }
 
 /* ==========================================
-   ACCESSIBILITY ENHANCEMENTS
+   9. ACCESSIBILITY FEATURES
+   Enhanced accessibility and reduced motion
    ========================================== */
+
+/* Reduce motion for users with vestibular disorders */
 @media (prefers-reduced-motion: reduce) {
     .website-card,
     .website-card:hover .game-image img,
@@ -5754,9 +5923,13 @@ body:has(.websites-section) .no-games p {
         animation: none;
         transition: none;
     }
+    
+    .website-card:hover {
+        transform: none;
+    }
 }
 
-/* Focus styles for better accessibility */
+/* Focus styles for keyboard navigation */
 .website-card:focus-within {
     outline: 2px solid #3B82F6;
     outline-offset: 2px;
@@ -5766,6 +5939,35 @@ body:has(.websites-section) .filter-select:focus {
     outline: 2px solid #3B82F6;
     outline-offset: 2px;
 }
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    body:has(.websites-section) .game-badge,
+    .category-badge,
+    .tech-tag {
+        border-width: 2px;
+    }
+}
+
+/* Print styles */
+@media print {
+    body:has(.websites-section) .filter-section,
+    body:has(.websites-section) .cta-section,
+    .game-overlay {
+        display: none;
+    }
+    
+    .website-card {
+        page-break-inside: avoid;
+        box-shadow: none;
+        border: 1px solid #000;
+    }
+}
+
+/* ==========================================
+   END OF STYLESHEET
+   Author: Arsh Verma
+   ========================================== */
 
 /* ==========================================
    INCREMENTAL CSS FOR website-detail.html
