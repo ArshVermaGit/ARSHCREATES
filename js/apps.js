@@ -1,169 +1,260 @@
 // ==========================================
-// WEBSITES PAGE - COMPLETE IMPLEMENTATION
-// Handles all website portfolio functionality
-// Author: Arsh Verma
-// Version: 1.0.0
-// Last Updated: 2024
+// APPS PAGE - Complete Mobile Apps Portfolio Functionality
+// Handles filtering, sorting, searching, and app display
+// Version: 1.0.0 | Author: Arsh Verma
 // ==========================================
 
-/**
- * TABLE OF CONTENTS
- * 1. Global State Management
- * 2. Initialization
- * 3. Data Loading
- * 4. Display & Rendering
- * 5. Filtering System
- * 6. Sorting Functions
- * 7. Card Interactions
- * 8. Event Listeners
- * 9. Navigation Functions
- * 10. Statistics & Analytics
- * 11. Animations
- * 12. Utility Functions
- * 13. Sample Data Fallback
- */
-
 // ==========================================
-// 1. GLOBAL STATE MANAGEMENT
-// Central state object for websites page
+// GLOBAL VARIABLES
 // ==========================================
-const WEBSITES_STATE = {
-    allWebsites: [],           // All websites from data source
-    filteredWebsites: [],      // Filtered results
-    currentFilters: {
-        category: 'all',       // Selected category filter
-        status: 'all',         // Selected status filter
-        sort: 'newest',        // Current sort order
-        search: ''             // Search query (future enhancement)
-    },
-    isLoading: false,          // Loading state flag
-    animationDelay: 100        // Stagger delay for card animations (ms)
+let currentApps = [];              // Currently displayed apps after filters
+let allApps = [];                  // All apps from data source
+let currentFilters = {             // Current filter state
+    platform: 'all',
+    category: 'all',
+    status: 'all'
 };
+let isAnimating = false;           // Prevent multiple animations at once
+let searchTimeout = null;          // Search debounce timeout
 
 // ==========================================
-// 2. INITIALIZATION
-// Initialize page when DOM is ready
+// PAGE INITIALIZATION
 // ==========================================
 
 /**
- * Main initialization function
- * Called when DOM content is loaded
+ * Initialize the apps portfolio page
+ * - Loads app data
+ * - Sets up filters and event listeners
+ * - Updates header statistics
+ * - Handles loading screen
+ * @author Arsh Verma
  */
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('🌐 Websites page initializing...');
-    initializeWebsitesPage();
-});
-
-/**
- * Initialize all website page components
- * @returns {void}
- */
-function initializeWebsitesPage() {
+function initializeAppsPage() {
+    console.log('Initializing apps page...');
+    
     try {
-        // Step 1: Load websites data from data source
-        loadWebsitesData();
+        // Load and display apps
+        loadApps();
         
-        // Step 2: Setup filter controls
-        setupWebsiteFilters();
+        // Setup filter controls
+        setupAppFilters();
         
-        // Step 3: Setup event listeners
-        setupWebsiteEventListeners();
+        // Setup event listeners
+        setupAppEventListeners();
         
-        // Step 4: Update header statistics
+        // Update header statistics
         updateHeaderStats();
         
-        // Step 5: Display websites
-        displayWebsites(WEBSITES_STATE.allWebsites);
+        // Hide loading screen after delay
+        setTimeout(() => {
+            hideLoadingScreen();
+        }, 800);
         
-        // Step 6: Hide loading screen after delay
-        setTimeout(hideLoadingScreen, 800);
-        
-        console.log('✅ Websites page initialized successfully');
-        console.log(`📊 Loaded ${WEBSITES_STATE.allWebsites.length} websites`);
-        
+        console.log('Apps page initialized successfully');
     } catch (error) {
-        console.error('❌ Error initializing websites page:', error);
-        showNotification('Failed to load websites. Please refresh the page.', 'error');
-        hideLoadingScreen();
+        console.error('Error initializing apps page:', error);
+        showNotification('Error loading apps page', 'error');
+    }
+}
+
+/**
+ * Hide loading screen with fade animation
+ * @author Arsh Verma
+ */
+function hideLoadingScreen() {
+    const loadingScreen = document.getElementById('loadingScreen');
+    if (loadingScreen) {
+        loadingScreen.style.opacity = '0';
+        setTimeout(() => {
+            loadingScreen.style.display = 'none';
+            // Focus on main content for accessibility
+            const mainContent = document.querySelector('.apps-section');
+            if (mainContent) {
+                mainContent.setAttribute('tabindex', '-1');
+                mainContent.focus();
+            }
+        }, 500);
     }
 }
 
 // ==========================================
-// 3. DATA LOADING
-// Load websites from data source
+// APP DATA LOADING
 // ==========================================
 
 /**
- * Load websites data from global data source
- * Supports multiple data source formats
- * @returns {void}
+ * Load apps from data source
+ * - Fetches apps from data.js
+ * - Handles empty data gracefully
+ * - Displays initial app grid
+ * @author Arsh Verma
  */
-function loadWebsitesData() {
+function loadApps() {
+    const appsGrid = document.getElementById('appsGrid');
+    if (!appsGrid) {
+        console.error('Apps grid element not found!');
+        return;
+    }
+    
     try {
-        // Try to get websites from global function
-        if (typeof window.getWebsites === 'function') {
-            WEBSITES_STATE.allWebsites = window.getWebsites();
-        } 
-        // Try to get from PORTFOLIO_DATA object
-        else if (typeof PORTFOLIO_DATA !== 'undefined' && PORTFOLIO_DATA.websites) {
-            WEBSITES_STATE.allWebsites = PORTFOLIO_DATA.websites;
-        } 
-        // Fallback to sample data
-        else {
-            console.warn('⚠️ No websites data found, using fallback sample data');
-            WEBSITES_STATE.allWebsites = createSampleWebsites();
+        // Get apps from data.js (check if function exists)
+        if (typeof getApps === 'function') {
+            allApps = getApps();
+        } else {
+            // Fallback to sample data if data.js not available
+            allApps = getSampleApps();
         }
         
-        // Initialize filtered websites with all websites
-        WEBSITES_STATE.filteredWebsites = [...WEBSITES_STATE.allWebsites];
+        currentApps = [...allApps];
         
-        console.log('📦 Websites loaded:', WEBSITES_STATE.allWebsites.length);
+        console.log('Loaded apps:', allApps.length);
         
+        // Handle empty data
+        if (allApps.length === 0) {
+            console.warn('No apps found in portfolio data');
+            appsGrid.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-mobile-alt" aria-hidden="true"></i>
+                    <h3>No Apps Available</h3>
+                    <p>Check back soon for new mobile app projects!</p>
+                </div>
+            `;
+            return;
+        }
+        
+        // Display all apps initially
+        displayApps(currentApps);
     } catch (error) {
-        console.error('❌ Error loading websites:', error);
-        WEBSITES_STATE.allWebsites = [];
-        WEBSITES_STATE.filteredWebsites = [];
+        console.error('Error loading apps:', error);
+        appsGrid.innerHTML = `
+            <div class="error-state">
+                <i class="fas fa-exclamation-triangle" aria-hidden="true"></i>
+                <h3>Error Loading Apps</h3>
+                <p>Please refresh the page to try again.</p>
+            </div>
+        `;
     }
 }
 
+/**
+ * Get sample apps for demonstration
+ * Used when data.js is not available
+ * @returns {Array} Sample app objects
+ * @author Arsh Verma
+ */
+function getSampleApps() {
+    return [
+        {
+            id: 1,
+            name: "TaskMaster Pro",
+            platform: "Cross-Platform",
+            category: "Productivity",
+            status: "Live",
+            rating: 4.8,
+            description: "Advanced task management app with AI-powered prioritization and team collaboration features.",
+            image: "https://via.placeholder.com/400x250/22C55E/FFFFFF?text=TaskMaster+Pro",
+            storeUrl: "#",
+            downloadCount: "100K+",
+            launchDate: "2024-01-15",
+            technologies: ["React Native", "Firebase", "AI/ML", "Push Notifications"],
+            features: ["Smart Prioritization", "Team Collaboration", "Voice Commands", "Dark Mode"]
+        },
+        {
+            id: 2,
+            name: "FitTrack",
+            platform: "iOS",
+            category: "Health & Fitness",
+            status: "Live",
+            rating: 4.6,
+            description: "Comprehensive fitness tracking app with workout plans, nutrition tracking, and progress analytics.",
+            image: "https://via.placeholder.com/400x250/10B981/FFFFFF?text=FitTrack",
+            storeUrl: "#",
+            downloadCount: "250K+",
+            launchDate: "2023-11-20",
+            technologies: ["Swift", "HealthKit", "CoreData", "Charts"],
+            features: ["Workout Plans", "Nutrition Tracking", "Progress Analytics", "Apple Watch"]
+        },
+        {
+            id: 3,
+            name: "ShopEasy",
+            platform: "Android",
+            category: "E-commerce",
+            status: "Live",
+            rating: 4.7,
+            description: "Modern e-commerce platform with AR product preview, one-click checkout, and personalized recommendations.",
+            image: "https://via.placeholder.com/400x250/84CC16/FFFFFF?text=ShopEasy",
+            storeUrl: "#",
+            downloadCount: "500K+",
+            launchDate: "2023-09-10",
+            technologies: ["Kotlin", "ARCore", "Stripe", "ML Kit"],
+            features: ["AR Preview", "One-Click Checkout", "Wishlist", "Order Tracking"]
+        },
+        {
+            id: 4,
+            name: "LearnHub",
+            platform: "Cross-Platform",
+            category: "Education",
+            status: "Beta",
+            rating: 4.5,
+            description: "Interactive learning platform with video courses, quizzes, and progress tracking for students.",
+            image: "https://via.placeholder.com/400x250/F59E0B/FFFFFF?text=LearnHub",
+            downloadCount: "50K+",
+            launchDate: "2024-03-01",
+            technologies: ["Flutter", "Firebase", "Video Streaming", "Analytics"],
+            features: ["Video Courses", "Interactive Quizzes", "Certificates", "Offline Mode"]
+        },
+        {
+            id: 5,
+            name: "MoneyWise",
+            platform: "iOS",
+            category: "Finance",
+            status: "In Development",
+            rating: 0,
+            description: "Smart financial management app with budget tracking, investment insights, and expense categorization.",
+            image: "https://via.placeholder.com/400x250/3B82F6/FFFFFF?text=MoneyWise",
+            launchDate: "2024-12-01",
+            technologies: ["SwiftUI", "Core Data", "Charts", "Secure Enclave"],
+            features: ["Budget Tracking", "Investment Insights", "Bill Reminders", "Bank Sync"]
+        },
+        {
+            id: 6,
+            name: "FoodDelight",
+            platform: "Android",
+            category: "Food & Drink",
+            status: "Live",
+            rating: 4.9,
+            description: "Food delivery app with real-time tracking, restaurant reviews, and exclusive deals.",
+            image: "https://via.placeholder.com/400x250/EF4444/FFFFFF?text=FoodDelight",
+            storeUrl: "#",
+            downloadCount: "1M+",
+            launchDate: "2023-06-15",
+            technologies: ["Kotlin", "Google Maps", "Firebase", "Payment Gateway"],
+            features: ["Real-time Tracking", "Restaurant Reviews", "Deals", "Schedule Orders"]
+        }
+    ];
+}
+
 // ==========================================
-// 4. DISPLAY & RENDERING
-// Render websites to the DOM
+// APP DISPLAY
 // ==========================================
 
 /**
- * Display websites in the grid
- * Handles loading, empty, and populated states
- * @param {Array} websites - Array of website objects to display
- * @returns {void}
+ * Display apps in the grid
+ * @param {Array} apps - Array of app objects to display
+ * @author Arsh Verma
  */
-function displayWebsites(websites) {
-    const websitesGrid = document.getElementById('websitesGrid');
+function displayApps(apps) {
+    const appsGrid = document.getElementById('appsGrid');
+    if (!appsGrid) return;
     
-    if (!websitesGrid) {
-        console.error('❌ Websites grid element not found');
-        return;
-    }
-    
-    // Show loading state
-    if (WEBSITES_STATE.isLoading) {
-        websitesGrid.innerHTML = `
-            <div class="loading-games">
-                <i class="fas fa-spinner fa-spin"></i>
-                <p>Loading amazing websites...</p>
-            </div>
-        `;
-        return;
-    }
-    
-    // Show empty state
-    if (!websites || websites.length === 0) {
-        websitesGrid.innerHTML = `
-            <div class="no-games">
-                <i class="fas fa-laptop-code"></i>
-                <p>No websites match your current filters</p>
-                <button class="btn btn-primary" onclick="resetWebsiteFilters()">
-                    <i class="fas fa-redo"></i>
+    // Handle no results
+    if (apps.length === 0) {
+        appsGrid.innerHTML = `
+            <div class="no-results">
+                <i class="fas fa-search" aria-hidden="true"></i>
+                <h3>No Apps Found</h3>
+                <p>No apps match your current filters</p>
+                <button class="btn btn-primary" onclick="resetAppFilters()">
+                    <i class="fas fa-redo" aria-hidden="true"></i>
                     <span>Reset Filters</span>
                 </button>
             </div>
@@ -171,608 +262,598 @@ function displayWebsites(websites) {
         return;
     }
     
-    // Generate and display website cards
-    websitesGrid.innerHTML = websites.map(website => createWebsiteCard(website)).join('');
+    // Generate app cards HTML
+    appsGrid.innerHTML = apps.map(app => createAppCard(app)).join('');
     
     // Setup card interactions
-    setupWebsiteCardListeners();
+    setupAppCardListeners();
     
-    // Animate cards entrance
-    animateWebsiteCards();
+    // Update results count
+    updateResultsCount(apps.length);
     
-    console.log(`✅ Displayed ${websites.length} websites`);
+    console.log(`Displayed ${apps.length} apps`);
 }
 
 /**
- * Create HTML for a single website card
- * @param {Object} website - Website data object
+ * Create HTML for a single app card
+ * @param {Object} app - App object
  * @returns {string} HTML string for the card
+ * @author Arsh Verma
  */
-function createWebsiteCard(website) {
-    const statusClass = website.status.toLowerCase().replace(/\s+/g, '-');
-    const starsHTML = generateStars(website.rating);
+function createAppCard(app) {
+    const statusClass = app.status.toLowerCase().replace(/\s+/g, '-');
+    const imageUrl = app.image || `https://via.placeholder.com/400x250/22C55E/FFFFFF?text=${encodeURIComponent(app.name)}`;
     
     return `
-        <div class="game-card website-card" 
-             data-website-id="${website.id}" 
-             data-category="${website.category}" 
-             data-status="${website.status}" 
-             data-rating="${website.rating}"
-             tabindex="0"
-             role="article"
-             aria-label="${website.name} website">
+        <div class="app-card" 
+             data-app-id="${app.id}" 
+             data-platform="${app.platform}" 
+             data-category="${app.category}" 
+             data-status="${app.status}" 
+             data-rating="${app.rating}"
+             role="listitem"
+             tabindex="0">
             
-            <!-- Website Image Section -->
-            <div class="game-image">
-                <img src="${website.image || 'assets/images/websites/default.jpg'}" 
-                     alt="${website.name} screenshot"
-                     loading="lazy"
-                     onerror="this.src='https://via.placeholder.com/400x250/3B82F6/FFFFFF?text=${encodeURIComponent(website.name)}'">
+            <!-- App Image with Overlay -->
+            <div class="app-image">
+                <img src="${imageUrl}" 
+                     alt="${escapeHtml(app.name)} mobile app screenshot" 
+                     loading="lazy" 
+                     onerror="this.src='https://via.placeholder.com/400x250/22C55E/FFFFFF?text=${encodeURIComponent(app.name)}'">
                 
-                <!-- Hover Overlay with Actions -->
-                <div class="game-overlay">
+                <!-- Hover Overlay -->
+                <div class="app-overlay">
                     <div class="overlay-content">
-                        <button class="btn btn-primary btn-view-details" 
-                                data-website-id="${website.id}"
-                                aria-label="View ${website.name} details">
-                            <i class="fas fa-eye"></i>
+                        <a href="app-detail.html?id=${app.id}" 
+                           class="view-details-btn"
+                           onclick="event.stopPropagation();"
+                           aria-label="View details for ${escapeHtml(app.name)}">
+                            <i class="fas fa-eye" aria-hidden="true"></i>
                             <span>View Details</span>
-                        </button>
-                        ${website.liveUrl ? `
-                            <a href="${website.liveUrl}" 
-                               class="btn btn-secondary btn-visit-site"
+                        </a>
+                        ${app.storeUrl ? `
+                            <a href="${app.storeUrl}" 
+                               class="download-btn"
                                target="_blank"
                                rel="noopener noreferrer"
-                               aria-label="Visit ${website.name} live">
-                                <i class="fas fa-external-link-alt"></i>
-                                <span>Visit Site</span>
+                               onclick="event.stopPropagation();"
+                               aria-label="Download ${escapeHtml(app.name)}">
+                                <i class="fas fa-download" aria-hidden="true"></i>
+                                <span>Download</span>
                             </a>
                         ` : ''}
                     </div>
                 </div>
                 
                 <!-- Status Badge -->
-                <div class="game-badge status-${statusClass}">${website.status}</div>
+                <div class="app-badge status-${statusClass}" aria-label="App status: ${app.status}">
+                    ${app.status}
+                </div>
                 
-                <!-- Category Badge -->
-                <div class="category-badge">
-                    <i class="fas fa-tag"></i>
-                    ${website.category}
+                <!-- Platform Badge -->
+                <div class="platform-badge" aria-label="Platform: ${app.platform}">
+                    ${getPlatformIcon(app.platform)}
+                    <span>${app.platform}</span>
                 </div>
             </div>
             
-            <!-- Website Content Section -->
-            <div class="game-content">
-                <!-- Header with Title and Rating -->
-                <div class="game-header">
-                    <h3 class="game-title">${website.name}</h3>
-                    <div class="game-rating" aria-label="Rating: ${website.rating} out of 5">
-                        <div class="rating-stars">${starsHTML}</div>
-                        <span class="rating-value">${website.rating}</span>
-                    </div>
-                </div>
-                
-                <!-- Metadata -->
-                <div class="game-meta">
-                    <span class="game-category">
-                        <i class="fas fa-tag"></i>
-                        ${website.category}
-                    </span>
-                    ${website.launchDate ? `
-                        <span class="game-date">
-                            <i class="fas fa-calendar"></i>
-                            ${formatDate(website.launchDate)}
-                        </span>
+            <!-- App Content -->
+            <div class="app-content">
+                <div class="app-header">
+                    <h3 class="app-title">${escapeHtml(app.name)}</h3>
+                    ${app.rating > 0 ? `
+                        <div class="app-rating" aria-label="Rating: ${app.rating} out of 5 stars">
+                            <div class="rating-stars">${generateStars(app.rating)}</div>
+                            <span class="rating-value">${app.rating}</span>
+                        </div>
                     ` : ''}
                 </div>
                 
-                <!-- Description -->
-                <p class="game-description">${website.overview || website.description || 'A professional web solution with modern design and functionality.'}</p>
+                <!-- Platform Display -->
+                <div class="app-platform">
+                    ${getPlatformIcon(app.platform)}
+                    <span>${app.platform}</span>
+                </div>
                 
-                <!-- Technology Stack -->
-                ${website.technologies && website.technologies.length > 0 ? `
-                    <div class="website-tech">
-                        ${website.technologies.slice(0, 4).map(tech => `
-                            <span class="tech-tag">${tech}</span>
-                        `).join('')}
-                        ${website.technologies.length > 4 ? 
-                            `<span class="tech-tag more">+${website.technologies.length - 4}</span>` 
+                <!-- Brief Description -->
+                ${app.description ? `
+                    <p class="app-description">${escapeHtml(truncateText(app.description, 120))}</p>
+                ` : ''}
+                
+                <!-- Quick Stats -->
+                ${(app.downloadCount || app.launchDate) ? `
+                    <div class="app-stats">
+                        ${app.downloadCount ? `
+                            <div class="app-stat">
+                                <span class="app-stat-value">${app.downloadCount}</span>
+                                <span class="app-stat-label">Downloads</span>
+                            </div>
+                        ` : ''}
+                        ${app.launchDate ? `
+                            <div class="app-stat">
+                                <span class="app-stat-value">${formatDate(app.launchDate)}</span>
+                                <span class="app-stat-label">Launched</span>
+                            </div>
+                        ` : ''}
+                    </div>
+                ` : ''}
+                
+                <!-- Technologies Used -->
+                ${app.technologies && app.technologies.length > 0 ? `
+                    <div class="app-features">
+                        ${app.technologies.slice(0, 4).map(tech => 
+                            `<span class="app-feature">${escapeHtml(tech)}</span>`
+                        ).join('')}
+                        ${app.technologies.length > 4 ? 
+                            `<span class="app-feature more">+${app.technologies.length - 4}</span>` 
                             : ''}
                     </div>
                 ` : ''}
                 
-                <!-- Statistics -->
-                <div class="website-stats">
-                    ${website.userBase ? `
-                        <div class="website-stat">
-                            <span class="website-stat-value">${website.userBase}</span>
-                            <span class="website-stat-label">Users</span>
-                        </div>
-                    ` : ''}
-                    ${website.pageViews ? `
-                        <div class="website-stat">
-                            <span class="website-stat-value">${formatNumber(website.pageViews)}</span>
-                            <span class="website-stat-label">Page Views</span>
-                        </div>
-                    ` : ''}
-                    ${website.conversionRate ? `
-                        <div class="website-stat">
-                            <span class="website-stat-value">${website.conversionRate}%</span>
-                            <span class="website-stat-label">Conversion</span>
-                        </div>
-                    ` : ''}
-                    ${website.loadTime ? `
-                        <div class="website-stat">
-                            <span class="website-stat-value">${website.loadTime}s</span>
-                            <span class="website-stat-label">Load Time</span>
-                        </div>
-                    ` : ''}
-                </div>
-                
-                <!-- Action Buttons -->
-                <div class="game-actions">
-                    <button class="btn btn-primary btn-view-website" 
-                            data-website-id="${website.id}"
-                            aria-label="Learn more about ${website.name}">
-                        <i class="fas fa-info-circle"></i>
-                        <span>Learn More</span>
-                    </button>
-                    ${website.repositoryUrl ? `
-                        <a href="${website.repositoryUrl}" 
-                           class="btn btn-secondary"
-                           target="_blank"
-                           rel="noopener noreferrer"
-                           aria-label="View ${website.name} source code on GitHub">
-                            <i class="fab fa-github"></i>
-                            <span>View Code</span>
+                <!-- App Actions -->
+                <div class="app-actions">
+                    <a href="app-detail.html?id=${app.id}" class="btn btn-secondary" aria-label="View details for ${escapeHtml(app.name)}">
+                        <i class="fas fa-info-circle" aria-hidden="true"></i>
+                        <span>Details</span>
+                    </a>
+                    ${app.storeUrl ? `
+                        <a href="${app.storeUrl}" class="btn btn-app" target="_blank" rel="noopener noreferrer" aria-label="Download ${escapeHtml(app.name)}">
+                            <i class="fas fa-download" aria-hidden="true"></i>
+                            <span>Download</span>
                         </a>
-                    ` : ''}
+                    ` : `
+                        <button class="btn btn-app" disabled aria-label="${escapeHtml(app.name)} coming soon">
+                            <i class="fas fa-clock" aria-hidden="true"></i>
+                            <span>Coming Soon</span>
+                        </button>
+                    `}
                 </div>
             </div>
         </div>
     `;
 }
 
-// ==========================================
-// 5. FILTERING SYSTEM
-// Setup and apply filters
-// ==========================================
-
 /**
- * Setup all filter controls
- * @returns {void}
+ * Get platform icon based on platform name
+ * @param {string} platform - Platform name
+ * @returns {string} Icon HTML
+ * @author Arsh Verma
  */
-function setupWebsiteFilters() {
-    console.log('🔧 Setting up website filters...');
-    
-    // Initialize each filter type
-    setupCategoryFilter();
-    setupStatusFilter();
-    setupSortFilter();
-    
-    console.log('✅ Filters initialized');
+function getPlatformIcon(platform) {
+    if (platform.includes('iOS') || platform.includes('iPhone')) {
+        return '<i class="fab fa-apple" aria-hidden="true"></i>';
+    } else if (platform.includes('Android')) {
+        return '<i class="fab fa-android" aria-hidden="true"></i>';
+    } else if (platform === 'Cross-Platform') {
+        return '<i class="fas fa-mobile-alt" aria-hidden="true"></i>';
+    }
+    return '<i class="fas fa-mobile-alt" aria-hidden="true"></i>';
 }
 
+// ==========================================
+// FILTER FUNCTIONALITY
+// ==========================================
+
 /**
- * Setup category filter dropdown
- * @returns {void}
+ * Setup filter controls and event listeners
+ * @author Arsh Verma
  */
-function setupCategoryFilter() {
+function setupAppFilters() {
+    const platformFilter = document.getElementById('platformFilter');
     const categoryFilter = document.getElementById('categoryFilter');
-    
-    if (!categoryFilter) return;
-    
-    // Get unique categories from websites
-    const categories = [...new Set(WEBSITES_STATE.allWebsites.map(website => website.category))];
-    
-    // Clear existing options except "All"
-    categoryFilter.innerHTML = '<option value="all">All Categories</option>';
-    
-    // Add category options dynamically
-    categories.forEach(category => {
-        const option = document.createElement('option');
-        option.value = category;
-        option.textContent = category;
-        categoryFilter.appendChild(option);
-    });
-    
-    // Add change event listener
-    categoryFilter.addEventListener('change', function() {
-        WEBSITES_STATE.currentFilters.category = this.value;
-        applyWebsiteFilters();
-        console.log('📂 Category filter changed:', this.value);
-    });
-}
-
-/**
- * Setup status filter dropdown
- * @returns {void}
- */
-function setupStatusFilter() {
     const statusFilter = document.getElementById('statusFilter');
     
-    if (!statusFilter) return;
+    // Platform Filter
+    if (platformFilter) {
+        platformFilter.addEventListener('change', function() {
+            currentFilters.platform = this.value;
+            const selectedText = this.options[this.selectedIndex].text;
+            applyAppFilters();
+            showNotification(`Filtered by platform: ${selectedText}`, 'info');
+            console.log('Platform filter changed:', this.value);
+        });
+    }
     
-    statusFilter.addEventListener('change', function() {
-        WEBSITES_STATE.currentFilters.status = this.value;
-        applyWebsiteFilters();
-        console.log('📊 Status filter changed:', this.value);
-    });
+    // Category Filter
+    if (categoryFilter) {
+        categoryFilter.addEventListener('change', function() {
+            currentFilters.category = this.value;
+            const selectedText = this.options[this.selectedIndex].text;
+            applyAppFilters();
+            showNotification(`Filtered by category: ${selectedText}`, 'info');
+            console.log('Category filter changed:', this.value);
+        });
+    }
+    
+    // Status Filter
+    if (statusFilter) {
+        statusFilter.addEventListener('change', function() {
+            currentFilters.status = this.value;
+            const selectedText = this.options[this.selectedIndex].text;
+            applyAppFilters();
+            showNotification(`Filtered by status: ${selectedText}`, 'info');
+            console.log('Status filter changed:', this.value);
+        });
+    }
+    
+    console.log('App filters setup complete');
 }
 
 /**
- * Setup sort filter dropdown
- * @returns {void}
+ * Apply all current filters to apps
+ * - Filters by platform (with smart matching)
+ * - Filters by category
+ * - Filters by status
+ * @author Arsh Verma
  */
-function setupSortFilter() {
-    const sortFilter = document.getElementById('sortFilter');
-    
-    if (!sortFilter) return;
-    
-    sortFilter.addEventListener('change', function() {
-        WEBSITES_STATE.currentFilters.sort = this.value;
-        applyWebsiteFilters();
-        console.log('🔄 Sort changed:', this.value);
-    });
-}
-
-/**
- * Apply all active filters to websites
- * @returns {void}
- */
-function applyWebsiteFilters() {
-    let filtered = [...WEBSITES_STATE.allWebsites];
-    
-    // Apply category filter
-    if (WEBSITES_STATE.currentFilters.category !== 'all') {
-        filtered = filtered.filter(website => 
-            website.category === WEBSITES_STATE.currentFilters.category
-        );
+function applyAppFilters() {
+    try {
+        let filteredApps = [...allApps];
+        
+        // Apply platform filter with smart matching
+        if (currentFilters.platform !== 'all') {
+            filteredApps = filteredApps.filter(app => {
+                const appPlatform = app.platform || '';
+                
+                if (currentFilters.platform === 'Cross-Platform') {
+                    return appPlatform === 'Cross-Platform' || 
+                           (appPlatform.includes('iOS') && appPlatform.includes('Android'));
+                } else if (currentFilters.platform === 'iOS') {
+                    return appPlatform.includes('iOS') || appPlatform === 'Cross-Platform';
+                } else if (currentFilters.platform === 'Android') {
+                    return appPlatform.includes('Android') || appPlatform === 'Cross-Platform';
+                }
+                
+                return appPlatform === currentFilters.platform;
+            });
+            console.log(`Platform filter applied: ${filteredApps.length} results`);
+        }
+        
+        // Apply category filter
+        if (currentFilters.category !== 'all') {
+            filteredApps = filteredApps.filter(app => 
+                app.category === currentFilters.category
+            );
+            console.log(`Category filter applied: ${filteredApps.length} results`);
+        }
+        
+        // Apply status filter
+        if (currentFilters.status !== 'all') {
+            filteredApps = filteredApps.filter(app => 
+                app.status === currentFilters.status
+            );
+            console.log(`Status filter applied: ${filteredApps.length} results`);
+        }
+        
+        // Update current apps and display
+        currentApps = filteredApps;
+        displayApps(filteredApps);
+        
+        console.log(`Filters applied. Showing ${filteredApps.length} of ${allApps.length} apps`);
+    } catch (error) {
+        console.error('Error applying filters:', error);
+        showNotification('Error applying filters', 'error');
     }
-    
-    // Apply status filter
-    if (WEBSITES_STATE.currentFilters.status !== 'all') {
-        filtered = filtered.filter(website => 
-            website.status === WEBSITES_STATE.currentFilters.status
-        );
-    }
-    
-    // Apply search filter (if implemented)
-    if (WEBSITES_STATE.currentFilters.search) {
-        const searchTerm = WEBSITES_STATE.currentFilters.search.toLowerCase();
-        filtered = filtered.filter(website => 
-            website.name.toLowerCase().includes(searchTerm) ||
-            (website.overview && website.overview.toLowerCase().includes(searchTerm)) ||
-            (website.description && website.description.toLowerCase().includes(searchTerm)) ||
-            website.category.toLowerCase().includes(searchTerm) ||
-            (website.technologies && website.technologies.some(tech => 
-                tech.toLowerCase().includes(searchTerm)
-            ))
-        );
-    }
-    
-    // Apply sorting
-    filtered = sortWebsites(filtered, WEBSITES_STATE.currentFilters.sort);
-    
-    // Update state and display
-    WEBSITES_STATE.filteredWebsites = filtered;
-    displayWebsites(filtered);
-    
-    console.log(`🎯 Filters applied: ${filtered.length} websites shown`);
 }
 
 /**
  * Reset all filters to default values
- * @returns {void}
+ * @author Arsh Verma
  */
-function resetWebsiteFilters() {
-    console.log('🔄 Resetting all filters...');
-    
-    // Reset state
-    WEBSITES_STATE.currentFilters = {
-        category: 'all',
-        status: 'all',
-        sort: 'newest',
-        search: ''
-    };
-    
-    // Reset UI elements
-    const categoryFilter = document.getElementById('categoryFilter');
-    const statusFilter = document.getElementById('statusFilter');
-    const sortFilter = document.getElementById('sortFilter');
-    
-    if (categoryFilter) categoryFilter.value = 'all';
-    if (statusFilter) statusFilter.value = 'all';
-    if (sortFilter) sortFilter.value = 'newest';
-    
-    // Reapply filters (will show all websites)
-    applyWebsiteFilters();
-    
-    showNotification('Filters reset successfully', 'success');
-}
-
-// ==========================================
-// 6. SORTING FUNCTIONS
-// Sort websites by various criteria
-// ==========================================
-
-/**
- * Sort websites array by specified criteria
- * @param {Array} websites - Array of websites to sort
- * @param {string} sortBy - Sort criteria
- * @returns {Array} Sorted array
- */
-function sortWebsites(websites, sortBy) {
-    const sorted = [...websites];
-    
-    switch (sortBy) {
-        case 'newest':
-            return sorted.sort((a, b) => 
-                new Date(b.launchDate || 0) - new Date(a.launchDate || 0)
-            );
-            
-        case 'oldest':
-            return sorted.sort((a, b) => 
-                new Date(a.launchDate || 0) - new Date(b.launchDate || 0)
-            );
-            
-        case 'rating':
-            return sorted.sort((a, b) => b.rating - a.rating);
-            
-        case 'users':
-            return sorted.sort((a, b) => 
-                parseUserBase(b.userBase || '0') - parseUserBase(a.userBase || '0')
-            );
-            
-        default:
-            return sorted;
+function resetAppFilters() {
+    try {
+        // Reset filter values
+        currentFilters = {
+            platform: 'all',
+            category: 'all',
+            status: 'all'
+        };
+        
+        // Reset select elements
+        const platformFilter = document.getElementById('platformFilter');
+        const categoryFilter = document.getElementById('categoryFilter');
+        const statusFilter = document.getElementById('statusFilter');
+        
+        if (platformFilter) platformFilter.value = 'all';
+        if (categoryFilter) categoryFilter.value = 'all';
+        if (statusFilter) statusFilter.value = 'all';
+        
+        // Clear search if exists
+        const searchInput = document.getElementById('appSearch');
+        if (searchInput) searchInput.value = '';
+        
+        // Reapply filters (will show all)
+        applyAppFilters();
+        
+        showNotification('Filters reset successfully', 'success');
+        console.log('Filters reset to defaults');
+    } catch (error) {
+        console.error('Error resetting filters:', error);
+        showNotification('Error resetting filters', 'error');
     }
 }
 
 // ==========================================
-// 7. CARD INTERACTIONS
-// Setup interactive elements on cards
+// EVENT LISTENERS
 // ==========================================
 
 /**
- * Setup event listeners for website cards
- * @returns {void}
+ * Setup additional event listeners
+ * - Search functionality
+ * - Scroll effects
+ * - Keyboard shortcuts
+ * @author Arsh Verma
  */
-function setupWebsiteCardListeners() {
-    // View Details Buttons
-    document.querySelectorAll('.btn-view-details, .btn-view-website').forEach(button => {
-        button.addEventListener('click', function(e) {
-            e.stopPropagation();
-            const websiteId = this.getAttribute('data-website-id');
-            viewWebsiteDetails(websiteId);
-        });
-    });
+function setupAppEventListeners() {
+    // Search functionality
+    setupSearchFunctionality();
     
-    // Visit Site Buttons
-    document.querySelectorAll('.btn-visit-site').forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.stopPropagation();
-            // Let the natural link behavior happen
-        });
-    });
+    // Keyboard shortcuts
+    setupKeyboardShortcuts();
     
-    // Card Click (entire card clickable)
-    document.querySelectorAll('.website-card').forEach(card => {
-        // Click handler
-        card.addEventListener('click', function(e) {
-            // Don't trigger if clicking on buttons or links
-            if (!e.target.closest('button') && !e.target.closest('a')) {
-                const websiteId = this.getAttribute('data-website-id');
-                viewWebsiteDetails(websiteId);
+    // Scroll to top button
+    setupScrollToTop();
+    
+    console.log('Event listeners setup complete');
+}
+
+/**
+ * Setup search functionality with debouncing
+ * @author Arsh Verma
+ */
+function setupSearchFunctionality() {
+    const searchInput = document.getElementById('appSearch');
+    
+    if (searchInput) {
+        searchInput.addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase().trim();
+            
+            // Clear previous timeout
+            if (searchTimeout) {
+                clearTimeout(searchTimeout);
+            }
+            
+            // Set new timeout for debouncing
+            searchTimeout = setTimeout(() => {
+                console.log('Searching for:', searchTerm);
+                
+                // If search is empty, apply normal filters
+                if (searchTerm === '') {
+                    applyAppFilters();
+                    return;
+                }
+                
+                // Search in app properties
+                const searchResults = allApps.filter(app => {
+                    const searchableText = [
+                        app.name,
+                        app.description,
+                        app.overview,
+                        app.category,
+                        app.platform,
+                        app.status,
+                        ...(app.technologies || []),
+                        ...(app.features || [])
+                    ].join(' ').toLowerCase();
+                    
+                    return searchableText.includes(searchTerm);
+                });
+                
+                currentApps = searchResults;
+                displayApps(searchResults);
+                
+                console.log(`Search results: ${searchResults.length} apps found`);
+                if (searchResults.length > 0) {
+                    showNotification(`Found ${searchResults.length} app(s)`, 'success');
+                }
+            }, 300);
+        });
+    }
+}
+
+/**
+ * Setup keyboard shortcuts
+ * @author Arsh Verma
+ */
+function setupKeyboardShortcuts() {
+    document.addEventListener('keydown', function(e) {
+        // Don't trigger if user is typing in an input
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') {
+            return;
+        }
+        
+        switch(e.key) {
+            case 'r':
+            case 'R':
+                // Reset filters with Ctrl/Cmd + R
+                if (e.ctrlKey || e.metaKey) {
+                    e.preventDefault();
+                    resetAppFilters();
+                }
+                break;
+                
+            case '/':
+                // Focus search
+                if (!e.ctrlKey && !e.metaKey) {
+                    e.preventDefault();
+                    const searchInput = document.getElementById('appSearch');
+                    if (searchInput) searchInput.focus();
+                }
+                break;
+                
+            case 'Escape':
+                // Clear search
+                const searchInput = document.getElementById('appSearch');
+                if (searchInput && searchInput.value) {
+                    searchInput.value = '';
+                    searchInput.dispatchEvent(new Event('input'));
+                }
+                break;
+        }
+    });
+}
+
+/**
+ * Setup scroll to top functionality
+ * @author Arsh Verma
+ */
+function setupScrollToTop() {
+    const backToTopBtn = document.getElementById('backToTop');
+    
+    if (backToTopBtn) {
+        // Show/hide button based on scroll position
+        window.addEventListener('scroll', function() {
+            if (window.pageYOffset > 300) {
+                backToTopBtn.classList.add('visible');
+            } else {
+                backToTopBtn.classList.remove('visible');
             }
         });
         
-        // Keyboard support
+        // Scroll to top on click
+        backToTopBtn.addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    }
+}
+
+// ==========================================
+// APP CARD INTERACTIONS
+// ==========================================
+
+/**
+ * Setup interactive behaviors for app cards
+ * - Click to view details
+ * - Hover effects
+ * - Keyboard navigation
+ * @author Arsh Verma
+ */
+function setupAppCardListeners() {
+    const cards = document.querySelectorAll('.app-card');
+    
+    cards.forEach(card => {
+        // Click to view details
+        card.addEventListener('click', function(e) {
+            // Don't navigate if clicking on a button or link
+            if (e.target.closest('a, button')) {
+                return;
+            }
+            
+            const appId = parseInt(this.getAttribute('data-app-id'));
+            if (appId) {
+                viewAppDetails(appId);
+            }
+        });
+        
+        // Keyboard navigation
         card.addEventListener('keydown', function(e) {
             if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault();
-                const websiteId = this.getAttribute('data-website-id');
-                viewWebsiteDetails(websiteId);
+                const appId = parseInt(this.getAttribute('data-app-id'));
+                if (appId) {
+                    viewAppDetails(appId);
+                }
             }
         });
-        
-        // Hover effects (desktop only)
-        if (window.innerWidth > 768) {
-            card.addEventListener('mouseenter', function() {
-                this.style.transform = 'translateY(-8px)';
-            });
-            
-            card.addEventListener('mouseleave', function() {
-                this.style.transform = 'translateY(0)';
-            });
-        }
     });
     
-    console.log('✅ Website card listeners attached');
+    console.log(`Setup interactions for ${cards.length} app cards`);
 }
 
-// ==========================================
-// 8. EVENT LISTENERS
-// Global event listeners
-// ==========================================
-
 /**
- * Setup global event listeners
- * @returns {void}
+ * Navigate to app detail page
+ * @param {number} appId - ID of the app to view
+ * @author Arsh Verma
  */
-function setupWebsiteEventListeners() {
-    // Window resize handler (debounced)
-    window.addEventListener('resize', debounce(function() {
-        setupWebsiteCardListeners();
-    }, 250));
-    
-    // Keyboard shortcuts
-    document.addEventListener('keydown', function(e) {
-        // Press 'R' to reset filters
-        if ((e.key === 'r' || e.key === 'R') && !e.ctrlKey && !e.metaKey) {
-            if (!e.target.matches('input, textarea, select')) {
-                e.preventDefault();
-                resetWebsiteFilters();
-            }
-        }
-    });
-    
-    console.log('✅ Event listeners initialized');
-}
-
-// ==========================================
-// 9. NAVIGATION FUNCTIONS
-// Handle page navigation
-// ==========================================
-
-/**
- * Navigate to website detail page
- * @param {string|number} websiteId - Website ID
- * @returns {void}
- */
-function viewWebsiteDetails(websiteId) {
-    console.log('🌐 Viewing website details:', websiteId);
-    
-    if (!websiteId) {
-        showNotification('Invalid website ID', 'error');
+function viewAppDetails(appId) {
+    if (!appId || isNaN(appId)) {
+        console.error('Invalid app ID:', appId);
+        showNotification('Invalid app', 'error');
         return;
     }
     
-    // Navigate to website detail page
-    window.location.href = `website-detail.html?id=${websiteId}`;
+    console.log('Navigating to app details:', appId);
+    window.location.href = `app-detail.html?id=${appId}`;
 }
 
 // ==========================================
-// 10. STATISTICS & ANALYTICS
-// Update header statistics
+// HEADER STATISTICS
 // ==========================================
 
 /**
- * Update header statistics display
- * @returns {void}
+ * Update header statistics based on app data
+ * - Total apps count
+ * - Average rating
+ * - Total downloads
+ * @author Arsh Verma
  */
 function updateHeaderStats() {
-    const allWebsites = WEBSITES_STATE.allWebsites;
-    
-    if (allWebsites.length === 0) return;
-    
-    // Calculate statistics
-    const totalWebsites = allWebsites.length;
-    const averageRating = (
-        allWebsites.reduce((sum, website) => sum + website.rating, 0) / totalWebsites
-    ).toFixed(1);
-    const totalUsers = allWebsites.reduce(
-        (sum, website) => sum + parseUserBase(website.userBase || '0'), 0
-    );
-    
-    // Update UI
-    const statNumbers = document.querySelectorAll('.header-stats .stat-number');
-    
-    if (statNumbers.length >= 3) {
-        statNumbers[0].textContent = `${totalWebsites}+`;
-        statNumbers[1].textContent = averageRating;
-        statNumbers[2].textContent = formatNumber(totalUsers) + '+';
-    }
-    
-    console.log('📊 Stats updated:', { totalWebsites, averageRating, totalUsers });
-}
-
-// ==========================================
-// 11. ANIMATIONS
-// Handle card animations
-// ==========================================
-
-/**
- * Animate website cards entrance
- * @returns {void}
- */
-function animateWebsiteCards() {
-    const cards = document.querySelectorAll('.website-card');
-    
-    cards.forEach((card, index) => {
-        // Set initial state
-        card.style.opacity = '0';
-        card.style.transform = 'translateY(30px)';
+    try {
+        const totalApps = allApps.length;
         
-        // Animate with stagger
-        setTimeout(() => {
-            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-            card.style.opacity = '1';
-            card.style.transform = 'translateY(0)';
-        }, index * WEBSITES_STATE.animationDelay);
-    });
+        // Calculate average rating (only from live apps with ratings)
+        const ratedApps = allApps.filter(app => app.rating > 0);
+        const averageRating = ratedApps.length > 0 
+            ? (ratedApps.reduce((sum, app) => sum + app.rating, 0) / ratedApps.length).toFixed(1)
+            : '0.0';
+        
+        // Calculate total downloads
+        const totalDownloads = allApps.reduce((sum, app) => 
+            sum + parseDownloadCount(app.downloadCount || '0'), 0
+        );
+        
+        // Update stat displays
+        const statNumbers = document.querySelectorAll('.header-stats .stat-number');
+        if (statNumbers.length >= 3) {
+            statNumbers[0].textContent = totalApps > 0 ? `${totalApps}+` : '0';
+            statNumbers[1].textContent = averageRating;
+            statNumbers[2].textContent = formatNumber(totalDownloads) + '+';
+        }
+        
+        console.log('Header stats updated:', { totalApps, averageRating, totalDownloads });
+    } catch (error) {
+        console.error('Error updating header stats:', error);
+    }
 }
 
 /**
- * Hide loading screen with fade effect
- * @returns {void}
+ * Update results count display
+ * @param {number} count - Number of results
+ * @author Arsh Verma
  */
-function hideLoadingScreen() {
-    const loadingScreen = document.getElementById('loadingScreen');
-    
-    if (loadingScreen) {
-        loadingScreen.style.opacity = '0';
-        setTimeout(() => {
-            loadingScreen.style.display = 'none';
-        }, 500);
+function updateResultsCount(count) {
+    const resultsCount = document.getElementById('resultsCount');
+    if (resultsCount) {
+        resultsCount.textContent = `Showing ${count} of ${allApps.length} app${allApps.length !== 1 ? 's' : ''}`;
     }
 }
 
 // ==========================================
-// 12. UTILITY FUNCTIONS
-// Helper functions for data formatting
+// UTILITY FUNCTIONS
 // ==========================================
 
 /**
- * Generate star rating HTML
- * @param {number} rating - Rating value (0-5)
- * @returns {string} HTML string with star icons
+ * Parse download count string to number
+ * @param {string} downloadCount - Download count string (e.g., "50K+", "1.2M+")
+ * @returns {number} Parsed number value
+ * @author Arsh Verma
  */
-function generateStars(rating) {
-    const fullStars = Math.floor(rating);
-    const hasHalfStar = rating % 1 >= 0.5;
-    const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
-    
-    let html = '';
-    
-    // Full stars
-    for (let i = 0; i < fullStars; i++) {
-        html += '<i class="fas fa-star"></i>';
-    }
-    
-    // Half star
-    if (hasHalfStar) {
-        html += '<i class="fas fa-star-half-alt"></i>';
-    }
-    
-    // Empty stars
-    for (let i = 0; i < emptyStars; i++) {
-        html += '<i class="far fa-star"></i>';
-    }
-    
-    return html;
-}
-
-/**
- * Parse user base string to number
- * Handles K (thousands) and M (millions) suffixes
- * @param {string} userBase - User base string (e.g., "50K", "1.5M")
- * @returns {number} Numeric value
- */
-function parseUserBase(userBase) {
-    if (!userBase || typeof userBase !== 'string') return 0;
+function parseDownloadCount(downloadCount) {
+    if (!downloadCount || typeof downloadCount !== 'string') return 0;
     
     // Remove non-numeric characters except decimal point
-    const numStr = userBase.replace(/[^0-9.]/g, '');
+    const numStr = downloadCount.replace(/[^0-9.]/g, '');
     const num = parseFloat(numStr);
     
     if (isNaN(num)) return 0;
     
     // Check for K (thousands) or M (millions) suffix
-    const upperCase = userBase.toUpperCase();
-    if (upperCase.includes('M')) {
+    if (downloadCount.toUpperCase().includes('M')) {
         return num * 1000000;
-    } else if (upperCase.includes('K')) {
+    } else if (downloadCount.toUpperCase().includes('K')) {
         return num * 1000;
     }
     
@@ -780,12 +861,13 @@ function parseUserBase(userBase) {
 }
 
 /**
- * Format large numbers with K/M suffixes
+ * Format number with K/M suffix
  * @param {number} num - Number to format
- * @returns {string} Formatted string
+ * @returns {string} Formatted number string
+ * @author Arsh Verma
  */
 function formatNumber(num) {
-    if (!num) return '0';
+    if (typeof num !== 'number' || isNaN(num)) return '0';
     
     if (num >= 1000000) {
         return (num / 1000000).toFixed(1) + 'M';
@@ -797,210 +879,351 @@ function formatNumber(num) {
 }
 
 /**
- * Format date string to readable format
+ * Generate star rating HTML
+ * @param {number} rating - Rating value (0-5)
+ * @returns {string} HTML string for stars
+ * @author Arsh Verma
+ */
+function generateStars(rating) {
+    if (typeof rating !== 'number' || isNaN(rating)) rating = 0;
+    
+    const fullStars = Math.floor(rating);
+    const hasHalfStar = (rating % 1) >= 0.5;
+    const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+    
+    let starsHTML = '';
+    
+    // Full stars
+    for (let i = 0; i < fullStars; i++) {
+        starsHTML += '<i class="fas fa-star" aria-hidden="true"></i>';
+    }
+    
+    // Half star
+    if (hasHalfStar) {
+        starsHTML += '<i class="fas fa-star-half-alt" aria-hidden="true"></i>';
+    }
+    
+    // Empty stars
+    for (let i = 0; i < emptyStars; i++) {
+        starsHTML += '<i class="far fa-star" aria-hidden="true"></i>';
+    }
+    
+    return starsHTML;
+}
+
+/**
+ * Format date to readable string
  * @param {string} dateString - ISO date string
  * @returns {string} Formatted date (e.g., "Jan 2024")
+ * @author Arsh Verma
  */
 function formatDate(dateString) {
     if (!dateString) return 'N/A';
     
-    const date = new Date(dateString);
-    
-    if (isNaN(date.getTime())) return 'N/A';
-    
-    const options = { year: 'numeric', month: 'short' };
-    return date.toLocaleDateString('en-US', options);
+    try {
+        const date = new Date(dateString);
+        if (isNaN(date.getTime())) return 'Invalid Date';
+        
+        return date.toLocaleDateString('en-US', { 
+            year: 'numeric', 
+            month: 'short'
+        });
+    } catch (error) {
+        console.error('Error formatting date:', error);
+        return 'Invalid Date';
+    }
 }
 
 /**
- * Debounce function to limit execution rate
- * @param {Function} func - Function to debounce
- * @param {number} wait - Wait time in milliseconds
- * @returns {Function} Debounced function
+ * Truncate text to specified length
+ * @param {string} text - Text to truncate
+ * @param {number} maxLength - Maximum length
+ * @returns {string} Truncated text
+ * @author Arsh Verma
  */
-function debounce(func, wait) {
-    let timeout;
-    return function executedFunction(...args) {
-        const later = () => {
-            clearTimeout(timeout);
-            func(...args);
-        };
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
-    };
+function truncateText(text, maxLength) {
+    if (!text || typeof text !== 'string') return '';
+    if (text.length <= maxLength) return text;
+    
+    return text.substring(0, maxLength).trim() + '...';
 }
 
 /**
- * Show notification to user
+ * Escape HTML special characters
+ * Prevents XSS attacks
+ * @param {string} text - Text to escape
+ * @returns {string} Escaped text
+ * @author Arsh Verma
+ */
+function escapeHtml(text) {
+    if (typeof text !== 'string') return '';
+    
+    const map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+    };
+    
+    return text.replace(/[&<>"']/g, m => map[m]);
+}
+
+/**
+ * Show notification toast
  * @param {string} message - Notification message
- * @param {string} type - Notification type (success, error, warning, info)
- * @returns {void}
+ * @param {string} type - Type: 'success', 'error', 'info', 'warning'
+ * @author Arsh Verma
  */
 function showNotification(message, type = 'info') {
-    // Use global notification function if available
-    if (typeof window.showNotification === 'function') {
-        window.showNotification(message, type);
-        return;
+    try {
+        // Check if utils.js has showNotification
+        if (typeof window.showNotification === 'function') {
+            window.showNotification(message, type);
+            return;
+        }
+        
+        // Fallback notification system
+        const notification = document.createElement('div');
+        notification.className = 'notification-toast';
+        notification.setAttribute('role', 'alert');
+        notification.setAttribute('aria-live', 'polite');
+        
+        let backgroundColor, icon;
+        switch (type) {
+            case 'error':
+                backgroundColor = '#dc3545';
+                icon = '<i class="fas fa-exclamation-circle" aria-hidden="true"></i>';
+                break;
+            case 'success':
+                backgroundColor = '#22C55E';
+                icon = '<i class="fas fa-check-circle" aria-hidden="true"></i>';
+                break;
+            case 'warning':
+                backgroundColor = '#ffc107';
+                icon = '<i class="fas fa-exclamation-triangle" aria-hidden="true"></i>';
+                break;
+            case 'info':
+            default:
+                backgroundColor = '#17a2b8';
+                icon = '<i class="fas fa-info-circle" aria-hidden="true"></i>';
+                break;
+        }
+        
+        notification.style.cssText = `
+            position: fixed;
+            top: 6rem;
+            right: 2rem;
+            padding: 1rem 1.5rem;
+            background: ${backgroundColor};
+            color: white;
+            border-radius: 12px;
+            z-index: 10000;
+            font-weight: 600;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            animation: slideInRight 0.3s ease;
+            max-width: 400px;
+        `;
+        
+        notification.innerHTML = `${icon}<span>${escapeHtml(message)}</span>`;
+        document.body.appendChild(notification);
+        
+        // Add animation styles if not present
+        if (!document.getElementById('notification-animations')) {
+            const style = document.createElement('style');
+            style.id = 'notification-animations';
+            style.textContent = `
+                @keyframes slideInRight {
+                    from {
+                        transform: translateX(400px);
+                        opacity: 0;
+                    }
+                    to {
+                        transform: translateX(0);
+                        opacity: 1;
+                    }
+                }
+                @keyframes slideOutRight {
+                    from {
+                        transform: translateX(0);
+                        opacity: 1;
+                    }
+                    to {
+                        transform: translateX(400px);
+                        opacity: 0;
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+        
+        setTimeout(() => {
+            notification.style.animation = 'slideOutRight 0.3s ease';
+            setTimeout(() => notification.remove(), 300);
+        }, 3000);
+    } catch (error) {
+        console.error('Error showing notification:', error);
+    }
+}
+
+// ==========================================
+// GLOBAL FUNCTION EXPORTS
+// Make functions available globally
+// @author Arsh Verma
+// ==========================================
+window.initializeAppsPage = initializeAppsPage;
+window.resetAppFilters = resetAppFilters;
+window.viewAppDetails = viewAppDetails;
+window.applyAppFilters = applyAppFilters;
+
+// ==========================================
+// AUTO-INITIALIZATION
+// Initialize when DOM is ready
+// @author Arsh Verma
+// ==========================================
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeAppsPage);
+    console.log('Waiting for DOM to load...');
+} else {
+    initializeAppsPage();
+}
+
+// ==========================================
+// DEBUG HELPERS
+// Development and debugging utilities
+// @author Arsh Verma
+// ==========================================
+
+/**
+ * Debug function to check apps state
+ * Call window.debugAppsState() in console
+ */
+window.debugAppsState = function() {
+    console.log('=== APPS STATE DEBUG ===');
+    console.log('All Apps:', allApps);
+    console.log('Current Apps:', currentApps);
+    console.log('Current Filters:', currentFilters);
+    console.log('Total Count:', allApps.length);
+    console.log('Filtered Count:', currentApps.length);
+    console.log('========================');
+    return {
+        allApps,
+        currentApps,
+        currentFilters,
+        totalCount: allApps.length,
+        filteredCount: currentApps.length
+    };
+};
+
+/**
+ * Debug function to test filters
+ * Call window.testFilters() in console
+ */
+window.testFilters = function() {
+    console.log('=== TESTING FILTERS ===');
+    
+    // Test platform filter
+    console.log('Testing platform filter...');
+    currentFilters.platform = 'iOS';
+    applyAppFilters();
+    console.log('iOS apps:', currentApps.length);
+    
+    // Reset
+    resetAppFilters();
+    
+    // Test category filter
+    console.log('Testing category filter...');
+    currentFilters.category = 'Productivity';
+    applyAppFilters();
+    console.log('Productivity apps:', currentApps.length);
+    
+    // Reset
+    resetAppFilters();
+    
+    console.log('Filter tests complete!');
+    console.log('========================');
+};
+
+/**
+ * Performance monitoring
+ */
+window.addEventListener('load', function() {
+    if (window.performance) {
+        const perfData = window.performance.timing;
+        const pageLoadTime = perfData.loadEventEnd - perfData.navigationStart;
+        const domReadyTime = perfData.domContentLoadedEventEnd - perfData.navigationStart;
+        
+        console.log('=== PERFORMANCE METRICS ===');
+        console.log('Page Load Time:', pageLoadTime + 'ms');
+        console.log('DOM Ready Time:', domReadyTime + 'ms');
+        console.log('===========================');
+    }
+});
+
+// Log initialization
+console.log('apps.js loaded successfully');
+console.log('Author: Arsh Verma');
+console.log('Version: 1.0.0');
+console.log('Available functions:', [
+    'initializeAppsPage', 
+    'resetAppFilters', 
+    'viewAppDetails', 
+    'applyAppFilters', 
+    'debugAppsState',
+    'testFilters'
+]);
+
+// ==========================================
+// ERROR HANDLING
+// Global error handler for apps page
+// @author Arsh Verma
+// ==========================================
+window.addEventListener('error', function(event) {
+    console.error('Global error caught:', event.error);
+    
+    // Only show notification for critical errors
+    if (event.error && event.error.message) {
+        const message = event.error.message;
+        if (message.includes('apps') || message.includes('filter')) {
+            showNotification('An error occurred. Please refresh the page.', 'error');
+        }
+    }
+});
+
+// ==========================================
+// UNLOAD HANDLER
+// Cleanup when leaving page
+// @author Arsh Verma
+// ==========================================
+window.addEventListener('beforeunload', function() {
+    // Clear any pending timeouts
+    if (searchTimeout) {
+        clearTimeout(searchTimeout);
     }
     
-    // Fallback notification implementation
-    console.log(`[${type.toUpperCase()}] ${message}`);
-    
-    const notification = document.createElement('div');
-    notification.className = `notification ${type}`;
-    notification.style.cssText = `
-        position: fixed;
-        top: 100px;
-        right: 20px;
-        padding: 1rem 1.5rem;
-        background: ${getNotificationColor(type)};
-        color: white;
-        border-radius: 8px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        z-index: 10000;
-        font-weight: 500;
-        animation: slideInRight 0.3s ease;
-        max-width: 300px;
-    `;
-    notification.textContent = message;
-    
-    document.body.appendChild(notification);
-    
-    // Auto-remove after 3 seconds
-    setTimeout(() => {
-        notification.style.animation = 'slideOutRight 0.3s ease';
-        setTimeout(() => notification.remove(), 300);
-    }, 3000);
-}
+    console.log('Apps page unloading...');
+});
 
-/**
- * Get notification background color by type
- * @param {string} type - Notification type
- * @returns {string} Hex color code
- */
-function getNotificationColor(type) {
-    const colors = {
-        success: '#10B981',
-        error: '#EF4444',
-        warning: '#F59E0B',
-        info: '#3B82F6'
+// ==========================================
+// EXPORT FOR MODULE SYSTEMS (if needed)
+// @author Arsh Verma
+// ==========================================
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+        initializeAppsPage,
+        resetAppFilters,
+        viewAppDetails,
+        applyAppFilters,
+        getSampleApps
     };
-    return colors[type] || colors.info;
 }
 
 // ==========================================
-// 13. SAMPLE DATA FALLBACK
-// Fallback data when no external source available
-// ==========================================
-
-/**
- * Create sample websites for fallback
- * @returns {Array} Array of sample website objects
- */
-function createSampleWebsites() {
-    return [
-        {
-            id: 1,
-            name: "E-Shop Pro",
-            category: "E-commerce",
-            status: "Live",
-            rating: 4.9,
-            overview: "Comprehensive health tracking platform with AI-powered insights and analytics.",
-            launchDate: "2024-02-20",
-            userBase: "25K+",
-            pageViews: 180000,
-            conversionRate: 4.1,
-            loadTime: 2.1,
-            image: "https://via.placeholder.com/400x250/3B82F6/FFFFFF?text=HealthTrack+Plus",
-            technologies: ["Vue.js", "Python", "PostgreSQL", "Django", "Docker"],
-            liveUrl: "https://healthtrackplus.com",
-            repositoryUrl: "https://github.com/ArshVermaGit/healthtrack-plus"
-        },
-        {
-            id: 3,
-            name: "CloudSuite SaaS",
-            category: "SaaS Platform",
-            status: "In Development",
-            rating: 4.6,
-            overview: "All-in-one SaaS platform for business management and team collaboration.",
-            launchDate: "2024-06-30",
-            userBase: "10K+",
-            pageViews: 75000,
-            conversionRate: 2.8,
-            loadTime: 2.4,
-            image: "https://via.placeholder.com/400x250/3B82F6/FFFFFF?text=CloudSuite+SaaS",
-            technologies: ["Angular", "Java", "MySQL", "Spring Boot", "Azure"]
-        },
-        {
-            id: 4,
-            name: "FoodExpress",
-            category: "Food Delivery",
-            status: "Live",
-            rating: 4.7,
-            overview: "Fast and reliable food delivery service with real-time tracking and multiple payment options.",
-            launchDate: "2023-11-10",
-            userBase: "100K+",
-            pageViews: 500000,
-            conversionRate: 5.2,
-            loadTime: 1.5,
-            image: "https://via.placeholder.com/400x250/3B82F6/FFFFFF?text=FoodExpress",
-            technologies: ["React Native", "Express.js", "MongoDB", "Redis", "Firebase"],
-            liveUrl: "https://foodexpress.com",
-            repositoryUrl: "https://github.com/ArshVermaGit/foodexpress"
-        },
-        {
-            id: 5,
-            name: "EduLearn Pro",
-            category: "SaaS Platform",
-            status: "Live",
-            rating: 4.9,
-            overview: "Interactive learning platform with video courses, quizzes, and progress tracking.",
-            launchDate: "2023-09-05",
-            userBase: "75K+",
-            pageViews: 320000,
-            conversionRate: 4.8,
-            loadTime: 1.9,
-            image: "https://via.placeholder.com/400x250/3B82F6/FFFFFF?text=EduLearn+Pro",
-            technologies: ["Next.js", "Python", "PostgreSQL", "FastAPI", "AWS"],
-            liveUrl: "https://edulearnpro.com",
-            repositoryUrl: "https://github.com/ArshVermaGit/edulearn-pro"
-        },
-        {
-            id: 6,
-            name: "FitLife Tracker",
-            category: "Health & Wellness",
-            status: "In Development",
-            rating: 4.4,
-            overview: "Advanced fitness tracking app with workout plans, nutrition guides, and community features.",
-            launchDate: "2024-08-15",
-            userBase: "5K+",
-            pageViews: 45000,
-            conversionRate: 3.5,
-            loadTime: 2.2,
-            image: "https://via.placeholder.com/400x250/3B82F6/FFFFFF?text=FitLife+Tracker",
-            technologies: ["Flutter", "Node.js", "MongoDB", "GraphQL", "Google Cloud"]
-        }
-    ];
-}
-
-// ==========================================
-// GLOBAL EXPORTS
-// Export functions for external use
-// ==========================================
-window.initializeWebsitesPage = initializeWebsitesPage;
-window.resetWebsiteFilters = resetWebsiteFilters;
-window.viewWebsiteDetails = viewWebsiteDetails;
-window.applyWebsiteFilters = applyWebsiteFilters;
-
-// ==========================================
-// AUTO-INITIALIZE CONFIRMATION
-// Log successful script load
-// ==========================================
-console.log('✅ Websites.js loaded successfully');
-console.log('📝 Created by: Arsh Verma');
-console.log('🔧 Version: 1.0.0');
-
-// ==========================================
-// END OF SCRIPT
+// END OF FILE
+// apps.js - Complete Apps Portfolio JavaScript
 // Author: Arsh Verma
+// Version: 1.0.0
 // ==========================================
