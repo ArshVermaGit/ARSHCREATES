@@ -11494,6 +11494,185 @@ html {
 }
 
 /* ==========================================
+   CERTIFICATES MANAGEMENT
+   ========================================== */
+.certificates-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.certificates-stats .stat-icon {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 5px 15px var(--shadow-color);
+}
+
+.certificates-stats .stat-icon.development {
+    background: linear-gradient(135deg, #3B82F6, #60A5FA);
+    color: #fff;
+}
+
+.certificates-stats .stat-icon.design {
+    background: linear-gradient(135deg, #EC4899, #F472B6);
+    color: #fff;
+}
+
+.certificates-stats .stat-icon.security {
+    background: linear-gradient(135deg, #10B981, #34D399);
+    color: #fff;
+}
+
+.certificates-stats .stat-icon.cloud {
+    background: linear-gradient(135deg, #8B5CF6, #A78BFA);
+    color: #fff;
+}
+
+.certificates-stats .stat-icon i {
+    font-size: 1.75rem;
+}
+
+.certificates-table-container {
+    background: var(--glass-bg);
+    backdrop-filter: blur(30px) saturate(180%);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    box-shadow: 0 5px 15px var(--shadow-color);
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+}
+
+.certificates-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: transparent;
+}
+
+.certificates-table th {
+    background: var(--glass-bg);
+    backdrop-filter: blur(30px) saturate(180%);
+    padding: 1.25rem 1.5rem;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: var(--text-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.certificates-table td {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 0.9rem;
+    color: var(--text-primary);
+}
+
+.certificates-table tbody tr {
+    transition: all var(--transition-base);
+    cursor: pointer;
+}
+
+.certificates-table tbody tr:hover {
+    background: rgba(59, 130, 246, 0.05);
+}
+
+.certificates-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.certificate-category {
+    padding: 0.4rem 0.8rem;
+    background: var(--glass-bg);
+    backdrop-filter: blur(30px) saturate(180%);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 3px 10px var(--shadow-color);
+}
+
+.certificate-category.development {
+    background: linear-gradient(135deg, #3B82F6, #60A5FA);
+    color: #fff;
+    border-color: #3B82F6;
+}
+
+.certificate-category.design {
+    background: linear-gradient(135deg, #EC4899, #F472B6);
+    color: #fff;
+    border-color: #EC4899;
+}
+
+.certificate-category.security {
+    background: linear-gradient(135deg, #10B981, #34D399);
+    color: #fff;
+    border-color: #10B981;
+}
+
+.certificate-category.cloud {
+    background: linear-gradient(135deg, #8B5CF6, #A78BFA);
+    color: #fff;
+    border-color: #8B5CF6;
+}
+
+/* Responsive design for certificates */
+@media (max-width: 992px) {
+    .certificates-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .certificates-table-container {
+        overflow-x: auto;
+    }
+    
+    .certificates-table {
+        min-width: 800px;
+    }
+}
+
+@media (max-width: 768px) {
+    .certificates-stats {
+        grid-template-columns: 1fr;
+    }
+    
+    .certificates-stats .stat-icon {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .certificates-stats .stat-icon i {
+        font-size: 1.5rem;
+    }
+    
+    .certificates-table th,
+    .certificates-table td {
+        padding: 1rem 1.25rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .certificate-actions {
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+    
+    .certificate-actions button {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* ==========================================
    TESTIMONIALS MANAGEMENT
    ========================================== */
 .testimonials-list {
