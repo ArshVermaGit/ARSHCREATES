@@ -3,27 +3,38 @@
 <head>
     <!-- ==========================================
          META TAGS & SEO
+         Author: Arsh Verma
+         Version: 1.0.0
+         Description: Mobile Apps Portfolio Page
          ========================================== -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Explore Arsh Verma's portfolio of modern web solutions, including e-commerce platforms, SaaS applications, and custom websites built with cutting-edge technologies.">
-    <meta name="keywords" content="web development, portfolio, websites, React, Node.js, SaaS, e-commerce">
+    <meta name="description" content="Explore Arsh Verma's portfolio of innovative mobile applications for iOS, Android, and cross-platform solutions with modern technologies.">
+    <meta name="keywords" content="mobile apps, iOS development, Android apps, React Native, Flutter, app portfolio, Arsh Verma">
     <meta name="author" content="Arsh Verma">
     <meta name="robots" content="index, follow">
     
     <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="Websites Portfolio - Arsh Verma">
-    <meta property="og:description" content="Revolutionary web solutions with modern frameworks and exceptional user experiences">
+    <meta property="og:title" content="Mobile Apps Portfolio - Arsh Verma">
+    <meta property="og:description" content="Innovative mobile applications with cutting-edge technologies and exceptional user experiences">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://arshverma.com/websites.html">
+    <meta property="og:url" content="https://arshverma.com/apps.html">
+    <meta property="og:image" content="https://arshverma.com/assets/apps-preview.jpg">
     
-    <title>Websites Portfolio - Arsh Verma | Modern Web Solutions</title>
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Mobile Apps Portfolio - Arsh Verma">
+    <meta name="twitter:description" content="Innovative mobile applications with cutting-edge technologies">
+    
+    <title>Mobile Apps Portfolio - Arsh Verma | iOS & Android Development</title>
     
     <!-- ==========================================
          STYLESHEETS & FONTS
+         Author: Arsh Verma
          ========================================== -->
     <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/apps.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-Avb2QiuDEEvB4bZJYdft2mNjVShBftLdPG8FJ0V7irTLQ8Uo0qcPxh4Plq7G5tGm0rU+1SPhVotteLpBERwTkw==" crossorigin="anonymous" referrerpolicy="no-referrer">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -39,12 +50,12 @@
         <div class="loading-content">
             <div class="loading-logo">
                 <div class="logo-glow"></div>
-                <i class="fas fa-laptop-code"></i>
+                <i class="fas fa-mobile-alt"></i>
             </div>
             <div class="loading-bar-container">
                 <div class="loading-bar" id="loadingBar"></div>
             </div>
-            <div class="loading-text" id="loadingText">Loading Websites Portfolio...</div>
+            <div class="loading-text" id="loadingText">Loading Apps Portfolio...</div>
         </div>
     </div>
 
@@ -69,8 +80,8 @@
                     <li><a href="index.html" class="nav-link">Home</a></li>
                     <li><a href="index.html#about" class="nav-link">About</a></li>
                     <li><a href="games.html" class="nav-link">Games</a></li>
-                    <li><a href="websites.html" class="nav-link active" aria-current="page">Websites</a></li>
-                    <li><a href="apps.html" class="nav-link">Apps</a></li>
+                    <li><a href="websites.html" class="nav-link">Websites</a></li>
+                    <li><a href="apps.html" class="nav-link active" aria-current="page">Apps</a></li>
                     <li><a href="certificates.html" class="nav-link">Certificates</a></li>
                     <li><a href="testimonials.html" class="nav-link">Testimonials</a></li>
                     <li><a href="index.html#contact" class="nav-link">Contact</a></li>
@@ -104,22 +115,22 @@
     <section class="page-header">
         <div class="container">
             <div class="header-content">
-                <h1>Websites Portfolio</h1>
-                <p>Revolutionary web solutions with modern frameworks, responsive design, and exceptional user experiences</p>
+                <h1>Mobile Apps Portfolio</h1>
+                <p>Innovative mobile applications with cutting-edge technologies, intuitive design, and exceptional user experiences for iOS and Android</p>
                 
                 <!-- Header Statistics -->
                 <div class="header-stats">
                     <div class="stat">
-                        <span class="stat-number">25+</span>
-                        <span class="stat-label">Websites Developed</span>
+                        <span class="stat-number">15+</span>
+                        <span class="stat-label">Apps Developed</span>
                     </div>
                     <div class="stat">
-                        <span class="stat-number">4.8</span>
+                        <span class="stat-number">4.7</span>
                         <span class="stat-label">Average Rating</span>
                     </div>
                     <div class="stat">
-                        <span class="stat-number">100K+</span>
-                        <span class="stat-label">Users</span>
+                        <span class="stat-number">500K+</span>
+                        <span class="stat-label">Total Downloads</span>
                     </div>
                 </div>
             </div>
@@ -128,21 +139,46 @@
 
     <!-- ==========================================
          FILTER SECTION
-         Dynamic filtering controls for websites
+         Dynamic filtering controls for apps
          Author: Arsh Verma
          ========================================== -->
     <section class="section filter-section">
         <div class="container">
             <div class="filter-container">
+                <!-- Search Bar -->
+                <div class="filter-group">
+                    <label for="appSearch">Search Apps</label>
+                    <input type="text" 
+                           id="appSearch" 
+                           class="search-input" 
+                           placeholder="Search by name, features, or technology..." 
+                           aria-label="Search apps">
+                </div>
+                
+                <!-- Platform Filter -->
+                <div class="filter-group">
+                    <label for="platformFilter">Platform</label>
+                    <select id="platformFilter" class="filter-select" aria-label="Filter by platform">
+                        <option value="all">All Platforms</option>
+                        <option value="iOS">iOS</option>
+                        <option value="Android">Android</option>
+                        <option value="Cross-Platform">Cross-Platform</option>
+                    </select>
+                </div>
+                
                 <!-- Category Filter -->
                 <div class="filter-group">
                     <label for="categoryFilter">Category</label>
                     <select id="categoryFilter" class="filter-select" aria-label="Filter by category">
                         <option value="all">All Categories</option>
+                        <option value="Productivity">Productivity</option>
+                        <option value="Social">Social</option>
                         <option value="E-commerce">E-commerce</option>
-                        <option value="Health & Wellness">Health & Wellness</option>
-                        <option value="SaaS Platform">SaaS Platform</option>
-                        <option value="Food Delivery">Food Delivery</option>
+                        <option value="Health & Fitness">Health & Fitness</option>
+                        <option value="Education">Education</option>
+                        <option value="Entertainment">Entertainment</option>
+                        <option value="Finance">Finance</option>
+                        <option value="Utilities">Utilities</option>
                     </select>
                 </div>
                 
@@ -153,55 +189,50 @@
                         <option value="all">All Status</option>
                         <option value="Live">Live</option>
                         <option value="In Development">In Development</option>
-                    </select>
-                </div>
-                
-                <!-- Sort Filter -->
-                <div class="filter-group">
-                    <label for="sortFilter">Sort By</label>
-                    <select id="sortFilter" class="filter-select" aria-label="Sort websites">
-                        <option value="newest">Newest First</option>
-                        <option value="oldest">Oldest First</option>
-                        <option value="rating">Highest Rating</option>
-                        <option value="users">Most Users</option>
+                        <option value="Beta">Beta</option>
                     </select>
                 </div>
                 
                 <!-- Reset Button -->
                 <div class="filter-group">
-                    <button class="btn btn-secondary" onclick="resetWebsiteFilters()" aria-label="Reset all filters">
-                        <i class="fas fa-redo"></i>
+                    <button class="btn btn-secondary" onclick="resetAppFilters()" aria-label="Reset all filters">
+                        <i class="fas fa-redo" aria-hidden="true"></i>
                         <span>Reset Filters</span>
                     </button>
                 </div>
+            </div>
+            
+            <!-- Results Count -->
+            <div class="results-info">
+                <p id="resultsCount" class="results-count">Showing all apps</p>
             </div>
         </div>
     </section>
 
     <!-- ==========================================
-         WEBSITES GRID SECTION
+         APPS GRID SECTION
          Main portfolio display area
          Author: Arsh Verma
          ========================================== -->
-    <section class="section websites-section">
+    <section class="section apps-section">
         <div class="container">
             <!-- Section Header -->
             <div class="section-header">
-                <h2 class="section-title">Featured Websites</h2>
-                <p class="section-subtitle">Explore my collection of modern web solutions and digital experiences</p>
+                <h2 class="section-title">Featured Mobile Apps</h2>
+                <p class="section-subtitle">Explore my collection of innovative mobile applications built with modern frameworks</p>
                 <div class="section-decoration">
                     <div class="decoration-line"></div>
-                    <i class="fas fa-laptop-code"></i>
+                    <i class="fas fa-mobile-alt" aria-hidden="true"></i>
                     <div class="decoration-line"></div>
                 </div>
             </div>
             
-            <!-- Websites Grid Container -->
-            <div class="portfolio-grid" id="websitesGrid">
+            <!-- Apps Grid Container -->
+            <div class="portfolio-grid" id="appsGrid" role="list">
                 <!-- Initial Loading State -->
-                <div class="loading-games">
-                    <i class="fas fa-spinner fa-spin"></i>
-                    <p>Loading websites...</p>
+                <div class="loading-apps">
+                    <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                    <p>Loading apps...</p>
                 </div>
             </div>
         </div>
@@ -215,11 +246,11 @@
     <section class="section cta-section">
         <div class="container">
             <div class="cta-content">
-                <h2>Ready to Build Your Website?</h2>
-                <p>Let's create an exceptional web experience that exceeds your expectations</p>
+                <h2>Ready to Build Your Mobile App?</h2>
+                <p>Let's create an exceptional mobile experience that delights your users and grows your business</p>
                 <a href="index.html#contact" class="btn btn-primary btn-glow">
-                    <i class="fas fa-code"></i>
-                    <span>Start Web Project</span>
+                    <i class="fas fa-rocket" aria-hidden="true"></i>
+                    <span>Start App Project</span>
                 </a>
             </div>
         </div>
@@ -298,7 +329,7 @@
                 </div>
                 <div class="footer-actions">
                     <a href="admin.html" class="admin-link">
-                        <i class="fas fa-cog"></i>
+                        <i class="fas fa-cog" aria-hidden="true"></i>
                         <span>Admin Panel</span>
                     </a>
                 </div>
@@ -312,7 +343,7 @@
          Author: Arsh Verma
          ========================================== -->
     <button class="back-to-top" id="backToTop" aria-label="Scroll back to top">
-        <i class="fas fa-chevron-up"></i>
+        <i class="fas fa-chevron-up" aria-hidden="true"></i>
     </button>
 
     <!-- ==========================================
@@ -320,7 +351,7 @@
          For displaying user notifications
          Author: Arsh Verma
          ========================================== -->
-    <div id="notificationContainer"></div>
+    <div id="notificationContainer" aria-live="polite" aria-atomic="true"></div>
 
     <!-- ==========================================
          JAVASCRIPT FILES
@@ -330,6 +361,6 @@
     <script src="js/utils.js"></script>
     <script src="js/data.js"></script>
     <script src="js/script.js"></script>
-    <script src="js/websites.js"></script>
+    <script src="js/apps.js"></script>
 </body>
 </html>
