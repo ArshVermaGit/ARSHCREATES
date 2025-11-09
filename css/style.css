@@ -2783,15 +2783,98 @@ select:focus-visible,
     }
 }
 
+/**
+ * ==========================================
+ * GAMES PORTFOLIO COMPLETE STYLES
+ * Author: Arsh Verma
+ * Purpose: Complete styles for games.html page
+ * Version: 1.0.0
+ * Last Updated: 2024
+ * ==========================================
+ */
+
 /* ==========================================
-   GAMES PORTFOLIO SPECIFIC STYLES
-   These styles only affect the games.html page
+   CSS VARIABLES & BASE STYLES
    ========================================== */
+:root {
+    /* Colors */
+    --accent-primary: #E4572E;
+    --accent-secondary: #FFC300;
+    --text-primary: #E4E7EB;
+    --text-secondary: #9CA3AF;
+    --bg-primary: #0f0f0f;
+    --bg-secondary: #1a1a1a;
+    --glass-bg: rgba(255, 255, 255, 0.05);
+    --border-color: rgba(255, 255, 255, 0.1);
+    --shadow-color: rgba(0, 0, 0, 0.2);
+    
+    /* Spacing */
+    --border-radius: 12px;
+    --border-radius-sm: 8px;
+    
+    /* Transitions */
+    --transition-base: 0.3s ease;
+    --transition-slow: 0.6s ease;
+    
+    /* Z-index */
+    --z-content: 10;
+}
+
+/* Container */
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.section {
+    padding: 4rem 0;
+}
+
+/* Button Base Styles */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.875rem 1.5rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    border-radius: var(--border-radius-sm);
+    border: none;
+    cursor: pointer;
+    transition: all var(--transition-base);
+    text-decoration: none;
+    font-family: inherit;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(228, 87, 46, 0.3);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(228, 87, 46, 0.4);
+}
+
+.btn-secondary {
+    background: var(--glass-bg);
+    backdrop-filter: blur(30px) saturate(180%);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+}
+
+.btn-secondary:hover {
+    border-color: var(--accent-primary);
+    background: rgba(228, 87, 46, 0.1);
+}
 
 /* ==========================================
    GAMES PAGE HEADER
+   Hero section with title and statistics
    ========================================== */
-body:has(.games-section) .page-header {
+.page-header {
     position: relative;
     overflow: hidden;
     background: linear-gradient(135deg, 
@@ -2802,15 +2885,16 @@ body:has(.games-section) .page-header {
     padding: 12rem 0 6rem;
 }
 
-body:has(.games-section) .header-content {
+.header-content {
     text-align: center;
     position: relative;
     z-index: var(--z-content);
     max-width: 800px;
     margin: 0 auto;
+    padding: 0 2rem;
 }
 
-body:has(.games-section) .header-content h1 {
+.header-content h1 {
     font-size: 4rem;
     font-weight: 800;
     margin-bottom: 1.5rem;
@@ -2821,15 +2905,17 @@ body:has(.games-section) .header-content h1 {
     line-height: 1.1;
 }
 
-body:has(.games-section) .header-content p {
+.header-content p {
     font-size: 1.25rem;
     opacity: 0.9;
     line-height: 1.6;
     margin-bottom: 3rem;
     font-weight: 400;
+    color: var(--text-secondary);
 }
 
-body:has(.games-section) .header-stats {
+/* Header Statistics Grid */
+.header-stats {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 2rem;
@@ -2843,17 +2929,17 @@ body:has(.games-section) .header-stats {
     margin: 0 auto;
 }
 
-body:has(.games-section) .stat {
+.stat {
     text-align: center;
     padding: 1rem;
     border-right: 1px solid var(--border-color);
 }
 
-body:has(.games-section) .stat:last-child {
+.stat:last-child {
     border-right: none;
 }
 
-body:has(.games-section) .stat-number {
+.stat-number {
     display: block;
     font-size: 2.25rem;
     font-weight: 800;
@@ -2862,18 +2948,20 @@ body:has(.games-section) .stat-number {
     margin-bottom: 0.5rem;
 }
 
-body:has(.games-section) .stat-label {
+.stat-label {
     font-size: 0.9rem;
     opacity: 0.8;
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    color: var(--text-secondary);
 }
 
 /* ==========================================
    GAMES FILTER SECTION
+   Filter controls for games
    ========================================== */
-body:has(.games-section) .filter-section {
+.filter-section {
     padding: 2.5rem 0;
     background: var(--glass-bg);
     backdrop-filter: blur(30px) saturate(180%);
@@ -2881,68 +2969,135 @@ body:has(.games-section) .filter-section {
     border-bottom: 1px solid var(--border-color);
 }
 
-body:has(.games-section) .filter-container {
+.filter-container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 2rem;
     align-items: end;
 }
 
-body:has(.games-section) .filter-group {
+.filter-group {
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
 }
 
-body:has(.games-section) .filter-group label {
+.filter-group label {
     font-weight: 600;
     font-size: 0.9rem;
     margin-bottom: 0.25rem;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    color: var(--text-primary);
 }
 
-body:has(.games-section) .filter-select {
+.filter-select {
     width: 100%;
-    padding: 1rem 1.25rem;
+    padding: 1rem 2.5rem 1rem 1.25rem;
     background: var(--glass-bg);
     backdrop-filter: blur(30px) saturate(180%);
     border: 1px solid var(--border-color);
     border-radius: var(--border-radius-sm);
     font-size: 0.95rem;
     font-family: inherit;
+    color: inherit;
     cursor: pointer;
     transition: all var(--transition-base);
     box-shadow: 0 4px 12px var(--shadow-color);
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23E4572E' d='M10.293 3.293L6 7.586 1.707 3.293A1 1 0 00.293 4.707l5 5a1 1 0 001.414 0l5-5a1 1 0 10-1.414-1.414z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 12px;
 }
 
-body:has(.games-section) .filter-select:hover {
+.filter-select:hover {
     border-color: var(--accent-primary);
     transform: translateY(-2px);
     box-shadow: 0 6px 20px var(--shadow-color);
 }
 
-body:has(.games-section) .filter-select:focus {
+.filter-select:focus {
     outline: none;
     border-color: var(--accent-primary);
     box-shadow: 0 6px 20px var(--shadow-color), 0 0 0 3px rgba(228, 87, 46, 0.1);
 }
 
+.filter-select option {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    padding: 0.5rem;
+}
+
+.filter-group .btn {
+    width: 100%;
+    padding: 1rem 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
 /* ==========================================
    GAMES GRID SECTION
+   Main games display area
    ========================================== */
 .games-section {
     padding: 5rem 0;
+    background: var(--bg-primary);
 }
 
-body:has(.games-section) .portfolio-grid {
+.section-header {
+    text-align: center;
+    margin-bottom: 4rem;
+}
+
+.section-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+}
+
+.section-subtitle {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    opacity: 0.9;
+    margin-bottom: 2rem;
+}
+
+.section-decoration {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.decoration-line {
+    width: 60px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent-primary), transparent);
+}
+
+.section-decoration i {
+    font-size: 1.5rem;
+    color: var(--accent-primary);
+}
+
+.portfolio-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
     gap: 2.5rem;
 }
 
-/* Refined Game Card with Borders */
-body:has(.games-section) .game-card {
+/* ==========================================
+   GAME CARD STYLES
+   Individual game card design
+   ========================================== */
+.game-card {
     background: var(--glass-bg);
     backdrop-filter: blur(30px) saturate(180%);
     border: 1.5px solid var(--border-color);
@@ -2951,15 +3106,17 @@ body:has(.games-section) .game-card {
     overflow: hidden;
     transition: all var(--transition-base);
     position: relative;
+    cursor: pointer;
 }
 
-body:has(.games-section) .game-card:hover {
+.game-card:hover {
     transform: translateY(-8px);
     border-color: var(--accent-primary);
     box-shadow: 0 20px 50px var(--shadow-color);
 }
 
-body:has(.games-section) .game-image {
+/* Game Image Container */
+.game-image {
     position: relative;
     width: 100%;
     height: 240px;
@@ -2967,18 +3124,52 @@ body:has(.games-section) .game-image {
     border-bottom: 1px solid var(--border-color);
 }
 
-body:has(.games-section) .game-image img {
+.game-image img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     transition: transform var(--transition-slow);
 }
 
-body:has(.games-section) .game-card:hover .game-image img {
+.game-card:hover .game-image img {
     transform: scale(1.05);
 }
 
-body:has(.games-section) .game-badge {
+/* Game Overlay (appears on hover) */
+.game-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity var(--transition-base);
+    z-index: 1;
+}
+
+.game-card:hover .game-overlay {
+    opacity: 1;
+}
+
+.overlay-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 2rem;
+    width: 100%;
+}
+
+.overlay-content .btn {
+    width: 100%;
+    justify-content: center;
+}
+
+/* Status Badge */
+.game-badge {
     position: absolute;
     top: 1rem;
     right: 1rem;
@@ -2989,21 +3180,28 @@ body:has(.games-section) .game-badge {
     font-weight: 700;
     border-radius: var(--border-radius-sm);
     border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 4px 12px var(--shadow-color);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     text-transform: uppercase;
     letter-spacing: 0.5px;
     z-index: 2;
 }
 
 .status-in-development {
-    background: linear-gradient(135deg, #6B7280, #9CA3AF);
+    background: linear-gradient(135deg, #6B7280, #9CA3AF) !important;
 }
 
-body:has(.games-section) .game-content {
+.status-live {
+    background: linear-gradient(135deg, #10B981, #34D399) !important;
+}
+
+/* Game Content Area */
+.game-content {
     padding: 2rem;
+    background: var(--bg-secondary);
 }
 
-body:has(.games-section) .game-header {
+/* Game Header (Title + Rating) */
+.game-header {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
@@ -3011,15 +3209,16 @@ body:has(.games-section) .game-header {
     gap: 1rem;
 }
 
-body:has(.games-section) .game-title {
+.game-title {
     font-size: 1.4rem;
     font-weight: 700;
     margin-bottom: 0.5rem;
     flex: 1;
     line-height: 1.3;
+    color: var(--text-primary);
 }
 
-body:has(.games-section) .game-rating {
+.game-rating {
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -3028,28 +3227,34 @@ body:has(.games-section) .game-rating {
     border: 1px solid var(--border-color);
     border-radius: var(--border-radius-sm);
     padding: 0.5rem 0.75rem;
-    box-shadow: 0 3px 10px var(--shadow-color);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
     flex-shrink: 0;
 }
 
-body:has(.games-section) .rating-stars {
+.rating-stars {
     color: var(--accent-secondary);
     font-size: 0.85rem;
+    display: flex;
+    gap: 2px;
 }
 
-body:has(.games-section) .rating-value {
+.rating-value {
     font-weight: 700;
     font-size: 0.85rem;
+    color: var(--text-primary);
 }
 
-body:has(.games-section) .game-meta {
+/* Game Meta Information */
+.game-meta {
     display: flex;
     align-items: center;
     gap: 1rem;
     margin-bottom: 1.25rem;
+    flex-wrap: wrap;
 }
 
-body:has(.games-section) .game-category {
+.game-category,
+.game-date {
     padding: 0.4rem 0.8rem;
     background: var(--glass-bg);
     backdrop-filter: blur(30px) saturate(180%);
@@ -3057,37 +3262,46 @@ body:has(.games-section) .game-category {
     border-radius: var(--border-radius-sm);
     font-size: 0.75rem;
     font-weight: 600;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.game-category {
     color: var(--accent-primary);
-    box-shadow: 0 3px 8px var(--shadow-color);
 }
 
-body:has(.games-section) .game-date {
-    padding: 0.4rem 0.8rem;
-    background: var(--glass-bg);
-    backdrop-filter: blur(30px) saturate(180%);
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius-sm);
-    font-size: 0.75rem;
-    font-weight: 600;
+.game-category i {
+    font-size: 0.7rem;
+}
+
+.game-date {
     color: var(--text-secondary);
-    box-shadow: 0 3px 8px var(--shadow-color);
 }
 
-body:has(.games-section) .game-description {
+.game-date i {
+    font-size: 0.7rem;
+}
+
+/* Game Description */
+.game-description {
     font-size: 0.95rem;
     line-height: 1.6;
     opacity: 0.85;
     margin-bottom: 1.5rem;
+    color: var(--text-secondary);
 }
 
-body:has(.games-section) .game-features {
+/* Game Features */
+.game-features {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
     margin-bottom: 2rem;
 }
 
-body:has(.games-section) .game-feature {
+.game-feature {
     padding: 0.4rem 0.8rem;
     background: var(--glass-bg);
     backdrop-filter: blur(30px) saturate(180%);
@@ -3095,42 +3309,52 @@ body:has(.games-section) .game-feature {
     border-radius: var(--border-radius-sm);
     font-size: 0.8rem;
     font-weight: 500;
-    box-shadow: 0 2px 6px var(--shadow-color);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
     transition: all var(--transition-base);
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--text-primary);
 }
 
-body:has(.games-section) .game-feature:hover {
+.game-feature:hover {
     border-color: var(--accent-primary);
     transform: translateY(-1px);
 }
 
-body:has(.games-section) .game-actions {
+.game-feature i {
+    font-size: 0.7rem;
+    color: var(--accent-primary);
+}
+
+/* Game Actions (Buttons) */
+.game-actions {
     display: flex;
     gap: 0.75rem;
 }
 
-body:has(.games-section) .game-actions .btn {
+.game-actions .btn {
     flex: 1;
     justify-content: center;
     padding: 0.875rem 1.25rem;
     font-size: 0.9rem;
-    border: 1px solid var(--border-color);
 }
 
-body:has(.games-section) .game-actions .btn-primary {
-    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-    border: 1px solid rgba(255, 255, 255, 0.2);
+.game-actions .btn:hover {
+    transform: translateY(-2px);
 }
 
-body:has(.games-section) .game-actions .btn-secondary {
-    background: var(--glass-bg);
-    backdrop-filter: blur(30px) saturate(180%);
+.btn-view-details,
+.btn-play-now,
+.btn-view-game {
+    transition: all var(--transition-base);
 }
 
 /* ==========================================
    GAMES CTA SECTION
+   Call-to-action section
    ========================================== */
-body:has(.games-section) .cta-section {
+.cta-section {
     background: linear-gradient(135deg, 
         rgba(228, 87, 46, 0.08) 0%, 
         rgba(255, 195, 0, 0.04) 50%, 
@@ -3139,14 +3363,14 @@ body:has(.games-section) .cta-section {
     border-bottom: 1px solid var(--border-color);
 }
 
-body:has(.games-section) .cta-content {
+.cta-content {
     text-align: center;
-    max-width: 500px;
+    max-width: 600px;
     margin: 0 auto;
-    padding: 4rem 0;
+    padding: 4rem 2rem;
 }
 
-body:has(.games-section) .cta-content h2 {
+.cta-content h2 {
     font-size: 2.5rem;
     font-weight: 800;
     margin-bottom: 1.25rem;
@@ -3157,24 +3381,36 @@ body:has(.games-section) .cta-content h2 {
     line-height: 1.2;
 }
 
-body:has(.games-section) .cta-content p {
+.cta-content p {
     font-size: 1.1rem;
     opacity: 0.9;
     line-height: 1.6;
     margin-bottom: 2.5rem;
+    color: var(--text-secondary);
 }
 
-body:has(.games-section) .cta-content .btn {
+.cta-content .btn {
     padding: 1.125rem 2.5rem;
     font-size: 1.05rem;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.btn-glow {
+    box-shadow: 0 0 20px rgba(228, 87, 46, 0.3);
+}
+
+.btn-glow:hover {
+    box-shadow: 0 0 30px rgba(228, 87, 46, 0.5);
 }
 
 /* ==========================================
    LOADING & EMPTY STATES
+   States for loading and no results
    ========================================== */
-body:has(.games-section) .loading-games,
-body:has(.games-section) .no-games {
+.loading-games,
+.no-games {
     text-align: center;
     padding: 4rem 2rem;
     background: var(--glass-bg);
@@ -3185,199 +3421,259 @@ body:has(.games-section) .no-games {
     grid-column: 1 / -1;
 }
 
-body:has(.games-section) .loading-games i,
-body:has(.games-section) .no-games i {
+.loading-games i,
+.no-games i {
     font-size: 3.5rem;
     color: var(--accent-primary);
     margin-bottom: 1.5rem;
     opacity: 0.7;
 }
 
-body:has(.games-section) .loading-games p,
-body:has(.games-section) .no-games p {
+.loading-games p,
+.no-games p {
     font-size: 1.1rem;
     opacity: 0.8;
     margin-bottom: 2rem;
+    color: var(--text-secondary);
+}
+
+.loading-games i.fa-spin {
+    animation: spin 1s linear infinite;
+}
+
+.no-games .btn {
+    margin-top: 1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
 /* ==========================================
-   RESPONSIVE DESIGN FOR GAMES PAGE
+   RESPONSIVE DESIGN
+   Mobile and tablet optimizations
    ========================================== */
+
+/* Large Tablets and Small Desktops */
 @media (max-width: 1200px) {
-    body:has(.games-section) .portfolio-grid {
+    .portfolio-grid {
         grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
         gap: 2rem;
     }
     
-    body:has(.games-section) .header-content h1 {
+    .header-content h1 {
         font-size: 3.5rem;
     }
 }
 
+/* Tablets */
 @media (max-width: 992px) {
-    body:has(.games-section) .page-header {
+    .page-header {
         padding: 10rem 0 4rem;
     }
     
-    body:has(.games-section) .header-content h1 {
+    .header-content h1 {
         font-size: 3rem;
     }
     
-    body:has(.games-section) .header-stats {
+    .header-stats {
         grid-template-columns: 1fr;
         gap: 1.5rem;
         padding: 2rem;
     }
     
-    body:has(.games-section) .stat {
+    .stat {
         border-right: none;
         border-bottom: 1px solid var(--border-color);
         padding: 1.5rem;
     }
     
-    body:has(.games-section) .stat:last-child {
+    .stat:last-child {
         border-bottom: none;
     }
     
-    body:has(.games-section) .portfolio-grid {
+    .portfolio-grid {
         grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
         gap: 2rem;
     }
     
-    body:has(.games-section) .game-content {
+    .game-content {
         padding: 1.75rem;
     }
     
-    body:has(.games-section) .cta-content h2 {
+    .cta-content h2 {
         font-size: 2.25rem;
     }
 }
 
+/* Mobile Devices */
 @media (max-width: 768px) {
-    body:has(.games-section) .page-header {
+    .page-header {
         padding: 8rem 0 3rem;
     }
     
-    body:has(.games-section) .header-content h1 {
+    .header-content h1 {
         font-size: 2.5rem;
     }
     
-    body:has(.games-section) .header-content p {
+    .header-content p {
         font-size: 1.1rem;
     }
     
-    body:has(.games-section) .filter-container {
+    .filter-container {
         grid-template-columns: 1fr;
         gap: 1.5rem;
     }
     
-    body:has(.games-section) .portfolio-grid {
+    .portfolio-grid {
         grid-template-columns: 1fr;
         gap: 1.5rem;
     }
     
-    body:has(.games-section) .game-header {
+    .game-header {
         flex-direction: column;
         gap: 1rem;
         align-items: flex-start;
     }
     
-    body:has(.games-section) .game-rating {
+    .game-rating {
         align-self: flex-start;
     }
     
-    body:has(.games-section) .game-meta {
+    .game-meta {
         flex-direction: column;
         align-items: flex-start;
         gap: 0.75rem;
     }
     
-    body:has(.games-section) .game-actions {
+    .game-actions {
         flex-direction: column;
     }
     
-    body:has(.games-section) .cta-content h2 {
+    .cta-content h2 {
         font-size: 2rem;
     }
     
-    body:has(.games-section) .cta-content p {
+    .cta-content p {
+        font-size: 1rem;
+    }
+    
+    /* Disable hover effects on mobile */
+    .game-overlay {
+        display: none;
+    }
+    
+    .section-title {
+        font-size: 2rem;
+    }
+    
+    .section-subtitle {
         font-size: 1rem;
     }
 }
 
+/* Small Mobile Devices */
 @media (max-width: 480px) {
-    body:has(.games-section) .header-content h1 {
+    .header-content h1 {
         font-size: 2rem;
     }
     
-    body:has(.games-section) .stat-number {
+    .stat-number {
         font-size: 2rem;
     }
     
-    body:has(.games-section) .game-content {
+    .game-content {
         padding: 1.5rem;
     }
     
-    body:has(.games-section) .game-title {
+    .game-title {
         font-size: 1.25rem;
     }
     
-    body:has(.games-section) .game-features {
+    .game-features {
         gap: 0.4rem;
     }
     
-    body:has(.games-section) .game-feature {
+    .game-feature {
         font-size: 0.75rem;
         padding: 0.35rem 0.7rem;
     }
     
-    body:has(.games-section) .cta-content {
-        padding: 3rem 0;
+    .cta-content {
+        padding: 3rem 1rem;
     }
     
-    body:has(.games-section) .cta-content h2 {
+    .cta-content h2 {
         font-size: 1.75rem;
+    }
+    
+    .filter-select {
+        font-size: 0.9rem;
+        padding: 0.875rem 2rem 0.875rem 1rem;
     }
 }
 
 /* ==========================================
-   ACCESSIBILITY FOR GAMES PAGE
+   ACCESSIBILITY
+   Reduced motion and focus states
    ========================================== */
 @media (prefers-reduced-motion: reduce) {
-    body:has(.games-section) .game-card,
-    body:has(.games-section) .filter-select,
-    body:has(.games-section) .game-feature {
-        transition: none;
+    .game-card,
+    .filter-select,
+    .game-feature,
+    .game-image img,
+    .btn {
+        transition: none !important;
     }
     
-    body:has(.games-section) .game-card:hover {
-        transform: none;
+    .game-card:hover {
+        transform: none !important;
+    }
+    
+    .loading-games i.fa-spin {
+        animation: none !important;
     }
 }
 
-body:has(.games-section) .game-card:focus-within {
+.game-card:focus-within {
+    outline: 2px solid var(--accent-primary);
+    outline-offset: 2px;
+}
+
+.btn:focus-visible,
+.filter-select:focus-visible {
     outline: 2px solid var(--accent-primary);
     outline-offset: 2px;
 }
 
 /* ==========================================
-   THEME CONSISTENCY FOR GAMES PAGE
+   THEME ADJUSTMENTS
+   Light theme specific styles
    ========================================== */
-[data-theme="light"] body:has(.games-section) .game-card {
-    border-color: rgba(0, 0, 0, 0.1);
+[data-theme="light"] {
+    --text-primary: #1F2937;
+    --text-secondary: #6B7280;
+    --bg-primary: #F9FAFB;
+    --bg-secondary: #FFFFFF;
+    --glass-bg: rgba(255, 255, 255, 0.8);
+    --border-color: rgba(0, 0, 0, 0.1);
+    --shadow-color: rgba(0, 0, 0, 0.1);
 }
 
-[data-theme="light"] body:has(.games-section) .game-card:hover {
-    border-color: var(--accent-primary);
+[data-theme="light"] .game-card {
+    background: rgba(255, 255, 255, 0.9);
 }
 
-[data-theme="light"] body:has(.games-section) .header-stats,
-[data-theme="light"] body:has(.games-section) .filter-section {
-    border-color: rgba(0, 0, 0, 0.1);
+[data-theme="light"] .game-overlay {
+    background: rgba(255, 255, 255, 0.95);
+}
+
+[data-theme="light"] .filter-select option {
+    background: #FFFFFF;
 }
 
 /* ==========================================
-   GAMES-SPECIFIC ANIMATIONS
+   ANIMATIONS
+   Card entrance and hover animations
    ========================================== */
 @keyframes gameCardSlideIn {
     from {
@@ -3390,16 +3686,50 @@ body:has(.games-section) .game-card:focus-within {
     }
 }
 
-body:has(.games-section) .game-card {
-    animation: gameCardSlideIn 0.6s ease-out;
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
-body:has(.games-section) .game-card:nth-child(1) { animation-delay: 0.1s; }
-body:has(.games-section) .game-card:nth-child(2) { animation-delay: 0.2s; }
-body:has(.games-section) .game-card:nth-child(3) { animation-delay: 0.3s; }
-body:has(.games-section) .game-card:nth-child(4) { animation-delay: 0.4s; }
-body:has(.games-section) .game-card:nth-child(5) { animation-delay: 0.5s; }
-body:has(.games-section) .game-card:nth-child(6) { animation-delay: 0.6s; }
+/* Staggered animation delays */
+.game-card:nth-child(1) { animation-delay: 0.1s; }
+.game-card:nth-child(2) { animation-delay: 0.2s; }
+.game-card:nth-child(3) { animation-delay: 0.3s; }
+.game-card:nth-child(4) { animation-delay: 0.4s; }
+.game-card:nth-child(5) { animation-delay: 0.5s; }
+.game-card:nth-child(6) { animation-delay: 0.6s; }
+.game-card:nth-child(7) { animation-delay: 0.7s; }
+.game-card:nth-child(8) { animation-delay: 0.8s; }
+.game-card:nth-child(9) { animation-delay: 0.9s; }
+
+/* ==========================================
+   PRINT STYLES
+   Optimized for printing
+   ========================================== */
+@media print {
+    .game-overlay,
+    .filter-section,
+    .cta-section {
+        display: none;
+    }
+    
+    .game-card {
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+}
+
+/**
+ * ==========================================
+ * END OF GAMES STYLES
+ * Created by: Arsh Verma
+ * GitHub: https://github.com/ArshVermaGit
+ * ==========================================
+ */
 
 /* ==========================================
    GAME DETAIL SECTION - PERFECT YOUTUBE LAYOUT
@@ -6258,14 +6588,12 @@ body:has(.websites-section) .filter-select:focus {
 }
 
 /* ==========================================
-   INCREMENTAL CSS FOR apps.html
-   New styles for mobile apps portfolio components
+   APPS PAGE SPECIFIC STYLES
+   Optimized for mobile apps portfolio
    ========================================== */
 
-/* ==========================================
-   PAGE HEADER - APPS SPECIFIC
-   ========================================== */
-.page-header {
+/* Apps Page Header */
+body:has(.apps-section) .page-header {
     padding: 12rem 0 6rem;
     position: relative;
     overflow: hidden;
@@ -6276,7 +6604,7 @@ body:has(.websites-section) .filter-select:focus {
     border-bottom: 1px solid var(--border-color);
 }
 
-.page-header::before {
+body:has(.apps-section) .page-header::before {
     content: '';
     position: absolute;
     top: 0;
@@ -6289,7 +6617,7 @@ body:has(.websites-section) .filter-select:focus {
     pointer-events: none;
 }
 
-.header-content {
+body:has(.apps-section) .header-content {
     text-align: center;
     position: relative;
     z-index: var(--z-content);
@@ -6297,7 +6625,7 @@ body:has(.websites-section) .filter-select:focus {
     margin: 0 auto;
 }
 
-.header-content h1 {
+body:has(.apps-section) .header-content h1 {
     font-size: 4.5rem;
     font-weight: 900;
     margin-bottom: 1.5rem;
@@ -6307,14 +6635,14 @@ body:has(.websites-section) .filter-select:focus {
     background-clip: text;
 }
 
-.header-content p {
+body:has(.apps-section) .header-content p {
     font-size: 1.25rem;
     opacity: 0.85;
     line-height: 1.7;
     margin-bottom: 3rem;
 }
 
-.header-stats {
+body:has(.apps-section) .header-stats {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 2rem;
@@ -6328,12 +6656,12 @@ body:has(.websites-section) .filter-select:focus {
     margin: 0 auto;
 }
 
-.stat {
+body:has(.apps-section) .stat {
     text-align: center;
     padding: 1rem;
 }
 
-.stat-number {
+body:has(.apps-section) .stat-number {
     display: block;
     font-size: 2.5rem;
     font-weight: 800;
@@ -6342,287 +6670,14 @@ body:has(.websites-section) .filter-select:focus {
     margin-bottom: 0.5rem;
 }
 
-.stat-label {
+body:has(.apps-section) .stat-label {
     font-size: 0.9rem;
     opacity: 0.7;
     font-weight: 500;
 }
 
-/* ==========================================
-   APPS GRID SECTION
-   ========================================== */
-.apps-section {
-    padding: 6rem 0;
-}
-
-.portfolio-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-    gap: 3rem;
-}
-
-/* App Card Styles */
-.app-card {
-    background: var(--glass-bg);
-    backdrop-filter: blur(30px) saturate(180%);
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius);
-    box-shadow: 0 10px 30px var(--shadow-color);
-    overflow: hidden;
-    transition: all var(--transition-base);
-    position: relative;
-}
-
-.app-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 20px 60px var(--shadow-color);
-}
-
-.app-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, #22C55E, #10B981);
-    opacity: 0;
-    transition: opacity var(--transition-base);
-    z-index: 1;
-}
-
-.app-card:hover::before {
-    opacity: 0.05;
-}
-
-.app-card > * {
-    position: relative;
-    z-index: 2;
-}
-
-.app-image {
-    position: relative;
-    width: 100%;
-    height: 250px;
-    overflow: hidden;
-    background: linear-gradient(135deg, #22C55E, #10B981);
-}
-
-.app-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform var(--transition-slow);
-}
-
-.app-card:hover .app-image img {
-    transform: scale(1.1);
-}
-
-.app-badge {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    padding: 0.5rem 1rem;
-    background: linear-gradient(135deg, #22C55E, #10B981);
-    color: #fff;
-    font-size: 0.8rem;
-    font-weight: 600;
-    border-radius: var(--border-radius-sm);
-    border: 1px solid var(--border-color);
-    box-shadow: 0 5px 15px var(--shadow-color);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.app-content {
-    padding: 2.5rem;
-}
-
-.app-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 1rem;
-}
-
-.app-title {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--text-primary);
-    margin-bottom: 0.5rem;
-    flex: 1;
-}
-
-.app-rating {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    background: var(--glass-bg);
-    backdrop-filter: blur(30px) saturate(180%);
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius-sm);
-    padding: 0.5rem 1rem;
-    box-shadow: 0 5px 15px var(--shadow-color);
-}
-
-.rating-stars {
-    color: #F59E0B;
-    font-size: 0.9rem;
-}
-
-.rating-value {
-    font-weight: 700;
-    font-size: 0.9rem;
-    color: var(--text-primary);
-}
-
-.app-platform {
-    display: inline-block;
-    padding: 0.5rem 1rem;
-    background: var(--glass-bg);
-    backdrop-filter: blur(30px) saturate(180%);
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius-sm);
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: #22C55E;
-    margin-bottom: 1rem;
-    box-shadow: 0 5px 15px var(--shadow-color);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.app-description {
-    font-size: 1rem;
-    line-height: 1.7;
-    opacity: 0.8;
-    margin-bottom: 2rem;
-}
-
-.app-features {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem;
-    margin-bottom: 2rem;
-}
-
-.app-feature {
-    padding: 0.5rem 1rem;
-    background: var(--glass-bg);
-    backdrop-filter: blur(30px) saturate(180%);
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius-sm);
-    font-size: 0.85rem;
-    font-weight: 500;
-    color: var(--text-primary);
-    box-shadow: 0 3px 10px var(--shadow-color);
-}
-
-.app-stats {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
-    margin-bottom: 2rem;
-    padding: 1.5rem;
-    background: var(--glass-bg);
-    backdrop-filter: blur(30px) saturate(180%);
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius-sm);
-    box-shadow: 0 5px 15px var(--shadow-color);
-}
-
-.app-stat {
-    text-align: center;
-}
-
-.app-stat-value {
-    display: block;
-    font-size: 1.5rem;
-    font-weight: 800;
-    color: #22C55E;
-    line-height: 1;
-    margin-bottom: 0.25rem;
-}
-
-.app-stat-label {
-    font-size: 0.75rem;
-    opacity: 0.7;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.app-actions {
-    display: flex;
-    gap: 1rem;
-}
-
-.app-actions .btn {
-    flex: 1;
-    justify-content: center;
-    padding: 1rem 1.5rem;
-    font-size: 0.9rem;
-}
-
-/* App-specific button variants */
-.btn-app {
-    background: linear-gradient(135deg, #22C55E, #10B981);
-    color: #fff;
-    border-color: #22C55E;
-}
-
-.btn-app:hover {
-    background: linear-gradient(135deg, #16A34A, #0D9488);
-    transform: translateY(-3px);
-    box-shadow: 0 15px 40px var(--shadow-color), 0 0 30px rgba(34, 197, 94, 0.3);
-}
-
-/* ==========================================
-   CTA SECTION - APPS SPECIFIC
-   ========================================== */
-.cta-section {
-    background: linear-gradient(135deg, 
-        rgba(34, 197, 94, 0.1) 0%, 
-        rgba(16, 185, 129, 0.05) 50%, 
-        rgba(5, 150, 105, 0.1) 100%);
-    border-top: 1px solid var(--border-color);
-    border-bottom: 1px solid var(--border-color);
-}
-
-.cta-content {
-    text-align: center;
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 4rem 0;
-}
-
-.cta-content h2 {
-    font-size: 3rem;
-    font-weight: 800;
-    margin-bottom: 1.5rem;
-    background: linear-gradient(135deg, #22C55E, #10B981);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
-
-.cta-content p {
-    font-size: 1.15rem;
-    opacity: 0.85;
-    line-height: 1.7;
-    margin-bottom: 2.5rem;
-}
-
-.cta-content .btn {
-    padding: 1.25rem 3rem;
-    font-size: 1.1rem;
-}
-
-/* ==========================================
-   APP-SPECIFIC FILTER STYLES
-   ========================================== */
-.filter-section {
+/* Apps Filter Section */
+body:has(.apps-section) .filter-section {
     padding: 3rem 0;
     background: var(--glass-bg);
     backdrop-filter: blur(30px) saturate(180%);
@@ -6630,27 +6685,27 @@ body:has(.websites-section) .filter-select:focus {
     border-bottom: 1px solid var(--border-color);
 }
 
-.filter-container {
+body:has(.apps-section) .filter-container {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 2rem;
     align-items: end;
 }
 
-.filter-group {
+body:has(.apps-section) .filter-group {
     display: flex;
     flex-direction: column;
     gap: 1rem;
 }
 
-.filter-group label {
+body:has(.apps-section) .filter-group label {
     font-weight: 600;
     font-size: 0.95rem;
     color: var(--text-primary);
     margin-bottom: 0.5rem;
 }
 
-.filter-select {
+body:has(.apps-section) .filter-select {
     width: 100%;
     padding: 1.25rem 1.5rem;
     background: var(--glass-bg);
@@ -6670,35 +6725,261 @@ body:has(.websites-section) .filter-select:focus {
     background-size: 1rem;
 }
 
-.filter-select:hover {
+body:has(.apps-section) .filter-select:hover {
     border-color: #22C55E;
     transform: translateY(-2px);
     box-shadow: 0 8px 25px var(--shadow-color);
 }
 
-.filter-select:focus {
+body:has(.apps-section) .filter-select:focus {
     outline: none;
     border-color: #22C55E;
     box-shadow: 0 8px 25px var(--shadow-color), 0 0 0 3px rgba(34, 197, 94, 0.1);
 }
 
-.filter-select option {
+body:has(.apps-section) .filter-select option {
     background: var(--bg-primary);
     color: var(--text-primary);
     padding: 1rem;
     font-size: 1rem;
 }
 
-/* ==========================================
-   PLATFORM BADGES
-   ========================================== */
-.platform-badges {
+/* Apps Grid Section */
+.apps-section {
+    padding: 6rem 0;
+}
+
+body:has(.apps-section) .portfolio-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    gap: 3rem;
+}
+
+/* App Card Styles */
+body:has(.apps-section) .app-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(30px) saturate(180%);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    box-shadow: 0 10px 30px var(--shadow-color);
+    overflow: hidden;
+    transition: all var(--transition-base);
+    position: relative;
+}
+
+body:has(.apps-section) .app-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 60px var(--shadow-color);
+}
+
+body:has(.apps-section) .app-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #22C55E, #10B981);
+    opacity: 0;
+    transition: opacity var(--transition-base);
+    z-index: 1;
+}
+
+body:has(.apps-section) .app-card:hover::before {
+    opacity: 0.05;
+}
+
+body:has(.apps-section) .app-card > * {
+    position: relative;
+    z-index: 2;
+}
+
+body:has(.apps-section) .app-image {
+    position: relative;
+    width: 100%;
+    height: 250px;
+    overflow: hidden;
+    background: linear-gradient(135deg, #22C55E, #10B981);
+}
+
+body:has(.apps-section) .app-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--transition-slow);
+}
+
+body:has(.apps-section) .app-card:hover .app-image img {
+    transform: scale(1.1);
+}
+
+body:has(.apps-section) .app-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    padding: 0.5rem 1rem;
+    background: linear-gradient(135deg, #22C55E, #10B981);
+    color: #fff;
+    font-size: 0.8rem;
+    font-weight: 600;
+    border-radius: var(--border-radius-sm);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 5px 15px var(--shadow-color);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+body:has(.apps-section) .app-content {
+    padding: 2.5rem;
+}
+
+body:has(.apps-section) .app-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+}
+
+body:has(.apps-section) .app-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+    flex: 1;
+}
+
+body:has(.apps-section) .app-rating {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--glass-bg);
+    backdrop-filter: blur(30px) saturate(180%);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    padding: 0.5rem 1rem;
+    box-shadow: 0 5px 15px var(--shadow-color);
+}
+
+body:has(.apps-section) .rating-stars {
+    color: #F59E0B;
+    font-size: 0.9rem;
+}
+
+body:has(.apps-section) .rating-value {
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--text-primary);
+}
+
+body:has(.apps-section) .app-platform {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background: var(--glass-bg);
+    backdrop-filter: blur(30px) saturate(180%);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #22C55E;
+    margin-bottom: 1rem;
+    box-shadow: 0 5px 15px var(--shadow-color);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+body:has(.apps-section) .app-description {
+    font-size: 1rem;
+    line-height: 1.7;
+    opacity: 0.8;
+    margin-bottom: 2rem;
+}
+
+body:has(.apps-section) .app-features {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+}
+
+body:has(.apps-section) .app-feature {
+    padding: 0.5rem 1rem;
+    background: var(--glass-bg);
+    backdrop-filter: blur(30px) saturate(180%);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    box-shadow: 0 3px 10px var(--shadow-color);
+}
+
+body:has(.apps-section) .app-stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: var(--glass-bg);
+    backdrop-filter: blur(30px) saturate(180%);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    box-shadow: 0 5px 15px var(--shadow-color);
+}
+
+body:has(.apps-section) .app-stat {
+    text-align: center;
+}
+
+body:has(.apps-section) .app-stat-value {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #22C55E;
+    line-height: 1;
+    margin-bottom: 0.25rem;
+}
+
+body:has(.apps-section) .app-stat-label {
+    font-size: 0.75rem;
+    opacity: 0.7;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+body:has(.apps-section) .app-actions {
+    display: flex;
+    gap: 1rem;
+}
+
+body:has(.apps-section) .app-actions .btn {
+    flex: 1;
+    justify-content: center;
+    padding: 1rem 1.5rem;
+    font-size: 0.9rem;
+}
+
+/* App-specific button variants */
+body:has(.apps-section) .btn-app {
+    background: linear-gradient(135deg, #22C55E, #10B981);
+    color: #fff;
+    border-color: #22C55E;
+}
+
+body:has(.apps-section) .btn-app:hover {
+    background: linear-gradient(135deg, #16A34A, #0D9488);
+    transform: translateY(-3px);
+    box-shadow: 0 15px 40px var(--shadow-color), 0 0 30px rgba(34, 197, 94, 0.3);
+}
+
+/* Platform Badges */
+body:has(.apps-section) .platform-badges {
     display: flex;
     gap: 0.5rem;
     margin-bottom: 1rem;
 }
 
-.platform-badge {
+body:has(.apps-section) .platform-badge {
     padding: 0.4rem 0.8rem;
     background: var(--glass-bg);
     backdrop-filter: blur(30px) saturate(180%);
@@ -6712,31 +6993,29 @@ body:has(.websites-section) .filter-select:focus {
     letter-spacing: 0.5px;
 }
 
-.platform-badge.ios {
+body:has(.apps-section) .platform-badge.ios {
     background: linear-gradient(135deg, #22C55E, #10B981);
     color: #fff;
 }
 
-.platform-badge.android {
+body:has(.apps-section) .platform-badge.android {
     background: linear-gradient(135deg, #84CC16, #65A30D);
     color: #fff;
 }
 
-.platform-badge.cross-platform {
+body:has(.apps-section) .platform-badge.cross-platform {
     background: linear-gradient(135deg, #EAB308, #CA8A04);
     color: #fff;
 }
 
-/* ==========================================
-   APP STORE BADGES
-   ========================================== */
-.store-badges {
+/* App Store Badges */
+body:has(.apps-section) .store-badges {
     display: flex;
     gap: 1rem;
     margin-bottom: 1.5rem;
 }
 
-.store-badge {
+body:has(.apps-section) .store-badge {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
@@ -6753,66 +7032,34 @@ body:has(.websites-section) .filter-select:focus {
     transition: all var(--transition-base);
 }
 
-.store-badge:hover {
+body:has(.apps-section) .store-badge:hover {
     transform: translateY(-2px);
     box-shadow: 0 5px 15px var(--shadow-color);
 }
 
-.store-badge.apple {
+body:has(.apps-section) .store-badge.apple {
     background: linear-gradient(135deg, #000000, #333333);
     color: #fff;
 }
 
-.store-badge.google {
+body:has(.apps-section) .store-badge.google {
     background: linear-gradient(135deg, #4285F4, #34A853);
     color: #fff;
 }
 
-.store-badge i {
+body:has(.apps-section) .store-badge i {
     font-size: 1.1rem;
 }
 
-/* ==========================================
-   LOADING STATES & EMPTY STATES
-   ========================================== */
-.loading-apps,
-.no-apps {
-    text-align: center;
-    padding: 4rem 2rem;
-    background: var(--glass-bg);
-    backdrop-filter: blur(30px) saturate(180%);
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius);
-    box-shadow: 0 10px 30px var(--shadow-color);
-    grid-column: 1 / -1;
-}
-
-.loading-apps i,
-.no-apps i {
-    font-size: 4rem;
-    color: #22C55E;
-    margin-bottom: 2rem;
-    opacity: 0.7;
-}
-
-.loading-apps p,
-.no-apps p {
-    font-size: 1.1rem;
-    opacity: 0.8;
-    margin-bottom: 2rem;
-}
-
-/* ==========================================
-   APP TECHNOLOGY TAGS
-   ========================================== */
-.app-tech {
+/* App Technology Tags */
+body:has(.apps-section) .app-tech {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
     margin-bottom: 1.5rem;
 }
 
-.tech-tag {
+body:has(.apps-section) .tech-tag {
     padding: 0.4rem 0.8rem;
     background: var(--glass-bg);
     backdrop-filter: blur(30px) saturate(180%);
@@ -6824,159 +7071,74 @@ body:has(.websites-section) .filter-select:focus {
     box-shadow: 0 3px 10px var(--shadow-color);
 }
 
-/* ==========================================
-   RESPONSIVE DESIGN FOR APPS PAGE
-   ========================================== */
-@media (max-width: 1200px) {
-    .portfolio-grid {
-        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-        gap: 2.5rem;
-    }
-    
-    .header-content h1 {
-        font-size: 4rem;
-    }
+/* CTA Section */
+body:has(.apps-section) .cta-section {
+    background: linear-gradient(135deg, 
+        rgba(34, 197, 94, 0.1) 0%, 
+        rgba(16, 185, 129, 0.05) 50%, 
+        rgba(5, 150, 105, 0.1) 100%);
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
 }
 
-@media (max-width: 992px) {
-    .page-header {
-        padding: 10rem 0 4rem;
-    }
-    
-    .header-content h1 {
-        font-size: 3.5rem;
-    }
-    
-    .header-stats {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-        padding: 2rem;
-    }
-    
-    .portfolio-grid {
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-        gap: 2rem;
-    }
-    
-    .app-content {
-        padding: 2rem;
-    }
-    
-    .app-stats {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 1rem;
-        padding: 1.25rem;
-    }
-    
-    .cta-content h2 {
-        font-size: 2.5rem;
-    }
+body:has(.apps-section) .cta-content {
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 4rem 0;
 }
 
-@media (max-width: 768px) {
-    .page-header {
-        padding: 8rem 0 3rem;
-    }
-    
-    .header-content h1 {
-        font-size: 2.5rem;
-    }
-    
-    .header-content p {
-        font-size: 1.1rem;
-    }
-    
-    .filter-container {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-    }
-    
-    .portfolio-grid {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-    }
-    
-    .app-header {
-        flex-direction: column;
-        gap: 1rem;
-        align-items: flex-start;
-    }
-    
-    .app-rating {
-        align-self: flex-start;
-    }
-    
-    .app-actions {
-        flex-direction: column;
-    }
-    
-    .app-stats {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    
-    .store-badges {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-    
-    .store-badge {
-        width: 100%;
-        justify-content: center;
-    }
-    
-    .cta-content h2 {
-        font-size: 2rem;
-    }
-    
-    .cta-content p {
-        font-size: 1rem;
-    }
+body:has(.apps-section) .cta-content h2 {
+    font-size: 3rem;
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(135deg, #22C55E, #10B981);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
-@media (max-width: 480px) {
-    .header-content h1 {
-        font-size: 2rem;
-    }
-    
-    .stat-number {
-        font-size: 2rem;
-    }
-    
-    .app-content {
-        padding: 1.5rem;
-    }
-    
-    .app-title {
-        font-size: 1.25rem;
-    }
-    
-    .app-features {
-        gap: 0.5rem;
-    }
-    
-    .app-feature {
-        font-size: 0.8rem;
-        padding: 0.4rem 0.8rem;
-    }
-    
-    .app-stats {
-        grid-template-columns: 1fr;
-        gap: 1rem;
-    }
-    
-    .app-stat-value {
-        font-size: 1.25rem;
-    }
-    
-    .platform-badges {
-        flex-direction: column;
-        align-items: flex-start;
-    }
+body:has(.apps-section) .cta-content p {
+    font-size: 1.15rem;
+    opacity: 0.85;
+    line-height: 1.7;
+    margin-bottom: 2.5rem;
 }
 
-/* ==========================================
-   ANIMATIONS FOR APPS PAGE
-   ========================================== */
+body:has(.apps-section) .cta-content .btn {
+    padding: 1.25rem 3rem;
+    font-size: 1.1rem;
+}
+
+/* Loading & Empty States */
+body:has(.apps-section) .loading-apps,
+body:has(.apps-section) .no-apps {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: var(--glass-bg);
+    backdrop-filter: blur(30px) saturate(180%);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    box-shadow: 0 10px 30px var(--shadow-color);
+    grid-column: 1 / -1;
+}
+
+body:has(.apps-section) .loading-apps i,
+body:has(.apps-section) .no-apps i {
+    font-size: 4rem;
+    color: #22C55E;
+    margin-bottom: 2rem;
+    opacity: 0.7;
+}
+
+body:has(.apps-section) .loading-apps p,
+body:has(.apps-section) .no-apps p {
+    font-size: 1.1rem;
+    opacity: 0.8;
+    margin-bottom: 2rem;
+}
+
+/* Animations */
 @keyframes slideInFade {
     from {
         opacity: 0;
@@ -6988,39 +7150,185 @@ body:has(.websites-section) .filter-select:focus {
     }
 }
 
-.app-card {
+body:has(.apps-section) .app-card {
     animation: slideInFade 0.6s ease-out;
 }
 
-.app-card:nth-child(1) { animation-delay: 0.1s; }
-.app-card:nth-child(2) { animation-delay: 0.2s; }
-.app-card:nth-child(3) { animation-delay: 0.3s; }
-.app-card:nth-child(4) { animation-delay: 0.4s; }
-.app-card:nth-child(5) { animation-delay: 0.5s; }
-.app-card:nth-child(6) { animation-delay: 0.6s; }
+body:has(.apps-section) .app-card:nth-child(1) { animation-delay: 0.1s; }
+body:has(.apps-section) .app-card:nth-child(2) { animation-delay: 0.2s; }
+body:has(.apps-section) .app-card:nth-child(3) { animation-delay: 0.3s; }
+body:has(.apps-section) .app-card:nth-child(4) { animation-delay: 0.4s; }
+body:has(.apps-section) .app-card:nth-child(5) { animation-delay: 0.5s; }
+body:has(.apps-section) .app-card:nth-child(6) { animation-delay: 0.6s; }
 
-/* ==========================================
-   ACCESSIBILITY ENHANCEMENTS
-   ========================================== */
+/* Responsive Design */
+@media (max-width: 1200px) {
+    body:has(.apps-section) .portfolio-grid {
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 2.5rem;
+    }
+    
+    body:has(.apps-section) .header-content h1 {
+        font-size: 4rem;
+    }
+}
+
+@media (max-width: 992px) {
+    body:has(.apps-section) .page-header {
+        padding: 10rem 0 4rem;
+    }
+    
+    body:has(.apps-section) .header-content h1 {
+        font-size: 3.5rem;
+    }
+    
+    body:has(.apps-section) .header-stats {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        padding: 2rem;
+    }
+    
+    body:has(.apps-section) .portfolio-grid {
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 2rem;
+    }
+    
+    body:has(.apps-section) .app-content {
+        padding: 2rem;
+    }
+    
+    body:has(.apps-section) .app-stats {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+        padding: 1.25rem;
+    }
+    
+    body:has(.apps-section) .cta-content h2 {
+        font-size: 2.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    body:has(.apps-section) .page-header {
+        padding: 8rem 0 3rem;
+    }
+    
+    body:has(.apps-section) .header-content h1 {
+        font-size: 2.5rem;
+    }
+    
+    body:has(.apps-section) .header-content p {
+        font-size: 1.1rem;
+    }
+    
+    body:has(.apps-section) .filter-container {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    body:has(.apps-section) .portfolio-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    body:has(.apps-section) .app-header {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+    
+    body:has(.apps-section) .app-rating {
+        align-self: flex-start;
+    }
+    
+    body:has(.apps-section) .app-actions {
+        flex-direction: column;
+    }
+    
+    body:has(.apps-section) .app-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    body:has(.apps-section) .store-badges {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    body:has(.apps-section) .store-badge {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    body:has(.apps-section) .cta-content h2 {
+        font-size: 2rem;
+    }
+    
+    body:has(.apps-section) .cta-content p {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    body:has(.apps-section) .header-content h1 {
+        font-size: 2rem;
+    }
+    
+    body:has(.apps-section) .stat-number {
+        font-size: 2rem;
+    }
+    
+    body:has(.apps-section) .app-content {
+        padding: 1.5rem;
+    }
+    
+    body:has(.apps-section) .app-title {
+        font-size: 1.25rem;
+    }
+    
+    body:has(.apps-section) .app-features {
+        gap: 0.5rem;
+    }
+    
+    body:has(.apps-section) .app-feature {
+        font-size: 0.8rem;
+        padding: 0.4rem 0.8rem;
+    }
+    
+    body:has(.apps-section) .app-stats {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    body:has(.apps-section) .app-stat-value {
+        font-size: 1.25rem;
+    }
+    
+    body:has(.apps-section) .platform-badges {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+/* Accessibility Enhancements */
 @media (prefers-reduced-motion: reduce) {
-    .app-card,
-    .app-card:hover .app-image img,
-    .filter-select,
-    .btn,
-    .store-badge {
+    body:has(.apps-section) .app-card,
+    body:has(.apps-section) .app-card:hover .app-image img,
+    body:has(.apps-section) .filter-select,
+    body:has(.apps-section) .btn,
+    body:has(.apps-section) .store-badge {
         animation: none;
         transition: none;
     }
 }
 
 /* Focus styles for better accessibility */
-.app-card:focus-within {
+body:has(.apps-section) .app-card:focus-within {
     outline: 2px solid #22C55E;
     outline-offset: 2px;
 }
 
-.filter-select:focus,
-.store-badge:focus {
+body:has(.apps-section) .filter-select:focus,
+body:has(.apps-section) .store-badge:focus {
     outline: 2px solid #22C55E;
     outline-offset: 2px;
 }
