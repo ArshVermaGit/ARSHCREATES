@@ -3,56 +3,87 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Certificates - Arsh Verma</title>
+    <meta name="description" content="Professional certificates and achievements of Arsh Verma - Industry-recognized certifications validating technical expertise">
+    <meta name="keywords" content="certificates, certifications, AWS, Google, Microsoft, IBM, programming, cloud computing">
+    <meta name="author" content="Arsh Verma">
+    
+    <title>Certificates - Arsh Verma | Professional Certifications Portfolio</title>
     <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="css/style.css" as="style">
+    <link rel="preload" href="css/certificates.css" as="style">
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" as="style" crossorigin="anonymous">
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" as="style" crossorigin="anonymous">
+    
+    <!-- CSS Stylesheets -->
     <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="css/certificates.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Structured Data for SEO -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Arsh Verma",
+        "url": "https://arshcreates.com",
+        "description": "Full-stack developer and technology enthusiast with industry-recognized certifications",
+        "hasCredential": {
+            "@type": "EducationalOccupationalCredential",
+            "credentialCategory": "Professional Certificate"
+        }
+    }
+    </script>
 </head>
-<body>
+<body class="certificates-page">
     <!-- Loading Screen -->
-    <div id="loadingScreen" class="loading-screen">
+    <div id="loadingScreen" class="loading-screen" aria-live="polite" aria-label="Loading certificates">
         <div class="loading-content">
             <div class="loading-logo">
                 <div class="logo-glow"></div>
-                <i class="fas fa-certificate"></i>
+                <i class="fas fa-certificate" aria-hidden="true"></i>
             </div>
             <div class="loading-bar-container">
-                <div class="loading-bar" id="loadingBar"></div>
+                <div class="loading-bar" id="loadingBar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
             </div>
             <div class="loading-text" id="loadingText">Loading Certificates...</div>
         </div>
     </div>
 
+    <!-- Skip to main content for accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
     <!-- Navigation -->
-    <nav class="navbar" id="navbar">
+    <nav class="navbar" id="navbar" role="navigation" aria-label="Main navigation">
         <div class="container">
             <div class="nav-content">
-                <a href="index.html" class="logo">
+                <a href="index.html" class="logo" aria-label="ArshCreates Home">
                     <div class="logo-icon">
-                        <i class="fas fa-code"></i>
+                        <i class="fas fa-code" aria-hidden="true"></i>
                     </div>
                     <span class="logo-text">ArshCreates</span>
                 </a>
 
-                <ul class="nav-menu" id="navMenu">
-                    <li><a href="index.html" class="nav-link">Home</a></li>
-                    <li><a href="index.html#about" class="nav-link">About</a></li>
-                    <li><a href="games.html" class="nav-link">Games</a></li>
-                    <li><a href="websites.html" class="nav-link">Websites</a></li>
-                    <li><a href="apps.html" class="nav-link">Apps</a></li>
-                    <li><a href="certificates.html" class="nav-link active">Certificates</a></li>
-                    <li><a href="testimonials.html" class="nav-link">Testimonials</a></li>
-                    <li><a href="index.html#contact" class="nav-link">Contact</a></li>
+                <ul class="nav-menu" id="navMenu" role="menubar">
+                    <li role="none"><a href="index.html" class="nav-link" role="menuitem">Home</a></li>
+                    <li role="none"><a href="index.html#about" class="nav-link" role="menuitem">About</a></li>
+                    <li role="none"><a href="games.html" class="nav-link" role="menuitem">Games</a></li>
+                    <li role="none"><a href="websites.html" class="nav-link" role="menuitem">Websites</a></li>
+                    <li role="none"><a href="apps.html" class="nav-link" role="menuitem">Apps</a></li>
+                    <li role="none"><a href="certificates.html" class="nav-link active" role="menuitem" aria-current="page">Certificates</a></li>
+                    <li role="none"><a href="testimonials.html" class="nav-link" role="menuitem">Testimonials</a></li>
+                    <li role="none"><a href="index.html#contact" class="nav-link" role="menuitem">Contact</a></li>
                 </ul>
 
                 <div class="nav-actions">
                     <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
                         <div class="theme-icon">
-                            <i class="fas fa-moon"></i>
+                            <i class="fas fa-moon" aria-hidden="true"></i>
                         </div>
                     </button>
-                    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+                    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="navMenu">
                         <span></span>
                         <span></span>
                         <span></span>
@@ -62,105 +93,109 @@
         </div>
     </nav>
 
-    <!-- Certificates Header -->
-    <section class="page-header">
-        <div class="container">
-            <div class="header-content">
-                <h1>Professional Certificates</h1>
-                <p>Industry-recognized certifications and achievements validating technical expertise and professional skills</p>
-                <div class="header-stats">
-                    <div class="stat">
-                        <span class="stat-number">20+</span>
-                        <span class="stat-label">Certificates Earned</span>
+    <!-- Main Content -->
+    <main id="main-content">
+        <!-- Certificates Header -->
+        <section class="page-header" aria-labelledby="page-title">
+            <div class="container">
+                <div class="header-content">
+                    <h1 id="page-title">Professional Certificates</h1>
+                    <p>Industry-recognized certifications and achievements validating technical expertise and professional skills</p>
+                    <div class="header-stats" aria-label="Certificates statistics">
+                        <div class="stat">
+                            <span class="stat-number">20+</span>
+                            <span class="stat-label">Certificates Earned</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number">15+</span>
+                            <span class="stat-label">Organizations</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number">98%</span>
+                            <span class="stat-label">Success Rate</span>
+                        </div>
                     </div>
-                    <div class="stat">
-                        <span class="stat-number">15+</span>
-                        <span class="stat-label">Organizations</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Certificates Filter -->
+        <section class="section filter-section" aria-labelledby="filter-title">
+            <div class="container">
+                <h2 id="filter-title" class="sr-only">Certificate Filters</h2>
+                <div class="filter-container">
+                    <div class="filter-group">
+                        <label for="categoryFilter">Category</label>
+                        <select id="categoryFilter" class="filter-select" aria-label="Filter by certificate category">
+                            <option value="all">All Categories</option>
+                            <option value="programming">Programming</option>
+                            <option value="cloud">Cloud Computing</option>
+                            <option value="design">Design</option>
+                            <option value="language">Language</option>
+                            <option value="security">Security</option>
+                        </select>
                     </div>
-                    <div class="stat">
-                        <span class="stat-number">98%</span>
-                        <span class="stat-label">Success Rate</span>
+                    <div class="filter-group">
+                        <label for="issuerFilter">Issuer</label>
+                        <select id="issuerFilter" class="filter-select" aria-label="Filter by certificate issuer">
+                            <option value="all">All Issuers</option>
+                            <option value="AWS">Amazon Web Services</option>
+                            <option value="Google">Google</option>
+                            <option value="Microsoft">Microsoft</option>
+                            <option value="IBM">IBM</option>
+                            <option value="freeCodeCamp">freeCodeCamp</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="yearFilter">Year</label>
+                        <select id="yearFilter" class="filter-select" aria-label="Filter by certificate year">
+                            <option value="all">All Years</option>
+                            <option value="2024">2024</option>
+                            <option value="2023">2023</option>
+                            <option value="2022">2022</option>
+                        </select>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Certificates Filter -->
-    <section class="section filter-section">
-        <div class="container">
-            <div class="filter-container">
-                <div class="filter-group">
-                    <label for="categoryFilter">Category</label>
-                    <select id="categoryFilter" class="filter-select">
-                        <option value="all">All Categories</option>
-                        <option value="programming">Programming</option>
-                        <option value="cloud">Cloud Computing</option>
-                        <option value="design">Design</option>
-                        <option value="language">Language</option>
-                        <option value="security">Security</option>
-                    </select>
+        <!-- Certificates Grid -->
+        <section class="section certificates-section" aria-labelledby="certificates-title">
+            <div class="container">
+                <div class="section-header">
+                    <h2 id="certificates-title" class="section-title">My Certifications</h2>
+                    <p class="section-subtitle">Validated skills and professional achievements from leading organizations</p>
+                    <div class="section-decoration" aria-hidden="true">
+                        <div class="decoration-line"></div>
+                        <i class="fas fa-award"></i>
+                        <div class="decoration-line"></div>
+                    </div>
                 </div>
-                <div class="filter-group">
-                    <label for="issuerFilter">Issuer</label>
-                    <select id="issuerFilter" class="filter-select">
-                        <option value="all">All Issuers</option>
-                        <option value="AWS">Amazon Web Services</option>
-                        <option value="Google">Google</option>
-                        <option value="Microsoft">Microsoft</option>
-                        <option value="IBM">IBM</option>
-                        <option value="freeCodeCamp">freeCodeCamp</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <label for="yearFilter">Year</label>
-                    <select id="yearFilter" class="filter-select">
-                        <option value="all">All Years</option>
-                        <option value="2024">2024</option>
-                        <option value="2023">2023</option>
-                        <option value="2022">2022</option>
-                    </select>
+                
+                <div class="portfolio-grid certificates-grid" id="certificatesGrid" role="grid" aria-label="Certificates portfolio">
+                    <!-- Certificates will be loaded dynamically from data.js -->
+                    <div class="loading-certificates" role="alert" aria-live="polite">
+                        <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        <p>Loading certificates...</p>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Certificates Grid -->
-    <section class="section certificates-section">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">My Certifications</h2>
-                <p class="section-subtitle">Validated skills and professional achievements from leading organizations</p>
-                <div class="section-decoration">
-                    <div class="decoration-line"></div>
-                    <i class="fas fa-award"></i>
-                    <div class="decoration-line"></div>
+        <!-- CTA Section -->
+        <section class="section cta-section certificates-cta" aria-labelledby="cta-title">
+            <div class="container">
+                <div class="cta-content">
+                    <h2 id="cta-title">Ready to Verify Skills?</h2>
+                    <p>Contact me for credential verification or to discuss certification opportunities</p>
+                    <a href="#contact" class="btn btn-primary btn-glow btn-certificate">
+                        <i class="fas fa-certificate" aria-hidden="true"></i>
+                        <span>Verify Credentials</span>
+                    </a>
                 </div>
             </div>
-            
-            <div class="portfolio-grid" id="certificatesGrid">
-                <!-- Certificates will be loaded dynamically from data.js -->
-                <div class="loading-games">
-                    <i class="fas fa-spinner fa-spin"></i>
-                    <p>Loading certificates...</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- CTA Section -->
-    <section class="section cta-section">
-        <div class="container">
-            <div class="cta-content">
-                <h2>Ready to Verify Skills?</h2>
-                <p>Contact me for credential verification or to discuss certification opportunities</p>
-                <a href="#contact" class="btn btn-primary btn-glow">
-                    <i class="fas fa-certificate"></i>
-                    <span>Verify Credentials</span>
-                </a>
-            </div>
-        </div>
-    </section>
+        </section>
+    </main>
 
     <!-- Footer -->
     <footer class="footer">
@@ -169,22 +204,25 @@
                 <div class="footer-brand">
                     <a href="index.html" class="logo">
                         <div class="logo-icon">
-                            <i class="fas fa-code"></i>
+                            <i class="fas fa-code" aria-hidden="true"></i>
                         </div>
                         <span class="logo-text">ArshCreates</span>
                     </a>
                     <p class="footer-description">
                         Creating exceptional digital experiences through innovative development and creative solutions.
                     </p>
+                    <div class="developer-credit">
+                        <span>Designed & Developed by <strong>Arsh Verma</strong></span>
+                    </div>
                     <div class="footer-social">
-                        <a href="https://github.com/ArshVermaGit" class="social-link" target="_blank">
-                            <i class="fab fa-github"></i>
+                        <a href="https://github.com/ArshVermaGit" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="GitHub profile">
+                            <i class="fab fa-github" aria-hidden="true"></i>
                         </a>
-                        <a href="https://www.linkedin.com/in/arshvermadev/" class="social-link" target="_blank">
-                            <i class="fab fa-linkedin"></i>
+                        <a href="https://www.linkedin.com/in/arshvermadev/" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile">
+                            <i class="fab fa-linkedin" aria-hidden="true"></i>
                         </a>
-                        <a href="#" class="social-link">
-                            <i class="fab fa-twitter"></i>
+                        <a href="#" class="social-link" aria-label="Twitter profile">
+                            <i class="fab fa-twitter" aria-hidden="true"></i>
                         </a>
                     </div>
                 </div>
@@ -219,11 +257,11 @@
 
             <div class="footer-bottom">
                 <div class="copyright">
-                    &copy; 2024 Arsh Verma. All rights reserved.
+                    &copy; 2024 Arsh Verma. All rights reserved. | Designed & Developed by <strong>Arsh Verma</strong>
                 </div>
                 <div class="footer-actions">
                     <a href="admin.html" class="admin-link">
-                        <i class="fas fa-cog"></i>
+                        <i class="fas fa-cog" aria-hidden="true"></i>
                         <span>Admin Panel</span>
                     </a>
                 </div>
@@ -233,12 +271,13 @@
 
     <!-- Back to Top -->
     <button class="back-to-top" id="backToTop" aria-label="Back to top">
-        <i class="fas fa-chevron-up"></i>
+        <i class="fas fa-chevron-up" aria-hidden="true"></i>
     </button>
 
     <!-- Notification Container -->
-    <div id="notificationContainer"></div>
+    <div id="notificationContainer" aria-live="polite" aria-atomic="true"></div>
     
+    <!-- JavaScript Files -->
     <script src="js/utils.js"></script>
     <script src="js/data.js"></script>
     <script src="js/script.js"></script>
