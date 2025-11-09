@@ -1,17 +1,45 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
+    <!-- ==========================================
+         META INFORMATION
+         Author: Arsh Verma
+         Purpose: Games Portfolio Page
+         Last Updated: 2024
+         ========================================== -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Explore Arsh Verma's game development portfolio featuring immersive gaming experiences built with cutting-edge technology">
+    <meta name="keywords" content="Arsh Verma, Game Development, Portfolio, Unity, Unreal Engine, Indie Games">
+    <meta name="author" content="Arsh Verma">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Games Portfolio - Arsh Verma">
+    <meta property="og:description" content="Immersive gaming experiences built with cutting-edge technology">
+    <meta property="og:type" content="website">
+    
     <title>Games Portfolio - Arsh Verma</title>
+    
+    <!-- Favicon -->
     <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
+    
+    <!-- Stylesheets -->
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/games.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-Avb2QiuDEEvB4bZJYdft2mNjVShBftLdPG8FJ0V7irTLQ8Uo0qcPxh4Plq7G5tGm0rU+1SPhVotteLpBERwTkw==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Loading Screen -->
+    <!-- ==========================================
+         LOADING SCREEN
+         Displays while page assets load
+         ========================================== -->
     <div id="loadingScreen" class="loading-screen">
         <div class="loading-content">
             <div class="loading-logo">
@@ -25,17 +53,22 @@
         </div>
     </div>
 
-    <!-- Navigation -->
+    <!-- ==========================================
+         NAVIGATION BAR
+         Main site navigation with theme toggle
+         ========================================== -->
     <nav class="navbar" id="navbar">
         <div class="container">
             <div class="nav-content">
-                <a href="index.html" class="logo">
+                <!-- Logo -->
+                <a href="index.html" class="logo" aria-label="ArshCreates Home">
                     <div class="logo-icon">
                         <i class="fas fa-code"></i>
                     </div>
                     <span class="logo-text">ArshCreates</span>
                 </a>
 
+                <!-- Navigation Menu -->
                 <ul class="nav-menu" id="navMenu">
                     <li><a href="index.html" class="nav-link">Home</a></li>
                     <li><a href="index.html#about" class="nav-link">About</a></li>
@@ -47,12 +80,16 @@
                     <li><a href="index.html#contact" class="nav-link">Contact</a></li>
                 </ul>
 
+                <!-- Navigation Actions -->
                 <div class="nav-actions">
+                    <!-- Theme Toggle Button -->
                     <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
                         <div class="theme-icon">
                             <i class="fas fa-moon"></i>
                         </div>
                     </button>
+                    
+                    <!-- Mobile Menu Toggle -->
                     <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
                         <span></span>
                         <span></span>
@@ -63,23 +100,28 @@
         </div>
     </nav>
 
-    <!-- Games Header -->
+    <!-- ==========================================
+         GAMES HEADER
+         Hero section with statistics
+         ========================================== -->
     <section class="page-header">
         <div class="container">
             <div class="header-content">
                 <h1>Games Portfolio</h1>
                 <p>Immersive gaming experiences built with cutting-edge technology and creative innovation</p>
+                
+                <!-- Portfolio Statistics -->
                 <div class="header-stats">
                     <div class="stat">
-                        <span class="stat-number">15+</span>
+                        <span class="stat-number" data-stat="games">15+</span>
                         <span class="stat-label">Games Developed</span>
                     </div>
                     <div class="stat">
-                        <span class="stat-number">4.8</span>
+                        <span class="stat-number" data-stat="rating">4.8</span>
                         <span class="stat-label">Average Rating</span>
                     </div>
                     <div class="stat">
-                        <span class="stat-number">50K+</span>
+                        <span class="stat-number" data-stat="players">50K+</span>
                         <span class="stat-label">Players</span>
                     </div>
                 </div>
@@ -87,13 +129,17 @@
         </div>
     </section>
 
-    <!-- Games Filter -->
+    <!-- ==========================================
+         GAMES FILTER SECTION
+         Filter and sort controls
+         ========================================== -->
     <section class="section filter-section">
         <div class="container">
             <div class="filter-container">
+                <!-- Category Filter -->
                 <div class="filter-group">
                     <label for="categoryFilter">Category</label>
-                    <select id="categoryFilter" class="filter-select">
+                    <select id="categoryFilter" class="filter-select" aria-label="Filter by category">
                         <option value="all">All Categories</option>
                         <option value="Action RPG">Action RPG</option>
                         <option value="Racing">Racing</option>
@@ -101,25 +147,31 @@
                         <option value="Fantasy RPG">Fantasy RPG</option>
                     </select>
                 </div>
+                
+                <!-- Status Filter -->
                 <div class="filter-group">
                     <label for="statusFilter">Status</label>
-                    <select id="statusFilter" class="filter-select">
+                    <select id="statusFilter" class="filter-select" aria-label="Filter by status">
                         <option value="all">All Status</option>
                         <option value="Live">Live</option>
                         <option value="In Development">In Development</option>
                     </select>
                 </div>
+                
+                <!-- Sort Filter -->
                 <div class="filter-group">
                     <label for="sortFilter">Sort By</label>
-                    <select id="sortFilter" class="filter-select">
+                    <select id="sortFilter" class="filter-select" aria-label="Sort games">
                         <option value="newest">Newest First</option>
                         <option value="oldest">Oldest First</option>
                         <option value="rating">Highest Rating</option>
                         <option value="popular">Most Popular</option>
                     </select>
                 </div>
+                
+                <!-- Reset Button -->
                 <div class="filter-group">
-                    <button class="btn btn-secondary" onclick="resetFilters()">
+                    <button class="btn btn-secondary" onclick="resetFilters()" aria-label="Reset all filters">
                         <i class="fas fa-redo"></i>
                         <span>Reset Filters</span>
                     </button>
@@ -128,9 +180,13 @@
         </div>
     </section>
 
-    <!-- Games Grid -->
+    <!-- ==========================================
+         GAMES GRID SECTION
+         Main content area displaying game cards
+         ========================================== -->
     <section class="section games-section">
         <div class="container">
+            <!-- Section Header -->
             <div class="section-header">
                 <h2 class="section-title">Featured Games</h2>
                 <p class="section-subtitle">Explore my collection of interactive gaming experiences</p>
@@ -141,8 +197,9 @@
                 </div>
             </div>
             
+            <!-- Games Grid Container -->
             <div class="portfolio-grid" id="gamesGrid">
-                <!-- Games will be loaded dynamically from data.js -->
+                <!-- Loading State -->
                 <div class="loading-games">
                     <i class="fas fa-spinner fa-spin"></i>
                     <p>Loading games...</p>
@@ -151,7 +208,10 @@
         </div>
     </section>
 
-    <!-- CTA Section -->
+    <!-- ==========================================
+         CTA SECTION
+         Call-to-action for project inquiries
+         ========================================== -->
     <section class="section cta-section">
         <div class="container">
             <div class="cta-content">
@@ -165,12 +225,16 @@
         </div>
     </section>
 
-    <!-- Footer -->
+    <!-- ==========================================
+         FOOTER
+         Site footer with links and social media
+         ========================================== -->
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
+                <!-- Footer Brand -->
                 <div class="footer-brand">
-                    <a href="index.html" class="logo">
+                    <a href="index.html" class="logo" aria-label="ArshCreates Home">
                         <div class="logo-icon">
                             <i class="fas fa-code"></i>
                         </div>
@@ -179,20 +243,24 @@
                     <p class="footer-description">
                         Creating exceptional digital experiences through innovative development and creative solutions.
                     </p>
+                    
+                    <!-- Social Media Links -->
                     <div class="footer-social">
-                        <a href="https://github.com/ArshVermaGit" class="social-link" target="_blank">
+                        <a href="https://github.com/ArshVermaGit" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
                             <i class="fab fa-github"></i>
                         </a>
-                        <a href="https://www.linkedin.com/in/arshvermadev/" class="social-link" target="_blank">
+                        <a href="https://www.linkedin.com/in/arshvermadev/" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
                             <i class="fab fa-linkedin"></i>
                         </a>
-                        <a href="https://x.com/TheArshVerma" class="social-link">
-                            <i class="fab fa-x"></i>
+                        <a href="https://x.com/TheArshVerma" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)">
+                            <i class="fab fa-x-twitter"></i>
                         </a>
                     </div>
                 </div>
 
+                <!-- Footer Links -->
                 <div class="footer-links">
+                    <!-- Navigation Links -->
                     <div class="link-group">
                         <h4>Navigation</h4>
                         <a href="index.html">Home</a>
@@ -203,6 +271,7 @@
                         <a href="certificates.html">Certificates</a>
                     </div>
 
+                    <!-- Connect Links -->
                     <div class="link-group">
                         <h4>Connect</h4>
                         <a href="index.html#contact">Contact</a>
@@ -211,6 +280,7 @@
                         <a href="#">Blog</a>
                     </div>
 
+                    <!-- Legal Links -->
                     <div class="link-group">
                         <h4>Legal</h4>
                         <a href="#">Privacy Policy</a>
@@ -220,6 +290,7 @@
                 </div>
             </div>
 
+            <!-- Footer Bottom -->
             <div class="footer-bottom">
                 <div class="copyright">
                     &copy; 2024 Arsh Verma. All rights reserved.
@@ -234,14 +305,24 @@
         </div>
     </footer>
 
-    <!-- Back to Top -->
+    <!-- ==========================================
+         BACK TO TOP BUTTON
+         Scroll to top functionality
+         ========================================== -->
     <button class="back-to-top" id="backToTop" aria-label="Back to top">
         <i class="fas fa-chevron-up"></i>
     </button>
 
-    <!-- Notification Container -->
-    <div id="notificationContainer"></div>
+    <!-- ==========================================
+         NOTIFICATION CONTAINER
+         For displaying user notifications
+         ========================================== -->
+    <div id="notificationContainer" aria-live="polite" aria-atomic="true"></div>
     
+    <!-- ==========================================
+         JAVASCRIPT FILES
+         Load scripts in correct order
+         ========================================== -->
     <script src="js/utils.js"></script>
     <script src="js/data.js"></script>
     <script src="js/script.js"></script>
