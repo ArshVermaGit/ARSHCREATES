@@ -2,40 +2,44 @@
 <html lang="en" data-theme="dark">
 <head>
     <!-- ==========================================
-         WEBSITES PORTFOLIO PAGE
+         META INFORMATION
          Author: Arsh Verma
-         Version: 2.0.0
-         Description: Professional web development portfolio showcase
+         Purpose: Websites Portfolio Page - Preview showcase for web projects
+         Last Updated: 2025
          ========================================== -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Explore Arsh Verma's portfolio of modern web solutions, including e-commerce platforms, SaaS applications, and custom websites">
-    <meta name="keywords" content="web development, portfolio, websites, React, Node.js, SaaS, e-commerce, Arsh Verma">
+    <meta name="description" content="Explore Arsh Verma's websites development portfolio featuring modern web solutions built with cutting-edge technology">
+    <meta name="keywords" content="Arsh Verma, Web Development, Portfolio, React, Node.js, SaaS, E-commerce">
     <meta name="author" content="Arsh Verma">
-    <meta name="robots" content="index, follow">
     
     <!-- Open Graph Meta Tags -->
     <meta property="og:title" content="Websites Portfolio - Arsh Verma">
-    <meta property="og:description" content="Revolutionary web solutions with modern frameworks and exceptional user experiences">
+    <meta property="og:description" content="Modern web solutions built with cutting-edge technology">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://arshverma.com/websites.html">
+    <meta property="og:image" content="assets/og-websites.jpg">
     
-    <title>Websites Portfolio - Arsh Verma | Modern Web Solutions</title>
+    <title>Websites Portfolio - Arsh Verma</title>
     
-    <!-- ==========================================
-         STYLESHEETS & FONTS
-         ========================================== -->
+    <!-- Favicon -->
     <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
+    
+    <!-- Stylesheets -->
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/websites.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-Avb2QiuDEEvB4bZJYdft2mNjVShBftLdPG8FJ0V7irTLQ8Uo0qcPxh4Plq7G5tGm0rU+1SPhVotteLpBERwTkw==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
     <!-- ==========================================
          LOADING SCREEN
+         Displays while page assets load - Production ready with smooth fade-out
          ========================================== -->
     <div id="loadingScreen" class="loading-screen">
         <div class="loading-content">
@@ -46,16 +50,18 @@
             <div class="loading-bar-container">
                 <div class="loading-bar" id="loadingBar"></div>
             </div>
-            <div class="loading-text">Loading Websites Portfolio...</div>
+            <div class="loading-text" id="loadingText">Loading Websites Portfolio...</div>
         </div>
     </div>
 
     <!-- ==========================================
          NAVIGATION BAR
+         Main site navigation with theme toggle - Consistent with other sections
          ========================================== -->
     <nav class="navbar" id="navbar">
         <div class="container">
             <div class="nav-content">
+                <!-- Logo -->
                 <a href="index.html" class="logo" aria-label="ArshCreates Home">
                     <div class="logo-icon">
                         <i class="fas fa-code"></i>
@@ -63,6 +69,7 @@
                     <span class="logo-text">ArshCreates</span>
                 </a>
 
+                <!-- Navigation Menu -->
                 <ul class="nav-menu" id="navMenu">
                     <li><a href="index.html" class="nav-link">Home</a></li>
                     <li><a href="index.html#about" class="nav-link">About</a></li>
@@ -74,13 +81,16 @@
                     <li><a href="index.html#contact" class="nav-link">Contact</a></li>
                 </ul>
 
+                <!-- Navigation Actions -->
                 <div class="nav-actions">
+                    <!-- Theme Toggle Button -->
                     <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
                         <div class="theme-icon">
                             <i class="fas fa-moon"></i>
                         </div>
                     </button>
                     
+                    <!-- Mobile Menu Toggle -->
                     <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
                         <span></span>
                         <span></span>
@@ -92,26 +102,28 @@
     </nav>
 
     <!-- ==========================================
-         PAGE HEADER
+         WEBSITES HEADER
+         Hero section with statistics - Preview-focused stats for engagement
          ========================================== -->
-    <section class="page-header websites-header">
+    <section class="page-header">
         <div class="container">
             <div class="header-content">
-                <h1 class="header-title">Websites Portfolio</h1>
-                <p class="header-subtitle">Revolutionary web solutions with modern frameworks, responsive design, and exceptional user experiences</p>
+                <h1>Websites Portfolio</h1>
+                <p>Modern web solutions built with cutting-edge technology and creative innovation - Preview the highlights</p>
                 
+                <!-- Portfolio Statistics -->
                 <div class="header-stats">
                     <div class="stat">
-                        <span class="stat-number">25+</span>
+                        <span class="stat-number" data-stat="websites">25+</span>
                         <span class="stat-label">Websites Developed</span>
                     </div>
                     <div class="stat">
-                        <span class="stat-number">4.8</span>
+                        <span class="stat-number" data-stat="rating">4.8</span>
                         <span class="stat-label">Average Rating</span>
                     </div>
                     <div class="stat">
-                        <span class="stat-number">100K+</span>
-                        <span class="stat-label">Users</span>
+                        <span class="stat-number" data-stat="users">100K+</span>
+                        <span class="stat-label">Users Reached</span>
                     </div>
                 </div>
             </div>
@@ -119,37 +131,38 @@
     </section>
 
     <!-- ==========================================
-         FILTER SECTION
+         WEBSITES FILTER SECTION
+         Filter and sort controls - Fully functional for preview navigation
          ========================================== -->
     <section class="section filter-section">
         <div class="container">
             <div class="filter-container">
+                <!-- Category Filter -->
                 <div class="filter-group">
                     <label for="categoryFilter">Category</label>
-                    <select id="categoryFilter" class="filter-select">
+                    <select id="categoryFilter" class="filter-select" aria-label="Filter by category">
                         <option value="all">All Categories</option>
                         <option value="E-commerce">E-commerce</option>
                         <option value="Health & Wellness">Health & Wellness</option>
                         <option value="SaaS Platform">SaaS Platform</option>
                         <option value="Food Delivery">Food Delivery</option>
-                        <option value="Portfolio">Portfolio</option>
-                        <option value="Business">Business</option>
                     </select>
                 </div>
                 
+                <!-- Status Filter -->
                 <div class="filter-group">
                     <label for="statusFilter">Status</label>
-                    <select id="statusFilter" class="filter-select">
+                    <select id="statusFilter" class="filter-select" aria-label="Filter by status">
                         <option value="all">All Status</option>
                         <option value="Live">Live</option>
                         <option value="In Development">In Development</option>
-                        <option value="Beta">Beta</option>
                     </select>
                 </div>
                 
+                <!-- Sort Filter -->
                 <div class="filter-group">
                     <label for="sortFilter">Sort By</label>
-                    <select id="sortFilter" class="filter-select">
+                    <select id="sortFilter" class="filter-select" aria-label="Sort websites">
                         <option value="newest">Newest First</option>
                         <option value="oldest">Oldest First</option>
                         <option value="rating">Highest Rating</option>
@@ -157,8 +170,9 @@
                     </select>
                 </div>
                 
+                <!-- Reset Button -->
                 <div class="filter-group">
-                    <button class="btn btn-secondary" onclick="resetWebsiteFilters()">
+                    <button class="btn btn-secondary" onclick="resetWebsiteFilters()" aria-label="Reset all filters">
                         <i class="fas fa-redo"></i>
                         <span>Reset Filters</span>
                     </button>
@@ -169,12 +183,14 @@
 
     <!-- ==========================================
          WEBSITES GRID SECTION
+         Main content area displaying website cards - Preview cards only, link to details
          ========================================== -->
     <section class="section websites-section">
         <div class="container">
+            <!-- Section Header -->
             <div class="section-header">
                 <h2 class="section-title">Featured Websites</h2>
-                <p class="section-subtitle">Explore my collection of modern web solutions and digital experiences</p>
+                <p class="section-subtitle">Explore my collection of modern web solutions - Click for full previews</p>
                 <div class="section-decoration">
                     <div class="decoration-line"></div>
                     <i class="fas fa-laptop-code"></i>
@@ -182,7 +198,9 @@
                 </div>
             </div>
             
+            <!-- Websites Grid Container -->
             <div class="portfolio-grid" id="websitesGrid">
+                <!-- Loading State -->
                 <div class="loading-websites">
                     <i class="fas fa-spinner fa-spin"></i>
                     <p>Loading websites...</p>
@@ -193,15 +211,16 @@
 
     <!-- ==========================================
          CTA SECTION
+         Call-to-action for project inquiries - Consistent with portfolio theme
          ========================================== -->
     <section class="section cta-section">
         <div class="container">
             <div class="cta-content">
-                <h2>Ready to Build Your Website?</h2>
-                <p>Let's create an exceptional web experience that exceeds your expectations</p>
+                <h2>Ready to Collaborate?</h2>
+                <p>Let's create your next web masterpiece together</p>
                 <a href="index.html#contact" class="btn btn-primary btn-glow">
-                    <i class="fas fa-code"></i>
-                    <span>Start Web Project</span>
+                    <i class="fas fa-laptop-code"></i>
+                    <span>Start a Web Project</span>
                 </a>
             </div>
         </div>
@@ -209,12 +228,14 @@
 
     <!-- ==========================================
          FOOTER
+         Site footer with links and social media - Production ready with credits
          ========================================== -->
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
+                <!-- Footer Brand -->
                 <div class="footer-brand">
-                    <a href="index.html" class="logo">
+                    <a href="index.html" class="logo" aria-label="ArshCreates Home">
                         <div class="logo-icon">
                             <i class="fas fa-code"></i>
                         </div>
@@ -224,20 +245,23 @@
                         Creating exceptional digital experiences through innovative development and creative solutions.
                     </p>
                     
+                    <!-- Social Media Links -->
                     <div class="footer-social">
-                        <a href="https://github.com/ArshVermaGit" class="social-link" target="_blank" rel="noopener noreferrer">
+                        <a href="https://github.com/ArshVermaGit" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
                             <i class="fab fa-github"></i>
                         </a>
-                        <a href="https://www.linkedin.com/in/arshvermadev/" class="social-link" target="_blank" rel="noopener noreferrer">
+                        <a href="https://www.linkedin.com/in/arshvermadev/" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
                             <i class="fab fa-linkedin"></i>
                         </a>
-                        <a href="https://x.com/TheArshVerma" class="social-link" target="_blank" rel="noopener noreferrer">
+                        <a href="https://x.com/TheArshVerma" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)">
                             <i class="fab fa-x-twitter"></i>
                         </a>
                     </div>
                 </div>
 
+                <!-- Footer Links -->
                 <div class="footer-links">
+                    <!-- Navigation Links -->
                     <div class="link-group">
                         <h4>Navigation</h4>
                         <a href="index.html">Home</a>
@@ -248,6 +272,7 @@
                         <a href="certificates.html">Certificates</a>
                     </div>
 
+                    <!-- Connect Links -->
                     <div class="link-group">
                         <h4>Connect</h4>
                         <a href="index.html#contact">Contact</a>
@@ -256,6 +281,7 @@
                         <a href="#">Blog</a>
                     </div>
 
+                    <!-- Legal Links -->
                     <div class="link-group">
                         <h4>Legal</h4>
                         <a href="#">Privacy Policy</a>
@@ -265,9 +291,10 @@
                 </div>
             </div>
 
+            <!-- Footer Bottom -->
             <div class="footer-bottom">
                 <div class="copyright">
-                    &copy; 2024 Arsh Verma. All rights reserved.
+                    &copy; 2025 Arsh Verma. All rights reserved. Developed with ❤️ by Arsh Verma.
                 </div>
                 <div class="footer-actions">
                     <a href="admin.html" class="admin-link">
@@ -281,6 +308,7 @@
 
     <!-- ==========================================
          BACK TO TOP BUTTON
+         Scroll to top functionality - Accessible and smooth
          ========================================== -->
     <button class="back-to-top" id="backToTop" aria-label="Back to top">
         <i class="fas fa-chevron-up"></i>
@@ -288,11 +316,13 @@
 
     <!-- ==========================================
          NOTIFICATION CONTAINER
+         For displaying user notifications - ARIA compliant
          ========================================== -->
-    <div id="notificationContainer"></div>
-
+    <div id="notificationContainer" aria-live="polite" aria-atomic="true"></div>
+    
     <!-- ==========================================
          JAVASCRIPT FILES
+         Load scripts in correct order - Production optimized
          ========================================== -->
     <script src="js/utils.js"></script>
     <script src="js/data.js"></script>
