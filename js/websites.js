@@ -119,6 +119,7 @@ function validateWebsitesData(websites) {
         launchDate: website.launchDate || null,
         userBase: website.userBase || '0',
         image: website.image || generatePlaceholderImage(website.name),
+        features: Array.isArray(website.technologies) ? website.technologies.slice(0, 3).map(tech => `Built with ${tech}`) : [],  // Adapt to features
         liveUrl: website.liveUrl || null,
         repositoryUrl: website.repositoryUrl || null
     })).filter(website => website.id);
