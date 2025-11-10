@@ -2,9 +2,9 @@
  * ==========================================
  * MOBILE APPS PORTFOLIO - COMPLETE STYLESHEET
  * Author: Arsh Verma
- * Version: 2.0.0
+ * Version: 2.1.0
  * Description: Professional styling for mobile apps portfolio
- * Features: Curved design, modern aesthetics, perfect layout
+ * Features: 3-column layout, enhanced curves, perfect spacing
  * ==========================================
  */
 
@@ -18,11 +18,11 @@
     --apps-accent: #84CC16;
     --apps-gradient: linear-gradient(135deg, #22C55E, #10B981);
     
-    /* Enhanced border radius */
-    --apps-radius-lg: 20px;
-    --apps-radius-md: 16px;
-    --apps-radius-sm: 12px;
-    --apps-radius-xs: 8px;
+    /* Enhanced curved edges */
+    --apps-radius-lg: 24px;
+    --apps-radius-md: 20px;
+    --apps-radius-sm: 16px;
+    --apps-radius-xs: 12px;
 }
 
 /* ==========================================
@@ -31,7 +31,7 @@
    ========================================== */
 .apps-header {
     position: relative;
-    padding: 12rem 0 6rem;
+    padding: 10rem 0 5rem;
     background: linear-gradient(135deg, 
         rgba(34, 197, 94, 0.15) 0%, 
         rgba(16, 185, 129, 0.08) 50%, 
@@ -55,9 +55,9 @@
 }
 
 .apps-header .header-title {
-    font-size: 4.5rem;
+    font-size: 3.5rem;
     font-weight: 900;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.25rem;
     background: var(--apps-gradient);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -67,10 +67,10 @@
 }
 
 .apps-header .header-subtitle {
-    font-size: 1.25rem;
+    font-size: 1.2rem;
     opacity: 0.9;
     line-height: 1.6;
-    margin-bottom: 3rem;
+    margin-bottom: 2.5rem;
     font-weight: 400;
     color: var(--text-secondary);
     text-align: center;
@@ -83,27 +83,27 @@
 .apps-header .header-stats {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 2rem;
-    padding: 3rem;
+    gap: 1.5rem;
+    padding: 2.5rem;
     background: var(--glass-bg);
     backdrop-filter: blur(40px) saturate(180%);
     border: 1px solid var(--border-color);
     border-radius: var(--apps-radius-lg);
     box-shadow: 0 20px 60px var(--shadow-color);
-    max-width: 700px;
+    max-width: 650px;
     margin: 0 auto;
 }
 
 .apps-header .stat {
     text-align: center;
-    padding: 1.5rem;
+    padding: 1.25rem;
     position: relative;
 }
 
 .apps-header .stat:not(:last-child)::after {
     content: '';
     position: absolute;
-    right: -1rem;
+    right: -0.75rem;
     top: 50%;
     transform: translateY(-50%);
     width: 2px;
@@ -113,15 +113,15 @@
 
 .apps-header .stat-number {
     display: block;
-    font-size: 3rem;
+    font-size: 2.5rem;
     font-weight: 800;
     color: var(--apps-primary);
     line-height: 1;
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.5rem;
 }
 
 .apps-header .stat-label {
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     opacity: 0.8;
     font-weight: 600;
     text-transform: uppercase;
@@ -132,14 +132,14 @@
 /* Results info styling */
 .apps-section .results-info {
     text-align: center;
-    margin-top: 2rem;
+    margin-top: 1.5rem;
 }
 
 .apps-section .results-count {
     color: var(--text-secondary);
-    font-size: 1.1rem;
+    font-size: 1rem;
     font-weight: 600;
-    padding: 1rem 2rem;
+    padding: 0.75rem 1.5rem;
     background: var(--glass-bg);
     backdrop-filter: blur(30px) saturate(180%);
     border: 2px solid var(--border-color);
@@ -149,10 +149,10 @@
 
 /* ==========================================
    APPS FILTER SECTION
-   Curved filter controls
+   Curved filter controls - FULL STYLING
    ========================================== */
 .apps-section .filter-section {
-    padding: 3rem 0;
+    padding: 2.5rem 0;
     background: var(--glass-bg);
     backdrop-filter: blur(40px) saturate(180%);
     border-top: 1px solid var(--border-color);
@@ -161,20 +161,20 @@
 
 .apps-section .filter-container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 2.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
     align-items: end;
 }
 
 .apps-section .filter-group {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 0.75rem;
 }
 
 .apps-section .filter-group label {
     font-weight: 700;
-    font-size: 1rem;
+    font-size: 0.95rem;
     margin-bottom: 0.5rem;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -183,12 +183,12 @@
 
 .apps-section .filter-select {
     width: 100%;
-    padding: 1.25rem 1.5rem;
+    padding: 1.1rem 1.25rem;
     background: var(--glass-bg);
     backdrop-filter: blur(30px) saturate(180%);
     border: 2px solid var(--border-color);
     border-radius: var(--apps-radius-md);
-    font-size: 1rem;
+    font-size: 0.95rem;
     font-family: inherit;
     color: inherit;
     cursor: pointer;
@@ -197,53 +197,53 @@
     appearance: none;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2322C55E' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
-    background-position: right 1.5rem center;
+    background-position: right 1.25rem center;
     background-size: 16px;
 }
 
 .apps-section .filter-select:hover {
     border-color: var(--apps-primary);
-    transform: translateY(-3px);
-    box-shadow: 0 15px 40px var(--shadow-color);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px var(--shadow-color);
 }
 
 .apps-section .filter-select:focus {
     outline: none;
     border-color: var(--apps-primary);
-    box-shadow: 0 15px 40px var(--shadow-color), 0 0 0 4px rgba(34, 197, 94, 0.1);
+    box-shadow: 0 12px 40px var(--shadow-color), 0 0 0 3px rgba(34, 197, 94, 0.1);
 }
 
 .apps-section .filter-group .btn {
     width: 100%;
-    padding: 1.25rem 1.5rem;
+    padding: 1.1rem 1.25rem;
     border-radius: var(--apps-radius-md);
     font-weight: 700;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0.75rem;
-    font-size: 1rem;
+    gap: 0.5rem;
+    font-size: 0.95rem;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* ==========================================
    APPS GRID SECTION
-   Main portfolio display with curved cards
+   Main portfolio display with 3-COLUMN layout
    ========================================== */
 .apps-section {
-    padding: 6rem 0;
+    padding: 5rem 0;
     background: var(--bg-primary);
 }
 
 .apps-section .section-header {
     text-align: center;
-    margin-bottom: 5rem;
+    margin-bottom: 4rem;
 }
 
 .apps-section .section-title {
-    font-size: 3.5rem;
+    font-size: 3rem;
     font-weight: 800;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
     color: var(--text-primary);
     background: var(--apps-gradient);
     -webkit-background-clip: text;
@@ -252,10 +252,10 @@
 }
 
 .apps-section .section-subtitle {
-    font-size: 1.2rem;
+    font-size: 1.15rem;
     color: var(--text-secondary);
     opacity: 0.9;
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
     max-width: 600px;
     margin-left: auto;
     margin-right: auto;
@@ -266,27 +266,28 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 2rem;
-    margin-top: 3rem;
+    gap: 1.5rem;
+    margin-top: 2rem;
 }
 
 .apps-section .decoration-line {
-    width: 80px;
-    height: 3px;
+    width: 60px;
+    height: 2px;
     background: linear-gradient(90deg, transparent, var(--apps-primary), transparent);
     border-radius: 2px;
 }
 
 .apps-section .section-decoration i {
-    font-size: 2rem;
+    font-size: 1.75rem;
     color: var(--apps-primary);
 }
 
-/* Enhanced portfolio grid */
+/* 3-COLUMN PORTFOLIO GRID */
 .apps-section .portfolio-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
-    gap: 3rem;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2.5rem;
+    margin-top: 2rem;
 }
 
 /* ==========================================
@@ -298,7 +299,7 @@
     backdrop-filter: blur(40px) saturate(180%);
     border: 2px solid var(--border-color);
     border-radius: var(--apps-radius-lg);
-    box-shadow: 0 20px 60px var(--shadow-color);
+    box-shadow: 0 15px 50px var(--shadow-color);
     overflow: hidden;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
@@ -306,16 +307,16 @@
 }
 
 .app-card:hover {
-    transform: translateY(-12px) scale(1.02);
+    transform: translateY(-8px) scale(1.02);
     border-color: var(--apps-primary);
-    box-shadow: 0 30px 80px var(--shadow-color), 0 0 0 1px rgba(34, 197, 94, 0.1);
+    box-shadow: 0 25px 70px var(--shadow-color), 0 0 0 1px rgba(34, 197, 94, 0.1);
 }
 
 /* App image container */
 .app-image {
     position: relative;
     width: 100%;
-    height: 280px;
+    height: 220px;
     overflow: hidden;
     background: linear-gradient(135deg, var(--apps-primary), var(--apps-secondary));
     border-bottom: 2px solid var(--border-color);
@@ -329,7 +330,7 @@
 }
 
 .app-card:hover .app-image img {
-    transform: scale(1.1);
+    transform: scale(1.08);
 }
 
 /* Enhanced overlay */
@@ -354,26 +355,26 @@
 
 .app-overlay .overlay-content {
     display: flex;
-    gap: 1.5rem;
+    gap: 1rem;
     flex-wrap: wrap;
     justify-content: center;
-    padding: 2.5rem;
+    padding: 2rem;
     width: 100%;
 }
 
 .view-details-btn,
 .download-btn {
-    padding: 1.25rem 2rem;
+    padding: 1rem 1.5rem;
     background: var(--apps-primary);
     color: white;
     text-decoration: none;
     border: none;
     border-radius: var(--apps-radius-md);
     font-weight: 700;
-    font-size: 1rem;
+    font-size: 0.9rem;
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: 0.5rem;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     cursor: pointer;
     border: 2px solid rgba(255, 255, 255, 0.2);
@@ -385,23 +386,23 @@
 
 .view-details-btn:hover,
 .download-btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 15px 40px rgba(34, 197, 94, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 35px rgba(34, 197, 94, 0.4);
 }
 
 /* Enhanced status badge */
 .app-badge {
     position: absolute;
-    top: 1.5rem;
-    right: 1.5rem;
-    padding: 0.75rem 1.5rem;
+    top: 1rem;
+    right: 1rem;
+    padding: 0.6rem 1.25rem;
     background: var(--apps-gradient);
     color: #fff;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     font-weight: 800;
     border-radius: var(--apps-radius-md);
     border: 2px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
     text-transform: uppercase;
     letter-spacing: 1px;
     z-index: 4;
@@ -423,18 +424,18 @@
 /* Platform badge */
 .platform-badge {
     position: absolute;
-    bottom: 1.5rem;
-    left: 1.5rem;
-    padding: 0.75rem 1.25rem;
+    bottom: 1rem;
+    left: 1rem;
+    padding: 0.6rem 1rem;
     background: rgba(0, 0, 0, 0.8);
     backdrop-filter: blur(10px);
     color: white;
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     font-weight: 700;
     border-radius: var(--apps-radius-md);
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: 0.5rem;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     z-index: 4;
@@ -443,7 +444,7 @@
 
 /* App content area */
 .app-content {
-    padding: 2.5rem;
+    padding: 2rem;
 }
 
 /* Enhanced app header */
@@ -451,15 +452,15 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    gap: 1.5rem;
-    margin-bottom: 1.5rem;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
 }
 
 .app-title {
-    font-size: 1.6rem;
+    font-size: 1.4rem;
     font-weight: 800;
     color: var(--text-primary);
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.5rem;
     flex: 1;
     line-height: 1.3;
 }
@@ -468,26 +469,26 @@
 .app-rating {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: 0.5rem;
     background: var(--glass-bg);
     backdrop-filter: blur(30px) saturate(180%);
     border: 2px solid var(--border-color);
     border-radius: var(--apps-radius-md);
-    padding: 0.75rem 1rem;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    padding: 0.6rem 0.8rem;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
     flex-shrink: 0;
 }
 
 .rating-stars {
     color: #F59E0B;
-    font-size: 1rem;
+    font-size: 0.9rem;
     display: flex;
-    gap: 3px;
+    gap: 2px;
 }
 
 .rating-value {
     font-weight: 800;
-    font-size: 1rem;
+    font-size: 0.9rem;
     color: var(--text-primary);
 }
 
@@ -495,17 +496,17 @@
 .app-platform {
     display: inline-flex;
     align-items: center;
-    gap: 0.75rem;
-    padding: 0.75rem 1.25rem;
+    gap: 0.5rem;
+    padding: 0.6rem 1rem;
     background: var(--glass-bg);
     backdrop-filter: blur(30px) saturate(180%);
     border: 2px solid var(--border-color);
     border-radius: var(--apps-radius-md);
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     font-weight: 700;
     color: var(--apps-primary);
-    margin-bottom: 1.5rem;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    margin-bottom: 1.25rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     text-transform: uppercase;
     letter-spacing: 0.5px;
     transition: all 0.3s ease;
@@ -518,10 +519,10 @@
 
 /* Enhanced description */
 .app-description {
-    font-size: 1.05rem;
-    line-height: 1.7;
+    font-size: 0.95rem;
+    line-height: 1.6;
     opacity: 0.85;
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
     color: var(--text-secondary);
 }
 
@@ -529,32 +530,32 @@
 .app-stats {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 1.5rem;
-    margin-bottom: 2rem;
-    padding: 2rem;
+    gap: 1.25rem;
+    margin-bottom: 1.5rem;
+    padding: 1.5rem;
     background: var(--glass-bg);
     backdrop-filter: blur(30px) saturate(180%);
     border: 2px solid var(--border-color);
     border-radius: var(--apps-radius-md);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
 }
 
 .app-stat {
     text-align: center;
-    padding: 1rem;
+    padding: 0.75rem;
 }
 
 .app-stat-value {
     display: block;
-    font-size: 1.75rem;
+    font-size: 1.5rem;
     font-weight: 800;
     color: var(--apps-primary);
     line-height: 1;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.4rem;
 }
 
 .app-stat-label {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     opacity: 0.7;
     font-weight: 600;
     text-transform: uppercase;
@@ -566,27 +567,27 @@
 .app-features {
     display: flex;
     flex-wrap: wrap;
-    gap: 1rem;
-    margin-bottom: 2.5rem;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
 }
 
 .app-feature {
-    padding: 0.75rem 1.25rem;
+    padding: 0.6rem 1rem;
     background: var(--glass-bg);
     backdrop-filter: blur(30px) saturate(180%);
     border: 2px solid var(--border-color);
     border-radius: var(--apps-radius-md);
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     font-weight: 600;
     color: var(--text-primary);
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
 }
 
 .app-feature:hover {
     background: rgba(34, 197, 94, 0.1);
     border-color: var(--apps-primary);
-    transform: translateY(-3px);
+    transform: translateY(-2px);
 }
 
 .app-feature.more {
@@ -599,19 +600,19 @@
 /* Enhanced action buttons */
 .app-actions {
     display: flex;
-    gap: 1rem;
+    gap: 0.75rem;
 }
 
 .app-actions .btn {
     flex: 1;
     justify-content: center;
-    padding: 1.25rem 2rem;
+    padding: 1rem 1.5rem;
     border-radius: var(--apps-radius-md);
-    font-size: 1rem;
+    font-size: 0.9rem;
     font-weight: 700;
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: 0.5rem;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -624,8 +625,8 @@
 
 .btn-app:hover:not(:disabled) {
     background: linear-gradient(135deg, #16A34A, #0D9488);
-    transform: translateY(-3px);
-    box-shadow: 0 15px 40px var(--shadow-color), 0 0 30px rgba(34, 197, 94, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 35px var(--shadow-color), 0 0 25px rgba(34, 197, 94, 0.3);
 }
 
 .btn-app:disabled {
@@ -636,7 +637,7 @@
 
 /* ==========================================
    APPS CTA SECTION
-   Curved call-to-action
+   Curved call-to-action - FULL STYLING
    ========================================== */
 .apps-section .cta-section {
     background: linear-gradient(135deg, 
@@ -645,14 +646,14 @@
         rgba(5, 150, 105, 0.15) 100%);
     border-top: 2px solid var(--border-color);
     border-bottom: 2px solid var(--border-color);
-    padding: 6rem 0;
+    padding: 5rem 0;
 }
 
 .apps-section .cta-content {
     text-align: center;
-    max-width: 700px;
+    max-width: 650px;
     margin: 0 auto;
-    padding: 4rem;
+    padding: 3.5rem;
     background: var(--glass-bg);
     backdrop-filter: blur(40px) saturate(180%);
     border: 2px solid var(--border-color);
@@ -661,9 +662,9 @@
 }
 
 .apps-section .cta-content h2 {
-    font-size: 3.5rem;
+    font-size: 3rem;
     font-weight: 800;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.25rem;
     background: var(--apps-gradient);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -672,21 +673,21 @@
 }
 
 .apps-section .cta-content p {
-    font-size: 1.2rem;
+    font-size: 1.15rem;
     opacity: 0.9;
-    line-height: 1.7;
-    margin-bottom: 3rem;
+    line-height: 1.6;
+    margin-bottom: 2.5rem;
     color: var(--text-secondary);
 }
 
 .apps-section .cta-content .btn {
-    padding: 1.5rem 3.5rem;
-    font-size: 1.2rem;
+    padding: 1.25rem 3rem;
+    font-size: 1.1rem;
     border-radius: var(--apps-radius-lg);
     font-weight: 800;
     display: inline-flex;
     align-items: center;
-    gap: 1rem;
+    gap: 0.75rem;
     border: 2px solid rgba(255, 255, 255, 0.2);
 }
 
@@ -699,7 +700,7 @@
 .empty-state,
 .error-state {
     text-align: center;
-    padding: 6rem 4rem;
+    padding: 5rem 3rem;
     background: var(--glass-bg);
     backdrop-filter: blur(40px) saturate(180%);
     border: 2px solid var(--border-color);
@@ -712,9 +713,9 @@
 .no-results i,
 .empty-state i,
 .error-state i {
-    font-size: 4.5rem;
+    font-size: 4rem;
     color: var(--apps-primary);
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
     opacity: 0.8;
 }
 
@@ -725,9 +726,9 @@
 .no-results h3,
 .empty-state h3,
 .error-state h3 {
-    font-size: 2rem;
+    font-size: 1.8rem;
     font-weight: 800;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.25rem;
     color: var(--text-primary);
 }
 
@@ -735,16 +736,16 @@
 .no-results p,
 .empty-state p,
 .error-state p {
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     opacity: 0.8;
-    margin-bottom: 3rem;
+    margin-bottom: 2.5rem;
     color: var(--text-secondary);
     font-weight: 600;
 }
 
 .no-results .btn {
-    margin-top: 2rem;
-    padding: 1.25rem 2.5rem;
+    margin-top: 1.5rem;
+    padding: 1rem 2rem;
     border-radius: var(--apps-radius-md);
     font-weight: 700;
 }
@@ -756,7 +757,7 @@
 @keyframes cardSlideIn {
     from {
         opacity: 0;
-        transform: translateY(40px) scale(0.95);
+        transform: translateY(30px) scale(0.95);
     }
     to {
         opacity: 1;
@@ -786,15 +787,23 @@
    Mobile and tablet optimizations
    ========================================== */
 
+/* Large Desktops */
+@media (max-width: 1400px) {
+    .apps-section .portfolio-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2rem;
+    }
+}
+
 /* Large Tablets and Small Desktops */
 @media (max-width: 1200px) {
     .apps-section .portfolio-grid {
-        grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
-        gap: 2.5rem;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem;
     }
     
     .apps-header .header-title {
-        font-size: 4rem;
+        font-size: 3rem;
     }
     
     .overlay-content {
@@ -811,17 +820,17 @@
 /* Tablets */
 @media (max-width: 992px) {
     .apps-header {
-        padding: 10rem 0 4rem;
+        padding: 8rem 0 4rem;
     }
     
     .apps-header .header-title {
-        font-size: 3.5rem;
+        font-size: 2.5rem;
     }
     
     .apps-header .header-stats {
         grid-template-columns: 1fr;
-        gap: 1.5rem;
-        padding: 2.5rem;
+        gap: 1.25rem;
+        padding: 2rem;
     }
     
     .apps-header .stat:not(:last-child)::after {
@@ -829,27 +838,31 @@
     }
     
     .apps-section .portfolio-grid {
-        grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-        gap: 2rem;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.75rem;
     }
     
     .app-content {
-        padding: 2rem;
+        padding: 1.75rem;
     }
     
     .apps-section .cta-content h2 {
-        font-size: 3rem;
+        font-size: 2.5rem;
+    }
+    
+    .apps-section .section-title {
+        font-size: 2.5rem;
     }
 }
 
 /* Mobile Devices */
 @media (max-width: 768px) {
     .apps-header {
-        padding: 8rem 0 3rem;
+        padding: 6rem 0 3rem;
     }
     
     .apps-header .header-title {
-        font-size: 2.8rem;
+        font-size: 2.2rem;
     }
     
     .apps-header .header-subtitle {
@@ -858,17 +871,17 @@
     
     .apps-section .filter-container {
         grid-template-columns: 1fr;
-        gap: 2rem;
+        gap: 1.5rem;
     }
     
     .apps-section .portfolio-grid {
         grid-template-columns: 1fr;
-        gap: 2rem;
+        gap: 1.5rem;
     }
     
     .app-header {
         flex-direction: column;
-        gap: 1.5rem;
+        gap: 1rem;
         align-items: flex-start;
     }
     
@@ -885,38 +898,42 @@
     }
     
     .apps-section .cta-content h2 {
-        font-size: 2.5rem;
+        font-size: 2rem;
     }
     
     .apps-section .cta-content p {
-        font-size: 1.1rem;
+        font-size: 1rem;
     }
     
     .apps-section .section-title {
-        font-size: 2.8rem;
+        font-size: 2.2rem;
     }
     
     .apps-section .section-subtitle {
-        font-size: 1.1rem;
+        font-size: 1rem;
+    }
+    
+    .apps-section .cta-content {
+        padding: 2.5rem 2rem;
     }
 }
 
 /* Small Mobile Devices */
 @media (max-width: 480px) {
     .apps-header .header-title {
-        font-size: 2.2rem;
+        font-size: 1.8rem;
     }
     
     .apps-header .stat-number {
-        font-size: 2.5rem;
+        font-size: 2rem;
     }
     
     .app-content {
-        padding: 1.75rem;
+        padding: 1.5rem;
     }
     
     .app-title {
-        font-size: 1.4rem;
+        font-size: 1.3rem;
     }
     
     .app-stats {
@@ -925,15 +942,11 @@
     }
     
     .app-stat-value {
-        font-size: 1.5rem;
-    }
-    
-    .apps-section .cta-content {
-        padding: 3rem 2rem;
+        font-size: 1.25rem;
     }
     
     .apps-section .cta-content h2 {
-        font-size: 2rem;
+        font-size: 1.75rem;
     }
     
     .overlay-content {
