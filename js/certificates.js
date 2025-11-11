@@ -1,289 +1,282 @@
 // ==========================================
-// CERTIFICATES PAGE - Complete Certificates Portfolio Functionality
-// Handles filtering, sorting, searching, and certificate display
+// CERTIFICATES PAGE - Complete Production-Ready Implementation
 // Author: Arsh Verma
-// Portfolio: https://arshcreates.com
-// GitHub: https://github.com/ArshVermaGit
+// Version: 2.2.0
+// Description: Handles all certificates portfolio functionality for preview showcase
+//              - Filters, searching, card rendering, and navigation to details
+//              - Error handling, accessibility, and performance optimized
+//              - Inspired by websites.js: Modern card design with dark bg, badges, skills preview
+// Last Updated: November 12, 2025
 // ==========================================
 
+'use strict';
+
 // ==========================================
-// GLOBAL VARIABLES
+// GLOBAL STATE MANAGEMENT
+// Centralized state for certificates data and UI interactions
 // ==========================================
-let currentCertificates = [];       // Currently displayed certificates after filters
-let allCertificates = [];           // All certificates from data source
-let currentFilters = {              // Current filter state
-    category: 'all',
-    issuer: 'all',
-    year: 'all'
+const CERTIFICATES_STATE = {
+    allCertificates: [],        // Complete list of certificates from data source
+    filteredCertificates: [],   // Currently displayed certificates after filtering/sorting/search
+    currentFilters: {           // Active filter settings
+        category: 'all',
+        issuer: 'all',
+        year: 'all'
+    },
+    searchTerm: '',             // Current search query
+    isLoading: false,           // Loading state to prevent race conditions
+    animationDelay: 100         // Staggered animation timing for card entrance
 };
-let isAnimating = false;            // Prevent multiple animations at once
 
 // ==========================================
-// PAGE INITIALIZATION
+// INITIALIZATION
+// Entry point for certificates page functionality
 // ==========================================
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('🏆 Certificates page initializing...');
+    initializeCertificatesPage();
+});
 
 /**
- * Initialize the certificates portfolio page
- * - Loads certificate data
- * - Sets up filters and event listeners
- * - Updates header statistics
- * - Handles loading screen
- * @author Arsh Verma
+ * Main initialization function
+ * - Orchestrates data loading, UI setup, and initial render
+ * - Wrapped in try-catch for robust error handling
  */
 function initializeCertificatesPage() {
-    console.log('Initializing certificates page by Arsh Verma...');
-    
     try {
-        // Load and display certificates
-        loadCertificates();
+        CERTIFICATES_STATE.isLoading = true;
         
-        // Setup filter controls
+        loadCertificatesData();
+        
         setupCertificateFilters();
-        
-        // Setup event listeners
         setupCertificateEventListeners();
         
-        // Update header statistics
         updateHeaderStats();
         
-        // Hide loading screen after delay
         setTimeout(() => {
+            CERTIFICATES_STATE.isLoading = false;
+            applyCertificateFilters(); // Initial display
             hideLoadingScreen();
         }, 800);
         
-        console.log('Certificates page initialized successfully by Arsh Verma');
+        console.log('✅ Certificates page initialized successfully');
     } catch (error) {
-        console.error('Error initializing certificates page:', error);
-        showNotification('Error loading certificates page', 'error');
+        console.error('❌ Error initializing certificates page:', error);
+        showNotification('Failed to load certificates. Please refresh the page.', 'error');
+        CERTIFICATES_STATE.isLoading = false;
+        displayCertificates([]);
+        hideLoadingScreen();
     }
 }
 
 /**
- * Hide loading screen with fade animation
- * @author Arsh Verma
+ * Load certificates data from data source
+ * - Prioritizes global functions/data, falls back to sample
+ * - Handles missing data gracefully
  */
-function hideLoadingScreen() {
-    const loadingScreen = document.getElementById('loadingScreen');
-    if (loadingScreen) {
-        loadingScreen.style.opacity = '0';
-        setTimeout(() => {
-            loadingScreen.style.display = 'none';
-        }, 500);
-    }
-}
-
-// ==========================================
-// CERTIFICATE DATA LOADING
-// ==========================================
-
-/**
- * Load certificates from data source
- * - Fetches certificates from data.js
- * - Handles empty data gracefully
- * - Displays initial certificate grid
- * @author Arsh Verma
- */
-function loadCertificates() {
-    const certificatesGrid = document.getElementById('certificatesGrid');
-    if (!certificatesGrid) {
-        console.error('Certificates grid element not found!');
-        return;
-    }
-    
+function loadCertificatesData() {
     try {
-        // Get certificates from data.js
-        allCertificates = getCertificates();
-        currentCertificates = [...allCertificates];
+        let certificatesData = [];
         
-        console.log('Loaded certificates by Arsh Verma:', allCertificates.length);
-        
-        // Handle empty data
-        if (allCertificates.length === 0) {
-            console.warn('No certificates found in portfolio data');
-            certificatesGrid.innerHTML = `
-                <div class="empty-state">
-                    <i class="fas fa-certificate"></i>
-                    <h3>No Certificates Available</h3>
-                    <p>Check back soon for new certifications from Arsh Verma!</p>
-                </div>
-            `;
-            return;
+        if (typeof window.getCertificates === 'function') {
+            certificatesData = window.getCertificates();
+            console.log('📦 Certificates loaded from getCertificates() function');
+        } else if (typeof PORTFOLIO_DATA !== 'undefined' && Array.isArray(PORTFOLIO_DATA.certificates)) {
+            certificatesData = PORTFOLIO_DATA.certificates;
+            console.log('📦 Certificates loaded from PORTFOLIO_DATA');
+        } else {
+            console.warn('⚠️ No certificates data found, using sample data for preview');
+            certificatesData = createSampleCertificates();
         }
         
-        // Display all certificates initially
-        displayCertificates(currentCertificates);
+        CERTIFICATES_STATE.allCertificates = validateCertificatesData(certificatesData);
+        CERTIFICATES_STATE.filteredCertificates = [...CERTIFICATES_STATE.allCertificates];
+        
+        console.log(`📦 Loaded ${CERTIFICATES_STATE.allCertificates.length} certificates`);
     } catch (error) {
-        console.error('Error loading certificates:', error);
-        certificatesGrid.innerHTML = `
-            <div class="error-state">
-                <i class="fas fa-exclamation-triangle"></i>
-                <h3>Error Loading Certificates</h3>
-                <p>Please refresh the page to try again.</p>
-                <p class="developer-note">If issue persists, contact Arsh Verma</p>
-            </div>
-        `;
+        console.error('❌ Error loading certificates:', error);
+        CERTIFICATES_STATE.allCertificates = [];
+        CERTIFICATES_STATE.filteredCertificates = [];
+        showNotification('Error loading certificates data.', 'error');
     }
 }
 
-// ==========================================
-// CERTIFICATE DISPLAY
-// ==========================================
+/**
+ * Validate certificates data structure
+ * - Ensures each certificate has required fields
+ * - Sanitizes and defaults missing values
+ * @param {Array} certificates - Raw certificates data
+ * @returns {Array} Validated certificates array
+ */
+function validateCertificatesData(certificates) {
+    if (!Array.isArray(certificates)) return [];
+    
+    return certificates.map(cert => ({
+        id: cert.id || Date.now() + Math.random(),
+        title: cert.title || 'Untitled Certificate',
+        category: cert.category || 'Uncategorized',
+        issuer: cert.issuer || 'Unknown',
+        year: cert.year || new Date().getFullYear(),
+        date: cert.date || new Date().toISOString(),
+        description: cert.description || 'Certificate details coming soon.',
+        image: cert.image || generatePlaceholderImage(cert.title),
+        skills: Array.isArray(cert.skills) ? cert.skills.slice(0, 5) : [],
+        credentialUrl: cert.credentialUrl || null,
+        credentialId: cert.credentialId || null
+    })).filter(cert => cert.id);
+}
+
+/**
+ * Generate placeholder image URL
+ * - Uses via.placeholder.com for production-ready fallbacks
+ * @param {string} title - Certificate title for text overlay
+ * @returns {string} Image URL
+ */
+function generatePlaceholderImage(title) {
+    const encodedTitle = encodeURIComponent(title.substring(0, 20));
+    return `https://via.placeholder.com/400x250/E4572E/FFFFFF?text=${encodedTitle}`;
+}
 
 /**
  * Display certificates in the grid
- * @param {Array} certificates - Array of certificate objects to display
- * @author Arsh Verma
+ * - Handles loading, empty, and populated states
+ * - Renders cards with preview focus (limited details)
+ * @param {Array} certificates - Certificates to display
  */
 function displayCertificates(certificates) {
     const certificatesGrid = document.getElementById('certificatesGrid');
-    if (!certificatesGrid) return;
+    if (!certificatesGrid) {
+        console.error('❌ Certificates grid element not found');
+        return;
+    }
     
-    // Handle no results
-    if (certificates.length === 0) {
+    if (CERTIFICATES_STATE.isLoading) {
+        certificatesGrid.innerHTML = `
+            <div class="loading-certificates">
+                <i class="fas fa-spinner fa-spin"></i>
+                <p>Loading certifications...</p>
+            </div>
+        `;
+        return;
+    }
+    
+    if (!certificates || certificates.length === 0) {
         certificatesGrid.innerHTML = `
             <div class="no-results">
-                <i class="fas fa-search"></i>
+                <i class="fas fa-certificate"></i>
                 <h3>No Certificates Found</h3>
-                <p>No certificates match your current filters in Arsh Verma's portfolio</p>
-                <button class="btn btn-primary" onclick="resetCertificateFilters()">
+                <p>No certificates match your current filters. Try adjusting them.</p>
+                <button class="btn btn-primary" onclick="resetCertificateFilters()" aria-label="Reset filters">
                     <i class="fas fa-redo"></i>
                     <span>Reset Filters</span>
                 </button>
             </div>
         `;
+        updateResultsCount(0);
         return;
     }
     
-    // Generate certificate cards HTML
-    certificatesGrid.innerHTML = certificates.map(certificate => createCertificateCard(certificate)).join('');
+    certificatesGrid.innerHTML = certificates.map(cert => createCertificateCard(cert)).join('');
     
-    // Setup card interactions
     setupCertificateCardListeners();
-    
-    // Animate cards entrance
     animateCertificateCards();
-    
-    // Update results count
     updateResultsCount(certificates.length);
     
-    console.log(`Displayed ${certificates.length} certificates from Arsh Verma's portfolio`);
+    console.log(`🎨 Displayed ${certificates.length} certificates`);
 }
 
 /**
- * Create HTML for a single certificate card
- * @param {Object} certificate - Certificate object
- * @returns {string} HTML string for the card
- * @author Arsh Verma
+ * Create HTML for a single certificate card (preview only)
+ * - Dark bg, rounded, category badge top-left, issuer badge top-right, meta, desc, skills list, buttons
+ * - Links to certificate-detail.html for full info
+ * @param {Object} certificate - Certificate data object
+ * @returns {string} HTML string for card
  */
 function createCertificateCard(certificate) {
     const categoryClass = certificate.category.toLowerCase().replace(/\s+/g, '-');
-    const imageUrl = certificate.image || `https://via.placeholder.com/400x300/E4572E/FFFFFF?text=${encodeURIComponent(certificate.title)}`;
+    const imageUrl = certificate.image;
+    const shortDescription = truncateText(certificate.description, 120);
+    
+    const issuerIcon = getIssuerIcon(certificate.issuer);
     
     return `
-        <div class="game-card certificate-card" 
-             data-certificate-id="${certificate.id}" 
-             data-category="${certificate.category}" 
-             data-issuer="${certificate.issuer}" 
-             data-year="${certificate.year}"
-             aria-label="Certificate: ${escapeHtml(certificate.title)}">
+        <article class="certificate-card" 
+                 data-certificate-id="${certificate.id}" 
+                 data-category="${certificate.category}" 
+                 data-issuer="${certificate.issuer}" 
+                 data-year="${certificate.year}"
+                 role="article"
+                 aria-labelledby="certificate-title-${certificate.id}">
             
-            <!-- Certificate Image with Overlay -->
-            <div class="game-image">
+            <div class="certificate-image">
                 <img src="${imageUrl}" 
-                     alt="${escapeHtml(certificate.title)} certificate by Arsh Verma" 
-                     loading="lazy" 
-                     onerror="this.src='https://via.placeholder.com/400x300/E4572E/FFFFFF?text=${encodeURIComponent(certificate.title)}'">
-                
-                <!-- Hover Overlay -->
-                <div class="game-overlay">
-                    <div class="overlay-content">
-                        <a href="certificate-detail.html?id=${certificate.id}" 
-                           class="view-details-btn"
-                           onclick="event.stopPropagation();"
-                           aria-label="View details for ${escapeHtml(certificate.title)}">
-                            <i class="fas fa-eye"></i>
-                            <span>View Details</span>
-                        </a>
-                        ${certificate.credentialUrl ? `
-                            <a href="${certificate.credentialUrl}" 
-                               class="download-btn"
-                               target="_blank"
-                               rel="noopener noreferrer"
-                               onclick="event.stopPropagation();"
-                               aria-label="Verify ${escapeHtml(certificate.title)} certificate">
-                                <i class="fas fa-external-link-alt"></i>
-                                <span>Verify</span>
-                            </a>
-                        ` : ''}
-                    </div>
-                </div>
+                     alt="${escapeHtml(certificate.title)} certificate preview"
+                     loading="lazy"
+                     onerror="this.src='${generatePlaceholderImage(certificate.title)}'">
                 
                 <!-- Category Badge -->
-                <div class="game-badge category-${categoryClass}">
-                    ${certificate.category}
-                </div>
+                <div class="certificate-badge category-${categoryClass}" aria-label="Category: ${certificate.category}">${certificate.category}</div>
                 
                 <!-- Issuer Badge -->
-                <div class="platform-badge">
-                    ${getIssuerIcon(certificate.issuer)}
-                    <span>${certificate.issuer}</span>
+                <div class="issuer-badge">
+                    ${issuerIcon}
+                    <span>${truncateText(certificate.issuer, 15)}</span>
                 </div>
             </div>
             
-            <!-- Certificate Content -->
-            <div class="game-content">
-                <h3 class="game-title">${escapeHtml(certificate.title)}</h3>
-                
-                <!-- Meta Information -->
-                <div class="game-meta">
-                    <div class="game-rating">
-                        <div class="issuer-logo">
-                            ${getIssuerLogo(certificate.issuer)}
-                        </div>
-                        <span class="issuer-name">${certificate.issuer}</span>
-                    </div>
-                    <span class="game-status date-issued">
-                        ${formatDate(certificate.date)}
-                    </span>
-                </div>
-                
-                <!-- Brief Description -->
-                ${certificate.description ? `
-                    <p class="certificate-overview">${escapeHtml(truncateText(certificate.description, 80))}</p>
-                ` : ''}
-                
-                <!-- Quick Stats -->
-                <div class="certificate-quick-stats">
-                    ${certificate.credentialId ? `
-                        <div class="quick-stat">
-                            <i class="fas fa-id-card"></i>
-                            <span>ID: ${certificate.credentialId}</span>
-                        </div>
-                    ` : ''}
-                    <div class="quick-stat">
-                        <i class="fas fa-calendar"></i>
-                        <span>${formatDate(certificate.date)}</span>
-                    </div>
-                </div>
-                
-                <!-- Skills Gained -->
-                ${certificate.skills && certificate.skills.length > 0 ? `
-                    <div class="skills-preview">
-                        ${certificate.skills.slice(0, 3).map(skill => 
-                            `<span class="skill-badge">${escapeHtml(skill)}</span>`
-                        ).join('')}
-                        ${certificate.skills.length > 3 ? 
-                            `<span class="skill-badge more">+${certificate.skills.length - 3}</span>` 
-                            : ''}
-                    </div>
-                ` : ''}
-                
-                <!-- Developer Credit -->
-                <div class="developer-credit-small">
-                    <span>Certified by <strong>Arsh Verma</strong></span>
-                </div>
+            <div class="certificate-header">
+                <h3 class="certificate-title" id="certificate-title-${certificate.id}">${escapeHtml(certificate.title)}</h3>
             </div>
-        </div>
+            
+            <div class="certificate-meta">
+                <span class="certificate-issuer" aria-label="Issuer: ${certificate.issuer}">
+                    <i class="fas fa-university" aria-hidden="true"></i>
+                    ${truncateText(certificate.issuer, 20)}
+                </span>
+                <span class="certificate-date" aria-label="Issued: ${formatDate(certificate.date)}">
+                    <i class="fas fa-calendar" aria-hidden="true"></i>
+                    ${formatDate(certificate.date)}
+                </span>
+            </div>
+            
+            <p class="certificate-description">${shortDescription}</p>
+            
+            ${certificate.skills && certificate.skills.length > 0 ? `
+                <div class="certificate-skills" aria-label="Key skills learned">
+                    ${certificate.skills.slice(0, 4).map(skill => `
+                        <div class="skill-item">
+                            <i class="fas fa-check" aria-hidden="true"></i>
+                            <span>${escapeHtml(skill)}</span>
+                        </div>
+                    `).join('')}
+                    ${certificate.skills.length > 4 ? `<div class="skill-item more">+${certificate.skills.length - 4} more</div>` : ''}
+                </div>
+            ` : ''}
+            
+            <div class="certificate-actions">
+                <button class="btn btn-primary btn-view-details" 
+                        data-certificate-id="${certificate.id}"
+                        aria-label="View details for ${escapeHtml(certificate.title)}">
+                    <i class="fas fa-eye" aria-hidden="true"></i>
+                    <span>View Details</span>
+                </button>
+                ${certificate.credentialUrl ? `
+                    <a href="${certificate.credentialUrl}" 
+                       class="btn btn-secondary btn-verify-cert"
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       aria-label="Verify ${escapeHtml(certificate.title)}">
+                        <i class="fas fa-external-link-alt" aria-hidden="true"></i>
+                        <span>Verify</span>
+                    </a>
+                ` : ''}
+            </div>
+            
+            <!-- Developer Credit -->
+            <div class="developer-credit-small">
+                <span>Certified by <strong>Arsh Verma</strong></span>
+            </div>
+        </article>
     `;
 }
 
@@ -291,7 +284,6 @@ function createCertificateCard(certificate) {
  * Get issuer icon based on issuer name
  * @param {string} issuer - Issuer name
  * @returns {string} Icon HTML
- * @author Arsh Verma
  */
 function getIssuerIcon(issuer) {
     if (issuer.includes('AWS') || issuer.includes('Amazon')) {
@@ -303,253 +295,185 @@ function getIssuerIcon(issuer) {
     } else if (issuer.includes('IBM')) {
         return '<i class="fas fa-brain"></i>';
     } else if (issuer.includes('freeCodeCamp')) {
-        return '<i class="fas fa-free-code-camp"></i>';
+        return '<i class="fab fa-free-code-camp"></i>';
     }
     return '<i class="fas fa-university"></i>';
 }
 
 /**
- * Get issuer logo/name for display
- * @param {string} issuer - Issuer name
- * @returns {string} Logo HTML
- * @author Arsh Verma
- */
-function getIssuerLogo(issuer) {
-    // Return abbreviated issuer name for logo area
-    if (issuer.includes('AWS')) return 'AWS';
-    if (issuer.includes('Google')) return 'GOOG';
-    if (issuer.includes('Microsoft')) return 'MS';
-    if (issuer.includes('IBM')) return 'IBM';
-    if (issuer.includes('freeCodeCamp')) return 'FCC';
-    
-    return issuer.substring(0, 4).toUpperCase();
-}
-
-// ==========================================
-// FILTER FUNCTIONALITY
-// ==========================================
-
-/**
- * Setup filter controls and event listeners
- * @author Arsh Verma
+ * Setup filter controls
+ * - Dynamically populates categories, issuers, years from data
+ * - Attaches change listeners for real-time filtering
  */
 function setupCertificateFilters() {
     const categoryFilter = document.getElementById('categoryFilter');
     const issuerFilter = document.getElementById('issuerFilter');
     const yearFilter = document.getElementById('yearFilter');
     
-    // Category Filter
-    if (categoryFilter) {
-        categoryFilter.addEventListener('change', function() {
-            currentFilters.category = this.value;
-            const selectedText = this.options[this.selectedIndex].text;
-            applyCertificateFilters();
-            showNotification(`Category: ${selectedText}`, 'info');
-            console.log('Category filter changed by Arsh Verma:', this.value);
-        });
+    if (!categoryFilter || !issuerFilter || !yearFilter) {
+        console.warn('⚠️ Filter elements not found');
+        return;
     }
     
-    // Issuer Filter
-    if (issuerFilter) {
-        issuerFilter.addEventListener('change', function() {
-            currentFilters.issuer = this.value;
-            const selectedText = this.options[this.selectedIndex].text;
-            applyCertificateFilters();
-            showNotification(`Issuer: ${selectedText}`, 'info');
-            console.log('Issuer filter changed by Arsh Verma:', this.value);
-        });
+    // Populate categories
+    const categories = [...new Set(CERTIFICATES_STATE.allCertificates.map(cert => cert.category).filter(Boolean))].sort();
+    categories.forEach(category => {
+        const option = document.createElement('option');
+        option.value = category;
+        option.textContent = category;
+        categoryFilter.appendChild(option);
+    });
+    
+    // Populate issuers
+    const issuers = [...new Set(CERTIFICATES_STATE.allCertificates.map(cert => cert.issuer).filter(Boolean))].sort();
+    issuers.forEach(issuer => {
+        const option = document.createElement('option');
+        option.value = issuer;
+        option.textContent = issuer;
+        issuerFilter.appendChild(option);
+    });
+    
+    // Populate years (descending)
+    const years = [...new Set(CERTIFICATES_STATE.allCertificates.map(cert => cert.year).filter(Boolean))].sort((a, b) => b - a);
+    years.forEach(year => {
+        const option = document.createElement('option');
+        option.value = year;
+        option.textContent = year;
+        yearFilter.appendChild(option);
+    });
+    
+    // Attach listeners
+    categoryFilter.addEventListener('change', handleFilterChange);
+    issuerFilter.addEventListener('change', handleFilterChange);
+    yearFilter.addEventListener('change', handleFilterChange);
+    
+    function handleFilterChange() {
+        CERTIFICATES_STATE.currentFilters.category = categoryFilter.value;
+        CERTIFICATES_STATE.currentFilters.issuer = issuerFilter.value;
+        CERTIFICATES_STATE.currentFilters.year = yearFilter.value;
+        applyCertificateFilters();
+        showNotification('Filters updated', 'info');
     }
     
-    // Year Filter
-    if (yearFilter) {
-        yearFilter.addEventListener('change', function() {
-            currentFilters.year = this.value;
-            const selectedText = this.options[this.selectedIndex].text;
-            applyCertificateFilters();
-            showNotification(`Year: ${selectedText}`, 'info');
-            console.log('Year filter changed by Arsh Verma:', this.value);
-        });
-    }
-    
-    console.log('Certificate filters setup complete by Arsh Verma');
+    console.log('🔧 Certificate filters setup complete');
 }
 
 /**
- * Apply all current filters to certificates
- * - Filters by category
- * - Filters by issuer
- * - Filters by year
- * @author Arsh Verma
+ * Apply all active filters and search
+ * - Chains category/issuer/year filters, then searches if term present
+ * - Updates display immediately
  */
 function applyCertificateFilters() {
-    try {
-        let filteredCertificates = [...allCertificates];
-        
-        // Apply category filter
-        if (currentFilters.category !== 'all') {
-            filteredCertificates = filteredCertificates.filter(cert => 
-                cert.category === currentFilters.category
-            );
-            console.log(`Category filter applied by Arsh Verma: ${filteredCertificates.length} results`);
-        }
-        
-        // Apply issuer filter
-        if (currentFilters.issuer !== 'all') {
-            filteredCertificates = filteredCertificates.filter(cert => 
-                cert.issuer === currentFilters.issuer
-            );
-            console.log(`Issuer filter applied by Arsh Verma: ${filteredCertificates.length} results`);
-        }
-        
-        // Apply year filter
-        if (currentFilters.year !== 'all') {
-            filteredCertificates = filteredCertificates.filter(cert => 
-                cert.year === currentFilters.year
-            );
-            console.log(`Year filter applied by Arsh Verma: ${filteredCertificates.length} results`);
-        }
-        
-        // Update current certificates and display
-        currentCertificates = filteredCertificates;
-        displayCertificates(filteredCertificates);
-        
-        console.log(`Filters applied by Arsh Verma. Showing ${filteredCertificates.length} of ${allCertificates.length} certificates`);
-    } catch (error) {
-        console.error('Error applying filters:', error);
-        showNotification('Error applying filters', 'error');
+    let filtered = [...CERTIFICATES_STATE.allCertificates];
+    
+    // Apply category filter
+    if (CERTIFICATES_STATE.currentFilters.category !== 'all') {
+        filtered = filtered.filter(cert => cert.category === CERTIFICATES_STATE.currentFilters.category);
     }
+    
+    // Apply issuer filter
+    if (CERTIFICATES_STATE.currentFilters.issuer !== 'all') {
+        filtered = filtered.filter(cert => cert.issuer === CERTIFICATES_STATE.currentFilters.issuer);
+    }
+    
+    // Apply year filter
+    if (CERTIFICATES_STATE.currentFilters.year !== 'all') {
+        filtered = filtered.filter(cert => cert.year === parseInt(CERTIFICATES_STATE.currentFilters.year));
+    }
+    
+    // Apply search if term exists
+    if (CERTIFICATES_STATE.searchTerm.trim()) {
+        const searchResults = filtered.filter(cert => {
+            const searchableText = [
+                cert.title,
+                cert.description,
+                cert.issuer,
+                cert.category,
+                ...cert.skills
+            ].join(' ').toLowerCase();
+            return searchableText.includes(CERTIFICATES_STATE.searchTerm.toLowerCase());
+        });
+        filtered = searchResults;
+    }
+    
+    CERTIFICATES_STATE.filteredCertificates = filtered;
+    displayCertificates(filtered);
+    
+    console.log(`🔍 Applied filters: ${filtered.length} results`);
 }
 
 /**
- * Reset all filters to default values
- * @author Arsh Verma
+ * Reset all filters and search to defaults
+ * - Clears selections and reapplies
+ * - Shows success notification
  */
 function resetCertificateFilters() {
-    try {
-        // Reset filter values
-        currentFilters = {
-            category: 'all',
-            issuer: 'all',
-            year: 'all'
-        };
-        
-        // Reset select elements
-        const categoryFilter = document.getElementById('categoryFilter');
-        const issuerFilter = document.getElementById('issuerFilter');
-        const yearFilter = document.getElementById('yearFilter');
-        
-        if (categoryFilter) categoryFilter.value = 'all';
-        if (issuerFilter) issuerFilter.value = 'all';
-        if (yearFilter) yearFilter.value = 'all';
-        
-        // Clear search if exists
-        const searchInput = document.querySelector('.search-input');
-        if (searchInput) searchInput.value = '';
-        
-        // Reapply filters (will show all)
-        applyCertificateFilters();
-        
-        showNotification('Filters reset successfully', 'success');
-        console.log('Filters reset to defaults by Arsh Verma');
-    } catch (error) {
-        console.error('Error resetting filters:', error);
-        showNotification('Error resetting filters', 'error');
-    }
+    CERTIFICATES_STATE.currentFilters = { category: 'all', issuer: 'all', year: 'all' };
+    CERTIFICATES_STATE.searchTerm = '';
+    
+    const categoryFilter = document.getElementById('categoryFilter');
+    const issuerFilter = document.getElementById('issuerFilter');
+    const yearFilter = document.getElementById('yearFilter');
+    const searchInput = document.getElementById('searchInput');
+    
+    if (categoryFilter) categoryFilter.value = 'all';
+    if (issuerFilter) issuerFilter.value = 'all';
+    if (yearFilter) yearFilter.value = 'all';
+    if (searchInput) searchInput.value = '';
+    
+    applyCertificateFilters();
+    showNotification('Filters reset successfully', 'success');
+    console.log('🔄 Filters reset');
 }
 
-// ==========================================
-// EVENT LISTENERS
-// ==========================================
-
 /**
- * Setup additional event listeners
- * - Search functionality
- * - Scroll effects
- * - Keyboard shortcuts
- * @author Arsh Verma
+ * Setup global event listeners
+ * - Search with debounce, keyboard shortcuts (e.g., 'R' for reset, '/' for search)
+ * - Ignores inputs to avoid conflicts
  */
 function setupCertificateEventListeners() {
-    // Search functionality
     setupSearchFunctionality();
-    
-    // Keyboard shortcuts
     setupKeyboardShortcuts();
-    
-    // Scroll to top button
     setupScrollToTop();
     
-    console.log('Event listeners setup complete by Arsh Verma');
+    console.log('👂 Event listeners setup complete');
 }
 
 /**
  * Setup search functionality with debouncing
- * @author Arsh Verma
+ * - Real-time search across title, desc, issuer, category, skills
  */
 function setupSearchFunctionality() {
-    const searchInput = document.querySelector('.search-input');
+    const searchInput = document.getElementById('searchInput');
+    if (!searchInput) return;
     
-    if (searchInput) {
-        searchInput.addEventListener('input', debounce(function(e) {
-            const searchTerm = e.target.value.toLowerCase().trim();
-            
-            console.log('Searching for certificates by Arsh Verma:', searchTerm);
-            
-            // If search is empty, apply normal filters
-            if (searchTerm === '') {
-                applyCertificateFilters();
-                return;
-            }
-            
-            // Search in certificate properties
-            const searchResults = allCertificates.filter(certificate => {
-                const searchableText = [
-                    certificate.title,
-                    certificate.description,
-                    certificate.issuer,
-                    certificate.category,
-                    ...(certificate.skills || [])
-                ].join(' ').toLowerCase();
-                
-                return searchableText.includes(searchTerm);
-            });
-            
-            currentCertificates = searchResults;
-            displayCertificates(searchResults);
-            
-            console.log(`Search results by Arsh Verma: ${searchResults.length} certificates found`);
-        }, 300));
-    }
+    searchInput.addEventListener('input', debounce(function(e) {
+        CERTIFICATES_STATE.searchTerm = e.target.value;
+        applyCertificateFilters();
+        console.log(`🔍 Searching: "${CERTIFICATES_STATE.searchTerm}"`);
+    }, 300));
 }
 
 /**
  * Setup keyboard shortcuts
- * @author Arsh Verma
+ * - 'R': Reset filters, '/': Focus search, 'A': Show credit
  */
 function setupKeyboardShortcuts() {
     document.addEventListener('keydown', function(e) {
-        // Don't trigger if user is typing in an input
-        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
-            return;
-        }
+        if (e.target.matches('input, textarea, select, button')) return;
         
         switch(e.key) {
             case 'r':
             case 'R':
-                // Reset filters
                 e.preventDefault();
                 resetCertificateFilters();
                 break;
-                
             case '/':
-                // Focus search
                 e.preventDefault();
-                const searchInput = document.querySelector('.search-input');
-                if (searchInput) searchInput.focus();
+                document.getElementById('searchInput').focus();
                 break;
-                
             case 'a':
             case 'A':
-                // Show Arsh Verma credit
                 e.preventDefault();
                 showNotification('Portfolio by Arsh Verma | arshcreates.com', 'info');
                 break;
@@ -559,211 +483,159 @@ function setupKeyboardShortcuts() {
 
 /**
  * Setup scroll to top functionality
- * @author Arsh Verma
+ * - Shows button after 300px scroll
  */
 function setupScrollToTop() {
     const backToTopBtn = document.getElementById('backToTop');
+    if (!backToTopBtn) return;
     
-    if (backToTopBtn) {
-        // Show/hide button based on scroll position
-        window.addEventListener('scroll', function() {
-            if (window.pageYOffset > 300) {
-                backToTopBtn.classList.add('visible');
-            } else {
-                backToTopBtn.classList.remove('visible');
-            }
-        });
-        
-        // Scroll to top on click
-        backToTopBtn.addEventListener('click', function() {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-        });
-    }
+    window.addEventListener('scroll', function() {
+        backToTopBtn.classList.toggle('visible', window.pageYOffset > 300);
+    });
+    
+    backToTopBtn.addEventListener('click', function() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
 }
 
-// ==========================================
-// CERTIFICATE CARD INTERACTIONS
-// ==========================================
-
 /**
- * Setup interactive behaviors for certificate cards
- * - Click to view details
- * - Hover effects
- * - Smooth transitions
- * @author Arsh Verma
+ * Setup interactive listeners on certificate cards
+ * - View details, verify, hover effects
+ * - Prevents event bubbling on buttons
  */
 function setupCertificateCardListeners() {
-    const cards = document.querySelectorAll('.game-card');
-    
-    cards.forEach(card => {
-        // Click to view details
-        card.addEventListener('click', function(e) {
-            // Don't navigate if clicking on a button or link
-            if (e.target.closest('a, button')) {
-                return;
-            }
-            
-            const certificateId = parseInt(this.getAttribute('data-certificate-id'));
-            if (certificateId) {
-                viewCertificateDetails(certificateId);
-            }
-        });
-        
-        // Hover effect - lift card
-        card.addEventListener('mouseenter', function() {
-            if (!isAnimating) {
-                this.style.transform = 'translateY(-10px)';
-            }
-        });
-        
-        card.addEventListener('mouseleave', function() {
-            if (!isAnimating) {
-                this.style.transform = 'translateY(0)';
-            }
+    document.querySelectorAll('.btn-view-details').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const certId = this.getAttribute('data-certificate-id');
+            viewCertificateDetails(certId);
         });
     });
     
-    console.log(`Setup interactions for ${cards.length} certificate cards by Arsh Verma`);
+    document.querySelectorAll('.btn-verify-cert').forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+    });
+    
+    document.querySelectorAll('.certificate-card').forEach(card => {
+        card.addEventListener('click', function(e) {
+            if (!e.target.closest('button') && !e.target.closest('a')) {
+                const certId = this.getAttribute('data-certificate-id');
+                viewCertificateDetails(certId);
+            }
+        });
+        
+        if (window.innerWidth > 768) {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-8px)';
+                this.style.transition = 'transform 0.3s ease';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        }
+    });
+    
+    console.log(`🖱️ Setup interactions for ${document.querySelectorAll('.certificate-card').length} cards`);
 }
 
 /**
- * Navigate to certificate detail page
- * @param {number} certificateId - ID of the certificate to view
- * @author Arsh Verma
+ * Navigate to certificate details page
+ * - Appends query params for SPA-like routing
+ * @param {string|number} certId - Certificate ID
  */
-function viewCertificateDetails(certificateId) {
-    if (!certificateId || isNaN(certificateId)) {
-        console.error('Invalid certificate ID:', certificateId);
-        showNotification('Invalid certificate', 'error');
+function viewCertificateDetails(certId) {
+    if (!certId) {
+        showNotification('Invalid certificate ID', 'error');
         return;
     }
-    
-    console.log('Navigating to certificate details by Arsh Verma:', certificateId);
-    window.location.href = `certificate-detail.html?id=${certificateId}`;
+    window.location.href = `certificate-detail.html?id=${encodeURIComponent(certId)}`;
+    console.log(`📄 Navigating to certificate details: ${certId}`);
 }
 
-// ==========================================
-// HEADER STATISTICS
-// ==========================================
-
 /**
- * Update header statistics based on certificate data
- * - Total certificates count
- * - Organizations count
- * - Success rate
- * @author Arsh Verma
+ * Update header statistics dynamically
+ * - Calculates totals from loaded data
+ * - Updates DOM elements safely
  */
 function updateHeaderStats() {
-    try {
-        const totalCertificates = allCertificates.length;
-        
-        // Calculate unique organizations
-        const uniqueOrganizations = new Set(allCertificates.map(cert => cert.issuer)).size;
-        
-        // Calculate success rate (assuming all certificates shown are successfully obtained)
-        const successRate = totalCertificates > 0 ? '98%' : '0%';
-        
-        // Update stat displays
-        const statNumbers = document.querySelectorAll('.header-stats .stat-number');
-        if (statNumbers.length >= 3) {
-            statNumbers[0].textContent = totalCertificates > 0 ? `${totalCertificates}+` : '0';
-            statNumbers[1].textContent = uniqueOrganizations > 0 ? `${uniqueOrganizations}+` : '0';
-            statNumbers[2].textContent = successRate;
-        }
-        
-        console.log('Header stats updated by Arsh Verma:', { totalCertificates, uniqueOrganizations, successRate });
-    } catch (error) {
-        console.error('Error updating header stats:', error);
+    const allCertificates = CERTIFICATES_STATE.allCertificates;
+    if (allCertificates.length === 0) return;
+    
+    const totalCertificates = allCertificates.length;
+    const uniqueIssuers = new Set(allCertificates.map(cert => cert.issuer)).size;
+    const successRate = '98%'; // Hardcoded as per original, or calculate if attempts data available
+    
+    const statNumbers = document.querySelectorAll('.header-stats .stat-number');
+    if (statNumbers.length >= 3) {
+        statNumbers[0].textContent = `${totalCertificates}+`;
+        statNumbers[1].textContent = `${uniqueIssuers}+`;
+        statNumbers[2].textContent = successRate;
     }
+    
+    console.log('📊 Header stats updated:', { totalCertificates, uniqueIssuers, successRate });
 }
 
 /**
  * Update results count display
  * @param {number} count - Number of results
- * @author Arsh Verma
  */
 function updateResultsCount(count) {
     const resultsCount = document.getElementById('resultsCount');
     if (resultsCount) {
-        resultsCount.textContent = `Showing ${count} of ${allCertificates.length} certificates from Arsh Verma's portfolio`;
+        resultsCount.textContent = `Showing ${count} of ${CERTIFICATES_STATE.allCertificates.length} certificates`;
     }
 }
 
-// ==========================================
-// ANIMATIONS
-// ==========================================
-
 /**
- * Animate certificate cards on display
- * Staggered fade-in animation
- * @author Arsh Verma
+ * Animate cards entrance with stagger
+ * - Fade-in and slide-up for polished UX
  */
 function animateCertificateCards() {
-    if (isAnimating) return;
-    
-    isAnimating = true;
-    const cards = document.querySelectorAll('.game-card');
-    
+    const cards = document.querySelectorAll('.certificate-card');
     cards.forEach((card, index) => {
-        // Set initial state
         card.style.opacity = '0';
         card.style.transform = 'translateY(30px)';
+        card.style.transition = 'none';
         
-        // Animate with delay based on index
         setTimeout(() => {
             card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
             card.style.opacity = '1';
             card.style.transform = 'translateY(0)';
-        }, index * 50); // 50ms delay between each card
+        }, index * CERTIFICATES_STATE.animationDelay);
     });
-    
-    // Reset animation flag after all cards have animated
-    setTimeout(() => {
-        isAnimating = false;
-    }, cards.length * 50 + 600);
+}
+
+/**
+ * Hide loading screen with fade-out
+ * - Ensures smooth transition to content
+ */
+function hideLoadingScreen() {
+    const loadingScreen = document.getElementById('loadingScreen');
+    if (loadingScreen) {
+        loadingScreen.style.opacity = '0';
+        loadingScreen.style.transition = 'opacity 0.5s ease';
+        setTimeout(() => {
+            loadingScreen.style.display = 'none';
+        }, 500);
+    }
 }
 
 // ==========================================
 // UTILITY FUNCTIONS
+// Reusable helpers for formatting, escaping, and notifications
 // ==========================================
-
-/**
- * Format date to readable string
- * @param {string} dateString - ISO date string
- * @returns {string} Formatted date (e.g., "Jan 2024")
- * @author Arsh Verma
- */
-function formatDate(dateString) {
-    if (!dateString) return 'N/A';
-    
-    try {
-        const date = new Date(dateString);
-        if (isNaN(date.getTime())) return 'Invalid Date';
-        
-        return date.toLocaleDateString('en-US', { 
-            year: 'numeric', 
-            month: 'short'
-        });
-    } catch (error) {
-        console.error('Error formatting date:', error);
-        return 'Invalid Date';
-    }
-}
 
 /**
  * Truncate text to specified length
  * @param {string} text - Text to truncate
  * @param {number} maxLength - Maximum length
  * @returns {string} Truncated text
- * @author Arsh Verma
  */
 function truncateText(text, maxLength) {
-    if (!text || typeof text !== 'string') return '';
-    if (text.length <= maxLength) return text;
-    
+    if (!text || text.length <= maxLength) return text || '';
     return text.substring(0, maxLength).trim() + '...';
 }
 
@@ -771,11 +643,9 @@ function truncateText(text, maxLength) {
  * Escape HTML special characters
  * @param {string} text - Text to escape
  * @returns {string} Escaped text
- * @author Arsh Verma
  */
 function escapeHtml(text) {
     if (typeof text !== 'string') return '';
-    
     const map = {
         '&': '&amp;',
         '<': '&lt;',
@@ -783,8 +653,25 @@ function escapeHtml(text) {
         '"': '&quot;',
         "'": '&#039;'
     };
-    
     return text.replace(/[&<>"']/g, m => map[m]);
+}
+
+/**
+ * Format date to readable string
+ * @param {string} dateString - ISO date string
+ * @returns {string} Formatted date or 'N/A'
+ */
+function formatDate(dateString) {
+    if (!dateString) return 'N/A';
+    try {
+        const date = new Date(dateString);
+        if (isNaN(date.getTime())) return 'N/A';
+        const options = { year: 'numeric', month: 'short' };
+        return date.toLocaleDateString('en-US', options);
+    } catch (error) {
+        console.warn('Invalid date format:', dateString);
+        return 'N/A';
+    }
 }
 
 /**
@@ -792,7 +679,6 @@ function escapeHtml(text) {
  * @param {Function} func - Function to debounce
  * @param {number} wait - Wait time in milliseconds
  * @returns {Function} Debounced function
- * @author Arsh Verma
  */
 function debounce(func, wait) {
     let timeout;
@@ -807,122 +693,103 @@ function debounce(func, wait) {
 }
 
 /**
- * Show notification toast
- * @param {string} message - Notification message
- * @param {string} type - Type: 'success', 'error', 'info', 'warning'
- * @author Arsh Verma
+ * Show notification (fallback to console if no global function)
+ * - Integrates with utils.js showNotification if available
+ * @param {string} message - Notification text
+ * @param {string} type - Type: info, success, error
  */
 function showNotification(message, type = 'info') {
-    try {
-        // Check if utils.js has showNotification
-        if (typeof window.showNotification === 'function') {
-            window.showNotification(message, type);
-            return;
-        }
-        
-        // Fallback notification system
-        const notification = document.createElement('div');
-        notification.className = 'notification-toast';
-        
-        let backgroundColor, icon;
-        switch (type) {
-            case 'error':
-                backgroundColor = '#dc3545';
-                icon = '<i class="fas fa-exclamation-circle"></i>';
-                break;
-            case 'success':
-                backgroundColor = '#28a745';
-                icon = '<i class="fas fa-check-circle"></i>';
-                break;
-            case 'warning':
-                backgroundColor = '#ffc107';
-                icon = '<i class="fas fa-exclamation-triangle"></i>';
-                break;
-            case 'info':
-            default:
-                backgroundColor = '#17a2b8';
-                icon = '<i class="fas fa-info-circle"></i>';
-                break;
-        }
-        
-        notification.style.cssText = `
-            position: fixed;
-            top: 6rem;
-            right: 2rem;
-            padding: 1rem 1.5rem;
-            background: ${backgroundColor};
-            color: white;
-            border-radius: 12px;
-            z-index: 10000;
-            font-weight: 600;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            animation: slideInRight 0.3s ease;
-        `;
-        
-        notification.innerHTML = `${icon}<span>${escapeHtml(message)}</span>`;
-        document.body.appendChild(notification);
-        
-        setTimeout(() => {
-            notification.style.animation = 'slideOutRight 0.3s ease';
-            setTimeout(() => notification.remove(), 300);
-        }, 3000);
-    } catch (error) {
-        console.error('Error showing notification:', error);
+    if (typeof window.showNotification === 'function') {
+        window.showNotification(message, type);
+        return;
     }
+    console.log(`[${type.toUpperCase()}] ${message}`);
 }
 
 // ==========================================
-// GLOBAL FUNCTION EXPORTS
-// Make functions available globally
+// SAMPLE DATA FALLBACK
+// Production-ready sample certificates for preview/demo mode
+// Edit here to add/remove sample entries
+// ==========================================
+function createSampleCertificates() {
+    return [
+        {
+            id: 1,
+            title: "AWS Certified Solutions Architect - Associate",
+            category: "Cloud Computing",
+            issuer: "Amazon Web Services",
+            year: 2024,
+            date: "2024-03-15",
+            description: "Professional certification validating expertise in designing and deploying scalable systems on AWS.",
+            image: "https://via.placeholder.com/400x250/E4572E/FFFFFF?text=AWS+Certified",
+            skills: ["Cloud Architecture", "EC2", "S3", "VPC", "IAM", "Lambda"],
+            credentialUrl: "https://www.credly.com/badges/abc123",
+            credentialId: "AWS-SA-2024-001"
+        },
+        {
+            id: 2,
+            title: "Google Cloud Professional Data Engineer",
+            category: "Cloud Computing",
+            issuer: "Google Cloud",
+            year: 2024,
+            date: "2024-05-20",
+            description: "Certification demonstrating proficiency in building and managing data processing systems on Google Cloud.",
+            image: "https://via.placeholder.com/400x250/4285F4/FFFFFF?text=Google+Cloud",
+            skills: ["BigQuery", "Dataflow", "Dataproc", "Pub/Sub", "Machine Learning"],
+            credentialUrl: "https://www.credly.com/badges/def456",
+            credentialId: "GCP-DE-2024-002"
+        },
+        {
+            id: 3,
+            title: "Responsive Web Design",
+            category: "Programming",
+            issuer: "freeCodeCamp",
+            year: 2023,
+            date: "2023-11-10",
+            description: "Entry-level certification in modern web development fundamentals and responsive design principles.",
+            image: "https://via.placeholder.com/400x250/006400/FFFFFF?text=freeCodeCamp",
+            skills: ["HTML5", "CSS3", "Flexbox", "Grid", "Responsive Design"],
+            credentialUrl: "https://www.freecodecamp.org/certification/ghi789",
+            credentialId: "FCC-RWD-2023-003"
+        },
+        {
+            id: 4,
+            title: "Microsoft Certified: Azure Fundamentals",
+            category: "Cloud Computing",
+            issuer: "Microsoft",
+            year: 2023,
+            date: "2023-08-05",
+            description: "Foundational certification covering core Azure services and cloud concepts.",
+            image: "https://via.placeholder.com/400x250/0078D4/FFFFFF?text=Azure+Fundamentals",
+            skills: ["Azure Services", "Cloud Computing", "Security", "Pricing"],
+            credentialUrl: "https://www.credly.com/badges/jkl012",
+            credentialId: "AZ-900-2023-004"
+        },
+        {
+            id: 5,
+            title: "IBM Data Science Professional Certificate",
+            category: "Programming",
+            issuer: "IBM",
+            year: 2024,
+            date: "2024-01-30",
+            description: "Comprehensive program covering data science tools, Python, SQL, and machine learning.",
+            image: "https://via.placeholder.com/400x250/192BC2/FFFFFF?text=IBM+Data+Science",
+            skills: ["Python", "SQL", "Machine Learning", "Data Visualization", "Pandas"],
+            credentialUrl: "https://www.credly.com/badges/mno345",
+            credentialId: "IBM-DS-2024-005"
+        }
+    ];
+}
+
+// ==========================================
+// GLOBAL EXPORTS
+// Make key functions available globally for HTML onclicks and utils integration
 // ==========================================
 window.initializeCertificatesPage = initializeCertificatesPage;
 window.resetCertificateFilters = resetCertificateFilters;
 window.viewCertificateDetails = viewCertificateDetails;
 window.applyCertificateFilters = applyCertificateFilters;
 
-// ==========================================
-// AUTO-INITIALIZATION
-// Initialize when DOM is ready
-// ==========================================
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initializeCertificatesPage);
-    console.log('Waiting for DOM to load by Arsh Verma...');
-} else {
-    initializeCertificatesPage();
-}
-
-// ==========================================
-// DEBUG HELPERS
-// ==========================================
-
-/**
- * Debug function to check certificates state
- * Call window.debugCertificatesState() in console
- * @author Arsh Verma
- */
-window.debugCertificatesState = function() {
-    console.log('=== CERTIFICATES STATE DEBUG BY ARSH VERMA ===');
-    console.log('All Certificates:', allCertificates);
-    console.log('Current Certificates:', currentCertificates);
-    console.log('Current Filters:', currentFilters);
-    console.log('Total Count:', allCertificates.length);
-    console.log('Filtered Count:', currentCertificates.length);
-    console.log('========================');
-};
-
-// Developer signature in console
-console.log(`
-╔══════════════════════════════════════════════╗
-║           CERTIFICATES PORTFOLIO             ║
-║            Developed by Arsh Verma           ║
-║      GitHub: https://github.com/ArshVermaGit ║
-║    Portfolio: https://arshcreates.com        ║
-╚══════════════════════════════════════════════╝
-`);
-
-// Log initialization
-console.log('certificates.js loaded successfully by Arsh Verma');
-console.log('Available functions:', ['initializeCertificatesPage', 'resetCertificateFilters', 'viewCertificateDetails', 'applyCertificateFilters', 'debugCertificatesState']);
+console.log('✅ Certificates.js loaded successfully');
+console.log('📝 Created by: Arsh Verma');
+console.log('🔧 Version: 2.2.0 - Websites-Inspired Design Applied');
