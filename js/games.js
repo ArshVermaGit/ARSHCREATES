@@ -129,7 +129,6 @@ function validateGamesData(games) {
         name: game.name || 'Untitled Game',
         category: game.category || 'Uncategorized',
         status: game.status || 'In Development',
-        rating: Math.max(0, Math.min(5, game.rating || 0)),  // Clamp 0-5
         overview: game.overview || game.description || 'Preview coming soon.',
         releaseDate: game.releaseDate || null,
         playCount: Math.max(0, game.playCount || 0),
