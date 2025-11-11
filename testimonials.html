@@ -1,16 +1,46 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
+    <!-- ==========================================
+         META INFORMATION
+         Author: Arsh Verma
+         Purpose: Testimonials Portfolio Page - Client reviews and feedback showcase with filters and submission
+         Last Updated: November 12, 2025
+         ========================================== -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Client Testimonials - Arsh Verma</title>
+    <meta name="description" content="Discover what clients say about Arsh Verma's development work - Authentic testimonials from satisfied collaborators">
+    <meta name="keywords" content="Arsh Verma, Testimonials, Client Reviews, Web Development, App Development, Game Development">
+    <meta name="author" content="Arsh Verma">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Testimonials - Arsh Verma">
+    <meta property="og:description" content="Authentic client testimonials showcasing collaboration and results">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="assets/og-testimonials.jpg">
+    
+    <title>Testimonials Portfolio - Arsh Verma</title>
+    
+    <!-- Favicon -->
     <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
+    
+    <!-- Stylesheets -->
     <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="css/testimonials.css">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-Avb2QiuDEEvB4bZJYdft2mNjVShBftLdPG8FJ0V7irTLQ8Uo0qcPxh4Plq7G5tGm0rU+1SPhVotteLpBERwTkw==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
-<body>
-    <!-- Loading Screen -->
+<body class="testimonials-page">
+    <!-- ==========================================
+         LOADING SCREEN
+         Displays while page assets load - Production ready with smooth fade-out
+         ========================================== -->
     <div id="loadingScreen" class="loading-screen">
         <div class="loading-content">
             <div class="loading-logo">
@@ -20,37 +50,47 @@
             <div class="loading-bar-container">
                 <div class="loading-bar" id="loadingBar"></div>
             </div>
-            <div class="loading-text" id="loadingText">Loading Testimonials...</div>
+            <div class="loading-text" id="loadingText">Loading Testimonials Portfolio...</div>
         </div>
     </div>
 
-    <!-- Navigation -->
+    <!-- ==========================================
+         NAVIGATION BAR
+         Main site navigation with theme toggle - Consistent with other sections
+         ========================================== -->
     <nav class="navbar" id="navbar">
         <div class="container">
             <div class="nav-content">
-                <a href="index.html" class="logo">
+                <!-- Logo -->
+                <a href="index.html" class="logo" aria-label="ArshCreates Home">
                     <div class="logo-icon">
                         <i class="fas fa-code"></i>
                     </div>
                     <span class="logo-text">ArshCreates</span>
                 </a>
 
+                <!-- Navigation Menu -->
                 <ul class="nav-menu" id="navMenu">
                     <li><a href="index.html" class="nav-link">Home</a></li>
                     <li><a href="index.html#about" class="nav-link">About</a></li>
                     <li><a href="games.html" class="nav-link">Games</a></li>
                     <li><a href="websites.html" class="nav-link">Websites</a></li>
                     <li><a href="apps.html" class="nav-link">Apps</a></li>
+                    <li><a href="certificates.html" class="nav-link">Certificates</a></li>
                     <li><a href="testimonials.html" class="nav-link active">Testimonials</a></li>
                     <li><a href="index.html#contact" class="nav-link">Contact</a></li>
                 </ul>
 
+                <!-- Navigation Actions -->
                 <div class="nav-actions">
+                    <!-- Theme Toggle Button -->
                     <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
                         <div class="theme-icon">
                             <i class="fas fa-moon"></i>
                         </div>
                     </button>
+                    
+                    <!-- Mobile Menu Toggle -->
                     <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
                         <span></span>
                         <span></span>
@@ -61,23 +101,28 @@
         </div>
     </nav>
 
-    <!-- Testimonials Header -->
+    <!-- ==========================================
+         TESTIMONIALS HEADER
+         Hero section with statistics - Dynamic stats for engagement
+         ========================================== -->
     <section class="page-header">
         <div class="container">
             <div class="header-content">
-                <h1>Client Testimonials</h1>
-                <p>What clients and collaborators say about working with me on their digital projects</p>
+                <h1>Testimonials Portfolio</h1>
+                <p>Authentic client stories and feedback highlighting successful collaborations and exceptional results</p>
+                
+                <!-- Portfolio Statistics -->
                 <div class="header-stats">
                     <div class="stat">
-                        <span class="stat-number">50+</span>
+                        <span class="stat-number" data-stat="clients">50+</span>
                         <span class="stat-label">Happy Clients</span>
                     </div>
                     <div class="stat">
-                        <span class="stat-number">4.9</span>
+                        <span class="stat-number" data-stat="rating">4.9</span>
                         <span class="stat-label">Average Rating</span>
                     </div>
                     <div class="stat">
-                        <span class="stat-number">98%</span>
+                        <span class="stat-number" data-stat="satisfaction">98%</span>
                         <span class="stat-label">Satisfaction Rate</span>
                     </div>
                 </div>
@@ -85,71 +130,106 @@
         </div>
     </section>
 
-    <!-- Testimonials Filter -->
+    <!-- ==========================================
+         TESTIMONIALS FILTER SECTION
+         Filter and sort controls - Fully functional for navigation
+         ========================================== -->
     <section class="section filter-section">
         <div class="container">
             <div class="filter-container">
+                <!-- Project Type Filter -->
                 <div class="filter-group">
                     <label for="projectTypeFilter">Project Type</label>
-                    <select id="projectTypeFilter" class="filter-select">
+                    <select id="projectTypeFilter" class="filter-select" aria-label="Filter by project type">
                         <option value="all">All Projects</option>
-                        <option value="Website">Websites</option>
-                        <option value="App">Mobile Apps</option>
-                        <option value="Game">Games</option>
-                        <option value="Consultation">Consultation</option>
                     </select>
                 </div>
+                
+                <!-- Rating Filter -->
                 <div class="filter-group">
                     <label for="ratingFilter">Minimum Rating</label>
-                    <select id="ratingFilter" class="filter-select">
+                    <select id="ratingFilter" class="filter-select" aria-label="Filter by minimum rating">
                         <option value="0">All Ratings</option>
-                        <option value="4">4+ Stars</option>
-                        <option value="4.5">4.5+ Stars</option>
-                        <option value="5">5 Stars Only</option>
                     </select>
                 </div>
+                
+                <!-- Sort Filter -->
                 <div class="filter-group">
                     <label for="sortFilter">Sort By</label>
-                    <select id="sortFilter" class="filter-select">
+                    <select id="sortFilter" class="filter-select" aria-label="Sort testimonials">
                         <option value="newest">Newest First</option>
                         <option value="oldest">Oldest First</option>
                         <option value="rating">Highest Rating</option>
                         <option value="project">Project Type</option>
                     </select>
                 </div>
+                
+                <!-- Reset Button -->
+                <div class="filter-group">
+                    <button class="btn btn-secondary" onclick="resetTestimonialFilters()" aria-label="Reset all filters">
+                        <i class="fas fa-redo"></i>
+                        <span>Reset Filters</span>
+                    </button>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Testimonials Grid -->
+    <!-- ==========================================
+         TESTIMONIALS GRID SECTION
+         Main content area displaying testimonial cards - Preview cards with details
+         ========================================== -->
     <section class="section testimonials-section">
         <div class="container">
-            <div class="testimonials-grid" id="testimonialsGrid">
-                <!-- Testimonials will be loaded dynamically -->
+            <!-- Section Header -->
+            <div class="section-header">
+                <h2 class="section-title">Client Stories</h2>
+                <p class="section-subtitle">Real feedback from satisfied clients across various projects</p>
+                <div class="section-decoration">
+                    <div class="decoration-line"></div>
+                    <i class="fas fa-comment-dots"></i>
+                    <div class="decoration-line"></div>
+                </div>
+            </div>
+            
+            <!-- Testimonials Grid Container -->
+            <div class="portfolio-grid" id="testimonialsGrid">
+                <!-- Loading State -->
+                <div class="loading-testimonials">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <p>Loading testimonials...</p>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Add Testimonial CTA -->
-    <section class="section add-testimonial-section">
+    <!-- ==========================================
+         CTA SECTION
+         Call-to-action for adding testimonials - Consistent with portfolio theme
+         ========================================== -->
+    <section class="section cta-section">
         <div class="container">
             <div class="cta-content">
-                <h2>Worked With Me?</h2>
-                <p>Share your experience and help others discover the quality of my work</p>
-                <button id="addTestimonialBtn" class="btn btn-primary btn-glow">
+                <h2>Share Your Experience?</h2>
+                <p>Worked with me? Add your testimonial to help future clients discover the quality of collaboration</p>
+                <button id="addTestimonialBtn" class="btn btn-primary btn-glow" onclick="openTestimonialModal()">
                     <i class="fas fa-plus"></i>
-                    <span>Add Your Testimonial</span>
+                    <span>Add Testimonial</span>
                 </button>
             </div>
         </div>
     </section>
 
-    <!-- Footer -->
+    <!-- ==========================================
+         FOOTER
+         Site footer with links and social media - Production ready with credits
+         ========================================== -->
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
+                <!-- Footer Brand -->
                 <div class="footer-brand">
-                    <a href="index.html" class="logo">
+                    <a href="index.html" class="logo" aria-label="ArshCreates Home">
                         <div class="logo-icon">
                             <i class="fas fa-code"></i>
                         </div>
@@ -158,20 +238,24 @@
                     <p class="footer-description">
                         Creating exceptional digital experiences through innovative development and creative solutions.
                     </p>
+                    
+                    <!-- Social Media Links -->
                     <div class="footer-social">
-                        <a href="https://github.com/ArshVermaGit" class="social-link" target="_blank">
+                        <a href="https://github.com/ArshVermaGit" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
                             <i class="fab fa-github"></i>
                         </a>
-                        <a href="https://www.linkedin.com/in/arshvermadev/" class="social-link" target="_blank">
+                        <a href="https://www.linkedin.com/in/arshvermadev/" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
                             <i class="fab fa-linkedin"></i>
                         </a>
-                        <a href="#" class="social-link">
-                            <i class="fab fa-twitter"></i>
+                        <a href="https://x.com/TheArshVerma" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)">
+                            <i class="fab fa-x-twitter"></i>
                         </a>
                     </div>
                 </div>
 
+                <!-- Footer Links -->
                 <div class="footer-links">
+                    <!-- Navigation Links -->
                     <div class="link-group">
                         <h4>Navigation</h4>
                         <a href="index.html">Home</a>
@@ -179,8 +263,10 @@
                         <a href="games.html">Games</a>
                         <a href="websites.html">Websites</a>
                         <a href="apps.html">Apps</a>
+                        <a href="certificates.html">Certificates</a>
                     </div>
 
+                    <!-- Connect Links -->
                     <div class="link-group">
                         <h4>Connect</h4>
                         <a href="index.html#contact">Contact</a>
@@ -189,6 +275,7 @@
                         <a href="#">Blog</a>
                     </div>
 
+                    <!-- Legal Links -->
                     <div class="link-group">
                         <h4>Legal</h4>
                         <a href="#">Privacy Policy</a>
@@ -198,9 +285,10 @@
                 </div>
             </div>
 
+            <!-- Footer Bottom -->
             <div class="footer-bottom">
                 <div class="copyright">
-                    &copy; 2024 Arsh Verma. All rights reserved.
+                    &copy; 2025 Arsh Verma. All rights reserved. Developed with ❤️ by Arsh Verma.
                 </div>
                 <div class="footer-actions">
                     <a href="admin.html" class="admin-link">
@@ -212,71 +300,80 @@
         </div>
     </footer>
 
-    <!-- Back to Top -->
+    <!-- ==========================================
+         BACK TO TOP BUTTON
+         Scroll to top functionality - Accessible and smooth
+         ========================================== -->
     <button class="back-to-top" id="backToTop" aria-label="Back to top">
         <i class="fas fa-chevron-up"></i>
     </button>
 
-    <!-- Add Testimonial Modal -->
-    <div id="testimonialModal" class="modal">
+    <!-- ==========================================
+         NOTIFICATION CONTAINER
+         For displaying user notifications - ARIA compliant
+         ========================================== -->
+    <div id="notificationContainer" aria-live="polite" aria-atomic="true"></div>
+
+    <!-- ==========================================
+         ADD TESTIMONIAL MODAL
+         Modal for submitting new testimonials - Responsive and accessible
+         ========================================== -->
+    <div id="testimonialModal" class="modal" role="dialog" aria-labelledby="modalTitle" aria-hidden="true">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>Add Your Testimonial</h2>
-                <button class="modal-close" id="modalClose">
+                <h2 id="modalTitle">Add Your Testimonial</h2>
+                <button class="modal-close" id="modalClose" aria-label="Close modal">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
             <form id="testimonialForm" class="modal-form">
                 <div class="form-group">
-                    <label for="clientName">Your Name</label>
-                    <input type="text" id="clientName" name="clientName" required>
+                    <label for="clientName">Your Name *</label>
+                    <input type="text" id="clientName" name="clientName" required aria-required="true">
                 </div>
                 <div class="form-group">
-                    <label for="clientRole">Your Role/Company</label>
-                    <input type="text" id="clientRole" name="clientRole" required>
+                    <label for="clientRole">Your Role/Company *</label>
+                    <input type="text" id="clientRole" name="clientRole" required aria-required="true">
                 </div>
                 <div class="form-group">
-                    <label for="projectType">Project Type</label>
-                    <select id="projectType" name="projectType" required>
+                    <label for="projectType">Project Type *</label>
+                    <select id="projectType" name="projectType" required aria-required="true">
                         <option value="">Select Project Type</option>
-                        <option value="Website">Website</option>
-                        <option value="App">Mobile App</option>
-                        <option value="Game">Game</option>
-                        <option value="Consultation">Consultation</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="projectName">Project Name</label>
-                    <input type="text" id="projectName" name="projectName" required>
+                    <label for="projectName">Project Name *</label>
+                    <input type="text" id="projectName" name="projectName" required aria-required="true">
                 </div>
                 <div class="form-group">
-                    <label for="rating">Rating</label>
+                    <label for="rating">Rating *</label>
                     <div class="rating-input">
-                        <div class="stars" id="ratingStars">
-                            <span class="star" data-rating="1">★</span>
-                            <span class="star" data-rating="2">★</span>
-                            <span class="star" data-rating="3">★</span>
-                            <span class="star" data-rating="4">★</span>
-                            <span class="star" data-rating="5">★</span>
+                        <div class="stars" id="ratingStars" role="radiogroup" aria-label="Select rating">
+                            <span class="star" data-rating="1" role="radio" aria-checked="false" tabindex="0">★</span>
+                            <span class="star" data-rating="2" role="radio" aria-checked="false" tabindex="0">★</span>
+                            <span class="star" data-rating="3" role="radio" aria-checked="false" tabindex="0">★</span>
+                            <span class="star" data-rating="4" role="radio" aria-checked="false" tabindex="0">★</span>
+                            <span class="star" data-rating="5" role="radio" aria-checked="false" tabindex="0">★</span>
                         </div>
-                        <input type="hidden" id="rating" name="rating" required>
+                        <input type="hidden" id="rating" name="rating" required aria-required="true">
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="testimonialText">Your Testimonial</label>
-                    <textarea id="testimonialText" name="testimonialText" rows="5" required></textarea>
+                    <label for="testimonialText">Your Testimonial *</label>
+                    <textarea id="testimonialText" name="testimonialText" rows="5" required aria-required="true" placeholder="Share your experience working with Arsh Verma..."></textarea>
                 </div>
                 <div class="form-actions">
-                    <button type="button" class="btn btn-secondary" id="cancelTestimonial">Cancel</button>
+                    <button type="button" class="btn btn-secondary" id="cancelTestimonial" aria-label="Cancel">Cancel</button>
                     <button type="submit" class="btn btn-primary">Submit Testimonial</button>
                 </div>
             </form>
         </div>
     </div>
-
-    <!-- Notification Container -->
-    <div id="notificationContainer"></div>
     
+    <!-- ==========================================
+         JAVASCRIPT FILES
+         Load scripts in correct order - Production optimized
+         ========================================== -->
     <script src="js/utils.js"></script>
     <script src="js/data.js"></script>
     <script src="js/script.js"></script>
