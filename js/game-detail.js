@@ -1044,17 +1044,6 @@ function handleKeyboardNavigation(e) {
     }
     
     switch (e.key) {
-        case 'ArrowLeft':
-            e.preventDefault();
-            navigateToPreviousGame();
-            console.log('⌨️ Keyboard: Navigate to previous game');
-            break;
-            
-        case 'ArrowRight':
-            e.preventDefault();
-            navigateToNextGame();
-            console.log('⌨️ Keyboard: Navigate to next game');
-            break;
             
         case 'Escape':
             if (isGamePlaying) {
