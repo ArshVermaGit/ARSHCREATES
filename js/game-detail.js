@@ -29,18 +29,15 @@ let unityInstance = null;          // Reference to Unity WebGL instance for game
 // ============================================================================================================
 
 const unityBuilds = {
-    // Example Unity Build Configuration
     "static/games_files/sky_surfers/": {
         loaderUrl: "static/games_files/sky_surfers/Build/sky_surfers.loader.js",
         dataUrl: "static/games_files/sky_surfers/Build/sky_surfers.data",
         frameworkUrl: "static/games_files/sky_surfers/Build/sky_surfers.framework.js",
         codeUrl: "static/games_files/sky_surfers/Build/sky_surfers.wasm",
         companyName: "ArshCreates",
-        productName: "Sky Surfers",
+        productName: "Sky Surfers", 
         productVersion: "1.0"
     }
-    // Add more Unity game builds here as needed
-    // Follow the same structure for each game
 };
 
 // ============================================================================================================
@@ -623,6 +620,7 @@ function playGameUnity(game) {
 function loadUnityBuild(buildConfig) {
     try {
         console.log('📦 Loading Unity build...');
+        console.log('Build config:', buildConfig);
         
         const canvas = document.getElementById("unityCanvas");
         const loadingBar = document.getElementById("unityProgressBar");
@@ -655,12 +653,19 @@ function loadUnityBuild(buildConfig) {
         const script = document.createElement("script");
         script.src = buildConfig.loaderUrl;
         
+        let loadTimeout = setTimeout(() => {
+            console.error('❌ Unity loader timeout - taking too long to load');
+            showNotification('Game loading timeout. The build files might be incomplete.', 'error');
+            resetGameState();
+        }, 30000); // 30 second timeout
+        
         script.onload = () => {
+            clearTimeout(loadTimeout);
             console.log('✅ Unity loader script loaded successfully');
             
             // Verify Unity loader function exists
             if (typeof createUnityInstance !== "function") {
-                showNotification('Unity WebGL loader failed to load', 'error');
+                showNotification('Unity WebGL loader failed. Check Unity version.', 'error');
                 console.error('❌ createUnityInstance function not found');
                 if (unityLoading) unityLoading.style.display = 'none';
                 resetGameState();
@@ -682,11 +687,17 @@ function loadUnityBuild(buildConfig) {
             
             // Create Unity instance with progress tracking
             createUnityInstance(canvas, config, (progress) => {
+                console.log(`📊 Unity loading progress: ${Math.round(progress * 100)}%`);
+                
                 // Update loading progress bar
                 if (loadingBar) {
                     const percentage = Math.round(progress * 100);
                     loadingBar.style.width = `${percentage}%`;
-                    console.log(`📊 Unity loading progress: ${percentage}%`);
+                    
+                    // If progress is stuck at 0% for too long, there's an issue
+                    if (percentage === 0) {
+                        console.warn('⚠️ Progress stuck at 0% - check .data file');
+                    }
                 }
             }).then((instance) => {
                 console.log('✅ Unity instance created successfully');
@@ -704,14 +715,15 @@ function loadUnityBuild(buildConfig) {
                 
             }).catch((message) => {
                 console.error('❌ Failed to create Unity instance:', message);
-                showNotification('Failed to load game: ' + message, 'error');
+                showNotification('Failed to load game. The build might be corrupted.', 'error');
                 resetGameState();
             });
         };
         
         script.onerror = (error) => {
+            clearTimeout(loadTimeout);
             console.error('❌ Failed to load Unity loader script:', error);
-            showNotification('Failed to load Unity WebGL build', 'error');
+            showNotification('Cannot load game files. Check if WebGL build is complete.', 'error');
             resetGameState();
         };
         
@@ -724,6 +736,36 @@ function loadUnityBuild(buildConfig) {
         resetGameState();
     }
 }
+
+/**
+ * Debug function to check if Unity files are accessible
+ */
+window.checkUnityFiles = async function() {
+    const buildConfig = unityBuilds["static/games_files/sky_surfers/"];
+    
+    if (!buildConfig) {
+        console.error('❌ Build config not found');
+        return;
+    }
+    
+    console.log('🔍 Checking Unity file accessibility...');
+    
+    const filesToCheck = [
+        { name: 'Loader', url: buildConfig.loaderUrl },
+        { name: 'Data', url: buildConfig.dataUrl },
+        { name: 'Framework', url: buildConfig.frameworkUrl },
+        { name: 'WASM', url: buildConfig.codeUrl }
+    ];
+    
+    for (const file of filesToCheck) {
+        try {
+            const response = await fetch(file.url, { method: 'HEAD' });
+            console.log(`✅ ${file.name}: ${response.status === 200 ? 'ACCESSIBLE' : 'NOT FOUND'}`);
+        } catch (error) {
+            console.error(`❌ ${file.name}: ${error.message}`);
+        }
+    }
+};
 
 /**
  * Reset game state to initial state (not playing)
