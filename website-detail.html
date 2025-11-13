@@ -1,33 +1,64 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
+    <!-- ========================================
+         META TAGS & CONFIGURATION
+         ======================================== -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Detailed view of web development projects by Arsh Verma - ArshCreates Portfolio">
+    <meta name="author" content="Arsh Verma">
+    <meta name="keywords" content="web development, portfolio, projects, Arsh Verma, ArshCreates">
+    
+    <!-- Page Title -->
     <title>Website Details - Arsh Verma</title>
+    
+    <!-- Favicon -->
     <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
+    
+    <!-- ========================================
+         STYLESHEETS
+         ======================================== -->
+    <!-- Main Stylesheet -->
     <link rel="stylesheet" href="css/style.css">
+    
+    <!-- Font Awesome Icons (v6.5.0) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
+    <!-- Google Fonts - Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Loading Screen -->
+    <!-- ========================================
+         LOADING SCREEN
+         Purpose: Display loading animation while page content loads
+         ======================================== -->
     <div id="loadingScreen" class="loading-screen">
         <div class="loading-content">
+            <!-- Animated Logo with Glow Effect -->
             <div class="loading-logo">
                 <div class="logo-glow"></div>
                 <i class="fas fa-laptop-code"></i>
             </div>
+            
+            <!-- Progress Bar -->
             <div class="loading-bar-container">
                 <div class="loading-bar" id="loadingBar"></div>
             </div>
+            
+            <!-- Loading Status Text -->
             <div class="loading-text" id="loadingText">Loading Website Details...</div>
         </div>
     </div>
 
-    <!-- Navigation -->
+    <!-- ========================================
+         NAVIGATION BAR
+         Purpose: Main navigation and theme controls
+         ======================================== -->
     <nav class="navbar">
         <div class="container">
             <div class="nav-content">
+                <!-- Brand Logo & Name -->
                 <a href="index.html" class="logo">
                     <div class="logo-icon">
                         <i class="fas fa-code"></i>
@@ -35,11 +66,15 @@
                     <span class="logo-text">ArshCreates</span>
                 </a>
 
+                <!-- Navigation Actions -->
                 <div class="nav-actions">
+                    <!-- Back to Websites Button -->
                     <a href="websites.html" class="btn btn-secondary">
                         <i class="fas fa-arrow-left"></i>
                         <span>Back to Websites</span>
                     </a>
+                    
+                    <!-- Theme Toggle Button (Dark/Light Mode) -->
                     <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
                         <div class="theme-icon">
                             <i class="fas fa-moon"></i>
@@ -50,14 +85,23 @@
         </div>
     </nav>
 
-    <!-- Website Detail Section -->
+    <!-- ========================================
+         MAIN CONTENT - WEBSITE DETAIL SECTION
+         Purpose: Display comprehensive website project details
+         ======================================== -->
     <section class="website-detail-section">
         <div class="container">
-            <!-- Website Preview -->
+            <!-- ========================================
+                 WEBSITE PREVIEW CONTAINER
+                 Purpose: Interactive preview and navigation
+                 ======================================== -->
             <div class="website-preview-container">
                 <div class="website-preview">
+                    <!-- Static Preview Image with Overlay -->
                     <div class="preview-image">
                         <img id="previewImage" src="" alt="Website Preview" class="preview-img">
+                        
+                        <!-- Overlay with Visit Button -->
                         <div class="preview-overlay">
                             <button id="visitBtn" class="btn-visit-large">
                                 <i class="fas fa-external-link-alt"></i>
@@ -66,33 +110,51 @@
                         </div>
                     </div>
                     
-                    <!-- Website Controls -->
+                    <!-- ========================================
+                         WEBSITE CONTROLS
+                         Purpose: Control iframe preview display
+                         ======================================== -->
                     <div class="website-controls">
+                        <!-- Control Buttons -->
                         <div class="control-group">
+                            <!-- Fullscreen Preview Button -->
                             <button id="fullscreenBtn" class="btn-control" title="Fullscreen Preview">
                                 <i class="fas fa-expand"></i>
                             </button>
+                            
+                            <!-- Close Preview Button -->
                             <button id="closePreviewBtn" class="btn-control" title="Close Preview">
                                 <i class="fas fa-times"></i>
                             </button>
                         </div>
+                        
+                        <!-- Control Information Text -->
                         <div class="control-info">
                             <span class="control-text">Interactive Website Preview</span>
                         </div>
                     </div>
 
-                    <!-- Website Container -->
+                    <!-- ========================================
+                         IFRAME CONTAINER
+                         Purpose: Live website preview in iframe
+                         ======================================== -->
                     <div id="websiteContainer" class="website-container">
                         <iframe id="websiteFrame" allowfullscreen></iframe>
                     </div>
                 </div>
 
-                <!-- Navigation Arrows -->
+                <!-- ========================================
+                     NAVIGATION ARROWS
+                     Purpose: Navigate between websites
+                     ======================================== -->
                 <div class="detail-navigation">
+                    <!-- Previous Website Button -->
                     <button id="prevWebsite" class="nav-arrow prev-arrow">
                         <i class="fas fa-chevron-left"></i>
                         <span class="arrow-text">Previous Website</span>
                     </button>
+                    
+                    <!-- Next Website Button -->
                     <button id="nextWebsite" class="nav-arrow next-arrow">
                         <span class="arrow-text">Next Website</span>
                         <i class="fas fa-chevron-right"></i>
@@ -100,29 +162,55 @@
                 </div>
             </div>
 
-            <!-- Website Information -->
+            <!-- ========================================
+                 WEBSITE INFORMATION CONTAINER
+                 Purpose: Display detailed project information
+                 ======================================== -->
             <div class="website-info-container">
+                <!-- ========================================
+                     WEBSITE HEADER
+                     Purpose: Title, meta info, and action buttons
+                     ======================================== -->
                 <div class="website-header">
+                    <!-- Title and Meta Information -->
                     <div class="website-title-section">
+                        <!-- Website Title (Dynamic) -->
                         <h1 id="websiteTitle" class="website-title">Website Title</h1>
+                        
+                        <!-- Meta Information: Category, Rating, Status -->
                         <div class="website-meta">
+                            <!-- Category Badge -->
                             <span id="websiteCategory" class="website-category">Category</span>
+                            
+                            <!-- Rating Display -->
                             <span class="website-rating">
                                 <i class="fas fa-star"></i>
                                 <span id="websiteRating">0.0</span>/5
                             </span>
+                            
+                            <!-- Status Badge (Active/Development/Archived) -->
                             <span id="websiteStatus" class="website-status">Status</span>
                         </div>
                     </div>
+                    
+                    <!-- ========================================
+                         ACTION BUTTONS
+                         Purpose: Share, view repository, and visit site
+                         ======================================== -->
                     <div class="website-actions">
+                        <!-- Share Button -->
                         <button id="shareBtn" class="btn btn-secondary">
                             <i class="fas fa-share-alt"></i>
                             <span>Share</span>
                         </button>
+                        
+                        <!-- GitHub Repository Link -->
                         <a id="repositoryBtn" href="#" class="btn btn-primary" target="_blank">
                             <i class="fab fa-github"></i>
                             <span>Repository</span>
                         </a>
+                        
+                        <!-- Live Site Link -->
                         <a id="liveUrlBtn" href="#" class="btn btn-accent" target="_blank">
                             <i class="fas fa-external-link-alt"></i>
                             <span>Live Site</span>
@@ -130,16 +218,30 @@
                     </div>
                 </div>
 
+                <!-- ========================================
+                     WEBSITE CONTENT
+                     Purpose: All detailed information sections
+                     ======================================== -->
                 <div class="website-content">
-                    <!-- Overview & Description -->
+                    <!-- ========================================
+                         OVERVIEW & DESCRIPTION SECTION
+                         Purpose: Project summary and description
+                         ======================================== -->
                     <div class="website-description-section">
                         <h2>About This Website</h2>
+                        <!-- Brief Overview (Dynamic) -->
                         <p id="websiteOverview" class="website-overview">Website overview...</p>
+                        
+                        <!-- Detailed Description (Dynamic) -->
                         <p id="websiteDescription" class="website-description">Website description...</p>
                     </div>
 
-                    <!-- Website Details Grid -->
+                    <!-- ========================================
+                         WEBSITE DETAILS GRID
+                         Purpose: Display key project metrics
+                         ======================================== -->
                     <div class="website-details-grid">
+                        <!-- Launch Date Card -->
                         <div class="detail-card">
                             <div class="detail-icon">
                                 <i class="fas fa-calendar"></i>
@@ -149,6 +251,8 @@
                                 <p id="launchDate">-</p>
                             </div>
                         </div>
+                        
+                        <!-- Development Time Card -->
                         <div class="detail-card">
                             <div class="detail-icon">
                                 <i class="fas fa-clock"></i>
@@ -158,6 +262,8 @@
                                 <p id="developmentTime">-</p>
                             </div>
                         </div>
+                        
+                        <!-- User Base Card -->
                         <div class="detail-card">
                             <div class="detail-icon">
                                 <i class="fas fa-users"></i>
@@ -167,6 +273,8 @@
                                 <p id="userBase">-</p>
                             </div>
                         </div>
+                        
+                        <!-- Responsive Design Card -->
                         <div class="detail-card">
                             <div class="detail-icon">
                                 <i class="fas fa-mobile-alt"></i>
@@ -178,26 +286,38 @@
                         </div>
                     </div>
 
-                    <!-- Features Section -->
+                    <!-- ========================================
+                         FEATURES SECTION
+                         Purpose: List key website features
+                         ======================================== -->
                     <div class="features-section">
                         <h2>Key Features</h2>
+                        <!-- Features List (Dynamically Populated) -->
                         <ul id="featuresList" class="features-list">
-                            <!-- Features will be populated dynamically -->
+                            <!-- Features will be populated by JavaScript -->
                         </ul>
                     </div>
 
-                    <!-- Technologies Section -->
+                    <!-- ========================================
+                         TECHNOLOGIES SECTION
+                         Purpose: Display tech stack used
+                         ======================================== -->
                     <div class="technologies-section">
                         <h2>Technologies Used</h2>
+                        <!-- Technology Tags (Dynamically Populated) -->
                         <div id="techList" class="tech-tags">
-                            <!-- Technologies will be populated dynamically -->
+                            <!-- Technologies will be populated by JavaScript -->
                         </div>
                     </div>
 
-                    <!-- Website Stats -->
+                    <!-- ========================================
+                         WEBSITE STATISTICS SECTION
+                         Purpose: Display performance metrics
+                         ======================================== -->
                     <div class="website-stats-section">
                         <h2>Website Statistics</h2>
                         <div class="stats-grid">
+                            <!-- Rating Stat -->
                             <div class="stat-item">
                                 <div class="stat-circle">
                                     <span id="ratingCircle" class="stat-value">0.0</span>
@@ -207,6 +327,8 @@
                                     <p>User Satisfaction Score</p>
                                 </div>
                             </div>
+                            
+                            <!-- Users Stat -->
                             <div class="stat-item">
                                 <div class="stat-circle">
                                     <span id="userCountCircle" class="stat-value">0</span>
@@ -216,6 +338,8 @@
                                     <p>Active User Base</p>
                                 </div>
                             </div>
+                            
+                            <!-- Performance Stat -->
                             <div class="stat-item">
                                 <div class="stat-circle">
                                     <span id="performanceCircle" class="stat-value">98%</span>
@@ -232,23 +356,33 @@
         </div>
     </section>
 
-    <!-- Footer -->
+    <!-- ========================================
+         FOOTER
+         Purpose: Site-wide footer with links and branding
+         ======================================== -->
     <footer class="footer">
         <div class="container">
+            <!-- Footer Content Grid -->
             <div class="footer-content">
+                <!-- Brand Section -->
                 <div class="footer-brand">
+                    <!-- Logo -->
                     <a href="index.html" class="logo">
                         <div class="logo-icon">
                             <i class="fas fa-code"></i>
                         </div>
                         <span class="logo-text">ArshCreates</span>
                     </a>
+                    
+                    <!-- Brand Description -->
                     <p class="footer-description">
                         Creating exceptional digital experiences through innovative development and creative solutions.
                     </p>
                 </div>
 
+                <!-- Footer Links -->
                 <div class="footer-links">
+                    <!-- Navigation Links -->
                     <div class="link-group">
                         <h4>Navigation</h4>
                         <a href="index.html">Home</a>
@@ -258,6 +392,7 @@
                         <a href="apps.html">Apps</a>
                     </div>
 
+                    <!-- Connect Links -->
                     <div class="link-group">
                         <h4>Connect</h4>
                         <a href="index.html#contact">Contact</a>
@@ -267,6 +402,7 @@
                 </div>
             </div>
 
+            <!-- Footer Bottom - Copyright -->
             <div class="footer-bottom">
                 <div class="copyright">
                     &copy; 2024 Arsh Verma. All rights reserved.
@@ -275,12 +411,43 @@
         </div>
     </footer>
 
-    <!-- Notification Container -->
+    <!-- ========================================
+         NOTIFICATION CONTAINER
+         Purpose: Display toast notifications
+         ======================================== -->
     <div id="notificationContainer"></div>
     
+    <!-- ========================================
+         JAVASCRIPT FILES
+         Order matters: Load utilities first, then data, then functionality
+         ======================================== -->
+    <!-- Utility Functions -->
     <script src="js/utils.js"></script>
+    
+    <!-- Data Management -->
     <script src="js/data.js"></script>
+    
+    <!-- Main Script -->
     <script src="js/script.js"></script>
+    
+    <!-- Website Detail Page Logic -->
     <script src="js/website-detail.js"></script>
+
+    <!-- ========================================
+         CREDITS
+         
+         Developed by: Arsh Verma
+         Portfolio: ArshCreates
+         
+         This website detail page is part of a comprehensive
+         portfolio management system featuring:
+         - Dynamic content loading
+         - Interactive website previews
+         - Responsive design
+         - Theme switching
+         - Smooth animations
+         
+         All rights reserved © 2024
+         ======================================== -->
 </body>
 </html>
