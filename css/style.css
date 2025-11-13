@@ -7331,47 +7331,162 @@ html {
    Last Updated: November 11, 2025
    ========================================== */
 
-/* ==========================================
-   INCREMENTAL CSS FOR website-detail.html
-   New styles for website detail page components
-   ========================================== */
+/* ============================================================================================================
+   WEBSITE DETAIL PAGE - COMPREHENSIVE STYLESHEET
+   ============================================================================================================
+   
+   Description: Complete CSS styling for website detail page with modern glassmorphism design
+   Features: Responsive layout, smooth animations, theme support, interactive elements
+   Design: Professional showcase with primary content and interactive preview
+   
+   Author: Arsh Verma
+   Portfolio: ArshCreates
+   Created: 2024
+   
+   ============================================================================================================
+   
+   TABLE OF CONTENTS:
+   1. CSS Variables & Theme Configuration
+   2. Website Detail Section
+   3. Website Preview Container
+   4. Website Controls
+   5. Website Container (Iframe)
+   6. Website Info Container
+   7. Website Header Section
+   8. Website Content Sections
+   9. Website Details Grid
+   10. Features Section
+   11. Technologies Section
+   12. Website Stats Section
+   13. Detail Navigation Arrows
+   14. Notification System
+   15. Button Styles
+   16. Responsive Design
+   17. Animations
+   18. Accessibility
+   
+   ============================================================================================================ */
 
-/* ==========================================
-   WEBSITE DETAIL SECTION
-   ========================================== */
+
+/* ============================================================================================================
+   1. CSS VARIABLES & THEME CONFIGURATION
+   ============================================================================================================ */
+
+:root {
+    /* === Primary Colors === */
+    --primary-blue: #3B82F6;
+    --primary-pink: #EC4899;
+    --primary-purple: #A855F7;
+    
+    /* === Gradient Definitions === */
+    --gradient-primary: linear-gradient(135deg, var(--primary-blue), var(--primary-pink));
+    --gradient-secondary: linear-gradient(135deg, var(--primary-purple), var(--primary-pink));
+    --gradient-overlay: linear-gradient(135deg, 
+        rgba(59, 130, 246, 0.1) 0%, 
+        rgba(168, 85, 247, 0.05) 50%, 
+        rgba(236, 72, 153, 0.1) 100%);
+    
+    /* === Status Colors === */
+    --status-active: #10B981;
+    --status-warning: #F59E0B;
+    --status-error: #EF4444;
+    --status-info: #3B82F6;
+    
+    /* === Border & Spacing === */
+    --border-radius: 24px;
+    --border-radius-sm: 16px;
+    --border-radius-xs: 12px;
+    
+    /* === Transitions === */
+    --transition-fast: 0.2s ease;
+    --transition-base: 0.3s ease;
+    --transition-slow: 0.5s ease;
+    
+    /* === Z-Index Layers === */
+    --z-preview: 20;
+    --z-controls: 10;
+    --z-navigation: 5;
+    --z-notification: 1000;
+}
+
+/* Dark Theme (Default) */
+[data-theme="dark"] {
+    --bg-primary: #0A0A0F;
+    --bg-secondary: #12121A;
+    --bg-tertiary: #1A1A2E;
+    --glass-bg: rgba(26, 26, 46, 0.7);
+    --border-color: rgba(255, 255, 255, 0.1);
+    --text-primary: #FFFFFF;
+    --text-secondary: rgba(255, 255, 255, 0.8);
+    --text-muted: rgba(255, 255, 255, 0.6);
+    --shadow-color: rgba(0, 0, 0, 0.3);
+}
+
+/* Light Theme */
+[data-theme="light"] {
+    --bg-primary: #FFFFFF;
+    --bg-secondary: #F8FAFC;
+    --bg-tertiary: #F1F5F9;
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --border-color: rgba(0, 0, 0, 0.1);
+    --text-primary: #0F172A;
+    --text-secondary: rgba(15, 23, 42, 0.8);
+    --text-muted: rgba(15, 23, 42, 0.6);
+    --shadow-color: rgba(0, 0, 0, 0.1);
+}
+
+
+/* ============================================================================================================
+   2. WEBSITE DETAIL SECTION
+   ============================================================================================================
+   Purpose: Main container for the entire website detail page
+   ============================================================================================================ */
+
 .website-detail-section {
     padding: 8rem 0 4rem;
     position: relative;
     min-height: 100vh;
+    background: var(--bg-primary);
+    transition: background var(--transition-base);
 }
 
-/* ==========================================
-   WEBSITE PREVIEW CONTAINER
-   ========================================== */
+
+/* ============================================================================================================
+   3. WEBSITE PREVIEW CONTAINER
+   ============================================================================================================
+   Purpose: Container for the website preview image and iframe
+   ============================================================================================================ */
+
 .website-preview-container {
     position: relative;
     margin-bottom: 4rem;
+    animation: fadeInUp 0.6s ease-out;
 }
 
 .website-preview {
     background: var(--glass-bg);
     backdrop-filter: blur(30px) saturate(180%);
+    -webkit-backdrop-filter: blur(30px) saturate(180%);
     border: 1px solid var(--border-color);
     border-radius: var(--border-radius);
     box-shadow: 0 20px 60px var(--shadow-color);
     overflow: hidden;
     position: relative;
+    transition: all var(--transition-base);
 }
 
+.website-preview:hover {
+    box-shadow: 0 25px 70px var(--shadow-color),
+                0 0 40px rgba(59, 130, 246, 0.1);
+}
+
+/* Preview Image Container */
 .preview-image {
     position: relative;
     width: 100%;
     height: 500px;
     overflow: hidden;
-    background: linear-gradient(135deg, 
-        rgba(59, 130, 246, 0.1) 0%, 
-        rgba(168, 85, 247, 0.05) 50%, 
-        rgba(236, 72, 153, 0.1) 100%);
+    background: var(--gradient-overlay);
 }
 
 .preview-img {
@@ -7381,6 +7496,11 @@ html {
     transition: transform var(--transition-slow);
 }
 
+.preview-image:hover .preview-img {
+    transform: scale(1.05);
+}
+
+/* Preview Overlay (Shows on Hover) */
 .preview-overlay {
     position: absolute;
     top: 0;
@@ -7389,49 +7509,54 @@ html {
     height: 100%;
     background: rgba(10, 10, 10, 0.7);
     backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     display: flex;
     align-items: center;
     justify-content: center;
     opacity: 0;
-    transition: all var(--transition-base);
+    transition: opacity var(--transition-base);
+    z-index: 5;
 }
 
 .preview-image:hover .preview-overlay {
     opacity: 1;
 }
 
-.preview-image:hover .preview-img {
-    transform: scale(1.05);
-}
-
+/* Large Visit Button */
 .btn-visit-large {
     display: flex;
     align-items: center;
     gap: 1rem;
     padding: 1.5rem 3rem;
-    background: linear-gradient(135deg, #3B82F6, #EC4899);
+    background: var(--gradient-primary);
     border: 1px solid var(--border-color);
-    border-radius: var(--border-radius);
+    border-radius: var(--border-radius-sm);
     color: #fff;
     font-size: 1.25rem;
     font-weight: 600;
     cursor: pointer;
     transition: all var(--transition-base);
     box-shadow: 0 15px 40px var(--shadow-color);
+    text-decoration: none;
 }
 
 .btn-visit-large:hover {
     transform: translateY(-5px) scale(1.05);
-    box-shadow: 0 20px 50px var(--shadow-color), 0 0 30px rgba(59, 130, 246, 0.3);
+    box-shadow: 0 20px 50px var(--shadow-color), 
+                0 0 30px rgba(59, 130, 246, 0.3);
 }
 
 .btn-visit-large i {
     font-size: 1.5rem;
 }
 
-/* ==========================================
-   WEBSITE CONTROLS
-   ========================================== */
+
+/* ============================================================================================================
+   4. WEBSITE CONTROLS
+   ============================================================================================================
+   Purpose: Control buttons for iframe preview (fullscreen, close)
+   ============================================================================================================ */
+
 .website-controls {
     position: absolute;
     bottom: 2rem;
@@ -7440,7 +7565,15 @@ html {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    z-index: 10;
+    z-index: var(--z-controls);
+    opacity: 0;
+    transition: opacity var(--transition-base);
+}
+
+/* Show controls when preview is active or on hover */
+.website-preview:hover .website-controls,
+.website-container.active ~ .website-controls {
+    opacity: 1;
 }
 
 .control-group {
@@ -7453,6 +7586,7 @@ html {
     height: 50px;
     background: var(--glass-bg);
     backdrop-filter: blur(30px) saturate(180%);
+    -webkit-backdrop-filter: blur(30px) saturate(180%);
     border: 1px solid var(--border-color);
     border-radius: 50%;
     display: flex;
@@ -7465,17 +7599,22 @@ html {
 }
 
 .btn-control:hover {
-    background: #3B82F6;
+    background: var(--primary-blue);
     color: #fff;
     transform: translateY(-3px);
     box-shadow: 0 8px 20px var(--shadow-color);
 }
 
+.btn-control:active {
+    transform: translateY(-1px);
+}
+
 .control-info {
     background: var(--glass-bg);
     backdrop-filter: blur(30px) saturate(180%);
+    -webkit-backdrop-filter: blur(30px) saturate(180%);
     border: 1px solid var(--border-color);
-    border-radius: var(--border-radius-sm);
+    border-radius: var(--border-radius-xs);
     padding: 0.75rem 1.5rem;
     box-shadow: 0 5px 15px var(--shadow-color);
 }
@@ -7484,11 +7623,16 @@ html {
     font-size: 0.9rem;
     opacity: 0.8;
     font-weight: 500;
+    color: var(--text-secondary);
 }
 
-/* ==========================================
-   WEBSITE CONTAINER (FOR EMBEDDED PREVIEW)
-   ========================================== */
+
+/* ============================================================================================================
+   5. WEBSITE CONTAINER (IFRAME)
+   ============================================================================================================
+   Purpose: Container for the embedded iframe preview
+   ============================================================================================================ */
+
 .website-container {
     position: absolute;
     top: 0;
@@ -7496,8 +7640,10 @@ html {
     width: 100%;
     height: 100%;
     background: var(--bg-primary);
-    z-index: 20;
+    z-index: var(--z-preview);
     display: none;
+    border-radius: var(--border-radius);
+    overflow: hidden;
 }
 
 .website-container.active {
@@ -7511,45 +7657,38 @@ html {
     border-radius: var(--border-radius);
 }
 
-/* ==========================================
-   WEBSITE-SPECIFIC BUTTON STYLES
-   ========================================== */
-.btn-accent {
-    background: linear-gradient(135deg, #3B82F6, #EC4899);
-    color: #fff;
-    border-color: #3B82F6;
-}
 
-.btn-accent:hover {
-    background: linear-gradient(135deg, #1D4ED8, #DB2777);
-    transform: translateY(-3px);
-    box-shadow: 0 15px 40px var(--shadow-color), 0 0 30px rgba(59, 130, 246, 0.3);
-}
+/* ============================================================================================================
+   6. WEBSITE INFO CONTAINER
+   ============================================================================================================
+   Purpose: Main container for website information sections
+   ============================================================================================================ */
 
-/* ==========================================
-   WEBSITE INFO CONTAINER
-   ========================================== */
 .website-info-container {
     background: var(--glass-bg);
     backdrop-filter: blur(30px) saturate(180%);
+    -webkit-backdrop-filter: blur(30px) saturate(180%);
     border: 1px solid var(--border-color);
     border-radius: var(--border-radius);
     box-shadow: 0 20px 60px var(--shadow-color);
     overflow: hidden;
+    animation: fadeInUp 0.6s ease-out 0.2s backwards;
 }
 
-/* ==========================================
-   WEBSITE HEADER SECTION
-   ========================================== */
+
+/* ============================================================================================================
+   7. WEBSITE HEADER SECTION
+   ============================================================================================================
+   Purpose: Website title, meta information, and action buttons
+   ============================================================================================================ */
+
 .website-header {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
     padding: 3rem;
     border-bottom: 1px solid var(--border-color);
-    background: linear-gradient(135deg, 
-        rgba(59, 130, 246, 0.05) 0%, 
-        rgba(236, 72, 153, 0.02) 100%);
+    background: var(--gradient-overlay);
 }
 
 .website-title-section {
@@ -7560,18 +7699,21 @@ html {
     font-size: 3.5rem;
     font-weight: 900;
     margin-bottom: 1rem;
-    background: linear-gradient(135deg, #3B82F6, #EC4899);
+    background: var(--gradient-primary);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
     line-height: 1.1;
+    animation: fadeInUp 0.6s ease-out 0.3s backwards;
 }
 
+/* Website Meta Information */
 .website-meta {
     display: flex;
     align-items: center;
     gap: 1.5rem;
     flex-wrap: wrap;
+    animation: fadeInUp 0.6s ease-out 0.4s backwards;
 }
 
 .website-category,
@@ -7580,47 +7722,70 @@ html {
     padding: 0.5rem 1.25rem;
     background: var(--glass-bg);
     backdrop-filter: blur(30px) saturate(180%);
+    -webkit-backdrop-filter: blur(30px) saturate(180%);
     border: 1px solid var(--border-color);
-    border-radius: var(--border-radius-sm);
+    border-radius: var(--border-radius-xs);
     font-weight: 600;
     box-shadow: 0 5px 15px var(--shadow-color);
+    transition: all var(--transition-base);
 }
 
 .website-category {
-    color: #3B82F6;
+    color: var(--primary-blue);
     text-transform: uppercase;
     font-size: 0.8rem;
     letter-spacing: 0.5px;
 }
 
 .website-rating {
-    color: #F59E0B;
+    color: var(--status-warning);
     display: flex;
     align-items: center;
     gap: 0.5rem;
 }
 
 .website-status {
-    color: #10B981;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
     text-transform: uppercase;
     font-size: 0.8rem;
     letter-spacing: 0.5px;
 }
 
+.website-status.status-active {
+    color: var(--status-active);
+}
+
+.website-status.status-dev {
+    color: var(--status-warning);
+}
+
+.website-status.status-archived {
+    color: var(--status-error);
+}
+
+/* Action Buttons */
 .website-actions {
     display: flex;
     gap: 1rem;
     align-items: center;
+    animation: fadeInUp 0.6s ease-out 0.5s backwards;
 }
 
 .website-actions .btn {
     padding: 1rem 2rem;
     font-size: 0.95rem;
+    white-space: nowrap;
 }
 
-/* ==========================================
-   WEBSITE CONTENT SECTIONS
-   ========================================== */
+
+/* ============================================================================================================
+   8. WEBSITE CONTENT SECTIONS
+   ============================================================================================================
+   Purpose: Main content area with description, features, and stats
+   ============================================================================================================ */
+
 .website-content {
     padding: 3rem;
 }
@@ -7631,22 +7796,24 @@ html {
     margin-bottom: 1.5rem;
     color: var(--text-primary);
     position: relative;
+    padding-bottom: 1rem;
 }
 
 .website-content h2::after {
     content: '';
     position: absolute;
-    bottom: -0.5rem;
+    bottom: 0;
     left: 0;
     width: 60px;
     height: 3px;
-    background: linear-gradient(90deg, #3B82F6, #EC4899);
+    background: var(--gradient-primary);
     border-radius: 2px;
 }
 
 /* Description Section */
 .website-description-section {
     margin-bottom: 3rem;
+    animation: fadeInUp 0.6s ease-out 0.6s backwards;
 }
 
 .website-overview {
@@ -7655,17 +7822,23 @@ html {
     opacity: 0.9;
     margin-bottom: 1.5rem;
     font-weight: 500;
+    color: var(--text-secondary);
 }
 
 .website-description {
     font-size: 1.05rem;
     line-height: 1.8;
     opacity: 0.8;
+    color: var(--text-secondary);
 }
 
-/* ==========================================
-   WEBSITE DETAILS GRID
-   ========================================== */
+
+/* ============================================================================================================
+   9. WEBSITE DETAILS GRID
+   ============================================================================================================
+   Purpose: Grid of detail cards showing key metrics
+   ============================================================================================================ */
+
 .website-details-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -7680,11 +7853,18 @@ html {
     padding: 2rem;
     background: var(--glass-bg);
     backdrop-filter: blur(30px) saturate(180%);
+    -webkit-backdrop-filter: blur(30px) saturate(180%);
     border: 1px solid var(--border-color);
     border-radius: var(--border-radius-sm);
     box-shadow: 0 5px 15px var(--shadow-color);
     transition: all var(--transition-base);
+    animation: fadeInUp 0.6s ease-out backwards;
 }
+
+.detail-card:nth-child(1) { animation-delay: 0.7s; }
+.detail-card:nth-child(2) { animation-delay: 0.8s; }
+.detail-card:nth-child(3) { animation-delay: 0.9s; }
+.detail-card:nth-child(4) { animation-delay: 1s; }
 
 .detail-card:hover {
     transform: translateY(-5px);
@@ -7694,7 +7874,7 @@ html {
 .detail-icon {
     width: 70px;
     height: 70px;
-    background: linear-gradient(135deg, #3B82F6, #EC4899);
+    background: var(--gradient-primary);
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -7712,7 +7892,7 @@ html {
 .detail-content h3 {
     font-size: 1rem;
     font-weight: 600;
-    color: #3B82F6;
+    color: var(--primary-blue);
     margin-bottom: 0.5rem;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -7725,11 +7905,16 @@ html {
     margin: 0;
 }
 
-/* ==========================================
-   FEATURES SECTION
-   ========================================== */
+
+/* ============================================================================================================
+   10. FEATURES SECTION
+   ============================================================================================================
+   Purpose: List of key website features
+   ============================================================================================================ */
+
 .features-section {
     margin-bottom: 3rem;
+    animation: fadeInUp 0.6s ease-out 1.1s backwards;
 }
 
 .features-list {
@@ -7737,6 +7922,8 @@ html {
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 1rem;
     list-style: none;
+    padding: 0;
+    margin: 0;
 }
 
 .features-list li {
@@ -7746,8 +7933,9 @@ html {
     padding: 1.25rem;
     background: var(--glass-bg);
     backdrop-filter: blur(30px) saturate(180%);
+    -webkit-backdrop-filter: blur(30px) saturate(180%);
     border: 1px solid var(--border-color);
-    border-radius: var(--border-radius-sm);
+    border-radius: var(--border-radius-xs);
     box-shadow: 0 5px 15px var(--shadow-color);
     transition: all var(--transition-base);
 }
@@ -7757,11 +7945,10 @@ html {
     box-shadow: 0 8px 20px var(--shadow-color);
 }
 
-.features-list li::before {
-    content: '✓';
-    color: #3B82F6;
-    font-weight: 700;
+.features-list li i {
+    color: var(--primary-blue);
     font-size: 1.1rem;
+    flex-shrink: 0;
 }
 
 .features-list li span {
@@ -7769,11 +7956,16 @@ html {
     color: var(--text-primary);
 }
 
-/* ==========================================
-   TECHNOLOGIES SECTION
-   ========================================== */
+
+/* ============================================================================================================
+   11. TECHNOLOGIES SECTION
+   ============================================================================================================
+   Purpose: Display tech stack tags
+   ============================================================================================================ */
+
 .technologies-section {
     margin-bottom: 3rem;
+    animation: fadeInUp 0.6s ease-out 1.2s backwards;
 }
 
 .tech-tags {
@@ -7782,30 +7974,43 @@ html {
     gap: 1rem;
 }
 
-.tech-tags span {
+.tech-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
     padding: 0.75rem 1.5rem;
     background: var(--glass-bg);
     backdrop-filter: blur(30px) saturate(180%);
+    -webkit-backdrop-filter: blur(30px) saturate(180%);
     border: 1px solid var(--border-color);
-    border-radius: var(--border-radius-sm);
+    border-radius: var(--border-radius-xs);
     font-weight: 600;
-    color: #3B82F6;
+    color: var(--primary-blue);
     box-shadow: 0 5px 15px var(--shadow-color);
     transition: all var(--transition-base);
 }
 
-.tech-tags span:hover {
-    background: #3B82F6;
+.tech-tag:hover {
+    background: var(--primary-blue);
     color: #fff;
     transform: translateY(-3px);
     box-shadow: 0 8px 20px var(--shadow-color);
 }
 
-/* ==========================================
-   WEBSITE STATS SECTION
-   ========================================== */
+.tech-tag i {
+    font-size: 0.9rem;
+}
+
+
+/* ============================================================================================================
+   12. WEBSITE STATS SECTION
+   ============================================================================================================
+   Purpose: Display performance statistics
+   ============================================================================================================ */
+
 .website-stats-section {
     margin-bottom: 0;
+    animation: fadeInUp 0.6s ease-out 1.3s backwards;
 }
 
 .stats-grid {
@@ -7821,6 +8026,7 @@ html {
     padding: 2rem;
     background: var(--glass-bg);
     backdrop-filter: blur(30px) saturate(180%);
+    -webkit-backdrop-filter: blur(30px) saturate(180%);
     border: 1px solid var(--border-color);
     border-radius: var(--border-radius-sm);
     box-shadow: 0 5px 15px var(--shadow-color);
@@ -7835,7 +8041,7 @@ html {
 .stat-circle {
     width: 80px;
     height: 80px;
-    background: linear-gradient(135deg, #3B82F6, #EC4899);
+    background: var(--gradient-primary);
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -7862,11 +8068,16 @@ html {
     font-size: 0.9rem;
     opacity: 0.7;
     margin: 0;
+    color: var(--text-secondary);
 }
 
-/* ==========================================
-   DETAIL NAVIGATION ARROWS (Website-specific)
-   ========================================== */
+
+/* ============================================================================================================
+   13. DETAIL NAVIGATION ARROWS
+   ============================================================================================================
+   Purpose: Previous/Next website navigation buttons
+   ============================================================================================================ */
+
 .detail-navigation {
     position: absolute;
     top: 50%;
@@ -7875,7 +8086,8 @@ html {
     display: flex;
     justify-content: space-between;
     transform: translateY(-50%);
-    z-index: 5;
+    z-index: var(--z-navigation);
+    pointer-events: none;
 }
 
 .nav-arrow {
@@ -7885,22 +8097,28 @@ html {
     padding: 1.5rem 2rem;
     background: var(--glass-bg);
     backdrop-filter: blur(30px) saturate(180%);
+    -webkit-backdrop-filter: blur(30px) saturate(180%);
     border: 1px solid var(--border-color);
-    border-radius: var(--border-radius);
+    border-radius: var(--border-radius-sm);
     color: var(--text-primary);
     font-weight: 600;
     cursor: pointer;
     transition: all var(--transition-base);
     box-shadow: 0 10px 30px var(--shadow-color);
     opacity: 0.7;
+    pointer-events: auto;
 }
 
 .nav-arrow:hover {
     opacity: 1;
     transform: translateY(-3px);
-    background: #3B82F6;
+    background: var(--primary-blue);
     color: #fff;
     box-shadow: 0 15px 40px var(--shadow-color);
+}
+
+.nav-arrow:active {
+    transform: translateY(-1px);
 }
 
 .prev-arrow {
@@ -7915,9 +8133,119 @@ html {
     font-size: 0.95rem;
 }
 
-/* ==========================================
-   RESPONSIVE DESIGN FOR WEBSITE DETAIL
-   ========================================== */
+
+/* ============================================================================================================
+   14. NOTIFICATION SYSTEM
+   ============================================================================================================
+   Purpose: Toast notification styling
+   ============================================================================================================ */
+
+.notification-container {
+    position: fixed;
+    top: 2rem;
+    right: 2rem;
+    z-index: var(--z-notification);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    pointer-events: none;
+}
+
+.notification-toast {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+    background: var(--glass-bg);
+    backdrop-filter: blur(30px) saturate(180%);
+    -webkit-backdrop-filter: blur(30px) saturate(180%);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-xs);
+    box-shadow: 0 10px 30px var(--shadow-color);
+    min-width: 300px;
+    opacity: 0;
+    transform: translateX(100%);
+    transition: all var(--transition-base);
+    pointer-events: auto;
+}
+
+.notification-toast.show {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.notification-icon {
+    font-size: 1.25rem;
+    flex-shrink: 0;
+}
+
+.notification-message {
+    flex: 1;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+/* Notification Types */
+.notification-success {
+    border-left: 4px solid var(--status-active);
+}
+
+.notification-success .notification-icon {
+    color: var(--status-active);
+}
+
+.notification-error {
+    border-left: 4px solid var(--status-error);
+}
+
+.notification-error .notification-icon {
+    color: var(--status-error);
+}
+
+.notification-warning {
+    border-left: 4px solid var(--status-warning);
+}
+
+.notification-warning .notification-icon {
+    color: var(--status-warning);
+}
+
+.notification-info {
+    border-left: 4px solid var(--status-info);
+}
+
+.notification-info .notification-icon {
+    color: var(--status-info);
+}
+
+
+/* ============================================================================================================
+   15. BUTTON STYLES (WEBSITE-SPECIFIC)
+   ============================================================================================================
+   Purpose: Enhanced button styling for website detail page
+   ============================================================================================================ */
+
+.btn-accent {
+    background: var(--gradient-primary);
+    color: #fff;
+    border-color: var(--primary-blue);
+}
+
+.btn-accent:hover {
+    background: linear-gradient(135deg, #1D4ED8, #DB2777);
+    transform: translateY(-3px);
+    box-shadow: 0 15px 40px var(--shadow-color), 
+                0 0 30px rgba(59, 130, 246, 0.3);
+}
+
+
+/* ============================================================================================================
+   16. RESPONSIVE DESIGN
+   ============================================================================================================
+   Purpose: Responsive layouts for various screen sizes
+   ============================================================================================================ */
+
+/* Large Desktops (1200px and up) */
 @media (max-width: 1200px) {
     .detail-navigation {
         left: -40px;
@@ -7929,6 +8257,7 @@ html {
     }
 }
 
+/* Tablets and Small Desktops (992px and down) */
 @media (max-width: 992px) {
     .website-detail-section {
         padding: 6rem 0 3rem;
@@ -7968,6 +8297,7 @@ html {
     }
 }
 
+/* Tablets (768px and down) */
 @media (max-width: 768px) {
     .website-detail-section {
         padding: 5rem 0 2rem;
@@ -7992,10 +8322,7 @@ html {
         text-align: center;
     }
     
-    .website-header {
-        padding: 2rem;
-    }
-    
+    .website-header,
     .website-content {
         padding: 2rem;
     }
@@ -8008,16 +8335,13 @@ html {
         gap: 1rem;
     }
     
-    .website-details-grid {
+    .website-details-grid,
+    .features-list {
         grid-template-columns: 1fr;
     }
     
     .detail-card {
         padding: 1.5rem;
-    }
-    
-    .features-list {
-        grid-template-columns: 1fr;
     }
     
     .stats-grid {
@@ -8045,8 +8369,20 @@ html {
         width: 100%;
         justify-content: center;
     }
+    
+    .notification-container {
+        top: 1rem;
+        right: 1rem;
+        left: 1rem;
+    }
+    
+    .notification-toast {
+        min-width: auto;
+        width: 100%;
+    }
 }
 
+/* Mobile Devices (480px and down) */
 @media (max-width: 480px) {
     .website-title {
         font-size: 1.75rem;
@@ -8091,11 +8427,33 @@ html {
     .website-content h2 {
         font-size: 1.5rem;
     }
+    
+    .website-overview {
+        font-size: 1.1rem;
+    }
+    
+    .website-description {
+        font-size: 1rem;
+    }
+    
+    .detail-navigation {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .nav-arrow {
+        width: 100%;
+        justify-content: center;
+    }
 }
 
-/* ==========================================
-   ANIMATIONS FOR WEBSITE DETAIL
-   ========================================== */
+
+/* ============================================================================================================
+   17. ANIMATIONS
+   ============================================================================================================
+   Purpose: Smooth entrance and interaction animations
+   ============================================================================================================ */
+
 @keyframes fadeInUp {
     from {
         opacity: 0;
@@ -8107,49 +8465,346 @@ html {
     }
 }
 
-.website-info-container {
-    animation: fadeInUp 0.6s ease-out;
-}
-
-.detail-card,
-.features-list li,
-.tech-tags span,
-.stat-item {
-    animation: fadeInUp 0.6s ease-out;
-}
-
-.detail-card:nth-child(1) { animation-delay: 0.1s; }
-.detail-card:nth-child(2) { animation-delay: 0.2s; }
-.detail-card:nth-child(3) { animation-delay: 0.3s; }
-.detail-card:nth-child(4) { animation-delay: 0.4s; }
-
-/* ==========================================
-   ACCESSIBILITY ENHANCEMENTS
-   ========================================== */
-@media (prefers-reduced-motion: reduce) {
-    .website-info-container,
-    .detail-card,
-    .features-list li,
-    .tech-tags span,
-    .stat-item,
-    .btn-visit-large,
-    .nav-arrow {
-        animation: none;
-        transition: none;
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
     }
 }
 
-/* Focus styles for better accessibility */
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+@keyframes glow {
+    0%, 100% {
+        box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+    }
+    50% {
+        box-shadow: 0 0 40px rgba(59, 130, 246, 0.6);
+    }
+}
+
+
+/* ============================================================================================================
+   18. ACCESSIBILITY
+   ============================================================================================================
+   Purpose: Enhanced accessibility and reduced motion support
+   ============================================================================================================ */
+
+/* Focus Styles for Keyboard Navigation */
 .website-info-container:focus-within {
-    outline: 2px solid #3B82F6;
+    outline: 2px solid var(--primary-blue);
     outline-offset: 2px;
 }
 
 .btn-visit-large:focus,
-.nav-arrow:focus {
-    outline: 2px solid #3B82F6;
+.btn-control:focus,
+.nav-arrow:focus,
+.btn:focus {
+    outline: 2px solid var(--primary-blue);
     outline-offset: 2px;
 }
+
+/* Skip to Content Link for Screen Readers */
+.skip-to-content {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: var(--primary-blue);
+    color: #fff;
+    padding: 0.5rem 1rem;
+    text-decoration: none;
+    z-index: 1001;
+}
+
+.skip-to-content:focus {
+    top: 0;
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+    .website-preview,
+    .website-info-container,
+    .detail-card,
+    .stat-item,
+    .features-list li,
+    .tech-tag {
+        border-width: 2px;
+    }
+}
+
+/* Reduced Motion for Users with Motion Sensitivity */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+    
+    .website-info-container,
+    .website-preview-container,
+    .detail-card,
+    .features-list li,
+    .tech-tag,
+    .stat-item,
+    .btn-visit-large,
+    .nav-arrow,
+    .notification-toast {
+        animation: none;
+        transition: none;
+    }
+    
+    .preview-img {
+        transform: none !important;
+    }
+    
+    .preview-overlay {
+        transition: opacity 0.01ms;
+    }
+}
+
+/* Screen Reader Only Content */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+
+/* ============================================================================================================
+   19. PRINT STYLES
+   ============================================================================================================
+   Purpose: Optimized styling for printing
+   ============================================================================================================ */
+
+@media print {
+    .navbar,
+    .website-controls,
+    .detail-navigation,
+    .website-actions,
+    .notification-container {
+        display: none !important;
+    }
+    
+    .website-detail-section {
+        padding: 0;
+    }
+    
+    .website-preview-container {
+        page-break-inside: avoid;
+    }
+    
+    .website-info-container {
+        box-shadow: none;
+        border: 1px solid #000;
+    }
+    
+    .website-title {
+        color: #000;
+        -webkit-text-fill-color: #000;
+    }
+    
+    .preview-overlay {
+        display: none;
+    }
+}
+
+
+/* ============================================================================================================
+   20. LOADING STATES
+   ============================================================================================================
+   Purpose: Loading indicators and skeleton screens
+   ============================================================================================================ */
+
+.loading-skeleton {
+    background: linear-gradient(
+        90deg,
+        var(--glass-bg) 0%,
+        rgba(255, 255, 255, 0.1) 50%,
+        var(--glass-bg) 100%
+    );
+    background-size: 200% 100%;
+    animation: loading 1.5s ease-in-out infinite;
+}
+
+@keyframes loading {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+.loading-state {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+
+/* ============================================================================================================
+   21. DARK MODE SPECIFIC ENHANCEMENTS
+   ============================================================================================================
+   Purpose: Additional styling for dark mode
+   ============================================================================================================ */
+
+[data-theme="dark"] .website-preview {
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5),
+                0 0 40px rgba(59, 130, 246, 0.1);
+}
+
+[data-theme="dark"] .btn-visit-large:hover {
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4),
+                0 0 30px rgba(59, 130, 246, 0.3);
+}
+
+[data-theme="dark"] .detail-card:hover,
+[data-theme="dark"] .stat-item:hover {
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+}
+
+
+/* ============================================================================================================
+   22. LIGHT MODE SPECIFIC ENHANCEMENTS
+   ============================================================================================================
+   Purpose: Additional styling for light mode
+   ============================================================================================================ */
+
+[data-theme="light"] .website-title {
+    text-shadow: 0 2px 10px rgba(59, 130, 246, 0.1);
+}
+
+[data-theme="light"] .preview-overlay {
+    background: rgba(255, 255, 255, 0.9);
+}
+
+[data-theme="light"] .btn-visit-large {
+    box-shadow: 0 15px 40px rgba(59, 130, 246, 0.2);
+}
+
+
+/* ============================================================================================================
+   23. CUSTOM SCROLLBAR
+   ============================================================================================================
+   Purpose: Styled scrollbar for better aesthetics
+   ============================================================================================================ */
+
+.website-content::-webkit-scrollbar,
+.website-container::-webkit-scrollbar {
+    width: 10px;
+}
+
+.website-content::-webkit-scrollbar-track,
+.website-container::-webkit-scrollbar-track {
+    background: var(--bg-secondary);
+    border-radius: 5px;
+}
+
+.website-content::-webkit-scrollbar-thumb,
+.website-container::-webkit-scrollbar-thumb {
+    background: var(--primary-blue);
+    border-radius: 5px;
+}
+
+.website-content::-webkit-scrollbar-thumb:hover,
+.website-container::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-pink);
+}
+
+
+/* ============================================================================================================
+   24. UTILITY CLASSES
+   ============================================================================================================
+   Purpose: Helpful utility classes for common patterns
+   ============================================================================================================ */
+
+.text-gradient {
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.glass-effect {
+    background: var(--glass-bg);
+    backdrop-filter: blur(30px) saturate(180%);
+    -webkit-backdrop-filter: blur(30px) saturate(180%);
+}
+
+.shadow-glow {
+    box-shadow: 0 0 30px rgba(59, 130, 246, 0.3);
+}
+
+.hidden {
+    display: none !important;
+}
+
+.visible {
+    display: block !important;
+}
+
+
+/* ============================================================================================================
+   END OF STYLESHEET
+   ============================================================================================================
+   
+   Credits:
+   Developed by: Arsh Verma
+   Portfolio: ArshCreates
+   
+   This stylesheet provides complete styling for the website detail page including:
+   ✓ Modern glassmorphism design
+   ✓ Smooth animations and transitions
+   ✓ Full responsive support
+   ✓ Theme switching (dark/light)
+   ✓ Interactive preview controls
+   ✓ Accessibility features
+   ✓ Print optimization
+   ✓ Custom scrollbars
+   ✓ Loading states
+   
+   All rights reserved © 2024 Arsh Verma
+   
+   ============================================================================================================ */
 
 /* ==========================================
    PERFECTED MOBILE APPS PORTFOLIO STYLES - PRODUCTION READY V3.0
