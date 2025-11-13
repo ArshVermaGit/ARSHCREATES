@@ -1,128 +1,128 @@
-// ==========================================
-// WEBSITE DETAIL PAGE - Complete & Corrected Version
-// Handles website preview, navigation, and all interactive features
+// ============================================================================================================
+// WEBSITE DETAIL PAGE - PROFESSIONAL SHOWCASE LAYOUT
+// ============================================================================================================
+// 
+// Description: Comprehensive website detail page with interactive preview and navigation
+// Features: Dynamic website loading, iframe preview, navigation, theme switching, and social sharing
+// Layout: Professional design with primary content and interactive website preview
+// 
 // Author: Arsh Verma
-// ==========================================
+// Portfolio: ArshCreates
+// Created: 2024
+// 
+// ============================================================================================================
 
-// ==========================================
-// GLOBAL VARIABLES
-// ==========================================
-let currentWebsiteId = null;        // ID of the currently displayed website
-let currentWebsite = null;          // Current website object with all details
-let websiteImages = [];             // Array of website images (main + screenshots)
-let isPreviewActive = false;        // Flag to track if preview is active
-let currentImageIndex = 0;          // Current image index for gallery
+// ============================================================================================================
+// GLOBAL STATE VARIABLES
+// ============================================================================================================
 
-// ==========================================
+let currentWebsiteId = null;       // Current website ID from URL parameter
+let currentWebsite = null;         // Current website object with all data
+let isPreviewActive = false;       // Flag indicating if preview iframe is currently active
+
+// ============================================================================================================
 // PAGE INITIALIZATION
-// ==========================================
+// ============================================================================================================
 
 /**
  * Initialize the website detail page
- * - Sets up theme
- * - Loads website data from URL parameters
- * - Sets up event listeners
- * - Handles auto-visit if requested
+ * Called automatically when DOM is ready
+ * Sets up theme, loads website data, initializes event listeners, and handles auto-preview
  */
 function initializeWebsiteDetailPage() {
-    console.log('Initializing website detail page...');
+    console.log('🌐 Initializing website detail page...');
     
     try {
-        // Initialize theme first
+        // Step 1: Initialize theme system
         initializeTheme();
         
-        // Extract website ID and auto-visit flag from URL parameters
+        // Step 2: Extract URL parameters
         const urlParams = new URLSearchParams(window.location.search);
         currentWebsiteId = parseInt(urlParams.get('id'));
-        const autoVisit = urlParams.get('visit') === 'true';
+        const autoPreview = urlParams.get('preview') === 'true';
         
-        // Validate website ID
+        // Step 3: Validate website ID
         if (!currentWebsiteId || isNaN(currentWebsiteId)) {
-            console.error('Invalid or missing website ID');
+            console.error('❌ Invalid or missing website ID in URL');
             showNotification('Website not found', 'error');
             setTimeout(() => window.location.href = 'websites.html', 2000);
             return;
         }
         
-        // Load and display website details
+        console.log(`🔌 Loading website with ID: ${currentWebsiteId}`);
+        
+        // Step 4: Load and display website details
         loadWebsiteDetails(currentWebsiteId);
         
-        // Setup all event listeners
+        // Step 5: Setup all event listeners
         setupWebsiteDetailEventListeners();
         
-        // Auto-visit website if requested via URL parameter
-        if (autoVisit) {
+        // Step 6: Auto-preview if requested via URL parameter
+        if (autoPreview) {
+            console.log('🎯 Auto-preview requested via URL');
             setTimeout(() => {
-                if (currentWebsite && currentWebsite.status === 'Live' && currentWebsite.liveUrl) {
-                    visitWebsiteExternal(currentWebsite);
+                if (currentWebsite && currentWebsite.liveUrl) {
+                    showWebsitePreview(currentWebsite);
                 }
-            }, 1000);
+            }, 1500);
         }
         
-        // Hide loading screen with fade animation
+        // Step 7: Hide loading screen with smooth fade animation
         setTimeout(() => {
-            hideLoadingScreen();
+            const loadingScreen = document.getElementById('loadingScreen');
+            if (loadingScreen) {
+                loadingScreen.style.opacity = '0';
+                setTimeout(() => {
+                    loadingScreen.style.display = 'none';
+                }, 500);
+            }
         }, 1000);
         
-        console.log('Website detail page initialized successfully');
+        console.log('✅ Website detail page initialized successfully');
+        
     } catch (error) {
-        console.error('Error initializing website detail page:', error);
+        console.error('❌ Error initializing website detail page:', error);
         showNotification('Error loading website page', 'error');
     }
 }
 
-/**
- * Hide loading screen with fade animation
- */
-function hideLoadingScreen() {
-    const loadingScreen = document.getElementById('loadingScreen');
-    if (loadingScreen) {
-        loadingScreen.style.opacity = '0';
-        setTimeout(() => {
-            loadingScreen.style.display = 'none';
-        }, 500);
-    }
-}
-
-// ==========================================
-// THEME MANAGEMENT
-// ==========================================
+// ============================================================================================================
+// THEME MANAGEMENT SYSTEM
+// ============================================================================================================
 
 /**
  * Initialize theme system
- * - Loads saved theme preference from localStorage
- * - Sets up theme toggle button
+ * Loads saved theme preference from localStorage and sets up toggle functionality
  */
 function initializeTheme() {
     const themeToggle = document.getElementById('themeToggle');
     const themeIcon = themeToggle?.querySelector('.theme-icon i');
     
     try {
-        // Load saved theme or default to dark
+        // Load saved theme preference or default to dark mode
         const savedTheme = localStorage.getItem('theme') || 'dark';
         document.documentElement.setAttribute('data-theme', savedTheme);
         
-        // Update theme icon
+        // Update theme toggle icon based on current theme
         if (themeIcon) {
             themeIcon.className = savedTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
         }
         
-        // Attach theme toggle event listener
+        // Attach click event listener to theme toggle button
         if (themeToggle) {
             themeToggle.addEventListener('click', toggleTheme);
         }
         
-        console.log('Theme initialized:', savedTheme);
+        console.log(`🎨 Theme initialized: ${savedTheme}`);
+        
     } catch (error) {
-        console.error('Error initializing theme:', error);
+        console.error('❌ Error initializing theme:', error);
     }
 }
 
 /**
  * Toggle between light and dark theme
- * - Updates DOM attribute
- * - Saves preference to localStorage
- * - Updates theme icon
+ * Updates DOM, saves preference, and changes icon
  */
 function toggleTheme() {
     try {
@@ -130,27 +130,30 @@ function toggleTheme() {
         const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
         const themeIcon = document.querySelector('.theme-icon i');
         
-        // Apply new theme
+        // Apply new theme to document
         document.documentElement.setAttribute('data-theme', newTheme);
         localStorage.setItem('theme', newTheme);
         
-        // Update icon
+        // Update icon: sun for dark mode, moon for light mode
         if (themeIcon) {
             themeIcon.className = newTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
         }
         
-        console.log('Theme toggled to:', newTheme);
+        console.log(`🎨 Theme toggled to: ${newTheme}`);
+        
     } catch (error) {
-        console.error('Error toggling theme:', error);
+        console.error('❌ Error toggling theme:', error);
     }
 }
 
-// ==========================================
+// ============================================================================================================
 // WEBSITE DATA LOADING
-// ==========================================
+// ============================================================================================================
 
 /**
  * Load website details from data source
+ * Fetches website data by ID and displays all information
+ * 
  * @param {number} websiteId - ID of the website to load
  */
 function loadWebsiteDetails(websiteId) {
@@ -167,7 +170,7 @@ function loadWebsiteDetails(websiteId) {
         const website = websites.find(w => w.id === websiteId);
         
         if (!website) {
-            console.error('Website not found with ID:', websiteId);
+            console.error(`❌ Website not found with ID: ${websiteId}`);
             showNotification('Website not found', 'error');
             setTimeout(() => window.location.href = 'websites.html', 2000);
             return;
@@ -176,112 +179,118 @@ function loadWebsiteDetails(websiteId) {
         // Store current website globally
         currentWebsite = website;
         
-        // Build images array (main image + screenshots)
-        websiteImages = [website.image];
-        if (website.screenshots && Array.isArray(website.screenshots)) {
-            websiteImages.push(...website.screenshots);
-        }
-        
         // Display all website information
         displayWebsiteDetails(website);
         
-        // Setup navigation arrows
+        // Setup navigation arrows for previous/next website
         setupWebsiteNavigation();
         
-        console.log('Website details loaded:', website.name);
+        console.log(`✅ Website details loaded: ${website.name}`);
+        
     } catch (error) {
-        console.error('Error loading website details:', error);
+        console.error('❌ Error loading website details:', error);
         showNotification('Error loading website details', 'error');
     }
 }
 
-// ==========================================
+// ============================================================================================================
 // WEBSITE DETAILS DISPLAY
-// ==========================================
+// ============================================================================================================
 
 /**
  * Display all website details in the UI
+ * Updates all DOM elements with website information
+ * 
  * @param {Object} website - Website object containing all details
  */
 function displayWebsiteDetails(website) {
     try {
-        // Update browser tab title
+        console.log('📄 Displaying website details for:', website.name);
+        
+        // ===== UPDATE BROWSER TAB TITLE =====
         document.title = `${website.name} - Arsh Verma`;
         
         // ===== PREVIEW IMAGE =====
         const previewImage = document.getElementById('previewImage');
         if (previewImage) {
-            previewImage.src = website.image || 'https://via.placeholder.com/1200x675/E4572E/FFFFFF?text=Website+Preview';
-            previewImage.alt = website.name;
+            previewImage.src = website.image || 'https://via.placeholder.com/1280x720/1a1a2e/ffffff?text=Website+Preview';
+            previewImage.alt = `${website.name} - Website Preview`;
             
             // Fallback for broken images
             previewImage.onerror = function() {
-                this.src = 'https://via.placeholder.com/1200x675/E4572E/FFFFFF?text=Website+Preview';
+                this.src = 'https://via.placeholder.com/1280x720/1a1a2e/ffffff?text=Website+Preview';
+                console.warn('⚠️ Failed to load website image, using placeholder');
             };
         }
         
         // ===== WEBSITE HEADER SECTION =====
-        const websiteTitle = document.getElementById('websiteTitle');
-        if (websiteTitle) websiteTitle.textContent = website.name || 'Unknown Website';
+        updateElement('websiteTitle', website.name || 'Unknown Website');
         
-        const websiteCategory = document.getElementById('websiteCategory');
-        if (websiteCategory) websiteCategory.textContent = website.category || 'Uncategorized';
+        // Update category badge
+        updateElement('websiteCategory', website.category || 'Uncategorized');
         
-        const websiteRating = document.getElementById('websiteRating');
-        if (websiteRating) websiteRating.textContent = website.rating || '0';
+        // Update rating
+        updateElement('websiteRating', website.rating ? website.rating.toFixed(1) : '0.0');
         
+        // Update status with proper class
         const websiteStatus = document.getElementById('websiteStatus');
         if (websiteStatus) {
-            websiteStatus.textContent = website.status || 'Unknown';
-            const statusClass = (website.status === 'Live' ? 'status-live' : 'status-dev');
-            websiteStatus.className = 'website-status ' + statusClass;
+            const statusText = website.status || 'Unknown';
+            websiteStatus.innerHTML = `<i class="fas fa-circle"></i> ${statusText}`;
+            websiteStatus.className = `website-status ${website.status === 'Active' ? 'status-active' : 
+                                       website.status === 'Development' ? 'status-dev' : 'status-archived'}`;
         }
         
-        // ===== WEBSITE DESCRIPTION =====
-        const websiteOverview = document.getElementById('websiteOverview');
-        if (websiteOverview) {
-            websiteOverview.textContent = website.overview || 'No overview available.';
-        }
+        // ===== WEBSITE DESCRIPTION SECTION =====
+        updateElement('websiteOverview', website.overview || 'No overview available for this website.');
+        updateElement('websiteDescription', website.description || 'Detailed description coming soon.');
         
-        const websiteDescription = document.getElementById('websiteDescription');
-        if (websiteDescription) {
-            websiteDescription.textContent = website.description || 'No description available.';
-        }
-        
-        // ===== DETAIL CARDS =====
-        updateDetailCard('launchDate', formatDate(website.launchDate));
-        updateDetailCard('developmentTime', website.developmentTime || '-');
-        updateDetailCard('userBase', website.userBase || '-');
+        // ===== WEBSITE DETAIL CARDS =====
+        updateElement('launchDate', formatDate(website.launchDate));
+        updateElement('developmentTime', website.developmentTime || '-');
+        updateElement('userBase', website.userBase || '-');
         
         // ===== FEATURES LIST =====
         const featuresList = document.getElementById('featuresList');
         if (featuresList && website.features && Array.isArray(website.features)) {
-            featuresList.innerHTML = website.features.map(feature => 
-                `<li><i class="fas fa-check"></i><span>${escapeHtml(feature)}</span></li>`
-            ).join('');
+            if (website.features.length > 0) {
+                featuresList.innerHTML = website.features.map(feature => 
+                    `<li>
+                        <i class="fas fa-check-circle"></i>
+                        <span>${escapeHtml(feature)}</span>
+                    </li>`
+                ).join('');
+            } else {
+                featuresList.innerHTML = '<li><i class="fas fa-info-circle"></i><span>No features listed</span></li>';
+            }
         }
         
         // ===== TECHNOLOGIES TAGS =====
         const techList = document.getElementById('techList');
         if (techList && website.technologies && Array.isArray(website.technologies)) {
-            techList.innerHTML = website.technologies.map(tech => 
-                `<span class="tech-tag">${escapeHtml(tech)}</span>`
-            ).join('');
+            if (website.technologies.length > 0) {
+                techList.innerHTML = website.technologies.map(tech => 
+                    `<span class="tech-tag">
+                        <i class="fas fa-code"></i>
+                        ${escapeHtml(tech)}
+                    </span>`
+                ).join('');
+            } else {
+                techList.innerHTML = '<span class="tech-tag"><i class="fas fa-info-circle"></i>No technologies listed</span>';
+            }
         }
         
-        // ===== STATISTICS CIRCLES =====
-        updateStatCircle('ratingCircle', website.rating ? website.rating.toString() : '0.0');
-        updateStatCircle('userCountCircle', formatUserCount(website.userBase || '0'));
-        updateStatCircle('performanceCircle', '98%'); // Default performance metric
+        // ===== STATISTICS SECTION =====
+        updateElement('ratingCircle', website.rating ? website.rating.toFixed(1) : '0.0');
+        updateElement('userCountCircle', formatStatNumber(website.userCount || 0));
+        updateElement('performanceCircle', website.performance ? `${website.performance}%` : '98%');
         
-        // ===== ACTION BUTTONS =====
-        
-        // Repository Button
+        // ===== REPOSITORY BUTTON =====
         const repositoryBtn = document.getElementById('repositoryBtn');
         if (repositoryBtn) {
-            if (website.repositoryUrl && website.repositoryUrl !== '#') {
+            if (website.repositoryUrl) {
                 repositoryBtn.href = website.repositoryUrl;
-                repositoryBtn.style.display = 'flex';
+                repositoryBtn.style.display = 'inline-flex';
                 repositoryBtn.target = '_blank';
                 repositoryBtn.rel = 'noopener noreferrer';
             } else {
@@ -289,98 +298,65 @@ function displayWebsiteDetails(website) {
             }
         }
         
-        // Live URL Button
+        // ===== LIVE URL BUTTON =====
         const liveUrlBtn = document.getElementById('liveUrlBtn');
         if (liveUrlBtn) {
-            if (website.status === 'Live' && website.liveUrl && website.liveUrl !== '#') {
+            if (website.liveUrl) {
                 liveUrlBtn.href = website.liveUrl;
-                liveUrlBtn.style.display = 'flex';
+                liveUrlBtn.style.display = 'inline-flex';
                 liveUrlBtn.target = '_blank';
                 liveUrlBtn.rel = 'noopener noreferrer';
-                liveUrlBtn.onclick = (e) => {
-                    e.preventDefault();
-                    visitWebsiteExternal(website);
-                };
             } else {
                 liveUrlBtn.style.display = 'none';
             }
         }
         
-        // ===== VISIT BUTTON STATE =====
-        updateVisitButton(website);
+        // ===== VISIT BUTTON (Main Preview Button) =====
+        const visitBtn = document.getElementById('visitBtn');
+        if (visitBtn) {
+            if (website.liveUrl) {
+                visitBtn.onclick = () => showWebsitePreview(website);
+            } else {
+                visitBtn.disabled = true;
+                visitBtn.style.opacity = '0.5';
+                visitBtn.style.cursor = 'not-allowed';
+            }
+        }
         
-        // ===== ANIMATE CONTENT =====
-        animateWebsiteDetails();
+        console.log('✅ Website details displayed successfully');
         
-        console.log('Website details displayed successfully');
     } catch (error) {
-        console.error('Error displaying website details:', error);
+        console.error('❌ Error displaying website details:', error);
         showNotification('Error displaying website information', 'error');
     }
 }
 
 /**
- * Update a detail card element
+ * Update a single DOM element's text content
+ * Helper function to reduce code repetition
+ * 
  * @param {string} elementId - ID of the element to update
  * @param {string} value - Value to display
  */
-function updateDetailCard(elementId, value) {
+function updateElement(elementId, value) {
     const element = document.getElementById(elementId);
     if (element) {
         element.textContent = value || '-';
     }
 }
 
-/**
- * Update a statistic circle element
- * @param {string} elementId - ID of the stat circle element
- * @param {string} value - Value to display
- */
-function updateStatCircle(elementId, value) {
-    const element = document.getElementById(elementId);
-    if (element) {
-        element.textContent = value || '0';
-    }
-}
-
-/**
- * Update the visit button based on website status
- * @param {Object} website - Website object
- */
-function updateVisitButton(website) {
-    const visitBtn = document.getElementById('visitBtn');
-    if (!visitBtn) return;
-    
-    try {
-        if (website.status === 'In Development' || !website.liveUrl || website.liveUrl === '#') {
-            // Website is not yet live
-            visitBtn.innerHTML = '<i class="fas fa-clock"></i><span>Coming Soon</span>';
-            visitBtn.disabled = true;
-            visitBtn.style.cursor = 'not-allowed';
-            visitBtn.style.opacity = '0.6';
-            visitBtn.onclick = null;
-        } else {
-            // Website is live and accessible
-            visitBtn.innerHTML = '<i class="fas fa-external-link-alt"></i><span>Visit Website</span>';
-            visitBtn.disabled = false;
-            visitBtn.style.cursor = 'pointer';
-            visitBtn.style.opacity = '1';
-            visitBtn.onclick = () => visitWebsiteExternal(website);
-        }
-    } catch (error) {
-        console.error('Error updating visit button:', error);
-    }
-}
-
-// ==========================================
+// ============================================================================================================
 // EVENT LISTENERS SETUP
-// ==========================================
+// ============================================================================================================
 
 /**
  * Setup all event listeners for the website detail page
+ * Attaches click handlers to all interactive elements
  */
 function setupWebsiteDetailEventListeners() {
     try {
+        console.log('🔧 Setting up event listeners...');
+        
         // ===== SHARE BUTTON =====
         const shareBtn = document.getElementById('shareBtn');
         if (shareBtn) {
@@ -399,27 +375,35 @@ function setupWebsiteDetailEventListeners() {
             closePreviewBtn.addEventListener('click', closePreview);
         }
         
+        // ===== VISIT BUTTON (Large Button on Preview Image) =====
+        const visitBtn = document.getElementById('visitBtn');
+        if (visitBtn && currentWebsite) {
+            visitBtn.addEventListener('click', () => showWebsitePreview(currentWebsite));
+        }
+        
         // ===== KEYBOARD NAVIGATION =====
         document.addEventListener('keydown', handleKeyboardNavigation);
         
-        // ===== FULLSCREEN CHANGE EVENTS =====
+        // ===== FULLSCREEN CHANGE EVENTS (Cross-browser) =====
         document.addEventListener('fullscreenchange', handleFullscreenChange);
         document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
         document.addEventListener('mozfullscreenchange', handleFullscreenChange);
         document.addEventListener('MSFullscreenChange', handleFullscreenChange);
         
-        console.log('Event listeners setup complete');
+        console.log('✅ Event listeners setup complete');
+        
     } catch (error) {
-        console.error('Error setting up event listeners:', error);
+        console.error('❌ Error setting up event listeners:', error);
     }
 }
 
-// ==========================================
-// WEBSITE NAVIGATION
-// ==========================================
+// ============================================================================================================
+// WEBSITE NAVIGATION (PREVIOUS/NEXT)
+// ============================================================================================================
 
 /**
  * Setup previous/next website navigation arrows
+ * Attaches click handlers to navigation buttons
  */
 function setupWebsiteNavigation() {
     try {
@@ -434,26 +418,28 @@ function setupWebsiteNavigation() {
             nextWebsiteBtn.addEventListener('click', navigateToNextWebsite);
         }
         
-        console.log('Website navigation setup complete');
+        console.log('✅ Website navigation setup complete');
+        
     } catch (error) {
-        console.error('Error setting up website navigation:', error);
+        console.error('❌ Error setting up website navigation:', error);
     }
 }
 
 /**
  * Navigate to the previous website in the list
+ * Wraps around to the last website if at the beginning
  */
 function navigateToPreviousWebsite() {
     try {
         const websites = getWebsites();
         if (!websites || !Array.isArray(websites)) {
-            console.error('Websites data not available');
+            console.error('❌ Websites data not available');
             return;
         }
         
         const currentIndex = websites.findIndex(w => w.id === currentWebsiteId);
         if (currentIndex === -1) {
-            console.error('Current website not found in websites list');
+            console.error('❌ Current website not found in websites list');
             return;
         }
         
@@ -461,28 +447,32 @@ function navigateToPreviousWebsite() {
         const prevIndex = (currentIndex - 1 + websites.length) % websites.length;
         const prevWebsite = websites[prevIndex];
         
+        console.log(`⬅️ Navigating to previous website: ${prevWebsite.name}`);
+        
         // Navigate to previous website
         window.location.href = `website-detail.html?id=${prevWebsite.id}`;
+        
     } catch (error) {
-        console.error('Error navigating to previous website:', error);
+        console.error('❌ Error navigating to previous website:', error);
         showNotification('Navigation error', 'error');
     }
 }
 
 /**
  * Navigate to the next website in the list
+ * Wraps around to the first website if at the end
  */
 function navigateToNextWebsite() {
     try {
         const websites = getWebsites();
         if (!websites || !Array.isArray(websites)) {
-            console.error('Websites data not available');
+            console.error('❌ Websites data not available');
             return;
         }
         
         const currentIndex = websites.findIndex(w => w.id === currentWebsiteId);
         if (currentIndex === -1) {
-            console.error('Current website not found in websites list');
+            console.error('❌ Current website not found in websites list');
             return;
         }
         
@@ -490,70 +480,127 @@ function navigateToNextWebsite() {
         const nextIndex = (currentIndex + 1) % websites.length;
         const nextWebsite = websites[nextIndex];
         
+        console.log(`➡️ Navigating to next website: ${nextWebsite.name}`);
+        
         // Navigate to next website
         window.location.href = `website-detail.html?id=${nextWebsite.id}`;
+        
     } catch (error) {
-        console.error('Error navigating to next website:', error);
+        console.error('❌ Error navigating to next website:', error);
         showNotification('Navigation error', 'error');
     }
 }
 
-// ==========================================
-// WEBSITE INTERACTION FUNCTIONS
-// ==========================================
+// ============================================================================================================
+// WEBSITE PREVIEW FUNCTIONS
+// ============================================================================================================
 
 /**
- * Visit website in new tab
- * @param {Object} website - Website object with liveUrl
+ * Show website preview in iframe
+ * Loads the live website URL in an embedded iframe for preview
+ * 
+ * @param {Object} website - Website object with liveUrl property
  */
-function visitWebsiteExternal(website) {
+function showWebsitePreview(website) {
+    console.log(`🌐 Loading website preview: ${website.name}`);
+    
     try {
-        if (!website.liveUrl || website.liveUrl === '#') {
-            showNotification('Website URL not available', 'error');
-            console.warn('No live URL available for website:', website.name);
+        // Check if website has live URL
+        if (!website.liveUrl) {
+            showNotification('No live URL available for this website', 'info');
+            
+            // Fallback to repository if available
+            if (website.repositoryUrl) {
+                window.open(website.repositoryUrl, '_blank', 'noopener,noreferrer');
+            }
             return;
         }
         
-        // Open website in new tab with security measures
-        window.open(website.liveUrl, '_blank', 'noopener,noreferrer');
-        showNotification(`Opening ${website.name}...`, 'success');
+        // Get necessary DOM elements
+        const websiteContainer = document.getElementById('websiteContainer');
+        const previewImage = document.querySelector('.preview-image');
+        const websiteFrame = document.getElementById('websiteFrame');
         
-        console.log('Opening website:', website.liveUrl);
+        if (!websiteContainer || !websiteFrame) {
+            showNotification('Preview container not found', 'error');
+            console.error('❌ Preview container elements not found in DOM');
+            return;
+        }
+        
+        // Show iframe container and hide preview image
+        websiteContainer.style.display = 'block';
+        if (previewImage) {
+            previewImage.style.display = 'none';
+        }
+        
+        // Set iframe source to live URL
+        websiteFrame.src = website.liveUrl;
+        
+        isPreviewActive = true;
+        
+        showNotification(`Loading ${website.name}...`, 'success');
+        
+        // Handle iframe load event
+        websiteFrame.onload = () => {
+            console.log('✅ Website preview loaded successfully');
+            showNotification('Preview loaded!', 'success');
+        };
+        
+        // Handle iframe error
+        websiteFrame.onerror = () => {
+            console.error('❌ Failed to load website preview');
+            showNotification('Failed to load preview. Opening in new tab...', 'warning');
+            
+            // Fallback: Open in new tab
+            setTimeout(() => {
+                window.open(website.liveUrl, '_blank', 'noopener,noreferrer');
+                closePreview();
+            }, 1500);
+        };
+        
+        console.log('✅ Website preview initialization started');
+        
     } catch (error) {
-        console.error('Error opening website:', error);
-        showNotification('Error opening website', 'error');
+        console.error('❌ Error showing website preview:', error);
+        showNotification('Error loading preview: ' + error.message, 'error');
+        closePreview();
     }
 }
 
 /**
- * Toggle fullscreen mode for website preview
+ * Close the preview and return to static image view
+ * Removes iframe source and shows preview image again
  */
-function toggleFullscreen() {
+function closePreview() {
     try {
-        const websitePreview = document.querySelector('.website-preview');
-        if (!websitePreview) {
-            console.error('Website preview element not found');
-            return;
+        console.log('❌ Closing website preview');
+        
+        const websiteContainer = document.getElementById('websiteContainer');
+        const previewImage = document.querySelector('.preview-image');
+        const websiteFrame = document.getElementById('websiteFrame');
+        
+        // Hide iframe container
+        if (websiteContainer) {
+            websiteContainer.style.display = 'none';
         }
         
-        // Check if already in fullscreen
-        if (!document.fullscreenElement && !document.webkitFullscreenElement && 
-            !document.mozFullScreenElement && !document.msFullscreenElement) {
-            
-            // Enter fullscreen
-            if (websitePreview.requestFullscreen) {
-                websitePreview.requestFullscreen();
-            } else if (websitePreview.webkitRequestFullscreen) {
-                websitePreview.webkitRequestFullscreen();
-            } else if (websitePreview.mozRequestFullScreen) {
-                websitePreview.mozRequestFullScreen();
-            } else if (websitePreview.msRequestFullscreen) {
-                websitePreview.msRequestFullscreen();
-            }
-            
-            console.log('Entering fullscreen mode');
-        } else {
-            // Exit fullscreen
+        // Show preview image
+        if (previewImage) {
+            previewImage.style.display = 'block';
+        }
+        
+        // Clear iframe source to stop loading
+        if (websiteFrame) {
+            websiteFrame.src = '';
+        }
+        
+        isPreviewActive = false;
+        
+        // Exit fullscreen if active
+        const isFullscreen = !!(document.fullscreenElement || document.webkitFullscreenElement || 
+                                document.mozFullScreenElement || document.msFullscreenElement);
+        
+        if (isFullscreen) {
             if (document.exitFullscreen) {
                 document.exitFullscreen();
             } else if (document.webkitExitFullscreen) {
@@ -563,33 +610,79 @@ function toggleFullscreen() {
             } else if (document.msExitFullscreen) {
                 document.msExitFullscreen();
             }
-            
-            console.log('Exiting fullscreen mode');
         }
+        
+        showNotification('Preview closed', 'info');
+        console.log('✅ Preview closed successfully');
+        
     } catch (error) {
-        console.error('Error toggling fullscreen:', error);
+        console.error('❌ Error closing preview:', error);
+        showNotification('Error closing preview', 'error');
+    }
+}
+
+// ============================================================================================================
+// PREVIEW CONTROL FUNCTIONS
+// ============================================================================================================
+
+/**
+ * Toggle fullscreen mode for preview container
+ * Supports cross-browser fullscreen API
+ */
+function toggleFullscreen() {
+    try {
+        const websitePreviewContainer = document.querySelector('.website-preview-container');
+        if (!websitePreviewContainer) {
+            console.error('❌ Website preview container element not found');
+            return;
+        }
+        
+        // Check if already in fullscreen
+        const isFullscreen = !!(document.fullscreenElement || document.webkitFullscreenElement || 
+                                document.mozFullScreenElement || document.msFullscreenElement);
+        
+        if (!isFullscreen) {
+            // Enter fullscreen
+            console.log('🖥️ Entering fullscreen mode');
+            
+            if (websitePreviewContainer.requestFullscreen) {
+                websitePreviewContainer.requestFullscreen();
+            } else if (websitePreviewContainer.webkitRequestFullscreen) {
+                websitePreviewContainer.webkitRequestFullscreen();
+            } else if (websitePreviewContainer.mozRequestFullScreen) {
+                websitePreviewContainer.mozRequestFullScreen();
+            } else if (websitePreviewContainer.msRequestFullscreen) {
+                websitePreviewContainer.msRequestFullscreen();
+            }
+            
+        } else {
+            // Exit fullscreen
+            console.log('🖥️ Exiting fullscreen mode');
+            
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            } else if (document.webkitExitFullscreen) {
+                document.webkitExitFullscreen();
+            } else if (document.mozCancelFullScreen) {
+                document.mozCancelFullScreen();
+            } else if (document.msExitFullscreen) {
+                document.msExitFullscreen();
+            }
+        }
+        
+    } catch (error) {
+        console.error('❌ Error toggling fullscreen:', error);
         showNotification('Fullscreen error', 'error');
     }
 }
 
-/**
- * Close preview and return to websites list
- */
-function closePreview() {
-    try {
-        console.log('Closing preview, returning to websites list');
-        window.location.href = 'websites.html';
-    } catch (error) {
-        console.error('Error closing preview:', error);
-    }
-}
-
-// ==========================================
+// ============================================================================================================
 // SHARE FUNCTIONALITY
-// ==========================================
+// ============================================================================================================
 
 /**
  * Share website using Web Share API or fallback to clipboard
+ * Allows users to share website via native share dialog or copy link
  */
 function shareWebsite() {
     if (!currentWebsite) {
@@ -599,22 +692,22 @@ function shareWebsite() {
     
     try {
         const shareData = {
-            title: currentWebsite.name,
-            text: currentWebsite.overview || `Check out ${currentWebsite.name}!`,
+            title: `${currentWebsite.name} - ArshCreates`,
+            text: currentWebsite.overview || `Check out ${currentWebsite.name} by Arsh Verma!`,
             url: window.location.href
         };
         
-        // Check if Web Share API is available
+        // Check if Web Share API is available (mobile/modern browsers)
         if (navigator.share) {
             navigator.share(shareData)
                 .then(() => {
                     showNotification('Website shared successfully', 'success');
-                    console.log('Website shared via Web Share API');
+                    console.log('✅ Website shared via Web Share API');
                 })
                 .catch((error) => {
                     // User cancelled or error occurred
                     if (error.name !== 'AbortError') {
-                        console.error('Share error:', error);
+                        console.error('❌ Share error:', error);
                         fallbackShare();
                     }
                 });
@@ -622,74 +715,62 @@ function shareWebsite() {
             // Web Share API not available, use fallback
             fallbackShare();
         }
+        
     } catch (error) {
-        console.error('Error sharing website:', error);
+        console.error('❌ Error sharing website:', error);
         fallbackShare();
     }
 }
 
 /**
  * Fallback share function - copies link to clipboard
+ * Used when Web Share API is not available
  */
 function fallbackShare() {
     const url = window.location.href;
     
-    // Try modern Clipboard API first
+    // Try to copy to clipboard
     if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(url)
             .then(() => {
-                showNotification('Website link copied to clipboard', 'success');
-                console.log('Link copied to clipboard');
+                showNotification('Link copied to clipboard!', 'success');
+                console.log('✅ Link copied to clipboard');
             })
             .catch((error) => {
-                console.error('Clipboard error:', error);
-                fallbackCopyToClipboard(url);
+                console.error('❌ Clipboard error:', error);
+                showManualCopyDialog(url);
             });
     } else {
-        // Use fallback method for older browsers
-        fallbackCopyToClipboard(url);
+        // Clipboard API not available - show manual copy dialog
+        showManualCopyDialog(url);
     }
 }
 
 /**
- * Fallback method to copy text to clipboard (older browsers)
- * @param {string} text - Text to copy
+ * Show manual copy dialog for browsers without clipboard access
+ * 
+ * @param {string} url - URL to display for copying
  */
-function fallbackCopyToClipboard(text) {
-    try {
-        const textArea = document.createElement('textarea');
-        textArea.value = text;
-        textArea.style.position = 'fixed';
-        textArea.style.left = '-999999px';
-        textArea.style.top = '-999999px';
-        document.body.appendChild(textArea);
-        textArea.focus();
-        textArea.select();
-        
-        const successful = document.execCommand('copy');
-        document.body.removeChild(textArea);
-        
-        if (successful) {
-            showNotification('Website link copied to clipboard', 'success');
-        } else {
-            showNotification('Could not copy link', 'error');
-        }
-    } catch (error) {
-        console.error('Fallback copy error:', error);
-        showNotification('Could not copy link', 'error');
+function showManualCopyDialog(url) {
+    const dialog = prompt('Copy this link to share:', url);
+    if (dialog !== null) {
+        showNotification('Please copy the link manually', 'info');
     }
 }
 
-// ==========================================
+// ============================================================================================================
 // KEYBOARD NAVIGATION
-// ==========================================
+// ============================================================================================================
 
 /**
- * Handle keyboard shortcuts
- * - Arrow Left/Right: Navigate between websites
+ * Handle keyboard shortcuts for navigation and preview control
+ * 
+ * Keyboard shortcuts:
+ * - Arrow Left: Navigate to previous website
+ * - Arrow Right: Navigate to next website
  * - Escape: Close preview
- * - Space/Enter: Visit website
  * - F: Toggle fullscreen
+ * 
  * @param {KeyboardEvent} e - Keyboard event
  */
 function handleKeyboardNavigation(e) {
@@ -702,56 +783,41 @@ function handleKeyboardNavigation(e) {
         case 'ArrowLeft':
             e.preventDefault();
             navigateToPreviousWebsite();
-            console.log('Keyboard: Navigate to previous website');
+            console.log('⌨️ Keyboard: Previous website');
             break;
             
         case 'ArrowRight':
             e.preventDefault();
             navigateToNextWebsite();
-            console.log('Keyboard: Navigate to next website');
+            console.log('⌨️ Keyboard: Next website');
             break;
             
         case 'Escape':
             if (isPreviewActive) {
                 e.preventDefault();
                 closePreview();
-                console.log('Keyboard: Close preview');
-            }
-            break;
-            
-        case ' ':
-        case 'Enter':
-            if (!isPreviewActive && currentWebsite && 
-                currentWebsite.status === 'Live' && currentWebsite.liveUrl) {
-                e.preventDefault();
-                visitWebsiteExternal(currentWebsite);
-                console.log('Keyboard: Visit website');
+                console.log('⌨️ Keyboard: Close preview');
             }
             break;
             
         case 'f':
         case 'F':
-            e.preventDefault();
-            toggleFullscreen();
-            console.log('Keyboard: Toggle fullscreen');
-            break;
-            
-        case 's':
-        case 'S':
-            e.preventDefault();
-            shareWebsite();
-            console.log('Keyboard: Share website');
+            if (isPreviewActive) {
+                e.preventDefault();
+                toggleFullscreen();
+                console.log('⌨️ Keyboard: Toggle fullscreen');
+            }
             break;
     }
 }
 
-// ==========================================
+// ============================================================================================================
 // FULLSCREEN CHANGE HANDLER
-// ==========================================
+// ============================================================================================================
 
 /**
  * Handle fullscreen state changes
- * Updates fullscreen button icon and tooltip
+ * Updates fullscreen button icon and text based on current state
  */
 function handleFullscreenChange() {
     const fullscreenBtn = document.getElementById('fullscreenBtn');
@@ -761,132 +827,28 @@ function handleFullscreenChange() {
     const isFullscreen = !!(document.fullscreenElement || document.webkitFullscreenElement || 
                            document.mozFullScreenElement || document.msFullscreenElement);
     
-    // Update button icon and title
+    // Update button icon
     const icon = fullscreenBtn.querySelector('i');
     if (icon) {
         icon.className = isFullscreen ? 'fas fa-compress' : 'fas fa-expand';
-    } else {
-        fullscreenBtn.innerHTML = isFullscreen ? 
-            '<i class="fas fa-compress"></i>' : 
-            '<i class="fas fa-expand"></i>';
     }
     
-    fullscreenBtn.title = isFullscreen ? 'Exit Fullscreen' : 'Enter Fullscreen';
+    // Update button title
+    fullscreenBtn.title = isFullscreen ? 'Exit Fullscreen' : 'Fullscreen Preview';
     
-    console.log('Fullscreen state:', isFullscreen ? 'active' : 'inactive');
+    console.log(`🖥️ Fullscreen state: ${isFullscreen ? 'active' : 'inactive'}`);
 }
 
-// ==========================================
-// ANIMATIONS
-// ==========================================
-
-/**
- * Animate website details on display
- * Staggered fade-in animation for all elements
- */
-function animateWebsiteDetails() {
-    try {
-        const elements = document.querySelectorAll(
-            '.detail-card, .features-list li, .tech-tags span, .stat-item'
-        );
-        
-        elements.forEach((element, index) => {
-            // Set initial state
-            element.style.opacity = '0';
-            element.style.transform = 'translateY(30px)';
-            
-            // Animate with delay based on index
-            setTimeout(() => {
-                element.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-                element.style.opacity = '1';
-                element.style.transform = 'translateY(0)';
-            }, index * 50); // 50ms delay between each element
-        });
-        
-        console.log(`Animated ${elements.length} elements`);
-    } catch (error) {
-        console.error('Error animating website details:', error);
-    }
-}
-
-// ==========================================
-// SCREENSHOT GALLERY (OPTIONAL FEATURE)
-// ==========================================
-
-/**
- * Load and display website screenshots
- * @param {Object} website - Website object with screenshots
- */
-function loadWebsiteScreenshots(website) {
-    const screenshotsContainer = document.getElementById('websiteScreenshots');
-    if (!screenshotsContainer || !website.screenshots || !Array.isArray(website.screenshots)) {
-        return;
-    }
-    
-    try {
-        screenshotsContainer.innerHTML = website.screenshots.map((screenshot, index) => `
-            <div class="screenshot-thumbnail" data-screenshot-index="${index}">
-                <img src="${screenshot}" 
-                     alt="${escapeHtml(website.name)} screenshot ${index + 1}" 
-                     loading="lazy"
-                     onerror="this.src='https://via.placeholder.com/200x150/E4572E/FFFFFF?text=Image+${index + 1}'">
-            </div>
-        `).join('');
-        
-        // Add click event to thumbnails
-        document.querySelectorAll('.screenshot-thumbnail').forEach(thumb => {
-            thumb.addEventListener('click', function() {
-                const index = parseInt(this.getAttribute('data-screenshot-index'));
-                showScreenshot(index);
-            });
-        });
-        
-        console.log(`Loaded ${website.screenshots.length} screenshots`);
-    } catch (error) {
-        console.error('Error loading screenshots:', error);
-    }
-}
-
-/**
- * Show specific screenshot in preview
- * @param {number} index - Index of screenshot to display
- */
-function showScreenshot(index) {
-    try {
-        if (index < 0 || index >= websiteImages.length) {
-            console.error('Invalid screenshot index:', index);
-            return;
-        }
-        
-        const previewImage = document.getElementById('previewImage');
-        if (previewImage && websiteImages[index]) {
-            currentImageIndex = index;
-            
-            // Fade out
-            previewImage.style.transition = 'opacity 0.3s ease';
-            previewImage.style.opacity = '0';
-            
-            // Change image and fade in
-            setTimeout(() => {
-                previewImage.src = websiteImages[index];
-                previewImage.style.opacity = '1';
-            }, 300);
-            
-            console.log('Showing screenshot:', index);
-        }
-    } catch (error) {
-        console.error('Error showing screenshot:', error);
-    }
-}
-
-// ==========================================
+// ============================================================================================================
 // UTILITY FUNCTIONS
-// ==========================================
+// ============================================================================================================
 
 /**
- * Format date to readable string
+ * Format date string to readable format
+ * Converts ISO date string to human-readable format
+ * 
  * @param {string} dateString - ISO date string
- * @returns {string} Formatted date string
+ * @returns {string} Formatted date string (e.g., "January 15, 2024")
  */
 function formatDate(dateString) {
     if (!dateString) return 'Not specified';
@@ -905,22 +867,21 @@ function formatDate(dateString) {
             month: 'long', 
             day: 'numeric' 
         });
+        
     } catch (error) {
-        console.error('Error formatting date:', error);
+        console.error('❌ Error formatting date:', error);
         return 'Invalid Date';
     }
 }
 
 /**
  * Format large numbers with K/M suffixes
- * @param {number|string} num - Number to format
- * @returns {string} Formatted number string
+ * Converts large numbers to compact format with suffixes
+ * 
+ * @param {number} num - Number to format
+ * @returns {string} Formatted number string (e.g., "1.5K", "2.3M")
  */
 function formatStatNumber(num) {
-    if (typeof num === 'string') {
-        num = parseFloat(num.replace(/[^0-9.]/g, ''));
-    }
-    
     if (typeof num !== 'number' || isNaN(num)) {
         return '0';
     }
@@ -937,27 +898,11 @@ function formatStatNumber(num) {
 }
 
 /**
- * Format user count (handles strings like "50K+", "1.2M+")
- * @param {string} userBase - User base string
- * @returns {string} Formatted user count
- */
-function formatUserCount(userBase) {
-    if (!userBase || typeof userBase !== 'string') return '0';
-    
-    // If already formatted (contains K or M), return as is
-    if (userBase.includes('K') || userBase.includes('M')) {
-        return userBase;
-    }
-    
-    // Otherwise, format as number
-    const num = parseFloat(userBase.replace(/[^0-9.]/g, ''));
-    return formatStatNumber(num);
-}
-
-/**
- * Escape HTML special characters to prevent XSS
+ * Escape HTML special characters to prevent XSS attacks
+ * Sanitizes user input before displaying in DOM
+ * 
  * @param {string} text - Text to escape
- * @returns {string} Escaped text
+ * @returns {string} Escaped text safe for HTML insertion
  */
 function escapeHtml(text) {
     if (typeof text !== 'string') return '';
@@ -975,324 +920,223 @@ function escapeHtml(text) {
 
 /**
  * Show notification toast message
- * @param {string} message - Notification message
+ * Displays temporary notification in top-right corner
+ * 
+ * @param {string} message - Notification message to display
  * @param {string} type - Notification type: 'success', 'error', 'info', 'warning'
  */
 function showNotification(message, type = 'info') {
     try {
-        // Check if utils.js has showNotification
-        if (typeof window.showNotification === 'function' && window.showNotification !== showNotification) {
-            window.showNotification(message, type);
-            return;
-        }
-        
-        // Fallback notification system
+        // Create notification element
         const notification = document.createElement('div');
-        notification.className = 'notification-toast';
+        notification.className = `notification-toast notification-${type}`;
         
-        // Set notification style based on type
-        let backgroundColor, icon;
+        // Set notification style and icon based on type
+        let icon;
         
         switch (type) {
             case 'error':
-                backgroundColor = '#dc3545';
                 icon = '<i class="fas fa-exclamation-circle"></i>';
                 break;
             case 'success':
-                backgroundColor = '#28a745';
                 icon = '<i class="fas fa-check-circle"></i>';
                 break;
             case 'warning':
-                backgroundColor = '#ffc107';
                 icon = '<i class="fas fa-exclamation-triangle"></i>';
                 break;
             case 'info':
             default:
-                backgroundColor = '#17a2b8';
                 icon = '<i class="fas fa-info-circle"></i>';
                 break;
         }
         
-        // Apply styles
-        notification.style.cssText = `
-            position: fixed;
-            top: 6rem;
-            right: 2rem;
-            padding: 1rem 1.5rem;
-            background: ${backgroundColor};
-            color: white;
-            border-radius: 12px;
-            z-index: 10000;
-            font-weight: 600;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            min-width: 250px;
-            max-width: 400px;
-            animation: slideInRight 0.3s ease;
-            font-family: 'Inter', sans-serif;
+        // Set notification content with icon
+        notification.innerHTML = `
+            <div class="notification-icon">${icon}</div>
+            <div class="notification-message">${escapeHtml(message)}</div>
         `;
         
-        // Set content with icon
-        notification.innerHTML = `${icon}<span>${escapeHtml(message)}</span>`;
+        // Get or create notification container
+        let container = document.getElementById('notificationContainer');
+        if (!container) {
+            container = document.createElement('div');
+            container.id = 'notificationContainer';
+            container.className = 'notification-container';
+            document.body.appendChild(container);
+        }
         
-        // Add to document
-        document.body.appendChild(notification);
+        // Add notification to container
+        container.appendChild(notification);
+        
+        // Animate in
+        setTimeout(() => {
+            notification.classList.add('show');
+        }, 10);
         
         // Auto-remove after 3 seconds
         setTimeout(() => {
-            notification.style.animation = 'slideOutRight 0.3s ease';
+            notification.classList.remove('show');
             setTimeout(() => {
                 notification.remove();
             }, 300);
         }, 3000);
         
-        console.log(`Notification [${type}]:`, message);
+        console.log(`📢 Notification [${type}]: ${message}`);
+        
     } catch (error) {
-        console.error('Error showing notification:', error);
+        console.error('❌ Error showing notification:', error);
     }
 }
 
-// ==========================================
-// VISIBILITY CHANGE HANDLER
-// ==========================================
+// ============================================================================================================
+// PAGE VISIBILITY HANDLER
+// ============================================================================================================
 
 /**
  * Handle page visibility changes
- * Optional: Pause/resume any animations when tab is not visible
+ * Optional: Can be used to pause iframe or show notification when tab is not visible
  */
 function handleVisibilityChange() {
-    if (document.hidden) {
-        console.log('Page hidden');
-        // Optional: Pause animations or videos
-    } else {
-        console.log('Page visible');
-        // Optional: Resume animations or videos
+    if (document.hidden && isPreviewActive) {
+        console.log('👁️ Page hidden, preview is active');
+        // Optional: Show notification or pause preview
+    } else if (!document.hidden && isPreviewActive) {
+        console.log('👁️ Page visible, preview is active');
+        // Optional: Resume preview
     }
 }
 
 // Listen for visibility changes
 document.addEventListener('visibilitychange', handleVisibilityChange);
 
-// ==========================================
+// ============================================================================================================
 // WINDOW UNLOAD HANDLER
-// ==========================================
+// ============================================================================================================
 
 /**
  * Cleanup when page is about to unload
+ * Ensures iframe is properly cleaned up
  */
 window.addEventListener('beforeunload', () => {
-    console.log('Page unloading, cleaning up...');
-    // Cleanup operations if needed
+    if (isPreviewActive) {
+        console.log('🧹 Page unloading, cleaning up preview');
+        const websiteFrame = document.getElementById('websiteFrame');
+        if (websiteFrame) {
+            websiteFrame.src = '';
+        }
+    }
 });
 
-// ==========================================
+// ============================================================================================================
 // GLOBAL FUNCTION EXPORTS
-// Make functions available globally for HTML onclick handlers
-// ==========================================
+// ============================================================================================================
+// Make functions available globally for inline HTML event handlers and console debugging
+
 window.initializeWebsiteDetailPage = initializeWebsiteDetailPage;
-window.visitWebsiteExternal = visitWebsiteExternal;
+window.showWebsitePreview = showWebsitePreview;
+window.closePreview = closePreview;
 window.shareWebsite = shareWebsite;
 window.navigateToPreviousWebsite = navigateToPreviousWebsite;
 window.navigateToNextWebsite = navigateToNextWebsite;
 window.toggleTheme = toggleTheme;
 window.toggleFullscreen = toggleFullscreen;
-window.closePreview = closePreview;
-window.showScreenshot = showScreenshot;
 
-// ==========================================
+// ============================================================================================================
+// DEBUG HELPERS
+// ============================================================================================================
+// Helpful functions for debugging - can be removed in production
+
+/**
+ * Debug function to check current website state
+ * Usage: Open browser console and type: window.debugWebsiteState()
+ */
+window.debugWebsiteState = function() {
+    console.log('╔═══════════════════════════════════════════╗');
+    console.log('║     WEBSITE STATE DEBUG INFO              ║');
+    console.log('╚═══════════════════════════════════════════╝');
+    console.log('Current Website ID:', currentWebsiteId);
+    console.log('Current Website Object:', currentWebsite);
+    console.log('Is Preview Active:', isPreviewActive);
+    console.log('Available Websites:', getWebsites());
+    console.log('Theme:', document.documentElement.getAttribute('data-theme'));
+    console.log('Fullscreen:', !!(document.fullscreenElement || document.webkitFullscreenElement));
+    console.log('═══════════════════════════════════════════');
+};
+
+/**
+ * Debug function to test notifications
+ * Usage: window.testNotifications()
+ */
+window.testNotifications = function() {
+    showNotification('This is an info notification', 'info');
+    setTimeout(() => showNotification('This is a success notification', 'success'), 500);
+    setTimeout(() => showNotification('This is a warning notification', 'warning'), 1000);
+    setTimeout(() => showNotification('This is an error notification', 'error'), 1500);
+};
+
+/**
+ * Debug function to test preview functionality
+ * Usage: window.testPreview()
+ */
+window.testPreview = function() {
+    if (currentWebsite && currentWebsite.liveUrl) {
+        console.log('🧪 Testing preview with current website');
+        showWebsitePreview(currentWebsite);
+    } else {
+        console.error('❌ No website loaded or no live URL available');
+        showNotification('Cannot test preview - no live URL', 'error');
+    }
+};
+
+/**
+ * Debug function to check iframe status
+ * Usage: window.checkIframeStatus()
+ */
+window.checkIframeStatus = function() {
+    const websiteFrame = document.getElementById('websiteFrame');
+    const websiteContainer = document.getElementById('websiteContainer');
+    
+    console.log('╔═══════════════════════════════════════════╗');
+    console.log('║       IFRAME STATUS DEBUG INFO            ║');
+    console.log('╚═══════════════════════════════════════════╝');
+    console.log('Iframe Element:', websiteFrame);
+    console.log('Container Element:', websiteContainer);
+    console.log('Iframe Source:', websiteFrame?.src || 'No source');
+    console.log('Container Display:', websiteContainer?.style.display || 'default');
+    console.log('Is Preview Active:', isPreviewActive);
+    console.log('═══════════════════════════════════════════');
+};
+
+// ============================================================================================================
 // AUTO-INITIALIZATION
+// ============================================================================================================
 // Initialize page when DOM is ready
-// ==========================================
+
 if (document.readyState === 'loading') {
     // DOM still loading, wait for DOMContentLoaded event
     document.addEventListener('DOMContentLoaded', initializeWebsiteDetailPage);
-    console.log('Waiting for DOM to load...');
+    console.log('⏳ Waiting for DOM to load...');
 } else {
     // DOM already loaded, initialize immediately
     initializeWebsiteDetailPage();
 }
 
-// ==========================================
-// CSS ANIMATIONS (Add to your stylesheet if not present)
-// ==========================================
-/*
-@keyframes slideInRight {
-    from {
-        transform: translateX(100%);
-        opacity: 0;
-    }
-    to {
-        transform: translateX(0);
-        opacity: 1;
-    }
-}
+// ============================================================================================================
+// INITIALIZATION COMPLETE
+// ============================================================================================================
 
-@keyframes slideOutRight {
-    from {
-        transform: translateX(0);
-        opacity: 1;
-    }
-    to {
-        transform: translateX(100%);
-        opacity: 0;
-    }
-}
-*/
+console.log('╔═══════════════════════════════════════════════════════════════════╗');
+console.log('║  WEBSITE DETAIL PAGE - JavaScript Loaded Successfully            ║');
+console.log('║  Author: Arsh Verma                                              ║');
+console.log('║  Portfolio: ArshCreates                                          ║');
+console.log('║                                                                  ║');
+console.log('║  Available Debug Commands:                                       ║');
+console.log('║  • window.debugWebsiteState()  - View current state              ║');
+console.log('║  • window.testNotifications()  - Test notification system        ║');
+console.log('║  • window.testPreview()        - Test preview functionality      ║');
+console.log('║  • window.checkIframeStatus()  - Check iframe status             ║');
+console.log('╚═══════════════════════════════════════════════════════════════════╝');
 
-// ==========================================
-// DEBUG HELPERS (Remove in production)
-// ==========================================
-
-/**
- * Debug function to check website state
- * Call window.debugWebsiteState() in console
- */
-window.debugWebsiteState = function() {
-    console.log('=== WEBSITE STATE DEBUG ===');
-    console.log('Current Website ID:', currentWebsiteId);
-    console.log('Current Website:', currentWebsite);
-    console.log('Website Images:', websiteImages);
-    console.log('Is Preview Active:', isPreviewActive);
-    console.log('Current Image Index:', currentImageIndex);
-    console.log('Available Websites:', getWebsites());
-    console.log('===========================');
-};
-
-/**
- * Test all interactive buttons
- * Call window.testButtons() in console
- */
-window.testButtons = function() {
-    console.log('=== TESTING ALL BUTTONS ===');
-    
-    const buttons = {
-        visitBtn: document.getElementById('visitBtn'),
-        shareBtn: document.getElementById('shareBtn'),
-        fullscreenBtn: document.getElementById('fullscreenBtn'),
-        closePreviewBtn: document.getElementById('closePreviewBtn'),
-        repositoryBtn: document.getElementById('repositoryBtn'),
-        liveUrlBtn: document.getElementById('liveUrlBtn'),
-        prevWebsite: document.getElementById('prevWebsite'),
-        nextWebsite: document.getElementById('nextWebsite'),
-        themeToggle: document.getElementById('themeToggle')
-    };
-    
-    Object.entries(buttons).forEach(([name, button]) => {
-        if (button) {
-            console.log(`✅ ${name}: Found and clickable`);
-        } else {
-            console.log(`❌ ${name}: Not found`);
-        }
-    });
-    
-    console.log('==========================');
-};
-
-/**
- * Test keyboard shortcuts
- * Call window.testKeyboardShortcuts() in console
- */
-window.testKeyboardShortcuts = function() {
-    console.log('=== KEYBOARD SHORTCUTS ===');
-    console.log('← → : Navigate between websites');
-    console.log('ESC : Close preview');
-    console.log('Space/Enter : Visit website');
-    console.log('F : Toggle fullscreen');
-    console.log('S : Share website');
-    console.log('==========================');
-};
-
-// Log initialization
-console.log('website-detail.js loaded successfully');
-console.log('Available functions:', [
-    'initializeWebsiteDetailPage',
-    'visitWebsiteExternal',
-    'shareWebsite',
-    'navigateToPreviousWebsite',
-    'navigateToNextWebsite',
-    'toggleTheme',
-    'toggleFullscreen',
-    'closePreview',
-    'showScreenshot',
-    'debugWebsiteState',
-    'testButtons',
-    'testKeyboardShortcuts'
-]);
-
-// ==========================================
-// ADDITIONAL ENHANCEMENTS
-// ==========================================
-
-/**
- * Auto-update relative timestamps (e.g., "2 days ago")
- * Call this if you want to show relative dates
- */
-function updateRelativeTimestamps() {
-    const launchDate = document.getElementById('launchDate');
-    if (launchDate && currentWebsite && currentWebsite.launchDate) {
-        const date = new Date(currentWebsite.launchDate);
-        const now = new Date();
-        const diffTime = Math.abs(now - date);
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-        
-        let relativeText = '';
-        if (diffDays === 0) {
-            relativeText = ' (Today)';
-        } else if (diffDays === 1) {
-            relativeText = ' (Yesterday)';
-        } else if (diffDays < 30) {
-            relativeText = ` (${diffDays} days ago)`;
-        } else if (diffDays < 365) {
-            const months = Math.floor(diffDays / 30);
-            relativeText = ` (${months} ${months === 1 ? 'month' : 'months'} ago)`;
-        } else {
-            const years = Math.floor(diffDays / 365);
-            relativeText = ` (${years} ${years === 1 ? 'year' : 'years'} ago)`;
-        }
-        
-        // Append relative time to existing date
-        const currentText = launchDate.textContent;
-        if (!currentText.includes('ago') && !currentText.includes('Today')) {
-            launchDate.textContent = currentText + relativeText;
-        }
-    }
-}
-
-/**
- * Track website views (if analytics is implemented)
- */
-function trackWebsiteView() {
-    if (currentWebsite) {
-        console.log('Website view tracked:', currentWebsite.name);
-        // Implement your analytics tracking here
-        // Example: gtag('event', 'page_view', { page_title: currentWebsite.name });
-    }
-}
-
-// Call tracking after page loads
-setTimeout(trackWebsiteView, 1000);
-
-/**
- * Add smooth scroll to sections
- */
-function setupSmoothScroll() {
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
-            e.preventDefault();
-            const target = document.querySelector(this.getAttribute('href'));
-            if (target) {
-                target.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                });
-            }
-        });
-    });
-}
-
-// Setup smooth scroll
-setupSmoothScroll();
-
-console.log('🚀 Website detail page fully loaded and ready!');
+// ============================================================================================================
+// END OF FILE
+// ============================================================================================================
