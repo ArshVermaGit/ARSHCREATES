@@ -1,47 +1,101 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
+    <!-- ==========================================
+         META TAGS & CONFIGURATION
+         ========================================== -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>App Details - Arsh Verma</title>
+    <meta name="description" content="Detailed view of mobile applications developed by Arsh Verma - ArshCreates Portfolio">
+    <meta name="keywords" content="Arsh Verma, ArshCreates, Mobile Apps, App Development, Portfolio">
+    <meta name="author" content="Arsh Verma">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph Meta Tags for Social Sharing -->
+    <meta property="og:title" content="App Details - Arsh Verma Portfolio">
+    <meta property="og:description" content="Explore innovative mobile applications crafted by Arsh Verma">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="assets/og-image.jpg">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="App Details - Arsh Verma Portfolio">
+    <meta name="twitter:description" content="Explore innovative mobile applications crafted by Arsh Verma">
+    
+    <title>App Details - Arsh Verma Portfolio</title>
+    
+    <!-- ==========================================
+         FAVICON & ICONS
+         ========================================== -->
     <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+    
+    <!-- ==========================================
+         STYLESHEETS
+         External: Font Awesome Icons & Google Fonts
+         Internal: Custom Styles
+         ========================================== -->
     <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" 
+          integrity="sha512-Avb2QiuDEEvB4bZJYdft2mNjVShBftLdPG8FJ0V7irTLQ8Uo0qcPxh4Plq7G5tGm0rU+1SPhVotteLpBERwTkw==" 
+          crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" 
+          rel="stylesheet">
 </head>
+
 <body>
-    <!-- Loading Screen -->
-    <div id="loadingScreen" class="loading-screen">
+    <!-- ==========================================
+         LOADING SCREEN
+         Displays while page and app data loads
+         Animated progress bar with app icon
+         Developer: Arsh Verma
+         ========================================== -->
+    <div id="loadingScreen" class="loading-screen" role="status" aria-live="polite">
         <div class="loading-content">
+            <!-- Animated Logo with Glow Effect -->
             <div class="loading-logo">
-                <div class="logo-glow"></div>
-                <i class="fas fa-mobile-alt"></i>
+                <div class="logo-glow" aria-hidden="true"></div>
+                <i class="fas fa-mobile-alt" aria-hidden="true"></i>
             </div>
-            <div class="loading-bar-container">
+            
+            <!-- Progress Bar Container -->
+            <div class="loading-bar-container" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
                 <div class="loading-bar" id="loadingBar"></div>
             </div>
+            
+            <!-- Loading Status Text -->
             <div class="loading-text" id="loadingText">Loading App Details...</div>
         </div>
     </div>
 
-    <!-- Navigation -->
-    <nav class="navbar">
+    <!-- ==========================================
+         NAVIGATION BAR
+         Top navigation with logo, back button, and theme toggle
+         Responsive design with mobile-friendly layout
+         Developer: Arsh Verma
+         ========================================== -->
+    <nav class="navbar" role="navigation" aria-label="Main navigation">
         <div class="container">
             <div class="nav-content">
-                <a href="index.html" class="logo">
-                    <div class="logo-icon">
+                <!-- Logo/Brand Section -->
+                <a href="index.html" class="logo" aria-label="ArshCreates - Go to homepage">
+                    <div class="logo-icon" aria-hidden="true">
                         <i class="fas fa-code"></i>
                     </div>
                     <span class="logo-text">ArshCreates</span>
                 </a>
 
+                <!-- Navigation Actions -->
                 <div class="nav-actions">
-                    <a href="apps.html" class="btn btn-secondary">
-                        <i class="fas fa-arrow-left"></i>
+                    <!-- Back to Apps Button -->
+                    <a href="apps.html" class="btn btn-secondary" aria-label="Back to apps page">
+                        <i class="fas fa-arrow-left" aria-hidden="true"></i>
                         <span>Back to Apps</span>
                     </a>
-                    <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
-                        <div class="theme-icon">
+                    
+                    <!-- Theme Toggle Button (Dark/Light Mode) -->
+                    <button id="themeToggle" class="theme-toggle" aria-label="Toggle dark/light theme">
+                        <div class="theme-icon" aria-hidden="true">
                             <i class="fas fa-moon"></i>
                         </div>
                     </button>
@@ -50,97 +104,198 @@
         </div>
     </nav>
 
-    <!-- App Detail Section -->
-    <section class="app-detail-section">
+    <!-- ==========================================
+         APP DETAIL SECTION
+         Main content area displaying app information
+         Two-column layout: Preview + Information
+         Developer: Arsh Verma
+         ========================================== -->
+    <section class="app-detail-section" role="main">
         <div class="container">
-            <!-- App Preview -->
+            
+            <!-- ==========================================
+                 LEFT COLUMN: APP PREVIEW CONTAINER
+                 Contains app preview image, download buttons,
+                 screenshots gallery, and navigation
+                 ========================================== -->
             <div class="app-preview-container">
                 <div class="app-preview">
+                    
+                    <!-- App Preview Image with Download Overlay -->
                     <div class="preview-image">
-                        <img id="previewImage" src="" alt="App Preview" class="preview-img">
-                        <div class="preview-overlay">
+                        <img id="previewImage" 
+                             src="" 
+                             alt="App Preview Screenshot" 
+                             class="preview-img"
+                             loading="lazy">
+                        
+                        <!-- Overlay with Download Buttons (Shows on Hover) -->
+                        <div class="preview-overlay" aria-hidden="true">
                             <div class="download-buttons">
-                                <a id="appStoreBtn" href="#" class="btn-download ios" target="_blank">
-                                    <i class="fab fa-apple"></i>
+                                <!-- iOS App Store Button -->
+                                <a id="appStoreBtn" 
+                                   href="#" 
+                                   class="btn-download ios" 
+                                   target="_blank" 
+                                   rel="noopener noreferrer"
+                                   aria-label="Download on the App Store">
+                                    <i class="fab fa-apple" aria-hidden="true"></i>
                                     <span>App Store</span>
                                 </a>
-                                <a id="playStoreBtn" href="#" class="btn-download android" target="_blank">
-                                    <i class="fab fa-google-play"></i>
+                                
+                                <!-- Android Google Play Button -->
+                                <a id="playStoreBtn" 
+                                   href="#" 
+                                   class="btn-download android" 
+                                   target="_blank" 
+                                   rel="noopener noreferrer"
+                                   aria-label="Download on Google Play">
+                                    <i class="fab fa-google-play" aria-hidden="true"></i>
                                     <span>Google Play</span>
                                 </a>
                             </div>
                         </div>
                     </div>
                     
-                    <!-- App Controls -->
+                    <!-- ==========================================
+                         APP CONTROLS
+                         Control buttons and info display
+                         ========================================== -->
                     <div class="app-controls">
+                        <!-- Control Buttons Group -->
                         <div class="control-group">
-                            <button id="closePreviewBtn" class="btn-control" title="Close Preview">
-                                <i class="fas fa-times"></i>
+                            <button id="closePreviewBtn" 
+                                    class="btn-control" 
+                                    title="Close Preview"
+                                    aria-label="Close app preview">
+                                <i class="fas fa-times" aria-hidden="true"></i>
                             </button>
                         </div>
+                        
+                        <!-- Control Information Display -->
                         <div class="control-info">
                             <span class="control-text">Mobile Application</span>
                         </div>
                     </div>
 
-                    <!-- App Screenshots -->
-                    <div id="appScreenshots" class="app-screenshots">
-                        <!-- Screenshots will be populated dynamically -->
+                    <!-- ==========================================
+                         APP SCREENSHOTS GALLERY
+                         Dynamically populated screenshot carousel
+                         ========================================== -->
+                    <div id="appScreenshots" 
+                         class="app-screenshots" 
+                         role="region" 
+                         aria-label="App screenshots gallery">
+                        <!-- Screenshots will be dynamically populated by app-detail.js -->
                     </div>
                 </div>
 
-                <!-- Navigation Arrows -->
-                <div class="detail-navigation">
-                    <button id="prevApp" class="nav-arrow prev-arrow">
-                        <i class="fas fa-chevron-left"></i>
+                <!-- ==========================================
+                     NAVIGATION ARROWS
+                     Previous/Next app navigation
+                     ========================================== -->
+                <div class="detail-navigation" role="navigation" aria-label="App navigation">
+                    <!-- Previous App Button -->
+                    <button id="prevApp" 
+                            class="nav-arrow prev-arrow"
+                            aria-label="View previous app">
+                        <i class="fas fa-chevron-left" aria-hidden="true"></i>
                         <span class="arrow-text">Previous App</span>
                     </button>
-                    <button id="nextApp" class="nav-arrow next-arrow">
+                    
+                    <!-- Next App Button -->
+                    <button id="nextApp" 
+                            class="nav-arrow next-arrow"
+                            aria-label="View next app">
                         <span class="arrow-text">Next App</span>
-                        <i class="fas fa-chevron-right"></i>
+                        <i class="fas fa-chevron-right" aria-hidden="true"></i>
                     </button>
                 </div>
             </div>
 
-            <!-- App Information -->
+            <!-- ==========================================
+                 RIGHT COLUMN: APP INFORMATION CONTAINER
+                 Contains all app details, features, and stats
+                 Developer: Arsh Verma
+                 ========================================== -->
             <div class="app-info-container">
+                
+                <!-- ==========================================
+                     APP HEADER
+                     Title, metadata, and action buttons
+                     ========================================== -->
                 <div class="app-header">
+                    <!-- Title and Meta Information -->
                     <div class="app-title-section">
                         <h1 id="appTitle" class="app-title">App Title</h1>
+                        
+                        <!-- App Metadata (Category, Rating, Status) -->
                         <div class="app-meta">
-                            <span id="appCategory" class="app-category">Category</span>
-                            <span class="app-rating">
-                                <i class="fas fa-star"></i>
+                            <span id="appCategory" 
+                                  class="app-category" 
+                                  role="text">Category</span>
+                            
+                            <span class="app-rating" role="text" aria-label="App rating">
+                                <i class="fas fa-star" aria-hidden="true"></i>
                                 <span id="appRating">0.0</span>/5
                             </span>
-                            <span id="appStatus" class="app-status">Status</span>
+                            
+                            <span id="appStatus" 
+                                  class="app-status" 
+                                  role="status">Status</span>
                         </div>
                     </div>
+                    
+                    <!-- Action Buttons -->
                     <div class="app-actions">
-                        <button id="shareBtn" class="btn btn-secondary">
-                            <i class="fas fa-share-alt"></i>
+                        <!-- Share Button -->
+                        <button id="shareBtn" 
+                                class="btn btn-secondary"
+                                aria-label="Share this app">
+                            <i class="fas fa-share-alt" aria-hidden="true"></i>
                             <span>Share</span>
                         </button>
-                        <a id="repositoryBtn" href="#" class="btn btn-primary" target="_blank">
-                            <i class="fab fa-github"></i>
+                        
+                        <!-- GitHub Repository Button -->
+                        <a id="repositoryBtn" 
+                           href="#" 
+                           class="btn btn-primary" 
+                           target="_blank"
+                           rel="noopener noreferrer"
+                           aria-label="View source code on GitHub">
+                            <i class="fab fa-github" aria-hidden="true"></i>
                             <span>Repository</span>
                         </a>
                     </div>
                 </div>
 
+                <!-- ==========================================
+                     APP CONTENT
+                     Main information sections
+                     ========================================== -->
                 <div class="app-content">
-                    <!-- Overview & Description -->
+                    
+                    <!-- ==========================================
+                         OVERVIEW & DESCRIPTION SECTION
+                         ========================================== -->
                     <div class="app-description-section">
                         <h2>About This App</h2>
-                        <p id="appOverview" class="app-overview">App overview...</p>
-                        <p id="appDescription" class="app-description">App description...</p>
+                        <p id="appOverview" class="app-overview">
+                            App overview will be loaded here...
+                        </p>
+                        <p id="appDescription" class="app-description">
+                            Detailed app description will be loaded here...
+                        </p>
                     </div>
 
-                    <!-- App Details Grid -->
+                    <!-- ==========================================
+                         APP DETAILS GRID
+                         Quick stats and information cards
+                         ========================================== -->
                     <div class="app-details-grid">
+                        <!-- Launch Date Card -->
                         <div class="detail-card">
-                            <div class="detail-icon">
+                            <div class="detail-icon" aria-hidden="true">
                                 <i class="fas fa-calendar"></i>
                             </div>
                             <div class="detail-content">
@@ -148,8 +303,10 @@
                                 <p id="launchDate">-</p>
                             </div>
                         </div>
+                        
+                        <!-- Development Time Card -->
                         <div class="detail-card">
-                            <div class="detail-icon">
+                            <div class="detail-icon" aria-hidden="true">
                                 <i class="fas fa-clock"></i>
                             </div>
                             <div class="detail-content">
@@ -157,8 +314,10 @@
                                 <p id="developmentTime">-</p>
                             </div>
                         </div>
+                        
+                        <!-- Downloads Card -->
                         <div class="detail-card">
-                            <div class="detail-icon">
+                            <div class="detail-icon" aria-hidden="true">
                                 <i class="fas fa-download"></i>
                             </div>
                             <div class="detail-content">
@@ -166,8 +325,10 @@
                                 <p id="downloadCount">-</p>
                             </div>
                         </div>
+                        
+                        <!-- Platform Card -->
                         <div class="detail-card">
-                            <div class="detail-icon">
+                            <div class="detail-icon" aria-hidden="true">
                                 <i class="fas fa-mobile-alt"></i>
                             </div>
                             <div class="detail-content">
@@ -177,28 +338,43 @@
                         </div>
                     </div>
 
-                    <!-- Features Section -->
+                    <!-- ==========================================
+                         KEY FEATURES SECTION
+                         Bulleted list of app features
+                         ========================================== -->
                     <div class="features-section">
                         <h2>Key Features</h2>
-                        <ul id="featuresList" class="features-list">
-                            <!-- Features will be populated dynamically -->
+                        <ul id="featuresList" 
+                            class="features-list" 
+                            role="list">
+                            <!-- Features will be dynamically populated by app-detail.js -->
                         </ul>
                     </div>
 
-                    <!-- Technologies Section -->
+                    <!-- ==========================================
+                         TECHNOLOGIES SECTION
+                         Tech stack tags display
+                         ========================================== -->
                     <div class="technologies-section">
                         <h2>Technologies Used</h2>
-                        <div id="techList" class="tech-tags">
-                            <!-- Technologies will be populated dynamically -->
+                        <div id="techList" 
+                             class="tech-tags" 
+                             role="list">
+                            <!-- Technology tags will be dynamically populated by app-detail.js -->
                         </div>
                     </div>
 
-                    <!-- App Stats -->
+                    <!-- ==========================================
+                         APP STATISTICS SECTION
+                         Visual stats display with circular progress
+                         ========================================== -->
                     <div class="app-stats-section">
                         <h2>App Statistics</h2>
                         <div class="stats-grid">
+                            
+                            <!-- Rating Stat -->
                             <div class="stat-item">
-                                <div class="stat-circle">
+                                <div class="stat-circle" role="img" aria-label="Rating score">
                                     <span id="ratingCircle" class="stat-value">0.0</span>
                                 </div>
                                 <div class="stat-info">
@@ -206,8 +382,10 @@
                                     <p>User Satisfaction Score</p>
                                 </div>
                             </div>
+                            
+                            <!-- Downloads Stat -->
                             <div class="stat-item">
-                                <div class="stat-circle">
+                                <div class="stat-circle" role="img" aria-label="Total downloads">
                                     <span id="downloadCountCircle" class="stat-value">0</span>
                                 </div>
                                 <div class="stat-info">
@@ -215,8 +393,10 @@
                                     <p>Total Downloads</p>
                                 </div>
                             </div>
+                            
+                            <!-- Retention Stat -->
                             <div class="stat-item">
-                                <div class="stat-circle">
+                                <div class="stat-circle" role="img" aria-label="User retention rate">
                                     <span id="retentionCircle" class="stat-value">85%</span>
                                 </div>
                                 <div class="stat-info">
@@ -231,13 +411,19 @@
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="footer">
+    <!-- ==========================================
+         FOOTER
+         Site-wide footer with navigation and branding
+         Developer: Arsh Verma
+         ========================================== -->
+    <footer class="footer" role="contentinfo">
         <div class="container">
             <div class="footer-content">
+                
+                <!-- Footer Brand Section -->
                 <div class="footer-brand">
-                    <a href="index.html" class="logo">
-                        <div class="logo-icon">
+                    <a href="index.html" class="logo" aria-label="ArshCreates - Go to homepage">
+                        <div class="logo-icon" aria-hidden="true">
                             <i class="fas fa-code"></i>
                         </div>
                         <span class="logo-text">ArshCreates</span>
@@ -247,7 +433,9 @@
                     </p>
                 </div>
 
+                <!-- Footer Navigation Links -->
                 <div class="footer-links">
+                    <!-- Navigation Group -->
                     <div class="link-group">
                         <h4>Navigation</h4>
                         <a href="index.html">Home</a>
@@ -257,6 +445,7 @@
                         <a href="apps.html">Apps</a>
                     </div>
 
+                    <!-- Connect Group -->
                     <div class="link-group">
                         <h4>Connect</h4>
                         <a href="index.html#contact">Contact</a>
@@ -266,6 +455,7 @@
                 </div>
             </div>
 
+            <!-- Footer Bottom - Copyright -->
             <div class="footer-bottom">
                 <div class="copyright">
                     &copy; 2024 Arsh Verma. All rights reserved.
@@ -274,9 +464,28 @@
         </div>
     </footer>
 
-    <!-- Notification Container -->
-    <div id="notificationContainer"></div>
+    <!-- ==========================================
+         NOTIFICATION CONTAINER
+         Dynamic notification messages display area
+         Populated by utils.js notification system
+         ========================================== -->
+    <div id="notificationContainer" 
+         role="region" 
+         aria-live="polite" 
+         aria-atomic="true"></div>
     
+    <!-- ==========================================
+         JAVASCRIPT FILES
+         Load order is important for dependencies
+         
+         1. utils.js - Utility functions and helpers
+         2. data.js - App data and configuration
+         3. script.js - Main site functionality
+         4. app-detail.js - App detail page specific logic
+         
+         Developer: Arsh Verma
+         Portfolio: ArshCreates
+         ========================================== -->
     <script src="js/utils.js"></script>
     <script src="js/data.js"></script>
     <script src="js/script.js"></script>
