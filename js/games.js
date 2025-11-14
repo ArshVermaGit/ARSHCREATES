@@ -6,7 +6,7 @@
 //              - Filters, sorting, card rendering, and navigation to details
 //              - Error handling, accessibility, and performance optimized
 //              - Fixed loading state bug: Now properly transitions from loading to content
-// Last Updated: November 10, 2025
+// Last Updated: November 10, 2024
 // ==========================================
 
 'use strict';
@@ -32,9 +32,10 @@ const GAMES_STATE = {
 // Entry point for games page functionality
 // ==========================================
 document.addEventListener('DOMContentLoaded', function() {
-    // Log initialization start (production: can be removed in minified build)
-    console.log('🎮 Games page initializing...');
     initializeGamesPage();
+    setupThemeToggle();
+    setupBackToTop();
+    setupMobileMenu();
 });
 
 /**
@@ -64,10 +65,8 @@ function initializeGamesPage() {
             displayGames(GAMES_STATE.filteredGames);
             hideLoadingScreen();
         }, 800);
-        
-        console.log('✅ Games page initialized successfully');
     } catch (error) {
-        console.error('❌ Error initializing games page:', error);
+        console.error('Error initializing games page:', error);
         showNotification('Failed to load games. Please refresh the page.', 'error');
         GAMES_STATE.isLoading = false;
         // Fallback display for error state
@@ -85,29 +84,14 @@ function loadGamesData() {
     try {
         let gamesData = [];
         
-        // Priority 1: Check for global getGames function (e.g., from data.js)
-        if (typeof window.getGames === 'function') {
-            gamesData = window.getGames();
-            console.log('📦 Games loaded from getGames() function');
-        } 
-        // Priority 2: Check for PORTFOLIO_DATA object
-        else if (typeof PORTFOLIO_DATA !== 'undefined' && Array.isArray(PORTFOLIO_DATA.games)) {
-            gamesData = PORTFOLIO_DATA.games;
-            console.log('📦 Games loaded from PORTFOLIO_DATA');
-        } 
         // Fallback: Use sample data for demo/preview
-        else {
-            console.warn('⚠️ No games data found, using sample data for preview');
-            gamesData = createSampleGames();
-        }
+        gamesData = createSampleGames();
         
         // Validate and assign data
         GAMES_STATE.allGames = validateGamesData(gamesData);
         GAMES_STATE.filteredGames = [...GAMES_STATE.allGames];
-        
-        console.log(`📦 Loaded ${GAMES_STATE.allGames.length} games`);
     } catch (error) {
-        console.error('❌ Error loading games:', error);
+        console.error('Error loading games:', error);
         GAMES_STATE.allGames = [];
         GAMES_STATE.filteredGames = [];
         showNotification('Error loading games data.', 'error');
@@ -131,6 +115,7 @@ function validateGamesData(games) {
         status: game.status || 'In Development',
         overview: game.overview || game.description || 'Preview coming soon.',
         releaseDate: game.releaseDate || null,
+        rating: game.rating || 0,
         playCount: Math.max(0, game.playCount || 0),
         image: game.image || generatePlaceholderImage(game.name),
         features: Array.isArray(game.features) ? game.features.slice(0, 5) : [],  // Limit to 5
@@ -158,7 +143,7 @@ function generatePlaceholderImage(name) {
 function displayGames(games) {
     const gamesGrid = document.getElementById('gamesGrid');
     if (!gamesGrid) {
-        console.error('❌ Games grid element not found');
+        console.error('Games grid element not found');
         return;
     }
     
@@ -320,7 +305,7 @@ function setupGameFilters() {
     const sortFilter = document.getElementById('sortFilter');
     
     if (!categoryFilter || !statusFilter || !sortFilter) {
-        console.warn('⚠️ Filter elements not found');
+        console.warn('Filter elements not found');
         return;
     }
     
@@ -500,7 +485,8 @@ function viewGameDetails(gameId) {
         showNotification('Invalid game ID', 'error');
         return;
     }
-    window.location.href = `game-detail.html?id=${encodeURIComponent(gameId)}`;
+    showNotification('Game details feature coming soon!', 'info');
+    // window.location.href = `game-detail.html?id=${encodeURIComponent(gameId)}`;
 }
 
 /**
@@ -513,7 +499,8 @@ function playGame(gameId) {
         showNotification('Invalid game ID', 'error');
         return;
     }
-    window.location.href = `game-detail.html?id=${encodeURIComponent(gameId)}&play=true`;
+    showNotification('Play feature coming soon!', 'info');
+    // window.location.href = `game-detail.html?id=${encodeURIComponent(gameId)}&play=true`;
 }
 
 /**
@@ -563,7 +550,7 @@ function animateGameCards() {
  * - Ensures smooth transition to content
  */
 function hideLoadingScreen() {
-    const loadingScreen = document.getElementById('loadingScreen');
+    const loadingScreen = document.querySelector('.loading-games');
     if (loadingScreen) {
         loadingScreen.style.opacity = '0';
         loadingScreen.style.transition = 'opacity 0.5s ease';
@@ -644,12 +631,133 @@ function formatDate(dateString) {
  * @param {string} type - Type: info, success, error
  */
 function showNotification(message, type = 'info') {
-    if (typeof window.showNotification === 'function') {
-        window.showNotification(message, type);
-        return;
+    const container = document.getElementById('notificationContainer');
+    if (!container) return;
+    
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    
+    let icon = 'info-circle';
+    let title = 'Information';
+    
+    if (type === 'success') {
+        icon = 'check-circle';
+        title = 'Success';
+    } else if (type === 'error') {
+        icon = 'exclamation-circle';
+        title = 'Error';
     }
-    // Fallback: Console log for development
-    console.log(`[${type.toUpperCase()}] ${message}`);
+    
+    notification.innerHTML = `
+        <div class="notification-icon">
+            <i class="fas fa-${icon}"></i>
+        </div>
+        <div class="notification-content">
+            <div class="notification-title">${title}</div>
+            <div class="notification-message">${message}</div>
+        </div>
+    `;
+    
+    container.appendChild(notification);
+    
+    // Show animation
+    setTimeout(() => notification.classList.add('show'), 10);
+    
+    // Auto remove after 5 seconds
+    setTimeout(() => {
+        notification.classList.remove('show');
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.parentNode.removeChild(notification);
+            }
+        }, 300);
+    }, 5000);
+}
+
+// ==========================================
+// THEME TOGGLE FUNCTIONALITY
+// ==========================================
+function setupThemeToggle() {
+    const themeToggle = document.getElementById('themeToggle');
+    const themeIcon = themeToggle?.querySelector('.theme-icon i');
+    
+    if (!themeToggle || !themeIcon) return;
+    
+    // Check for saved theme preference or default to 'dark'
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    
+    // Update icon based on current theme
+    updateThemeIcon(savedTheme, themeIcon);
+    
+    themeToggle.addEventListener('click', () => {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        
+        // Update theme
+        document.documentElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+        
+        // Update icon
+        updateThemeIcon(newTheme, themeIcon);
+        
+        showNotification(`Switched to ${newTheme} mode`, 'info');
+    });
+}
+
+function updateThemeIcon(theme, iconElement) {
+    if (theme === 'dark') {
+        iconElement.className = 'fas fa-sun';
+    } else {
+        iconElement.className = 'fas fa-moon';
+    }
+}
+
+// ==========================================
+// BACK TO TOP FUNCTIONALITY
+// ==========================================
+function setupBackToTop() {
+    const backToTop = document.getElementById('backToTop');
+    
+    if (!backToTop) return;
+    
+    window.addEventListener('scroll', () => {
+        if (window.pageYOffset > 300) {
+            backToTop.classList.add('visible');
+        } else {
+            backToTop.classList.remove('visible');
+        }
+    });
+    
+    backToTop.addEventListener('click', () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+}
+
+// ==========================================
+// MOBILE MENU FUNCTIONALITY
+// ==========================================
+function setupMobileMenu() {
+    const navToggle = document.getElementById('navToggle');
+    const navMenu = document.getElementById('navMenu');
+    
+    if (!navToggle || !navMenu) return;
+    
+    navToggle.addEventListener('click', () => {
+        navMenu.classList.toggle('active');
+        navToggle.classList.toggle('active');
+    });
+    
+    // Close menu when clicking on a link
+    document.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', () => {
+            navMenu.classList.remove('active');
+            navToggle.classList.remove('active');
+        });
+    });
 }
 
 // ==========================================
@@ -710,6 +818,32 @@ function createSampleGames() {
             image: "https://via.placeholder.com/400x250/2E2E2E/FFFFFF?text=Shadow+Realm",
             features: ["Branching Storylines", "Moral Choices", "Procedural Dungeons", "Voice Acting"],
             repositoryUrl: null
+        },
+        {
+            id: 5,
+            name: "Cosmic Colony",
+            category: "Strategy",
+            status: "Live",
+            rating: 4.8,
+            overview: "Build and manage interstellar colonies in this deep space strategy game. Explore alien worlds.",
+            releaseDate: "2023-11-10",
+            playCount: 18000,
+            image: "https://via.placeholder.com/400x250/8B5CF6/FFFFFF?text=Cosmic+Colony",
+            features: ["Base Building", "Resource Management", "Alien Diplomacy", "Research Trees"],
+            repositoryUrl: "https://github.com/ArshVermaGit/cosmic-colony"
+        },
+        {
+            id: 6,
+            name: "Cyber Heist",
+            category: "Action RPG",
+            status: "In Development",
+            rating: 4.2,
+            overview: "Futuristic heist game with hacking mechanics and team-based gameplay. Plan the perfect cyber crime.",
+            releaseDate: "2024-09-15",
+            playCount: 3000,
+            image: "https://via.placeholder.com/400x250/06B6D4/FFFFFF?text=Cyber+Heist",
+            features: ["Team Coordination", "Hacking Minigames", "Stealth Mechanics", "Multiple Endings"],
+            repositoryUrl: "https://github.com/ArshVermaGit/cyber-heist"
         }
     ];
 }
@@ -723,7 +857,3 @@ window.resetFilters = resetFilters;
 window.viewGameDetails = viewGameDetails;
 window.playGame = playGame;
 window.applyFilters = applyFilters;
-
-console.log('✅ Games.js loaded successfully');
-console.log('📝 Created by: Arsh Verma');
-console.log('🔧 Version: 2.2.0 - Loading Fix Applied');
