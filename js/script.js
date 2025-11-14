@@ -1,6 +1,6 @@
 // ==========================================
-// PORTFOLIO MASTER SCRIPT - COMPLETE & FUNCTIONAL
-// All features implemented with proper error handling
+// PORTFOLIO MASTER SCRIPT - OPTIMIZED & FAST
+// All features working perfectly - No admin, no loading screen
 // ==========================================
 
 // ==========================================
@@ -8,8 +8,6 @@
 // ==========================================
 const STATE = {
     currentTheme: 'dark',
-    isLoading: false,
-    currentPage: '',
     menuOpen: false,
     modalOpen: false
 };
@@ -36,47 +34,16 @@ function initializePage() {
     setTheme(savedTheme);
     updateThemeToggle(savedTheme);
     
-    // 2. Detect current page
-    STATE.currentPage = getCurrentPage();
-    console.log('📄 Current page:', STATE.currentPage);
-    
-    // 3. Setup all event listeners
+    // 2. Setup all event listeners
     setupEventListeners();
     
-    // 4. Start animations
+    // 3. Start animations
     startAnimations();
     
-    // 5. Initialize particles
+    // 4. Initialize particles
     initializeParticles();
     
-    // 6. Hide loading screen
-    setTimeout(hideLoadingScreen, 1000);
-    
     console.log('✅ Portfolio initialized successfully');
-}
-
-// ==========================================
-// PAGE DETECTION
-// ==========================================
-function getCurrentPage() {
-    const path = window.location.pathname;
-    const page = path.split('/').pop() || 'index.html';
-    
-    if (page === 'index.html' || page === '' || page === '/') return 'home';
-    if (page.includes('games.html')) return 'games';
-    if (page.includes('websites.html')) return 'websites';
-    if (page.includes('apps.html')) return 'apps';
-    if (page.includes('testimonials.html')) return 'testimonials';
-    if (page.includes('certificates.html')) return 'certificates';
-    if (page.includes('admin.html')) return 'admin';
-    if (page.includes('game-detail.html')) return 'game-detail';
-    if (page.includes('website-detail.html')) return 'website-detail';
-    if (page.includes('app-detail.html')) return 'app-detail';
-    if (page.includes('certificate-detail.html')) return 'certificate-detail';
-    if (page.includes('404.html')) return '404';
-    if (page.includes('500.html')) return '500';
-    
-    return 'home';
 }
 
 // ==========================================
@@ -160,6 +127,7 @@ function setupMobileMenu() {
             STATE.menuOpen = !STATE.menuOpen;
             navMenu.classList.toggle('active');
             navToggle.classList.toggle('active');
+            document.body.style.overflow = STATE.menuOpen ? 'hidden' : '';
         });
         
         // Close menu when clicking outside
@@ -167,47 +135,27 @@ function setupMobileMenu() {
             if (STATE.menuOpen && 
                 !navToggle.contains(e.target) && 
                 !navMenu.contains(e.target)) {
-                navMenu.classList.remove('active');
-                navToggle.classList.remove('active');
-                STATE.menuOpen = false;
+                closeMobileMenu();
             }
         });
         
         // Close menu when clicking a link
         navMenu.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                navMenu.classList.remove('active');
-                navToggle.classList.remove('active');
-                STATE.menuOpen = false;
-            });
+            link.addEventListener('click', closeMobileMenu);
         });
         
         console.log('✅ Mobile menu initialized');
     }
 }
 
-// ==========================================
-// LOADING SCREEN
-// ==========================================
-function hideLoadingScreen() {
-    const loadingScreen = document.getElementById('loadingScreen');
-    if (loadingScreen) {
-        loadingScreen.style.opacity = '0';
-        setTimeout(() => {
-            loadingScreen.style.display = 'none';
-        }, 500);
-    }
-}
-
-function showLoadingScreen(message = 'Loading...') {
-    const loadingScreen = document.getElementById('loadingScreen');
-    const loadingText = document.getElementById('loadingText');
+function closeMobileMenu() {
+    const navMenu = document.getElementById('navMenu');
+    const navToggle = document.getElementById('navToggle');
     
-    if (loadingScreen) {
-        if (loadingText) loadingText.textContent = message;
-        loadingScreen.style.display = 'flex';
-        setTimeout(() => loadingScreen.style.opacity = '1', 10);
-    }
+    navMenu?.classList.remove('active');
+    navToggle?.classList.remove('active');
+    document.body.style.overflow = '';
+    STATE.menuOpen = false;
 }
 
 // ==========================================
@@ -233,6 +181,11 @@ function setupSmoothScroll() {
                     top: offsetTop,
                     behavior: 'smooth'
                 });
+                
+                // Close mobile menu if open
+                if (STATE.menuOpen) {
+                    closeMobileMenu();
+                }
             }
         });
     });
@@ -795,8 +748,6 @@ function formatDate(dateString) {
 // Make functions available globally for other scripts
 // ==========================================
 window.showNotification = showNotification;
-window.hideLoadingScreen = hideLoadingScreen;
-window.showLoadingScreen = showLoadingScreen;
 window.debounce = debounce;
 window.throttle = throttle;
 window.escapeHtml = escapeHtml;
@@ -837,8 +788,6 @@ console.log('%c━━━━━━━━━━━━━━━━━━━━━�
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = {
         showNotification,
-        hideLoadingScreen,
-        showLoadingScreen,
         debounce,
         throttle,
         escapeHtml,
