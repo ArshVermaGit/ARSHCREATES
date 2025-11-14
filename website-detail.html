@@ -1,9 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
-    <!-- ========================================
-         META TAGS & CONFIGURATION
-         ======================================== -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Detailed view of web development projects by Arsh Verma - ArshCreates Portfolio">
@@ -16,24 +13,15 @@
     <!-- Favicon -->
     <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
     
-    <!-- ========================================
-         STYLESHEETS
-         ======================================== -->
-    <!-- Main Stylesheet -->
+    <!-- Stylesheets -->
     <link rel="stylesheet" href="css/style.css">
-    
-    <!-- Font Awesome Icons (v6.5.0) -->
+    <link rel="stylesheet" href="css/website-detail.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    
-    <!-- Google Fonts - Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <!-- ========================================
-         NAVIGATION BAR
-         Purpose: Main navigation and theme controls
-         ======================================== -->
+    <!-- Navigation Bar -->
     <nav class="navbar">
         <div class="container">
             <div class="nav-content">
@@ -45,6 +33,18 @@
                     <span class="logo-text">ArshCreates</span>
                 </a>
 
+                <!-- Navigation Menu -->
+                <ul class="nav-menu" id="navMenu">
+                    <li><a href="index.html" class="nav-link">Home</a></li>
+                    <li><a href="index.html#about" class="nav-link">About</a></li>
+                    <li><a href="games.html" class="nav-link">Games</a></li>
+                    <li><a href="websites.html" class="nav-link active">Websites</a></li>
+                    <li><a href="apps.html" class="nav-link">Apps</a></li>
+                    <li><a href="certificates.html" class="nav-link">Certificates</a></li>
+                    <li><a href="testimonials.html" class="nav-link">Testimonials</a></li>
+                    <li><a href="index.html#contact" class="nav-link">Contact</a></li>
+                </ul>
+
                 <!-- Navigation Actions -->
                 <div class="nav-actions">
                     <!-- Back to Websites Button -->
@@ -53,27 +53,28 @@
                         <span>Back to Websites</span>
                     </a>
                     
-                    <!-- Theme Toggle Button (Dark/Light Mode) -->
+                    <!-- Theme Toggle Button -->
                     <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
                         <div class="theme-icon">
                             <i class="fas fa-moon"></i>
                         </div>
+                    </button>
+                    
+                    <!-- Mobile Menu Toggle -->
+                    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+                        <span></span>
+                        <span></span>
+                        <span></span>
                     </button>
                 </div>
             </div>
         </div>
     </nav>
 
-    <!-- ========================================
-         MAIN CONTENT - WEBSITE DETAIL SECTION
-         Purpose: Display comprehensive website project details
-         ======================================== -->
+    <!-- Main Content - Website Detail Section -->
     <section class="website-detail-section">
         <div class="container">
-            <!-- ========================================
-                 WEBSITE PREVIEW CONTAINER
-                 Purpose: Interactive preview and navigation
-                 ======================================== -->
+            <!-- Website Preview Container -->
             <div class="website-preview-container">
                 <div class="website-preview">
                     <!-- Static Preview Image with Overlay -->
@@ -89,10 +90,7 @@
                         </div>
                     </div>
                     
-                    <!-- ========================================
-                         WEBSITE CONTROLS
-                         Purpose: Control iframe preview display
-                         ======================================== -->
+                    <!-- Website Controls -->
                     <div class="website-controls">
                         <!-- Control Buttons -->
                         <div class="control-group">
@@ -113,19 +111,13 @@
                         </div>
                     </div>
 
-                    <!-- ========================================
-                         IFRAME CONTAINER
-                         Purpose: Live website preview in iframe
-                         ======================================== -->
+                    <!-- Iframe Container -->
                     <div id="websiteContainer" class="website-container">
                         <iframe id="websiteFrame" allowfullscreen></iframe>
                     </div>
                 </div>
 
-                <!-- ========================================
-                     NAVIGATION ARROWS
-                     Purpose: Navigate between websites
-                     ======================================== -->
+                <!-- Navigation Arrows -->
                 <div class="detail-navigation">
                     <!-- Previous Website Button -->
                     <button id="prevWebsite" class="nav-arrow prev-arrow">
@@ -141,19 +133,13 @@
                 </div>
             </div>
 
-            <!-- ========================================
-                 WEBSITE INFORMATION CONTAINER
-                 Purpose: Display detailed project information
-                 ======================================== -->
+            <!-- Website Information Container -->
             <div class="website-info-container">
-                <!-- ========================================
-                     WEBSITE HEADER
-                     Purpose: Title, meta info, and action buttons
-                     ======================================== -->
+                <!-- Website Header -->
                 <div class="website-header">
                     <!-- Title and Meta Information -->
                     <div class="website-title-section">
-                        <!-- Website Title (Dynamic) -->
+                        <!-- Website Title -->
                         <h1 id="websiteTitle" class="website-title">Website Title</h1>
                         
                         <!-- Meta Information: Category, Rating, Status -->
@@ -167,15 +153,12 @@
                                 <span id="websiteRating">0.0</span>/5
                             </span>
                             
-                            <!-- Status Badge (Active/Development/Archived) -->
+                            <!-- Status Badge -->
                             <span id="websiteStatus" class="website-status">Status</span>
                         </div>
                     </div>
                     
-                    <!-- ========================================
-                         ACTION BUTTONS
-                         Purpose: Share, view repository, and visit site
-                         ======================================== -->
+                    <!-- Action Buttons -->
                     <div class="website-actions">
                         <!-- Share Button -->
                         <button id="shareBtn" class="btn btn-secondary">
@@ -197,28 +180,19 @@
                     </div>
                 </div>
 
-                <!-- ========================================
-                     WEBSITE CONTENT
-                     Purpose: All detailed information sections
-                     ======================================== -->
+                <!-- Website Content -->
                 <div class="website-content">
-                    <!-- ========================================
-                         OVERVIEW & DESCRIPTION SECTION
-                         Purpose: Project summary and description
-                         ======================================== -->
+                    <!-- Overview & Description Section -->
                     <div class="website-description-section">
                         <h2>About This Website</h2>
-                        <!-- Brief Overview (Dynamic) -->
+                        <!-- Brief Overview -->
                         <p id="websiteOverview" class="website-overview">Website overview...</p>
                         
-                        <!-- Detailed Description (Dynamic) -->
+                        <!-- Detailed Description -->
                         <p id="websiteDescription" class="website-description">Website description...</p>
                     </div>
 
-                    <!-- ========================================
-                         WEBSITE DETAILS GRID
-                         Purpose: Display key project metrics
-                         ======================================== -->
+                    <!-- Website Details Grid -->
                     <div class="website-details-grid">
                         <!-- Launch Date Card -->
                         <div class="detail-card">
@@ -265,34 +239,25 @@
                         </div>
                     </div>
 
-                    <!-- ========================================
-                         FEATURES SECTION
-                         Purpose: List key website features
-                         ======================================== -->
+                    <!-- Features Section -->
                     <div class="features-section">
                         <h2>Key Features</h2>
-                        <!-- Features List (Dynamically Populated) -->
+                        <!-- Features List -->
                         <ul id="featuresList" class="features-list">
                             <!-- Features will be populated by JavaScript -->
                         </ul>
                     </div>
 
-                    <!-- ========================================
-                         TECHNOLOGIES SECTION
-                         Purpose: Display tech stack used
-                         ======================================== -->
+                    <!-- Technologies Section -->
                     <div class="technologies-section">
                         <h2>Technologies Used</h2>
-                        <!-- Technology Tags (Dynamically Populated) -->
+                        <!-- Technology Tags -->
                         <div id="techList" class="tech-tags">
                             <!-- Technologies will be populated by JavaScript -->
                         </div>
                     </div>
 
-                    <!-- ========================================
-                         WEBSITE STATISTICS SECTION
-                         Purpose: Display performance metrics
-                         ======================================== -->
+                    <!-- Website Statistics Section -->
                     <div class="website-stats-section">
                         <h2>Website Statistics</h2>
                         <div class="stats-grid">
@@ -335,10 +300,21 @@
         </div>
     </section>
 
-    <!-- ========================================
-         FOOTER
-         Purpose: Site-wide footer with links and branding
-         ======================================== -->
+    <!-- CTA Section -->
+    <section class="section cta-section">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Ready to Collaborate on a Website?</h2>
+                <p>Let's create your next web masterpiece together</p>
+                <a href="index.html#contact" class="btn btn-primary btn-glow">
+                    <i class="fas fa-laptop-code"></i>
+                    <span>Start a Web Project</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
     <footer class="footer">
         <div class="container">
             <!-- Footer Content Grid -->
@@ -369,6 +345,7 @@
                         <a href="games.html">Games</a>
                         <a href="websites.html">Websites</a>
                         <a href="apps.html">Apps</a>
+                        <a href="certificates.html">Certificates</a>
                     </div>
 
                     <!-- Connect Links -->
@@ -376,7 +353,6 @@
                         <h4>Connect</h4>
                         <a href="index.html#contact">Contact</a>
                         <a href="testimonials.html">Testimonials</a>
-                        <a href="admin.html">Admin</a>
                     </div>
                 </div>
             </div>
@@ -390,43 +366,18 @@
         </div>
     </footer>
 
-    <!-- ========================================
-         NOTIFICATION CONTAINER
-         Purpose: Display toast notifications
-         ======================================== -->
+    <!-- Back to Top Button -->
+    <button class="back-to-top" id="backToTop" aria-label="Back to top">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+
+    <!-- Notification Container -->
     <div id="notificationContainer"></div>
     
-    <!-- ========================================
-         JAVASCRIPT FILES
-         Order matters: Load utilities first, then data, then functionality
-         ======================================== -->
-    <!-- Utility Functions -->
+    <!-- JavaScript Files -->
     <script src="js/utils.js"></script>
-    
-    <!-- Data Management -->
     <script src="js/data.js"></script>
-    
-    <!-- Main Script -->
     <script src="js/script.js"></script>
-    
-    <!-- Website Detail Page Logic -->
     <script src="js/website-detail.js"></script>
-
-    <!-- ========================================
-         CREDITS
-         
-         Developed by: Arsh Verma
-         Portfolio: ArshCreates
-         
-         This website detail page is part of a comprehensive
-         portfolio management system featuring:
-         - Dynamic content loading
-         - Interactive website previews
-         - Responsive design
-         - Theme switching
-         - Smooth animations
-         
-         All rights reserved © 2024
-         ======================================== -->
 </body>
 </html>
