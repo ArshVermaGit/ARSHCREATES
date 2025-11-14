@@ -1,13 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
-    <!-- 
-    ============================================
-    Game Detail Page - YouTube Style Layout
-    Created by: Arsh Verma
-    Description: Professional game showcase page with YouTube-inspired layout
-    ============================================
-    -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Game Details - Arsh Verma's Portfolio">
@@ -29,11 +22,7 @@
 </head>
 <body>
 
-    <!-- 
-    ============================================
-    NAVIGATION BAR
-    ============================================
-    -->
+    <!-- Navigation Bar -->
     <nav class="navbar">
         <div class="container">
             <div class="nav-content">
@@ -44,6 +33,18 @@
                     </div>
                     <span class="logo-text">ArshCreates</span>
                 </a>
+
+                <!-- Navigation Menu -->
+                <ul class="nav-menu" id="navMenu">
+                    <li><a href="index.html" class="nav-link">Home</a></li>
+                    <li><a href="index.html#about" class="nav-link">About</a></li>
+                    <li><a href="games.html" class="nav-link active">Games</a></li>
+                    <li><a href="websites.html" class="nav-link">Websites</a></li>
+                    <li><a href="apps.html" class="nav-link">Apps</a></li>
+                    <li><a href="certificates.html" class="nav-link">Certificates</a></li>
+                    <li><a href="testimonials.html" class="nav-link">Testimonials</a></li>
+                    <li><a href="index.html#contact" class="nav-link">Contact</a></li>
+                </ul>
 
                 <!-- Navigation Actions -->
                 <div class="nav-actions">
@@ -56,26 +57,23 @@
                             <i class="fas fa-moon"></i>
                         </div>
                     </button>
+                    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
                 </div>
             </div>
         </div>
     </nav>
 
-    <!-- 
-    ============================================
-    MAIN GAME DETAIL SECTION - YOUTUBE STYLE LAYOUT
-    ============================================
-    -->
+    <!-- Main Game Detail Section -->
     <section class="game-detail-section">
         <div class="container">
             <!-- YouTube-Style Two Column Layout -->
             <div class="youtube-layout">
                 
-                <!-- 
-                ============================================
-                LEFT COLUMN - PRIMARY CONTENT (Video/Game Player Area)
-                ============================================
-                -->
+                <!-- Left Column - Primary Content -->
                 <div class="primary-column">
                     
                     <!-- Game Preview/Player Container -->
@@ -96,7 +94,7 @@
                             </div>
                         </div>
                         
-                        <!-- Unity Game Container (Hidden by default) -->
+                        <!-- Unity Game Container -->
                         <div id="gameContainer" class="game-container" style="display: none;">
                             <div id="unityContainer" class="unity-container">
                                 <!-- Unity Loading Screen -->
@@ -115,7 +113,7 @@
                         </div>
                     </div>
 
-                    <!-- Game Control Buttons (Below Player) -->
+                    <!-- Game Control Buttons -->
                     <div class="game-controls">
                         <div class="control-buttons">
                             <button id="fullscreenBtn" class="btn-control" title="Fullscreen">
@@ -137,11 +135,7 @@
                         </div>
                     </div>
 
-                    <!-- 
-                    ============================================
-                    GAME HEADER INFO (Below Player - YouTube Style)
-                    ============================================
-                    -->
+                    <!-- Game Header Info -->
                     <div class="game-header">
                         <h1 id="gameTitle" class="game-title">Game Title</h1>
                         
@@ -178,11 +172,7 @@
                         </div>
                     </div>
 
-                    <!-- 
-                    ============================================
-                    GAME DESCRIPTION (Expandable Section)
-                    ============================================
-                    -->
+                    <!-- Game Description -->
                     <div class="game-description-section">
                         <div class="description-header">
                             <h2>About This Game</h2>
@@ -193,11 +183,7 @@
                         </div>
                     </div>
 
-                    <!-- 
-                    ============================================
-                    KEY FEATURES SECTION
-                    ============================================
-                    -->
+                    <!-- Key Features Section -->
                     <div class="features-section">
                         <h2>
                             <i class="fas fa-star"></i>
@@ -208,11 +194,7 @@
                         </ul>
                     </div>
 
-                    <!-- 
-                    ============================================
-                    TECHNOLOGIES USED SECTION
-                    ============================================
-                    -->
+                    <!-- Technologies Used Section -->
                     <div class="technologies-section">
                         <h2>
                             <i class="fas fa-code"></i>
@@ -223,11 +205,7 @@
                         </div>
                     </div>
 
-                    <!-- 
-                    ============================================
-                    GAME NAVIGATION (Previous/Next Game)
-                    ============================================
-                    -->
+                    <!-- Game Navigation -->
                     <div class="game-navigation">
                         <button id="prevGame" class="nav-button nav-prev">
                             <i class="fas fa-chevron-left"></i>
@@ -246,11 +224,7 @@
                     </div>
                 </div>
 
-                <!-- 
-                ============================================
-                RIGHT COLUMN - SIDEBAR (Game Details & Stats)
-                ============================================
-                -->
+                <!-- Right Column - Sidebar -->
                 <div class="sidebar-column">
                     
                     <!-- Game Details Cards -->
@@ -344,11 +318,21 @@
         </div>
     </section>
 
-    <!-- 
-    ============================================
-    FOOTER SECTION
-    ============================================
-    -->
+    <!-- CTA Section -->
+    <section class="section cta-section">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Ready to Collaborate on a Game?</h2>
+                <p>Let's create your next gaming masterpiece together</p>
+                <a href="index.html#contact" class="btn btn-primary btn-glow">
+                    <i class="fas fa-gamepad"></i>
+                    <span>Start a Game Project</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
@@ -372,6 +356,9 @@
                         <a href="index.html">Home</a>
                         <a href="index.html#about">About</a>
                         <a href="games.html">Games</a>
+                        <a href="websites.html">Websites</a>
+                        <a href="apps.html">Apps</a>
+                        <a href="certificates.html">Certificates</a>
                     </div>
 
                     <div class="link-group">
@@ -391,18 +378,15 @@
         </div>
     </footer>
 
-    <!-- 
-    ============================================
-    NOTIFICATION CONTAINER (For Toast Messages)
-    ============================================
-    -->
+    <!-- Back to Top Button -->
+    <button class="back-to-top" id="backToTop" aria-label="Back to top">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+
+    <!-- Notification Container -->
     <div id="notificationContainer" class="notification-container"></div>
     
-    <!-- 
-    ============================================
-    JAVASCRIPT FILES
-    ============================================
-    -->
+    <!-- JavaScript Files -->
     <script src="js/utils.js"></script>
     <script src="js/data.js"></script>
     <script src="js/script.js"></script>
