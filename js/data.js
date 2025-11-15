@@ -10,7 +10,7 @@ const PORTFOLIO_DATA = {
             name: "Sky Surfers",
             overview: "Fast-paced endless runner with stunning aerial gameplay",
             description: "Soar through the skies in this thrilling endless runner game. Navigate through clouds, avoid obstacles, collect power-ups, and compete for the highest score on global leaderboards.",
-            image: "static/images/games/Game1.jpg",
+            image: "static/images/games/sky_surfers/sky_surfers.jpg",
             category: "Endless Runner",
             rating: 4.6,
             status: "Live",
@@ -33,9 +33,10 @@ const PORTFOLIO_DATA = {
             playUrl: "games/sky-surfers/index.html",
             unityBuild: "static/games_files/sky_surfers/",
             screenshots: [
-                "static/images/games/Game1.jpg",
-                "static/images/games/Game1.jpg",
-                "static/images/games/Game1.jpg"
+                "static/images/games/sky_surfers/1.jpg",
+                "static/images/games/sky_surfers/2.jpg",
+                "static/images/games/sky_surfers/3.jpg",
+                "static/images/games/sky_surfers/4.jpg"
             ]
         }
     ],
@@ -53,9 +54,10 @@ const PORTFOLIO_DATA = {
             launchDate: "2023-10-25",
             developmentTime: "3 months",
             userBase: "50K+",
+            performance: "98",
             pageLoadTime: "1.2s",
             mobileResponsive: true,
-            technologies: ["HTML5", "CSS3", "JavaScript"],
+            technologies: ["HTML5", "CSS3", "JavaScript", "API Integration"],
             features: [
                 "Multi-platform support (Instagram, Facebook, Twitter)",
                 "High-quality video downloads",
@@ -65,7 +67,7 @@ const PORTFOLIO_DATA = {
                 "Privacy-focused design"
             ],
             repositoryUrl: "https://github.com/ArshVermaGit/REELSPOT",
-            liveUrl: "file:///Users/arshverma/GitHub/REELSPOT/index.html",
+            liveUrl: "https://arshvermagit.github.io/REELSPOT/",
             screenshots: [
                 "static/images/websites/ReelSpot/1.jpg",
                 "static/images/websites/ReelSpot/2.jpg",
@@ -80,7 +82,7 @@ const PORTFOLIO_DATA = {
             id: 1,
             name: "Productivity Pro",
             overview: "All-in-one productivity app for task management and time tracking",
-            description: "Productivity Pro is a comprehensive productivity application designed to help users organize their tasks, track time, set goals, and boost overall efficiency. With intuitive interfaces, powerful features, and seamless synchronization across devices, it's the perfect companion for professionals, students, and anyone looking to maximize their productivity. Features include task management with priorities, time tracking with detailed analytics, goal setting with progress monitoring, and customizable workflows.",
+            description: "Productivity Pro is a comprehensive productivity application designed to help users organize their tasks, track time, set goals, and boost overall efficiency. With intuitive interfaces, powerful features, and seamless synchronization across devices, it's the perfect companion for professionals, students, and anyone looking to maximize their productivity.",
             image: "static/apps/app1.jpg",
             category: "Productivity",
             rating: 4.8,
@@ -185,373 +187,87 @@ const PORTFOLIO_DATA = {
             date: "2023-12-20",
             avatar: "assets/testimonials/client3.jpg",
             approved: true
-        },
-        {
-            id: 4,
-            clientName: "David Thompson",
-            clientRole: "CTO, GameNest Studios",
-            projectType: "Game",
-            projectName: "Epic Adventure Quest",
-            rating: 5,
-            testimonialText: "Arsh's game development skills are top-notch. He created an engaging RPG with smooth gameplay and beautiful visuals. The project was delivered on time and exceeded our quality expectations.",
-            date: "2023-11-25",
-            avatar: "assets/testimonials/client4.jpg",
-            approved: true
-        },
-        {
-            id: 5,
-            clientName: "Jennifer Lee",
-            clientRole: "Marketing Director, BudgetWise",
-            projectType: "App",
-            projectName: "Budget Master",
-            rating: 5,
-            testimonialText: "Our finance app has received incredible feedback from users. Arsh's expertise in mobile development and UI/UX design resulted in an app that's both powerful and easy to use. We couldn't be happier!",
-            date: "2024-01-05",
-            avatar: "assets/testimonials/client5.jpg",
-            approved: true
-        },
-        {
-            id: 6,
-            clientName: "Robert Martinez",
-            clientRole: "Owner, FoodieDelight",
-            projectType: "Website",
-            projectName: "Food Delivery Platform",
-            rating: 4.5,
-            testimonialText: "The food delivery platform Arsh built for us is fantastic. Real-time tracking works flawlessly, and the restaurant dashboard is intuitive. Our delivery efficiency has improved significantly!",
-            date: "2023-10-15",
-            avatar: "assets/testimonials/client6.jpg",
-            approved: true
-        },
-        {
-            id: 7,
-            clientName: "Amanda Foster",
-            clientRole: "Director, LearnSmart Academy",
-            projectType: "Website",
-            projectName: "Learning Management System",
-            rating: 5,
-            testimonialText: "Arsh created an outstanding LMS for our academy. The platform handles video streaming, quizzes, and progress tracking perfectly. Our student engagement has doubled, and instructors love the easy-to-use interface.",
-            date: "2023-11-30",
-            avatar: "assets/testimonials/client7.jpg",
-            approved: true
-        },
-        {
-            id: 8,
-            clientName: "Chris Anderson",
-            clientRole: "Indie Game Developer",
-            projectType: "Game",
-            projectName: "Puzzle Master Pro",
-            rating: 5,
-            testimonialText: "Arsh helped bring my puzzle game vision to life. The mechanics are innovative, the design is beautiful, and players are loving it. His expertise in Unity and game design is exceptional.",
-            date: "2024-02-01",
-            avatar: "assets/testimonials/client8.jpg",
-            approved: true
-        },
-        {
-            id: 9,
-            clientName: "Lisa Wang",
-            clientRole: "Product Owner, LinguaLearn",
-            projectType: "App",
-            projectName: "Language Learner",
-            rating: 4.5,
-            testimonialText: "The language learning app exceeded our expectations. The AI-powered pronunciation feedback is a game-changer. Arsh's technical skills and creative problem-solving made this project a success.",
-            date: "2023-12-10",
-            avatar: "assets/testimonials/client9.jpg",
-            approved: true
-        },
-        {
-            id: 10,
-            clientName: "Michael Brown",
-            clientRole: "Entrepreneur",
-            projectType: "Website",
-            projectName: "Portfolio Showcase",
-            rating: 5,
-            testimonialText: "Arsh created a stunning portfolio website for me. The animations are smooth, the design is modern, and I've received so many compliments. It's helped me land several new clients!",
-            date: "2024-01-25",
-            avatar: "assets/testimonials/client10.jpg",
-            approved: true
-        },
-        {
-            id: 11,
-            clientName: "Rachel Green",
-            clientRole: "Wellness Coach",
-            projectType: "App",
-            projectName: "Meditation & Sleep",
-            rating: 5,
-            testimonialText: "The meditation app Arsh developed has been a hit with my clients. The guided sessions are professionally integrated, and the sleep sounds are incredibly relaxing. Highly professional work!",
-            date: "2023-10-05",
-            avatar: "assets/testimonials/client11.jpg",
-            approved: true
-        },
-        {
-            id: 12,
-            clientName: "Kevin Patel",
-            clientRole: "Food Blogger",
-            projectType: "App",
-            projectName: "Recipe Hub",
-            rating: 4.5,
-            testimonialText: "Recipe Hub has become my go-to app for meal planning. Arsh created a beautiful and functional app that makes cooking enjoyable. The recipe scaling feature is particularly clever!",
-            date: "2024-02-15",
-            avatar: "assets/testimonials/client12.jpg",
-            approved: true
         }
     ]
 };
 
 // ==========================================
-// CERTIFICATE-SPECIFIC UTILITY FUNCTIONS
+// IMMEDIATE GLOBAL ASSIGNMENTS (CRITICAL!)
+// Must be at the top before any functions
+// ==========================================
+window.PORTFOLIO_DATA = PORTFOLIO_DATA;
+
+// ==========================================
+// CORE DATA ACCESS FUNCTIONS
 // ==========================================
 
-/**
- * Get all certificates
- * @returns {Array} Array of certificate objects
- */
+function getGames() {
+    return PORTFOLIO_DATA.games || [];
+}
+
+function getApps() {
+    return PORTFOLIO_DATA.apps || [];
+}
+
+function getWebsites() {
+    return PORTFOLIO_DATA.websites || [];
+}
+
 function getCertificates() {
-    return PORTFOLIO_DATA.certificates;
+    return PORTFOLIO_DATA.certificates || [];
 }
 
-/**
- * Get certificate by ID
- * @param {number} id - Certificate ID
- * @returns {Object|null} Certificate object or null if not found
- */
-function getCertificateById(id) {
-    return PORTFOLIO_DATA.certificates.find(cert => cert.id === parseInt(id)) || null;
-}
-
-/**
- * Get certificates by category
- * @param {string} category - Category to filter by
- * @returns {Array} Filtered certificates array
- */
-function getCertificatesByCategory(category) {
-    if (category === 'all') return PORTFOLIO_DATA.certificates;
-    return PORTFOLIO_DATA.certificates.filter(cert => 
-        cert.category.toLowerCase() === category.toLowerCase()
-    );
-}
-
-/**
- * Get certificates by issuer
- * @param {string} issuer - Issuer to filter by
- * @returns {Array} Filtered certificates array
- */
-function getCertificatesByIssuer(issuer) {
-    if (issuer === 'all') return PORTFOLIO_DATA.certificates;
-    return PORTFOLIO_DATA.certificates.filter(cert => 
-        cert.issuer.toLowerCase().includes(issuer.toLowerCase())
-    );
-}
-
-/**
- * Get certificates by year
- * @param {string} year - Year to filter by
- * @returns {Array} Filtered certificates array
- */
-function getCertificatesByYear(year) {
-    if (year === 'all') return PORTFOLIO_DATA.certificates;
-    return PORTFOLIO_DATA.certificates.filter(cert => cert.year === year);
-}
-
-/**
- * Get featured certificates
- * @returns {Array} Array of featured certificates
- */
-function getFeaturedCertificates() {
-    return PORTFOLIO_DATA.certificates.filter(cert => cert.featured);
-}
-
-/**
- * Get certificate categories
- * @returns {Array} Array of unique certificate categories
- */
-function getCertificateCategories() {
-    const categories = [...new Set(PORTFOLIO_DATA.certificates.map(cert => cert.category))];
-    return categories.sort();
-}
-
-/**
- * Get certificate issuers
- * @returns {Array} Array of unique certificate issuers
- */
-function getCertificateIssuers() {
-    const issuers = [...new Set(PORTFOLIO_DATA.certificates.map(cert => cert.issuer))];
-    return issuers.sort();
-}
-
-/**
- * Get certificate years
- * @returns {Array} Array of unique certificate years
- */
-function getCertificateYears() {
-    const years = [...new Set(PORTFOLIO_DATA.certificates.map(cert => cert.year))];
-    return years.sort((a, b) => b - a); // Descending order
-}
-
-/**
- * Filter certificates based on multiple criteria
- * @param {Object} filters - Filter criteria
- * @returns {Array} Filtered certificates array
- */
-function filterCertificates(filters = {}) {
-    let certificates = [...PORTFOLIO_DATA.certificates];
-    
-    // Filter by category
-    if (filters.category && filters.category !== 'all') {
-        certificates = certificates.filter(cert => 
-            cert.category.toLowerCase() === filters.category.toLowerCase()
-        );
-    }
-    
-    // Filter by issuer
-    if (filters.issuer && filters.issuer !== 'all') {
-        certificates = certificates.filter(cert => 
-            cert.issuer.toLowerCase().includes(filters.issuer.toLowerCase())
-        );
-    }
-    
-    // Filter by year
-    if (filters.year && filters.year !== 'all') {
-        certificates = certificates.filter(cert => cert.year === filters.year);
-    }
-    
-    // Filter by difficulty
-    if (filters.difficulty && filters.difficulty !== 'all') {
-        certificates = certificates.filter(cert => 
-            cert.difficulty.toLowerCase() === filters.difficulty.toLowerCase()
-        );
-    }
-    
-    // Filter by featured
-    if (filters.featured) {
-        certificates = certificates.filter(cert => cert.featured);
-    }
-    
-    // Filter by verified
-    if (filters.verified) {
-        certificates = certificates.filter(cert => cert.verified);
-    }
-    
-    // Sort certificates
-    if (filters.sortBy) {
-        switch(filters.sortBy) {
-            case 'newest':
-                certificates.sort((a, b) => new Date(b.date) - new Date(a.date));
-                break;
-            case 'oldest':
-                certificates.sort((a, b) => new Date(a.date) - new Date(b.date));
-                break;
-            case 'difficulty':
-                const difficultyOrder = { 'Beginner': 1, 'Intermediate': 2, 'Advanced': 3 };
-                certificates.sort((a, b) => difficultyOrder[b.difficulty] - difficultyOrder[a.difficulty]);
-                break;
-            case 'issuer':
-                certificates.sort((a, b) => a.issuer.localeCompare(b.issuer));
-                break;
-            default:
-                // Default sort by ID
-                certificates.sort((a, b) => a.id - b.id);
-        }
-    }
-    
-    return certificates;
-}
-
-/**
- * Search certificates by keyword
- * @param {string} searchTerm - Search term
- * @returns {Array} Filtered certificates array
- */
-function searchCertificates(searchTerm) {
-    if (!searchTerm || searchTerm.trim() === '') {
-        return PORTFOLIO_DATA.certificates;
-    }
-    
-    const term = searchTerm.toLowerCase();
-    return PORTFOLIO_DATA.certificates.filter(cert => {
-        return (
-            cert.title.toLowerCase().includes(term) ||
-            cert.issuer.toLowerCase().includes(term) ||
-            cert.description.toLowerCase().includes(term) ||
-            cert.category.toLowerCase().includes(term) ||
-            cert.skills.some(skill => skill.toLowerCase().includes(term)) ||
-            cert.technologies.some(tech => tech.toLowerCase().includes(term))
-        );
-    });
-}
-
-/**
- * Get certificate statistics
- * @returns {Object} Certificate statistics
- */
-function getCertificateStats() {
-    const certificates = PORTFOLIO_DATA.certificates;
-    const total = certificates.length;
-    const categories = getCertificateCategories();
-    const issuers = getCertificateIssuers();
-    
-    // Count by category
-    const categoryCount = {};
-    categories.forEach(category => {
-        categoryCount[category] = certificates.filter(cert => cert.category === category).length;
-    });
-    
-    // Count by year
-    const yearCount = {};
-    const years = getCertificateYears();
-    years.forEach(year => {
-        yearCount[year] = certificates.filter(cert => cert.year === year).length;
-    });
-    
-    // Count by difficulty
-    const difficultyCount = {
-        'Beginner': certificates.filter(cert => cert.difficulty === 'Beginner').length,
-        'Intermediate': certificates.filter(cert => cert.difficulty === 'Intermediate').length,
-        'Advanced': certificates.filter(cert => cert.difficulty === 'Advanced').length
-    };
-    
-    return {
-        totalCertificates: total,
-        totalCategories: categories.length,
-        totalIssuers: issuers.length,
-        featuredCount: certificates.filter(cert => cert.featured).length,
-        verifiedCount: certificates.filter(cert => cert.verified).length,
-        categoryCount: categoryCount,
-        yearCount: yearCount,
-        difficultyCount: difficultyCount
-    };
-}
+// Make functions immediately available
+window.getGames = getGames;
+window.getApps = getApps;
+window.getWebsites = getWebsites;
+window.getCertificates = getCertificates;
 
 // ==========================================
-// EXISTING UTILITY FUNCTIONS (Updated)
+// UTILITY FUNCTIONS
 // ==========================================
 
 function formatDate(dateString) {
-    const options = { year: 'numeric', month: 'long', day: 'numeric' };
-    return new Date(dateString).toLocaleDateString('en-US', options);
+    if (!dateString) return 'Date not available';
+    try {
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        return new Date(dateString).toLocaleDateString('en-US', options);
+    } catch (error) {
+        return 'Invalid date';
+    }
 }
 
 function formatDateShort(dateString) {
-    const options = { year: 'numeric', month: 'short', day: 'numeric' };
-    return new Date(dateString).toLocaleDateString('en-US', options);
+    if (!dateString) return 'N/A';
+    try {
+        const options = { year: 'numeric', month: 'short', day: 'numeric' };
+        return new Date(dateString).toLocaleDateString('en-US', options);
+    } catch (error) {
+        return 'Invalid date';
+    }
 }
 
 function formatRelativeTime(dateString) {
-    const date = new Date(dateString);
-    const now = new Date();
-    const diff = now - date;
-    const seconds = Math.floor(diff / 1000);
-    const minutes = Math.floor(seconds / 60);
-    const hours = Math.floor(minutes / 60);
-    const days = Math.floor(hours / 24);
-    const months = Math.floor(days / 30);
-    const years = Math.floor(days / 365);
-    
-    if (years > 0) return `${years} year${years > 1 ? 's' : ''} ago`;
-    if (months > 0) return `${months} month${months > 1 ? 's' : ''} ago`;
-    if (days > 0) return `${days} day${days > 1 ? 's' : ''} ago`;
-    if (hours > 0) return `${hours} hour${hours > 1 ? 's' : ''} ago`;
-    if (minutes > 0) return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
-    return 'Just now';
+    try {
+        const date = new Date(dateString);
+        const now = new Date();
+        const diff = now - date;
+        const seconds = Math.floor(diff / 1000);
+        const minutes = Math.floor(seconds / 60);
+        const hours = Math.floor(minutes / 60);
+        const days = Math.floor(hours / 24);
+        const months = Math.floor(days / 30);
+        const years = Math.floor(days / 365);
+        
+        if (years > 0) return `${years} year${years > 1 ? 's' : ''} ago`;
+        if (months > 0) return `${months} month${months > 1 ? 's' : ''} ago`;
+        if (days > 0) return `${days} day${days > 1 ? 's' : ''} ago`;
+        if (hours > 0) return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+        if (minutes > 0) return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
+        return 'Just now';
+    } catch (error) {
+        return 'Recently';
+    }
 }
 
 function generateStars(rating) {
@@ -575,19 +291,158 @@ function generateStars(rating) {
 function getProjectById(type, id) {
     const data = PORTFOLIO_DATA[type];
     if (!data) return null;
-    return data.find(item => item.id === parseInt(id));
+    return data.find(item => item.id === parseInt(id)) || null;
 }
 
-function getGames() {
-    return PORTFOLIO_DATA.games;
+function getCertificateById(id) {
+    return PORTFOLIO_DATA.certificates.find(cert => cert.id === parseInt(id)) || null;
 }
 
-function getApps() {
-    return PORTFOLIO_DATA.apps;
+function getCertificatesByCategory(category) {
+    if (category === 'all') return PORTFOLIO_DATA.certificates;
+    return PORTFOLIO_DATA.certificates.filter(cert => 
+        cert.category.toLowerCase() === category.toLowerCase()
+    );
 }
 
-function getWebsites() {
-    return PORTFOLIO_DATA.websites;
+function getCertificatesByIssuer(issuer) {
+    if (issuer === 'all') return PORTFOLIO_DATA.certificates;
+    return PORTFOLIO_DATA.certificates.filter(cert => 
+        cert.issuer.toLowerCase().includes(issuer.toLowerCase())
+    );
+}
+
+function getCertificatesByYear(year) {
+    if (year === 'all') return PORTFOLIO_DATA.certificates;
+    return PORTFOLIO_DATA.certificates.filter(cert => cert.year === year);
+}
+
+function getFeaturedCertificates() {
+    return PORTFOLIO_DATA.certificates.filter(cert => cert.featured);
+}
+
+function getCertificateCategories() {
+    const categories = [...new Set(PORTFOLIO_DATA.certificates.map(cert => cert.category))];
+    return categories.sort();
+}
+
+function getCertificateIssuers() {
+    const issuers = [...new Set(PORTFOLIO_DATA.certificates.map(cert => cert.issuer))];
+    return issuers.sort();
+}
+
+function getCertificateYears() {
+    const years = [...new Set(PORTFOLIO_DATA.certificates.map(cert => cert.year))];
+    return years.sort((a, b) => b - a);
+}
+
+function filterCertificates(filters = {}) {
+    let certificates = [...PORTFOLIO_DATA.certificates];
+    
+    if (filters.category && filters.category !== 'all') {
+        certificates = certificates.filter(cert => 
+            cert.category.toLowerCase() === filters.category.toLowerCase()
+        );
+    }
+    
+    if (filters.issuer && filters.issuer !== 'all') {
+        certificates = certificates.filter(cert => 
+            cert.issuer.toLowerCase().includes(filters.issuer.toLowerCase())
+        );
+    }
+    
+    if (filters.year && filters.year !== 'all') {
+        certificates = certificates.filter(cert => cert.year === filters.year);
+    }
+    
+    if (filters.difficulty && filters.difficulty !== 'all') {
+        certificates = certificates.filter(cert => 
+            cert.difficulty.toLowerCase() === filters.difficulty.toLowerCase()
+        );
+    }
+    
+    if (filters.featured) {
+        certificates = certificates.filter(cert => cert.featured);
+    }
+    
+    if (filters.verified) {
+        certificates = certificates.filter(cert => cert.verified);
+    }
+    
+    if (filters.sortBy) {
+        switch(filters.sortBy) {
+            case 'newest':
+                certificates.sort((a, b) => new Date(b.date) - new Date(a.date));
+                break;
+            case 'oldest':
+                certificates.sort((a, b) => new Date(a.date) - new Date(b.date));
+                break;
+            case 'difficulty':
+                const difficultyOrder = { 'Beginner': 1, 'Intermediate': 2, 'Advanced': 3 };
+                certificates.sort((a, b) => difficultyOrder[b.difficulty] - difficultyOrder[a.difficulty]);
+                break;
+            case 'issuer':
+                certificates.sort((a, b) => a.issuer.localeCompare(b.issuer));
+                break;
+            default:
+                certificates.sort((a, b) => a.id - b.id);
+        }
+    }
+    
+    return certificates;
+}
+
+function searchCertificates(searchTerm) {
+    if (!searchTerm || searchTerm.trim() === '') {
+        return PORTFOLIO_DATA.certificates;
+    }
+    
+    const term = searchTerm.toLowerCase();
+    return PORTFOLIO_DATA.certificates.filter(cert => {
+        return (
+            cert.title.toLowerCase().includes(term) ||
+            cert.issuer.toLowerCase().includes(term) ||
+            cert.description.toLowerCase().includes(term) ||
+            cert.category.toLowerCase().includes(term) ||
+            cert.skills.some(skill => skill.toLowerCase().includes(term)) ||
+            cert.technologies.some(tech => tech.toLowerCase().includes(term))
+        );
+    });
+}
+
+function getCertificateStats() {
+    const certificates = PORTFOLIO_DATA.certificates;
+    const total = certificates.length;
+    const categories = getCertificateCategories();
+    const issuers = getCertificateIssuers();
+    
+    const categoryCount = {};
+    categories.forEach(category => {
+        categoryCount[category] = certificates.filter(cert => cert.category === category).length;
+    });
+    
+    const yearCount = {};
+    const years = getCertificateYears();
+    years.forEach(year => {
+        yearCount[year] = certificates.filter(cert => cert.year === year).length;
+    });
+    
+    const difficultyCount = {
+        'Beginner': certificates.filter(cert => cert.difficulty === 'Beginner').length,
+        'Intermediate': certificates.filter(cert => cert.difficulty === 'Intermediate').length,
+        'Advanced': certificates.filter(cert => cert.difficulty === 'Advanced').length
+    };
+    
+    return {
+        totalCertificates: total,
+        totalCategories: categories.length,
+        totalIssuers: issuers.length,
+        featuredCount: certificates.filter(cert => cert.featured).length,
+        verifiedCount: certificates.filter(cert => cert.verified).length,
+        categoryCount: categoryCount,
+        yearCount: yearCount,
+        difficultyCount: difficultyCount
+    };
 }
 
 function getTestimonialsByType(type) {
@@ -602,26 +457,22 @@ function getTestimonialsByRating(minRating) {
 function filterProjects(type, filters = {}) {
     let items = [...PORTFOLIO_DATA[type]];
     
-    // Filter by category
     if (filters.category && filters.category !== 'all') {
         items = items.filter(item => 
             item.category.toLowerCase() === filters.category.toLowerCase()
         );
     }
     
-    // Filter by rating
     if (filters.minRating) {
         items = items.filter(item => item.rating >= parseFloat(filters.minRating));
     }
     
-    // Filter by status
     if (filters.status && filters.status !== 'all') {
         items = items.filter(item => 
             item.status.toLowerCase() === filters.status.toLowerCase()
         );
     }
     
-    // Filter by platform (for games and apps)
     if (filters.platform && filters.platform !== 'all') {
         items = items.filter(item => {
             if (item.platforms) {
@@ -636,7 +487,6 @@ function filterProjects(type, filters = {}) {
         });
     }
     
-    // Sort
     if (filters.sortBy) {
         switch(filters.sortBy) {
             case 'newest':
@@ -662,7 +512,6 @@ function filterProjects(type, filters = {}) {
                 });
                 break;
             default:
-                // Default sort by ID
                 items.sort((a, b) => a.id - b.id);
         }
     }
@@ -778,7 +627,6 @@ function getRecentProjects(limit = 6) {
         ...PORTFOLIO_DATA.apps.map(a => ({...a, type: 'app'}))
     ];
     
-    // Sort by date (newest first)
     allProjects.sort((a, b) => {
         const dateA = new Date(a.releaseDate || a.launchDate);
         const dateB = new Date(b.releaseDate || b.launchDate);
@@ -789,7 +637,6 @@ function getRecentProjects(limit = 6) {
 }
 
 function getFeaturedProjects() {
-    // Get highest rated projects from each category
     const topGame = PORTFOLIO_DATA.games.reduce((prev, current) => 
         (prev.rating > current.rating) ? prev : current
     );
@@ -827,19 +674,14 @@ function validateProjectData(type, data) {
 }
 
 // ==========================================
-// MAKE FUNCTIONS GLOBALLY AVAILABLE
+// EXPORT ALL FUNCTIONS TO WINDOW OBJECT
 // ==========================================
 
-window.PORTFOLIO_DATA = PORTFOLIO_DATA;
 window.formatDate = formatDate;
 window.formatDateShort = formatDateShort;
 window.formatRelativeTime = formatRelativeTime;
 window.generateStars = generateStars;
 window.getProjectById = getProjectById;
-window.getGames = getGames;
-window.getApps = getApps;
-window.getWebsites = getWebsites;
-window.getCertificates = getCertificates;
 window.getCertificateById = getCertificateById;
 window.getCertificatesByCategory = getCertificatesByCategory;
 window.getCertificatesByIssuer = getCertificatesByIssuer;
@@ -861,6 +703,16 @@ window.getStats = getStats;
 window.getRecentProjects = getRecentProjects;
 window.getFeaturedProjects = getFeaturedProjects;
 window.validateProjectData = validateProjectData;
+
+// Log successful data load
+console.log('✅ Portfolio data loaded successfully');
+console.log('📊 Stats:', {
+    games: PORTFOLIO_DATA.games.length,
+    websites: PORTFOLIO_DATA.websites.length,
+    apps: PORTFOLIO_DATA.apps.length,
+    certificates: PORTFOLIO_DATA.certificates.length,
+    testimonials: PORTFOLIO_DATA.testimonials.length
+});
 
 // Export for module usage if needed
 if (typeof module !== 'undefined' && module.exports) {
