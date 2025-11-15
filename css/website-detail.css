@@ -848,6 +848,32 @@
   opacity: 0.5;
 }
 
+/* Ensure screenshots section is always visible */
+.screenshots-section {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+.screenshots-grid {
+  display: grid !important;
+  visibility: visible !important;
+}
+
+.screenshot-item {
+  position: relative;
+  display: block;
+  visibility: visible;
+  opacity: 1;
+}
+
+.no-screenshots {
+  display: flex !important;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
 /* ==========================================
    FEATURES LIST
    ========================================== */
@@ -1485,9 +1511,15 @@
     gap: 1rem;
   }
   
+  /* Fix sidebar minimum width to prevent empty spaces */
   .sidebar-column {
-    grid-template-columns: 1fr;
-    gap: 1.375rem;
+    min-width: 360px;
+  }
+
+  @media (min-width: 1200px) {
+    .youtube-layout {
+      grid-template-columns: minmax(0, 1fr) minmax(360px, 402px);
+    }
   }
   
   .screenshots-grid {
