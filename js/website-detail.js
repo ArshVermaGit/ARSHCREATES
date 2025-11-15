@@ -1,9 +1,7 @@
 // ==========================================
-// WEBSITE DETAIL PAGE - COMPLETE JAVASCRIPT
+// WEBSITE DETAIL PAGE - FIXED VERSION
 // Author: Arsh Verma
-// Version: 8.0.0 - Yellow Theme Edition - FULLY FIXED
-// Description: Complete working version with all fixes
-// Last Updated: November 2024
+// Version: 8.1.0 - Bug Fixed
 // ==========================================
 
 'use strict';
@@ -38,23 +36,20 @@ function initializeWebsiteDetailPage() {
         
         console.log(`🔌 Loading website ID: ${currentWebsiteId}`);
         
-        loadWebsitesData().then(() => {
-            loadWebsiteDetails(currentWebsiteId);
-            setupWebsiteDetailEventListeners();
-            
-            if (autoPreview) {
-                setTimeout(() => {
-                    if (currentWebsite && currentWebsite.status === 'Live' && currentWebsite.liveUrl) {
-                        showWebsitePreview(currentWebsite);
-                    }
-                }, 1500);
-            }
-            
-            console.log('✅ Website detail initialized');
-        }).catch(error => {
-            console.error('❌ Failed to load websites data:', error);
-            showNotification('Error loading website data', 'error');
-        });
+        // Load data and display
+        loadWebsitesData();
+        loadWebsiteDetails(currentWebsiteId);
+        setupWebsiteDetailEventListeners();
+        
+        if (autoPreview) {
+            setTimeout(() => {
+                if (currentWebsite && currentWebsite.status === 'Live' && currentWebsite.liveUrl) {
+                    showWebsitePreview(currentWebsite);
+                }
+            }, 1500);
+        }
+        
+        console.log('✅ Website detail initialized');
         
     } catch (error) {
         console.error('❌ Initialization error:', error);
@@ -111,37 +106,33 @@ function toggleTheme() {
 }
 
 // ==========================================
-// WEBSITE DATA LOADING
+// WEBSITE DATA LOADING - FIXED
 // ==========================================
-async function loadWebsitesData() {
+function loadWebsitesData() {
     try {
-        if (typeof getWebsites === 'function') {
-            websitesData = getWebsites();
-            console.log('📥 Loaded from getWebsites():', websitesData.length);
-            return websitesData;
+        // Try to get data from global functions
+        if (typeof window.getWebsites === 'function') {
+            websitesData = window.getWebsites();
+            console.log('📥 Loaded from window.getWebsites():', websitesData.length);
         } else if (window.PORTFOLIO_DATA && Array.isArray(window.PORTFOLIO_DATA.websites)) {
             websitesData = window.PORTFOLIO_DATA.websites;
             console.log('📥 Loaded from PORTFOLIO_DATA:', websitesData.length);
-            return websitesData;
         } else {
-            websitesData = createSampleWebsites();
-            console.log('📥 Using sample data:', websitesData.length);
-            return websitesData;
+            console.warn('⚠️ No data source found, using sample data');
+            websitesData = [];
         }
+        
+        return websitesData;
     } catch (error) {
         console.error('❌ Error loading websites data:', error);
-        websitesData = createSampleWebsites();
+        websitesData = [];
         return websitesData;
     }
 }
 
-function getWebsites() {
-    return websitesData;
-}
-
 function loadWebsiteDetails(websiteId) {
     try {
-        const websites = getWebsites();
+        const websites = websitesData;
         
         if (!websites || websites.length === 0) {
             throw new Error('No websites data available');
@@ -245,53 +236,8 @@ function displayWebsiteDetails(website) {
             }
         }
         
-        // Screenshots - FIXED VERSION
-        const screenshotsGrid = document.getElementById('screenshotsGrid');
-        if (screenshotsGrid) {
-            console.log('📸 Processing screenshots:', website.screenshots);
-            
-            if (website.screenshots && Array.isArray(website.screenshots) && website.screenshots.length > 0) {
-                const validScreenshots = website.screenshots.filter(screenshot => 
-                    screenshot && typeof screenshot === 'string' && screenshot.trim() !== ''
-                );
-                
-                console.log('✅ Valid screenshots:', validScreenshots.length);
-                
-                if (validScreenshots.length > 0) {
-                    screenshotsGrid.innerHTML = validScreenshots.map((screenshot, index) => {
-                        const screenshotPath = screenshot.trim();
-                        const fallbackUrl = `https://via.placeholder.com/800x450/1A1A2E/FFB800?text=Screenshot+${index+1}`;
-                        
-                        return `<div class="screenshot-item" onclick="viewScreenshot('${escapeHtml(screenshotPath)}')">
-                            <img src="${escapeHtml(screenshotPath)}" 
-                                 alt="${escapeHtml(website.name)} Screenshot ${index + 1}" 
-                                 loading="lazy" 
-                                 onerror="this.onerror=null; this.src='${fallbackUrl}'; console.error('Failed to load screenshot: ${escapeHtml(screenshotPath)}');">
-                            <div class="screenshot-overlay">
-                                <button class="btn-screenshot-view" aria-label="View screenshot" onclick="event.stopPropagation(); viewScreenshot('${escapeHtml(screenshotPath)}');">
-                                    <i class="fas fa-expand"></i>
-                                </button>
-                            </div>
-                        </div>`;
-                    }).join('');
-                    
-                    console.log('✅ Screenshots rendered successfully');
-                } else {
-                    screenshotsGrid.innerHTML = `
-                        <div class="no-screenshots">
-                            <i class="fas fa-images"></i>
-                            <p>No screenshots available</p>
-                        </div>`;
-                }
-            } else {
-                console.log('⚠️ No screenshots data available');
-                screenshotsGrid.innerHTML = `
-                    <div class="no-screenshots">
-                        <i class="fas fa-images"></i>
-                        <p>No screenshots available</p>
-                    </div>`;
-            }
-        }
+        // Screenshots
+        displayScreenshots(website);
         
         // Statistics
         updateElement('ratingCircle', website.rating ? website.rating.toFixed(1) : '0.0');
@@ -334,6 +280,55 @@ function displayWebsiteDetails(website) {
     }
 }
 
+function displayScreenshots(website) {
+    const screenshotsGrid = document.getElementById('screenshotsGrid');
+    if (!screenshotsGrid) return;
+    
+    console.log('📸 Processing screenshots:', website.screenshots);
+    
+    if (website.screenshots && Array.isArray(website.screenshots) && website.screenshots.length > 0) {
+        const validScreenshots = website.screenshots.filter(screenshot => 
+            screenshot && typeof screenshot === 'string' && screenshot.trim() !== ''
+        );
+        
+        console.log('✅ Valid screenshots:', validScreenshots.length);
+        
+        if (validScreenshots.length > 0) {
+            screenshotsGrid.innerHTML = validScreenshots.map((screenshot, index) => {
+                const screenshotPath = screenshot.trim();
+                const fallbackUrl = `https://via.placeholder.com/800x450/1A1A2E/FFB800?text=Screenshot+${index+1}`;
+                
+                return `<div class="screenshot-item" onclick="viewScreenshot('${escapeHtml(screenshotPath)}')">
+                    <img src="${escapeHtml(screenshotPath)}" 
+                         alt="${escapeHtml(website.name)} Screenshot ${index + 1}" 
+                         loading="lazy" 
+                         onerror="this.onerror=null; this.src='${fallbackUrl}';">
+                    <div class="screenshot-overlay">
+                        <button class="btn-screenshot-view" aria-label="View screenshot">
+                            <i class="fas fa-expand"></i>
+                        </button>
+                    </div>
+                </div>`;
+            }).join('');
+            
+            console.log('✅ Screenshots rendered successfully');
+        } else {
+            screenshotsGrid.innerHTML = `
+                <div class="no-screenshots">
+                    <i class="fas fa-images"></i>
+                    <p>No screenshots available</p>
+                </div>`;
+        }
+    } else {
+        console.log('⚠️ No screenshots data available');
+        screenshotsGrid.innerHTML = `
+            <div class="no-screenshots">
+                <i class="fas fa-images"></i>
+                <p>No screenshots available</p>
+            </div>`;
+    }
+}
+
 function updateElement(elementId, value) {
     const element = document.getElementById(elementId);
     if (element) {
@@ -349,6 +344,7 @@ function updateVisitButton(website) {
         const visitIcon = visitBtn.querySelector('.visit-icon-circle i');
         const visitText = visitBtn.querySelector('.visit-text');
         
+        // Remove old event listeners by cloning
         const newVisitBtn = visitBtn.cloneNode(true);
         visitBtn.parentNode.replaceChild(newVisitBtn, visitBtn);
         
@@ -388,13 +384,12 @@ function updateVisitButton(website) {
 }
 
 // ==========================================
-// SCREENSHOTS FUNCTIONALITY - FIXED
+// SCREENSHOTS FUNCTIONALITY
 // ==========================================
 function viewScreenshot(screenshotUrl) {
     console.log('🖼️ Opening screenshot:', screenshotUrl);
     
     try {
-        // Remove any existing modal
         const existingModal = document.querySelector('.screenshot-modal');
         if (existingModal) {
             existingModal.remove();
@@ -417,7 +412,6 @@ function viewScreenshot(screenshotUrl) {
         document.body.appendChild(modal);
         document.body.style.overflow = 'hidden';
         
-        // Add styles if not already present
         if (!document.querySelector('#screenshot-modal-styles')) {
             const styles = document.createElement('style');
             styles.id = 'screenshot-modal-styles';
@@ -482,17 +476,10 @@ function viewScreenshot(screenshotUrl) {
                     from { opacity: 0; }
                     to { opacity: 1; }
                 }
-                @media (max-width: 768px) {
-                    .modal-close {
-                        top: 10px;
-                        right: 10px;
-                    }
-                }
             `;
             document.head.appendChild(styles);
         }
         
-        // Add keyboard event to close on Escape
         const handleKeyPress = (e) => {
             if (e.key === 'Escape') {
                 closeScreenshotModal();
@@ -547,9 +534,6 @@ function setupWebsiteDetailEventListeners() {
         }
         
         document.addEventListener('keydown', handleKeyboardNavigation);
-        document.addEventListener('fullscreenchange', handleFullscreenChange);
-        document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
-        document.addEventListener('mozfullscreenchange', handleFullscreenChange);
         
         console.log('✅ Listeners setup complete');
         
@@ -566,14 +550,13 @@ function setupWebsiteNavigation() {
         const prevWebsiteBtn = document.getElementById('prevWebsite');
         const nextWebsiteBtn = document.getElementById('nextWebsite');
         
-        const websites = getWebsites();
-        if (!websites || websites.length === 0) return;
+        if (!websitesData || websitesData.length === 0) return;
         
-        const currentIndex = websites.findIndex(w => w.id === currentWebsiteId);
+        const currentIndex = websitesData.findIndex(w => w.id === currentWebsiteId);
         if (currentIndex === -1) return;
         
-        const prevWebsite = websites[(currentIndex - 1 + websites.length) % websites.length];
-        const nextWebsite = websites[(currentIndex + 1) % websites.length];
+        const prevWebsite = websitesData[(currentIndex - 1 + websitesData.length) % websitesData.length];
+        const nextWebsite = websitesData[(currentIndex + 1) % websitesData.length];
         
         if (prevWebsiteBtn) {
             prevWebsiteBtn.onclick = () => navigateToWebsite(prevWebsite.id);
@@ -595,14 +578,14 @@ function navigateToWebsite(websiteId) {
 }
 
 // ==========================================
-// WEBSITE PREVIEW FUNCTIONALITY
+// PREVIEW & CONTROLS
 // ==========================================
 function showWebsitePreview(website) {
     console.log(`🌐 Previewing: ${website.name}`);
     
     try {
         if (!website.liveUrl) {
-            showNotification('No live URL available for this website', 'info');
+            showNotification('No live URL available', 'info');
             if (website.repositoryUrl) {
                 window.open(website.repositoryUrl, '_blank', 'noopener,noreferrer');
             }
@@ -613,97 +596,53 @@ function showWebsitePreview(website) {
         const previewImage = document.querySelector('.preview-image');
         const websiteFrame = document.getElementById('websiteFrame');
         
-        if (!websiteContainer || !websiteFrame) {
-            showNotification('Preview container not found', 'error');
-            return;
-        }
-        
-        websiteContainer.style.display = 'block';
-        previewImage.style.display = 'none';
+        if (websiteContainer) websiteContainer.style.display = 'block';
+        if (previewImage) previewImage.style.display = 'none';
         
         isPreviewActive = true;
         
-        websiteFrame.src = website.liveUrl;
+        if (websiteFrame) {
+            websiteFrame.src = website.liveUrl;
+        }
         
         showNotification(`Loading ${website.name}...`, 'success');
         
-        websiteFrame.onload = () => {
-            console.log('✅ Website preview loaded successfully');
-            showNotification('Preview loaded!', 'success');
-        };
-        
-        websiteFrame.onerror = () => {
-            console.error('❌ Failed to load website preview');
-            showNotification('Failed to load preview. Opening in new tab...', 'warning');
-            
-            setTimeout(() => {
-                window.open(website.liveUrl, '_blank', 'noopener,noreferrer');
-                closePreview();
-            }, 1500);
-        };
-        
     } catch (error) {
         console.error('❌ Preview error:', error);
-        showNotification('Error loading preview: ' + error.message, 'error');
-        closePreview();
+        showNotification('Error loading preview', 'error');
     }
 }
 
 function closePreview() {
     try {
-        console.log('❌ Closing website preview');
-        
         const websiteContainer = document.getElementById('websiteContainer');
         const previewImage = document.querySelector('.preview-image');
         const websiteFrame = document.getElementById('websiteFrame');
         
-        if (websiteContainer) {
-            websiteContainer.style.display = 'none';
-        }
-        
-        if (previewImage) {
-            previewImage.style.display = 'block';
-        }
-        
-        if (websiteFrame) {
-            websiteFrame.src = '';
-        }
+        if (websiteContainer) websiteContainer.style.display = 'none';
+        if (previewImage) previewImage.style.display = 'block';
+        if (websiteFrame) websiteFrame.src = '';
         
         isPreviewActive = false;
-        
-        const isFullscreen = !!(document.fullscreenElement || document.webkitFullscreenElement);
-        
-        if (isFullscreen) {
-            if (document.exitFullscreen) {
-                document.exitFullscreen();
-            } else if (document.webkitExitFullscreen) {
-                document.webkitExitFullscreen();
-            }
-        }
-        
         showNotification('Preview closed', 'info');
         
     } catch (error) {
         console.error('❌ Error closing preview:', error);
-        showNotification('Error closing preview', 'error');
     }
 }
 
-// ==========================================
-// WEBSITE CONTROLS
-// ==========================================
 function toggleFullscreen() {
     try {
-        const websitePreviewWrapper = document.querySelector('.website-preview-wrapper');
-        if (!websitePreviewWrapper) return;
+        const wrapper = document.querySelector('.website-preview-wrapper');
+        if (!wrapper) return;
         
         const isFullscreen = !!(document.fullscreenElement || document.webkitFullscreenElement);
         
         if (!isFullscreen) {
-            if (websitePreviewWrapper.requestFullscreen) {
-                websitePreviewWrapper.requestFullscreen();
-            } else if (websitePreviewWrapper.webkitRequestFullscreen) {
-                websitePreviewWrapper.webkitRequestFullscreen();
+            if (wrapper.requestFullscreen) {
+                wrapper.requestFullscreen();
+            } else if (wrapper.webkitRequestFullscreen) {
+                wrapper.webkitRequestFullscreen();
             }
         } else {
             if (document.exitFullscreen) {
@@ -712,21 +651,13 @@ function toggleFullscreen() {
                 document.webkitExitFullscreen();
             }
         }
-        
     } catch (error) {
         console.error('❌ Fullscreen error:', error);
-        showNotification('Fullscreen error', 'error');
     }
 }
 
-// ==========================================
-// SHARE FUNCTIONALITY
-// ==========================================
 function shareWebsite() {
-    if (!currentWebsite) {
-        showNotification('No website to share', 'error');
-        return;
-    }
+    if (!currentWebsite) return;
     
     try {
         const shareData = {
@@ -737,9 +668,7 @@ function shareWebsite() {
         
         if (navigator.share) {
             navigator.share(shareData)
-                .then(() => {
-                    showNotification('Shared successfully', 'success');
-                })
+                .then(() => showNotification('Shared successfully', 'success'))
                 .catch((error) => {
                     if (error.name !== 'AbortError') {
                         fallbackShare();
@@ -748,9 +677,7 @@ function shareWebsite() {
         } else {
             fallbackShare();
         }
-        
     } catch (error) {
-        console.error('❌ Share error:', error);
         fallbackShare();
     }
 }
@@ -760,14 +687,10 @@ function fallbackShare() {
     
     if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(url)
-            .then(() => {
-                showNotification('Link copied to clipboard!', 'success');
-            })
-            .catch(() => {
-                prompt('Copy this link to share:', url);
-            });
+            .then(() => showNotification('Link copied!', 'success'))
+            .catch(() => prompt('Copy this link:', url));
     } else {
-        prompt('Copy this link to share:', url);
+        prompt('Copy this link:', url);
     }
 }
 
@@ -784,67 +707,23 @@ function handleKeyboardNavigation(e) {
                 closePreview();
             } else {
                 const modal = document.querySelector('.screenshot-modal');
-                if (modal) {
-                    closeScreenshotModal();
-                }
+                if (modal) closeScreenshotModal();
             }
             break;
         case 'ArrowLeft':
-            e.preventDefault();
-            navigateToPreviousWebsite();
-            break;
-        case 'ArrowRight':
-            e.preventDefault();
-            navigateToNextWebsite();
-            break;
-        case 'f':
-        case 'F':
-            if (isPreviewActive) {
+            if (!isPreviewActive) {
                 e.preventDefault();
-                toggleFullscreen();
+                const prevBtn = document.getElementById('prevWebsite');
+                if (prevBtn) prevBtn.click();
             }
             break;
-    }
-}
-
-function navigateToPreviousWebsite() {
-    const websites = getWebsites();
-    if (!websites || websites.length === 0) return;
-    
-    const currentIndex = websites.findIndex(w => w.id === currentWebsiteId);
-    if (currentIndex === -1) return;
-    
-    const prevIndex = (currentIndex - 1 + websites.length) % websites.length;
-    const prevWebsite = websites[prevIndex];
-    
-    navigateToWebsite(prevWebsite.id);
-}
-
-function navigateToNextWebsite() {
-    const websites = getWebsites();
-    if (!websites || websites.length === 0) return;
-    
-    const currentIndex = websites.findIndex(w => w.id === currentWebsiteId);
-    if (currentIndex === -1) return;
-    
-    const nextIndex = (currentIndex + 1) % websites.length;
-    const nextWebsite = websites[nextIndex];
-    
-    navigateToWebsite(nextWebsite.id);
-}
-
-// ==========================================
-// FULLSCREEN HANDLER
-// ==========================================
-function handleFullscreenChange() {
-    const fullscreenBtn = document.getElementById('fullscreenBtn');
-    if (!fullscreenBtn) return;
-    
-    const isFullscreen = !!(document.fullscreenElement || document.webkitFullscreenElement);
-    
-    const icon = fullscreenBtn.querySelector('i');
-    if (icon) {
-        icon.className = isFullscreen ? 'fas fa-compress' : 'fas fa-expand';
+        case 'ArrowRight':
+            if (!isPreviewActive) {
+                e.preventDefault();
+                const nextBtn = document.getElementById('nextWebsite');
+                if (nextBtn) nextBtn.click();
+            }
+            break;
     }
 }
 
@@ -945,121 +824,6 @@ function showNotification(message, type = 'info') {
 }
 
 // ==========================================
-// SAMPLE DATA FALLBACK
-// ==========================================
-function createSampleWebsites() {
-    return [
-        {
-            id: 1,
-            name: "ReelSpot",
-            overview: "Modern social media downloader with advanced features and seamless UX",
-            description: "ReelSpot is a comprehensive social media content downloader that allows users to save their favorite videos, images, and reels from multiple platforms. Built with modern web technologies, it features a clean interface, fast processing, and support for multiple formats. The platform prioritizes user privacy and doesn't require login for most features.",
-            image: "static/images/websites/ReelSpot/ReelSpot.jpg",
-            category: "Media Downloader",
-            rating: 4.8,
-            status: "Live",
-            launchDate: "2023-10-25",
-            developmentTime: "3 months",
-            userBase: "50K+",
-            performance: "98",
-            pageLoadTime: "1.2s",
-            mobileResponsive: true,
-            technologies: ["HTML5", "CSS3", "JavaScript", "API Integration"],
-            features: [
-                "Multi-platform support (Instagram, Facebook, Twitter)",
-                "High-quality video downloads up to 4K resolution",
-                "Batch download capability for multiple files",
-                "No watermarks on downloaded content",
-                "Format conversion options (MP4, MP3, AVI)",
-                "Privacy-focused design with no data collection"
-            ],
-            repositoryUrl: "https://github.com/ArshVermaGit/REELSPOT",
-            liveUrl: "https://arshvermagit.github.io/REELSPOT/",
-            screenshots: [
-                "static/images/websites/ReelSpot/1.jpg",
-                "static/images/websites/ReelSpot/2.jpg",
-                "static/images/websites/ReelSpot/3.jpg",
-                "static/images/websites/ReelSpot/4.jpg"
-            ]
-        },
-        {
-            id: 2,
-            name: "E-Commerce Platform",
-            category: "E-commerce",
-            status: "Live",
-            rating: 4.9,
-            overview: "Full-featured online shopping platform with modern design and seamless checkout experience.",
-            description: "A comprehensive e-commerce solution built with cutting-edge technologies. Features include product catalog, shopping cart, secure payment processing, order management, and admin dashboard. Optimized for performance and user experience.",
-            launchDate: "2024-01-15",
-            developmentTime: "4 months",
-            userBase: "25K+",
-            performance: "99",
-            features: [
-                "Advanced product filtering and search",
-                "Secure payment gateway integration",
-                "Real-time inventory management",
-                "Customer reviews and ratings",
-                "Mobile-responsive design",
-                "Admin analytics dashboard"
-            ],
-            technologies: ["React", "Node.js", "MongoDB", "Stripe", "Redux", "Express"],
-            repositoryUrl: "https://github.com/ArshVermaGit/ecommerce-platform",
-            liveUrl: "https://example-ecommerce.com",
-            image: "https://via.placeholder.com/600x350/1A1A2E/FFB800?text=E-Commerce+Platform",
-            screenshots: [
-                "https://via.placeholder.com/800x450/1A1A2E/FFB800?text=Home+Page",
-                "https://via.placeholder.com/800x450/1A1A2E/FFB800?text=Product+Details",
-                "https://via.placeholder.com/800x450/1A1A2E/FFB800?text=Shopping+Cart",
-                "https://via.placeholder.com/800x450/1A1A2E/FFB800?text=Checkout"
-            ]
-        },
-        {
-            id: 3,
-            name: "Health Tracker",
-            category: "Health & Wellness",
-            status: "Live",
-            rating: 4.7,
-            overview: "Comprehensive health and fitness tracking application with AI-powered insights.",
-            description: "A modern health tracking platform that helps users monitor their fitness goals, nutrition, and overall wellness. Features AI-powered recommendations, progress tracking, and data visualization.",
-            launchDate: "2023-11-20",
-            developmentTime: "5 months",
-            userBase: "40K+",
-            performance: "97",
-            features: [
-                "Activity and workout tracking",
-                "Nutrition and calorie monitoring",
-                "AI-powered health insights",
-                "Progress visualization charts",
-                "Goal setting and reminders",
-                "Integration with fitness devices"
-            ],
-            technologies: ["Vue.js", "Python", "PostgreSQL", "TensorFlow", "Chart.js"],
-            repositoryUrl: "https://github.com/ArshVermaGit/health-tracker",
-            liveUrl: "https://example-health.com",
-            image: "https://via.placeholder.com/600x350/1A1A2E/FFB800?text=Health+Tracker",
-            screenshots: [
-                "https://via.placeholder.com/800x450/1A1A2E/FFB800?text=Dashboard",
-                "https://via.placeholder.com/800x450/1A1A2E/FFB800?text=Activity+Log",
-                "https://via.placeholder.com/800x450/1A1A2E/FFB800?text=Nutrition",
-                "https://via.placeholder.com/800x450/1A1A2E/FFB800?text=Progress"
-            ]
-        }
-    ];
-}
-
-// ==========================================
-// CLEANUP
-// ==========================================
-window.addEventListener('beforeunload', () => {
-    if (isPreviewActive) {
-        const websiteFrame = document.getElementById('websiteFrame');
-        if (websiteFrame) {
-            websiteFrame.src = '';
-        }
-    }
-});
-
-// ==========================================
 // GLOBAL EXPORTS
 // ==========================================
 window.initializeWebsiteDetailPage = initializeWebsiteDetailPage;
@@ -1077,7 +841,7 @@ window.closeScreenshotModal = closeScreenshotModal;
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initializeWebsiteDetailPage);
 } else {
-    setTimeout(initializeWebsiteDetailPage, 100);
+    initializeWebsiteDetailPage();
 }
 
-console.log('🌐 Website detail JavaScript loaded successfully!');
+console.log('🌐 Website detail JavaScript loaded!');
