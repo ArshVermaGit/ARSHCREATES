@@ -11,16 +11,16 @@
    ========================================== */
 :root {
   /* Using main theme variables */
-  --gradient-primary: var(--accent-gradient, linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%));
+  --gradient-primary: var(--accent-gradient, linear-gradient(135deg, #FFB800 0%, #FF9500 100%));
   --gradient-overlay: linear-gradient(135deg, 
-    rgba(59, 130, 246, 0.1) 0%, 
-    rgba(29, 78, 216, 0.08) 50%,
-    rgba(59, 130, 246, 0.1) 100%);
+    rgba(255, 184, 0, 0.1) 0%, 
+    rgba(255, 149, 0, 0.08) 50%,
+    rgba(255, 184, 0, 0.1) 100%);
   
   /* Website specific shadows */
-  --shadow-accent-sm: 0 4px 12px rgba(59, 130, 246, 0.25);
-  --shadow-accent-md: 0 8px 25px rgba(59, 130, 246, 0.3);
-  --shadow-accent-lg: 0 12px 35px rgba(59, 130, 246, 0.4);
+  --shadow-accent-sm: 0 4px 12px rgba(255, 184, 0, 0.25);
+  --shadow-accent-md: 0 8px 25px rgba(255, 184, 0, 0.3);
+  --shadow-accent-lg: 0 12px 35px rgba(255, 184, 0, 0.4);
 }
 
 /* ==========================================
@@ -154,7 +154,7 @@ body {
   color: var(--accent-primary);
   line-height: 1;
   margin-bottom: var(--spacing-sm);
-  text-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+  text-shadow: 0 2px 8px rgba(255, 184, 0, 0.3);
 }
 
 .stat-label {
@@ -216,7 +216,7 @@ body {
   cursor: pointer;
   transition: all var(--transition-base);
   appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%233B82F6' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%23FFB800' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right var(--spacing-md) center;
   box-shadow: var(--shadow-sm);
@@ -224,15 +224,15 @@ body {
 }
 
 .filter-select:hover {
-  border-color: var(--accent-primary);
+  border-color: var(--yellow-primary);
   transform: translateY(-2px);
   box-shadow: var(--shadow-md);
 }
 
 .filter-select:focus {
   outline: none;
-  border-color: var(--accent-primary);
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1), var(--shadow-md);
+  border-color: var(--yellow-primary);
+  box-shadow: 0 0 0 3px rgba(255, 184, 0, 0.1), var(--shadow-md);
 }
 
 /* ==========================================
@@ -296,7 +296,7 @@ body {
 
 .section-decoration i {
   font-size: 1.5rem;
-  color: var(--accent-primary);
+  color: var(--yellow-primary);
   animation: bounce 2s ease-in-out infinite;
 }
 
@@ -357,7 +357,7 @@ body {
   width: 100%;
   height: 240px;
   overflow: hidden;
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(29, 78, 216, 0.1));
+  background: linear-gradient(135deg, rgba(255, 184, 0, 0.1), rgba(255, 149, 0, 0.1));
 }
 
 .website-image img {
@@ -403,7 +403,7 @@ body {
 .website-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.95), rgba(29, 78, 216, 0.9));
+  background: linear-gradient(135deg, rgba(255, 184, 0, 0.95), rgba(255, 149, 0, 0.9));
   opacity: 0;
   transition: opacity var(--transition-base);
   display: flex;
@@ -430,7 +430,7 @@ body {
 
 .overlay-content .btn {
   background: rgba(255, 255, 255, 0.95);
-  color: var(--accent-primary);
+  color: var(--yellow-primary);
   padding: var(--spacing-md) var(--spacing-xl);
   border-radius: var(--radius-lg);
   font-weight: 700;
@@ -492,8 +492,8 @@ body {
   display: flex;
   align-items: center;
   gap: var(--spacing-xs);
-  background: rgba(59, 130, 246, 0.1);
-  border: 1px solid rgba(59, 130, 246, 0.2);
+  background: rgba(255, 184, 0, 0.1);
+  border: 1px solid rgba(255, 184, 0, 0.2);
   border-radius: var(--radius-full);
   padding: var(--spacing-xs) var(--spacing-md);
   flex-shrink: 0;
@@ -501,14 +501,14 @@ body {
 }
 
 .website-card:hover .website-rating {
-  background: rgba(59, 130, 246, 0.2);
+  background: rgba(255, 184, 0, 0.2);
   transform: scale(1.05);
 }
 
 .rating-stars {
   display: flex;
   gap: 2px;
-  color: var(--accent-secondary);
+  color: var(--yellow-secondary);
   font-size: 0.875rem;
 }
 
@@ -542,7 +542,7 @@ body {
 }
 
 .website-category {
-  color: var(--accent-primary);
+  color: var(--yellow-primary);
 }
 
 .website-category i {
@@ -550,8 +550,8 @@ body {
 }
 
 .website-card:hover .website-category {
-  background: rgba(59, 130, 246, 0.1);
-  border-color: var(--accent-primary);
+  background: rgba(255, 184, 0, 0.1);
+  border-color: var(--yellow-primary);
   transform: translateY(-2px);
 }
 
@@ -570,6 +570,7 @@ body {
   color: var(--text-secondary);
   display: -webkit-box;
   -webkit-line-clamp: 3;
+  line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
   transition: color var(--transition-base);
@@ -595,7 +596,7 @@ body {
   border-radius: var(--radius-full);
   font-size: 0.8125rem;
   font-weight: 500;
-  color: var(--text-primary);
+  color: var(--yellow-primary);
   display: inline-flex;
   align-items: center;
   gap: var(--spacing-xs);
@@ -608,7 +609,7 @@ body {
 }
 
 .website-feature:hover {
-  border-color: var(--accent-primary);
+  border-color: var(--yellow-primary);
   transform: translateY(-2px);
   box-shadow: var(--shadow-sm);
 }
@@ -1010,9 +1011,9 @@ body {
    ACCESSIBILITY FOR CTA
    ========================================== */
 .btn-glow:focus-visible {
-  outline: 3px solid var(--accent-primary);
+  outline: 3px solid var(--yellow-primary);
   outline-offset: 3px;
-  box-shadow: 0 0 0 6px rgba(59, 130, 246, 0.25);
+  box-shadow: 0 0 0 6px rgba(255, 184, 0, 0.25);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1242,7 +1243,7 @@ body {
 .website-card:focus-visible,
 .btn:focus-visible,
 .filter-select:focus-visible {
-  outline: 3px solid var(--accent-primary);
+  outline: 3px solid var(--yellow-primary);
   outline-offset: 3px;
 }
 
