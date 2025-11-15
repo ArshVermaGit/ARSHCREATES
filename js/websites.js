@@ -1,11 +1,8 @@
 // ==========================================
-// WEBSITES PAGE - Complete Production-Ready Implementation
+// WEBSITES PORTFOLIO - PERFECTED JAVASCRIPT
 // Author: Arsh Verma
-// Version: 3.1.0
-// Description: Handles all websites portfolio functionality
-//              - Fixed data loading from PORTFOLIO_DATA
-//              - Filters, sorting, card rendering, and navigation
-//              - Error handling, accessibility, and performance optimized
+// Version: 6.0.0 - Production Ready
+// Description: Complete, bug-free websites portfolio
 // Last Updated: November 2024
 // ==========================================
 
@@ -23,27 +20,29 @@ const WEBSITES_STATE = {
         sort: 'newest'
     },
     isLoading: false,
-    animationDelay: 150
+    animationDelay: 100
 };
 
 // ==========================================
 // INITIALIZATION
 // ==========================================
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('🌐 Initializing Websites Page...');
+    console.log('🌐 Initializing Websites Portfolio...');
     initializeWebsitesPage();
 });
 
 /**
- * Main initialization function - Fixed data loading
+ * Main initialization function
  */
 function initializeWebsitesPage() {
     try {
-        // Set loading state
+        // Initialize theme first
+        initializeTheme();
+        
         WEBSITES_STATE.isLoading = true;
         showLoadingState();
         
-        // Load websites data first
+        // Load websites data
         loadWebsitesData();
         
         // Setup UI components
@@ -51,74 +50,153 @@ function initializeWebsitesPage() {
         setupWebsiteEventListeners();
         updateHeaderStats();
         
-        // Display websites after short delay for smooth UX
+        // Display websites after delay for smooth UX
         setTimeout(() => {
             WEBSITES_STATE.isLoading = false;
-            applyWebsiteFilters(); // This will trigger displayWebsites
+            applyFilters();
             hideLoadingState();
-            console.log('✅ Websites page initialized successfully');
-        }, 800);
+            console.log('✅ Websites portfolio initialized');
+        }, 600);
         
     } catch (error) {
-        console.error('❌ Error initializing websites page:', error);
-        showNotification('Failed to load websites portfolio. Please refresh the page.', 'error');
+        console.error('❌ Error initializing:', error);
+        showNotification('Failed to load websites portfolio. Please refresh.', 'error');
         WEBSITES_STATE.isLoading = false;
         displayErrorState();
     }
 }
 
-/**
- * Fixed data loading from PORTFOLIO_DATA
- */
+// ==========================================
+// THEME MANAGEMENT
+// ==========================================
+function initializeTheme() {
+    const themeToggle = document.getElementById('themeToggle');
+    const themeIcon = themeToggle?.querySelector('.theme-icon i');
+    
+    try {
+        // Get theme from localStorage or default to system preference
+        const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        
+        if (themeIcon) {
+            themeIcon.className = savedTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+        }
+        
+        if (themeToggle) {
+            themeToggle.addEventListener('click', toggleTheme);
+        }
+        
+        console.log(`🎨 Theme initialized: ${savedTheme}`);
+        
+    } catch (error) {
+        console.error('❌ Theme error:', error);
+        // Fallback to light theme
+        document.documentElement.setAttribute('data-theme', 'light');
+    }
+}
+
+function toggleTheme() {
+    try {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        const themeIcon = document.querySelector('#themeToggle .theme-icon i');
+        
+        document.documentElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+        
+        if (themeIcon) {
+            themeIcon.className = newTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+        }
+        
+        console.log(`🎨 Theme toggled: ${newTheme}`);
+        
+    } catch (error) {
+        console.error('❌ Theme toggle error:', error);
+    }
+}
+
+// ==========================================
+// WEBSITE DATA LOADING
+// ==========================================
 function loadWebsitesData() {
     try {
         let websitesData = [];
         
-        // Try to load from PORTFOLIO_DATA
-        if (typeof window.PORTFOLIO_DATA !== 'undefined' && 
-            Array.isArray(window.PORTFOLIO_DATA.websites) && 
-            window.PORTFOLIO_DATA.websites.length > 0) {
-            websitesData = window.PORTFOLIO_DATA.websites;
-            console.log('📥 Loaded websites from PORTFOLIO_DATA:', websitesData.length);
-        } 
-        // Fallback: Check if getWebsites function exists
-        else if (typeof window.getWebsites === 'function') {
+        // Try multiple data sources
+        if (typeof window.getWebsites === 'function') {
             websitesData = window.getWebsites();
-            console.log('📥 Loaded websites from getWebsites():', websitesData.length);
-        }
-        // Final fallback: Use sample data
-        else {
+            console.log('📥 Loaded from getWebsites():', websitesData.length);
+        } else if (window.PORTFOLIO_DATA && Array.isArray(window.PORTFOLIO_DATA.websites)) {
+            websitesData = window.PORTFOLIO_DATA.websites;
+            console.log('📥 Loaded from PORTFOLIO_DATA:', websitesData.length);
+        } else {
             websitesData = createSampleWebsites();
-            console.log('📥 Using sample websites data:', websitesData.length);
+            console.log('📥 Using sample data:', websitesData.length);
         }
         
-        // Validate and assign data
+        // Validate and assign
         WEBSITES_STATE.allWebsites = validateWebsitesData(websitesData);
         WEBSITES_STATE.filteredWebsites = [...WEBSITES_STATE.allWebsites];
         
-        console.log('🌐 Final websites count:', WEBSITES_STATE.allWebsites.length);
+        console.log('🌐 Websites loaded:', WEBSITES_STATE.allWebsites.length);
         
     } catch (error) {
-        console.error('Error loading websites:', error);
-        WEBSITES_STATE.allWebsites = [];
-        WEBSITES_STATE.filteredWebsites = [];
-        throw new Error('Failed to load websites data');
+        console.error('❌ Error loading websites:', error);
+        WEBSITES_STATE.allWebsites = createSampleWebsites();
+        WEBSITES_STATE.filteredWebsites = [...WEBSITES_STATE.allWebsites];
     }
 }
 
 /**
- * Enhanced loading state
+ * Validate websites data structure
+ */
+function validateWebsitesData(websites) {
+    if (!Array.isArray(websites)) {
+        console.warn('⚠️ Invalid websites data: expected array');
+        return [];
+    }
+    
+    return websites.map((website, index) => ({
+        id: website.id || `website-${Date.now()}-${index}`,
+        name: (website.name || 'Untitled Website').trim(),
+        category: website.category || 'Uncategorized',
+        status: website.status || 'In Development',
+        overview: website.overview || website.description || 'A modern web solution built with cutting-edge technology.',
+        launchDate: website.launchDate || null,
+        rating: Math.min(5, Math.max(0, website.rating || 0)),
+        userBase: website.userBase || '0',
+        image: website.image || generatePlaceholderImage(website.name || 'Website'),
+        features: Array.isArray(website.features) ? website.features.slice(0, 5) : 
+                  ['Modern Design', 'Responsive Layout', 'Fast Performance'],
+        repositoryUrl: website.repositoryUrl || null,
+        liveUrl: website.liveUrl || null,
+        technologies: website.technologies || ['HTML5', 'CSS3', 'JavaScript'],
+        screenshots: website.screenshots || []
+    })).filter(website => website.id && website.name);
+}
+
+/**
+ * Generate placeholder image URL
+ */
+function generatePlaceholderImage(name) {
+    const encodedName = encodeURIComponent(name.substring(0, 20));
+    return `https://via.placeholder.com/600x350/1A1A2E/3B82F6?text=${encodedName}`;
+}
+
+// ==========================================
+// UI LOADING STATES
+// ==========================================
+
+/**
+ * Show loading state
  */
 function showLoadingState() {
     const websitesGrid = document.getElementById('websitesGrid');
     if (websitesGrid) {
         websitesGrid.innerHTML = `
-            <div class="loading-websites" style="animation: fadeIn 0.5s ease-out;">
-                <i class="fas fa-spinner fa-spin" style="animation: spin 1s linear infinite, pulse 2s ease-in-out infinite;"></i>
+            <div class="loading-websites">
+                <i class="fas fa-spinner fa-spin"></i>
                 <p>Loading amazing websites...</p>
-                <div style="width: 100px; height: 4px; background: var(--border-color); border-radius: 2px; margin-top: 10px; overflow: hidden;">
-                    <div style="width: 100%; height: 100%; background: var(--accent-primary); border-radius: 2px; animation: shimmer 1.5s infinite;"></div>
-                </div>
             </div>
         `;
     }
@@ -131,29 +209,27 @@ function hideLoadingState() {
     const loadingElement = document.querySelector('.loading-websites');
     if (loadingElement) {
         loadingElement.style.opacity = '0';
-        loadingElement.style.transform = 'translateY(-20px)';
-        loadingElement.style.transition = 'all 0.5s ease';
-        
+        loadingElement.style.transition = 'opacity 0.4s ease';
         setTimeout(() => {
             if (loadingElement.parentNode) {
                 loadingElement.remove();
             }
-        }, 500);
+        }, 400);
     }
 }
 
 /**
- * Display error state with retry option
+ * Display error state
  */
 function displayErrorState() {
     const websitesGrid = document.getElementById('websitesGrid');
     if (websitesGrid) {
         websitesGrid.innerHTML = `
-            <div class="no-results" style="animation: fadeIn 0.6s ease-out;">
+            <div class="no-results">
                 <i class="fas fa-exclamation-triangle"></i>
                 <h3>Failed to Load Websites</h3>
-                <p>There was an error loading the websites portfolio. Please try again.</p>
-                <button class="btn btn-primary" onclick="retryWebsitesLoading()" aria-label="Retry loading websites">
+                <p>There was an error loading the websites portfolio.</p>
+                <button class="btn btn-primary" onclick="retryLoading()">
                     <i class="fas fa-redo"></i>
                     <span>Retry Loading</span>
                 </button>
@@ -165,50 +241,9 @@ function displayErrorState() {
 /**
  * Retry loading websites
  */
-function retryWebsitesLoading() {
+function retryLoading() {
     showNotification('Retrying to load websites...', 'info');
     initializeWebsitesPage();
-}
-
-// ==========================================
-// DATA VALIDATION
-// ==========================================
-
-/**
- * Validate websites data structure
- */
-function validateWebsitesData(websites) {
-    if (!Array.isArray(websites)) {
-        console.warn('Invalid websites data: expected array');
-        return [];
-    }
-    
-    return websites.map((website, index) => {
-        const validatedWebsite = {
-            id: website.id || `website-${Date.now()}-${index}`,
-            name: website.name?.trim() || 'Untitled Website',
-            category: website.category || 'Uncategorized',
-            status: website.status || 'Live',
-            overview: website.overview || website.description || 'A modern web solution with cutting-edge technology and user-friendly design.',
-            launchDate: website.launchDate || null,
-            rating: Math.min(5, Math.max(0, website.rating || 0)),
-            userBase: website.userBase || '0',
-            image: website.image || generatePlaceholderImage(website.name || 'Website'),
-            features: Array.isArray(website.features) ? website.features.slice(0, 5) : ['Modern Design', 'Responsive Layout', 'Fast Performance'],
-            liveUrl: website.liveUrl || null,
-            repositoryUrl: website.repositoryUrl || null
-        };
-        
-        return validatedWebsite;
-    }).filter(website => website.id && website.name);
-}
-
-/**
- * Generate placeholder image URL
- */
-function generatePlaceholderImage(name) {
-    const encodedName = encodeURIComponent(name.substring(0, 20));
-    return `https://via.placeholder.com/400x250/2E2E2E/3B82F6?text=${encodedName}`;
 }
 
 // ==========================================
@@ -221,27 +256,24 @@ function generatePlaceholderImage(name) {
 function displayWebsites(websites) {
     const websitesGrid = document.getElementById('websitesGrid');
     if (!websitesGrid) {
-        console.error('❌ Websites grid element not found');
+        console.error('❌ Websites grid not found');
         return;
     }
     
-    // Clear existing content
     websitesGrid.innerHTML = '';
     
-    // Loading state
     if (WEBSITES_STATE.isLoading) {
         showLoadingState();
         return;
     }
     
-    // Empty state
     if (!websites || websites.length === 0) {
         websitesGrid.innerHTML = `
-            <div class="no-results" style="animation: fadeIn 0.6s ease-out;">
+            <div class="no-results">
                 <i class="fas fa-laptop-code"></i>
                 <h3>No Websites Found</h3>
-                <p>No websites match your current filters. Try adjusting them to see more previews.</p>
-                <button class="btn btn-primary" onclick="resetWebsiteFilters()" aria-label="Reset all filters">
+                <p>No websites match your current filters. Try adjusting them to see more.</p>
+                <button class="btn btn-primary" onclick="resetFilters()">
                     <i class="fas fa-redo"></i>
                     <span>Reset Filters</span>
                 </button>
@@ -255,13 +287,12 @@ function displayWebsites(websites) {
         const websiteCard = createWebsiteCard(website);
         const cardElement = createElementFromHTML(websiteCard);
         
-        // Set initial state for animation
         cardElement.style.opacity = '0';
         cardElement.style.transform = 'translateY(30px)';
+        cardElement.style.animationDelay = `${index * WEBSITES_STATE.animationDelay}ms`;
         
         websitesGrid.appendChild(cardElement);
         
-        // Staggered entrance animation
         setTimeout(() => {
             cardElement.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
             cardElement.style.opacity = '1';
@@ -269,7 +300,6 @@ function displayWebsites(websites) {
         }, index * WEBSITES_STATE.animationDelay);
     });
     
-    // Setup interactions after render
     setTimeout(() => {
         setupWebsiteCardListeners();
         console.log(`🌐 Displayed ${websites.length} websites`);
@@ -290,7 +320,6 @@ function createElementFromHTML(htmlString) {
  */
 function createWebsiteCard(website) {
     const statusClass = website.status.toLowerCase().replace(/\s+/g, '-');
-    const imageUrl = website.image;
     const shortOverview = (website.overview || '').length > 120 
         ? website.overview.substring(0, 120) + '...' 
         : website.overview;
@@ -301,73 +330,68 @@ function createWebsiteCard(website) {
                  data-category="${website.category}" 
                  data-status="${website.status}"
                  role="article"
-                 aria-labelledby="website-title-${website.id}"
                  tabindex="0">
             
             <div class="website-image">
-                <img src="${imageUrl}" 
-                     alt="${website.name} - Website preview screenshot"
+                <img src="${website.image}" 
+                     alt="${website.name} - Website preview"
                      loading="lazy"
-                     onerror="this.src='${generatePlaceholderImage(website.name)}'; this.onerror=null;">
+                     onerror="this.src='${generatePlaceholderImage(website.name)}'">
                 
                 <div class="website-overlay">
                     <div class="overlay-content">
-                        <button class="btn btn-primary btn-view-details" 
-                                data-website-id="${website.id}"
-                                aria-label="View detailed preview of ${website.name}">
+                        <button class="btn btn-view-details" 
+                                data-website-id="${website.id}">
                             <i class="fas fa-eye"></i>
-                            <span>Preview Details</span>
+                            <span>View Details</span>
                         </button>
-                        ${website.liveUrl ? `
-                            <a href="${website.liveUrl}" 
-                               class="btn btn-secondary btn-visit-live"
-                               target="_blank"
-                               rel="noopener noreferrer"
-                               aria-label="Visit ${website.name} live website">
+                        ${website.status === 'Live' && website.liveUrl ? `
+                            <button class="btn btn-visit-now" 
+                                    data-website-id="${website.id}">
                                 <i class="fas fa-external-link-alt"></i>
                                 <span>Visit Live</span>
-                            </a>
+                            </button>
                         ` : ''}
                     </div>
                 </div>
                 
-                <div class="website-status-badge status-${statusClass}" aria-label="Status: ${website.status}">
+                <div class="website-status-badge status-${statusClass}">
                     ${website.status}
                 </div>
             </div>
             
             <div class="website-content">
                 <header class="website-header">
-                    <h3 class="website-title" id="website-title-${website.id}">${website.name}</h3>
+                    <h3 class="website-title">${website.name}</h3>
                     ${website.rating > 0 ? `
-                        <div class="website-rating" aria-label="Rating: ${website.rating} out of 5 stars">
-                            <div class="rating-stars" aria-hidden="true">${generateStars(website.rating)}</div>
+                        <div class="website-rating">
+                            <div class="rating-stars">${generateStars(website.rating)}</div>
                             <span class="rating-value">${website.rating.toFixed(1)}</span>
                         </div>
                     ` : ''}
                 </header>
                 
                 <div class="website-meta">
-                    <span class="website-category" aria-label="Category: ${website.category}">
-                        <i class="fas fa-tag" aria-hidden="true"></i>
+                    <span class="website-category">
+                        <i class="fas fa-tag"></i>
                         ${website.category}
                     </span>
                     ${website.launchDate ? `
-                        <span class="website-date" aria-label="Launched: ${formatDate(website.launchDate)}">
-                            <i class="fas fa-calendar" aria-hidden="true"></i>
+                        <span class="website-date">
+                            <i class="fas fa-calendar"></i>
                             ${formatDate(website.launchDate)}
                         </span>
                     ` : ''}
                 </div>
                 
-                <p class="website-description">${shortOverview}</p>
+                <p class="website-description">${escapeHtml(shortOverview)}</p>
                 
                 ${website.features && website.features.length > 0 ? `
-                    <div class="website-features" aria-label="Key features of ${website.name}">
+                    <div class="website-features">
                         ${website.features.slice(0, 3).map(feature => `
                             <span class="website-feature">
-                                <i class="fas fa-check" aria-hidden="true"></i>
-                                ${feature}
+                                <i class="fas fa-check"></i>
+                                ${escapeHtml(feature)}
                             </span>
                         `).join('')}
                     </div>
@@ -375,18 +399,16 @@ function createWebsiteCard(website) {
                 
                 <div class="website-actions">
                     <button class="btn btn-primary btn-view-website" 
-                            data-website-id="${website.id}"
-                            aria-label="Learn more about ${website.name}">
-                        <i class="fas fa-info-circle" aria-hidden="true"></i>
-                        <span>Preview More</span>
+                            data-website-id="${website.id}">
+                        <i class="fas fa-info-circle"></i>
+                        <span>Learn More</span>
                     </button>
                     ${website.repositoryUrl ? `
                         <a href="${website.repositoryUrl}" 
                            class="btn btn-secondary"
                            target="_blank"
-                           rel="noopener noreferrer"
-                           aria-label="View ${website.name} source code on GitHub">
-                            <i class="fab fa-github" aria-hidden="true"></i>
+                           rel="noopener noreferrer">
+                            <i class="fab fa-github"></i>
                             <span>View Code</span>
                         </a>
                     ` : ''}
@@ -407,14 +429,15 @@ function setupWebsiteFilters() {
     const categoryFilter = document.getElementById('categoryFilter');
     const statusFilter = document.getElementById('statusFilter');
     const sortFilter = document.getElementById('sortFilter');
+    const resetButton = document.getElementById('resetFilters');
     
-    if (!categoryFilter || !statusFilter || !sortFilter) {
-        console.warn('Filter elements not found');
+    if (!categoryFilter || !statusFilter || !sortFilter || !resetButton) {
+        console.warn('⚠️ Filter elements not found');
         return;
     }
     
-    // Populate categories dynamically from actual data
-    const categories = [...new Set(WEBSITES_STATE.allWebsites.map(website => website.category).filter(Boolean))].sort();
+    // Populate categories dynamically
+    const categories = [...new Set(WEBSITES_STATE.allWebsites.map(w => w.category).filter(Boolean))].sort();
     categories.forEach(category => {
         const option = document.createElement('option');
         option.value = category;
@@ -422,37 +445,38 @@ function setupWebsiteFilters() {
         categoryFilter.appendChild(option);
     });
     
-    // Event listeners for filters
+    // Event listeners
     function handleFilterChange() {
         WEBSITES_STATE.currentFilters.category = categoryFilter.value;
         WEBSITES_STATE.currentFilters.status = statusFilter.value;
         WEBSITES_STATE.currentFilters.sort = sortFilter.value;
-        applyWebsiteFilters();
+        applyFilters();
     }
     
     categoryFilter.addEventListener('change', handleFilterChange);
     statusFilter.addEventListener('change', handleFilterChange);
     sortFilter.addEventListener('change', handleFilterChange);
+    resetButton.addEventListener('click', resetFilters);
     
-    console.log('✅ Website filters setup completed');
+    console.log('✅ Filters setup completed');
 }
 
 /**
  * Apply all active filters and sorting
  */
-function applyWebsiteFilters() {
+function applyFilters() {
     if (WEBSITES_STATE.isLoading) return;
     
     let filtered = [...WEBSITES_STATE.allWebsites];
     
     // Category filter
     if (WEBSITES_STATE.currentFilters.category !== 'all') {
-        filtered = filtered.filter(website => website.category === WEBSITES_STATE.currentFilters.category);
+        filtered = filtered.filter(w => w.category === WEBSITES_STATE.currentFilters.category);
     }
     
     // Status filter
     if (WEBSITES_STATE.currentFilters.status !== 'all') {
-        filtered = filtered.filter(website => website.status === WEBSITES_STATE.currentFilters.status);
+        filtered = filtered.filter(w => w.status === WEBSITES_STATE.currentFilters.status);
     }
     
     // Sort results
@@ -467,7 +491,7 @@ function applyWebsiteFilters() {
 }
 
 /**
- * Sort websites by specified criteria
+ * Sort websites by criteria
  */
 function sortWebsites(websites, sortBy) {
     const sorted = [...websites];
@@ -499,9 +523,9 @@ function sortWebsites(websites, sortBy) {
 }
 
 /**
- * Reset all filters to defaults
+ * Reset all filters
  */
-function resetWebsiteFilters() {
+function resetFilters() {
     WEBSITES_STATE.currentFilters = {
         category: 'all',
         status: 'all',
@@ -516,12 +540,12 @@ function resetWebsiteFilters() {
     if (statusFilter) statusFilter.value = 'all';
     if (sortFilter) sortFilter.value = 'newest';
     
-    applyWebsiteFilters();
-    showNotification('All filters reset successfully', 'success');
+    applyFilters();
+    showNotification('Filters reset successfully', 'success');
 }
 
 // ==========================================
-// INTERACTIONS & EVENT HANDLERS
+// EVENT HANDLERS
 // ==========================================
 
 /**
@@ -534,18 +558,18 @@ function setupWebsiteEventListeners() {
         
         if (e.key === 'r' || e.key === 'R') {
             e.preventDefault();
-            resetWebsiteFilters();
+            resetFilters();
         }
     });
 }
 
 /**
- * Setup interactive listeners on website cards
+ * Setup website card listeners
  */
 function setupWebsiteCardListeners() {
-    // View details / Learn more buttons
-    document.querySelectorAll('.btn-view-details, .btn-view-website').forEach(button => {
-        button.addEventListener('click', function(e) {
+    // View details buttons
+    document.querySelectorAll('.btn-view-details, .btn-view-website').forEach(btn => {
+        btn.addEventListener('click', function(e) {
             e.stopPropagation();
             const websiteId = this.getAttribute('data-website-id');
             buttonClickAnimation(this);
@@ -553,21 +577,21 @@ function setupWebsiteCardListeners() {
         });
     });
     
-    // Visit live buttons
-    document.querySelectorAll('.btn-visit-live').forEach(link => {
-        link.addEventListener('click', function(e) {
+    // Visit now buttons
+    document.querySelectorAll('.btn-visit-now').forEach(btn => {
+        btn.addEventListener('click', function(e) {
             e.stopPropagation();
+            const websiteId = this.getAttribute('data-website-id');
             buttonClickAnimation(this);
-            // Link will naturally navigate
+            visitWebsite(websiteId);
         });
     });
     
-    // Card-wide click for details
+    // Card click
     document.querySelectorAll('.website-card').forEach(card => {
         card.addEventListener('click', function(e) {
             if (!e.target.closest('button') && !e.target.closest('a')) {
                 const websiteId = this.getAttribute('data-website-id');
-                cardClickAnimation(this);
                 viewWebsiteDetails(websiteId);
             }
         });
@@ -580,17 +604,6 @@ function setupWebsiteCardListeners() {
                 viewWebsiteDetails(websiteId);
             }
         });
-        
-        // Enhanced hover effects
-        if (window.innerWidth > 768) {
-            card.addEventListener('mouseenter', function() {
-                this.style.transform = 'translateY(-8px) scale(1.02)';
-            });
-            
-            card.addEventListener('mouseleave', function() {
-                this.style.transform = 'translateY(0) scale(1)';
-            });
-        }
     });
 }
 
@@ -599,23 +612,9 @@ function setupWebsiteCardListeners() {
  */
 function buttonClickAnimation(button) {
     button.style.transform = 'scale(0.95)';
-    button.style.transition = 'transform 0.1s ease';
-    
     setTimeout(() => {
         button.style.transform = '';
     }, 100);
-}
-
-/**
- * Card click animation
- */
-function cardClickAnimation(card) {
-    card.style.transform = 'scale(0.98)';
-    card.style.transition = 'transform 0.2s ease';
-    
-    setTimeout(() => {
-        card.style.transform = '';
-    }, 200);
 }
 
 /**
@@ -629,26 +628,36 @@ function viewWebsiteDetails(websiteId) {
     
     const website = WEBSITES_STATE.allWebsites.find(w => w.id == websiteId);
     if (!website) {
-        showNotification('Website details not found', 'error');
+        showNotification('Website not found', 'error');
         return;
     }
     
-    showNotification(`Opening details for ${website.name}...`, 'info', 2000);
-    console.log(`🔍 Viewing details for: ${website.name}`, website);
+    console.log(`🔍 Viewing: ${website.name}`);
+    window.location.href = `website-detail.html?id=${websiteId}`;
+}
+
+/**
+ * Visit website functionality
+ */
+function visitWebsite(websiteId) {
+    if (!websiteId) {
+        showNotification('Invalid website selection', 'error');
+        return;
+    }
     
-    // For demo purposes - navigate to detail page
-    setTimeout(() => {
-        if (website.liveUrl) {
-            window.open(website.liveUrl, '_blank');
-        } else {
-            const features = website.features.slice(0, 3).join(', ');
-            showNotification(
-                `${website.name} - ${website.category} | Rating: ${website.rating}/5 | Features: ${features}`,
-                'info',
-                4000
-            );
-        }
-    }, 500);
+    const website = WEBSITES_STATE.allWebsites.find(w => w.id == websiteId);
+    if (!website) {
+        showNotification('Website not found', 'error');
+        return;
+    }
+    
+    if (website.status !== 'Live' || !website.liveUrl) {
+        showNotification(`${website.name} is not available for live preview!`, 'info');
+        return;
+    }
+    
+    console.log(`🌐 Visiting: ${website.name}`);
+    window.open(website.liveUrl, '_blank', 'noopener,noreferrer');
 }
 
 // ==========================================
@@ -666,19 +675,16 @@ function generateStars(rating) {
     
     let html = '';
     
-    // Full stars
     for (let i = 0; i < fullStars + (hasFullExtra ? 1 : 0); i++) {
-        html += '<i class="fas fa-star" style="color: #3B82F6;"></i>';
+        html += '<i class="fas fa-star"></i>';
     }
     
-    // Half star
     if (hasHalfStar) {
-        html += '<i class="fas fa-star-half-alt" style="color: #3B82F6;"></i>';
+        html += '<i class="fas fa-star-half-alt"></i>';
     }
     
-    // Empty stars
     for (let i = 0; i < emptyStars; i++) {
-        html += '<i class="far fa-star" style="color: #3B82F6;"></i>';
+        html += '<i class="far fa-star"></i>';
     }
     
     return html;
@@ -700,49 +706,38 @@ function parseUserBase(userBase) {
 }
 
 /**
- * Format large numbers
- */
-function formatNumber(num) {
-    if (!num || num === 0) return '0';
-    if (num >= 1000000) {
-        return (num / 1000000).toFixed(1) + 'M';
-    } else if (num >= 1000) {
-        return (num / 1000).toFixed(1) + 'K';
-    }
-    return num.toString();
-}
-
-/**
- * Format date to readable string
+ * Format date
  */
 function formatDate(dateString) {
     if (!dateString) return 'Coming Soon';
     try {
         const date = new Date(dateString);
         if (isNaN(date.getTime())) return 'Coming Soon';
-        const options = { year: 'numeric', month: 'short', day: 'numeric' };
-        return date.toLocaleDateString('en-US', options);
+        return date.toLocaleDateString('en-US', { 
+            year: 'numeric', 
+            month: 'short', 
+            day: 'numeric' 
+        });
     } catch (error) {
-        console.warn('Invalid date format:', dateString);
         return 'Coming Soon';
     }
 }
 
 /**
- * Update header statistics dynamically
+ * Update header statistics
  */
 function updateHeaderStats() {
     const allWebsites = WEBSITES_STATE.allWebsites;
     if (allWebsites.length === 0) return;
     
     const totalWebsites = allWebsites.length;
-    const averageRating = (allWebsites.reduce((sum, website) => sum + (website.rating || 0), 0) / totalWebsites).toFixed(1);
-    const totalUsers = allWebsites.reduce((sum, website) => sum + parseUserBase(website.userBase || '0'), 0);
+    const avgRating = (allWebsites.reduce((sum, w) => sum + (w.rating || 0), 0) / totalWebsites).toFixed(1);
+    const totalUsers = allWebsites.reduce((sum, w) => sum + parseUserBase(w.userBase || '0'), 0);
     
     const statNumbers = document.querySelectorAll('.header-stats .stat-number');
     if (statNumbers.length >= 3) {
         animateValue(statNumbers[0], 0, totalWebsites, 1500, '+');
-        animateValue(statNumbers[1], 0, averageRating, 1500, '');
+        animateValue(statNumbers[1], 0, parseFloat(avgRating), 1500, '');
         animateValue(statNumbers[2], 0, totalUsers, 1500, '+');
     }
 }
@@ -751,77 +746,102 @@ function updateHeaderStats() {
  * Animate number counting
  */
 function animateValue(element, start, end, duration, suffix = '') {
-    const range = end - start;
-    const increment = end > start ? 1 : -1;
-    const stepTime = Math.abs(Math.floor(duration / range));
+    if (!element) return;
+    
+    const range = Math.abs(end - start);
+    const stepTime = Math.max(Math.floor(duration / range), 20);
+    const isDecimal = end % 1 !== 0;
     let current = start;
     
     const timer = setInterval(() => {
-        current += increment;
-        element.textContent = current + suffix;
+        current += (end > start ? 1 : -1) * (isDecimal ? 0.1 : 1);
         
-        if (current == end) {
+        if ((end > start && current >= end) || (end < start && current <= end)) {
+            current = end;
             clearInterval(timer);
         }
+        
+        element.textContent = (isDecimal ? current.toFixed(1) : Math.floor(current)) + suffix;
     }, stepTime);
 }
 
 /**
  * Show notification
  */
-function showNotification(message, type = 'info', duration = 5000) {
-    const container = document.getElementById('notificationContainer');
-    if (!container) {
-        console.log(`[${type.toUpperCase()}] ${message}`);
-        return;
-    }
-    
-    const notification = document.createElement('div');
-    notification.className = `notification ${type}`;
-    
-    let icon = 'info-circle';
-    let title = 'Information';
-    
-    switch (type) {
-        case 'success':
-            icon = 'check-circle';
-            title = 'Success';
-            break;
-        case 'error':
-            icon = 'exclamation-circle';
-            title = 'Error';
-            break;
-        default:
-            icon = 'info-circle';
-            title = 'Information';
-    }
-    
-    notification.innerHTML = `
-        <div class="notification-icon">
-            <i class="fas fa-${icon}"></i>
-        </div>
-        <div class="notification-content">
-            <div class="notification-title">${title}</div>
-            <div class="notification-message">${message}</div>
-        </div>
-    `;
-    
-    container.appendChild(notification);
-    
-    // Animate in
-    setTimeout(() => notification.classList.add('show'), 10);
-    
-    // Auto remove
-    setTimeout(() => {
-        notification.classList.remove('show');
+function showNotification(message, type = 'info', duration = 3000) {
+    try {
+        let container = document.getElementById('notificationContainer');
+        if (!container) {
+            container = document.createElement('div');
+            container.id = 'notificationContainer';
+            container.className = 'notification-container';
+            container.style.cssText = `
+                position: fixed;
+                top: 6rem;
+                right: 1.5rem;
+                z-index: 9999;
+                display: flex;
+                flex-direction: column;
+                gap: 0.75rem;
+                pointer-events: none;
+            `;
+            document.body.appendChild(container);
+        }
+        
+        const notification = document.createElement('div');
+        notification.className = `notification ${type}`;
+        
+        const icons = {
+            success: 'check-circle',
+            error: 'exclamation-circle',
+            warning: 'exclamation-triangle',
+            info: 'info-circle'
+        };
+        
+        notification.innerHTML = `
+            <div class="notification-icon">
+                <i class="fas fa-${icons[type] || 'info-circle'}"></i>
+            </div>
+            <div class="notification-content">
+                <div class="notification-message">${escapeHtml(message)}</div>
+            </div>
+        `;
+        
+        container.appendChild(notification);
+        
+        // Animate in
+        setTimeout(() => notification.classList.add('show'), 10);
+        
+        // Auto remove
         setTimeout(() => {
-            if (notification.parentNode) {
-                notification.parentNode.removeChild(notification);
-            }
-        }, 300);
-    }, duration);
+            notification.classList.remove('show');
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.remove();
+                }
+            }, 300);
+        }, duration);
+        
+    } catch (error) {
+        console.error('❌ Notification error:', error);
+    }
+}
+
+/**
+ * Escape HTML to prevent XSS
+ */
+function escapeHtml(text) {
+    if (typeof text !== 'string') return '';
     
-    return notification;
+    const map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+    };
+    
+    return text.replace(/[&<>"']/g, m => map[m]);
 }
 
 // ==========================================
@@ -831,58 +851,83 @@ function createSampleWebsites() {
     return [
         {
             id: 1,
+            name: "ReelSpot",
+            overview: "Modern social media downloader with advanced features and seamless UX",
+            description: "ReelSpot is a comprehensive social media content downloader that allows users to save their favorite videos, images, and reels from multiple platforms. Built with modern web technologies, it features a clean interface, fast processing, and support for multiple formats. The platform prioritizes user privacy and doesn't require login for most features.",
+            image: "static/images/websites/ReelSpot/ReelSpot.jpg",
+            category: "Media Downloader",
+            rating: 4.8,
+            status: "Live",
+            launchDate: "2023-10-25",
+            developmentTime: "3 months",
+            userBase: "50K+",
+            pageLoadTime: "1.2s",
+            mobileResponsive: true,
+            technologies: ["HTML5", "CSS3", "JavaScript"],
+            features: [
+                "Multi-platform support (Instagram, Facebook, Twitter)",
+                "High-quality video downloads",
+                "Batch download capability",
+                "No watermarks",
+                "Format conversion options",
+                "Privacy-focused design"
+            ],
+            repositoryUrl: "https://github.com/ArshVermaGit/REELSPOT",
+            liveUrl: "file:///Users/arshverma/GitHub/REELSPOT/index.html",
+            screenshots: [
+                "static/images/websites/ReelSpot/1.jpg",
+                "static/images/websites/ReelSpot/2.jpg",
+                "static/images/websites/ReelSpot/3.jpg",
+                "static/images/websites/ReelSpot/4.jpg"
+            ]
+        },
+        {
+            id: 2,
             name: "E-Shop Pro",
             category: "E-commerce",
             status: "Live",
             rating: 4.9,
-            overview: "Comprehensive e-commerce platform with advanced features and seamless user experience. Preview the storefront and features.",
+            overview: "Comprehensive e-commerce platform with advanced features and seamless user experience.",
+            description: "Built with modern web technologies and optimized for performance. Features include advanced product filtering, secure payment processing, admin dashboard, and mobile-responsive design.",
             launchDate: "2024-02-20",
+            developmentTime: "3 months",
             userBase: "25K+",
-            image: "https://via.placeholder.com/400x250/3B82F6/FFFFFF?text=E-Shop+Pro",
-            features: ["React frontend", "Node.js backend", "Stripe payments", "Admin dashboard"],
+            performance: "99.8",
+            features: [
+                "React frontend with modern UI",
+                "Node.js backend with Express",
+                "MongoDB database integration",
+                "Stripe payment processing",
+                "Admin dashboard with analytics",
+                "Mobile-responsive design"
+            ],
+            technologies: ["React", "Node.js", "MongoDB", "Stripe", "Express", "JWT"],
+            repositoryUrl: "https://github.com/ArshVermaGit/eshop-pro",
             liveUrl: "https://eshoppro.com",
-            repositoryUrl: "https://github.com/ArshVermaGit/eshop-pro"
+            image: "https://via.placeholder.com/600x350/1A1A2E/3B82F6?text=E-Shop+Pro",
+            screenshots: [
+                "https://via.placeholder.com/800x450/1A1A2E/3B82F6?text=E-Shop+Pro+1",
+                "https://via.placeholder.com/800x450/1A1A2E/3B82F6?text=E-Shop+Pro+2"
+            ]
         },
         {
-            id: 2,
+            id: 3,
             name: "HealthTrack Plus",
             category: "Health & Wellness",
             status: "Live",
             rating: 4.8,
-            overview: "Comprehensive health tracking platform with AI-powered insights and analytics. Test the dashboard in preview.",
+            overview: "Comprehensive health tracking platform with AI-powered insights and analytics. Modern design with focus on user experience and data visualization.",
             launchDate: "2024-01-15",
             userBase: "50K+",
-            image: "https://via.placeholder.com/400x250/EC4899/FFFFFF?text=HealthTrack+Plus",
-            features: ["Vue.js UI", "Python API", "PostgreSQL DB", "Real-time analytics"],
+            image: "https://via.placeholder.com/600x350/1A1A2E/EC4899?text=HealthTrack+Plus",
+            features: ["Vue.js UI", "Python API", "PostgreSQL DB", "Real-time analytics", "Progressive Web App"],
+            technologies: ["Vue.js", "Python", "PostgreSQL", "D3.js"],
+            repositoryUrl: "https://github.com/ArshVermaGit/healthtrack-plus",
             liveUrl: "https://healthtrackplus.com",
-            repositoryUrl: "https://github.com/ArshVermaGit/healthtrack-plus"
-        },
-        {
-            id: 3,
-            name: "CloudSuite SaaS",
-            category: "SaaS Platform",
-            status: "In Development",
-            rating: 4.6,
-            overview: "All-in-one SaaS platform for business management and team collaboration. Sneak peek at core modules.",
-            launchDate: "2024-06-30",
-            userBase: "10K+",
-            image: "https://via.placeholder.com/400x250/A855F7/FFFFFF?text=CloudSuite+SaaS",
-            features: ["Angular framework", "Java Spring", "MySQL integration", "Multi-tenant"],
-            repositoryUrl: "https://github.com/ArshVermaGit/cloudsuite-saas"
-        },
-        {
-            id: 4,
-            name: "FoodDash Delivery",
-            category: "Food Delivery",
-            status: "In Development",
-            rating: 0,
-            overview: "Real-time food delivery app with integrated payments and tracking. Early preview available.",
-            launchDate: null,
-            userBase: "0",
-            image: "https://via.placeholder.com/400x250/10B981/FFFFFF?text=FoodDash",
-            features: ["Next.js SSR", "Express server", "Redis caching", "Real-time tracking"],
-            liveUrl: null,
-            repositoryUrl: null
+            screenshots: [
+                "https://via.placeholder.com/800x450/1A1A2E/EC4899?text=HealthTrack+1",
+                "https://via.placeholder.com/800x450/1A1A2E/EC4899?text=HealthTrack+2"
+            ]
         }
     ];
 }
@@ -891,9 +936,10 @@ function createSampleWebsites() {
 // GLOBAL EXPORTS
 // ==========================================
 window.initializeWebsitesPage = initializeWebsitesPage;
-window.resetWebsiteFilters = resetWebsiteFilters;
+window.resetFilters = resetFilters;
 window.viewWebsiteDetails = viewWebsiteDetails;
-window.applyWebsiteFilters = applyWebsiteFilters;
-window.retryWebsitesLoading = retryWebsitesLoading;
+window.visitWebsite = visitWebsite;
+window.applyFilters = applyFilters;
+window.retryLoading = retryLoading;
 
-console.log('🌐 Websites portfolio JavaScript loaded successfully!');
+console.log('🌐 Websites portfolio JavaScript loaded!');
