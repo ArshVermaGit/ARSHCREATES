@@ -1,5 +1,5 @@
 /* ==========================================
-   PERFECTED websiteS PORTFOLIO - ULTIMATE CSS
+   WEBSITES PORTFOLIO - PERFECTED CSS
    Author: Arsh Verma
    Version: 6.0.0 - Production Ready
    Description: Complete, pixel-perfect CSS with creative design
@@ -10,17 +10,17 @@
    CSS VARIABLES - Using Main Theme System
    ========================================== */
 :root {
-  /* Using main theme variables from style.css */
-  --gradient-primary: var(--accent-gradient, linear-gradient(135deg, #FFB800 0%, #FF9500 100%));
-  --gradient-overlay: var(--liquid-glass-overlay, linear-gradient(135deg, 
-    rgba(255, 184, 0, 0.1) 0%, 
-    rgba(255, 149, 0, 0.08) 50%,
-    rgba(255, 184, 0, 0.1) 100%));
+  /* Using main theme variables */
+  --gradient-primary: var(--accent-gradient, linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%));
+  --gradient-overlay: linear-gradient(135deg, 
+    rgba(59, 130, 246, 0.1) 0%, 
+    rgba(29, 78, 216, 0.08) 50%,
+    rgba(59, 130, 246, 0.1) 100%);
   
-  /* website specific shadows */
-  --shadow-accent-sm: var(--shadow-glow-sm);
-  --shadow-accent-md: var(--shadow-glow-md);
-  --shadow-accent-lg: var(--shadow-glow-lg);
+  /* Website specific shadows */
+  --shadow-accent-sm: 0 4px 12px rgba(59, 130, 246, 0.25);
+  --shadow-accent-md: 0 8px 25px rgba(59, 130, 246, 0.3);
+  --shadow-accent-lg: 0 12px 35px rgba(59, 130, 246, 0.4);
 }
 
 /* ==========================================
@@ -71,8 +71,8 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  background: radial-gradient(circle at 20% 30%, rgba(255, 184, 0, 0.08) 0%, transparent 60%),
-              radial-gradient(circle at 80% 70%, rgba(255, 149, 0, 0.06) 0%, transparent 60%);
+  background: radial-gradient(circle at 20% 30%, rgba(59, 130, 246, 0.08) 0%, transparent 60%),
+              radial-gradient(circle at 80% 70%, rgba(29, 78, 216, 0.06) 0%, transparent 60%);
   pointer-events: none;
   animation: backgroundPulse 10s ease-in-out infinite;
 }
@@ -154,7 +154,7 @@ body {
   color: var(--accent-primary);
   line-height: 1;
   margin-bottom: var(--spacing-sm);
-  text-shadow: 0 2px 8px rgba(255, 184, 0, 0.3);
+  text-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
 }
 
 .stat-label {
@@ -216,7 +216,7 @@ body {
   cursor: pointer;
   transition: all var(--transition-base);
   appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%23FFB800' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%233B82F6' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right var(--spacing-md) center;
   box-shadow: var(--shadow-sm);
@@ -232,11 +232,11 @@ body {
 .filter-select:focus {
   outline: none;
   border-color: var(--accent-primary);
-  box-shadow: 0 0 0 3px rgba(255, 184, 0, 0.1), var(--shadow-md);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1), var(--shadow-md);
 }
 
 /* ==========================================
-   websiteS GRID SECTION
+   WEBSITES GRID SECTION
    ========================================== */
 .websites-section {
   padding: var(--spacing-4xl) 0;
@@ -303,12 +303,13 @@ body {
 /* Portfolio Grid */
 .portfolio-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
   gap: var(--spacing-xl);
+  align-items: start;
 }
 
 /* ==========================================
-   website CARD - Perfect Liquid Glass Design
+   WEBSITE CARD - Perfect Liquid Glass Design
    ========================================== */
 .website-card {
   background: var(--card-bg);
@@ -323,6 +324,7 @@ body {
   position: relative;
   backdrop-filter: var(--glass-blur);
   animation: cardSlideIn 0.6s ease-out both;
+  height: 100%;
 }
 
 .website-card::before {
@@ -353,9 +355,9 @@ body {
 .website-image {
   position: relative;
   width: 100%;
-  height: 280px;
+  height: 240px;
   overflow: hidden;
-  background: linear-gradient(135deg, rgba(255, 184, 0, 0.1), rgba(255, 149, 0, 0.1));
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(29, 78, 216, 0.1));
 }
 
 .website-image img {
@@ -370,7 +372,7 @@ body {
 }
 
 /* Status Badge */
-.website-badge {
+.website-status-badge {
   position: absolute;
   top: var(--spacing-md);
   right: var(--spacing-md);
@@ -401,7 +403,7 @@ body {
 .website-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, rgba(255, 184, 0, 0.95), rgba(255, 149, 0, 0.9));
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.95), rgba(29, 78, 216, 0.9));
   opacity: 0;
   transition: opacity var(--transition-base);
   display: flex;
@@ -441,6 +443,8 @@ body {
   justify-content: center;
   gap: var(--spacing-sm);
   font-size: 0.9375rem;
+  font-family: inherit;
+  text-decoration: none;
 }
 
 .overlay-content .btn:hover {
@@ -449,7 +453,7 @@ body {
   box-shadow: var(--shadow-lg);
 }
 
-/* website Content */
+/* Website Content */
 .website-content {
   padding: var(--spacing-xl);
   display: flex;
@@ -488,8 +492,8 @@ body {
   display: flex;
   align-items: center;
   gap: var(--spacing-xs);
-  background: rgba(255, 184, 0, 0.1);
-  border: 1px solid rgba(255, 184, 0, 0.2);
+  background: rgba(59, 130, 246, 0.1);
+  border: 1px solid rgba(59, 130, 246, 0.2);
   border-radius: var(--radius-full);
   padding: var(--spacing-xs) var(--spacing-md);
   flex-shrink: 0;
@@ -497,7 +501,7 @@ body {
 }
 
 .website-card:hover .website-rating {
-  background: rgba(255, 184, 0, 0.2);
+  background: rgba(59, 130, 246, 0.2);
   transform: scale(1.05);
 }
 
@@ -546,7 +550,7 @@ body {
 }
 
 .website-card:hover .website-category {
-  background: rgba(255, 184, 0, 0.1);
+  background: rgba(59, 130, 246, 0.1);
   border-color: var(--accent-primary);
   transform: translateY(-2px);
 }
@@ -566,10 +570,10 @@ body {
   color: var(--text-secondary);
   display: -webkit-box;
   -webkit-line-clamp: 3;
-  line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
   transition: color var(--transition-base);
+  flex: 1;
 }
 
 .website-card:hover .website-description {
@@ -744,8 +748,8 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  background: radial-gradient(circle at 30% 50%, rgba(255, 184, 0, 0.08) 0%, transparent 60%),
-              radial-gradient(circle at 70% 50%, rgba(255, 149, 0, 0.06) 0%, transparent 60%);
+  background: radial-gradient(circle at 30% 50%, rgba(59, 130, 246, 0.08) 0%, transparent 60%),
+              radial-gradient(circle at 70% 50%, rgba(29, 78, 216, 0.06) 0%, transparent 60%);
   animation: backgroundPulse 8s ease-in-out infinite;
   pointer-events: none;
   z-index: 0;
@@ -767,7 +771,7 @@ body {
 }
 
 .cta-content:hover {
-  border-color: rgba(255, 184, 0, 0.4);
+  border-color: rgba(59, 130, 246, 0.4);
   box-shadow: var(--shadow-2xl), var(--shadow-accent-sm);
   transform: translateY(-5px);
 }
@@ -1008,7 +1012,7 @@ body {
 .btn-glow:focus-visible {
   outline: 3px solid var(--accent-primary);
   outline-offset: 3px;
-  box-shadow: 0 0 0 6px rgba(255, 184, 0, 0.25);
+  box-shadow: 0 0 0 6px rgba(59, 130, 246, 0.25);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1117,24 +1121,6 @@ body {
   }
 }
 
-@keyframes shimmer {
-  0% {
-    left: -100%;
-  }
-  100% {
-    left: 100%;
-  }
-}
-
-@keyframes backgroundPulse {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.8;
-  }
-}
-
 /* ==========================================
    RESPONSIVE DESIGN
    ========================================== */
@@ -1144,7 +1130,7 @@ body {
   }
   
   .website-image {
-    height: 240px;
+    height: 220px;
   }
 }
 
@@ -1233,6 +1219,10 @@ body {
     min-width: 140px;
     font-size: 0.875rem;
     padding: var(--spacing-sm) var(--spacing-lg);
+  }
+  
+  .portfolio-grid {
+    grid-template-columns: 1fr;
   }
 }
 
