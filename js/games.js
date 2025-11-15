@@ -1,9 +1,7 @@
 // ==========================================
-// GAMES PORTFOLIO - PERFECTED JAVASCRIPT
+// GAMES PORTFOLIO - FIXED VERSION
 // Author: Arsh Verma
-// Version: 6.0.0 - Production Ready
-// Description: Complete, bug-free games portfolio
-// Last Updated: November 2024
+// Version: 7.0.0 - Auto-loads from data.js
 // ==========================================
 
 'use strict';
@@ -31,26 +29,18 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeGamesPage();
 });
 
-/**
- * Main initialization function
- */
 function initializeGamesPage() {
     try {
-        // Initialize theme first
         initializeTheme();
         
         GAMES_STATE.isLoading = true;
         showLoadingState();
         
-        // Load games data
         loadGamesData();
-        
-        // Setup UI components
         setupGameFilters();
         setupGameEventListeners();
         updateHeaderStats();
         
-        // Display games after delay for smooth UX
         setTimeout(() => {
             GAMES_STATE.isLoading = false;
             applyFilters();
@@ -74,8 +64,8 @@ function initializeTheme() {
     const themeIcon = themeToggle?.querySelector('.theme-icon i');
     
     try {
-        // Get theme from localStorage or default to system preference
-        const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        const savedTheme = localStorage.getItem('theme') || 
+                          (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
         document.documentElement.setAttribute('data-theme', savedTheme);
         
         if (themeIcon) {
@@ -90,7 +80,6 @@ function initializeTheme() {
         
     } catch (error) {
         console.error('❌ Theme error:', error);
-        // Fallback to light theme
         document.documentElement.setAttribute('data-theme', 'light');
     }
 }
@@ -122,7 +111,6 @@ function loadGamesData() {
     try {
         let gamesData = [];
         
-        // Try multiple data sources
         if (typeof window.getGames === 'function') {
             gamesData = window.getGames();
             console.log('📥 Loaded from getGames():', gamesData.length);
@@ -130,11 +118,10 @@ function loadGamesData() {
             gamesData = window.PORTFOLIO_DATA.games;
             console.log('📥 Loaded from PORTFOLIO_DATA:', gamesData.length);
         } else {
-            gamesData = createSampleGames();
-            console.log('📥 Using sample data:', gamesData.length);
+            console.warn('⚠️ No data source found, using empty array');
+            gamesData = [];
         }
         
-        // Validate and assign
         GAMES_STATE.allGames = validateGamesData(gamesData);
         GAMES_STATE.filteredGames = [...GAMES_STATE.allGames];
         
@@ -142,14 +129,11 @@ function loadGamesData() {
         
     } catch (error) {
         console.error('❌ Error loading games:', error);
-        GAMES_STATE.allGames = createSampleGames();
-        GAMES_STATE.filteredGames = [...GAMES_STATE.allGames];
+        GAMES_STATE.allGames = [];
+        GAMES_STATE.filteredGames = [];
     }
 }
 
-/**
- * Validate games data structure
- */
 function validateGamesData(games) {
     if (!Array.isArray(games)) {
         console.warn('⚠️ Invalid games data: expected array');
@@ -169,13 +153,11 @@ function validateGamesData(games) {
         features: Array.isArray(game.features) ? game.features.slice(0, 5) : 
                   ['Engaging Gameplay', 'Stunning Visuals', 'Immersive Experience'],
         repositoryUrl: game.repositoryUrl || null,
-        unityBuild: game.unityBuild || null
+        playUrl: game.playUrl || null,
+        unityBuild: game.unityBuild || { enabled: false }
     })).filter(game => game.id && game.name);
 }
 
-/**
- * Generate placeholder image URL
- */
 function generatePlaceholderImage(name) {
     const encodedName = encodeURIComponent(name.substring(0, 20));
     return `https://via.placeholder.com/600x350/1A1A2E/FFB800?text=${encodedName}`;
@@ -184,10 +166,6 @@ function generatePlaceholderImage(name) {
 // ==========================================
 // UI LOADING STATES
 // ==========================================
-
-/**
- * Show loading state
- */
 function showLoadingState() {
     const gamesGrid = document.getElementById('gamesGrid');
     if (gamesGrid) {
@@ -200,9 +178,6 @@ function showLoadingState() {
     }
 }
 
-/**
- * Hide loading state
- */
 function hideLoadingState() {
     const loadingElement = document.querySelector('.loading-games');
     if (loadingElement) {
@@ -216,9 +191,6 @@ function hideLoadingState() {
     }
 }
 
-/**
- * Display error state
- */
 function displayErrorState() {
     const gamesGrid = document.getElementById('gamesGrid');
     if (gamesGrid) {
@@ -236,9 +208,6 @@ function displayErrorState() {
     }
 }
 
-/**
- * Retry loading games
- */
 function retryLoading() {
     showNotification('Retrying to load games...', 'info');
     initializeGamesPage();
@@ -247,10 +216,6 @@ function retryLoading() {
 // ==========================================
 // UI RENDERING
 // ==========================================
-
-/**
- * Display games in the grid
- */
 function displayGames(games) {
     const gamesGrid = document.getElementById('gamesGrid');
     if (!gamesGrid) {
@@ -280,7 +245,6 @@ function displayGames(games) {
         return;
     }
     
-    // Render games with staggered animation
     games.forEach((game, index) => {
         const gameCard = createGameCard(game);
         const cardElement = createElementFromHTML(gameCard);
@@ -304,23 +268,21 @@ function displayGames(games) {
     }, 100);
 }
 
-/**
- * Create HTML element from string
- */
 function createElementFromHTML(htmlString) {
     const div = document.createElement('div');
     div.innerHTML = htmlString.trim();
     return div.firstChild;
 }
 
-/**
- * Create game card HTML
- */
 function createGameCard(game) {
     const statusClass = game.status.toLowerCase().replace(/\s+/g, '-');
     const shortOverview = (game.overview || '').length > 120 
         ? game.overview.substring(0, 120) + '...' 
         : game.overview;
+    
+    // Determine if game is playable
+    const isPlayable = game.status === 'Live' && 
+                      ((game.unityBuild && game.unityBuild.enabled) || game.playUrl);
     
     return `
         <article class="game-card" 
@@ -343,7 +305,7 @@ function createGameCard(game) {
                             <i class="fas fa-eye"></i>
                             <span>View Details</span>
                         </button>
-                        ${game.status === 'Live' ? `
+                        ${isPlayable ? `
                             <button class="btn btn-play-now" 
                                     data-game-id="${game.id}">
                                 <i class="fas fa-play"></i>
@@ -419,10 +381,6 @@ function createGameCard(game) {
 // ==========================================
 // FILTERING & SORTING
 // ==========================================
-
-/**
- * Setup filter controls
- */
 function setupGameFilters() {
     const categoryFilter = document.getElementById('categoryFilter');
     const statusFilter = document.getElementById('statusFilter');
@@ -433,7 +391,6 @@ function setupGameFilters() {
         return;
     }
     
-    // Populate categories dynamically
     const categories = [...new Set(GAMES_STATE.allGames.map(g => g.category).filter(Boolean))].sort();
     categories.forEach(category => {
         const option = document.createElement('option');
@@ -442,7 +399,6 @@ function setupGameFilters() {
         categoryFilter.appendChild(option);
     });
     
-    // Event listeners
     function handleFilterChange() {
         GAMES_STATE.currentFilters.category = categoryFilter.value;
         GAMES_STATE.currentFilters.status = statusFilter.value;
@@ -457,38 +413,28 @@ function setupGameFilters() {
     console.log('✅ Filters setup completed');
 }
 
-/**
- * Apply all active filters and sorting
- */
 function applyFilters() {
     if (GAMES_STATE.isLoading) return;
     
     let filtered = [...GAMES_STATE.allGames];
     
-    // Category filter
     if (GAMES_STATE.currentFilters.category !== 'all') {
         filtered = filtered.filter(g => g.category === GAMES_STATE.currentFilters.category);
     }
     
-    // Status filter
     if (GAMES_STATE.currentFilters.status !== 'all') {
         filtered = filtered.filter(g => g.status === GAMES_STATE.currentFilters.status);
     }
     
-    // Sort results
     filtered = sortGames(filtered, GAMES_STATE.currentFilters.sort);
     
     GAMES_STATE.filteredGames = filtered;
     displayGames(filtered);
     
-    // Show results count
     const resultsText = filtered.length === 1 ? 'game' : 'games';
     showNotification(`Showing ${filtered.length} ${resultsText}`, 'info', 2000);
 }
 
-/**
- * Sort games by criteria
- */
 function sortGames(games, sortBy) {
     const sorted = [...games];
     
@@ -518,9 +464,6 @@ function sortGames(games, sortBy) {
     }
 }
 
-/**
- * Reset all filters
- */
 function resetFilters() {
     GAMES_STATE.currentFilters = {
         category: 'all',
@@ -543,12 +486,7 @@ function resetFilters() {
 // ==========================================
 // EVENT HANDLERS
 // ==========================================
-
-/**
- * Setup global event listeners
- */
 function setupGameEventListeners() {
-    // Keyboard shortcuts
     document.addEventListener('keydown', function(e) {
         if (e.target.matches('input, textarea, select, button')) return;
         
@@ -559,11 +497,7 @@ function setupGameEventListeners() {
     });
 }
 
-/**
- * Setup game card listeners
- */
 function setupGameCardListeners() {
-    // View details buttons
     document.querySelectorAll('.btn-view-details, .btn-view-game').forEach(btn => {
         btn.addEventListener('click', function(e) {
             e.stopPropagation();
@@ -573,7 +507,6 @@ function setupGameCardListeners() {
         });
     });
     
-    // Play now buttons
     document.querySelectorAll('.btn-play-now').forEach(btn => {
         btn.addEventListener('click', function(e) {
             e.stopPropagation();
@@ -583,7 +516,6 @@ function setupGameCardListeners() {
         });
     });
     
-    // Card click
     document.querySelectorAll('.game-card').forEach(card => {
         card.addEventListener('click', function(e) {
             if (!e.target.closest('button') && !e.target.closest('a')) {
@@ -592,7 +524,6 @@ function setupGameCardListeners() {
             }
         });
         
-        // Keyboard navigation
         card.addEventListener('keydown', function(e) {
             if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault();
@@ -603,9 +534,6 @@ function setupGameCardListeners() {
     });
 }
 
-/**
- * Button click animation
- */
 function buttonClickAnimation(button) {
     button.style.transform = 'scale(0.95)';
     setTimeout(() => {
@@ -613,9 +541,6 @@ function buttonClickAnimation(button) {
     }, 100);
 }
 
-/**
- * Navigate to game details
- */
 function viewGameDetails(gameId) {
     if (!gameId) {
         showNotification('Invalid game selection', 'error');
@@ -632,9 +557,6 @@ function viewGameDetails(gameId) {
     window.location.href = `game-detail.html?id=${gameId}`;
 }
 
-/**
- * Play game functionality
- */
 function playGame(gameId) {
     if (!gameId) {
         showNotification('Invalid game selection', 'error');
@@ -659,10 +581,6 @@ function playGame(gameId) {
 // ==========================================
 // UTILITY FUNCTIONS
 // ==========================================
-
-/**
- * Generate star rating HTML
- */
 function generateStars(rating) {
     const fullStars = Math.floor(rating);
     const hasHalfStar = rating % 1 >= 0.3 && rating % 1 <= 0.7;
@@ -686,9 +604,6 @@ function generateStars(rating) {
     return html;
 }
 
-/**
- * Format date
- */
 function formatDate(dateString) {
     if (!dateString) return 'Coming Soon';
     try {
@@ -704,9 +619,6 @@ function formatDate(dateString) {
     }
 }
 
-/**
- * Update header statistics
- */
 function updateHeaderStats() {
     const allGames = GAMES_STATE.allGames;
     if (allGames.length === 0) return;
@@ -723,9 +635,6 @@ function updateHeaderStats() {
     }
 }
 
-/**
- * Animate number counting
- */
 function animateValue(element, start, end, duration, suffix = '') {
     if (!element) return;
     
@@ -746,9 +655,6 @@ function animateValue(element, start, end, duration, suffix = '') {
     }, stepTime);
 }
 
-/**
- * Show notification
- */
 function showNotification(message, type = 'info', duration = 3000) {
     try {
         let container = document.getElementById('notificationContainer');
@@ -790,10 +696,8 @@ function showNotification(message, type = 'info', duration = 3000) {
         
         container.appendChild(notification);
         
-        // Animate in
         setTimeout(() => notification.classList.add('show'), 10);
         
-        // Auto remove
         setTimeout(() => {
             notification.classList.remove('show');
             setTimeout(() => {
@@ -808,9 +712,6 @@ function showNotification(message, type = 'info', duration = 3000) {
     }
 }
 
-/**
- * Escape HTML to prevent XSS
- */
 function escapeHtml(text) {
     if (typeof text !== 'string') return '';
     
@@ -823,71 +724,6 @@ function escapeHtml(text) {
     };
     
     return text.replace(/[&<>"']/g, m => map[m]);
-}
-
-// ==========================================
-// SAMPLE DATA FALLBACK
-// ==========================================
-function createSampleGames() {
-    return [
-        {
-            id: 1,
-            name: "Sky Surfers",
-            category: "Action",
-            status: "Live",
-            rating: 4.8,
-            overview: "An exciting aerial adventure game with stunning visuals and smooth controls. Soar through dynamic environments and master challenging obstacles.",
-            releaseDate: "2024-01-15",
-            playCount: 15000,
-            image: "https://via.placeholder.com/600x350/1A1A2E/FFB800?text=Sky+Surfers",
-            features: ["Dynamic Environments", "Smooth Controls", "Leaderboards", "Customization", "Multiplayer"],
-            technologies: ["Unity", "C#", "WebGL"],
-            repositoryUrl: "https://github.com/ArshVermaGit/sky-surfers",
-            unityBuild: "sky_surfers"
-        },
-        {
-            id: 2,
-            name: "Dragon Quest RPG",
-            category: "Fantasy RPG",
-            status: "Live",
-            rating: 4.7,
-            overview: "An epic fantasy adventure with deep combat mechanics and rich storytelling. Explore mystical lands and uncover ancient secrets.",
-            releaseDate: "2024-02-20",
-            playCount: 12000,
-            image: "https://via.placeholder.com/600x350/1A1A2E/FF9500?text=Dragon+Quest+RPG",
-            features: ["Open World", "Character Progression", "Quest System", "Crafting", "Multiplayer"],
-            technologies: ["Unity", "C#", "Blender"],
-            repositoryUrl: "https://github.com/ArshVermaGit/dragon-quest"
-        },
-        {
-            id: 3,
-            name: "Neon Drift Racer",
-            category: "Racing",
-            status: "In Development",
-            rating: 4.9,
-            overview: "High-speed futuristic racing with stunning visuals and intense competition. Customize your vehicle and dominate the leaderboards.",
-            releaseDate: "2024-03-30",
-            playCount: 0,
-            image: "https://via.placeholder.com/600x350/1A1A2E/FFC300?text=Neon+Drift+Racer",
-            features: ["Vehicle Customization", "Dynamic Weather", "Online Multiplayer", "VR Support"],
-            technologies: ["Unreal Engine", "C++", "Substance"],
-            repositoryUrl: "https://github.com/ArshVermaGit/neon-drift"
-        },
-        {
-            id: 4,
-            name: "Pixel Platformer",
-            category: "Platformer",
-            status: "Live",
-            rating: 4.6,
-            overview: "A retro-inspired platformer with modern mechanics and charming pixel art. Jump, dash, and explore vibrant worlds.",
-            releaseDate: "2024-01-10",
-            playCount: 8000,
-            image: "https://via.placeholder.com/600x350/1A1A2E/10B981?text=Pixel+Platformer",
-            features: ["Retro Pixel Art", "Precise Controls", "Secret Areas", "Speedrun Mode"],
-            technologies: ["Unity", "C#", "Aseprite"],
-            repositoryUrl: "https://github.com/ArshVermaGit/pixel-platformer"
-        }
-    ];
 }
 
 // ==========================================
