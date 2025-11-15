@@ -1,9 +1,7 @@
 // ==========================================
-// GAME DETAIL PAGE - PERFECTED JAVASCRIPT
+// GAME DETAIL PAGE - FIXED VERSION
 // Author: Arsh Verma
-// Version: 6.0.0 - Production Ready
-// Description: Complete game detail with Unity WebGL
-// Last Updated: November 2024
+// Version: 7.0.0 - Auto-loads from data.js
 // ==========================================
 
 'use strict';
@@ -16,21 +14,6 @@ let currentGame = null;
 let isGamePlaying = false;
 let unityInstance = null;
 let gamesData = [];
-
-// ==========================================
-// UNITY WEBGL BUILD CONFIG
-// ==========================================
-const unityBuilds = {
-    "sky_surfers": {
-        loaderUrl: "static/games_files/sky_surfers/Build/sky_surfers.loader.js",
-        dataUrl: "static/games_files/sky_surfers/Build/sky_surfers.data",
-        frameworkUrl: "static/games_files/sky_surfers/Build/sky_surfers.framework.js",
-        codeUrl: "static/games_files/sky_surfers/Build/sky_surfers.wasm",
-        companyName: "ArshCreates",
-        productName: "Sky Surfers",
-        productVersion: "1.0"
-    }
-};
 
 // ==========================================
 // INITIALIZATION
@@ -52,7 +35,7 @@ function initializeGameDetailPage() {
             return;
         }
         
-        console.log(`📌 Loading game ID: ${currentGameId}`);
+        console.log(`🔌 Loading game ID: ${currentGameId}`);
         
         // Load games data first
         loadGamesData().then(() => {
@@ -61,7 +44,7 @@ function initializeGameDetailPage() {
             
             if (autoPlay) {
                 setTimeout(() => {
-                    if (currentGame && currentGame.status === 'Live' && currentGame.unityBuild) {
+                    if (currentGame && currentGame.status === 'Live') {
                         playGame(currentGame);
                     }
                 }, 1500);
@@ -87,8 +70,8 @@ function initializeTheme() {
     const themeIcon = themeToggle?.querySelector('.theme-icon i');
     
     try {
-        // Get theme from localStorage or default to system preference
-        const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        const savedTheme = localStorage.getItem('theme') || 
+                          (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
         document.documentElement.setAttribute('data-theme', savedTheme);
         
         if (themeIcon) {
@@ -103,7 +86,6 @@ function initializeTheme() {
         
     } catch (error) {
         console.error('❌ Theme error:', error);
-        // Fallback to light theme
         document.documentElement.setAttribute('data-theme', 'light');
     }
 }
@@ -133,14 +115,12 @@ function toggleTheme() {
 // ==========================================
 async function loadGamesData() {
     try {
-        // Try multiple sources for game data
         if (typeof getGames === 'function') {
             gamesData = getGames();
         } else if (window.PORTFOLIO_DATA && Array.isArray(window.PORTFOLIO_DATA.games)) {
             gamesData = window.PORTFOLIO_DATA.games;
         } else {
-            // Fallback to sample data
-            gamesData = createSampleGames();
+            throw new Error('Games data not available');
         }
         
         if (!gamesData || !Array.isArray(gamesData)) {
@@ -152,8 +132,7 @@ async function loadGamesData() {
         
     } catch (error) {
         console.error('❌ Error loading games data:', error);
-        gamesData = createSampleGames();
-        return gamesData;
+        throw error;
     }
 }
 
@@ -191,7 +170,6 @@ function displayGameDetails(game) {
     try {
         console.log(`📋 Displaying: ${game.name}`);
         
-        // Update title
         document.title = `${game.name} - Arsh Verma`;
         
         // Preview image
@@ -309,7 +287,6 @@ function displayScreenshots(screenshots) {
             </div>
         `).join('');
         
-        // Create lightbox if it doesn't exist
         if (!document.getElementById('lightbox')) {
             const lightboxHTML = `
                 <div id="lightbox" class="lightbox" style="display: none;">
@@ -391,7 +368,6 @@ function updatePlayButton(game) {
         const playIcon = playBtn.querySelector('.play-icon-circle i');
         const playText = playBtn.querySelector('.play-text');
         
-        // Remove existing event listeners by replacing the button
         const newPlayBtn = playBtn.cloneNode(true);
         playBtn.parentNode.replaceChild(newPlayBtn, playBtn);
         
@@ -403,7 +379,16 @@ function updatePlayButton(game) {
             updatedPlayBtn.disabled = true;
             updatedPlayBtn.style.cursor = 'not-allowed';
             updatedPlayBtn.style.opacity = '0.6';
-        } else if (!game.unityBuild && game.playUrl) {
+        } else if (game.unityBuild && game.unityBuild.enabled) {
+            // Unity WebGL game
+            if (playIcon) playIcon.className = 'fas fa-play';
+            if (playText) playText.textContent = 'Play Game';
+            updatedPlayBtn.disabled = false;
+            updatedPlayBtn.style.cursor = 'pointer';
+            updatedPlayBtn.style.opacity = '1';
+            updatedPlayBtn.onclick = () => playGame(game);
+        } else if (game.playUrl) {
+            // External link game
             if (playIcon) playIcon.className = 'fas fa-external-link-alt';
             if (playText) playText.textContent = 'Play Game';
             updatedPlayBtn.disabled = false;
@@ -412,7 +397,8 @@ function updatePlayButton(game) {
             updatedPlayBtn.onclick = () => {
                 window.open(game.playUrl, '_blank', 'noopener,noreferrer');
             };
-        } else if (!game.unityBuild) {
+        } else {
+            // No playable version
             if (playIcon) playIcon.className = 'fas fa-external-link-alt';
             if (playText) playText.textContent = 'View Project';
             updatedPlayBtn.disabled = false;
@@ -425,13 +411,6 @@ function updatePlayButton(game) {
                     showNotification('No playable version available', 'info');
                 }
             };
-        } else {
-            if (playIcon) playIcon.className = 'fas fa-play';
-            if (playText) playText.textContent = 'Play Game';
-            updatedPlayBtn.disabled = false;
-            updatedPlayBtn.style.cursor = 'pointer';
-            updatedPlayBtn.style.opacity = '1';
-            updatedPlayBtn.onclick = () => playGame(game);
         }
         
     } catch (error) {
@@ -470,8 +449,6 @@ function setupGameDetailEventListeners() {
         document.addEventListener('fullscreenchange', handleFullscreenChange);
         document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
         document.addEventListener('mozfullscreenchange', handleFullscreenChange);
-        
-        // Lightbox keyboard navigation
         document.addEventListener('keydown', handleLightboxNavigation);
         
         console.log('✅ Listeners setup complete');
@@ -514,7 +491,6 @@ function setupGameNavigation() {
         const prevGame = gamesData[(currentIndex - 1 + gamesData.length) % gamesData.length];
         const nextGame = gamesData[(currentIndex + 1) % gamesData.length];
         
-        // Update navigation buttons
         if (prevGameBtn) {
             const prevTitle = prevGameBtn.querySelector('.nav-title');
             if (prevTitle) prevTitle.textContent = prevGame.name;
@@ -545,13 +521,14 @@ function playGame(game) {
     console.log(`🎮 Playing: ${game.name}`);
     
     try {
-        if (game.playUrl && !game.unityBuild) {
-            // External game URL
+        // Check if external playUrl exists
+        if (game.playUrl && (!game.unityBuild || !game.unityBuild.enabled)) {
             window.open(game.playUrl, '_blank', 'noopener,noreferrer');
             return;
         }
         
-        if (!game.unityBuild) {
+        // Check if Unity WebGL is enabled
+        if (!game.unityBuild || !game.unityBuild.enabled) {
             showNotification('Game not available for WebGL play', 'info');
             if (game.repositoryUrl) {
                 window.open(game.repositoryUrl, '_blank', 'noopener,noreferrer');
@@ -559,10 +536,12 @@ function playGame(game) {
             return;
         }
         
-        const buildConfig = unityBuilds[game.unityBuild];
-        if (!buildConfig) {
-            showNotification('Game build not found', 'error');
-            console.error('❌ Build config missing:', game.unityBuild);
+        const buildConfig = game.unityBuild;
+        
+        // Validate Unity build configuration
+        if (!buildConfig.loaderUrl || !buildConfig.dataUrl || !buildConfig.frameworkUrl || !buildConfig.codeUrl) {
+            showNotification('Invalid Unity build configuration', 'error');
+            console.error('❌ Missing Unity build URLs');
             return;
         }
         
@@ -575,7 +554,6 @@ function playGame(game) {
             return;
         }
         
-        // Show game container, hide preview
         gameContainer.style.display = 'block';
         previewContainer.style.display = 'none';
         
@@ -625,7 +603,7 @@ function loadUnityBuild(buildConfig) {
         
         const loadTimeout = setTimeout(() => {
             console.error('❌ Unity loader timeout');
-            showNotification('Game loading timeout', 'error');
+            showNotification('Game loading timeout - check build files', 'error');
             resetGameState();
         }, 30000);
         
@@ -645,9 +623,9 @@ function loadUnityBuild(buildConfig) {
                 frameworkUrl: buildConfig.frameworkUrl,
                 codeUrl: buildConfig.codeUrl,
                 streamingAssetsUrl: "StreamingAssets",
-                companyName: buildConfig.companyName,
-                productName: buildConfig.productName,
-                productVersion: buildConfig.productVersion,
+                companyName: buildConfig.companyName || "ArshCreates",
+                productName: buildConfig.productName || "Game",
+                productVersion: buildConfig.productVersion || "1.0",
             };
             
             console.log('⚙️ Creating Unity instance...');
@@ -672,7 +650,7 @@ function loadUnityBuild(buildConfig) {
                 
             }).catch((message) => {
                 console.error('❌ Unity instance failed:', message);
-                showNotification('Failed to load game', 'error');
+                showNotification('Failed to load game - check console', 'error');
                 resetGameState();
             });
         };
@@ -680,7 +658,7 @@ function loadUnityBuild(buildConfig) {
         script.onerror = (error) => {
             clearTimeout(loadTimeout);
             console.error('❌ Script load failed:', error);
-            showNotification('Cannot load game files', 'error');
+            showNotification('Cannot load game files - check paths', 'error');
             resetGameState();
         };
         
@@ -994,10 +972,8 @@ function showNotification(message, type = 'info') {
         
         container.appendChild(notification);
         
-        // Animate in
         setTimeout(() => notification.classList.add('show'), 10);
         
-        // Auto remove
         setTimeout(() => {
             notification.classList.remove('show');
             setTimeout(() => {
@@ -1010,47 +986,6 @@ function showNotification(message, type = 'info') {
     } catch (error) {
         console.error('❌ Notification error:', error);
     }
-}
-
-// ==========================================
-// SAMPLE DATA FALLBACK
-// ==========================================
-function createSampleGames() {
-    return [
-        {
-            id: 1,
-            name: "Sky Surfers",
-            category: "Endless Runner",
-            status: "Live",
-            rating: 4.6,
-            overview: "Fast-paced endless runner with stunning aerial gameplay",
-            description: "Soar through the skies in this thrilling endless runner game. Navigate through clouds, avoid obstacles, collect power-ups, and compete for the highest score on global leaderboards.",
-            releaseDate: "2023-09-20",
-            developmentTime: "3 months",
-            teamSize: "2 developers",
-            platforms: ["WebGL", "Mobile"],
-            playCount: 12500,
-            likes: 890,
-            features: [
-                "Smooth endless gameplay mechanics",
-                "Power-up system with unique abilities",
-                "Global leaderboards",
-                "Daily challenges and rewards",
-                "Multiple character skins",
-                "Progressive difficulty system"
-            ],
-            technologies: ["Unity", "C#", "Unity Ads", "Firebase"],
-            repositoryUrl: "https://github.com/ArshVermaGit/sky-surfers",
-            playUrl: "games/sky-surfers/index.html",
-            unityBuild: "sky_surfers",
-            image: "static/images/games/Game1.jpg",
-            screenshots: [
-                "assets/games/game2-1.jpg",
-                "assets/games/game2-2.jpg",
-                "assets/games/game2-3.jpg"
-            ]
-        }
-    ];
 }
 
 // ==========================================
