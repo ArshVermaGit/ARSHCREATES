@@ -36,6 +36,9 @@ document.addEventListener('DOMContentLoaded', function() {
  */
 function initializeGamesPage() {
     try {
+        // Initialize theme first
+        initializeTheme();
+        
         GAMES_STATE.isLoading = true;
         showLoadingState();
         
@@ -63,27 +66,70 @@ function initializeGamesPage() {
     }
 }
 
-/**
- * Load games data from PORTFOLIO_DATA
- */
+// ==========================================
+// THEME MANAGEMENT
+// ==========================================
+function initializeTheme() {
+    const themeToggle = document.getElementById('themeToggle');
+    const themeIcon = themeToggle?.querySelector('.theme-icon i');
+    
+    try {
+        // Get theme from localStorage or default to system preference
+        const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        
+        if (themeIcon) {
+            themeIcon.className = savedTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+        }
+        
+        if (themeToggle) {
+            themeToggle.addEventListener('click', toggleTheme);
+        }
+        
+        console.log(`🎨 Theme initialized: ${savedTheme}`);
+        
+    } catch (error) {
+        console.error('❌ Theme error:', error);
+        // Fallback to light theme
+        document.documentElement.setAttribute('data-theme', 'light');
+    }
+}
+
+function toggleTheme() {
+    try {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        const themeIcon = document.querySelector('#themeToggle .theme-icon i');
+        
+        document.documentElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+        
+        if (themeIcon) {
+            themeIcon.className = newTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+        }
+        
+        console.log(`🎨 Theme toggled: ${newTheme}`);
+        
+    } catch (error) {
+        console.error('❌ Theme toggle error:', error);
+    }
+}
+
+// ==========================================
+// GAME DATA LOADING
+// ==========================================
 function loadGamesData() {
     try {
         let gamesData = [];
         
-        // Try PORTFOLIO_DATA first
-        if (typeof window.PORTFOLIO_DATA !== 'undefined' && 
-            Array.isArray(window.PORTFOLIO_DATA.games) && 
-            window.PORTFOLIO_DATA.games.length > 0) {
-            gamesData = window.PORTFOLIO_DATA.games;
-            console.log('📥 Loaded from PORTFOLIO_DATA:', gamesData.length);
-        } 
-        // Fallback to getGames function
-        else if (typeof window.getGames === 'function') {
+        // Try multiple data sources
+        if (typeof window.getGames === 'function') {
             gamesData = window.getGames();
             console.log('📥 Loaded from getGames():', gamesData.length);
-        }
-        // Final fallback to sample data
-        else {
+        } else if (window.PORTFOLIO_DATA && Array.isArray(window.PORTFOLIO_DATA.games)) {
+            gamesData = window.PORTFOLIO_DATA.games;
+            console.log('📥 Loaded from PORTFOLIO_DATA:', gamesData.length);
+        } else {
             gamesData = createSampleGames();
             console.log('📥 Using sample data:', gamesData.length);
         }
@@ -96,9 +142,8 @@ function loadGamesData() {
         
     } catch (error) {
         console.error('❌ Error loading games:', error);
-        GAMES_STATE.allGames = [];
-        GAMES_STATE.filteredGames = [];
-        throw new Error('Failed to load games data');
+        GAMES_STATE.allGames = createSampleGames();
+        GAMES_STATE.filteredGames = [...GAMES_STATE.allGames];
     }
 }
 
@@ -123,7 +168,8 @@ function validateGamesData(games) {
         image: game.image || generatePlaceholderImage(game.name || 'Game'),
         features: Array.isArray(game.features) ? game.features.slice(0, 5) : 
                   ['Engaging Gameplay', 'Stunning Visuals', 'Immersive Experience'],
-        repositoryUrl: game.repositoryUrl || null
+        repositoryUrl: game.repositoryUrl || null,
+        unityBuild: game.unityBuild || null
     })).filter(game => game.id && game.name);
 }
 
@@ -132,7 +178,7 @@ function validateGamesData(games) {
  */
 function generatePlaceholderImage(name) {
     const encodedName = encodeURIComponent(name.substring(0, 20));
-    return `https://via.placeholder.com/600x350/1A1A2E/E4572E?text=${encodedName}`;
+    return `https://via.placeholder.com/600x350/1A1A2E/FFB800?text=${encodedName}`;
 }
 
 // ==========================================
@@ -162,7 +208,11 @@ function hideLoadingState() {
     if (loadingElement) {
         loadingElement.style.opacity = '0';
         loadingElement.style.transition = 'opacity 0.4s ease';
-        setTimeout(() => loadingElement.remove(), 400);
+        setTimeout(() => {
+            if (loadingElement.parentNode) {
+                loadingElement.remove();
+            }
+        }, 400);
     }
 }
 
@@ -284,7 +334,7 @@ function createGameCard(game) {
                 <img src="${game.image}" 
                      alt="${game.name} - Game preview"
                      loading="lazy"
-                     onerror="this.src='${generatePlaceholderImage(game.name)}';">
+                     onerror="this.src='${generatePlaceholderImage(game.name)}'">
                 
                 <div class="game-overlay">
                     <div class="overlay-content">
@@ -332,14 +382,14 @@ function createGameCard(game) {
                     ` : ''}
                 </div>
                 
-                <p class="game-description">${shortOverview}</p>
+                <p class="game-description">${escapeHtml(shortOverview)}</p>
                 
                 ${game.features && game.features.length > 0 ? `
                     <div class="game-features">
                         ${game.features.slice(0, 3).map(feature => `
                             <span class="game-feature">
                                 <i class="fas fa-check"></i>
-                                ${feature}
+                                ${escapeHtml(feature)}
                             </span>
                         `).join('')}
                     </div>
@@ -677,6 +727,8 @@ function updateHeaderStats() {
  * Animate number counting
  */
 function animateValue(element, start, end, duration, suffix = '') {
+    if (!element) return;
+    
     const range = Math.abs(end - start);
     const stepTime = Math.max(Math.floor(duration / range), 20);
     const isDecimal = end % 1 !== 0;
@@ -698,54 +750,79 @@ function animateValue(element, start, end, duration, suffix = '') {
  * Show notification
  */
 function showNotification(message, type = 'info', duration = 3000) {
-    const container = document.getElementById('notificationContainer') || createNotificationContainer();
-    
-    const notification = document.createElement('div');
-    notification.className = `notification ${type}`;
-    
-    const icons = {
-        success: 'check-circle',
-        error: 'exclamation-circle',
-        warning: 'exclamation-triangle',
-        info: 'info-circle'
-    };
-    
-    notification.innerHTML = `
-        <div class="notification-icon">
-            <i class="fas fa-${icons[type] || 'info-circle'}"></i>
-        </div>
-        <div class="notification-content">
-            <div class="notification-message">${message}</div>
-        </div>
-    `;
-    
-    container.appendChild(notification);
-    
-    setTimeout(() => notification.classList.add('show'), 10);
-    
-    setTimeout(() => {
-        notification.classList.remove('show');
-        setTimeout(() => notification.remove(), 300);
-    }, duration);
+    try {
+        let container = document.getElementById('notificationContainer');
+        if (!container) {
+            container = document.createElement('div');
+            container.id = 'notificationContainer';
+            container.className = 'notification-container';
+            container.style.cssText = `
+                position: fixed;
+                top: 6rem;
+                right: 1.5rem;
+                z-index: 9999;
+                display: flex;
+                flex-direction: column;
+                gap: 0.75rem;
+                pointer-events: none;
+            `;
+            document.body.appendChild(container);
+        }
+        
+        const notification = document.createElement('div');
+        notification.className = `notification ${type}`;
+        
+        const icons = {
+            success: 'check-circle',
+            error: 'exclamation-circle',
+            warning: 'exclamation-triangle',
+            info: 'info-circle'
+        };
+        
+        notification.innerHTML = `
+            <div class="notification-icon">
+                <i class="fas fa-${icons[type] || 'info-circle'}"></i>
+            </div>
+            <div class="notification-content">
+                <div class="notification-message">${escapeHtml(message)}</div>
+            </div>
+        `;
+        
+        container.appendChild(notification);
+        
+        // Animate in
+        setTimeout(() => notification.classList.add('show'), 10);
+        
+        // Auto remove
+        setTimeout(() => {
+            notification.classList.remove('show');
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.remove();
+                }
+            }, 300);
+        }, duration);
+        
+    } catch (error) {
+        console.error('❌ Notification error:', error);
+    }
 }
 
 /**
- * Create notification container
+ * Escape HTML to prevent XSS
  */
-function createNotificationContainer() {
-    const container = document.createElement('div');
-    container.id = 'notificationContainer';
-    container.style.cssText = `
-        position: fixed;
-        top: 6rem;
-        right: 1.5rem;
-        z-index: 9999;
-        display: flex;
-        flex-direction: column;
-        gap: 0.75rem;
-    `;
-    document.body.appendChild(container);
-    return container;
+function escapeHtml(text) {
+    if (typeof text !== 'string') return '';
+    
+    const map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+    };
+    
+    return text.replace(/[&<>"']/g, m => map[m]);
 }
 
 // ==========================================
@@ -755,29 +832,60 @@ function createSampleGames() {
     return [
         {
             id: 1,
-            name: "Dragon Quest RPG",
-            category: "Action RPG",
+            name: "Sky Surfers",
+            category: "Action",
             status: "Live",
-            rating: 4.7,
-            overview: "An epic fantasy adventure with deep combat mechanics and rich storytelling.",
+            rating: 4.8,
+            overview: "An exciting aerial adventure game with stunning visuals and smooth controls. Soar through dynamic environments and master challenging obstacles.",
             releaseDate: "2024-01-15",
             playCount: 15000,
-            image: "https://via.placeholder.com/600x350/1A1A2E/E4572E?text=Dragon+Quest+RPG",
-            features: ["Open World", "Character Customization", "Real-time Combat", "Multiplayer"],
-            repositoryUrl: "https://github.com/ArshVermaGit/dragon-quest-rpg"
+            image: "https://via.placeholder.com/600x350/1A1A2E/FFB800?text=Sky+Surfers",
+            features: ["Dynamic Environments", "Smooth Controls", "Leaderboards", "Customization", "Multiplayer"],
+            technologies: ["Unity", "C#", "WebGL"],
+            repositoryUrl: "https://github.com/ArshVermaGit/sky-surfers",
+            unityBuild: "sky_surfers"
         },
         {
             id: 2,
+            name: "Dragon Quest RPG",
+            category: "Fantasy RPG",
+            status: "Live",
+            rating: 4.7,
+            overview: "An epic fantasy adventure with deep combat mechanics and rich storytelling. Explore mystical lands and uncover ancient secrets.",
+            releaseDate: "2024-02-20",
+            playCount: 12000,
+            image: "https://via.placeholder.com/600x350/1A1A2E/FF9500?text=Dragon+Quest+RPG",
+            features: ["Open World", "Character Progression", "Quest System", "Crafting", "Multiplayer"],
+            technologies: ["Unity", "C#", "Blender"],
+            repositoryUrl: "https://github.com/ArshVermaGit/dragon-quest"
+        },
+        {
+            id: 3,
             name: "Neon Drift Racer",
             category: "Racing",
-            status: "Live",
+            status: "In Development",
             rating: 4.9,
-            overview: "High-speed futuristic racing with stunning visuals and intense competition.",
-            releaseDate: "2024-02-20",
-            playCount: 22000,
+            overview: "High-speed futuristic racing with stunning visuals and intense competition. Customize your vehicle and dominate the leaderboards.",
+            releaseDate: "2024-03-30",
+            playCount: 0,
             image: "https://via.placeholder.com/600x350/1A1A2E/FFC300?text=Neon+Drift+Racer",
-            features: ["Multiplayer Races", "Vehicle Customization", "Dynamic Weather", "VR"],
-            repositoryUrl: "https://github.com/ArshVermaGit/neon-drift-racer"
+            features: ["Vehicle Customization", "Dynamic Weather", "Online Multiplayer", "VR Support"],
+            technologies: ["Unreal Engine", "C++", "Substance"],
+            repositoryUrl: "https://github.com/ArshVermaGit/neon-drift"
+        },
+        {
+            id: 4,
+            name: "Pixel Platformer",
+            category: "Platformer",
+            status: "Live",
+            rating: 4.6,
+            overview: "A retro-inspired platformer with modern mechanics and charming pixel art. Jump, dash, and explore vibrant worlds.",
+            releaseDate: "2024-01-10",
+            playCount: 8000,
+            image: "https://via.placeholder.com/600x350/1A1A2E/10B981?text=Pixel+Platformer",
+            features: ["Retro Pixel Art", "Precise Controls", "Secret Areas", "Speedrun Mode"],
+            technologies: ["Unity", "C#", "Aseprite"],
+            repositoryUrl: "https://github.com/ArshVermaGit/pixel-platformer"
         }
     ];
 }
