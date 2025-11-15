@@ -30,8 +30,21 @@ const PORTFOLIO_DATA = {
             ],
             technologies: ["Unity", "C#", "Unity Ads", "Firebase"],
             repositoryUrl: "https://github.com/ArshVermaGit/sky-surfers",
-            playUrl: "games/sky-surfers/index.html",
-            unityBuild: "static/games_files/sky_surfers/",
+            playUrl: null, // Set to null if using Unity WebGL, or provide external URL
+            
+            // Unity WebGL Configuration - IMPORTANT: Set this for WebGL games
+            unityBuild: {
+                enabled: true, // Set to true if this game has Unity WebGL build
+                buildName: "sky_surfers", // Name of the build folder
+                loaderUrl: "static/games_files/sky_surfers/Build/sky_surfers.loader.js",
+                dataUrl: "static/games_files/sky_surfers/Build/sky_surfers.data",
+                frameworkUrl: "static/games_files/sky_surfers/Build/sky_surfers.framework.js",
+                codeUrl: "static/games_files/sky_surfers/Build/sky_surfers.wasm",
+                companyName: "ArshCreates",
+                productName: "Sky Surfers",
+                productVersion: "1.0"
+            },
+            
             screenshots: [
                 "static/images/games/sky_surfers/1.jpg",
                 "static/images/games/sky_surfers/2.jpg",
@@ -46,7 +59,7 @@ const PORTFOLIO_DATA = {
             id: 1,
             name: "ReelSpot",
             overview: "Modern social media downloader with advanced features and seamless UX",
-            description: "ReelSpot is a comprehensive social media content downloader that allows users to save their favorite videos, images, and reels from multiple platforms. Built with modern web technologies, it features a clean interface, fast processing, and support for multiple formats. The platform prioritizes user privacy and doesn't require login for most features.",
+            description: "ReelSpot is a comprehensive social media content downloader that allows users to save their favorite videos, images, and reels from multiple platforms. Built with modern web technologies, it features a clean interface, fast processing, and support for multiple formats.",
             image: "static/images/websites/ReelSpot/ReelSpot.jpg",
             category: "Media Downloader",
             rating: 4.8,
@@ -82,7 +95,7 @@ const PORTFOLIO_DATA = {
             id: 1,
             name: "Productivity Pro",
             overview: "All-in-one productivity app for task management and time tracking",
-            description: "Productivity Pro is a comprehensive productivity application designed to help users organize their tasks, track time, set goals, and boost overall efficiency. With intuitive interfaces, powerful features, and seamless synchronization across devices, it's the perfect companion for professionals, students, and anyone looking to maximize their productivity.",
+            description: "Productivity Pro is a comprehensive productivity application designed to help users organize their tasks, track time, set goals, and boost overall efficiency.",
             image: "static/apps/app1.jpg",
             category: "Productivity",
             rating: 4.8,
@@ -96,13 +109,11 @@ const PORTFOLIO_DATA = {
             minOS: "iOS 13.0 / Android 8.0",
             technologies: ["React Native", "Firebase", "Redux", "Expo"],
             features: [
-                "Advanced task management with tags and priorities",
-                "Pomodoro timer with customizable intervals",
-                "Time tracking with detailed analytics",
-                "Goal setting and progress monitoring",
-                "Calendar integration",
-                "Team collaboration features",
-                "Cloud synchronization across devices",
+                "Advanced task management",
+                "Pomodoro timer",
+                "Time tracking with analytics",
+                "Goal setting",
+                "Cloud synchronization",
                 "Offline mode support"
             ],
             repositoryUrl: "https://github.com/ArshVermaGit/productivity-pro",
@@ -125,27 +136,20 @@ const PORTFOLIO_DATA = {
             date: "2024-01-15",
             category: "Cloud Computing",
             image: "assets/certificates/aws-saa.jpg",
-            description: "Demonstrated expertise in designing distributed systems on AWS platform including compute, networking, storage, and database AWS services as well as deployment and management services.",
+            description: "Demonstrated expertise in designing distributed systems on AWS platform.",
             skills: [
                 "AWS Services Architecture",
                 "Cloud Infrastructure Design",
                 "Security & Compliance",
-                "Cost Optimization",
-                "High Availability Systems",
-                "Scalable Solutions"
+                "Cost Optimization"
             ],
-            technologies: ["AWS", "EC2", "S3", "RDS", "Lambda", "CloudFormation", "VPC"],
+            technologies: ["AWS", "EC2", "S3", "RDS", "Lambda"],
             credentialId: "AWS-ASA-12345-67890",
-            credentialUrl: "https://www.credly.com/badges/aws-certified-solutions-architect-associate",
+            credentialUrl: "https://www.credly.com/badges/aws-certified",
             year: "2024",
             validity: "3 Years",
             difficulty: "Advanced",
             duration: "3 Months",
-            recognition: "Global",
-            additionalImages: [
-                "assets/certificates/aws-saa-badge.jpg",
-                "assets/certificates/aws-saa-transcript.jpg"
-            ],
             verified: true,
             featured: true
         }
@@ -159,33 +163,9 @@ const PORTFOLIO_DATA = {
             projectType: "Website",
             projectName: "E-Commerce Pro",
             rating: 5,
-            testimonialText: "Arsh delivered an exceptional e-commerce platform that exceeded our expectations. His attention to detail and technical expertise transformed our online business. The site is fast, secure, and our sales have increased by 150% since launch!",
+            testimonialText: "Arsh delivered an exceptional e-commerce platform that exceeded our expectations.",
             date: "2024-01-15",
             avatar: "assets/testimonials/client1.jpg",
-            approved: true
-        },
-        {
-            id: 2,
-            clientName: "Mike Rodriguez",
-            clientRole: "Product Manager, FitLife",
-            projectType: "App",
-            projectName: "Fitness Tracker Pro",
-            rating: 5,
-            testimonialText: "The fitness app developed by Arsh has been instrumental in our company's growth. The user experience is seamless, the performance is outstanding, and our users love the intuitive design. Highly recommended!",
-            date: "2024-02-10",
-            avatar: "assets/testimonials/client2.jpg",
-            approved: true
-        },
-        {
-            id: 3,
-            clientName: "Emily Chen",
-            clientRole: "Founder, HealthWell Solutions",
-            projectType: "Website",
-            projectName: "Health & Wellness Hub",
-            rating: 5,
-            testimonialText: "Working with Arsh was an absolute pleasure. He understood our vision perfectly and delivered a platform that our users love. The attention to detail and commitment to quality is evident in every aspect of the project.",
-            date: "2023-12-20",
-            avatar: "assets/testimonials/client3.jpg",
             approved: true
         }
     ]
