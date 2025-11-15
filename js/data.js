@@ -33,9 +33,9 @@ const PORTFOLIO_DATA = {
             playUrl: "games/sky-surfers/index.html",
             unityBuild: "static/games_files/sky_surfers/",
             screenshots: [
-                "assets/games/game2-1.jpg",
-                "assets/games/game2-2.jpg",
-                "assets/games/game2-3.jpg"
+                "static/images/games/Game1.jpg",
+                "static/images/games/Game1.jpg",
+                "static/images/games/Game1.jpg"
             ]
         }
     ],
