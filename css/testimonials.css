@@ -1,0 +1,1573 @@
+   /* ==========================================
+   PERFECTED TESTIMONIALS PORTFOLIO STYLES - PRODUCTION READY V3.0
+   Author: Arsh Verma
+   Version: 3.0.0
+   Description: Comprehensive CSS for testimonials.html portfolio page
+                - Modern card design with client focus
+                - Glassmorphism with borders, smooth animations
+                - Full dark/light mode support with proper contrast
+                - Rating stars, quote styling, modal interactions
+   Last Updated: November 12, 2025
+   ========================================== */
+
+/* ==========================================
+   CSS VARIABLES FOR THEME MANAGEMENT
+   Easy editing point for colors and spacing
+   ========================================== */
+:root {
+    /* ===== WARM YELLOW COLOR PALETTE ===== */
+    /* Primary warm yellows - main brand colors */
+    --yellow-primary: #FFB800;        /* Vibrant golden yellow - primary CTA */
+    --yellow-secondary: #FF9500;      /* Warm amber - secondary elements */
+    --yellow-accent: #FFC933;         /* Light golden - highlights */
+    --yellow-deep: #CC9200;           /* Deep gold - hover states */
+    
+    --radius-sm: 12px;       /* Small elements */
+    --radius-md: 16px;       /* Medium cards */
+    --radius-lg: 24px;       /* Large sections */
+    --radius-xl: 32px;       /* Hero elements */
+    --radius-full: 9999px;   /* Pills & circles */
+
+    /* Light mode colors */
+    --bg-light: #FFFFFF;              /* Pure white background */
+    --text-light: #000000;            /* Pure black text */
+    --text-secondary-light: #4A4A4A;  /* Dark gray for secondary text */
+    --text-tertiary-light: #8E8E93;   /* Medium gray for tertiary text */
+    --card-bg-light: rgba(255, 255, 255, 0.7);  /* Frosted white cards */
+    --border-light: rgba(0, 0, 0, 0.08);        /* Subtle borders */
+    
+    /* Active theme variables - default to light */
+    --bg-primary: var(--bg-light);
+    --text-primary: var(--text-light);
+    --text-secondary: var(--text-secondary-light);
+    --text-tertiary: var(--text-tertiary-light);
+    --card-bg: var(--card-bg-light);
+    --bg-secondary: rgba(250, 250, 250, 0.8);
+    --border-color: var(--border-light);
+    
+    /* Accent colors - warm yellow theme */
+    --accent-primary: var(--yellow-primary);
+    --accent-secondary: var(--yellow-secondary);
+    --accent-gradient: linear-gradient(135deg, var(--yellow-primary) 0%, var(--yellow-secondary) 100%);
+    
+    /* ===== iOS 26 LIQUID GLASS EFFECTS ===== */
+    /* Advanced glassmorphism with layered blur and saturation */
+    --glass-bg: rgba(255, 255, 255, 0.65);
+    --glass-blur: blur(40px) saturate(180%);
+    --glass-border: 1px solid rgba(255, 255, 255, 0.25);
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+    
+    /* Dynamic liquid glass with color tint */
+    --liquid-glass-warm: rgba(255, 184, 0, 0.12);
+    --liquid-glass-overlay: linear-gradient(135deg, 
+        rgba(255, 184, 0, 0.1) 0%, 
+        rgba(255, 149, 0, 0.08) 50%,
+        rgba(255, 184, 0, 0.1) 100%);
+    
+    /* ===== SPACING SYSTEM ===== */
+    --spacing-xs: 0.5rem;    /* 8px */
+    --spacing-sm: 0.75rem;   /* 12px */
+    --spacing-md: 1rem;      /* 16px */
+    --spacing-lg: 1.5rem;    /* 24px */
+    --spacing-xl: 2rem;      /* 32px */
+    --spacing-2xl: 3rem;     /* 48px */
+    --spacing-3xl: 4rem;     /* 64px */
+    --spacing-4xl: 5rem;     /* 80px */
+    
+    /* ===== BORDER RADIUS - SOFT & FRIENDLY ===== */
+    --radius-sm: 12px;       /* Small elements */
+    --radius-md: 16px;       /* Medium cards */
+    --radius-lg: 24px;       /* Large sections */
+    --radius-xl: 32px;       /* Hero elements */
+    --radius-full: 9999px;   /* Pills & circles */
+    
+    /* ===== TYPOGRAPHY SCALE ===== */
+    --font-xs: 0.75rem;      /* 12px */
+    --font-sm: 0.875rem;     /* 14px */
+    --font-base: 1rem;       /* 16px */
+    --font-lg: 1.125rem;     /* 18px */
+    --font-xl: 1.25rem;      /* 20px */
+    --font-2xl: 1.5rem;      /* 24px */
+    --font-3xl: 1.875rem;    /* 30px */
+    --font-4xl: 2.25rem;     /* 36px */
+    --font-5xl: 3rem;        /* 48px */
+    --font-6xl: 4rem;        /* 64px */
+    
+    /* ===== TRANSITIONS - SILKY SMOOTH ===== */
+    --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-base: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-smooth: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-slow: 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    
+    /* ===== SHADOWS - SOFT & LAYERED ===== */
+    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.08);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+    --shadow-xl: 0 16px 40px rgba(0, 0, 0, 0.15);
+    --shadow-2xl: 0 24px 60px rgba(0, 0, 0, 0.18);
+    
+    /* Golden glow shadows for accent elements */
+    --shadow-glow-sm: 0 4px 16px rgba(255, 184, 0, 0.35);
+    --shadow-glow-md: 0 8px 28px rgba(255, 184, 0, 0.45);
+    --shadow-glow-lg: 0 16px 48px rgba(255, 184, 0, 0.55);
+    
+    /* ===== Z-INDEX LAYERS ===== */
+    --z-particles: 1;
+    --z-content: 10;
+    --z-navbar: 100;
+    --z-modal: 200;
+    --z-notification: 300;
+    --z-loading: 400;
+}
+
+/* ==========================================================================================================
+   DARK MODE - EXACT BLACK WITH WARM YELLOW ACCENTS
+   ========================================================================================================== */
+
+[data-theme="dark"] {
+    /* Pure black background for OLED displays */
+    --bg-dark: #000000;
+    --text-dark: #FFFFFF;
+    --text-secondary-dark: #B0B0B0;
+    --text-tertiary-dark: #8E8E93;
+    --card-bg-dark: rgba(20, 20, 20, 0.7);
+    --border-dark: rgba(255, 255, 255, 0.12);
+    
+    /* Apply dark theme */
+    --bg-primary: var(--bg-dark);
+    --text-primary: var(--text-dark);
+    --text-secondary: var(--text-secondary-dark);
+    --text-tertiary: var(--text-tertiary-dark);
+    --card-bg: var(--card-bg-dark);
+    --bg-secondary: rgba(30, 30, 30, 0.8);
+    --border-color: var(--border-dark);
+    
+    /* Enhanced liquid glass for dark mode */
+    --glass-bg: rgba(20, 20, 20, 0.7);
+    --glass-border: 1px solid rgba(255, 255, 255, 0.15);
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+    
+    /* Warm overlay for dark mode */
+    --liquid-glass-warm: rgba(255, 184, 0, 0.08);
+    --liquid-glass-overlay: linear-gradient(135deg, 
+        rgba(255, 184, 0, 0.06) 0%, 
+        rgba(255, 149, 0, 0.04) 50%,
+        rgba(255, 184, 0, 0.06) 100%);
+    
+    /* Enhanced shadows for dark mode */
+    --shadow-xs: 0 1px 3px rgba(0, 0, 0, 0.4);
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.5);
+    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.6);
+    --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.7);
+    --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.8);
+    --shadow-2xl: 0 24px 72px rgba(0, 0, 0, 0.9);
+}
+
+/* ==========================================
+   PAGE HEADER - Hero Section
+   Gradient background with stats grid
+   Edit: Modify padding for different header heights
+   ========================================== */
+.page-header {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg,
+        var(--header-gradient-start) 0%,
+        var(--header-gradient-mid) 50%,
+        var(--header-gradient-end) 100%);
+    border-bottom: 1px solid var(--glass-border);
+    padding: 12rem 0 6rem;
+}
+
+.header-content {
+    text-align: center;
+    position: relative;
+    z-index: 10;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-md);
+}
+
+.header-content h1 {
+    font-size: 4rem;
+    font-weight: 800;
+    margin-bottom: var(--spacing-lg);
+    background: linear-gradient(135deg, var(--testimonial-accent-primary), var(--testimonial-accent-secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.1;
+}
+
+.header-content p {
+    font-size: 1.25rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: var(--spacing-3xl);
+    font-weight: 400;
+}
+
+/* Stats Grid */
+.header-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-xl);
+    padding: var(--spacing-2xl);
+    background: var(--glass-bg);
+    backdrop-filter: blur(30px) saturate(180%);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 8px 32px var(--filter-shadow);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.stat {
+    text-align: center;
+    padding: var(--spacing-md);
+    border-right: 1px solid var(--glass-border);
+}
+
+.stat:last-child {
+    border-right: none;
+}
+
+.stat-number {
+    display: block;
+    font-size: 2.25rem;
+    font-weight: 800;
+    color: var(--testimonial-accent-primary);
+    line-height: 1;
+    margin-bottom: var(--spacing-xs);
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* ==========================================
+   FILTER SECTION
+   Project type, rating, and sort controls
+   Edit: Modify grid columns via minmax for responsiveness
+   ========================================== */
+.filter-section {
+    padding: var(--spacing-2xl) 0;
+    background: var(--glass-bg);
+    backdrop-filter: blur(30px) saturate(180%);
+    border-top: 1px solid var(--glass-border);
+    border-bottom: 1px solid var(--glass-border);
+}
+
+.filter-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--spacing-xl);
+    align-items: end;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+
+.filter-group label {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--text-primary);
+    margin-bottom: 0.25rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.filter-select {
+    width: 100%;
+    padding: var(--spacing-md) 1.25rem;
+    background: var(--filter-bg);
+    backdrop-filter: blur(30px) saturate(180%);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-sm);
+    font-size: 0.95rem;
+    color: var(--text-primary);
+    font-family: inherit;
+    cursor: pointer;
+    transition: all var(--transition-base);
+    box-shadow: 0 4px 12px var(--filter-shadow);
+}
+
+.filter-select:hover {
+    border-color: var(--testimonial-accent-primary);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px var(--filter-shadow);
+}
+
+.filter-select:focus {
+    outline: none;
+    border-color: var(--testimonial-accent-primary);
+    box-shadow: 0 6px 20px var(--filter-shadow), 0 0 0 3px rgba(228, 87, 46, 0.1);
+}
+
+/* Fix select dropdown arrow in light mode */
+[data-theme="light"] .filter-select {
+    background-image: linear-gradient(45deg, transparent 50%, var(--text-primary) 50%),
+                      linear-gradient(135deg, var(--text-primary) 50%, transparent 50%);
+    background-position: calc(100% - 20px) calc(1em + 2px),
+                         calc(100% - 15px) calc(1em + 2px);
+    background-size: 5px 5px, 5px 5px;
+    background-repeat: no-repeat;
+}
+
+/* ==========================================
+   TESTIMONIALS SECTION & GRID
+   Main portfolio grid layout
+   Edit: Adjust minmax for card width (400px default)
+   ========================================== */
+.testimonials-section {
+    padding: 5rem 0;
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: var(--spacing-3xl);
+}
+
+.section-title {
+    font-size: var(--font-5xl);
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: var(--spacing-md);
+    color: var(--header-text-primary); /* Changed from gradient to solid color */
+}
+
+.section-subtitle {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    margin-bottom: var(--spacing-xl);
+}
+
+.section-decoration {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-md);
+}
+
+.section-decoration i {
+    color: var(--testimonial-accent-primary);
+    font-size: 1.5rem;
+}
+
+.decoration-line {
+    width: 100px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--glass-border), transparent);
+}
+
+.portfolio-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    gap: var(--spacing-2xl);
+}
+
+/* ==========================================
+   TESTIMONIAL CARD STYLES
+   Individual client testimonial cards
+   Edit: Customize hover transforms or border radius
+   ========================================== */
+
+/* Base Card Structure */
+.testimonial-card {
+    background: var(--card-bg);
+    backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius-2xl);
+    box-shadow: 0 8px 32px var(--card-shadow);
+    overflow: hidden;
+    transition: all var(--transition-base);
+    position: relative;
+    cursor: default;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: var(--spacing-xl);
+}
+
+.testimonial-card:hover {
+    transform: translateY(-8px);
+    border-color: var(--card-hover-border);
+    box-shadow: 0 20px 50px var(--card-hover-shadow);
+}
+
+.testimonial-card:focus-within {
+    outline: 2px solid var(--testimonial-accent-primary);
+    outline-offset: 2px;
+}
+
+/* Header Section: Client Info + Rating */
+.testimonial-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+}
+
+.testimonial-client {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    flex: 1;
+}
+
+.client-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: var(--radius-full);
+    border: 2px solid var(--testimonial-accent-primary);
+    object-fit: cover;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(228, 87, 46, 0.2);
+}
+
+.client-info {
+    flex: 1;
+}
+
+.client-name {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0 0 0.25rem 0;
+    line-height: 1.2;
+}
+
+.client-role {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin: 0;
+    line-height: 1.3;
+}
+
+/* Rating Display */
+.testimonial-rating {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: var(--btn-secondary-bg);
+    border-radius: var(--radius-lg);
+    flex-shrink: 0;
+}
+
+.rating-stars {
+    display: flex;
+    gap: 2px;
+}
+
+.rating-stars i {
+    color: var(--star-color);
+    font-size: 0.9rem;
+}
+
+.rating-stars i.far {
+    color: var(--star-empty);
+}
+
+.rating-value {
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--text-primary);
+    line-height: 1;
+}
+
+/* Testimonial Content: Quote */
+.testimonial-content {
+    position: relative;
+    margin-bottom: var(--spacing-lg);
+    flex: 1;
+}
+
+.quote-icon {
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--quote-color);
+    border-radius: var(--radius-md);
+    z-index: 1;
+}
+
+.quote-icon i {
+    font-size: 1.5rem;
+    color: var(--testimonial-accent-primary);
+    opacity: 0.6;
+}
+
+.testimonial-text {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--text-secondary);
+    margin: 0;
+    padding: var(--spacing-md) 0 0 var(--spacing-lg);
+    position: relative;
+    font-style: italic;
+}
+
+/* Footer: Project Info + Date */
+.testimonial-footer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-md);
+    padding-top: var(--spacing-lg);
+    border-top: 1px solid var(--actions-border);
+    margin-top: auto;
+}
+
+.project-info,
+.testimonial-date {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-xs) var(--spacing-md);
+    background: var(--meta-badge-bg);
+    border: 1px solid var(--meta-badge-border);
+    border-radius: var(--radius-xl);
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.project-info i,
+.testimonial-date i {
+    color: var(--testimonial-accent-primary);
+    font-size: 0.9rem;
+}
+
+.testimonial-date {
+    background: var(--btn-secondary-bg);
+    border-color: var(--btn-secondary-border);
+    color: var(--text-muted);
+    margin-left: auto;
+}
+
+/* Developer Credit in Card */
+.developer-credit-small {
+    margin-top: var(--spacing-md);
+    padding-top: var(--spacing-sm);
+    border-top: 1px solid var(--glass-border);
+    text-align: center;
+}
+
+.developer-credit-small span {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.developer-credit-small strong {
+    color: var(--testimonial-accent-primary);
+    font-weight: 600;
+}
+
+/* ==========================================
+   CTA SECTION
+   Call-to-action for adding testimonials
+   Edit: Customize padding or button styles
+   ========================================== */
+.cta-section {
+    background: linear-gradient(135deg,
+        var(--header-gradient-start) 0%,
+        var(--header-gradient-mid) 50%,
+        var(--header-gradient-end) 100%);
+    border-top: 1px solid var(--glass-border);
+    border-bottom: 1px solid var(--glass-border);
+    padding: 4rem 0;
+}
+
+.cta-content {
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 4rem var(--spacing-md);
+}
+
+.cta-content h2 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 1.25rem;
+    background: linear-gradient(135deg, var(--testimonial-accent-primary), var(--testimonial-accent-secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.2;
+}
+
+.cta-content p {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: var(--spacing-2xl);
+}
+
+.cta-content .btn {
+    padding: 1.125rem 2.5rem;
+    font-size: 1.05rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 15px rgba(228, 87, 46, 0.3);
+    background: linear-gradient(135deg, var(--testimonial-accent-primary), var(--testimonial-accent-secondary));
+    color: #FFFFFF;
+    border-radius: var(--radius-2xl);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    text-decoration: none;
+    transition: all var(--transition-base);
+    cursor: pointer;
+}
+
+.cta-content .btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(228, 87, 46, 0.4);
+}
+
+/* ==========================================
+   LOADING & EMPTY STATES
+   User feedback for data states
+   Edit: Customize icon sizes or messages
+   ========================================== */
+.loading-testimonials,
+.no-results {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: var(--glass-bg);
+    backdrop-filter: blur(30px) saturate(180%);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 8px 32px var(--filter-shadow);
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 300px;
+}
+
+.loading-testimonials i,
+.no-results i {
+    font-size: 3.5rem;
+    color: var(--testimonial-accent-primary);
+    margin-bottom: var(--spacing-lg);
+    opacity: 0.7;
+}
+
+.loading-testimonials p,
+.no-results p {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    margin-bottom: var(--spacing-xl);
+}
+
+.no-results h3 {
+    font-size: 1.5rem;
+    margin-bottom: var(--spacing-md);
+    color: var(--text-primary);
+}
+
+.no-results .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    padding: 12px 24px;
+    background: linear-gradient(135deg, var(--testimonial-accent-primary), var(--testimonial-accent-secondary));
+    color: #FFFFFF;
+    border: none;
+    border-radius: var(--radius-2xl);
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all var(--transition-base);
+}
+
+.no-results .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(228, 87, 46, 0.4);
+}
+
+/* ==========================================
+   MODAL STYLES
+   Testimonial submission form modal
+   Edit: Adjust modal width or padding
+   ========================================== */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--modal-overlay);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all var(--transition-base);
+    padding: var(--spacing-md);
+}
+
+.modal.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content {
+    background: var(--modal-bg);
+    backdrop-filter: blur(30px) saturate(180%);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-2xl);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    max-width: 600px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    transform: scale(0.9);
+    transition: transform var(--transition-base);
+}
+
+.modal.active .modal-content {
+    transform: scale(1);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-xl) var(--spacing-xl) var(--spacing-md);
+    border-bottom: 1px solid var(--glass-border);
+}
+
+.modal-header h2 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0;
+    background: linear-gradient(135deg, var(--testimonial-accent-primary), var(--testimonial-accent-secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.modal-close {
+    width: 40px;
+    height: 40px;
+    background: var(--btn-secondary-bg);
+    border: 1px solid var(--btn-secondary-border);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all var(--transition-base);
+    color: var(--text-primary);
+    font-size: 1.25rem;
+}
+
+.modal-close:hover {
+    background: var(--btn-secondary-hover-bg);
+    transform: rotate(90deg);
+}
+
+/* Modal Form Styles */
+.modal-form {
+    padding: var(--spacing-xl);
+}
+
+.form-group {
+    margin-bottom: var(--spacing-lg);
+}
+
+.form-group label {
+    display: block;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-sm);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: var(--spacing-md);
+    background: var(--input-bg);
+    backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid var(--input-border);
+    border-radius: var(--radius-sm);
+    font-size: 1rem;
+    color: var(--text-primary);
+    font-family: inherit;
+    transition: all var(--transition-base);
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--input-focus-border);
+    box-shadow: 0 0 0 3px rgba(228, 87, 46, 0.1);
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+    color: var(--text-muted);
+}
+
+/* Rating Input Stars */
+.rating-input {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+
+.stars {
+    display: flex;
+    gap: var(--spacing-xs);
+}
+
+.star {
+    font-size: 2rem;
+    color: var(--star-empty);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    user-select: none;
+}
+
+.star:hover,
+.star.selected {
+    color: var(--star-color);
+    transform: scale(1.1);
+}
+
+.star:focus {
+    outline: 2px solid var(--testimonial-accent-primary);
+    outline-offset: 4px;
+    border-radius: 4px;
+}
+
+/* Form Actions */
+.form-actions {
+    display: flex;
+    gap: var(--spacing-md);
+    padding-top: var(--spacing-lg);
+    border-top: 1px solid var(--glass-border);
+}
+
+.form-actions .btn {
+    flex: 1;
+    padding: var(--spacing-md) var(--spacing-xl);
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: var(--radius-xl);
+    cursor: pointer;
+    transition: all var(--transition-base);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-xs);
+}
+
+.form-actions .btn-primary {
+    background: linear-gradient(135deg, var(--testimonial-accent-primary), var(--testimonial-accent-secondary));
+    color: #FFFFFF;
+    border: none;
+    box-shadow: 0 4px 15px rgba(228, 87, 46, 0.3);
+}
+
+.form-actions .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(228, 87, 46, 0.4);
+}
+
+.form-actions .btn-secondary {
+    background: var(--btn-secondary-bg);
+    color: var(--text-primary);
+    border: 1px solid var(--btn-secondary-border);
+}
+
+.form-actions .btn-secondary:hover {
+    background: var(--btn-secondary-hover-bg);
+    transform: translateY(-2px);
+}
+
+/* ==========================================
+   RESPONSIVE DESIGN
+   Mobile-first breakpoints for all screen sizes
+   Edit: Add or modify breakpoints as needed
+   ========================================== */
+
+/* Large desktops */
+@media (max-width: 1200px) {
+    .portfolio-grid {
+        grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+        gap: var(--spacing-xl);
+    }
+    
+    .header-content h1 {
+        font-size: 3.5rem;
+    }
+}
+
+/* Tablets and small desktops */
+@media (max-width: 992px) {
+    .page-header {
+        padding: 10rem 0 4rem;
+    }
+    
+    .header-content h1 {
+        font-size: 3rem;
+    }
+    
+    .header-stats {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-lg);
+        padding: var(--spacing-xl);
+    }
+    
+    .stat {
+        border-right: none;
+        border-bottom: 1px solid var(--glass-border);
+        padding: var(--spacing-lg);
+    }
+    
+    .stat:last-child {
+        border-bottom: none;
+    }
+    
+    .portfolio-grid {
+        grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+        gap: var(--spacing-xl);
+    }
+    
+    .cta-content h2 {
+        font-size: 2.25rem;
+    }
+}
+
+/* Mobile devices */
+@media (max-width: 768px) {
+    .page-header {
+        padding: 8rem 0 3rem;
+    }
+    
+    .header-content h1 {
+        font-size: 2.5rem;
+    }
+    
+    .header-content p {
+        font-size: 1.1rem;
+    }
+    
+    .filter-container {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-lg);
+    }
+    
+    .portfolio-grid {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-lg);
+    }
+    
+    .testimonial-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--spacing-md);
+    }
+    
+    .testimonial-rating {
+        flex-direction: row;
+        gap: var(--spacing-sm);
+    }
+    
+    .testimonial-footer {
+        flex-direction: column;
+        gap: var(--spacing-sm);
+    }
+    
+    .testimonial-date {
+        margin-left: 0;
+    }
+    
+    .cta-content h2 {
+        font-size: 2rem;
+    }
+    
+    .cta-content p {
+        font-size: 1rem;
+    }
+    
+    .section-title {
+        font-size: 2.25rem;
+    }
+    
+    .modal-content {
+        max-height: 95vh;
+    }
+    
+    .form-actions {
+        flex-direction: column;
+    }
+}
+
+/* Small mobile devices */
+@media (max-width: 480px) {
+    .header-content h1 {
+        font-size: 2rem;
+    }
+    
+    .stat-number {
+        font-size: 2rem;
+    }
+    
+    .client-name {
+        font-size: 1.1rem;
+    }
+    
+    .client-role {
+        font-size: 0.85rem;
+    }
+    
+    .client-avatar {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .testimonial-text {
+        font-size: 0.95rem;
+    }
+    
+    .cta-content {
+        padding: 3rem var(--spacing-md);
+    }
+    
+    .cta-content h2 {
+        font-size: 1.75rem;
+    }
+    
+    .portfolio-grid {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-md);
+    }
+    
+    .testimonial-card {
+        padding: var(--spacing-lg);
+    }
+    
+    .modal-header h2 {
+        font-size: 1.5rem;
+    }
+}
+
+/* ==========================================
+   ACCESSIBILITY & PERFORMANCE
+   Reduced motion, focus states, high contrast
+   Edit: Add custom focus styles if needed
+   ========================================== */
+
+/* Respect user's motion preferences */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+    
+    .testimonial-card:hover {
+        transform: none;
+    }
+    
+    .modal.active .modal-content {
+        transform: scale(1);
+    }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .testimonial-card,
+    .header-stats,
+    .filter-select {
+        border-width: 2px;
+    }
+    
+    .client-name,
+    .section-title {
+        -webkit-text-fill-color: var(--text-primary);
+    }
+    
+    .btn-primary {
+        border: 2px solid #FFFFFF;
+    }
+}
+
+/* Focus visible for keyboard navigation */
+.testimonial-card:focus-visible,
+.filter-select:focus-visible,
+.btn:focus-visible,
+.star:focus-visible,
+.modal-close:focus-visible {
+    outline: 3px solid var(--testimonial-accent-primary);
+    outline-offset: 3px;
+}
+
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+    outline: 2px solid var(--testimonial-accent-primary);
+    outline-offset: 2px;
+}
+
+/* Print styles for portfolio export */
+@media print {
+    .testimonial-card {
+        box-shadow: none;
+        border: 1px solid #000;
+        break-inside: avoid;
+        background: white !important;
+    }
+    
+    .page-header,
+    .filter-section,
+    .cta-section {
+        background: none !important;
+        border: none;
+    }
+    
+    .modal,
+    .back-to-top,
+    #notificationContainer {
+        display: none;
+    }
+    
+    .testimonial-rating {
+        background: #f5f5f5 !important;
+    }
+}
+
+/* ==========================================
+   LIGHT MODE SPECIFIC OVERRIDES
+   Additional styles for optimal light mode appearance
+   ========================================== */
+[data-theme="light"] .client-name {
+    color: var(--text-primary);
+}
+
+[data-theme="light"] .section-title,
+[data-theme="light"] .header-content h1,
+[data-theme="light"] .cta-content h2,
+[data-theme="light"] .modal-header h2 {
+    background: linear-gradient(135deg, var(--testimonial-accent-primary), var(--testimonial-accent-secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+[data-theme="light"] .testimonial-card {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="light"] .testimonial-card:hover {
+    box-shadow: 0 12px 40px rgba(228, 87, 46, 0.15);
+}
+
+[data-theme="light"] .filter-select option {
+    background: #FFFFFF;
+    color: var(--text-primary);
+}
+
+[data-theme="light"] .form-actions .btn-secondary {
+    background: rgba(0, 0, 0, 0.05);
+    border-color: rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="light"] .form-actions .btn-secondary:hover {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="light"] input,
+[data-theme="light"] select,
+[data-theme="light"] textarea {
+    background: rgba(255, 255, 255, 0.95);
+    border-color: rgba(0, 0, 0, 0.2);
+}
+
+/* ==========================================
+   ANIMATION CLASSES
+   Entrance animations for cards (applied via JS)
+   Edit: Modify keyframes for different animation styles
+   ========================================== */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(400px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes starGlow {
+    0%, 100% {
+        filter: drop-shadow(0 0 2px var(--star-color));
+    }
+    50% {
+        filter: drop-shadow(0 0 8px var(--star-color));
+    }
+}
+
+.testimonial-card[style*="opacity: 1"] {
+    animation: fadeInUp 0.6s ease forwards;
+}
+
+.loading-testimonials i {
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+.star.selected {
+    animation: starGlow 2s ease-in-out infinite;
+}
+
+/* ==========================================
+   UTILITY CLASSES
+   Helper classes for common styling patterns
+   ========================================== */
+.btn-glow {
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-glow::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.btn-glow:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+/* Smooth scroll behavior */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Container utility (if not defined globally) */
+.container {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-xl);
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 0 var(--spacing-md);
+    }
+}
+
+/* ==========================================
+   NOTIFICATION STYLES
+   Toast notifications for user feedback
+   ========================================== */
+#notificationContainer {
+    position: fixed;
+    top: 100px;
+    right: 20px;
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.notification {
+    padding: var(--spacing-md) var(--spacing-lg);
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius-md);
+    box-shadow: 0 8px 32px var(--card-shadow);
+    backdrop-filter: blur(20px);
+    min-width: 300px;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    animation: slideInRight 0.3s ease;
+}
+
+.notification.success {
+    border-left: 4px solid #10B981;
+}
+
+.notification.error {
+    border-left: 4px solid #EF4444;
+}
+
+.notification.info {
+    border-left: 4px solid var(--testimonial-accent-primary);
+}
+
+.notification i {
+    font-size: 1.5rem;
+}
+
+.notification.success i {
+    color: #10B981;
+}
+
+.notification.error i {
+    color: #EF4444;
+}
+
+.notification.info i {
+    color: var(--testimonial-accent-primary);
+}
+
+.notification-message {
+    flex: 1;
+    color: var(--text-primary);
+    font-size: 0.95rem;
+}
+
+@media (max-width: 768px) {
+    #notificationContainer {
+        right: 10px;
+        left: 10px;
+    }
+    
+    .notification {
+        min-width: auto;
+    }
+}
+
+/* ==========================================
+   BACK TO TOP BUTTON
+   Fixed position scroll-to-top button
+   ========================================== */
+.back-to-top {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, var(--testimonial-accent-primary), var(--testimonial-accent-secondary));
+    color: #FFFFFF;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0;
+    visibility: hidden;
+    transition: all var(--transition-base);
+    box-shadow: 0 4px 15px rgba(228, 87, 46, 0.3);
+    z-index: 1000;
+}
+
+.back-to-top.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.back-to-top:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 20px rgba(228, 87, 46, 0.4);
+}
+
+.back-to-top i {
+    font-size: 1.25rem;
+}
+
+@media (max-width: 768px) {
+    .back-to-top {
+        bottom: 20px;
+        right: 20px;
+        width: 45px;
+        height: 45px;
+    }
+}
+
+/* ==========================================
+   CUSTOM SCROLLBAR
+   Styled scrollbar for modern browsers
+   Edit: Modify colors to match theme
+   ========================================== */
+::-webkit-scrollbar {
+    width: 12px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--glass-bg);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--testimonial-accent-primary);
+    border-radius: 6px;
+    border: 3px solid var(--glass-bg);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--testimonial-accent-hover);
+}
+
+/* Firefox scrollbar */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--testimonial-accent-primary) var(--glass-bg);
+}
+
+/* Modal scrollbar */
+.modal-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.modal-content::-webkit-scrollbar-thumb {
+    background: var(--testimonial-accent-primary);
+    border-radius: 4px;
+}
+
+/* ==========================================
+   SELECTION STYLING
+   Custom text selection colors
+   ========================================== */
+::selection {
+    background: rgba(228, 87, 46, 0.3);
+    color: var(--text-primary);
+}
+
+::-moz-selection {
+    background: rgba(228, 87, 46, 0.3);
+    color: var(--text-primary);
+}
+
+/* ==========================================
+   ADDITIONAL HELPER CLASSES
+   Common utilities for testimonials page
+   ========================================== */
+
+/* Truncate text with ellipsis */
+.text-truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Responsive hide/show */
+.hide-mobile {
+    display: block;
+}
+
+@media (max-width: 768px) {
+    .hide-mobile {
+        display: none;
+    }
+}
+
+.show-mobile {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .show-mobile {
+        display: block;
+    }
+}
+
+/* Gradient text utility */
+.gradient-text {
+    background: linear-gradient(135deg, var(--testimonial-accent-primary), var(--testimonial-accent-secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Glass effect utility */
+.glass-effect {
+    background: var(--glass-bg);
+    backdrop-filter: blur(30px) saturate(180%);
+    border: 1px solid var(--glass-border);
+}
+
+/* ==========================================
+   END OF TESTIMONIALS.CSS
+   Production-ready stylesheet for testimonials portfolio page
+   Fully responsive with dark/light mode support
+   
+   Quick Edit Guide:
+   1. Colors: Modify CSS variables at the top (lines 15-48)
+   2. Spacing: Adjust spacing variables (lines 50-58)
+   3. Card sizes: Change minmax in .portfolio-grid (line 374)
+   4. Hover effects: Modify transform values in .testimonial-card:hover (line 407)
+   5. Animations: Edit @keyframes sections (lines 800-840)
+   6. Breakpoints: Adjust @media queries (lines 700-780)
+   7. Modal width: Change max-width in .modal-content (line 620)
+   8. Rating stars: Modify .star styles (lines 690-710)
+   
+   Features:
+   - Dark/Light mode with seamless transitions
+   - Testimonial cards with client avatars and ratings
+   - Interactive modal form for submissions
+   - Responsive grid layout
+   - Accessible keyboard navigation
+   - Smooth animations and hover effects
+   - Loading states and empty state handling
+   - Print-friendly styles
+   
+   Developed by: Arsh Verma
+   Version: 3.0.0
+   ========================================== */
