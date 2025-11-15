@@ -15,12 +15,13 @@ let currentGameId = null;
 let currentGame = null;
 let isGamePlaying = false;
 let unityInstance = null;
+let gamesData = [];
 
 // ==========================================
 // UNITY WEBGL BUILD CONFIG
 // ==========================================
 const unityBuilds = {
-    "static/games_files/sky_surfers/": {
+    "sky_surfers": {
         loaderUrl: "static/games_files/sky_surfers/Build/sky_surfers.loader.js",
         dataUrl: "static/games_files/sky_surfers/Build/sky_surfers.data",
         frameworkUrl: "static/games_files/sky_surfers/Build/sky_surfers.framework.js",
@@ -53,26 +54,24 @@ function initializeGameDetailPage() {
         
         console.log(`📌 Loading game ID: ${currentGameId}`);
         
-        loadGameDetails(currentGameId);
-        setupGameDetailEventListeners();
-        
-        if (autoPlay) {
-            setTimeout(() => {
-                if (currentGame && currentGame.status === 'Live' && currentGame.unityBuild) {
-                    playGameUnity(currentGame);
-                }
-            }, 1500);
-        }
-        
-        setTimeout(() => {
-            const loadingScreen = document.getElementById('loadingScreen');
-            if (loadingScreen) {
-                loadingScreen.style.opacity = '0';
-                setTimeout(() => loadingScreen.style.display = 'none', 500);
+        // Load games data first
+        loadGamesData().then(() => {
+            loadGameDetails(currentGameId);
+            setupGameDetailEventListeners();
+            
+            if (autoPlay) {
+                setTimeout(() => {
+                    if (currentGame && currentGame.status === 'Live' && currentGame.unityBuild) {
+                        playGame(currentGame);
+                    }
+                }, 1500);
             }
-        }, 1000);
-        
-        console.log('✅ Game detail initialized');
+            
+            console.log('✅ Game detail initialized');
+        }).catch(error => {
+            console.error('❌ Failed to load games data:', error);
+            showNotification('Error loading game data', 'error');
+        });
         
     } catch (error) {
         console.error('❌ Initialization error:', error);
@@ -88,7 +87,8 @@ function initializeTheme() {
     const themeIcon = themeToggle?.querySelector('.theme-icon i');
     
     try {
-        const savedTheme = localStorage.getItem('theme') || 'dark';
+        // Get theme from localStorage or default to system preference
+        const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
         document.documentElement.setAttribute('data-theme', savedTheme);
         
         if (themeIcon) {
@@ -99,10 +99,12 @@ function initializeTheme() {
             themeToggle.addEventListener('click', toggleTheme);
         }
         
-        console.log(`🎨 Theme: ${savedTheme}`);
+        console.log(`🎨 Theme initialized: ${savedTheme}`);
         
     } catch (error) {
         console.error('❌ Theme error:', error);
+        // Fallback to light theme
+        document.documentElement.setAttribute('data-theme', 'light');
     }
 }
 
@@ -110,7 +112,7 @@ function toggleTheme() {
     try {
         const currentTheme = document.documentElement.getAttribute('data-theme');
         const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-        const themeIcon = document.querySelector('.theme-icon i');
+        const themeIcon = document.querySelector('#themeToggle .theme-icon i');
         
         document.documentElement.setAttribute('data-theme', newTheme);
         localStorage.setItem('theme', newTheme);
@@ -129,16 +131,39 @@ function toggleTheme() {
 // ==========================================
 // GAME DATA LOADING
 // ==========================================
-function loadGameDetails(gameId) {
+async function loadGamesData() {
     try {
-        const games = typeof getGames === 'function' ? getGames() : 
-                     (window.PORTFOLIO_DATA?.games || []);
+        // Try multiple sources for game data
+        if (typeof getGames === 'function') {
+            gamesData = getGames();
+        } else if (window.PORTFOLIO_DATA && Array.isArray(window.PORTFOLIO_DATA.games)) {
+            gamesData = window.PORTFOLIO_DATA.games;
+        } else {
+            // Fallback to sample data
+            gamesData = createSampleGames();
+        }
         
-        if (!games || !Array.isArray(games)) {
+        if (!gamesData || !Array.isArray(gamesData)) {
             throw new Error('Games data not available');
         }
         
-        const game = games.find(g => g.id === gameId);
+        console.log(`📥 Loaded ${gamesData.length} games`);
+        return gamesData;
+        
+    } catch (error) {
+        console.error('❌ Error loading games data:', error);
+        gamesData = createSampleGames();
+        return gamesData;
+    }
+}
+
+function loadGameDetails(gameId) {
+    try {
+        if (!gamesData || gamesData.length === 0) {
+            throw new Error('No games data available');
+        }
+        
+        const game = gamesData.find(g => g.id === gameId);
         
         if (!game) {
             console.error(`❌ Game not found: ${gameId}`);
@@ -172,10 +197,10 @@ function displayGameDetails(game) {
         // Preview image
         const previewImage = document.getElementById('previewImage');
         if (previewImage) {
-            previewImage.src = game.image || 'https://via.placeholder.com/1280x720/1A1A2E/E4572E?text=Game';
+            previewImage.src = game.image || 'https://via.placeholder.com/1280x720/1A1A2E/FFB800?text=Game+Preview';
             previewImage.alt = `${game.name} - Preview`;
             previewImage.onerror = function() {
-                this.src = 'https://via.placeholder.com/1280x720/1A1A2E/E4572E?text=Game+Preview';
+                this.src = 'https://via.placeholder.com/1280x720/1A1A2E/FFB800?text=Game+Preview';
             };
         }
         
@@ -201,13 +226,13 @@ function displayGameDetails(game) {
         
         // Description
         updateElement('gameOverview', game.overview || 'No overview available.');
-        updateElement('gameDescription', game.description || 'Detailed description coming soon.');
+        updateElement('gameDescription', game.description || game.overview || 'Detailed description coming soon.');
         
         // Sidebar details
         updateElement('releaseDate', formatDate(game.releaseDate));
-        updateElement('developmentTime', game.developmentTime || '-');
-        updateElement('teamSize', game.teamSize || '-');
-        updateElement('platforms', game.platforms ? game.platforms.join(', ') : '-');
+        updateElement('developmentTime', game.developmentTime || 'Not specified');
+        updateElement('teamSize', game.teamSize || 'Solo');
+        updateElement('platforms', game.platforms ? (Array.isArray(game.platforms) ? game.platforms.join(', ') : game.platforms) : 'Web, Windows');
         
         // Stats
         updateElement('playCount', game.playCount ? game.playCount.toLocaleString() : '0');
@@ -216,8 +241,8 @@ function displayGameDetails(game) {
         
         // Features
         const featuresList = document.getElementById('featuresList');
-        if (featuresList && game.features && Array.isArray(game.features)) {
-            if (game.features.length > 0) {
+        if (featuresList) {
+            if (game.features && Array.isArray(game.features) && game.features.length > 0) {
                 featuresList.innerHTML = game.features.map(feature => 
                     `<li>
                         <i class="fas fa-check-circle"></i>
@@ -231,8 +256,8 @@ function displayGameDetails(game) {
         
         // Technologies
         const techList = document.getElementById('techList');
-        if (techList && game.technologies && Array.isArray(game.technologies)) {
-            if (game.technologies.length > 0) {
+        if (techList) {
+            if (game.technologies && Array.isArray(game.technologies) && game.technologies.length > 0) {
                 techList.innerHTML = game.technologies.map(tech => 
                     `<span class="tech-tag">
                         <i class="fas fa-code"></i>
@@ -257,6 +282,9 @@ function displayGameDetails(game) {
             }
         }
         
+        // Screenshots
+        displayScreenshots(game.screenshots);
+        
         updatePlayButton(game);
         
         console.log('✅ Game details displayed');
@@ -265,6 +293,87 @@ function displayGameDetails(game) {
         console.error('❌ Display error:', error);
         showNotification('Error displaying game information', 'error');
     }
+}
+
+function displayScreenshots(screenshots) {
+    const screenshotsGrid = document.getElementById('screenshotsGrid');
+    if (!screenshotsGrid) return;
+    
+    if (screenshots && Array.isArray(screenshots) && screenshots.length > 0) {
+        screenshotsGrid.innerHTML = screenshots.map((screenshot, index) => `
+            <div class="screenshot-item" onclick="openLightbox('${screenshot}', ${index})">
+                <img src="${screenshot}" alt="Game Screenshot ${index + 1}" loading="lazy">
+                <div class="screenshot-overlay">
+                    <i class="fas fa-expand"></i>
+                </div>
+            </div>
+        `).join('');
+        
+        // Create lightbox if it doesn't exist
+        if (!document.getElementById('lightbox')) {
+            const lightboxHTML = `
+                <div id="lightbox" class="lightbox" style="display: none;">
+                    <div class="lightbox-content">
+                        <button class="lightbox-close" onclick="closeLightbox()">
+                            <i class="fas fa-times"></i>
+                        </button>
+                        <button class="lightbox-nav lightbox-prev" onclick="changeSlide(-1)">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <img id="lightboxImage" src="" alt="Game Screenshot">
+                        <button class="lightbox-nav lightbox-next" onclick="changeSlide(1)">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', lightboxHTML);
+        }
+    } else {
+        screenshotsGrid.innerHTML = `
+            <div class="no-screenshots">
+                <i class="fas fa-images"></i>
+                <p>No screenshots available</p>
+            </div>
+        `;
+    }
+}
+
+function openLightbox(imageSrc, index) {
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImage = document.getElementById('lightboxImage');
+    
+    if (lightbox && lightboxImage) {
+        lightboxImage.src = imageSrc;
+        lightboxImage.dataset.currentIndex = index;
+        lightbox.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+function closeLightbox() {
+    const lightbox = document.getElementById('lightbox');
+    if (lightbox) {
+        lightbox.style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }
+}
+
+function changeSlide(direction) {
+    const lightboxImage = document.getElementById('lightboxImage');
+    if (!lightboxImage) return;
+    
+    const currentIndex = parseInt(lightboxImage.dataset.currentIndex);
+    const screenshots = currentGame?.screenshots;
+    
+    if (!screenshots || !Array.isArray(screenshots)) return;
+    
+    let newIndex = currentIndex + direction;
+    if (newIndex < 0) newIndex = screenshots.length - 1;
+    if (newIndex >= screenshots.length) newIndex = 0;
+    
+    lightboxImage.src = screenshots[newIndex];
+    lightboxImage.dataset.currentIndex = newIndex;
 }
 
 function updateElement(elementId, value) {
@@ -282,20 +391,34 @@ function updatePlayButton(game) {
         const playIcon = playBtn.querySelector('.play-icon-circle i');
         const playText = playBtn.querySelector('.play-text');
         
+        // Remove existing event listeners by replacing the button
+        const newPlayBtn = playBtn.cloneNode(true);
+        playBtn.parentNode.replaceChild(newPlayBtn, playBtn);
+        
+        const updatedPlayBtn = document.getElementById('playBtn');
+        
         if (game.status === 'In Development') {
             if (playIcon) playIcon.className = 'fas fa-clock';
             if (playText) playText.textContent = 'Coming Soon';
-            playBtn.disabled = true;
-            playBtn.style.cursor = 'not-allowed';
-            playBtn.style.opacity = '0.6';
-            playBtn.onclick = null;
+            updatedPlayBtn.disabled = true;
+            updatedPlayBtn.style.cursor = 'not-allowed';
+            updatedPlayBtn.style.opacity = '0.6';
+        } else if (!game.unityBuild && game.playUrl) {
+            if (playIcon) playIcon.className = 'fas fa-external-link-alt';
+            if (playText) playText.textContent = 'Play Game';
+            updatedPlayBtn.disabled = false;
+            updatedPlayBtn.style.cursor = 'pointer';
+            updatedPlayBtn.style.opacity = '1';
+            updatedPlayBtn.onclick = () => {
+                window.open(game.playUrl, '_blank', 'noopener,noreferrer');
+            };
         } else if (!game.unityBuild) {
             if (playIcon) playIcon.className = 'fas fa-external-link-alt';
             if (playText) playText.textContent = 'View Project';
-            playBtn.disabled = false;
-            playBtn.style.cursor = 'pointer';
-            playBtn.style.opacity = '1';
-            playBtn.onclick = () => {
+            updatedPlayBtn.disabled = false;
+            updatedPlayBtn.style.cursor = 'pointer';
+            updatedPlayBtn.style.opacity = '1';
+            updatedPlayBtn.onclick = () => {
                 if (game.repositoryUrl) {
                     window.open(game.repositoryUrl, '_blank', 'noopener,noreferrer');
                 } else {
@@ -305,10 +428,10 @@ function updatePlayButton(game) {
         } else {
             if (playIcon) playIcon.className = 'fas fa-play';
             if (playText) playText.textContent = 'Play Game';
-            playBtn.disabled = false;
-            playBtn.style.cursor = 'pointer';
-            playBtn.style.opacity = '1';
-            playBtn.onclick = () => playGameUnity(game);
+            updatedPlayBtn.disabled = false;
+            updatedPlayBtn.style.cursor = 'pointer';
+            updatedPlayBtn.style.opacity = '1';
+            updatedPlayBtn.onclick = () => playGame(game);
         }
         
     } catch (error) {
@@ -348,10 +471,30 @@ function setupGameDetailEventListeners() {
         document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
         document.addEventListener('mozfullscreenchange', handleFullscreenChange);
         
+        // Lightbox keyboard navigation
+        document.addEventListener('keydown', handleLightboxNavigation);
+        
         console.log('✅ Listeners setup complete');
         
     } catch (error) {
         console.error('❌ Listener setup error:', error);
+    }
+}
+
+function handleLightboxNavigation(e) {
+    const lightbox = document.getElementById('lightbox');
+    if (!lightbox || lightbox.style.display === 'none') return;
+    
+    switch (e.key) {
+        case 'Escape':
+            closeLightbox();
+            break;
+        case 'ArrowLeft':
+            changeSlide(-1);
+            break;
+        case 'ArrowRight':
+            changeSlide(1);
+            break;
     }
 }
 
@@ -363,72 +506,51 @@ function setupGameNavigation() {
         const prevGameBtn = document.getElementById('prevGame');
         const nextGameBtn = document.getElementById('nextGame');
         
+        if (!gamesData || gamesData.length === 0) return;
+        
+        const currentIndex = gamesData.findIndex(g => g.id === currentGameId);
+        if (currentIndex === -1) return;
+        
+        const prevGame = gamesData[(currentIndex - 1 + gamesData.length) % gamesData.length];
+        const nextGame = gamesData[(currentIndex + 1) % gamesData.length];
+        
+        // Update navigation buttons
         if (prevGameBtn) {
-            prevGameBtn.addEventListener('click', navigateToPreviousGame);
+            const prevTitle = prevGameBtn.querySelector('.nav-title');
+            if (prevTitle) prevTitle.textContent = prevGame.name;
+            prevGameBtn.onclick = () => navigateToGame(prevGame.id);
         }
         
         if (nextGameBtn) {
-            nextGameBtn.addEventListener('click', navigateToNextGame);
+            const nextTitle = nextGameBtn.querySelector('.nav-title');
+            if (nextTitle) nextTitle.textContent = nextGame.name;
+            nextGameBtn.onclick = () => navigateToGame(nextGame.id);
         }
         
-        console.log('✅ Navigation setup');
+        console.log('✅ Navigation setup complete');
         
     } catch (error) {
         console.error('❌ Navigation setup error:', error);
     }
 }
 
-function navigateToPreviousGame() {
-    try {
-        const games = typeof getGames === 'function' ? getGames() : 
-                     (window.PORTFOLIO_DATA?.games || []);
-        
-        if (!games || !Array.isArray(games)) return;
-        
-        const currentIndex = games.findIndex(g => g.id === currentGameId);
-        if (currentIndex === -1) return;
-        
-        const prevIndex = (currentIndex - 1 + games.length) % games.length;
-        const prevGame = games[prevIndex];
-        
-        console.log(`⬅️ Previous: ${prevGame.name}`);
-        window.location.href = `game-detail.html?id=${prevGame.id}`;
-        
-    } catch (error) {
-        console.error('❌ Navigation error:', error);
-        showNotification('Navigation error', 'error');
-    }
-}
-
-function navigateToNextGame() {
-    try {
-        const games = typeof getGames === 'function' ? getGames() : 
-                     (window.PORTFOLIO_DATA?.games || []);
-        
-        if (!games || !Array.isArray(games)) return;
-        
-        const currentIndex = games.findIndex(g => g.id === currentGameId);
-        if (currentIndex === -1) return;
-        
-        const nextIndex = (currentIndex + 1) % games.length;
-        const nextGame = games[nextIndex];
-        
-        console.log(`➡️ Next: ${nextGame.name}`);
-        window.location.href = `game-detail.html?id=${nextGame.id}`;
-        
-    } catch (error) {
-        console.error('❌ Navigation error:', error);
-        showNotification('Navigation error', 'error');
-    }
+function navigateToGame(gameId) {
+    window.location.href = `game-detail.html?id=${gameId}`;
 }
 
 // ==========================================
-// UNITY WEBGL FUNCTIONS
+// GAME PLAY FUNCTIONALITY
 // ==========================================
-function playGameUnity(game) {
+function playGame(game) {
     console.log(`🎮 Playing: ${game.name}`);
     
     try {
+        if (game.playUrl && !game.unityBuild) {
+            // External game URL
+            window.open(game.playUrl, '_blank', 'noopener,noreferrer');
+            return;
+        }
+        
         if (!game.unityBuild) {
             showNotification('Game not available for WebGL play', 'info');
             if (game.repositoryUrl) {
@@ -453,10 +575,9 @@ function playGameUnity(game) {
             return;
         }
         
+        // Show game container, hide preview
         gameContainer.style.display = 'block';
-        if (previewContainer) {
-            previewContainer.style.display = 'none';
-        }
+        previewContainer.style.display = 'none';
         
         isGamePlaying = true;
         loadUnityBuild(buildConfig);
@@ -466,7 +587,7 @@ function playGameUnity(game) {
         
     } catch (error) {
         console.error('❌ Play error:', error);
-        showNotification('Error starting game: ' + error.message, 'error');
+        showNotification('Error starting game', 'error');
         resetGameState();
     }
 }
@@ -488,6 +609,7 @@ function loadUnityBuild(buildConfig) {
             unityLoading.style.display = 'flex';
         }
         
+        // Clean up previous instance
         if (window.unityInstance) {
             try {
                 window.unityInstance.Quit();
@@ -546,7 +668,7 @@ function loadUnityBuild(buildConfig) {
                     unityLoading.style.display = 'none';
                 }
                 
-                showNotification('Game loaded!', 'success');
+                showNotification('Game loaded successfully!', 'success');
                 
             }).catch((message) => {
                 console.error('❌ Unity instance failed:', message);
@@ -566,7 +688,7 @@ function loadUnityBuild(buildConfig) {
         
     } catch (error) {
         console.error('❌ Load Unity error:', error);
-        showNotification('Error loading game: ' + error.message, 'error');
+        showNotification('Error loading game', 'error');
         resetGameState();
     }
 }
@@ -640,14 +762,14 @@ function restartGame() {
             window.unityInstance = null;
             
             setTimeout(() => {
-                playGameUnity(currentGame);
+                playGame(currentGame);
             }, 500);
         }).catch((error) => {
             console.warn('⚠️ Quit error:', error);
             unityInstance = null;
             window.unityInstance = null;
             setTimeout(() => {
-                playGameUnity(currentGame);
+                playGame(currentGame);
             }, 500);
         });
         
@@ -745,7 +867,7 @@ function fallbackShare() {
     if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(url)
             .then(() => {
-                showNotification('Link copied!', 'success');
+                showNotification('Link copied to clipboard!', 'success');
             })
             .catch(() => {
                 showManualCopyDialog(url);
@@ -756,7 +878,7 @@ function fallbackShare() {
 }
 
 function showManualCopyDialog(url) {
-    prompt('Copy this link:', url);
+    prompt('Copy this link to share:', url);
 }
 
 // ==========================================
@@ -815,11 +937,11 @@ function handleFullscreenChange() {
 // UTILITY FUNCTIONS
 // ==========================================
 function formatDate(dateString) {
-    if (!dateString) return 'Not specified';
+    if (!dateString) return 'Coming Soon';
     
     try {
         const date = new Date(dateString);
-        if (isNaN(date.getTime())) return 'Invalid Date';
+        if (isNaN(date.getTime())) return 'Coming Soon';
         
         return date.toLocaleDateString('en-US', { 
             year: 'numeric', 
@@ -827,7 +949,7 @@ function formatDate(dateString) {
             day: 'numeric' 
         });
     } catch (error) {
-        return 'Invalid Date';
+        return 'Coming Soon';
     }
 }
 
@@ -847,6 +969,14 @@ function escapeHtml(text) {
 
 function showNotification(message, type = 'info') {
     try {
+        let container = document.getElementById('notificationContainer');
+        if (!container) {
+            container = document.createElement('div');
+            container.id = 'notificationContainer';
+            container.className = 'notification-container';
+            document.body.appendChild(container);
+        }
+        
         const notification = document.createElement('div');
         notification.className = `notification-toast notification-${type}`;
         
@@ -862,21 +992,19 @@ function showNotification(message, type = 'info') {
             <div class="notification-message">${escapeHtml(message)}</div>
         `;
         
-        let container = document.getElementById('notificationContainer');
-        if (!container) {
-            container = document.createElement('div');
-            container.id = 'notificationContainer';
-            container.className = 'notification-container';
-            document.body.appendChild(container);
-        }
-        
         container.appendChild(notification);
         
+        // Animate in
         setTimeout(() => notification.classList.add('show'), 10);
         
+        // Auto remove
         setTimeout(() => {
             notification.classList.remove('show');
-            setTimeout(() => notification.remove(), 300);
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.remove();
+                }
+            }, 300);
         }, 3000);
         
     } catch (error) {
@@ -885,12 +1013,53 @@ function showNotification(message, type = 'info') {
 }
 
 // ==========================================
+// SAMPLE DATA FALLBACK
+// ==========================================
+function createSampleGames() {
+    return [
+        {
+            id: 1,
+            name: "Sky Surfers",
+            category: "Endless Runner",
+            status: "Live",
+            rating: 4.6,
+            overview: "Fast-paced endless runner with stunning aerial gameplay",
+            description: "Soar through the skies in this thrilling endless runner game. Navigate through clouds, avoid obstacles, collect power-ups, and compete for the highest score on global leaderboards.",
+            releaseDate: "2023-09-20",
+            developmentTime: "3 months",
+            teamSize: "2 developers",
+            platforms: ["WebGL", "Mobile"],
+            playCount: 12500,
+            likes: 890,
+            features: [
+                "Smooth endless gameplay mechanics",
+                "Power-up system with unique abilities",
+                "Global leaderboards",
+                "Daily challenges and rewards",
+                "Multiple character skins",
+                "Progressive difficulty system"
+            ],
+            technologies: ["Unity", "C#", "Unity Ads", "Firebase"],
+            repositoryUrl: "https://github.com/ArshVermaGit/sky-surfers",
+            playUrl: "games/sky-surfers/index.html",
+            unityBuild: "sky_surfers",
+            image: "static/images/games/Game1.jpg",
+            screenshots: [
+                "assets/games/game2-1.jpg",
+                "assets/games/game2-2.jpg",
+                "assets/games/game2-3.jpg"
+            ]
+        }
+    ];
+}
+
+// ==========================================
 // CLEANUP
 // ==========================================
 window.addEventListener('beforeunload', () => {
     if (unityInstance) {
         try {
-            console.log('🧹 Cleaning up');
+            console.log('🧹 Cleaning up Unity instance');
             unityInstance.Quit();
         } catch (e) {
             console.warn('⚠️ Cleanup error:', e);
@@ -902,91 +1071,23 @@ window.addEventListener('beforeunload', () => {
 // GLOBAL EXPORTS
 // ==========================================
 window.initializeGameDetailPage = initializeGameDetailPage;
-window.playGameUnity = playGameUnity;
+window.playGame = playGame;
 window.shareGame = shareGame;
-window.navigateToPreviousGame = navigateToPreviousGame;
-window.navigateToNextGame = navigateToNextGame;
 window.toggleTheme = toggleTheme;
 window.toggleFullscreen = toggleFullscreen;
 window.restartGame = restartGame;
 window.closeGame = closeGame;
-
-// ==========================================
-// DEBUG HELPERS
-// ==========================================
-window.debugGameState = function() {
-    console.log('╔═══════════════════════════════════════╗');
-    console.log('║       GAME STATE DEBUG INFO           ║');
-    console.log('╚═══════════════════════════════════════╝');
-    console.log('Current Game ID:', currentGameId);
-    console.log('Current Game:', currentGame);
-    console.log('Is Playing:', isGamePlaying);
-    console.log('Unity Instance:', unityInstance);
-    console.log('Available Games:', typeof getGames === 'function' ? getGames() : []);
-    console.log('Unity Builds:', unityBuilds);
-    console.log('Theme:', document.documentElement.getAttribute('data-theme'));
-    console.log('Fullscreen:', !!(document.fullscreenElement || document.webkitFullscreenElement));
-    console.log('═══════════════════════════════════════');
-};
-
-window.testNotifications = function() {
-    showNotification('Info notification', 'info');
-    setTimeout(() => showNotification('Success notification', 'success'), 500);
-    setTimeout(() => showNotification('Warning notification', 'warning'), 1000);
-    setTimeout(() => showNotification('Error notification', 'error'), 1500);
-};
-
-window.checkUnityFiles = async function() {
-    const buildConfig = unityBuilds["static/games_files/sky_surfers/"];
-    
-    if (!buildConfig) {
-        console.error('❌ Build config not found');
-        return;
-    }
-    
-    console.log('🔍 Checking Unity file accessibility...');
-    
-    const files = [
-        { name: 'Loader', url: buildConfig.loaderUrl },
-        { name: 'Data', url: buildConfig.dataUrl },
-        { name: 'Framework', url: buildConfig.frameworkUrl },
-        { name: 'WASM', url: buildConfig.codeUrl }
-    ];
-    
-    for (const file of files) {
-        try {
-            const response = await fetch(file.url, { method: 'HEAD' });
-            console.log(`✅ ${file.name}: ${response.status === 200 ? 'ACCESSIBLE' : 'NOT FOUND'}`);
-        } catch (error) {
-            console.error(`❌ ${file.name}: ${error.message}`);
-        }
-    }
-};
+window.openLightbox = openLightbox;
+window.closeLightbox = closeLightbox;
+window.changeSlide = changeSlide;
 
 // ==========================================
 // AUTO-INITIALIZATION
 // ==========================================
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initializeGameDetailPage);
-    console.log('⏳ Waiting for DOM...');
 } else {
-    initializeGameDetailPage();
+    setTimeout(initializeGameDetailPage, 100);
 }
 
-// ==========================================
-// INITIALIZATION COMPLETE
-// ==========================================
-console.log('╔═══════════════════════════════════════════════════════════════╗');
-console.log('║  GAME DETAIL PAGE - JavaScript Loaded Successfully           ║');
-console.log('║  Author: Arsh Verma                                          ║');
-console.log('║  Portfolio: ArshCreates                                      ║');
-console.log('║                                                              ║');
-console.log('║  Available Debug Commands:                                   ║');
-console.log('║  • window.debugGameState()    - View current state           ║');
-console.log('║  • window.testNotifications() - Test notification system     ║');
-console.log('║  • window.checkUnityFiles()   - Check Unity build files      ║');
-console.log('╚═══════════════════════════════════════════════════════════════╝');
-
-// ==========================================
-// END OF FILE
-// ==========================================
+console.log('🎮 Game detail JavaScript loaded successfully!');
