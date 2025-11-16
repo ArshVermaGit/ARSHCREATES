@@ -1,1710 +1,1690 @@
 /* ==========================================
-   APP DETAIL PAGE - COMPLETE STYLESHEET
+   APP DETAIL PAGE - PERFECTED CSS
+   Author: Arsh Verma
+   Version: 8.0.0 - Production Ready
+   Description: Perfectly matched with websites detail design
+   Last Updated: November 2024
    ========================================== */
-/**
- * Developer: Arsh Verma (ArshCreates)
- * Portfolio: https://arshcreates.com
- * File: app-detail.css
- * Version: 2.0 - Enhanced & Documented
- * Last Updated: 2024
- * 
- * Description:
- * Complete stylesheet for the app detail page featuring glassmorphism design,
- * smooth animations, responsive layouts, and interactive elements. This CSS
- * works in conjunction with app-detail.html and app-detail.js to create an
- * immersive app showcase experience.
- * 
- * Features:
- * - Glassmorphism design with backdrop blur effects
- * - Smooth fade-in animations with staggered delays
- * - Responsive grid layouts for all screen sizes
- * - Interactive hover effects and transitions
- * - Keyboard navigation support with focus styles
- * - Accessibility features (reduced motion support)
- * - Dark/Light theme compatibility
- * - Mobile-optimized layouts
- * 
- * Dependencies:
- * - style.css (base styles and CSS variables)
- * - Font Awesome 6.5.0 (icons)
- * - Google Fonts - Inter (typography)
- * 
- * CSS Variables Used:
- * --glass-bg: Glassmorphism background
- * --border-color: Border colors
- * --border-radius: Border radius values
- * --shadow-color: Shadow colors
- * --text-primary: Primary text color
- * --accent-primary: Accent color (#22C55E)
- * --transition-base: Base transition timing
- * --transition-slow: Slow transition timing
- * --z-modal: Modal z-index
- * 
- * Structure:
- * 1. App Detail Section Layout
- * 2. App Preview Container
- * 3. App Controls
- * 4. Screenshot Gallery
- * 5. App Information Container
- * 6. App Header
- * 7. Description Sections
- * 8. Detail Cards Grid
- * 9. Features List
- * 10. Technologies Tags
- * 11. Statistics Display
- * 12. Navigation Arrows
- * 13. Action Buttons
- * 14. Animations
- * 15. Responsive Design
- * 16. Accessibility Features
- * 
- * Credits: Arsh Verma
- */
 
 /* ==========================================
-   1. APP DETAIL SECTION - MAIN CONTAINER
+   THEME VARIABLES - INHERITED FROM MAIN
    ========================================== */
-/**
- * Main section container for app detail page
- * Provides vertical spacing and centers content
- * Full viewport height for immersive experience
- */
+:root {
+  /* Using main theme yellow colors */
+  --detail-primary: var(--yellow-primary, #FFB800);
+  --detail-secondary: var(--yellow-secondary, #FF9500);
+  --detail-accent: var(--yellow-accent, #FFC933);
+  --detail-gradient: var(--accent-gradient, linear-gradient(135deg, #FFB800 0%, #FF9500 100%));
+  --shadow-glow-detail: 0 8px 25px rgba(255, 184, 0, 0.35);
+}
+
+/* ==========================================
+   MAIN APP DETAIL SECTION
+   ========================================== */
 .app-detail-section {
-    padding: 8rem 0 4rem; /* Top padding accounts for navbar */
-    position: relative;
-    min-height: 100vh; /* Full viewport height */
+  padding: calc(80px + 3rem) 0 5rem;
+  min-height: 100vh;
+  background: var(--bg-primary);
+  position: relative;
+  transition: background var(--transition-smooth), color var(--transition-smooth);
+}
+
+.app-detail-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    radial-gradient(circle at 20% 30%, rgba(255, 184, 0, 0.06) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(255, 149, 0, 0.04) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.app-detail-section .container {
+  position: relative;
+  z-index: var(--z-content);
 }
 
 /* ==========================================
-   2. APP PREVIEW CONTAINER - LEFT COLUMN
+   LAYOUT - YOUTUBE STYLE
    ========================================== */
-/**
- * Container for app preview image and gallery
- * Creates glassmorphism card effect
- * Includes hover effects and shadow
- */
-.app-preview-container {
-    position: relative;
-    margin-bottom: 4rem; /* Spacing below preview */
-}
-
-.app-preview {
-    background: var(--glass-bg); /* Glassmorphism background */
-    backdrop-filter: blur(30px) saturate(180%); /* Glass blur effect */
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius);
-    box-shadow: 0 20px 60px var(--shadow-color); /* Elevated shadow */
-    overflow: hidden; /* Clip child elements */
-    position: relative;
+.youtube-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 402px;
+  gap: 2.5rem;
+  align-items: start;
+  max-width: 1800px;
+  margin: 0 auto;
 }
 
 /* ==========================================
-   2.1 Preview Image Area
+   PRIMARY COLUMN
    ========================================== */
-/**
- * Main preview image container
- * Fixed height with gradient background
- * Interactive hover effects
- */
+.primary-column {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  min-width: 0;
+  width: 100%;
+}
+
+/* ==========================================
+   APP PREVIEW WRAPPER
+   ========================================== */
+.app-preview-wrapper {
+  position: relative;
+  width: 100%;
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+  box-shadow: var(--shadow-xl);
+  border: var(--glass-border);
+  transition: all var(--transition-smooth);
+}
+
+.app-preview-wrapper:hover {
+  border-color: rgba(255, 184, 0, 0.5);
+  box-shadow: var(--shadow-2xl), var(--shadow-glow-detail);
+  transform: translateY(-2px);
+}
+
+/* ==========================================
+   PREVIEW CONTAINER - 16:9 ASPECT RATIO
+   ========================================== */
+.preview-container {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: linear-gradient(135deg, 
+    rgba(26, 26, 46, 0.98) 0%, 
+    rgba(15, 15, 25, 0.99) 100%);
+  overflow: hidden;
+}
+
 .preview-image {
-    position: relative;
-    width: 100%;
-    height: 500px; /* Fixed height for consistency */
-    overflow: hidden;
-    /* Gradient background as placeholder */
-    background: linear-gradient(135deg, 
-        rgba(34, 197, 94, 0.1) 0%, 
-        rgba(16, 185, 129, 0.05) 50%, 
-        rgba(5, 150, 105, 0.1) 100%);
+  width: 100%;
+  height: 100%;
+  position: relative;
 }
 
-/**
- * Preview image styling
- * Smooth zoom on hover
- */
 .preview-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover; /* Cover entire area */
-    transition: transform var(--transition-slow); /* Smooth zoom transition */
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform var(--transition-slow);
 }
 
-/**
- * Hover overlay with download buttons
- * Appears when hovering over preview image
- */
+.preview-container:hover .preview-img {
+  transform: scale(1.05);
+}
+
+/* ==========================================
+   PREVIEW OVERLAY
+   ========================================== */
 .preview-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(10, 10, 10, 0.8); /* Dark overlay */
-    backdrop-filter: blur(10px); /* Additional blur */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0; /* Hidden by default */
-    transition: all var(--transition-base);
-    pointer-events: none; /* Allow clicks through when hidden */
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, 
+    rgba(0, 0, 0, 0.88) 0%,
+    rgba(15, 15, 15, 0.92) 100%);
+  backdrop-filter: blur(10px) saturate(1.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity var(--transition-smooth);
+  z-index: 5;
 }
 
-/* Show overlay on hover */
-.preview-image:hover .preview-overlay {
-    opacity: 1;
-    pointer-events: auto; /* Enable clicks when visible */
-}
-
-/* Zoom image on hover */
-.preview-image:hover .preview-img {
-    transform: scale(1.05); /* 5% zoom */
+.preview-container:hover .preview-overlay {
+  opacity: 1;
 }
 
 /* ==========================================
-   2.2 Download Buttons
+   DOWNLOAD BUTTON - YELLOW THEME
    ========================================== */
-/**
- * Container for App Store and Play Store buttons
- * Flexbox layout with responsive wrapping
- */
-.download-buttons {
-    display: flex;
-    gap: 1.5rem; /* Space between buttons */
-    flex-wrap: wrap; /* Wrap on small screens */
-    justify-content: center;
-    padding: 2rem;
+.btn-download-large {
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem 3rem;
+  background: var(--detail-gradient);
+  border: 2px solid rgba(255, 255, 255, 0.25);
+  border-radius: var(--radius-lg);
+  color: white;
+  font-size: 1.125rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all var(--transition-base);
+  box-shadow: var(--shadow-md), var(--shadow-glow-detail);
+  position: relative;
+  overflow: hidden;
+  font-family: inherit;
 }
 
-/**
- * Base download button styles
- * Platform-agnostic styling
- */
-.btn-download {
-    display: flex;
-    align-items: center;
-    gap: 1rem; /* Space between icon and text */
-    padding: 1.25rem 2.5rem;
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius);
-    font-size: 1.1rem;
-    font-weight: 600;
-    text-decoration: none;
-    cursor: pointer;
-    transition: all var(--transition-base);
-    box-shadow: 0 10px 30px var(--shadow-color);
-    min-width: 200px; /* Minimum button width */
-    justify-content: center;
+.btn-download-large::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.15) 0%, 
+    transparent 100%);
+  opacity: 0;
+  transition: opacity var(--transition-base);
 }
 
-/**
- * iOS App Store button
- * Black gradient matching Apple branding
- */
-.btn-download.ios {
-    background: linear-gradient(135deg, #000000, #333333);
-    color: #fff;
+.btn-download-large:hover::before {
+  opacity: 1;
 }
 
-.btn-download.ios:hover {
-    background: linear-gradient(135deg, #333333, #666666);
-    transform: translateY(-5px) scale(1.05); /* Lift and scale */
-    box-shadow: 0 15px 40px var(--shadow-color), 
-                0 0 30px rgba(0, 0, 0, 0.3); /* Enhanced shadow */
+.btn-download-large:hover {
+  transform: translateY(-4px) scale(1.03);
+  box-shadow: var(--shadow-xl), var(--shadow-glow-lg);
+  border-color: rgba(255, 255, 255, 0.4);
 }
 
-/**
- * Android Play Store button
- * Blue-green gradient matching Google branding
- */
-.btn-download.android {
-    background: linear-gradient(135deg, #4285F4, #34A853);
-    color: #fff;
+.btn-download-large:active {
+  transform: translateY(-2px) scale(1.01);
 }
 
-.btn-download.android:hover {
-    background: linear-gradient(135deg, #3367D6, #2E8B57);
-    transform: translateY(-5px) scale(1.05); /* Lift and scale */
-    box-shadow: 0 15px 40px var(--shadow-color), 
-                0 0 30px rgba(66, 133, 244, 0.3); /* Blue glow */
+.btn-download-large:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: var(--shadow-md) !important;
 }
 
-/* Icon sizing within download buttons */
-.btn-download i {
-    font-size: 1.5rem;
+.download-icon-circle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 50%;
+  transition: all var(--transition-base);
+}
+
+.btn-download-large:hover .download-icon-circle {
+  background: rgba(255, 255, 255, 0.28);
+  transform: scale(1.1);
+}
+
+.download-icon-circle i {
+  font-size: 1.375rem;
+}
+
+.download-text {
+  font-size: 1.125rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
 }
 
 /* ==========================================
-   3. APP CONTROLS - BOTTOM TOOLBAR
+   APP CONTROLS
    ========================================== */
-/**
- * Control bar at bottom of preview
- * Contains close button and info display
- */
 .app-controls {
-    position: absolute;
-    bottom: 2rem;
-    left: 2rem;
-    right: 2rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    z-index: 10; /* Above preview image */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.25rem 1.75rem;
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: var(--glass-border);
+  border-radius: var(--radius-lg);
+  margin-top: 1rem;
+  box-shadow: var(--shadow-md);
+  transition: all var(--transition-base);
 }
 
-/**
- * Control buttons group
- * Left-aligned interactive buttons
- */
+.app-controls:hover {
+  border-color: rgba(255, 184, 0, 0.4);
+  box-shadow: var(--shadow-lg);
+}
+
 .control-group {
-    display: flex;
-    gap: 1rem;
+  display: flex;
+  gap: 0.75rem;
 }
 
-/**
- * Individual control button
- * Circular design with glassmorphism
- */
 .btn-control {
-    width: 50px;
-    height: 50px;
-    background: var(--glass-bg);
-    backdrop-filter: blur(30px) saturate(180%);
-    border: 1px solid var(--border-color);
-    border-radius: 50%; /* Perfect circle */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--text-primary);
-    cursor: pointer;
-    transition: all var(--transition-base);
-    box-shadow: 0 5px 15px var(--shadow-color);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.875rem 1.375rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-base);
+  white-space: nowrap;
+  font-family: inherit;
 }
 
-/**
- * Control button hover effect
- * Green highlight matching theme
- */
 .btn-control:hover {
-    background: #22C55E; /* Accent color */
-    color: #fff;
-    transform: translateY(-3px); /* Slight lift */
-    box-shadow: 0 8px 20px var(--shadow-color);
+  background: var(--detail-gradient);
+  color: white;
+  border-color: transparent;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-glow-sm);
 }
 
-/**
- * Control info display
- * Right-aligned text container
- */
+.btn-control:active {
+  transform: translateY(0);
+}
+
+.btn-control i {
+  font-size: 1.125rem;
+}
+
 .control-info {
-    background: var(--glass-bg);
-    backdrop-filter: blur(30px) saturate(180%);
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius-sm);
-    padding: 0.75rem 1.5rem;
-    box-shadow: 0 5px 15px var(--shadow-color);
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  font-weight: 500;
 }
 
-.control-text {
-    font-size: 0.9rem;
-    opacity: 0.8;
-    font-weight: 500;
+.control-info i {
+  color: var(--detail-primary);
+  font-size: 0.875rem;
 }
 
 /* ==========================================
-   4. APP SCREENSHOTS CAROUSEL
+   APP SCREENSHOTS
    ========================================== */
-/**
- * Horizontal scrolling gallery
- * Custom scrollbar styling
- */
 .app-screenshots {
-    display: flex;
-    gap: 1rem;
-    padding: 2rem;
-    overflow-x: auto; /* Enable horizontal scroll */
-    background: var(--glass-bg);
-    backdrop-filter: blur(30px) saturate(180%);
-    border-top: 1px solid var(--border-color);
-    scrollbar-width: thin; /* Firefox */
-    scrollbar-color: #22C55E var(--border-color); /* Firefox */
+  display: flex;
+  gap: 1rem;
+  padding: 1.5rem;
+  overflow-x: auto;
+  background: var(--bg-secondary);
+  border-top: 1px solid var(--border-color);
 }
 
-/* Webkit scrollbar styling (Chrome, Safari, Edge) */
 .app-screenshots::-webkit-scrollbar {
-    height: 8px;
+  height: 6px;
 }
 
 .app-screenshots::-webkit-scrollbar-track {
-    background: var(--border-color);
-    border-radius: 10px;
+  background: var(--bg-primary);
+  border-radius: 3px;
 }
 
 .app-screenshots::-webkit-scrollbar-thumb {
-    background: #22C55E; /* Accent color */
-    border-radius: 10px;
+  background: var(--detail-primary);
+  border-radius: 3px;
 }
 
-/**
- * Individual screenshot thumbnail
- * Phone-sized proportions
- */
-.screenshot-item,
 .screenshot-thumbnail {
-    flex: 0 0 auto; /* Don't grow or shrink */
-    width: 200px;
-    height: 350px; /* Phone aspect ratio */
-    border-radius: var(--border-radius-sm);
-    overflow: hidden;
-    border: 1px solid var(--border-color);
-    box-shadow: 0 5px 15px var(--shadow-color);
-    cursor: pointer;
-    transition: all var(--transition-base);
-    position: relative;
+  flex-shrink: 0;
+  width: 80px;
+  height: 140px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: all var(--transition-base);
+  position: relative;
 }
 
-/**
- * Screenshot hover effect
- * Lift and enhance shadow
- */
-.screenshot-item:hover,
 .screenshot-thumbnail:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 25px var(--shadow-color);
+  transform: translateY(-2px);
+  border-color: var(--detail-primary);
+  box-shadow: var(--shadow-sm);
 }
 
-/* Active screenshot highlight */
 .screenshot-thumbnail.active {
-    border-color: #22C55E;
-    box-shadow: 0 10px 25px var(--shadow-color),
-                0 0 20px rgba(34, 197, 94, 0.3);
+  border-color: var(--detail-primary);
+  box-shadow: var(--shadow-glow-sm);
 }
 
-/* Screenshot image styling */
-.screenshot-item img,
 .screenshot-thumbnail img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform var(--transition-slow);
-}
-
-/* Zoom on hover */
-.screenshot-item:hover img,
-.screenshot-thumbnail:hover img {
-    transform: scale(1.1);
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 /* ==========================================
-   5. APP-SPECIFIC BUTTON STYLES
+   APP HEADER
    ========================================== */
-/**
- * Primary action button for apps
- * Green gradient matching theme
- */
-.btn-app {
-    background: linear-gradient(135deg, #22C55E, #10B981);
-    color: #fff;
-    border-color: #22C55E;
-}
-
-.btn-app:hover {
-    background: linear-gradient(135deg, #16A34A, #0D9488);
-    transform: translateY(-3px);
-    box-shadow: 0 15px 40px var(--shadow-color), 
-                0 0 30px rgba(34, 197, 94, 0.3); /* Green glow */
-}
-
-/* ==========================================
-   6. APP INFO CONTAINER - RIGHT COLUMN
-   ========================================== */
-/**
- * Main information container
- * Glassmorphism card with sections
- */
-.app-info-container {
-    background: var(--glass-bg);
-    backdrop-filter: blur(30px) saturate(180%);
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius);
-    box-shadow: 0 20px 60px var(--shadow-color);
-    overflow: hidden;
-}
-
-/* ==========================================
-   7. APP HEADER SECTION
-   ========================================== */
-/**
- * Top section of info container
- * Contains title, metadata, and actions
- */
 .app-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    padding: 3rem;
-    border-bottom: 1px solid var(--border-color);
-    /* Subtle gradient background */
-    background: linear-gradient(135deg, 
-        rgba(34, 197, 94, 0.05) 0%, 
-        rgba(16, 185, 129, 0.02) 100%);
+  padding: 1.5rem 0;
+  animation: slideUpFade 0.6s ease-out 0.1s both;
 }
 
-/**
- * Title section container
- * Left side of header
- */
-.app-title-section {
-    flex: 1;
+@keyframes slideUpFade {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-/**
- * App title
- * Large gradient text
- */
 .app-title {
-    font-size: 3.5rem;
-    font-weight: 900;
-    margin-bottom: 1rem;
-    /* Gradient text effect */
-    background: linear-gradient(135deg, #22C55E, #10B981);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    line-height: 1.1;
+  font-size: 2rem;
+  font-weight: 900;
+  color: var(--text-primary);
+  line-height: 1.3;
+  margin-bottom: 1rem;
+  letter-spacing: -0.5px;
 }
 
-/**
- * Metadata badges container
- * Category, rating, status
- */
-.app-meta {
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-    flex-wrap: wrap; /* Wrap on small screens */
+/* ==========================================
+   APP META ROW
+   ========================================== */
+.app-meta-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  flex-wrap: wrap;
 }
 
-/**
- * Base badge styling
- * Shared by category, rating, status
- */
+.app-meta-left {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  flex-wrap: wrap;
+}
+
 .app-category,
 .app-rating,
 .app-status {
-    padding: 0.5rem 1.25rem;
-    background: var(--glass-bg);
-    backdrop-filter: blur(30px) saturate(180%);
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius-sm);
-    font-weight: 600;
-    box-shadow: 0 5px 15px var(--shadow-color);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.75rem 1.125rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  transition: all var(--transition-base);
+  cursor: default;
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
 }
 
-/**
- * Category badge
- * Green text, uppercase
- */
 .app-category {
-    color: #22C55E;
-    text-transform: uppercase;
-    font-size: 0.8rem;
-    letter-spacing: 0.5px;
+  color: var(--detail-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-/**
- * Rating badge
- * Yellow/amber for stars
- */
+.app-category:hover {
+  background: rgba(255, 184, 0, 0.12);
+  border-color: var(--detail-primary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.app-category i {
+  font-size: 0.9375rem;
+}
+
 .app-rating {
-    color: #F59E0B; /* Amber color */
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
+  color: var(--detail-secondary);
 }
 
-/**
- * Status badge
- * Conditional coloring via JavaScript
- */
+.app-rating:hover {
+  background: rgba(255, 149, 0, 0.12);
+  border-color: var(--detail-secondary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.app-rating i {
+  font-size: 0.9375rem;
+}
+
+/* Status badges */
 .app-status {
-    color: #10B981; /* Default green */
-    text-transform: uppercase;
-    font-size: 0.8rem;
-    letter-spacing: 0.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  position: relative;
 }
 
-/* Status variants */
-.app-status.status-live {
-    color: #10B981; /* Green for live */
-    border-color: rgba(16, 185, 129, 0.3);
+.status-live {
+  color: #10B981;
+  background: rgba(16, 185, 129, 0.12);
+  border-color: rgba(16, 185, 129, 0.35);
 }
 
-.app-status.status-dev {
-    color: #F59E0B; /* Orange for development */
-    border-color: rgba(245, 158, 11, 0.3);
+.status-live i {
+  animation: livePulse 2s ease-in-out infinite;
 }
 
-/**
- * Action buttons container
- * Right side of header
- */
-.app-actions {
-    display: flex;
-    gap: 1rem;
-    align-items: center;
-}
-
-/* Consistent button sizing in actions */
-.app-actions .btn {
-    padding: 1rem 2rem;
-    font-size: 0.95rem;
-}
-
-/* ==========================================
-   8. APP CONTENT SECTIONS
-   ========================================== */
-/**
- * Main content area container
- * Contains all information sections
- */
-.app-content {
-    padding: 3rem;
-}
-
-/**
- * Section headings
- * Consistent styling with underline
- */
-.app-content h2 {
-    font-size: 2rem;
-    font-weight: 700;
-    margin-bottom: 1.5rem;
-    color: var(--text-primary);
-    position: relative;
-}
-
-/**
- * Decorative underline for headings
- * Green accent bar
- */
-.app-content h2::after {
-    content: '';
-    position: absolute;
-    bottom: -0.5rem;
-    left: 0;
-    width: 60px;
-    height: 3px;
-    background: linear-gradient(90deg, #22C55E, #10B981);
-    border-radius: 2px;
-}
-
-/* ==========================================
-   8.1 Description Section
-   ========================================== */
-.app-description-section {
-    margin-bottom: 3rem;
-}
-
-/**
- * Overview paragraph
- * Large, bold introductory text
- */
-.app-overview {
-    font-size: 1.25rem;
-    line-height: 1.7;
-    opacity: 0.9;
-    margin-bottom: 1.5rem;
-    font-weight: 500;
-}
-
-/**
- * Detailed description
- * Standard body text
- */
-.app-description {
-    font-size: 1.05rem;
-    line-height: 1.8;
-    opacity: 0.8;
-}
-
-/* ==========================================
-   9. APP DETAILS GRID
-   ========================================== */
-/**
- * Grid of detail cards
- * Responsive with auto-fit
- */
-.app-details-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1.5rem;
-    margin-bottom: 3rem;
-}
-
-/**
- * Individual detail card
- * Icon + content layout
- */
-.detail-card {
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-    padding: 2rem;
-    background: var(--glass-bg);
-    backdrop-filter: blur(30px) saturate(180%);
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius-sm);
-    box-shadow: 0 5px 15px var(--shadow-color);
-    transition: all var(--transition-base);
-}
-
-/* Card hover effect */
-.detail-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 25px var(--shadow-color);
-}
-
-/**
- * Detail icon circle
- * Green gradient background
- */
-.detail-icon {
-    width: 70px;
-    height: 70px;
-    background: linear-gradient(135deg, #22C55E, #10B981);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0; /* Don't shrink */
-    border: 1px solid var(--border-color);
-    box-shadow: 0 5px 15px var(--shadow-color);
-}
-
-.detail-icon i {
-    font-size: 1.75rem;
-    color: #fff;
-}
-
-/**
- * Detail text content
- * Label + value
- */
-.detail-content h3 {
-    font-size: 1rem;
-    font-weight: 600;
-    color: #22C55E;
-    margin-bottom: 0.5rem;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.detail-content p {
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: var(--text-primary);
-    margin: 0;
-}
-
-/* ==========================================
-   10. FEATURES SECTION
-   ========================================== */
-.features-section {
-    margin-bottom: 3rem;
-}
-
-/**
- * Features list grid
- * Responsive with auto-fit
- */
-.features-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 1rem;
-    list-style: none; /* Remove default bullets */
-}
-
-/**
- * Individual feature item
- * Checkmark + text layout
- */
-.features-list li {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 1.25rem;
-    background: var(--glass-bg);
-    backdrop-filter: blur(30px) saturate(180%);
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius-sm);
-    box-shadow: 0 5px 15px var(--shadow-color);
-    transition: all var(--transition-base);
-}
-
-/* Feature hover effect - slide right */
-.features-list li:hover {
-    transform: translateX(10px);
-    box-shadow: 0 8px 20px var(--shadow-color);
-}
-
-/**
- * Custom checkmark bullet
- * Green checkmark before text
- */
-.features-list li::before {
-    content: '✓';
-    color: #22C55E;
-    font-weight: 700;
-    font-size: 1.1rem;
-}
-
-.features-list li span {
-    font-weight: 500;
-    color: var(--text-primary);
-}
-
-/* ==========================================
-   11. TECHNOLOGIES SECTION
-   ========================================== */
-.technologies-section {
-    margin-bottom: 3rem;
-}
-
-/**
- * Technology tags container
- * Flexbox with wrapping
- */
-.tech-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-}
-
-/**
- * Individual technology tag
- * Pill-shaped badge
- */
-.tech-tags span,
-.tech-tag {
-    padding: 0.75rem 1.5rem;
-    background: var(--glass-bg);
-    backdrop-filter: blur(30px) saturate(180%);
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius-sm);
-    font-weight: 600;
-    color: #22C55E;
-    box-shadow: 0 5px 15px var(--shadow-color);
-    transition: all var(--transition-base);
-}
-
-/**
- * Tag hover effect
- * Invert colors (green background, white text)
- */
-.tech-tags span:hover,
-.tech-tag:hover {
-    background: #22C55E;
-    color: #fff;
-    transform: translateY(-3px);
-    box-shadow: 0 8px 20px var(--shadow-color);
-}
-
-/* ==========================================
-   12. APP STATS SECTION
-   ========================================== */
-.app-stats-section {
-    margin-bottom: 0; /* Last section */
-}
-
-/**
- * Statistics grid
- * Three-column responsive layout
- */
-.stats-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 2rem;
-}
-
-/**
- * Individual stat item
- * Circle + info layout
- */
-.stat-item {
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-    padding: 2rem;
-    background: var(--glass-bg);
-    backdrop-filter: blur(30px) saturate(180%);
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius-sm);
-    box-shadow: 0 5px 15px var(--shadow-color);
-    transition: all var(--transition-base);
-}
-
-/* Stat hover effect */
-.stat-item:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 25px var(--shadow-color);
-}
-
-/**
- * Circular stat display
- * Green gradient circle with value
- */
-.stat-circle {
-    width: 80px;
-    height: 80px;
-    background: linear-gradient(135deg, #22C55E, #10B981);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid var(--border-color);
-    box-shadow: 0 5px 15px var(--shadow-color);
-    flex-shrink: 0; /* Don't shrink */
-}
-
-/**
- * Stat value text
- * Large white text in circle
- */
-.stat-value {
-    font-size: 1.5rem;
-    font-weight: 800;
-    color: #fff;
-}
-
-/**
- * Stat information
- * Label + description
- */
-.stat-info h3 {
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: var(--text-primary);
-    margin-bottom: 0.5rem;
-}
-
-.stat-info p {
-    font-size: 0.9rem;
-    opacity: 0.7;
-    margin: 0;
-}
-
-/* ==========================================
-   13. DETAIL NAVIGATION ARROWS
-   ========================================== */
-/**
- * Previous/Next app navigation
- * Positioned outside main container
- */
-.detail-navigation {
-    position: absolute;
-    top: 50%;
-    left: -80px; /* Outside container */
-    right: -80px; /* Outside container */
-    display: flex;
-    justify-content: space-between;
-    transform: translateY(-50%); /* Center vertically */
-    z-index: 5;
-}
-
-/**
- * Navigation arrow button
- * Glassmorphism with hover effect
- */
-.nav-arrow {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 1.5rem 2rem;
-    background: var(--glass-bg);
-    backdrop-filter: blur(30px) saturate(180%);
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius);
-    color: var(--text-primary);
-    font-weight: 600;
-    cursor: pointer;
-    transition: all var(--transition-base);
-    box-shadow: 0 10px 30px var(--shadow-color);
-    opacity: 0.7; /* Subtle by default */
-}
-
-/**
- * Arrow hover effect
- * Full opacity, lift, green background
- */
-.nav-arrow:hover {
+@keyframes livePulse {
+  0%, 100% {
     opacity: 1;
-    transform: translateY(-3px);
-    background: #22C55E;
-    color: #fff;
-    box-shadow: 0 15px 40px var(--shadow-color);
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.25);
+  }
 }
 
-/* Additional padding for directional arrows */
+.status-dev {
+  color: #F59E0B;
+  background: rgba(245, 158, 11, 0.12);
+  border-color: rgba(245, 158, 11, 0.35);
+}
+
+/* ==========================================
+   SIDEBAR ACTIONS
+   ========================================== */
+.sidebar-actions {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: var(--glass-border);
+  border-radius: var(--radius-xl);
+  padding: 2rem;
+  box-shadow: var(--shadow-md);
+  transition: all var(--transition-base);
+}
+
+.sidebar-actions:hover {
+  border-color: rgba(255, 184, 0, 0.35);
+  box-shadow: var(--shadow-lg), var(--shadow-glow-sm);
+  transform: translateY(-3px);
+}
+
+.sidebar-title {
+  font-size: 1.0625rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.sidebar-title::before {
+  content: '';
+  width: 4px;
+  height: 16px;
+  background: var(--detail-gradient);
+  border-radius: 2px;
+}
+
+.action-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.btn-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all var(--transition-base);
+  white-space: nowrap;
+  font-family: inherit;
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  width: 100%;
+  justify-content: flex-start;
+}
+
+.btn-action:hover {
+  background: var(--bg-secondary);
+  border-color: var(--detail-primary);
+  color: var(--detail-primary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-action i {
+  font-size: 1.125rem;
+  transition: transform var(--transition-base);
+  width: 20px;
+  text-align: center;
+}
+
+.btn-action:hover i {
+  transform: scale(1.2);
+}
+
+.btn-action-primary {
+  background: var(--detail-gradient);
+  color: white;
+  border-color: transparent;
+}
+
+.btn-action-primary:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: var(--shadow-glow-sm);
+  color: white;
+}
+
+/* ==========================================
+   SIDEBAR NAVIGATION
+   ========================================== */
+.sidebar-navigation {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: var(--glass-border);
+  border-radius: var(--radius-xl);
+  padding: 2rem;
+  box-shadow: var(--shadow-md);
+  transition: all var(--transition-base);
+}
+
+.sidebar-navigation:hover {
+  border-color: rgba(255, 184, 0, 0.35);
+  box-shadow: var(--shadow-lg), var(--shadow-glow-sm);
+  transform: translateY(-3px);
+}
+
+.nav-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.nav-arrow {
+  display: flex;
+  align-items: center;
+  gap: 1.125rem;
+  padding: 1.25rem 1.5rem;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all var(--transition-smooth);
+  position: relative;
+  overflow: hidden;
+  font-family: inherit;
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  width: 100%;
+}
+
+.nav-arrow::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, 
+    rgba(255, 184, 0, 0.12) 0%, 
+    rgba(255, 149, 0, 0.06) 100%);
+  opacity: 0;
+  transition: opacity var(--transition-base);
+}
+
+.nav-arrow:hover::before {
+  opacity: 1;
+}
+
+.nav-arrow:hover {
+  border-color: var(--detail-primary);
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-lg), var(--shadow-glow-sm);
+}
+
+.nav-arrow i {
+  font-size: 1.625rem;
+  color: var(--detail-primary);
+  transition: transform var(--transition-base);
+  position: relative;
+  z-index: 1;
+}
+
 .prev-arrow {
-    padding-left: 2.5rem;
+  justify-content: flex-start;
+}
+
+.prev-arrow:hover i {
+  transform: translateX(-5px);
 }
 
 .next-arrow {
-    padding-right: 2.5rem;
+  justify-content: flex-end;
+}
+
+.next-arrow:hover i {
+  transform: translateX(5px);
 }
 
 .arrow-text {
-    font-size: 0.95rem;
+  font-size: 1.0625rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  position: relative;
+  z-index: 1;
 }
 
 /* ==========================================
-   14. NAVIGATION BACK BUTTON
+   STORE BADGES
    ========================================== */
-/**
- * Back to Apps button in navbar
- * Consistent styling with other nav elements
- */
-.navbar .btn-secondary {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    padding: 0.75rem 1.5rem;
-    background: var(--glass-bg);
-    backdrop-filter: blur(30px) saturate(180%);
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius-sm);
-    color: var(--text-primary);
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 0.9rem;
-    transition: all var(--transition-base);
-    box-shadow: 0 5px 15px var(--shadow-color);
+.sidebar-stores {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: var(--glass-border);
+  border-radius: var(--radius-xl);
+  padding: 2rem;
+  box-shadow: var(--shadow-md);
+  transition: all var(--transition-base);
 }
 
-.navbar .btn-secondary:hover {
-    background: var(--accent-primary);
-    color: #fff;
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px var(--shadow-color);
+.sidebar-stores:hover {
+  border-color: rgba(255, 184, 0, 0.35);
+  box-shadow: var(--shadow-lg), var(--shadow-glow-sm);
+  transform: translateY(-3px);
+}
+
+.store-badges {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.store-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all var(--transition-base);
+  white-space: nowrap;
+  font-family: inherit;
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  width: 100%;
+  justify-content: flex-start;
+}
+
+.store-badge:hover {
+  background: var(--bg-secondary);
+  border-color: var(--detail-primary);
+  color: var(--detail-primary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.store-badge i {
+  font-size: 1.375rem;
+  transition: transform var(--transition-base);
+  width: 24px;
+  text-align: center;
+}
+
+.store-badge:hover i {
+  transform: scale(1.2);
 }
 
 /* ==========================================
-   15. ANIMATIONS
+   CONTENT SECTIONS - FULL WIDTH
    ========================================== */
-/**
- * Fade in from bottom animation
- * Used for staggered entrance effects
- */
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+.app-description-section,
+.screenshots-section,
+.features-section,
+.technologies-section,
+.app-stats-section {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: var(--glass-border);
+  border-radius: var(--radius-xl);
+  padding: 2.5rem;
+  margin-top: 2rem;
+  box-shadow: var(--shadow-md);
+  transition: all var(--transition-smooth);
+  animation: slideUpFade 0.6s ease-out both;
 }
 
-/**
- * Apply animation to main container
- */
-.app-info-container {
-    animation: fadeInUp 0.6s ease-out;
+.app-description-section {
+  animation-delay: 0.2s;
 }
 
-/**
- * Apply animation to interactive elements
- * JavaScript adds staggered delays
- */
-.detail-card,
-.features-list li,
-.tech-tags span,
-.stat-item,
+.screenshots-section {
+  animation-delay: 0.25s;
+}
+
+.features-section {
+  animation-delay: 0.3s;
+}
+
+.technologies-section {
+  animation-delay: 0.35s;
+}
+
+.app-stats-section {
+  animation-delay: 0.4s;
+}
+
+.app-description-section:hover,
+.screenshots-section:hover,
+.features-section:hover,
+.technologies-section:hover,
+.app-stats-section:hover {
+  border-color: rgba(255, 184, 0, 0.35);
+  box-shadow: var(--shadow-lg), var(--shadow-glow-sm);
+  transform: translateY(-3px);
+}
+
+.app-description-section h2,
+.screenshots-section h2,
+.features-section h2,
+.technologies-section h2,
+.app-stats-section h2 {
+  font-size: 1.625rem;
+  font-weight: 900;
+  color: var(--text-primary);
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  letter-spacing: -0.3px;
+}
+
+.features-section h2 i,
+.technologies-section h2 i,
+.app-stats-section h2 i,
+.screenshots-section h2 i {
+  color: var(--detail-primary);
+  font-size: 1.375rem;
+}
+
+.description-content {
+  color: var(--text-secondary);
+}
+
+.app-overview {
+  font-size: 1.125rem;
+  line-height: 1.8;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: 1.375rem;
+}
+
+.app-description {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+}
+
+/* ==========================================
+   SCREENSHOTS SECTION
+   ========================================== */
+.screenshots-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
 .screenshot-item {
-    animation: fadeInUp 0.6s ease-out;
+  position: relative;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  aspect-ratio: 9 / 16;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  transition: all var(--transition-base);
+  cursor: pointer;
 }
 
-/**
- * Staggered animation delays
- * Creates cascading effect
- */
-.detail-card:nth-child(1) { animation-delay: 0.1s; }
-.detail-card:nth-child(2) { animation-delay: 0.2s; }
-.detail-card:nth-child(3) { animation-delay: 0.3s; }
-.detail-card:nth-child(4) { animation-delay: 0.4s; }
-
-/* ==========================================
-   16. RESPONSIVE DESIGN - LARGE SCREENS
-   ========================================== */
-/**
- * Adjustments for screens below 1200px
- * Reduce navigation arrow spacing
- */
-@media (max-width: 1200px) {
-    /* Bring navigation arrows closer */
-    .detail-navigation {
-        left: -40px;
-        right: -40px;
-    }
-    
-    /* Reduce title size */
-    .app-title {
-        font-size: 3rem;
-    }
+.screenshot-item:hover {
+  transform: translateY(-5px) scale(1.02);
+  border-color: var(--detail-primary);
+  box-shadow: var(--shadow-lg), var(--shadow-glow-sm);
 }
 
-/* ==========================================
-   17. RESPONSIVE DESIGN - TABLETS
-   ========================================== */
-/**
- * Adjustments for screens below 992px
- * Stack navigation, adjust layouts
- */
-@media (max-width: 992px) {
-    /* Reduce section padding */
-    .app-detail-section {
-        padding: 6rem 0 3rem;
-    }
-    
-    /**
-     * Navigation arrows - move below content
-     * Remove absolute positioning
-     */
-    .detail-navigation {
-        position: static;
-        transform: none;
-        margin-top: 2rem;
-        justify-content: center;
-        gap: 2rem;
-    }
-    
-    .nav-arrow {
-        position: static;
-        opacity: 1; /* Always visible on mobile */
-    }
-    
-    /**
-     * App header - stack vertically
-     */
-    .app-header {
-        flex-direction: column;
-        gap: 2rem;
-        align-items: flex-start;
-    }
-    
-    .app-actions {
-        width: 100%;
-        justify-content: flex-start;
-        flex-wrap: wrap;
-    }
-    
-    /* Adjust title size */
-    .app-title {
-        font-size: 2.5rem;
-    }
-    
-    /* Reduce preview height */
-    .preview-image {
-        height: 400px;
-    }
-    
-    /**
-     * Download buttons - stack vertically
-     */
-    .download-buttons {
-        flex-direction: column;
-        align-items: center;
-    }
-    
-    .btn-download {
-        width: 100%;
-        max-width: 300px;
-    }
+.screenshot-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--transition-slow);
 }
 
-/* ==========================================
-   18. RESPONSIVE DESIGN - MOBILE
-   ========================================== */
-/**
- * Adjustments for screens below 768px
- * Mobile-first optimizations
- */
-@media (max-width: 768px) {
-    /* Further reduce section padding */
-    .app-detail-section {
-        padding: 5rem 0 2rem;
-    }
-    
-    .app-preview-container {
-        margin-bottom: 2rem;
-    }
-    
-    /* Smaller preview height */
-    .preview-image {
-        height: 300px;
-    }
-    
-    /**
-     * App controls - stack vertically
-     */
-    .app-controls {
-        flex-direction: column;
-        gap: 1rem;
-        align-items: flex-start;
-    }
-    
-    .control-info {
-        align-self: stretch;
-        text-align: center;
-    }
-    
-    /**
-     * Content padding reduction
-     */
-    .app-header {
-        padding: 2rem;
-    }
-    
-    .app-content {
-        padding: 2rem;
-    }
-    
-    /* Title size for mobile */
-    .app-title {
-        font-size: 2rem;
-    }
-    
-    /* Meta badges spacing */
-    .app-meta {
-        gap: 1rem;
-    }
-    
-    /**
-     * Detail grid - single column
-     */
-    .app-details-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .detail-card {
-        padding: 1.5rem;
-    }
-    
-    /**
-     * Features - single column
-     */
-    .features-list {
-        grid-template-columns: 1fr;
-    }
-    
-    /**
-     * Stats - single column
-     */
-    .stats-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    /**
-     * Download buttons - adjust sizing
-     */
-    .btn-download {
-        padding: 1rem 2rem;
-        font-size: 1rem;
-        min-width: auto;
-    }
-    
-    /**
-     * Navigation arrows - reduce padding
-     */
-    .nav-arrow {
-        padding: 1rem 1.5rem;
-    }
-    
-    .arrow-text {
-        font-size: 0.85rem;
-    }
-    
-    /**
-     * Action buttons - stack vertically
-     */
-    .app-actions {
-        flex-direction: column;
-    }
-    
-    .app-actions .btn {
-        width: 100%;
-        justify-content: center;
-    }
-    
-    /**
-     * Screenshots - smaller thumbnails
-     */
-    .screenshot-item,
-    .screenshot-thumbnail {
-        width: 150px;
-        height: 260px;
-    }
+.screenshot-item:hover img {
+  transform: scale(1.1);
+}
+
+.screenshot-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, 
+    rgba(255, 184, 0, 0.9) 0%,
+    rgba(255, 149, 0, 0.8) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity var(--transition-base);
+}
+
+.screenshot-item:hover .screenshot-overlay {
+  opacity: 1;
+}
+
+.btn-screenshot-view {
+  width: 60px;
+  height: 60px;
+  background: rgba(255, 255, 255, 0.95);
+  border: none;
+  border-radius: 50%;
+  color: var(--detail-primary);
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: all var(--transition-base);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-screenshot-view:hover {
+  background: white;
+  transform: scale(1.1) rotate(90deg);
+  box-shadow: var(--shadow-lg);
+}
+
+.no-screenshots {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 3rem 2rem;
+  color: var(--text-secondary);
+  font-size: 1.125rem;
+}
+
+.no-screenshots i {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  opacity: 0.5;
+}
+
+/* Ensure screenshots section is always visible */
+.screenshots-section {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+.screenshots-grid {
+  display: grid !important;
+  visibility: visible !important;
+}
+
+.screenshot-item {
+  position: relative;
+  display: block;
+  visibility: visible;
+  opacity: 1;
+}
+
+.no-screenshots {
+  display: flex !important;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 /* ==========================================
-   19. RESPONSIVE DESIGN - SMALL MOBILE
+   FEATURES LIST
    ========================================== */
-/**
- * Adjustments for screens below 480px
- * Extra small devices optimizations
- */
-@media (max-width: 480px) {
-    /* Very compact title */
-    .app-title {
-        font-size: 1.75rem;
-    }
-    
-    /* Minimal preview height */
-    .preview-image {
-        height: 250px;
-    }
-    
-    /**
-     * Meta badges - stack vertically
-     */
-    .app-meta {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-    
-    /**
-     * Detail cards - stack icon and content
-     */
-    .detail-card {
-        flex-direction: column;
-        text-align: center;
-        gap: 1rem;
-    }
-    
-    /**
-     * Stat items - stack circle and info
-     */
-    .stat-item {
-        flex-direction: column;
-        text-align: center;
-        gap: 1rem;
-    }
-    
-    /**
-     * Download buttons - stack icon and text
-     */
-    .btn-download {
-        flex-direction: column;
-        gap: 0.5rem;
-        padding: 1rem 1.5rem;
-    }
-    
-    /**
-     * Control buttons - reduce size
-     */
-    .control-group {
-        gap: 0.5rem;
-    }
-    
-    .btn-control {
-        width: 45px;
-        height: 45px;
-    }
-    
-    /**
-     * Section headings - smaller
-     */
-    .app-content h2 {
-        font-size: 1.5rem;
-    }
-    
-    /**
-     * Screenshots - even smaller
-     */
-    .screenshot-item,
-    .screenshot-thumbnail {
-        width: 120px;
-        height: 210px;
-    }
+.features-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.125rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.features-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.125rem;
+  padding: 1.375rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-base);
+  cursor: default;
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+}
+
+.features-list li:hover {
+  background: linear-gradient(135deg, 
+    rgba(255, 184, 0, 0.1) 0%, 
+    rgba(255, 149, 0, 0.06) 100%);
+  border-color: rgba(255, 184, 0, 0.35);
+  transform: translateX(5px);
+  box-shadow: var(--shadow-sm);
+}
+
+.features-list li i {
+  color: var(--detail-primary);
+  font-size: 1.375rem;
+  flex-shrink: 0;
+  margin-top: 0.125rem;
+  transition: transform var(--transition-base);
+}
+
+.features-list li:hover i {
+  transform: scale(1.25) rotate(8deg);
+}
+
+.features-list li span {
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  color: var(--text-primary);
+  font-weight: 500;
 }
 
 /* ==========================================
-   20. ACCESSIBILITY FEATURES
+   TECHNOLOGY TAGS
    ========================================== */
-/**
- * Reduced motion preferences
- * Disable animations for users who prefer reduced motion
- */
-@media (prefers-reduced-motion: reduce) {
-    .app-info-container,
-    .detail-card,
-    .features-list li,
-    .tech-tags span,
-    .stat-item,
-    .screenshot-item,
-    .screenshot-thumbnail,
-    .btn-download,
-    .nav-arrow,
-    .preview-img {
-        animation: none;
-        transition: none;
-    }
-    
-    /* Keep instant feedback for interactions */
-    .btn-download:hover,
-    .nav-arrow:hover,
-    .btn-control:hover {
-        transition: background-color 0.1s ease, color 0.1s ease;
-    }
+.tech-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
 }
 
-/**
- * Focus styles for keyboard navigation
- * Enhanced visibility for accessibility
- */
-.app-info-container:focus-within {
-    outline: 2px solid #22C55E;
-    outline-offset: 2px;
+.tech-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.875rem 1.375rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  transition: all var(--transition-base);
+  cursor: default;
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
 }
 
-.btn-download:focus,
-.nav-arrow:focus,
-.screenshot-item:focus,
-.screenshot-thumbnail:focus,
-.btn-control:focus,
-.tech-tags span:focus {
-    outline: 2px solid #22C55E;
-    outline-offset: 2px;
-    box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.2);
+.tech-tag:hover {
+  background: var(--detail-gradient);
+  color: white;
+  border-color: transparent;
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-glow-sm);
 }
 
-/**
- * High contrast mode support
- * Ensure borders are visible in high contrast
- */
-@media (prefers-contrast: high) {
-    .app-preview,
-    .app-info-container,
-    .detail-card,
-    .features-list li,
-    .tech-tags span,
-    .stat-item,
-    .screenshot-item,
-    .screenshot-thumbnail {
-        border-width: 2px;
-    }
+.tech-tag i {
+  font-size: 0.9375rem;
+  transition: transform var(--transition-base);
 }
 
-/**
- * Focus visible (keyboard only)
- * Only show focus ring for keyboard navigation
- */
-.btn-download:focus:not(:focus-visible),
-.nav-arrow:focus:not(:focus-visible),
-.screenshot-item:focus:not(:focus-visible),
-.screenshot-thumbnail:focus:not(:focus-visible) {
-    outline: none;
+.tech-tag:hover i {
+  transform: rotate(180deg);
 }
 
 /* ==========================================
-   21. SCREENSHOT MODAL (Future Enhancement)
+   APP DETAILS GRID - FULL WIDTH
    ========================================== */
-/**
- * Full-screen screenshot viewer modal
- * Currently not implemented but styled for future use
- */
-.screenshot-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(10, 10, 10, 0.95); /* Dark overlay */
-    backdrop-filter: blur(20px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: var(--z-modal); /* Top layer */
+.app-details-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.25rem;
+  margin-top: 2rem;
+  margin-bottom: 0;
+}
+
+.detail-card {
+  display: flex;
+  align-items: center;
+  gap: 1.125rem;
+  padding: 1.375rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-base);
+  cursor: default;
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+}
+
+.detail-card:hover {
+  background: linear-gradient(135deg, 
+    rgba(255, 184, 0, 0.08) 0%, 
+    rgba(255, 149, 0, 0.04) 100%);
+  border-color: rgba(255, 184, 0, 0.35);
+  transform: translateX(5px);
+  box-shadow: var(--shadow-sm);
+}
+
+.detail-icon {
+  width: 56px;
+  height: 56px;
+  background: var(--detail-gradient);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: var(--shadow-glow-sm);
+  transition: all var(--transition-base);
+  position: relative;
+}
+
+.detail-icon::after {
+  content: '';
+  position: absolute;
+  inset: -5px;
+  border-radius: 50%;
+  background: var(--detail-gradient);
+  opacity: 0;
+  filter: blur(15px);
+  transition: opacity var(--transition-base);
+  z-index: -1;
+}
+
+.detail-card:hover .detail-icon {
+  transform: scale(1.15) rotate(8deg);
+}
+
+.detail-card:hover .detail-icon::after {
+  opacity: 0.5;
+}
+
+.detail-icon i {
+  font-size: 1.375rem;
+  color: white;
+}
+
+.detail-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.detail-content h3 {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-tertiary);
+  margin-bottom: 0.5rem;
+}
+
+.detail-content p {
+  font-size: 1.0625rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ==========================================
+   APP STATISTICS
+   ========================================== */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: 1.375rem;
+  padding: 1.625rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-base);
+  cursor: default;
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+}
+
+.stat-item:hover {
+  background: linear-gradient(135deg, 
+    rgba(255, 184, 0, 0.08) 0%, 
+    rgba(255, 149, 0, 0.04) 100%);
+  border-color: rgba(255, 184, 0, 0.35);
+  transform: translateX(5px);
+  box-shadow: var(--shadow-sm);
+}
+
+.stat-circle {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: var(--detail-gradient);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: var(--shadow-glow-sm);
+  transition: all var(--transition-base);
+}
+
+.stat-item:hover .stat-circle {
+  transform: scale(1.1) rotate(8deg);
+}
+
+.stat-value {
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: white;
+}
+
+.stat-info {
+  flex: 1;
+}
+
+.stat-info h3 {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.stat-info p {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+/* ==========================================
+   SIDEBAR COLUMN
+   ========================================== */
+.sidebar-column {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  position: sticky;
+  top: calc(70px + 2rem);
+  animation: slideDownFade 0.6s ease-out 0.2s both;
+}
+
+@keyframes slideDownFade {
+  from {
     opacity: 0;
-    visibility: hidden;
-    transition: all var(--transition-base);
-}
-
-/**
- * Active modal state
- */
-.screenshot-modal.active {
+    transform: translateY(-20px);
+  }
+  to {
     opacity: 1;
-    visibility: visible;
+    transform: translateY(0);
+  }
 }
 
-/**
- * Modal content container
- */
-.modal-content {
-    max-width: 90%;
-    max-height: 90%;
-    border-radius: var(--border-radius);
-    overflow: hidden;
-    box-shadow: 0 20px 60px var(--shadow-color);
+/* ==========================================
+   NOTIFICATION CONTAINER
+   ========================================== */
+.notification-container {
+  position: fixed;
+  top: 6rem;
+  right: 1.5rem;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+  pointer-events: none;
 }
 
-.modal-content img {
+.notification-toast {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.125rem 1.625rem;
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: var(--glass-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-xl);
+  min-width: 340px;
+  max-width: 420px;
+  opacity: 0;
+  transform: translateX(450px);
+  transition: all var(--transition-smooth);
+  pointer-events: all;
+}
+
+.notification-toast.show {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.notification-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.notification-icon i {
+  font-size: 1.375rem;
+}
+
+.notification-success {
+  border-color: rgba(16, 185, 129, 0.5);
+}
+
+.notification-success .notification-icon {
+  background: rgba(16, 185, 129, 0.18);
+  color: #10B981;
+}
+
+.notification-error {
+  border-color: rgba(239, 68, 68, 0.5);
+}
+
+.notification-error .notification-icon {
+  background: rgba(239, 68, 68, 0.18);
+  color: #EF4444;
+}
+
+.notification-warning {
+  border-color: rgba(245, 158, 11, 0.5);
+}
+
+.notification-warning .notification-icon {
+  background: rgba(245, 158, 11, 0.18);
+  color: #F59E0B;
+}
+
+.notification-info {
+  border-color: rgba(255, 184, 0, 0.5);
+}
+
+.notification-info .notification-icon {
+  background: rgba(255, 184, 0, 0.18);
+  color: var(--detail-primary);
+}
+
+.notification-message {
+  flex: 1;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.5;
+}
+
+/* ==========================================
+   CTA SECTION - YELLOW THEME
+   ========================================== */
+.cta-section {
+  background: var(--bg-primary);
+  border-top: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
+  padding: var(--spacing-4xl) 0;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.cta-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 30% 50%, rgba(255, 184, 0, 0.08) 0%, transparent 60%),
+              radial-gradient(circle at 70% 50%, rgba(255, 149, 0, 0.06) 0%, transparent 60%);
+  animation: backgroundPulse 8s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.cta-content {
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+  padding: var(--spacing-2xl);
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: var(--glass-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-xl);
+  transition: all var(--transition-smooth);
+}
+
+.cta-content:hover {
+  border-color: rgba(255, 184, 0, 0.4);
+  box-shadow: var(--shadow-2xl), var(--shadow-glow-sm);
+  transform: translateY(-5px);
+}
+
+.cta-content h2 {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 900;
+  margin-bottom: var(--spacing-lg);
+  line-height: 1.2;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+}
+
+.cta-content p {
+  font-size: 1.125rem;
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-2xl);
+  line-height: 1.7;
+  font-weight: 500;
+}
+
+.btn-glow {
+  padding: var(--spacing-lg) var(--spacing-2xl);
+  font-size: 1.125rem;
+  background: var(--detail-gradient);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-lg);
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  text-decoration: none;
+  box-shadow: var(--shadow-lg), var(--shadow-glow-detail);
+  transition: all var(--transition-base);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  font-family: inherit;
+  z-index: 1;
+}
+
+.btn-glow::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s ease, height 0.6s ease;
+  z-index: -1;
+}
+
+.btn-glow:hover::before {
+  width: 400px;
+  height: 400px;
+}
+
+.btn-glow::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+  transform: rotate(45deg);
+  animation: shimmer 3s infinite;
+  z-index: -1;
+}
+
+.btn-glow:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: var(--shadow-xl), var(--shadow-glow-lg);
+}
+
+.btn-glow:active {
+  transform: translateY(-1px) scale(1.02);
+}
+
+.btn-glow i {
+  font-size: 1.25rem;
+  position: relative;
+  z-index: 1;
+  transition: transform var(--transition-base);
+}
+
+.btn-glow:hover i {
+  transform: scale(1.2) rotate(10deg);
+}
+
+.btn-glow span {
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes shimmer {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+@keyframes backgroundPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+/* ==========================================
+   RESPONSIVE DESIGN
+   ========================================== */
+@media (max-width: 1199px) {
+  .youtube-layout {
+    grid-template-columns: minmax(0, 1fr) 350px;
+    gap: 2rem;
+  }
+}
+
+@media (max-width: 991px) {
+  .app-detail-section {
+    padding: calc(60px + 2.5rem) 0 4rem;
+  }
+  
+  .youtube-layout {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+  
+  .sidebar-column {
+    position: static;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+  
+  .notification-container {
+    right: 1rem;
+    left: 1rem;
+  }
+  
+  .notification-toast {
+    min-width: auto;
     width: 100%;
-    height: 100%;
-    object-fit: contain; /* Maintain aspect ratio */
+  }
 }
 
-/* ==========================================
-   22. PRINT STYLES
-   ========================================== */
-/**
- * Optimize page for printing
- * Remove unnecessary elements and adjust layout
- */
-@media print {
-    /* Hide navigation and interactive elements */
-    .navbar,
-    .detail-navigation,
-    .app-controls,
-    .download-buttons,
-    .app-actions,
-    .footer {
-        display: none !important;
-    }
-    
-    /* Reset backgrounds for printing */
-    .app-preview,
-    .app-info-container,
-    .detail-card,
-    .features-list li,
-    .stat-item {
-        background: #fff !important;
-        box-shadow: none !important;
-        border: 1px solid #000 !important;
-    }
-    
-    /* Black text for printing */
-    body {
-        color: #000 !important;
-    }
-    
-    /* Remove shadows and effects */
-    * {
-        box-shadow: none !important;
-        text-shadow: none !important;
-    }
-    
-    /* Page breaks */
-    .app-detail-section {
-        page-break-inside: avoid;
-    }
-    
-    .detail-card,
-    .stat-item {
-        page-break-inside: avoid;
-    }
-}
-
-/* ==========================================
-   24. ERROR STATES
-   ========================================== */
-/**
- * Error message display
- * Shown when app fails to load
- */
-.error-container {
+@media (max-width: 767px) {
+  .app-detail-section {
+    padding: calc(60px + 2rem) 0 3rem;
+  }
+  
+  .app-preview-wrapper {
+    margin-bottom: 1.25rem;
+  }
+  
+  .app-controls {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+  }
+  
+  .control-group {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+  
+  .btn-control {
+    flex: 1;
+    min-width: calc(33.333% - 0.5rem);
+    justify-content: center;
+  }
+  
+  .control-info {
+    width: 100%;
+    justify-content: center;
     text-align: center;
-    padding: 4rem 2rem;
+  }
+  
+  .app-header {
+    padding: 1.25rem 0;
+  }
+  
+  .app-title {
+    font-size: 1.625rem;
+    margin-bottom: 0.875rem;
+  }
+  
+  .app-description-section,
+  .screenshots-section,
+  .features-section,
+  .technologies-section,
+  .app-stats-section {
+    padding: 1.875rem;
+  }
+  
+  .app-details-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+  
+  .features-list {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .screenshots-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar-column {
+    min-width: 360px;
+  }
+
+  @media (min-width: 1200px) {
+    .youtube-layout {
+      grid-template-columns: minmax(0, 1fr) minmax(360px, 402px);
+    }
+  }
 }
 
-.error-icon {
-    font-size: 4rem;
-    color: #EF4444; /* Red */
-    margin-bottom: 1rem;
-}
-
-.error-message {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: var(--text-primary);
-    margin-bottom: 1rem;
-}
-
-.error-description {
+@media (max-width: 639px) {
+  .btn-download-large {
+    padding: 1.125rem 2.5rem;
     font-size: 1rem;
-    opacity: 0.7;
-    margin-bottom: 2rem;
+    gap: 0.875rem;
+  }
+  
+  .download-icon-circle {
+    width: 44px;
+    height: 44px;
+  }
+  
+  .btn-control span {
+    display: none;
+  }
+  
+  .btn-control {
+    padding: 0.875rem;
+    min-width: auto;
+    width: auto;
+    flex: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .app-description-section,
+  .screenshots-section,
+  .features-section,
+  .technologies-section,
+  .app-stats-section {
+    padding: 1.5rem;
+  }
+  
+  .notification-container {
+    top: 5rem;
+    right: 0.875rem;
+    left: 0.875rem;
+  }
 }
 
 /* ==========================================
-   25. UTILITY CLASSES
+   ACCESSIBILITY
    ========================================== */
-/**
- * Hidden elements
- * Screen reader only or completely hidden
- */
-.sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border-width: 0;
+.btn-download-large:focus-visible,
+.btn-control:focus-visible,
+.btn-action:focus-visible,
+.nav-arrow:focus-visible,
+.btn-glow:focus-visible {
+  outline: 3px solid var(--detail-primary);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 6px rgba(255, 184, 0, 0.25);
 }
 
-/**
- * Visibility utilities
- */
-.hidden {
-    display: none !important;
-}
-
-.invisible {
-    visibility: hidden !important;
-}
-
-/**
- * Text utilities
- */
-.text-truncate {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.text-center {
-    text-align: center;
-}
-
-/**
- * Spacing utilities
- */
-.mt-0 { margin-top: 0 !important; }
-.mb-0 { margin-bottom: 0 !important; }
-.mt-1 { margin-top: 0.5rem !important; }
-.mb-1 { margin-bottom: 0.5rem !important; }
-.mt-2 { margin-top: 1rem !important; }
-.mb-2 { margin-bottom: 1rem !important; }
-
-/* ==========================================
-   26. THEME-SPECIFIC ADJUSTMENTS
-   ========================================== */
-/**
- * Light theme overrides
- * Applied when [data-theme="light"] is set
- */
-[data-theme="light"] .app-preview,
-[data-theme="light"] .app-info-container,
-[data-theme="light"] .detail-card,
-[data-theme="light"] .features-list li,
-[data-theme="light"] .tech-tags span,
-[data-theme="light"] .stat-item {
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-}
-
-[data-theme="light"] .preview-overlay {
-    background: rgba(255, 255, 255, 0.95);
-}
-
-/**
- * Dark theme optimizations
- * Applied when [data-theme="dark"] is set
- */
-[data-theme="dark"] .preview-overlay {
-    background: rgba(10, 10, 10, 0.95);
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 /* ==========================================
-   27. PERFORMANCE OPTIMIZATIONS
+   PERFORMANCE OPTIMIZATIONS
    ========================================== */
-/**
- * GPU acceleration for animations
- */
-.preview-img,
-.screenshot-item img,
-.screenshot-thumbnail img,
+.btn-download-large,
+.btn-control,
+.btn-action,
+.nav-arrow,
 .detail-card,
-.stat-item,
-.features-list li,
-.nav-arrow {
-    will-change: transform;
+.tech-tag,
+.preview-img {
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
-
-/**
- * Contain layout changes
- */
-.app-preview,
-.app-info-container {
-    contain: layout style;
-}
-
-/**
- * Image optimization
- */
-img {
-    image-rendering: -webkit-optimize-contrast;
-    image-rendering: crisp-edges;
-}
-
-/* ==========================================
-   END OF APP DETAIL STYLESHEET
-   ========================================== */
-/**
- * Total Lines: 1400+
- * Total Sections: 27
- * Responsive Breakpoints: 4 (1200px, 992px, 768px, 480px)
- * Animations: 2 (fadeInUp, loading-shimmer)
- * 
- * This stylesheet provides complete styling for the app detail page
- * with comprehensive responsive design, accessibility features, and
- * performance optimizations.
- * 
- * Developer: Arsh Verma (ArshCreates)
- * Portfolio: https://arshcreates.com
- * Last Updated: 2024
- * Version: 2.0 - Production Ready
- * 
- * Special Thanks:
- * - Font Awesome for icons
- * - Google Fonts for Inter typeface
- * - Community feedback and testing
- * 
- * Usage:
- * Link this stylesheet after style.css in app-detail.html:
- * <link rel="stylesheet" href="css/style.css">
- * <link rel="stylesheet" href="css/app-detail.css">
- * 
- * For best results, ensure:
- * 1. app-detail.html structure is followed
- * 2. app-detail.js is loaded for dynamic functionality
- * 3. CSS variables are defined in style.css
- * 4. Font Awesome and Google Fonts are loaded
- * 
- * Browser Support:
- * - Chrome 90+
- * - Firefox 88+
- * - Safari 14+
- * - Edge 90+
- * - Mobile browsers (iOS Safari, Chrome Mobile)
- * 
- * Performance Metrics:
- * - First Contentful Paint: <1.5s
- * - Time to Interactive: <3s
- * - Lighthouse Score: 95+
- * 
- * Accessibility:
- * - WCAG 2.1 Level AA compliant
- * - Keyboard navigation support
- * - Screen reader friendly
- * - Reduced motion support
- * - High contrast mode support
- * 
- * Credits: Arsh Verma
- * License: Custom License - For Portfolio Use
- * ===========================================
- */
