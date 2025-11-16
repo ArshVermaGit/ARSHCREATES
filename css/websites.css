@@ -749,8 +749,8 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  background: radial-gradient(circle at 30% 50%, rgba(59, 130, 246, 0.08) 0%, transparent 60%),
-              radial-gradient(circle at 70% 50%, rgba(29, 78, 216, 0.06) 0%, transparent 60%);
+  background: radial-gradient(circle at 30% 50%, rgba(255, 184, 0, 0.4) 0%, transparent 60%),
+              radial-gradient(circle at 70% 50%, rgba(255, 184, 0, 0.4) 0%, transparent 60%);
   animation: backgroundPulse 8s ease-in-out infinite;
   pointer-events: none;
   z-index: 0;
@@ -772,7 +772,7 @@ body {
 }
 
 .cta-content:hover {
-  border-color: rgba(59, 130, 246, 0.4);
+  border-color: rgba(255, 184, 0, 0.4);
   box-shadow: var(--shadow-2xl), var(--shadow-accent-sm);
   transform: translateY(-5px);
 }
