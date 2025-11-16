@@ -87,261 +87,252 @@
     <!-- App Detail Section -->
     <section class="app-detail-section" role="main">
         <div class="container">
-            
-            <!-- Left Column: App Preview Container -->
-            <div class="app-preview-container">
-                <div class="app-preview">
-                    
-                    <!-- App Preview Image with Download Overlay -->
-                    <div class="preview-image">
-                        <img id="previewImage" 
-                             src="" 
-                             alt="App Preview Screenshot" 
-                             class="preview-img"
-                             loading="lazy">
-                        
-                        <!-- Overlay with Download Buttons -->
-                        <div class="preview-overlay" aria-hidden="true">
-                            <div class="download-buttons">
-                                <!-- iOS App Store Button -->
-                                <a id="appStoreBtn" 
-                                   href="#" 
-                                   class="btn-download ios" 
-                                   target="_blank" 
-                                   rel="noopener noreferrer"
-                                   aria-label="Download on the App Store">
-                                    <i class="fab fa-apple" aria-hidden="true"></i>
-                                    <span>App Store</span>
-                                </a>
+            <div class="youtube-layout">
+                <!-- Primary Column -->
+                <div class="primary-column">
+                    <!-- App Preview -->
+                    <div class="app-preview-wrapper">
+                        <div class="preview-container">
+                            <div class="preview-image">
+                                <img id="previewImage" src="" alt="App Preview" class="preview-img">
                                 
-                                <!-- Android Google Play Button -->
-                                <a id="playStoreBtn" 
-                                   href="#" 
-                                   class="btn-download android" 
-                                   target="_blank" 
-                                   rel="noopener noreferrer"
-                                   aria-label="Download on Google Play">
-                                    <i class="fab fa-google-play" aria-hidden="true"></i>
-                                    <span>Google Play</span>
-                                </a>
+                                <div class="preview-overlay">
+                                    <button id="downloadBtn" class="btn-download-large">
+                                        <div class="download-icon-circle">
+                                            <i class="fas fa-download"></i>
+                                        </div>
+                                        <span class="download-text">Download App</span>
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    
-                    <!-- App Controls -->
-                    <div class="app-controls">
-                        <!-- Control Buttons Group -->
-                        <div class="control-group">
-                            <button id="closePreviewBtn" 
-                                    class="btn-control" 
-                                    title="Close Preview"
-                                    aria-label="Close app preview">
-                                <i class="fas fa-times" aria-hidden="true"></i>
-                            </button>
-                        </div>
                         
-                        <!-- Control Information Display -->
-                        <div class="control-info">
-                            <span class="control-text">Mobile Application</span>
+                        <div class="app-controls">
+                            <div class="control-group">
+                                <button id="closePreviewBtn" class="btn-control" title="Close Preview">
+                                    <i class="fas fa-times"></i>
+                                    <span>Close</span>
+                                </button>
+                            </div>
+                            
+                            <div class="control-info">
+                                <i class="fas fa-mobile-alt"></i>
+                                <span class="control-text">Mobile Application</span>
+                            </div>
+                        </div>
+
+                        <!-- App Screenshots Gallery -->
+                        <div id="appScreenshots" class="app-screenshots">
+                            <!-- Screenshots will be dynamically populated by app-detail.js -->
                         </div>
                     </div>
 
-                    <!-- App Screenshots Gallery -->
-                    <div id="appScreenshots" 
-                         class="app-screenshots" 
-                         role="region" 
-                         aria-label="App screenshots gallery">
-                        <!-- Screenshots will be dynamically populated by app-detail.js -->
-                    </div>
-                </div>
-
-                <!-- Navigation Arrows -->
-                <div class="detail-navigation" role="navigation" aria-label="App navigation">
-                    <!-- Previous App Button -->
-                    <button id="prevApp" 
-                            class="nav-arrow prev-arrow"
-                            aria-label="View previous app">
-                        <i class="fas fa-chevron-left" aria-hidden="true"></i>
-                        <span class="arrow-text">Previous App</span>
-                    </button>
-                    
-                    <!-- Next App Button -->
-                    <button id="nextApp" 
-                            class="nav-arrow next-arrow"
-                            aria-label="View next app">
-                        <span class="arrow-text">Next App</span>
-                        <i class="fas fa-chevron-right" aria-hidden="true"></i>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Right Column: App Information Container -->
-            <div class="app-info-container">
-                
-                <!-- App Header -->
-                <div class="app-header">
-                    <!-- Title and Meta Information -->
-                    <div class="app-title-section">
+                    <!-- App Header -->
+                    <div class="app-header">
                         <h1 id="appTitle" class="app-title">App Title</h1>
                         
-                        <!-- App Metadata -->
-                        <div class="app-meta">
-                            <span id="appCategory" 
-                                  class="app-category" 
-                                  role="text">Category</span>
-                            
-                            <span class="app-rating" role="text" aria-label="App rating">
-                                <i class="fas fa-star" aria-hidden="true"></i>
-                                <span id="appRating">0.0</span>/5
-                            </span>
-                            
-                            <span id="appStatus" 
-                                  class="app-status" 
-                                  role="status">Status</span>
+                        <div class="app-meta-row">
+                            <div class="app-meta-left">
+                                <span id="appCategory" class="app-category">
+                                    <i class="fas fa-tag"></i>
+                                    Category
+                                </span>
+                                
+                                <span class="app-rating">
+                                    <i class="fas fa-star"></i>
+                                    <span id="appRating">0.0</span>
+                                </span>
+                                
+                                <span id="appStatus" class="app-status">
+                                    <i class="fas fa-circle"></i>
+                                    Status
+                                </span>
+                            </div>
                         </div>
                     </div>
-                    
-                    <!-- Action Buttons -->
-                    <div class="app-actions">
-                        <!-- Share Button -->
-                        <button id="shareBtn" 
-                                class="btn btn-secondary"
-                                aria-label="Share this app">
-                            <i class="fas fa-share-alt" aria-hidden="true"></i>
-                            <span>Share</span>
-                        </button>
-                        
-                        <!-- GitHub Repository Button -->
-                        <a id="repositoryBtn" 
-                           href="#" 
-                           class="btn btn-primary" 
-                           target="_blank"
-                           rel="noopener noreferrer"
-                           aria-label="View source code on GitHub">
-                            <i class="fab fa-github" aria-hidden="true"></i>
-                            <span>Repository</span>
-                        </a>
+
+                    <!-- App Content -->
+                    <div class="app-content">
+                        <!-- About Section -->
+                        <div class="app-description-section">
+                            <h2>
+                                <i class="fas fa-info-circle"></i>
+                                About This App
+                            </h2>
+                            <div class="description-content">
+                                <p id="appOverview" class="app-overview">App overview...</p>
+                                <p id="appDescription" class="app-description">App description...</p>
+                            </div>
+                        </div>
+
+                        <!-- Details Grid -->
+                        <div class="app-details-grid">
+                            <div class="detail-card">
+                                <div class="detail-icon">
+                                    <i class="fas fa-calendar"></i>
+                                </div>
+                                <div class="detail-content">
+                                    <h3>Launch Date</h3>
+                                    <p id="launchDate">-</p>
+                                </div>
+                            </div>
+                            
+                            <div class="detail-card">
+                                <div class="detail-icon">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                                <div class="detail-content">
+                                    <h3>Development Time</h3>
+                                    <p id="developmentTime">-</p>
+                                </div>
+                            </div>
+                            
+                            <div class="detail-card">
+                                <div class="detail-icon">
+                                    <i class="fas fa-download"></i>
+                                </div>
+                                <div class="detail-content">
+                                    <h3>Downloads</h3>
+                                    <p id="downloadCount">-</p>
+                                </div>
+                            </div>
+                            
+                            <div class="detail-card">
+                                <div class="detail-icon">
+                                    <i class="fas fa-mobile-alt"></i>
+                                </div>
+                                <div class="detail-content">
+                                    <h3>Platform</h3>
+                                    <p id="appPlatform">-</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Screenshots Section -->
+                        <div class="screenshots-section">
+                            <h2>
+                                <i class="fas fa-images"></i>
+                                Screenshots
+                            </h2>
+                            <div id="screenshotsGrid" class="screenshots-grid">
+                                <!-- Screenshots will be populated by JavaScript -->
+                            </div>
+                        </div>
+
+                        <!-- Features Section -->
+                        <div class="features-section">
+                            <h2>
+                                <i class="fas fa-star"></i>
+                                Key Features
+                            </h2>
+                            <ul id="featuresList" class="features-list">
+                                <!-- Features will be populated by JavaScript -->
+                            </ul>
+                        </div>
+
+                        <!-- Technologies Section -->
+                        <div class="technologies-section">
+                            <h2>
+                                <i class="fas fa-code"></i>
+                                Technologies Used
+                            </h2>
+                            <div id="techList" class="tech-tags">
+                                <!-- Technologies will be populated by JavaScript -->
+                            </div>
+                        </div>
+
+                        <!-- Statistics Section -->
+                        <div class="app-stats-section">
+                            <h2>
+                                <i class="fas fa-chart-line"></i>
+                                App Statistics
+                            </h2>
+                            <div class="stats-grid">
+                                <div class="stat-item">
+                                    <div class="stat-circle">
+                                        <span id="ratingCircle" class="stat-value">0.0</span>
+                                    </div>
+                                    <div class="stat-info">
+                                        <h3>Rating</h3>
+                                        <p>User Satisfaction</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="stat-item">
+                                    <div class="stat-circle">
+                                        <span id="downloadCountCircle" class="stat-value">0</span>
+                                    </div>
+                                    <div class="stat-info">
+                                        <h3>Downloads</h3>
+                                        <p>Total Downloads</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="stat-item">
+                                    <div class="stat-circle">
+                                        <span id="retentionCircle" class="stat-value">85%</span>
+                                    </div>
+                                    <div class="stat-info">
+                                        <h3>Retention</h3>
+                                        <p>User Retention Rate</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <!-- App Content -->
-                <div class="app-content">
-                    
-                    <!-- Overview & Description Section -->
-                    <div class="app-description-section">
-                        <h2>About This App</h2>
-                        <p id="appOverview" class="app-overview">
-                            App overview will be loaded here...
-                        </p>
-                        <p id="appDescription" class="app-description">
-                            Detailed app description will be loaded here...
-                        </p>
-                    </div>
-
-                    <!-- App Details Grid -->
-                    <div class="app-details-grid">
-                        <!-- Launch Date Card -->
-                        <div class="detail-card">
-                            <div class="detail-icon" aria-hidden="true">
-                                <i class="fas fa-calendar"></i>
-                            </div>
-                            <div class="detail-content">
-                                <h3>Launch Date</h3>
-                                <p id="launchDate">-</p>
-                            </div>
-                        </div>
-                        
-                        <!-- Development Time Card -->
-                        <div class="detail-card">
-                            <div class="detail-icon" aria-hidden="true">
-                                <i class="fas fa-clock"></i>
-                            </div>
-                            <div class="detail-content">
-                                <h3>Development Time</h3>
-                                <p id="developmentTime">-</p>
-                            </div>
-                        </div>
-                        
-                        <!-- Downloads Card -->
-                        <div class="detail-card">
-                            <div class="detail-icon" aria-hidden="true">
+                <!-- Sidebar Column -->
+                <div class="sidebar-column">
+                    <!-- Actions Card -->
+                    <div class="sidebar-actions">
+                        <h3 class="sidebar-title">Actions</h3>
+                        <div class="action-buttons">
+                            <button id="shareBtn" class="btn-action">
+                                <i class="fas fa-share-alt"></i>
+                                <span>Share</span>
+                            </button>
+                            
+                            <a id="repositoryBtn" href="#" class="btn-action" target="_blank" rel="noopener noreferrer">
+                                <i class="fab fa-github"></i>
+                                <span>Repository</span>
+                            </a>
+                            
+                            <button id="downloadSidebarBtn" class="btn-action btn-action-primary">
                                 <i class="fas fa-download"></i>
-                            </div>
-                            <div class="detail-content">
-                                <h3>Downloads</h3>
-                                <p id="downloadCount">-</p>
-                            </div>
-                        </div>
-                        
-                        <!-- Platform Card -->
-                        <div class="detail-card">
-                            <div class="detail-icon" aria-hidden="true">
-                                <i class="fas fa-mobile-alt"></i>
-                            </div>
-                            <div class="detail-content">
-                                <h3>Platform</h3>
-                                <p id="appPlatform">-</p>
-                            </div>
+                                <span>Download</span>
+                            </button>
                         </div>
                     </div>
 
-                    <!-- Key Features Section -->
-                    <div class="features-section">
-                        <h2>Key Features</h2>
-                        <ul id="featuresList" 
-                            class="features-list" 
-                            role="list">
-                            <!-- Features will be dynamically populated by app-detail.js -->
-                        </ul>
-                    </div>
-
-                    <!-- Technologies Section -->
-                    <div class="technologies-section">
-                        <h2>Technologies Used</h2>
-                        <div id="techList" 
-                             class="tech-tags" 
-                             role="list">
-                            <!-- Technology tags will be dynamically populated by app-detail.js -->
+                    <!-- Navigation Card -->
+                    <div class="sidebar-navigation">
+                        <h3 class="sidebar-title">Navigation</h3>
+                        <div class="nav-buttons">
+                            <button id="prevApp" class="nav-arrow prev-arrow">
+                                <i class="fas fa-chevron-left"></i>
+                                <span class="arrow-text">Previous</span>
+                            </button>
+                            
+                            <button id="nextApp" class="nav-arrow next-arrow">
+                                <span class="arrow-text">Next</span>
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
                         </div>
                     </div>
 
-                    <!-- App Statistics Section -->
-                    <div class="app-stats-section">
-                        <h2>App Statistics</h2>
-                        <div class="stats-grid">
-                            
-                            <!-- Rating Stat -->
-                            <div class="stat-item">
-                                <div class="stat-circle" role="img" aria-label="Rating score">
-                                    <span id="ratingCircle" class="stat-value">0.0</span>
-                                </div>
-                                <div class="stat-info">
-                                    <h3>Rating</h3>
-                                    <p>User Satisfaction Score</p>
-                                </div>
-                            </div>
-                            
-                            <!-- Downloads Stat -->
-                            <div class="stat-item">
-                                <div class="stat-circle" role="img" aria-label="Total downloads">
-                                    <span id="downloadCountCircle" class="stat-value">0</span>
-                                </div>
-                                <div class="stat-info">
-                                    <h3>Downloads</h3>
-                                    <p>Total Downloads</p>
-                                </div>
-                            </div>
-                            
-                            <!-- Retention Stat -->
-                            <div class="stat-item">
-                                <div class="stat-circle" role="img" aria-label="User retention rate">
-                                    <span id="retentionCircle" class="stat-value">85%</span>
-                                </div>
-                                <div class="stat-info">
-                                    <h3>Retention</h3>
-                                    <p>User Retention Rate</p>
-                                </div>
-                            </div>
+                    <!-- Store Badges -->
+                    <div class="sidebar-stores">
+                        <h3 class="sidebar-title">Available On</h3>
+                        <div class="store-badges">
+                            <a id="appStoreBtn" href="#" class="store-badge" target="_blank" rel="noopener noreferrer">
+                                <i class="fab fa-apple"></i>
+                                <span>App Store</span>
+                            </a>
+                            <a id="playStoreBtn" href="#" class="store-badge" target="_blank" rel="noopener noreferrer">
+                                <i class="fab fa-google-play"></i>
+                                <span>Google Play</span>
+                            </a>
                         </div>
                     </div>
                 </div>
