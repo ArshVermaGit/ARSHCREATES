@@ -328,10 +328,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 *Transforming ideas into exceptional digital experiences through innovative development and creative solutions.*
 
-[![Website](https://img.shields.io/badge/🌐_Live_Portfolio-FFB800?style=for-the-badge&logo=google-chrome&logoColor=white)](https://arshcreates.com)
+[![Website](https://img.shields.io/badge/🌐_Live_Portfolio-FFB800?style=for-the-badge&logo=google-chrome&logoColor=white)](https://arshcreates.netlify.app)
 [![LinkedIn](https://img.shields.io/badge/💼_LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/arshvermadev/)
 [![GitHub](https://img.shields.io/badge/🐙_GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/ArshVermaGit)
-[![Buy Me a Coffee](https://img.shields.io/badge/☕_Buy_Me_A_Coffee-FFDD00?style=for-the-badge&logo=buymeacoffee&logoColor=black)](https://buymeacoffee.com/arshverma)
 
 </div>
 
