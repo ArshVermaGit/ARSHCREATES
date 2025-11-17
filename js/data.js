@@ -154,21 +154,6 @@ const PORTFOLIO_DATA = {
             featured: true
         }
     ],
-
-    testimonials: [
-        {
-            id: 1,
-            clientName: "Sarah Johnson",
-            clientRole: "CEO, TechStart Inc.",
-            projectType: "Website",
-            projectName: "E-Commerce Pro",
-            rating: 5,
-            testimonialText: "Arsh delivered an exceptional e-commerce platform that exceeded our expectations.",
-            date: "2024-01-15",
-            avatar: "assets/testimonials/client1.jpg",
-            approved: true
-        }
-    ]
 };
 
 // ==========================================
