@@ -43,15 +43,11 @@
         <div class="container">
             <div class="header-content">
                 <h1>Admin Panel</h1>
-                <p>Manage your portfolio content, view contact submissions, and monitor website analytics</p>
+                <p>Manage contact submissions and testimonials</p>
                 <div class="admin-stats">
                     <div class="stat">
                         <span class="stat-number" id="totalContacts">0</span>
                         <span class="stat-label">Contact Submissions</span>
-                    </div>
-                    <div class="stat">
-                        <span class="stat-number" id="totalProjects">0</span>
-                        <span class="stat-label">Total Projects</span>
                     </div>
                     <div class="stat">
                         <span class="stat-number" id="totalTestimonials">0</span>
@@ -65,49 +61,6 @@
     <!-- Admin Dashboard -->
     <section class="section admin-dashboard">
         <div class="container">
-            <!-- Quick Actions -->
-            <div class="quick-actions">
-                <h2>Quick Actions</h2>
-                <div class="actions-grid">
-                    <button class="action-card" data-action="export-data">
-                        <div class="action-icon">
-                            <i class="fas fa-download"></i>
-                        </div>
-                        <div class="action-content">
-                            <h3>Export Data</h3>
-                            <p>Download all portfolio data as JSON</p>
-                        </div>
-                    </button>
-                    <button class="action-card" data-action="clear-data">
-                        <div class="action-icon">
-                            <i class="fas fa-trash"></i>
-                        </div>
-                        <div class="action-content">
-                            <h3>Clear Data</h3>
-                            <p>Reset all stored data</p>
-                        </div>
-                    </button>
-                    <button class="action-card" data-action="refresh-data">
-                        <div class="action-icon">
-                            <i class="fas fa-sync"></i>
-                        </div>
-                        <div class="action-content">
-                            <h3>Refresh Data</h3>
-                            <p>Reload data from storage</p>
-                        </div>
-                    </button>
-                    <button class="action-card" data-action="backup-data">
-                        <div class="action-icon">
-                            <i class="fas fa-save"></i>
-                        </div>
-                        <div class="action-content">
-                            <h3>Backup Data</h3>
-                            <p>Create data backup</p>
-                        </div>
-                    </button>
-                </div>
-            </div>
-
             <!-- Contact Submissions -->
             <div class="admin-section">
                 <div class="section-header">
@@ -151,217 +104,19 @@
                 </div>
             </div>
 
-            <!-- Project Management -->
-            <div class="admin-section">
-                <div class="section-header">
-                    <h2>Project Management</h2>
-                    <div class="section-actions">
-                        <button id="addProject" class="btn btn-primary">
-                            <i class="fas fa-plus"></i>
-                            <span>Add Project</span>
-                        </button>
-                    </div>
-                </div>
-                <div class="projects-stats">
-                    <div class="stat-card">
-                        <div class="stat-icon games">
-                            <i class="fas fa-gamepad"></i>
-                        </div>
-                        <div class="stat-content">
-                            <h3 id="gamesCount">0</h3>
-                            <p>Games</p>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon websites">
-                            <i class="fas fa-laptop-code"></i>
-                        </div>
-                        <div class="stat-content">
-                            <h3 id="websitesCount">0</h3>
-                            <p>Websites</p>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon apps">
-                            <i class="fas fa-mobile-alt"></i>
-                        </div>
-                        <div class="stat-content">
-                            <h3 id="appsCount">0</h3>
-                            <p>Mobile Apps</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             <!-- Testimonials Management -->
             <div class="admin-section">
                 <div class="section-header">
                     <h2>Testimonials Management</h2>
                     <div class="section-actions">
-                        <button id="addTestimonial" class="btn btn-primary">
-                            <i class="fas fa-plus"></i>
-                            <span>Add Testimonial</span>
+                        <button id="refreshTestimonials" class="btn btn-secondary">
+                            <i class="fas fa-sync-alt"></i>
+                            <span>Refresh</span>
                         </button>
                     </div>
                 </div>
                 <div class="testimonials-list" id="testimonialsList">
                     <!-- Testimonials will be populated dynamically -->
-                </div>
-            </div>
-
-            <!-- Certificates Management -->
-<div class="admin-section">
-    <div class="section-header">
-        <h2>Certificates Management</h2>
-        <div class="section-actions">
-            <button id="addCertificate" class="btn btn-primary">
-                <i class="fas fa-plus"></i>
-                <span>Add Certificate</span>
-            </button>
-            <button id="refreshCertificates" class="btn btn-secondary">
-                <i class="fas fa-sync"></i>
-                <span>Refresh</span>
-            </button>
-        </div>
-    </div>
-    
-    <!-- Certificates Stats -->
-    <div class="certificates-stats">
-        <div class="stat-card">
-            <div class="stat-icon development">
-                <i class="fas fa-code"></i>
-            </div>
-            <div class="stat-content">
-                <h3 id="developmentCerts">0</h3>
-                <p>Development</p>
-            </div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-icon design">
-                <i class="fas fa-palette"></i>
-            </div>
-            <div class="stat-content">
-                <h3 id="designCerts">0</h3>
-                <p>Design</p>
-            </div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-icon security">
-                <i class="fas fa-shield-alt"></i>
-            </div>
-            <div class="stat-content">
-                <h3 id="securityCerts">0</h3>
-                <p>Security</p>
-            </div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-icon cloud">
-                <i class="fas fa-cloud"></i>
-            </div>
-            <div class="stat-content">
-                <h3 id="cloudCerts">0</h3>
-                <p>Cloud</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Certificates Table -->
-    <div class="certificates-table-container">
-        <table class="certificates-table" id="certificatesTable">
-            <thead>
-                <tr>
-                    <th>Certificate</th>
-                    <th>Issuer</th>
-                    <th>Category</th>
-                    <th>Date</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody id="certificatesTableBody">
-                <!-- Certificate rows will be populated dynamically -->
-            </tbody>
-        </table>
-    </div>
-    <div class="table-footer">
-        <div class="table-info">
-            Showing <span id="certificatesCount">0</span> certificates
-        </div>
-        <div class="table-pagination" id="certificatesPagination">
-            <!-- Pagination will be populated dynamically -->
-        </div>
-    </div>
-</div>
-
-            <!-- Analytics -->
-            <div class="admin-section">
-                <div class="section-header">
-                    <h2>Website Analytics</h2>
-                    <div class="section-actions">
-                        <button id="refreshAnalytics" class="btn btn-secondary">
-                            <i class="fas fa-sync"></i>
-                            <span>Refresh</span>
-                        </button>
-                    </div>
-                </div>
-                <div class="analytics-grid">
-                    <div class="analytics-card">
-                        <div class="analytics-header">
-                            <h3>Page Views</h3>
-                            <div class="analytics-trend up">
-                                <i class="fas fa-arrow-up"></i>
-                                <span>12%</span>
-                            </div>
-                        </div>
-                        <div class="analytics-value" id="pageViews">0</div>
-                        <div class="analytics-chart">
-                            <div class="chart-bar" style="height: 70%"></div>
-                            <div class="chart-bar" style="height: 85%"></div>
-                            <div class="chart-bar" style="height: 60%"></div>
-                            <div class="chart-bar" style="height: 90%"></div>
-                            <div class="chart-bar" style="height: 75%"></div>
-                            <div class="chart-bar" style="height: 95%"></div>
-                            <div class="chart-bar" style="height: 80%"></div>
-                        </div>
-                    </div>
-                    <div class="analytics-card">
-                        <div class="analytics-header">
-                            <h3>Contact Rate</h3>
-                            <div class="analytics-trend up">
-                                <i class="fas fa-arrow-up"></i>
-                                <span>8%</span>
-                            </div>
-                        </div>
-                        <div class="analytics-value" id="contactRate">0%</div>
-                        <div class="analytics-chart">
-                            <div class="chart-bar" style="height: 50%"></div>
-                            <div class="chart-bar" style="height: 65%"></div>
-                            <div class="chart-bar" style="height: 45%"></div>
-                            <div class="chart-bar" style="height: 70%"></div>
-                            <div class="chart-bar" style="height: 55%"></div>
-                            <div class="chart-bar" style="height: 75%"></div>
-                            <div class="chart-bar" style="height: 60%"></div>
-                        </div>
-                    </div>
-                    <div class="analytics-card">
-                        <div class="analytics-header">
-                            <h3>Avg. Session</h3>
-                            <div class="analytics-trend down">
-                                <i class="fas fa-arrow-down"></i>
-                                <span>3%</span>
-                            </div>
-                        </div>
-                        <div class="analytics-value" id="avgSession">0m</div>
-                        <div class="analytics-chart">
-                            <div class="chart-bar" style="height: 80%"></div>
-                            <div class="chart-bar" style="height: 75%"></div>
-                            <div class="chart-bar" style="height: 70%"></div>
-                            <div class="chart-bar" style="height: 65%"></div>
-                            <div class="chart-bar" style="height: 60%"></div>
-                            <div class="chart-bar" style="height: 55%"></div>
-                            <div class="chart-bar" style="height: 50%"></div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -411,7 +166,7 @@
     </footer>
 
     <!-- Contact Detail Modal -->
-    <div id="contactModal" class="modal">
+    <div id="contactModal" class="modal" style="display: none;">
         <div class="modal-content large">
             <div class="modal-header">
                 <h2>Contact Submission Details</h2>
@@ -430,7 +185,7 @@
     </div>
 
     <!-- Notification Container -->
-    <div id="notificationContainer"></div>
+    <div id="notificationContainer" class="notification-container"></div>
     
     <script src="js/utils.js"></script>
     <script src="js/data.js"></script>
