@@ -135,7 +135,7 @@ const PORTFOLIO_DATA = {
             issuer: "Amazon Web Services",
             date: "2024-01-15",
             category: "Cloud Computing",
-            image: "assets/certificates/aws-saa.jpg",
+            image: "static/images/certificates/AWS Certified Solutions Architect/image.jpg",
             description: "Demonstrated expertise in designing distributed systems on AWS platform.",
             skills: [
                 "AWS Services Architecture",
