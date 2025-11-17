@@ -1,0 +1,60 @@
+[build]
+  publish = "."
+  command = "echo 'No build command needed for static site'"
+
+# Essential redirects for SPA behavior
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Cache optimization headers
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/static/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/css/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/js/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Unity WebGL specific MIME types
+[[headers]]
+  for = "/static/games_files/*/*.wasm"
+  [headers.values]
+    Content-Type = "application/wasm"
+
+[[headers]]
+  for = "/static/games_files/*/*.data"
+  [headers.values]
+    Content-Type = "application/octet-stream"
+
+[[headers]]
+  for = "/static/games_files/*/*.js"
+  [headers.values]
+    Content-Type = "application/javascript"
+
+[[headers]]
+  for = "/static/games_files/*/*.json"
+  [headers.values]
+    Content-Type = "application/json"
+
+# Security headers
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
