@@ -10,6 +10,8 @@
 // - Keyboard shortcuts
 // ==========================================
 
+'use strict';
+
 // ==========================================
 // GLOBAL VARIABLES
 // ==========================================
@@ -31,6 +33,8 @@ function initializeCertificateDetailPage() {
     console.log('🚀 Initializing certificate detail page...');
     
     try {
+        initializeTheme();
+        
         // Extract URL parameters
         const urlParams = new URLSearchParams(window.location.search);
         currentCertificateId = parseInt(urlParams.get('id'));
@@ -70,8 +74,17 @@ function initializeCertificateDetailPage() {
  */
 function loadCertificateDetails(certificateId) {
     try {
-        // Get all certificates from data.js
-        const certificates = getCertificates();
+        // Get all certificates from data source
+        let certificates = [];
+        
+        if (typeof window.getCertificates === 'function') {
+            certificates = window.getCertificates();
+        } else if (typeof PORTFOLIO_DATA !== 'undefined' && Array.isArray(PORTFOLIO_DATA.certificates)) {
+            certificates = PORTFOLIO_DATA.certificates;
+        } else {
+            console.warn('⚠️ No certificates data found');
+            certificates = [];
+        }
         
         // Find the specific certificate
         const certificate = certificates.find(c => c.id === certificateId);
@@ -150,6 +163,9 @@ function displayCertificateDetails(certificate) {
         
         // Load and display badges
         loadCertificateBadges(certificate);
+        
+        // Update sidebar information
+        updateSidebarInfo(certificate);
         
         // Animate content entrance
         animateCertificateDetails();
@@ -273,10 +289,10 @@ function updateSkills(certificate) {
     
     if (certificate.skills && certificate.skills.length > 0) {
         skillsList.innerHTML = certificate.skills.map(skill => 
-            `<li><span>${skill}</span></li>`
+            `<li><i class="fas fa-check"></i><span>${skill}</span></li>`
         ).join('');
     } else {
-        skillsList.innerHTML = '<li><span>Skills information not available</span></li>';
+        skillsList.innerHTML = '<li><i class="fas fa-info-circle"></i><span>Skills information not available</span></li>';
     }
 }
 
@@ -293,10 +309,10 @@ function updateTechnologies(certificate) {
     
     if (certificate.technologies && certificate.technologies.length > 0) {
         techList.innerHTML = certificate.technologies.map(tech => 
-            `<span class="tech-tag">${tech}</span>`
+            `<span class="tech-tag"><i class="fas fa-code"></i>${tech}</span>`
         ).join('');
     } else {
-        techList.innerHTML = '<span class="tech-tag">Technologies not specified</span>';
+        techList.innerHTML = '<span class="tech-tag"><i class="fas fa-info-circle"></i>Technologies not specified</span>';
     }
 }
 
@@ -367,6 +383,38 @@ function updateActionButtons(certificate) {
             downloadCertificate(certificate);
         });
     }
+    
+    // View certificate button
+    const viewCertificateBtn = document.getElementById('viewCertificateBtn');
+    if (viewCertificateBtn) {
+        viewCertificateBtn.addEventListener('click', function() {
+            showCertificateImage(0);
+        });
+    }
+}
+
+/**
+ * Update Sidebar Information
+ * @param {object} certificate - The certificate object
+ */
+function updateSidebarInfo(certificate) {
+    // Credential ID
+    const sidebarCredentialId = document.getElementById('sidebarCredentialId');
+    if (sidebarCredentialId) {
+        sidebarCredentialId.textContent = certificate.credentialId || 'Not specified';
+    }
+    
+    // Issue Date
+    const sidebarIssueDate = document.getElementById('sidebarIssueDate');
+    if (sidebarIssueDate) {
+        sidebarIssueDate.textContent = formatDate(certificate.date) || 'Not specified';
+    }
+    
+    // Expiration
+    const sidebarExpiration = document.getElementById('sidebarExpiration');
+    if (sidebarExpiration) {
+        sidebarExpiration.textContent = certificate.validity || 'Lifetime';
+    }
 }
 
 // ==========================================
@@ -400,7 +448,7 @@ function loadCertificateBadges(certificate) {
     
     // Generate badge thumbnails
     badgesContainer.innerHTML = certificate.additionalImages.map((image, index) => `
-        <div class="screenshot-thumbnail ${index === 0 ? 'active' : ''}" 
+        <div class="certificate-badge-thumbnail ${index === 0 ? 'active' : ''}" 
              data-image-index="${index + 1}"
              role="button"
              tabindex="0"
@@ -413,7 +461,7 @@ function loadCertificateBadges(certificate) {
     `).join('');
     
     // Add click events to thumbnails
-    const thumbnails = document.querySelectorAll('.screenshot-thumbnail');
+    const thumbnails = document.querySelectorAll('.certificate-badge-thumbnail');
     thumbnails.forEach(thumb => {
         // Click event
         thumb.addEventListener('click', function() {
@@ -466,7 +514,7 @@ function showCertificateImage(index) {
     }, 300);
     
     // Update active thumbnail
-    const thumbnails = document.querySelectorAll('.screenshot-thumbnail');
+    const thumbnails = document.querySelectorAll('.certificate-badge-thumbnail');
     thumbnails.forEach((thumb, i) => {
         // Additional images start at index 1 (index 0 is the main certificate image)
         if (i === index - 1) {
@@ -530,7 +578,17 @@ function setupCertificateNavigation() {
  */
 function navigateToPreviousCertificate() {
     try {
-        const certificates = getCertificates();
+        let certificates = [];
+        
+        if (typeof window.getCertificates === 'function') {
+            certificates = window.getCertificates();
+        } else if (typeof PORTFOLIO_DATA !== 'undefined' && Array.isArray(PORTFOLIO_DATA.certificates)) {
+            certificates = PORTFOLIO_DATA.certificates;
+        } else {
+            console.error('❌ No certificates data available');
+            return;
+        }
+        
         const currentIndex = certificates.findIndex(c => c.id === currentCertificateId);
         
         if (currentIndex === -1) {
@@ -558,7 +616,17 @@ function navigateToPreviousCertificate() {
  */
 function navigateToNextCertificate() {
     try {
-        const certificates = getCertificates();
+        let certificates = [];
+        
+        if (typeof window.getCertificates === 'function') {
+            certificates = window.getCertificates();
+        } else if (typeof PORTFOLIO_DATA !== 'undefined' && Array.isArray(PORTFOLIO_DATA.certificates)) {
+            certificates = PORTFOLIO_DATA.certificates;
+        } else {
+            console.error('❌ No certificates data available');
+            return;
+        }
+        
         const currentIndex = certificates.findIndex(c => c.id === currentCertificateId);
         
         if (currentIndex === -1) {
@@ -835,6 +903,127 @@ function formatDate(dateString) {
     }
 }
 
+/**
+ * Initialize theme from localStorage or system preference
+ */
+function initializeTheme() {
+    const themeToggle = document.getElementById('themeToggle');
+    const themeIcon = themeToggle?.querySelector('.theme-icon i');
+    
+    try {
+        const savedTheme = localStorage.getItem('theme') || 
+            (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        
+        if (themeIcon) {
+            themeIcon.className = savedTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+        }
+        
+        if (themeToggle) {
+            themeToggle.addEventListener('click', toggleTheme);
+        }
+        
+        console.log(`🎨 Theme initialized: ${savedTheme}`);
+        
+    } catch (error) {
+        console.error('❌ Theme error:', error);
+        document.documentElement.setAttribute('data-theme', 'light');
+    }
+}
+
+/**
+ * Toggle between light and dark themes
+ */
+function toggleTheme() {
+    try {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        const themeIcon = document.querySelector('#themeToggle .theme-icon i');
+        
+        document.documentElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+        
+        if (themeIcon) {
+            themeIcon.className = newTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+        }
+        
+        console.log(`🎨 Theme toggled: ${newTheme}`);
+        
+    } catch (error) {
+        console.error('❌ Theme toggle error:', error);
+    }
+}
+
+/**
+ * Show notification (fallback to console if no global function)
+ * @param {string} message - Notification text
+ * @param {string} type - Type: info, success, error
+ */
+function showNotification(message, type = 'info') {
+    if (typeof window.showNotification === 'function') {
+        window.showNotification(message, type);
+        return;
+    }
+    
+    try {
+        let container = document.getElementById('notificationContainer');
+        if (!container) {
+            container = document.createElement('div');
+            container.id = 'notificationContainer';
+            container.className = 'notification-container';
+            document.body.appendChild(container);
+        }
+        
+        const notification = document.createElement('div');
+        notification.className = `notification-toast notification-${type}`;
+        
+        const icons = {
+            error: '<i class="fas fa-exclamation-circle"></i>',
+            success: '<i class="fas fa-check-circle"></i>',
+            warning: '<i class="fas fa-exclamation-triangle"></i>',
+            info: '<i class="fas fa-info-circle"></i>'
+        };
+        
+        notification.innerHTML = `
+            <div class="notification-icon">${icons[type] || icons.info}</div>
+            <div class="notification-message">${escapeHtml(message)}</div>
+        `;
+        
+        container.appendChild(notification);
+        
+        setTimeout(() => notification.classList.add('show'), 10);
+        
+        setTimeout(() => {
+            notification.classList.remove('show');
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.remove();
+                }
+            }, 300);
+        }, 3000);
+        
+    } catch (error) {
+        console.error('❌ Notification error:', error);
+    }
+}
+
+/**
+ * Escape HTML special characters
+ * @param {string} text - Text to escape
+ * @returns {string} Escaped text
+ */
+function escapeHtml(text) {
+    if (typeof text !== 'string') return '';
+    const map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+    };
+    return text.replace(/[&<>"']/g, m => map[m]);
+}
+
 // ==========================================
 // GLOBAL EXPORTS
 // ==========================================
@@ -847,6 +1036,7 @@ window.navigateToPreviousCertificate = navigateToPreviousCertificate;
 window.navigateToNextCertificate = navigateToNextCertificate;
 window.closePreview = closePreview;
 window.showCertificateImage = showCertificateImage;
+window.toggleTheme = toggleTheme;
 
 // ==========================================
 // AUTO-INITIALIZATION
