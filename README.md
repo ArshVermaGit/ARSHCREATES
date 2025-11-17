@@ -73,8 +73,7 @@ ARSHCREATES/
 │   └── admin.js                   # Admin panel functionality
 │
 └── 📁 Assets & Static
-    ├── static/                    # Static resources & assets
-    ├── assets/                    # Images, icons, and media files
+    ├── static/                    # Static resources & assets                   # Images, icons, and media files
     └── .gitattributes             # Git configuration
 ```
 
@@ -115,53 +114,6 @@ php -S localhost:8000
 - Upload to any static hosting service (Netlify, Vercel, GitHub Pages)
 - Configure custom domain if desired
 - Enable HTTPS for secure connections
-
-### Access Points
-- **Main Portfolio**: `http://localhost:8000`
-- **Admin Dashboard**: `http://localhost:8000/admin.html`
-- **Game Portfolio**: `http://localhost:8000/games.html`
-- **App Portfolio**: `http://localhost:8000/apps.html`
-
-## ☕ Buy Me a Coffee Integration
-
-### Support the Developer
-Show your appreciation for the work by supporting through:
-
-**Direct Integration:**
-```html
-<!-- Add to your HTML files -->
-<div class="coffee-section">
-    <h3>Enjoyed my work?</h3>
-    <a href="https://buymeacoffee.com/arshverma" 
-       class="btn btn-coffee"
-       target="_blank"
-       rel="noopener noreferrer">
-        <i class="fas fa-coffee"></i>
-        Buy Me a Coffee
-    </a>
-</div>
-```
-
-**Custom Styling:**
-```css
-.btn-coffee {
-    background: linear-gradient(135deg, #FFDD00 0%, #FF9500 100%);
-    color: #000000;
-    font-weight: 700;
-    padding: 12px 24px;
-    border-radius: 50px;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    transition: all 0.3s ease;
-}
-
-.btn-coffee:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(255, 149, 0, 0.4);
-}
-```
 
 ## 🎨 Customization Guide
 
@@ -347,13 +299,6 @@ function addCustomSection(sectionName, data) {
 - 💼 **LinkedIn**: [ArshVermaDev](https://www.linkedin.com/in/arshvermadev/)
 - 🐙 **GitHub**: [ArshVermaGit](https://github.com/ArshVermaGit)
 - 🐦 **Twitter**: [TheArshVerma](https://x.com/TheArshVerma)
-
-### ☕ Buy Me a Coffee
-If you find this portfolio helpful or inspiring, consider supporting my work:
-
-[![Buy Me a Coffee](https://img.shields.io/badge/Buy_Me_A_Coffee-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/arshverma)
-
-Your support helps me continue creating amazing projects and maintaining this portfolio!
 
 ## 📄 License
 
