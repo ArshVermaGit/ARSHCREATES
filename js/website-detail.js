@@ -356,26 +356,30 @@ function updateVisitButton(website) {
             updatedVisitBtn.disabled = true;
             updatedVisitBtn.style.cursor = 'not-allowed';
             updatedVisitBtn.style.opacity = '0.6';
-        } else if (!website.liveUrl) {
-            if (visitIcon) visitIcon.className = 'fas fa-external-link-alt';
-            if (visitText) visitText.textContent = 'View Project';
-            updatedVisitBtn.disabled = false;
-            updatedVisitBtn.style.cursor = 'pointer';
-            updatedVisitBtn.style.opacity = '1';
-            updatedVisitBtn.onclick = () => {
-                if (website.repositoryUrl) {
-                    window.open(website.repositoryUrl, '_blank', 'noopener,noreferrer');
-                } else {
-                    showNotification('No live version available', 'info');
-                }
-            };
-        } else {
+        } else if (website.liveUrl) {
+            // FIXED: Check for liveUrl first, not the opposite
             if (visitIcon) visitIcon.className = 'fas fa-external-link-alt';
             if (visitText) visitText.textContent = 'Preview Website';
             updatedVisitBtn.disabled = false;
             updatedVisitBtn.style.cursor = 'pointer';
             updatedVisitBtn.style.opacity = '1';
             updatedVisitBtn.onclick = () => showWebsitePreview(website);
+        } else if (website.repositoryUrl) {
+            // Fallback to repository if no live URL
+            if (visitIcon) visitIcon.className = 'fas fa-code-branch';
+            if (visitText) visitText.textContent = 'View Repository';
+            updatedVisitBtn.disabled = false;
+            updatedVisitBtn.style.cursor = 'pointer';
+            updatedVisitBtn.style.opacity = '1';
+            updatedVisitBtn.onclick = () => {
+                window.open(website.repositoryUrl, '_blank', 'noopener,noreferrer');
+            };
+        } else {
+            if (visitIcon) visitIcon.className = 'fas fa-info-circle';
+            if (visitText) visitText.textContent = 'No Link Available';
+            updatedVisitBtn.disabled = true;
+            updatedVisitBtn.style.cursor = 'not-allowed';
+            updatedVisitBtn.style.opacity = '0.6';
         }
         
     } catch (error) {
