@@ -56,178 +56,255 @@
     </nav>
 
     <!-- Certificate Detail Section -->
-    <section class="app-detail-section">
+    <section class="certificate-detail-section">
         <div class="container">
-            <!-- Certificate Preview -->
-            <div class="app-preview-container">
-                <div class="app-preview">
-                    <div class="preview-image">
-                        <img id="previewImage" src="" alt="Certificate Preview" class="preview-img">
-                        <div class="preview-overlay">
-                            <div class="download-buttons">
-                                <a id="verifyCredentialBtn" href="#" class="btn-download ios" target="_blank">
-                                    <i class="fas fa-external-link-alt"></i>
-                                    <span>Verify Credential</span>
-                                </a>
-                                <button id="downloadCertificateBtn" class="btn-download android">
+            <div class="youtube-layout">
+                <!-- Primary Column -->
+                <div class="primary-column">
+                    <!-- Certificate Preview -->
+                    <div class="certificate-preview-wrapper">
+                        <div class="preview-container">
+                            <div class="preview-image">
+                                <img id="previewImage" src="" alt="Certificate Preview" class="preview-img">
+                                
+                                <div class="preview-overlay">
+                                    <button id="viewCertificateBtn" class="btn-visit-large">
+                                        <div class="visit-icon-circle">
+                                            <i class="fas fa-expand"></i>
+                                        </div>
+                                        <span class="visit-text">View Certificate</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="certificate-controls">
+                            <div class="control-group">
+                                <button id="downloadCertificateBtn" class="btn-control" title="Download">
                                     <i class="fas fa-download"></i>
                                     <span>Download</span>
                                 </button>
+                                
+                                <button id="closePreviewBtn" class="btn-control" title="Close">
+                                    <i class="fas fa-times"></i>
+                                    <span>Close</span>
+                                </button>
+                            </div>
+                            
+                            <div class="control-info">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="control-text">Professional Certificate</span>
+                            </div>
+                        </div>
+
+                        <!-- Certificate Badges -->
+                        <div id="certificateBadges" class="certificate-badges">
+                            <!-- Badges will be populated dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- Certificate Header -->
+                    <div class="certificate-header">
+                        <h1 id="certificateTitle" class="certificate-title">Certificate Title</h1>
+                        
+                        <div class="certificate-meta-row">
+                            <div class="certificate-meta-left">
+                                <span id="certificateCategory" class="certificate-category">
+                                    <i class="fas fa-tag"></i>
+                                    Category
+                                </span>
+                                
+                                <span class="certificate-issuer">
+                                    <i class="fas fa-university"></i>
+                                    <span id="certificateIssuer">Issuer</span>
+                                </span>
+                                
+                                <span id="certificateDate" class="certificate-date">
+                                    <i class="fas fa-calendar"></i>
+                                    Date
+                                </span>
                             </div>
                         </div>
                     </div>
-                    
-                    <!-- Certificate Controls -->
-                    <div class="app-controls">
-                        <div class="control-group">
-                            <button id="closePreviewBtn" class="btn-control" title="Close Preview">
-                                <i class="fas fa-times"></i>
+
+                    <!-- Certificate Content -->
+                    <div class="certificate-content">
+                        <!-- About Section -->
+                        <div class="certificate-description-section">
+                            <h2>
+                                <i class="fas fa-info-circle"></i>
+                                About This Certificate
+                            </h2>
+                            <div class="description-content">
+                                <p id="certificateDescription" class="certificate-overview">Certificate description...</p>
+                                <p id="certificateDetails" class="certificate-details">Certificate details...</p>
+                            </div>
+                        </div>
+
+                        <!-- Details Grid -->
+                        <div class="certificate-details-grid">
+                            <div class="detail-card">
+                                <div class="detail-icon">
+                                    <i class="fas fa-calendar"></i>
+                                </div>
+                                <div class="detail-content">
+                                    <h3>Issue Date</h3>
+                                    <p id="issueDate">-</p>
+                                </div>
+                            </div>
+                            
+                            <div class="detail-card">
+                                <div class="detail-icon">
+                                    <i class="fas fa-id-card"></i>
+                                </div>
+                                <div class="detail-content">
+                                    <h3>Credential ID</h3>
+                                    <p id="credentialId">-</p>
+                                </div>
+                            </div>
+                            
+                            <div class="detail-card">
+                                <div class="detail-icon">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                                <div class="detail-content">
+                                    <h3>Validity</h3>
+                                    <p id="certificateValidity">-</p>
+                                </div>
+                            </div>
+                            
+                            <div class="detail-card">
+                                <div class="detail-icon">
+                                    <i class="fas fa-university"></i>
+                                </div>
+                                <div class="detail-content">
+                                    <h3>Issuing Organization</h3>
+                                    <p id="issuingOrganization">-</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Skills Section -->
+                        <div class="features-section">
+                            <h2>
+                                <i class="fas fa-star"></i>
+                                Skills Validated
+                            </h2>
+                            <ul id="skillsList" class="features-list">
+                                <!-- Skills will be populated by JavaScript -->
+                            </ul>
+                        </div>
+
+                        <!-- Technologies Section -->
+                        <div class="technologies-section">
+                            <h2>
+                                <i class="fas fa-code"></i>
+                                Technologies Covered
+                            </h2>
+                            <div id="techList" class="tech-tags">
+                                <!-- Technologies will be populated by JavaScript -->
+                            </div>
+                        </div>
+
+                        <!-- Statistics Section -->
+                        <div class="certificate-stats-section">
+                            <h2>
+                                <i class="fas fa-chart-line"></i>
+                                Certificate Information
+                            </h2>
+                            <div class="stats-grid">
+                                <div class="stat-item">
+                                    <div class="stat-circle">
+                                        <span id="difficultyCircle" class="stat-value">Intermediate</span>
+                                    </div>
+                                    <div class="stat-info">
+                                        <h3>Difficulty Level</h3>
+                                        <p>Certificate Complexity</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="stat-item">
+                                    <div class="stat-circle">
+                                        <span id="durationCircle" class="stat-value">3 Months</span>
+                                    </div>
+                                    <div class="stat-info">
+                                        <h3>Study Duration</h3>
+                                        <p>Time to Complete</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="stat-item">
+                                    <div class="stat-circle">
+                                        <span id="recognitionCircle" class="stat-value">Global</span>
+                                    </div>
+                                    <div class="stat-info">
+                                        <h3>Recognition</h3>
+                                        <p>Industry Recognition</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sidebar Column -->
+                <div class="sidebar-column">
+                    <!-- Actions Card -->
+                    <div class="sidebar-actions">
+                        <h3 class="sidebar-title">Actions</h3>
+                        <div class="action-buttons">
+                            <button id="shareBtn" class="btn-action">
+                                <i class="fas fa-share-alt"></i>
+                                <span>Share</span>
+                            </button>
+                            
+                            <a id="verifyCredentialBtn" href="#" class="btn-action" target="_blank" rel="noopener noreferrer">
+                                <i class="fas fa-external-link-alt"></i>
+                                <span>Verify Online</span>
+                            </a>
+                            
+                            <a id="credentialUrlBtn" href="#" class="btn-action btn-action-primary" target="_blank" rel="noopener noreferrer">
+                                <i class="fas fa-certificate"></i>
+                                <span>View Credential</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Navigation Card -->
+                    <div class="sidebar-navigation">
+                        <h3 class="sidebar-title">Navigation</h3>
+                        <div class="nav-buttons">
+                            <button id="prevCertificate" class="nav-arrow prev-arrow">
+                                <i class="fas fa-chevron-left"></i>
+                                <span class="arrow-text">Previous</span>
+                            </button>
+                            
+                            <button id="nextCertificate" class="nav-arrow next-arrow">
+                                <span class="arrow-text">Next</span>
+                                <i class="fas fa-chevron-right"></i>
                             </button>
                         </div>
-                        <div class="control-info">
-                            <span class="control-text">Professional Certificate</span>
-                        </div>
                     </div>
 
-                    <!-- Certificate Badges -->
-                    <div id="certificateBadges" class="app-screenshots">
-                        <!-- Badges will be populated dynamically -->
-                    </div>
-                </div>
-
-                <!-- Navigation Arrows -->
-                <div class="detail-navigation">
-                    <button id="prevCertificate" class="nav-arrow prev-arrow">
-                        <i class="fas fa-chevron-left"></i>
-                        <span class="arrow-text">Previous Certificate</span>
-                    </button>
-                    <button id="nextCertificate" class="nav-arrow next-arrow">
-                        <span class="arrow-text">Next Certificate</span>
-                        <i class="fas fa-chevron-right"></i>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Certificate Information -->
-            <div class="app-info-container">
-                <div class="app-header">
-                    <div class="app-title-section">
-                        <h1 id="certificateTitle" class="app-title">Certificate Title</h1>
-                        <div class="app-meta">
-                            <span id="certificateCategory" class="app-category">Category</span>
-                            <span class="app-rating">
-                                <i class="fas fa-award"></i>
-                                <span id="certificateIssuer">Issuer</span>
-                            </span>
-                            <span id="certificateDate" class="app-status">Date</span>
-                        </div>
-                    </div>
-                    <div class="app-actions">
-                        <button id="shareBtn" class="btn btn-secondary">
-                            <i class="fas fa-share-alt"></i>
-                            <span>Share</span>
-                        </button>
-                        <a id="credentialUrlBtn" href="#" class="btn btn-primary" target="_blank">
-                            <i class="fas fa-external-link-alt"></i>
-                            <span>Verify Online</span>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="app-content">
-                    <!-- Overview & Description -->
-                    <div class="app-description-section">
-                        <h2>About This Certificate</h2>
-                        <p id="certificateDescription" class="app-overview">Certificate description...</p>
-                        <p id="certificateDetails" class="app-description">Certificate details...</p>
-                    </div>
-
-                    <!-- Certificate Details Grid -->
-                    <div class="app-details-grid">
-                        <div class="detail-card">
-                            <div class="detail-icon">
-                                <i class="fas fa-calendar"></i>
+                    <!-- Credential Info Card -->
+                    <div class="sidebar-info">
+                        <h3 class="sidebar-title">Credential Information</h3>
+                        <div class="info-content">
+                            <div class="info-item">
+                                <span class="info-label">Credential ID:</span>
+                                <span id="sidebarCredentialId" class="info-value">-</span>
                             </div>
-                            <div class="detail-content">
-                                <h3>Issue Date</h3>
-                                <p id="issueDate">-</p>
+                            <div class="info-item">
+                                <span class="info-label">Issue Date:</span>
+                                <span id="sidebarIssueDate" class="info-value">-</span>
                             </div>
-                        </div>
-                        <div class="detail-card">
-                            <div class="detail-icon">
-                                <i class="fas fa-id-card"></i>
+                            <div class="info-item">
+                                <span class="info-label">Expiration:</span>
+                                <span id="sidebarExpiration" class="info-value">-</span>
                             </div>
-                            <div class="detail-content">
-                                <h3>Credential ID</h3>
-                                <p id="credentialId">-</p>
-                            </div>
-                        </div>
-                        <div class="detail-card">
-                            <div class="detail-icon">
-                                <i class="fas fa-clock"></i>
-                            </div>
-                            <div class="detail-content">
-                                <h3>Validity</h3>
-                                <p id="certificateValidity">-</p>
-                            </div>
-                        </div>
-                        <div class="detail-card">
-                            <div class="detail-icon">
-                                <i class="fas fa-university"></i>
-                            </div>
-                            <div class="detail-content">
-                                <h3>Issuing Organization</h3>
-                                <p id="issuingOrganization">-</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Skills Section -->
-                    <div class="features-section">
-                        <h2>Skills Validated</h2>
-                        <ul id="skillsList" class="features-list">
-                            <!-- Skills will be populated dynamically -->
-                        </ul>
-                    </div>
-
-                    <!-- Technologies Section -->
-                    <div class="technologies-section">
-                        <h2>Technologies Covered</h2>
-                        <div id="techList" class="tech-tags">
-                            <!-- Technologies will be populated dynamically -->
-                        </div>
-                    </div>
-
-                    <!-- Certificate Stats -->
-                    <div class="app-stats-section">
-                        <h2>Certificate Information</h2>
-                        <div class="stats-grid">
-                            <div class="stat-item">
-                                <div class="stat-circle">
-                                    <span id="difficultyCircle" class="stat-value">Intermediate</span>
-                                </div>
-                                <div class="stat-info">
-                                    <h3>Difficulty Level</h3>
-                                    <p>Certificate Complexity</p>
-                                </div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-circle">
-                                    <span id="durationCircle" class="stat-value">3 Months</span>
-                                </div>
-                                <div class="stat-info">
-                                    <h3>Study Duration</h3>
-                                    <p>Time to Complete</p>
-                                </div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-circle">
-                                    <span id="recognitionCircle" class="stat-value">Global</span>
-                                </div>
-                                <div class="stat-info">
-                                    <h3>Recognition</h3>
-                                    <p>Industry Recognition</p>
-                                </div>
+                            <div class="info-item">
+                                <span class="info-label">Status:</span>
+                                <span class="info-value status-valid">Valid</span>
                             </div>
                         </div>
                     </div>
