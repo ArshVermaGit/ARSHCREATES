@@ -1,12 +1,12 @@
 // ==========================================
-// CERTIFICATES PAGE - Complete Production-Ready Implementation
+// CERTIFICATES PORTFOLIO - Complete Production-Ready Implementation
 // Author: Arsh Verma
 // Version: 2.2.0
 // Description: Handles all certificates portfolio functionality for preview showcase
 //              - Filters, searching, card rendering, and navigation to details
 //              - Error handling, accessibility, and performance optimized
 //              - Inspired by websites.js: Modern card design with dark bg, badges, skills preview
-// Last Updated: November 12, 2025
+// Last Updated: November 12, 2024
 // ==========================================
 
 'use strict';
@@ -44,13 +44,12 @@ document.addEventListener('DOMContentLoaded', function() {
  */
 function initializeCertificatesPage() {
     try {
+        initializeTheme();
         CERTIFICATES_STATE.isLoading = true;
         
         loadCertificatesData();
-        
         setupCertificateFilters();
         setupCertificateEventListeners();
-        
         updateHeaderStats();
         
         setTimeout(() => {
@@ -122,7 +121,14 @@ function validateCertificatesData(certificates) {
         image: cert.image || generatePlaceholderImage(cert.title),
         skills: Array.isArray(cert.skills) ? cert.skills.slice(0, 5) : [],
         credentialUrl: cert.credentialUrl || null,
-        credentialId: cert.credentialId || null
+        credentialId: cert.credentialId || null,
+        validity: cert.validity || 'Lifetime',
+        technologies: cert.technologies || [],
+        additionalImages: cert.additionalImages || [],
+        details: cert.details || cert.description || 'Additional details not available.',
+        difficulty: cert.difficulty || 'Intermediate',
+        duration: cert.duration || '3 Months',
+        recognition: cert.recognition || 'Global'
     })).filter(cert => cert.id);
 }
 
@@ -222,59 +228,81 @@ function createCertificateCard(certificate) {
                     ${issuerIcon}
                     <span>${truncateText(certificate.issuer, 15)}</span>
                 </div>
-            </div>
-            
-            <div class="certificate-header">
-                <h3 class="certificate-title" id="certificate-title-${certificate.id}">${escapeHtml(certificate.title)}</h3>
-            </div>
-            
-            <div class="certificate-meta">
-                <span class="certificate-issuer" aria-label="Issuer: ${certificate.issuer}">
-                    <i class="fas fa-university" aria-hidden="true"></i>
-                    ${truncateText(certificate.issuer, 20)}
-                </span>
-                <span class="certificate-date" aria-label="Issued: ${formatDate(certificate.date)}">
-                    <i class="fas fa-calendar" aria-hidden="true"></i>
-                    ${formatDate(certificate.date)}
-                </span>
-            </div>
-            
-            <p class="certificate-description">${shortDescription}</p>
-            
-            ${certificate.skills && certificate.skills.length > 0 ? `
-                <div class="certificate-skills" aria-label="Key skills learned">
-                    ${certificate.skills.slice(0, 4).map(skill => `
-                        <div class="skill-item">
-                            <i class="fas fa-check" aria-hidden="true"></i>
-                            <span>${escapeHtml(skill)}</span>
-                        </div>
-                    `).join('')}
-                    ${certificate.skills.length > 4 ? `<div class="skill-item more">+${certificate.skills.length - 4} more</div>` : ''}
+                
+                <!-- Overlay with action buttons -->
+                <div class="certificate-overlay">
+                    <div class="overlay-content">
+                        <button class="btn btn-view-details" data-certificate-id="${certificate.id}">
+                            <i class="fas fa-eye"></i>
+                            <span>View Details</span>
+                        </button>
+                        ${certificate.credentialUrl ? `
+                            <a href="${certificate.credentialUrl}" 
+                               class="btn" 
+                               target="_blank" 
+                               rel="noopener noreferrer"
+                               onclick="event.stopPropagation()">
+                                <i class="fas fa-external-link-alt"></i>
+                                <span>Verify Online</span>
+                            </a>
+                        ` : ''}
+                    </div>
                 </div>
-            ` : ''}
-            
-            <div class="certificate-actions">
-                <button class="btn btn-primary btn-view-details" 
-                        data-certificate-id="${certificate.id}"
-                        aria-label="View details for ${escapeHtml(certificate.title)}">
-                    <i class="fas fa-eye" aria-hidden="true"></i>
-                    <span>View Details</span>
-                </button>
-                ${certificate.credentialUrl ? `
-                    <a href="${certificate.credentialUrl}" 
-                       class="btn btn-secondary btn-verify-cert"
-                       target="_blank"
-                       rel="noopener noreferrer"
-                       aria-label="Verify ${escapeHtml(certificate.title)}">
-                        <i class="fas fa-external-link-alt" aria-hidden="true"></i>
-                        <span>Verify</span>
-                    </a>
-                ` : ''}
             </div>
             
-            <!-- Developer Credit -->
-            <div class="developer-credit-small">
-                <span>Certified by <strong>Arsh Verma</strong></span>
+            <div class="certificate-content">
+                <header class="certificate-header">
+                    <h3 class="certificate-title" id="certificate-title-${certificate.id}">${escapeHtml(certificate.title)}</h3>
+                </header>
+                
+                <div class="certificate-meta">
+                    <span class="certificate-issuer" aria-label="Issuer: ${certificate.issuer}">
+                        <i class="fas fa-university" aria-hidden="true"></i>
+                        ${truncateText(certificate.issuer, 20)}
+                    </span>
+                    <span class="certificate-date" aria-label="Issued: ${formatDate(certificate.date)}">
+                        <i class="fas fa-calendar" aria-hidden="true"></i>
+                        ${formatDate(certificate.date)}
+                    </span>
+                </div>
+                
+                <p class="certificate-description">${shortDescription}</p>
+                
+                ${certificate.skills && certificate.skills.length > 0 ? `
+                    <div class="certificate-skills" aria-label="Key skills learned">
+                        ${certificate.skills.slice(0, 4).map(skill => `
+                            <div class="skill-item">
+                                <i class="fas fa-check" aria-hidden="true"></i>
+                                <span>${escapeHtml(skill)}</span>
+                            </div>
+                        `).join('')}
+                        ${certificate.skills.length > 4 ? `<div class="skill-item more">+${certificate.skills.length - 4} more</div>` : ''}
+                    </div>
+                ` : ''}
+                
+                <div class="certificate-actions">
+                    <button class="btn btn-primary btn-view-details" 
+                            data-certificate-id="${certificate.id}"
+                            aria-label="View details for ${escapeHtml(certificate.title)}">
+                        <i class="fas fa-eye" aria-hidden="true"></i>
+                        <span>View Details</span>
+                    </button>
+                    ${certificate.credentialUrl ? `
+                        <a href="${certificate.credentialUrl}" 
+                           class="btn btn-secondary btn-verify-cert"
+                           target="_blank"
+                           rel="noopener noreferrer"
+                           aria-label="Verify ${escapeHtml(certificate.title)}">
+                            <i class="fas fa-external-link-alt" aria-hidden="true"></i>
+                            <span>Verify</span>
+                        </a>
+                    ` : ''}
+                </div>
+                
+                <!-- Developer Credit -->
+                <div class="developer-credit-small">
+                    <span>Certified by <strong>Arsh Verma</strong></span>
+                </div>
             </div>
         </article>
     `;
@@ -296,6 +324,10 @@ function getIssuerIcon(issuer) {
         return '<i class="fas fa-brain"></i>';
     } else if (issuer.includes('freeCodeCamp')) {
         return '<i class="fab fa-free-code-camp"></i>';
+    } else if (issuer.includes('Cisco')) {
+        return '<i class="fas fa-network-wired"></i>';
+    } else if (issuer.includes('Meta')) {
+        return '<i class="fab fa-facebook"></i>';
     }
     return '<i class="fas fa-university"></i>';
 }
@@ -570,8 +602,8 @@ function updateHeaderStats() {
     
     const statNumbers = document.querySelectorAll('.header-stats .stat-number');
     if (statNumbers.length >= 3) {
-        statNumbers[0].textContent = `${totalCertificates}+`;
-        statNumbers[1].textContent = `${uniqueIssuers}+`;
+        animateValue(statNumbers[0], 0, totalCertificates, 1500, '+');
+        animateValue(statNumbers[1], 0, uniqueIssuers, 1500, '+');
         statNumbers[2].textContent = successRate;
     }
     
@@ -585,7 +617,8 @@ function updateHeaderStats() {
 function updateResultsCount(count) {
     const resultsCount = document.getElementById('resultsCount');
     if (resultsCount) {
-        resultsCount.textContent = `Showing ${count} of ${CERTIFICATES_STATE.allCertificates.length} certificates`;
+        const total = CERTIFICATES_STATE.allCertificates.length;
+        resultsCount.textContent = `Showing ${count} of ${total} certificate${total !== 1 ? 's' : ''}`;
     }
 }
 
@@ -706,6 +739,85 @@ function showNotification(message, type = 'info') {
     console.log(`[${type.toUpperCase()}] ${message}`);
 }
 
+/**
+ * Animate value counting up
+ * @param {HTMLElement} element - Element to animate
+ * @param {number} start - Start value
+ * @param {number} end - End value
+ * @param {number} duration - Animation duration
+ * @param {string} suffix - Suffix to append
+ */
+function animateValue(element, start, end, duration, suffix = '') {
+    if (!element) return;
+    
+    const range = Math.abs(end - start);
+    const stepTime = Math.max(Math.floor(duration / range), 20);
+    const isDecimal = end % 1 !== 0;
+    let current = start;
+    
+    const timer = setInterval(() => {
+        current += (end > start ? 1 : -1) * (isDecimal ? 0.1 : 1);
+        
+        if ((end > start && current >= end) || (end < start && current <= end)) {
+            current = end;
+            clearInterval(timer);
+        }
+        
+        element.textContent = (isDecimal ? current.toFixed(1) : Math.floor(current)) + suffix;
+    }, stepTime);
+}
+
+/**
+ * Initialize theme from localStorage or system preference
+ */
+function initializeTheme() {
+    const themeToggle = document.getElementById('themeToggle');
+    const themeIcon = themeToggle?.querySelector('.theme-icon i');
+    
+    try {
+        const savedTheme = localStorage.getItem('theme') || 
+            (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        
+        if (themeIcon) {
+            themeIcon.className = savedTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+        }
+        
+        if (themeToggle) {
+            themeToggle.addEventListener('click', toggleTheme);
+        }
+        
+        console.log(`🎨 Theme initialized: ${savedTheme}`);
+        
+    } catch (error) {
+        console.error('❌ Theme error:', error);
+        document.documentElement.setAttribute('data-theme', 'light');
+    }
+}
+
+/**
+ * Toggle between light and dark themes
+ */
+function toggleTheme() {
+    try {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        const themeIcon = document.querySelector('#themeToggle .theme-icon i');
+        
+        document.documentElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+        
+        if (themeIcon) {
+            themeIcon.className = newTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+        }
+        
+        console.log(`🎨 Theme toggled: ${newTheme}`);
+        
+    } catch (error) {
+        console.error('❌ Theme toggle error:', error);
+    }
+}
+
 // ==========================================
 // SAMPLE DATA FALLBACK
 // Production-ready sample certificates for preview/demo mode
@@ -724,7 +836,17 @@ function createSampleCertificates() {
             image: "https://via.placeholder.com/400x250/E4572E/FFFFFF?text=AWS+Certified",
             skills: ["Cloud Architecture", "EC2", "S3", "VPC", "IAM", "Lambda"],
             credentialUrl: "https://www.credly.com/badges/abc123",
-            credentialId: "AWS-SA-2024-001"
+            credentialId: "AWS-SA-2024-001",
+            validity: "3 Years",
+            technologies: ["AWS", "CloudFormation", "EC2", "S3", "Lambda"],
+            additionalImages: [
+                "https://via.placeholder.com/400x250/E4572E/FFFFFF?text=AWS+Badge+1",
+                "https://via.placeholder.com/400x250/E4572E/FFFFFF?text=AWS+Badge+2"
+            ],
+            details: "This certification demonstrates proficiency in designing and deploying scalable, highly available, and fault-tolerant systems on AWS.",
+            difficulty: "Advanced",
+            duration: "6 Months",
+            recognition: "Global"
         },
         {
             id: 2,
@@ -737,7 +859,16 @@ function createSampleCertificates() {
             image: "https://via.placeholder.com/400x250/4285F4/FFFFFF?text=Google+Cloud",
             skills: ["BigQuery", "Dataflow", "Dataproc", "Pub/Sub", "Machine Learning"],
             credentialUrl: "https://www.credly.com/badges/def456",
-            credentialId: "GCP-DE-2024-002"
+            credentialId: "GCP-DE-2024-002",
+            validity: "2 Years",
+            technologies: ["BigQuery", "Dataflow", "Dataproc", "Pub/Sub"],
+            additionalImages: [
+                "https://via.placeholder.com/400x250/4285F4/FFFFFF?text=GCP+Badge+1"
+            ],
+            details: "Validates skills in designing data processing systems, building and operationalizing data processing systems.",
+            difficulty: "Advanced",
+            duration: "4 Months",
+            recognition: "Global"
         },
         {
             id: 3,
@@ -750,7 +881,14 @@ function createSampleCertificates() {
             image: "https://via.placeholder.com/400x250/006400/FFFFFF?text=freeCodeCamp",
             skills: ["HTML5", "CSS3", "Flexbox", "Grid", "Responsive Design"],
             credentialUrl: "https://www.freecodecamp.org/certification/ghi789",
-            credentialId: "FCC-RWD-2023-003"
+            credentialId: "FCC-RWD-2023-003",
+            validity: "Lifetime",
+            technologies: ["HTML5", "CSS3", "JavaScript"],
+            additionalImages: [],
+            details: "Covers fundamental web development concepts including HTML5, CSS3, and responsive web design principles.",
+            difficulty: "Beginner",
+            duration: "2 Months",
+            recognition: "Global"
         },
         {
             id: 4,
@@ -763,7 +901,17 @@ function createSampleCertificates() {
             image: "https://via.placeholder.com/400x250/0078D4/FFFFFF?text=Azure+Fundamentals",
             skills: ["Azure Services", "Cloud Computing", "Security", "Pricing"],
             credentialUrl: "https://www.credly.com/badges/jkl012",
-            credentialId: "AZ-900-2023-004"
+            credentialId: "AZ-900-2023-004",
+            validity: "Lifetime",
+            technologies: ["Azure", "Cloud Computing"],
+            additionalImages: [
+                "https://via.placeholder.com/400x250/0078D4/FFFFFF?text=Azure+Badge+1",
+                "https://via.placeholder.com/400x250/0078D4/FFFFFF?text=Azure+Badge+2"
+            ],
+            details: "Demonstrates foundational knowledge of cloud services and how those services are provided with Microsoft Azure.",
+            difficulty: "Beginner",
+            duration: "1 Month",
+            recognition: "Global"
         },
         {
             id: 5,
@@ -776,7 +924,36 @@ function createSampleCertificates() {
             image: "https://via.placeholder.com/400x250/192BC2/FFFFFF?text=IBM+Data+Science",
             skills: ["Python", "SQL", "Machine Learning", "Data Visualization", "Pandas"],
             credentialUrl: "https://www.credly.com/badges/mno345",
-            credentialId: "IBM-DS-2024-005"
+            credentialId: "IBM-DS-2024-005",
+            validity: "Lifetime",
+            technologies: ["Python", "SQL", "Jupyter", "Pandas", "Scikit-learn"],
+            additionalImages: [
+                "https://via.placeholder.com/400x250/192BC2/FFFFFF?text=IBM+Badge+1"
+            ],
+            details: "Comprehensive data science program covering tools and technologies, methodology, and Python programming.",
+            difficulty: "Intermediate",
+            duration: "5 Months",
+            recognition: "Global"
+        },
+        {
+            id: 6,
+            title: "Meta Front-End Developer Professional Certificate",
+            category: "Programming",
+            issuer: "Meta",
+            year: 2024,
+            date: "2024-07-15",
+            description: "Professional certificate covering React, JavaScript, and modern front-end development practices.",
+            image: "https://via.placeholder.com/400x250/1877F2/FFFFFF?text=Meta+Frontend",
+            skills: ["React", "JavaScript", "HTML/CSS", "UI/UX", "Git"],
+            credentialUrl: "https://coursera.org/verify/specialization/xyz789",
+            credentialId: "META-FE-2024-006",
+            validity: "Lifetime",
+            technologies: ["React", "JavaScript", "HTML5", "CSS3", "Git"],
+            additionalImages: [],
+            details: "Comprehensive front-end development program focusing on React, JavaScript, and modern web development practices.",
+            difficulty: "Intermediate",
+            duration: "4 Months",
+            recognition: "Global"
         }
     ];
 }
@@ -789,6 +966,7 @@ window.initializeCertificatesPage = initializeCertificatesPage;
 window.resetCertificateFilters = resetCertificateFilters;
 window.viewCertificateDetails = viewCertificateDetails;
 window.applyCertificateFilters = applyCertificateFilters;
+window.toggleTheme = toggleTheme;
 
 console.log('✅ Certificates.js loaded successfully');
 console.log('📝 Created by: Arsh Verma');
