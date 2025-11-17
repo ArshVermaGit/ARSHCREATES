@@ -1,5 +1,5 @@
 /* ==========================================
-   PERFECTED certificateS PORTFOLIO - ULTIMATE CSS
+   CERTIFICATES PORTFOLIO - PERFECTED CSS
    Author: Arsh Verma
    Version: 6.0.0 - Production Ready
    Description: Complete, pixel-perfect CSS with creative design
@@ -10,17 +10,17 @@
    CSS VARIABLES - Using Main Theme System
    ========================================== */
 :root {
-  /* Using main theme variables from style.css */
+  /* Using main theme variables */
   --gradient-primary: var(--accent-gradient, linear-gradient(135deg, #FFB800 0%, #FF9500 100%));
-  --gradient-overlay: var(--liquid-glass-overlay, linear-gradient(135deg, 
+  --gradient-overlay: linear-gradient(135deg, 
     rgba(255, 184, 0, 0.1) 0%, 
     rgba(255, 149, 0, 0.08) 50%,
-    rgba(255, 184, 0, 0.1) 100%));
+    rgba(255, 184, 0, 0.1) 100%);
   
-  /* certificate specific shadows */
-  --shadow-accent-sm: var(--shadow-glow-sm);
-  --shadow-accent-md: var(--shadow-glow-md);
-  --shadow-accent-lg: var(--shadow-glow-lg);
+  /* Certificate specific shadows */
+  --shadow-accent-sm: 0 4px 12px rgba(255, 184, 0, 0.25);
+  --shadow-accent-md: 0 8px 25px rgba(255, 184, 0, 0.3);
+  --shadow-accent-lg: 0 12px 35px rgba(255, 184, 0, 0.4);
 }
 
 /* ==========================================
@@ -32,7 +32,7 @@
   box-sizing: border-box;
 }
 
-body {
+body.certificates-page {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   background: var(--bg-primary);
   color: var(--text-primary);
@@ -71,8 +71,8 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  background: radial-gradient(circle at 20% 30%, rgba(255, 184, 0, 0.08) 0%, transparent 60%),
-              radial-gradient(circle at 80% 70%, rgba(255, 149, 0, 0.06) 0%, transparent 60%);
+  background: radial-gradient(circle at 20% 30%, rgba(59, 130, 246, 0.08) 0%, transparent 60%),
+              radial-gradient(circle at 80% 70%, rgba(29, 78, 216, 0.06) 0%, transparent 60%);
   pointer-events: none;
   animation: backgroundPulse 10s ease-in-out infinite;
 }
@@ -202,6 +202,51 @@ body {
   transition: color var(--transition-base);
 }
 
+/* Search Input */
+.search-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-input {
+  width: 100%;
+  padding: var(--spacing-md) var(--spacing-lg);
+  padding-left: 3rem;
+  background: var(--card-bg);
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  font-size: 1rem;
+  color: var(--text-primary);
+  font-family: inherit;
+  font-weight: 500;
+  transition: all var(--transition-base);
+  box-shadow: var(--shadow-sm);
+  backdrop-filter: var(--glass-blur);
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--yellow-primary);
+  box-shadow: 0 0 0 3px rgba(255, 184, 0, 0.1), var(--shadow-md);
+}
+
+.search-input::placeholder {
+  color: var(--text-tertiary);
+}
+
+.search-icon {
+  position: absolute;
+  left: var(--spacing-lg);
+  color: var(--text-tertiary);
+  font-size: 1rem;
+  transition: color var(--transition-base);
+}
+
+.search-input:focus + .search-icon {
+  color: var(--yellow-primary);
+}
+
 .filter-select {
   width: 100%;
   padding: var(--spacing-md) var(--spacing-lg);
@@ -224,19 +269,19 @@ body {
 }
 
 .filter-select:hover {
-  border-color: var(--accent-primary);
+  border-color: var(--yellow-primary);
   transform: translateY(-2px);
   box-shadow: var(--shadow-md);
 }
 
 .filter-select:focus {
   outline: none;
-  border-color: var(--accent-primary);
+  border-color: var(--yellow-primary);
   box-shadow: 0 0 0 3px rgba(255, 184, 0, 0.1), var(--shadow-md);
 }
 
 /* ==========================================
-   certificateS GRID SECTION
+   CERTIFICATES GRID SECTION
    ========================================== */
 .certificates-section {
   padding: var(--spacing-4xl) 0;
@@ -296,19 +341,30 @@ body {
 
 .section-decoration i {
   font-size: 1.5rem;
-  color: var(--accent-primary);
+  color: var(--yellow-primary);
   animation: bounce 2s ease-in-out infinite;
+}
+
+/* Results Count */
+.results-count {
+  text-align: center;
+  margin-bottom: var(--spacing-xl);
+  font-size: 1rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+  animation: fadeIn 0.8s ease-out 1s both;
 }
 
 /* Portfolio Grid */
 .portfolio-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
   gap: var(--spacing-xl);
+  align-items: start;
 }
 
 /* ==========================================
-   certificate CARD - Perfect Liquid Glass Design
+   CERTIFICATE CARD - Perfect Liquid Glass Design
    ========================================== */
 .certificate-card {
   background: var(--card-bg);
@@ -323,6 +379,7 @@ body {
   position: relative;
   backdrop-filter: var(--glass-blur);
   animation: cardSlideIn 0.6s ease-out both;
+  height: 100%;
 }
 
 .certificate-card::before {
@@ -353,7 +410,7 @@ body {
 .certificate-image {
   position: relative;
   width: 100%;
-  height: 280px;
+  height: 240px;
   overflow: hidden;
   background: linear-gradient(135deg, rgba(255, 184, 0, 0.1), rgba(255, 149, 0, 0.1));
 }
@@ -369,11 +426,11 @@ body {
   transform: scale(1.1) rotate(1deg);
 }
 
-/* Status Badge */
+/* Category Badge */
 .certificate-badge {
   position: absolute;
   top: var(--spacing-md);
-  right: var(--spacing-md);
+  left: var(--spacing-md);
   padding: var(--spacing-sm) var(--spacing-lg);
   background: rgba(0, 0, 0, 0.8);
   backdrop-filter: blur(10px);
@@ -388,13 +445,40 @@ body {
   border: 1.5px solid rgba(255, 255, 255, 0.2);
 }
 
-.status-live {
-  background: linear-gradient(135deg, #10B981, #059669);
-  animation: pulse 2s ease-in-out infinite;
+.category-cloud-computing {
+  background: linear-gradient(135deg, #FFB800, #FF9500);
 }
 
-.status-in-development {
-  background: linear-gradient(135deg, #F59E0B, #D97706);
+.category-programming {
+  background: linear-gradient(135deg, #10B981, #059669);
+}
+
+.category-data-science {
+  background: linear-gradient(135deg, #8B5CF6, #7C3AED);
+}
+
+/* Issuer Badge */
+.issuer-badge {
+  position: absolute;
+  top: var(--spacing-md);
+  right: var(--spacing-md);
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  z-index: 3;
+  box-shadow: var(--shadow-md);
+  border: 1.5px solid rgba(255, 255, 255, 0.2);
+}
+
+.issuer-badge i {
+  font-size: 0.875rem;
 }
 
 /* Overlay */
@@ -428,7 +512,7 @@ body {
 
 .overlay-content .btn {
   background: rgba(255, 255, 255, 0.95);
-  color: var(--accent-primary);
+  color: var(--yellow-primary);
   padding: var(--spacing-md) var(--spacing-xl);
   border-radius: var(--radius-lg);
   font-weight: 700;
@@ -441,6 +525,8 @@ body {
   justify-content: center;
   gap: var(--spacing-sm);
   font-size: 0.9375rem;
+  font-family: inherit;
+  text-decoration: none;
 }
 
 .overlay-content .btn:hover {
@@ -449,7 +535,7 @@ body {
   box-shadow: var(--shadow-lg);
 }
 
-/* certificate Content */
+/* Certificate Content */
 .certificate-content {
   padding: var(--spacing-xl);
   display: flex;
@@ -483,37 +569,6 @@ body {
   color: var(--accent-primary);
 }
 
-/* Rating */
-.certificate-rating {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-xs);
-  background: rgba(255, 184, 0, 0.1);
-  border: 1px solid rgba(255, 184, 0, 0.2);
-  border-radius: var(--radius-full);
-  padding: var(--spacing-xs) var(--spacing-md);
-  flex-shrink: 0;
-  transition: all var(--transition-base);
-}
-
-.certificate-card:hover .certificate-rating {
-  background: rgba(255, 184, 0, 0.2);
-  transform: scale(1.05);
-}
-
-.rating-stars {
-  display: flex;
-  gap: 2px;
-  color: var(--accent-secondary);
-  font-size: 0.875rem;
-}
-
-.rating-value {
-  font-weight: 700;
-  font-size: 0.875rem;
-  color: var(--text-primary);
-}
-
 /* Meta */
 .certificate-meta {
   display: flex;
@@ -523,7 +578,7 @@ body {
   margin-bottom: var(--spacing-sm);
 }
 
-.certificate-category,
+.certificate-issuer,
 .certificate-date {
   padding: var(--spacing-xs) var(--spacing-md);
   background: var(--bg-secondary);
@@ -537,17 +592,17 @@ body {
   transition: all var(--transition-base);
 }
 
-.certificate-category {
-  color: var(--accent-primary);
+.certificate-issuer {
+  color: var(--yellow-primary);
 }
 
-.certificate-category i {
+.certificate-issuer i {
   font-size: 0.75rem;
 }
 
-.certificate-card:hover .certificate-category {
+.certificate-card:hover .certificate-issuer {
   background: rgba(255, 184, 0, 0.1);
-  border-color: var(--accent-primary);
+  border-color: var(--yellow-primary);
   transform: translateY(-2px);
 }
 
@@ -560,7 +615,7 @@ body {
 }
 
 /* Description */
-.certficate-description {
+.certificate-description {
   font-size: 0.9375rem;
   line-height: 1.6;
   color: var(--text-secondary);
@@ -570,43 +625,50 @@ body {
   -webkit-box-orient: vertical;
   overflow: hidden;
   transition: color var(--transition-base);
+  flex: 1;
 }
 
 .certificate-card:hover .certificate-description {
   color: var(--text-primary);
 }
 
-/* Features */
-.certificate-features {
+/* Skills */
+.certificate-skills {
   display: flex;
   flex-wrap: wrap;
   gap: var(--spacing-xs);
   margin-top: var(--spacing-sm);
 }
 
-.certificate-feature {
+.skill-item {
   padding: var(--spacing-xs) var(--spacing-md);
   background: var(--bg-secondary);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-full);
   font-size: 0.8125rem;
   font-weight: 500;
-  color: var(--text-primary);
+  color: var(--yellow-primary);
   display: inline-flex;
   align-items: center;
   gap: var(--spacing-xs);
   transition: all var(--transition-base);
 }
 
-.certificate-feature i {
+.skill-item i {
   font-size: 0.75rem;
   color: var(--accent-primary);
 }
 
-.certificate-feature:hover {
-  border-color: var(--accent-primary);
+.skill-item:hover {
+  border-color: var(--yellow-primary);
   transform: translateY(-2px);
   box-shadow: var(--shadow-sm);
+}
+
+.skill-item.more {
+  background: var(--gradient-primary);
+  color: #fff;
+  border-color: transparent;
 }
 
 /* Actions */
@@ -675,6 +737,20 @@ body {
   border-color: var(--accent-primary);
   transform: translateY(-2px);
   box-shadow: var(--shadow-sm);
+}
+
+/* Developer Credit */
+.developer-credit-small {
+  margin-top: var(--spacing-md);
+  padding-top: var(--spacing-md);
+  border-top: 1px solid var(--border-color);
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+}
+
+.developer-credit-small strong {
+  color: var(--yellow-primary);
 }
 
 /* ==========================================
@@ -1117,24 +1193,6 @@ body {
   }
 }
 
-@keyframes shimmer {
-  0% {
-    left: -100%;
-  }
-  100% {
-    left: 100%;
-  }
-}
-
-@keyframes backgroundPulse {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.8;
-  }
-}
-
 /* ==========================================
    RESPONSIVE DESIGN
    ========================================== */
@@ -1144,7 +1202,7 @@ body {
   }
   
   .certificate-image {
-    height: 240px;
+    height: 220px;
   }
 }
 
@@ -1225,14 +1283,14 @@ body {
     align-items: flex-start;
   }
   
-  .certificate-rating {
-    align-self: flex-start;
-  }
-  
   .overlay-content .btn {
     min-width: 140px;
     font-size: 0.875rem;
     padding: var(--spacing-sm) var(--spacing-lg);
+  }
+  
+  .portfolio-grid {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -1251,8 +1309,9 @@ body {
 
 .certificate-card:focus-visible,
 .btn:focus-visible,
-.filter-select:focus-visible {
-  outline: 3px solid var(--accent-primary);
+.filter-select:focus-visible,
+.search-input:focus-visible {
+  outline: 3px solid var(--yellow-primary);
   outline-offset: 3px;
 }
 
