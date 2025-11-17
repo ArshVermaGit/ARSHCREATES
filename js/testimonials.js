@@ -1,339 +1,301 @@
 // ==========================================
-// TESTIMONIALS PAGE - Complete Production-Ready Implementation
-// Author: Arsh Verma
-// Version: 2.2.0
-// Description: Handles all testimonials portfolio functionality for client feedback showcase
-//              - Filters, sorting, card rendering, modal submission, and localStorage integration
-//              - Error handling, accessibility, and performance optimized
-//              - Inspired by websites.js: Modern card design with dark bg, ratings, project info
-// Last Updated: November 12, 2025
+// TESTIMONIALS MANAGEMENT SYSTEM
+// Complete functionality for testimonials page
 // ==========================================
 
-'use strict';
-
-// ==========================================
-// GLOBAL STATE MANAGEMENT
-// Centralized state for testimonials data and UI interactions
-// ==========================================
+// Global state
 const TESTIMONIALS_STATE = {
-    allTestimonials: [],        // Complete list of testimonials from data/localStorage
-    filteredTestimonials: [],   // Currently displayed testimonials after filtering/sorting
-    currentFilters: {           // Active filter and sort settings
+    testimonials: [],
+    filteredTestimonials: [],
+    filters: {
         projectType: 'all',
-        rating: '0',
-        sort: 'newest'
+        minRating: 0,
+        sortBy: 'newest'
     },
-    isLoading: false,           // Loading state to prevent race conditions
-    animationDelay: 100         // Staggered animation timing for card entrance
+    currentModal: null
 };
 
 // ==========================================
 // INITIALIZATION
-// Entry point for testimonials page functionality
 // ==========================================
+
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('💬 Testimonials page initializing...');
+    console.log('🚀 Initializing testimonials page...');
     initializeTestimonialsPage();
 });
 
-/**
- * Main initialization function
- * - Orchestrates data loading, UI setup, and initial render
- * - Wrapped in try-catch for robust error handling
- */
 function initializeTestimonialsPage() {
-    try {
-        TESTIMONIALS_STATE.isLoading = true;
-        
-        loadTestimonialsData();
-        
-        setupTestimonialFilters();
-        setupTestimonialEventListeners();
-        setupTestimonialModal();
-        
-        updateHeaderStats();
-        
-        setTimeout(() => {
-            TESTIMONIALS_STATE.isLoading = false;
-            applyTestimonialFilters();
-            hideLoadingScreen();
-        }, 800);
-        
-        console.log('✅ Testimonials page initialized successfully');
-    } catch (error) {
-        console.error('❌ Error initializing testimonials page:', error);
-        showNotification('Failed to load testimonials. Please refresh the page.', 'error');
-        TESTIMONIALS_STATE.isLoading = false;
-        displayTestimonials([]);
-        hideLoadingScreen();
-    }
+    // Load testimonials data
+    loadTestimonials();
+    
+    // Setup event listeners
+    setupTestimonialsEventListeners();
+    
+    // Update statistics
+    updateTestimonialsStats();
+    
+    console.log('✅ Testimonials page initialized');
 }
 
-/**
- * Load testimonials data from data source or localStorage
- * - Prioritizes localStorage for user submissions, falls back to data.js or sample
- * - Handles missing data gracefully
- */
-function loadTestimonialsData() {
+// ==========================================
+// DATA MANAGEMENT
+// ==========================================
+
+function loadTestimonials() {
+    console.log('📖 Loading testimonials...');
+    
     try {
-        let testimonialsData = [];
+        // Show loading state
+        showLoadingState();
         
-        // Check localStorage first for user-submitted testimonials
-        const stored = localStorage.getItem('portfolio_testimonials');
-        if (stored) {
-            testimonialsData = JSON.parse(stored);
-            console.log('📦 Testimonials loaded from localStorage');
-        } else if (typeof window.getTestimonials === 'function') {
-            testimonialsData = window.getTestimonials();
-            console.log('📦 Testimonials loaded from getTestimonials() function');
-        } else if (typeof PORTFOLIO_DATA !== 'undefined' && Array.isArray(PORTFOLIO_DATA.testimonials)) {
-            testimonialsData = PORTFOLIO_DATA.testimonials.map(t => ({ ...t, approved: true }));
-            console.log('📦 Testimonials loaded from PORTFOLIO_DATA');
+        // Get approved testimonials from localStorage
+        const storedTestimonials = localStorage.getItem('portfolio_testimonials');
+        
+        if (storedTestimonials) {
+            const allTestimonials = JSON.parse(storedTestimonials);
+            // Filter only approved testimonials
+            TESTIMONIALS_STATE.testimonials = allTestimonials.filter(t => t.approved === true);
+            console.log(`✅ Loaded ${TESTIMONIALS_STATE.testimonials.length} approved testimonials`);
         } else {
-            console.warn('⚠️ No testimonials data found, using sample data for preview');
-            testimonialsData = createSampleTestimonials();
+            // If no testimonials in storage, use sample data
+            TESTIMONIALS_STATE.testimonials = getSampleTestimonials();
+            console.log('📝 Using sample testimonials data');
         }
         
-        TESTIMONIALS_STATE.allTestimonials = validateTestimonialsData(testimonialsData);
-        TESTIMONIALS_STATE.filteredTestimonials = [...TESTIMONIALS_STATE.allTestimonials];
+        // Apply current filters
+        applyFilters();
         
-        console.log(`📦 Loaded ${TESTIMONIALS_STATE.allTestimonials.length} testimonials`);
+        // Display testimonials
+        displayTestimonials();
+        
     } catch (error) {
         console.error('❌ Error loading testimonials:', error);
-        TESTIMONIALS_STATE.allTestimonials = [];
-        TESTIMONIALS_STATE.filteredTestimonials = [];
-        showNotification('Error loading testimonials data.', 'error');
+        showNotification('Error loading testimonials', 'error');
+        TESTIMONIALS_STATE.testimonials = getSampleTestimonials();
+        applyFilters();
+        displayTestimonials();
     }
 }
 
-/**
- * Validate testimonials data structure
- * - Ensures each testimonial has required fields
- * - Sanitizes and defaults missing values, marks unapproved as false
- * @param {Array} testimonials - Raw testimonials data
- * @returns {Array} Validated testimonials array
- */
-function validateTestimonialsData(testimonials) {
-    if (!Array.isArray(testimonials)) return [];
+function getSampleTestimonials() {
+    return [
+        {
+            id: 1,
+            clientName: "Sarah Johnson",
+            clientRole: "Product Manager at TechInnovate",
+            projectType: "website",
+            projectName: "E-Commerce Platform",
+            rating: 5,
+            testimonialText: "Arsh delivered an exceptional e-commerce platform that exceeded our expectations. His attention to detail and technical expertise transformed our online presence. The website performance improved by 60% and conversion rates increased significantly.",
+            date: "2024-10-15",
+            avatar: "https://ui-avatars.com/api/?name=Sarah+Johnson&background=E4572E&color=fff",
+            approved: true
+        },
+        {
+            id: 2,
+            clientName: "Mike Chen",
+            clientRole: "CEO at GameStudio Pro",
+            projectType: "game",
+            projectName: "Mobile Adventure Game",
+            rating: 5,
+            testimonialText: "Working with Arsh on our mobile game was a fantastic experience. His Unity expertise and creative problem-solving helped us launch 2 weeks ahead of schedule. The game has received overwhelmingly positive reviews!",
+            date: "2024-09-22",
+            avatar: "https://ui-avatars.com/api/?name=Mike+Chen&background=E4572E&color=fff",
+            approved: true
+        },
+        {
+            id: 3,
+            clientName: "Emily Rodriguez",
+            clientRole: "Startup Founder",
+            projectType: "app",
+            projectName: "Fitness Tracking App",
+            rating: 4.5,
+            testimonialText: "Arsh's development skills brought our fitness app vision to life. He was responsive, professional, and delivered high-quality code. The app has been featured in the App Store and we're seeing great user engagement.",
+            date: "2024-08-30",
+            avatar: "https://ui-avatars.com/api/?name=Emily+Rodriguez&background=E4572E&color=fff",
+            approved: true
+        }
+    ];
+}
+
+function saveTestimonial(testimonial) {
+    try {
+        // Get existing testimonials
+        const existingTestimonials = JSON.parse(localStorage.getItem('portfolio_testimonials') || '[]');
+        
+        // Add new testimonial (unapproved by default)
+        const newTestimonial = {
+            ...testimonial,
+            id: Date.now(),
+            date: new Date().toISOString(),
+            approved: false // Needs admin approval
+        };
+        
+        existingTestimonials.unshift(newTestimonial);
+        
+        // Save back to localStorage
+        localStorage.setItem('portfolio_testimonials', JSON.stringify(existingTestimonials));
+        
+        console.log('✅ Testimonial saved for admin approval');
+        return true;
+        
+    } catch (error) {
+        console.error('❌ Error saving testimonial:', error);
+        return false;
+    }
+}
+
+// ==========================================
+// DISPLAY FUNCTIONS
+// ==========================================
+
+function displayTestimonials() {
+    const grid = document.getElementById('testimonialsGrid');
+    const loading = document.getElementById('loadingTestimonials');
+    const noResults = document.getElementById('noResults');
     
-    return testimonials.map(testimonial => ({
-        id: testimonial.id || Date.now() + Math.random(),
-        clientName: testimonial.clientName || 'Anonymous Client',
-        clientRole: testimonial.clientRole || 'Collaborator',
-        projectType: testimonial.projectType || 'Website',
-        projectName: testimonial.projectName || 'Untitled Project',
-        rating: testimonial.rating || 5,
-        testimonialText: testimonial.testimonialText || testimonial.text || 'Great experience working together!',
-        date: testimonial.date || new Date().toISOString(),
-        approved: testimonial.approved !== undefined ? testimonial.approved : true,
-        avatar: testimonial.avatar || generateAvatar(testimonial.clientName)
-    })).filter(testimonial => testimonial.id && testimonial.approved !== false);
-}
-
-/**
- * Generate avatar URL using UI Avatars
- * @param {string} name - Client name for avatar
- * @returns {string} Avatar URL
- */
-function generateAvatar(name) {
-    return `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=E4572E&color=fff&size=80`;
-}
-
-/**
- * Display testimonials in the grid
- * - Handles loading, empty, and populated states
- * - Renders cards with client info, rating, text, project details
- * @param {Array} testimonials - Testimonials to display
- */
-function displayTestimonials(testimonials) {
-    const testimonialsGrid = document.getElementById('testimonialsGrid');
-    if (!testimonialsGrid) {
-        console.error('❌ Testimonials grid element not found');
+    if (!grid) return;
+    
+    // Hide loading state
+    if (loading) loading.style.display = 'none';
+    
+    if (TESTIMONIALS_STATE.filteredTestimonials.length === 0) {
+        // Show no results state
+        if (noResults) noResults.style.display = 'flex';
+        grid.innerHTML = '';
         return;
     }
     
-    if (TESTIMONIALS_STATE.isLoading) {
-        testimonialsGrid.innerHTML = `
-            <div class="loading-testimonials">
-                <i class="fas fa-spinner fa-spin"></i>
-                <p>Loading client stories...</p>
-            </div>
-        `;
-        return;
-    }
+    // Hide no results state
+    if (noResults) noResults.style.display = 'none';
     
-    if (!testimonials || testimonials.length === 0) {
-        testimonialsGrid.innerHTML = `
-            <div class="no-results">
-                <i class="fas fa-comment-dots"></i>
-                <h3>No Testimonials Found</h3>
-                <p>No testimonials match your current filters. Try adjusting them.</p>
-                <button class="btn btn-primary" onclick="resetTestimonialFilters()" aria-label="Reset filters">
-                    <i class="fas fa-redo"></i>
-                    <span>Reset Filters</span>
-                </button>
-            </div>
-        `;
-        return;
-    }
-    
-    testimonialsGrid.innerHTML = testimonials.map(testimonial => createTestimonialCard(testimonial)).join('');
-    
-    setupTestimonialCardListeners();
-    animateTestimonialCards();
-    
-    console.log(`🎨 Displayed ${testimonials.length} testimonials`);
-}
-
-/**
- * Create HTML for a single testimonial card
- * - Dark bg, rounded, client avatar, rating stars, quote text, project footer
- * @param {Object} testimonial - Testimonial data object
- * @returns {string} HTML string for card
- */
-function createTestimonialCard(testimonial) {
-    const avatar = testimonial.avatar;
-    const rating = testimonial.rating;
-    const projectIcon = getProjectTypeIcon(testimonial.projectType);
-    
-    return `
-        <article class="testimonial-card" 
-                 data-testimonial-id="${testimonial.id}" 
-                 data-project-type="${testimonial.projectType}" 
-                 data-rating="${rating}"
-                 role="article"
-                 aria-labelledby="testimonial-title-${testimonial.id}">
-            
+    // Generate testimonial cards
+    grid.innerHTML = TESTIMONIALS_STATE.filteredTestimonials.map(testimonial => `
+        <div class="testimonial-card" data-testimonial-id="${testimonial.id}">
             <div class="testimonial-header">
                 <div class="testimonial-client">
-                    <img src="${avatar}" 
-                         alt="${escapeHtml(testimonial.clientName)} avatar"
-                         class="client-avatar" 
-                         loading="lazy"
-                         onerror="this.src='${generateAvatar(testimonial.clientName)}'">
+                    <img src="${testimonial.avatar}" 
+                         alt="${testimonial.clientName}" 
+                         class="client-avatar"
+                         onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(testimonial.clientName)}&background=E4572E&color=fff'">
                     <div class="client-info">
-                        <h3 class="client-name" id="testimonial-title-${testimonial.id}">${escapeHtml(testimonial.clientName)}</h3>
+                        <h3 class="client-name">${escapeHtml(testimonial.clientName)}</h3>
                         <p class="client-role">${escapeHtml(testimonial.clientRole)}</p>
                     </div>
                 </div>
-                <div class="testimonial-rating" aria-label="Rating: ${rating} out of 5">
-                    ${generateStars(rating)}
-                    <span class="rating-value">${rating}</span>
+                <div class="testimonial-rating">
+                    <div class="rating-stars">
+                        ${generateStarsHTML(testimonial.rating)}
+                    </div>
+                    <div class="rating-value">${testimonial.rating}/5</div>
                 </div>
             </div>
             
             <div class="testimonial-content">
                 <div class="quote-icon">
-                    <i class="fas fa-quote-left" aria-hidden="true"></i>
+                    <i class="fas fa-quote-left"></i>
                 </div>
-                <p class="testimonial-text">${escapeHtml(testimonial.testimonialText)}</p>
+                <p class="testimonial-text">"${escapeHtml(testimonial.testimonialText)}"</p>
             </div>
             
             <div class="testimonial-footer">
                 <div class="project-info">
-                    <i class="fas fa-${projectIcon}" aria-hidden="true"></i>
-                    <span><strong>${escapeHtml(testimonial.projectName)}</strong> (${testimonial.projectType})</span>
+                    <i class="fas fa-${getProjectIcon(testimonial.projectType)}"></i>
+                    <span>${getProjectTypeLabel(testimonial.projectType)}</span>
                 </div>
-                <div class="testimonial-date" aria-label="Date: ${formatRelativeDate(testimonial.date)}">
-                    <i class="far fa-calendar" aria-hidden="true"></i>
-                    <span>${formatRelativeDate(testimonial.date)}</span>
+                <div class="testimonial-date">
+                    <i class="fas fa-calendar"></i>
+                    <span>${formatTestimonialDate(testimonial.date)}</span>
                 </div>
             </div>
-            
-            <!-- Developer Credit -->
-            <div class="developer-credit-small">
-                <span>Featured by <strong>Arsh Verma</strong></span>
-            </div>
-        </article>
-    `;
+        </div>
+    `).join('');
 }
 
-/**
- * Get project type icon based on type
- * @param {string} projectType - Project type
- * @returns {string} Icon class
- */
-function getProjectTypeIcon(projectType) {
+function generateStarsHTML(rating) {
+    const fullStars = Math.floor(rating);
+    const hasHalfStar = rating % 1 >= 0.5;
+    const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+    
+    let starsHTML = '';
+    
+    // Full stars
+    for (let i = 0; i < fullStars; i++) {
+        starsHTML += '<i class="fas fa-star"></i>';
+    }
+    
+    // Half star
+    if (hasHalfStar) {
+        starsHTML += '<i class="fas fa-star-half-alt"></i>';
+    }
+    
+    // Empty stars
+    for (let i = 0; i < emptyStars; i++) {
+        starsHTML += '<i class="far fa-star"></i>';
+    }
+    
+    return starsHTML;
+}
+
+function getProjectIcon(projectType) {
     const icons = {
-        'Website': 'laptop-code',
-        'App': 'mobile-alt',
-        'Game': 'gamepad',
-        'Consultation': 'comments'
+        'game': 'gamepad',
+        'website': 'laptop-code',
+        'app': 'mobile-alt',
+        'consultation': 'comments',
+        'other': 'star'
     };
     return icons[projectType] || 'star';
 }
 
-/**
- * Setup filter controls
- * - Dynamically populates project types, ratings from data
- * - Attaches change listeners for real-time filtering
- */
-function setupTestimonialFilters() {
-    const projectTypeFilter = document.getElementById('projectTypeFilter');
-    const ratingFilter = document.getElementById('ratingFilter');
-    const sortFilter = document.getElementById('sortFilter');
-    
-    if (!projectTypeFilter || !ratingFilter || !sortFilter) {
-        console.warn('⚠️ Filter elements not found');
-        return;
-    }
-    
-    // Populate project types
-    const projectTypes = [...new Set(TESTIMONIALS_STATE.allTestimonials.map(t => t.projectType).filter(Boolean))].sort();
-    projectTypes.forEach(type => {
-        const option = document.createElement('option');
-        option.value = type;
-        option.textContent = type;
-        projectTypeFilter.appendChild(option);
-    });
-    
-    // Populate ratings (static 4+, 4.5+, 5)
-    const ratingOptions = ['4', '4.5', '5'];
-    ratingOptions.forEach(rating => {
-        const option = document.createElement('option');
-        option.value = rating;
-        option.textContent = `${rating}+ Stars`;
-        ratingFilter.appendChild(option);
-    });
-    
-    // Attach listeners
-    projectTypeFilter.addEventListener('change', handleFilterChange);
-    ratingFilter.addEventListener('change', handleFilterChange);
-    sortFilter.addEventListener('change', handleFilterChange);
-    
-    function handleFilterChange() {
-        TESTIMONIALS_STATE.currentFilters.projectType = projectTypeFilter.value;
-        TESTIMONIALS_STATE.currentFilters.rating = ratingFilter.value;
-        TESTIMONIALS_STATE.currentFilters.sort = sortFilter.value;
-        applyTestimonialFilters();
-        showNotification('Filters updated', 'info');
-    }
-    
-    console.log('🔧 Testimonial filters setup complete');
+function getProjectTypeLabel(projectType) {
+    const labels = {
+        'game': 'Game Development',
+        'website': 'Web Development',
+        'app': 'Mobile App',
+        'consultation': 'Consultation',
+        'other': 'Other Project'
+    };
+    return labels[projectType] || 'Project';
 }
 
-/**
- * Apply all active filters and sort
- * - Chains project type/rating filters, then sorts
- * - Updates display immediately
- */
-function applyTestimonialFilters() {
-    let filtered = [...TESTIMONIALS_STATE.allTestimonials];
+function formatTestimonialDate(dateString) {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffTime = Math.abs(now - date);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    
+    if (diffDays === 1) return 'Yesterday';
+    if (diffDays < 7) return `${diffDays} days ago`;
+    if (diffDays < 30) return `${Math.floor(diffDays / 7)} weeks ago`;
+    
+    return date.toLocaleDateString('en-US', { 
+        year: 'numeric', 
+        month: 'short', 
+        day: 'numeric' 
+    });
+}
+
+// ==========================================
+// FILTERING & SORTING
+// ==========================================
+
+function applyFilters() {
+    let filtered = [...TESTIMONIALS_STATE.testimonials];
     
     // Apply project type filter
-    if (TESTIMONIALS_STATE.currentFilters.projectType !== 'all') {
-        filtered = filtered.filter(t => t.projectType === TESTIMONIALS_STATE.currentFilters.projectType);
+    if (TESTIMONIALS_STATE.filters.projectType !== 'all') {
+        filtered = filtered.filter(t => t.projectType === TESTIMONIALS_STATE.filters.projectType);
     }
     
     // Apply rating filter
-    if (TESTIMONIALS_STATE.currentFilters.rating !== '0') {
-        const minRating = parseFloat(TESTIMONIALS_STATE.currentFilters.rating);
-        filtered = filtered.filter(t => t.rating >= minRating);
+    if (TESTIMONIALS_STATE.filters.minRating > 0) {
+        filtered = filtered.filter(t => t.rating >= TESTIMONIALS_STATE.filters.minRating);
     }
     
     // Apply sorting
     filtered.sort((a, b) => {
-        switch (TESTIMONIALS_STATE.currentFilters.sort) {
+        switch (TESTIMONIALS_STATE.filters.sortBy) {
             case 'newest':
                 return new Date(b.date) - new Date(a.date);
             case 'oldest':
@@ -348,19 +310,30 @@ function applyTestimonialFilters() {
     });
     
     TESTIMONIALS_STATE.filteredTestimonials = filtered;
-    displayTestimonials(filtered);
-    
-    console.log(`🔍 Applied filters: ${filtered.length} results`);
 }
 
-/**
- * Reset all filters to defaults
- * - Clears selections and reapplies
- * - Shows success notification
- */
-function resetTestimonialFilters() {
-    TESTIMONIALS_STATE.currentFilters = { projectType: 'all', rating: '0', sort: 'newest' };
+function updateFilters() {
+    const projectTypeFilter = document.getElementById('projectTypeFilter');
+    const ratingFilter = document.getElementById('ratingFilter');
+    const sortFilter = document.getElementById('sortFilter');
     
+    if (projectTypeFilter) {
+        TESTIMONIALS_STATE.filters.projectType = projectTypeFilter.value;
+    }
+    
+    if (ratingFilter) {
+        TESTIMONIALS_STATE.filters.minRating = parseFloat(ratingFilter.value);
+    }
+    
+    if (sortFilter) {
+        TESTIMONIALS_STATE.filters.sortBy = sortFilter.value;
+    }
+    
+    applyFilters();
+    displayTestimonials();
+}
+
+function resetFilters() {
     const projectTypeFilter = document.getElementById('projectTypeFilter');
     const ratingFilter = document.getElementById('ratingFilter');
     const sortFilter = document.getElementById('sortFilter');
@@ -369,365 +342,424 @@ function resetTestimonialFilters() {
     if (ratingFilter) ratingFilter.value = '0';
     if (sortFilter) sortFilter.value = 'newest';
     
-    applyTestimonialFilters();
+    TESTIMONIALS_STATE.filters = {
+        projectType: 'all',
+        minRating: 0,
+        sortBy: 'newest'
+    };
+    
+    applyFilters();
+    displayTestimonials();
+    
     showNotification('Filters reset successfully', 'success');
-    console.log('🔄 Filters reset');
 }
 
-/**
- * Setup global event listeners
- * - Keyboard shortcuts (e.g., 'R' for reset, 'N' for new testimonial)
- * - Scroll to top
- */
-function setupTestimonialEventListeners() {
-    setupKeyboardShortcuts();
-    setupScrollToTop();
-    
-    console.log('👂 Event listeners setup complete');
-}
+// ==========================================
+// EVENT LISTENERS
+// ==========================================
 
-/**
- * Setup keyboard shortcuts
- * - 'R': Reset filters, 'N': Open modal
- */
-function setupKeyboardShortcuts() {
-    document.addEventListener('keydown', function(e) {
-        if (e.target.matches('input, textarea, select, button')) return;
-        
-        switch(e.key) {
-            case 'r':
-            case 'R':
-                e.preventDefault();
-                resetTestimonialFilters();
-                break;
-            case 'n':
-            case 'N':
-                e.preventDefault();
-                openTestimonialModal();
-                break;
-        }
-    });
-}
-
-/**
- * Setup scroll to top functionality
- * - Shows button after 300px scroll
- */
-function setupScrollToTop() {
-    const backToTopBtn = document.getElementById('backToTop');
-    if (!backToTopBtn) return;
+function setupTestimonialsEventListeners() {
+    console.log('🎯 Setting up testimonials event listeners...');
     
-    window.addEventListener('scroll', function() {
-        backToTopBtn.classList.toggle('visible', window.pageYOffset > 300);
-    });
+    // Filter event listeners
+    setupFilterListeners();
     
-    backToTopBtn.addEventListener('click', function() {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-}
-
-/**
- * Setup testimonial card interactions
- * - Hover effects, click to expand (if needed)
- */
-function setupTestimonialCardListeners() {
-    document.querySelectorAll('.testimonial-card').forEach(card => {
-        if (window.innerWidth > 768) {
-            card.addEventListener('mouseenter', function() {
-                this.style.transform = 'translateY(-8px)';
-                this.style.transition = 'transform 0.3s ease';
-            });
-            
-            card.addEventListener('mouseleave', function() {
-                this.style.transform = 'translateY(0)';
-            });
-        }
-    });
+    // Add testimonial button
+    setupAddTestimonialButton();
     
-    console.log(`🖱️ Setup interactions for ${document.querySelectorAll('.testimonial-card').length} cards`);
-}
-
-/**
- * Setup modal functionality
- * - Open/close, form submission with validation and localStorage save
- */
-function setupTestimonialModal() {
-    const modal = document.getElementById('testimonialModal');
-    const form = document.getElementById('testimonialForm');
-    const openBtn = document.getElementById('addTestimonialBtn');
-    const closeBtn = document.getElementById('modalClose');
-    const cancelBtn = document.getElementById('cancelTestimonial');
-    const ratingStars = document.getElementById('ratingStars');
-    const projectTypeSelect = document.getElementById('projectType');
-    
-    if (!modal || !form || !openBtn || !closeBtn || !cancelBtn || !ratingStars || !projectTypeSelect) return;
-    
-    // Populate project types in modal
-    const projectTypes = [...new Set(TESTIMONIALS_STATE.allTestimonials.map(t => t.projectType))].sort();
-    projectTypes.forEach(type => {
-        const option = document.createElement('option');
-        option.value = type;
-        option.textContent = type;
-        projectTypeSelect.appendChild(option);
-    });
-    
-    // Rating stars interaction
-    ratingStars.addEventListener('click', function(e) {
-        if (e.target.classList.contains('star')) {
-            const rating = parseInt(e.target.dataset.rating);
-            setRating(rating);
-        }
-    });
-    
-    ratingStars.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter' || e.key === ' ') {
-            const focused = document.activeElement;
-            if (focused.classList.contains('star')) {
-                const rating = parseInt(focused.dataset.rating);
-                setRating(rating);
-            }
-        }
-    });
-    
-    function setRating(rating) {
-        Array.from(ratingStars.children).forEach((star, index) => {
-            if (index < rating) {
-                star.classList.add('selected');
-                star.setAttribute('aria-checked', 'true');
-            } else {
-                star.classList.remove('selected');
-                star.setAttribute('aria-checked', 'false');
-            }
-        });
-        document.getElementById('rating').value = rating;
-    }
+    // Modal event listeners
+    setupModalListeners();
     
     // Form submission
-    form.addEventListener('submit', function(e) {
-        e.preventDefault();
-        submitTestimonial();
-    });
+    setupFormSubmission();
     
-    // Open modal
-    openBtn.addEventListener('click', openTestimonialModal);
+    // Character count for testimonial text
+    setupCharacterCount();
     
-    // Close modal
-    closeBtn.addEventListener('click', closeTestimonialModal);
-    cancelBtn.addEventListener('click', closeTestimonialModal);
-    modal.addEventListener('click', function(e) {
-        if (e.target === modal) closeTestimonialModal();
-    });
+    console.log('✅ Testimonials event listeners setup complete');
+}
+
+function setupFilterListeners() {
+    const projectTypeFilter = document.getElementById('projectTypeFilter');
+    const ratingFilter = document.getElementById('ratingFilter');
+    const sortFilter = document.getElementById('sortFilter');
+    const resetFiltersBtn = document.getElementById('resetFilters');
+    const resetFiltersNoResults = document.getElementById('resetFiltersNoResults');
     
-    // Close on Escape
+    if (projectTypeFilter) {
+        projectTypeFilter.addEventListener('change', updateFilters);
+    }
+    
+    if (ratingFilter) {
+        ratingFilter.addEventListener('change', updateFilters);
+    }
+    
+    if (sortFilter) {
+        sortFilter.addEventListener('change', updateFilters);
+    }
+    
+    if (resetFiltersBtn) {
+        resetFiltersBtn.addEventListener('click', resetFilters);
+    }
+    
+    if (resetFiltersNoResults) {
+        resetFiltersNoResults.addEventListener('click', resetFilters);
+    }
+}
+
+function setupAddTestimonialButton() {
+    const addTestimonialBtn = document.getElementById('addTestimonialBtn');
+    
+    if (addTestimonialBtn) {
+        addTestimonialBtn.addEventListener('click', openTestimonialModal);
+    }
+}
+
+function setupModalListeners() {
+    const modal = document.getElementById('testimonialModal');
+    const modalClose = document.getElementById('modalClose');
+    const cancelTestimonial = document.getElementById('cancelTestimonial');
+    
+    // Close modal on backdrop click
+    if (modal) {
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                closeTestimonialModal();
+            }
+        });
+    }
+    
+    // Close modal on close button click
+    if (modalClose) {
+        modalClose.addEventListener('click', closeTestimonialModal);
+    }
+    
+    // Close modal on cancel button click
+    if (cancelTestimonial) {
+        cancelTestimonial.addEventListener('click', closeTestimonialModal);
+    }
+    
+    // Close modal on ESC key
     document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape' && modal.classList.contains('active')) {
+        if (e.key === 'Escape' && TESTIMONIALS_STATE.currentModal === 'testimonial') {
             closeTestimonialModal();
         }
     });
+}
+
+function setupFormSubmission() {
+    const form = document.getElementById('testimonialForm');
     
-    console.log('🔧 Testimonial modal setup complete');
-}
-
-/**
- * Open testimonial modal
- */
-function openTestimonialModal() {
-    const modal = document.getElementById('testimonialModal');
-    if (modal) {
-        modal.classList.add('active');
-        modal.setAttribute('aria-hidden', 'false');
-        document.body.style.overflow = 'hidden';
-        document.getElementById('clientName').focus();
+    if (form) {
+        form.addEventListener('submit', handleTestimonialSubmit);
     }
-    console.log('📝 Testimonial modal opened');
 }
 
-/**
- * Close testimonial modal
- */
-function closeTestimonialModal() {
+function setupCharacterCount() {
+    const testimonialText = document.getElementById('testimonialText');
+    const charCount = document.getElementById('charCount');
+    
+    if (testimonialText && charCount) {
+        testimonialText.addEventListener('input', function() {
+            const count = this.value.length;
+            charCount.textContent = count;
+            
+            if (count > 500) {
+                charCount.style.color = 'var(--error-color, #dc3545)';
+            } else if (count > 400) {
+                charCount.style.color = 'var(--warning-color, #ffc107)';
+            } else {
+                charCount.style.color = 'var(--text-secondary)';
+            }
+        });
+    }
+}
+
+// ==========================================
+// MODAL MANAGEMENT
+// ==========================================
+
+function openTestimonialModal() {
+    console.log('📝 Opening testimonial modal...');
+    
     const modal = document.getElementById('testimonialModal');
+    const form = document.getElementById('testimonialForm');
+    
+    if (modal && form) {
+        TESTIMONIALS_STATE.currentModal = 'testimonial';
+        modal.classList.add('active');
+        
+        // Reset form
+        form.reset();
+        document.getElementById('charCount').textContent = '0';
+        resetStarRating();
+        
+        // Set focus to first input
+        const firstInput = form.querySelector('input, textarea, select');
+        if (firstInput) firstInput.focus();
+    }
+}
+
+function closeTestimonialModal() {
+    console.log('📝 Closing testimonial modal...');
+    
+    const modal = document.getElementById('testimonialModal');
+    
     if (modal) {
         modal.classList.remove('active');
-        modal.setAttribute('aria-hidden', 'true');
-        document.body.style.overflow = '';
-        document.getElementById('testimonialForm').reset();
-        setRating(0); // Reset stars
+        TESTIMONIALS_STATE.currentModal = null;
+        
+        // Reset form after animation
+        setTimeout(() => {
+            const form = document.getElementById('testimonialForm');
+            if (form) form.reset();
+            resetStarRating();
+        }, 300);
     }
-    console.log('❌ Testimonial modal closed');
 }
 
-/**
- * Submit new testimonial
- * - Validates form, saves to localStorage, reloads data
- */
-function submitTestimonial() {
-    const form = document.getElementById('testimonialForm');
-    const formData = new FormData(form);
-    const testimonialData = Object.fromEntries(formData);
+// ==========================================
+// STAR RATING SYSTEM
+// ==========================================
+
+function setupStarRating() {
+    const stars = document.querySelectorAll('.star');
+    const ratingInput = document.getElementById('rating');
+    const ratingText = document.getElementById('ratingText');
     
-    // Validation
-    if (!testimonialData.clientName || !testimonialData.clientRole || 
-        !testimonialData.projectType || !testimonialData.projectName ||
-        testimonialData.rating < 1 || testimonialData.testimonialText.length < 20) {
-        showNotification('Please complete all fields with a detailed testimonial (20+ characters).', 'error');
-        return;
+    const ratingTexts = {
+        1: 'Poor',
+        2: 'Fair',
+        3: 'Good',
+        4: 'Very Good',
+        5: 'Excellent'
+    };
+    
+    stars.forEach(star => {
+        star.addEventListener('click', function() {
+            const rating = parseInt(this.getAttribute('data-rating'));
+            setStarRating(rating);
+        });
+        
+        star.addEventListener('mouseenter', function() {
+            const rating = parseInt(this.getAttribute('data-rating'));
+            highlightStars(rating);
+            ratingText.textContent = ratingTexts[rating] || 'Select your rating';
+        });
+    });
+    
+    // Reset stars when mouse leaves the container
+    const starsContainer = document.getElementById('ratingStars');
+    if (starsContainer) {
+        starsContainer.addEventListener('mouseleave', function() {
+            const currentRating = parseInt(ratingInput.value) || 0;
+            if (currentRating > 0) {
+                highlightStars(currentRating);
+                ratingText.textContent = ratingTexts[currentRating] || 'Select your rating';
+            } else {
+                resetStarRating();
+            }
+        });
     }
+}
+
+function setStarRating(rating) {
+    const stars = document.querySelectorAll('.star');
+    const ratingInput = document.getElementById('rating');
+    const ratingText = document.getElementById('ratingText');
     
-    try {
-        // Get existing testimonials
-        let testimonials = TESTIMONIALS_STATE.allTestimonials;
-        const stored = localStorage.getItem('portfolio_testimonials');
-        if (stored) {
-            testimonials = JSON.parse(stored);
+    const ratingTexts = {
+        1: 'Poor',
+        2: 'Fair',
+        3: 'Good',
+        4: 'Very Good',
+        5: 'Excellent'
+    };
+    
+    // Update stars appearance
+    stars.forEach(star => {
+        const starRating = parseInt(star.getAttribute('data-rating'));
+        if (starRating <= rating) {
+            star.classList.add('selected');
+        } else {
+            star.classList.remove('selected');
         }
-        
-        // Create new testimonial
-        const newTestimonial = {
-            id: Date.now(),
-            ...testimonialData,
-            date: new Date().toISOString(),
-            approved: false, // Pending review
-            avatar: generateAvatar(testimonialData.clientName)
-        };
-        
-        // Add to beginning
-        testimonials.unshift(newTestimonial);
-        
-        // Save to localStorage
-        localStorage.setItem('portfolio_testimonials', JSON.stringify(testimonials));
-        
-        showNotification('Thank you! Your testimonial is submitted for review and will be published soon.', 'success');
-        closeTestimonialModal();
-        
-        // Reload after delay
-        setTimeout(() => {
-            loadTestimonialsData();
-            applyTestimonialFilters();
-            updateHeaderStats();
-        }, 500);
-        
-        console.log('✓ New testimonial submitted');
-    } catch (error) {
-        console.error('❌ Error submitting testimonial:', error);
-        showNotification('Error submitting testimonial. Please try again.', 'error');
-    }
+    });
+    
+    // Update hidden input
+    ratingInput.value = rating;
+    
+    // Update rating text
+    ratingText.textContent = ratingTexts[rating] || 'Select your rating';
 }
 
-/**
- * Update header statistics dynamically
- * - Calculates totals from loaded data
- * - Updates DOM elements safely
- */
-function updateHeaderStats() {
-    const allTestimonials = TESTIMONIALS_STATE.allTestimonials;
-    if (allTestimonials.length === 0) return;
+function highlightStars(rating) {
+    const stars = document.querySelectorAll('.star');
     
-    const totalClients = allTestimonials.length;
-    const averageRating = (allTestimonials.reduce((sum, t) => sum + t.rating, 0) / totalClients).toFixed(1);
-    const satisfied = allTestimonials.filter(t => t.rating >= 4).length;
-    const satisfactionRate = Math.round((satisfied / totalClients) * 100);
-    
-    const statNumbers = document.querySelectorAll('.header-stats .stat-number');
-    if (statNumbers.length >= 3) {
-        statNumbers[0].textContent = `${totalClients}+`;
-        statNumbers[1].textContent = averageRating;
-        statNumbers[2].textContent = `${satisfactionRate}%`;
-    }
-    
-    console.log('📊 Header stats updated:', { totalClients, averageRating, satisfactionRate });
-}
-
-/**
- * Animate cards entrance with stagger
- * - Fade-in and slide-up for polished UX
- */
-function animateTestimonialCards() {
-    const cards = document.querySelectorAll('.testimonial-card');
-    cards.forEach((card, index) => {
-        card.style.opacity = '0';
-        card.style.transform = 'translateY(30px)';
-        card.style.transition = 'none';
-        
-        setTimeout(() => {
-            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-            card.style.opacity = '1';
-            card.style.transform = 'translateY(0)';
-        }, index * TESTIMONIALS_STATE.animationDelay);
+    stars.forEach(star => {
+        const starRating = parseInt(star.getAttribute('data-rating'));
+        if (starRating <= rating) {
+            star.classList.add('selected');
+        } else {
+            star.classList.remove('selected');
+        }
     });
 }
 
-/**
- * Hide loading screen with fade-out
- * - Ensures smooth transition to content
- */
-function hideLoadingScreen() {
-    const loadingScreen = document.getElementById('loadingScreen');
-    if (loadingScreen) {
-        loadingScreen.style.opacity = '0';
-        loadingScreen.style.transition = 'opacity 0.5s ease';
-        setTimeout(() => {
-            loadingScreen.style.display = 'none';
-        }, 500);
-    }
-}
-
-// ==========================================
-// UTILITY FUNCTIONS
-// Reusable helpers for formatting, escaping, and notifications
-// ==========================================
-
-/**
- * Generate star rating HTML
- * - Full, half, and empty stars based on rating
- * @param {number} rating - Rating value (0-5)
- * @returns {string} HTML for stars
- */
-function generateStars(rating) {
-    const fullStars = Math.floor(rating);
-    const hasHalfStar = rating % 1 >= 0.5;
-    const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+function resetStarRating() {
+    const stars = document.querySelectorAll('.star');
+    const ratingInput = document.getElementById('rating');
+    const ratingText = document.getElementById('ratingText');
     
-    let html = '';
-    for (let i = 0; i < fullStars; i++) html += '<i class="fas fa-star"></i>';
-    if (hasHalfStar) html += '<i class="fas fa-star-half-alt"></i>';
-    for (let i = 0; i < emptyStars; i++) html += '<i class="far fa-star"></i>';
-    return html;
+    stars.forEach(star => {
+        star.classList.remove('selected');
+    });
+    
+    ratingInput.value = '';
+    ratingText.textContent = 'Select your rating';
 }
 
-/**
- * Format relative date
- * - Shows 'Today', 'Yesterday', 'X days ago', etc.
- * @param {string} dateString - ISO date string
- * @returns {string} Relative date string
- */
-function formatRelativeDate(dateString) {
-    if (!dateString) return 'Recently';
+// ==========================================
+// FORM HANDLING
+// ==========================================
+
+async function handleTestimonialSubmit(e) {
+    e.preventDefault();
+    console.log('📨 Processing testimonial submission...');
+    
+    const form = e.target;
+    const formData = new FormData(form);
+    
+    // Validate form
+    if (!validateTestimonialForm(formData)) {
+        return;
+    }
+    
+    // Create testimonial object
+    const testimonial = {
+        clientName: formData.get('clientName').trim(),
+        clientRole: formData.get('clientRole').trim(),
+        projectType: formData.get('projectType'),
+        projectName: formData.get('projectName').trim(),
+        rating: parseFloat(formData.get('rating')),
+        testimonialText: formData.get('testimonialText').trim(),
+        avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(formData.get('clientName').trim())}&background=E4572E&color=fff`
+    };
+    
     try {
-        const date = new Date(dateString);
-        const now = new Date();
-        const diffTime = Math.abs(now - date);
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        // Save testimonial (will be unapproved by default)
+        const success = saveTestimonial(testimonial);
         
-        if (diffDays === 0) return 'Today';
-        if (diffDays === 1) return 'Yesterday';
-        if (diffDays < 7) return `${diffDays} days ago`;
-        if (diffDays < 30) return `${Math.floor(diffDays / 7)} ${Math.floor(diffDays / 7) === 1 ? 'week' : 'weeks'} ago`;
-        if (diffDays < 365) return `${Math.floor(diffDays / 30)} ${Math.floor(diffDays / 30) === 1 ? 'month' : 'months'} ago`;
-        return `${Math.floor(diffDays / 365)} ${Math.floor(diffDays / 365) === 1 ? 'year' : 'years'} ago`;
+        if (success) {
+            // Show success message
+            showNotification('Thank you! Your testimonial has been submitted for review.', 'success');
+            
+            // Close modal
+            closeTestimonialModal();
+            
+            // Reset form
+            form.reset();
+            
+            console.log('✅ Testimonial submitted successfully');
+        } else {
+            throw new Error('Failed to save testimonial');
+        }
+        
     } catch (error) {
-        console.warn('Invalid date format:', dateString);
-        return 'Recently';
+        console.error('❌ Error submitting testimonial:', error);
+        showNotification('Failed to submit testimonial. Please try again.', 'error');
     }
 }
 
-/**
- * Escape HTML special characters
- * @param {string} text - Text to escape
- * @returns {string} Escaped text
- */
+function validateTestimonialForm(formData) {
+    const clientName = formData.get('clientName');
+    const clientRole = formData.get('clientRole');
+    const projectType = formData.get('projectType');
+    const projectName = formData.get('projectName');
+    const rating = formData.get('rating');
+    const testimonialText = formData.get('testimonialText');
+    
+    // Validate required fields
+    if (!clientName || clientName.trim().length < 2) {
+        showNotification('Please enter your full name (minimum 2 characters)', 'error');
+        return false;
+    }
+    
+    if (!clientRole || clientRole.trim().length < 2) {
+        showNotification('Please enter your role or company name', 'error');
+        return false;
+    }
+    
+    if (!projectType) {
+        showNotification('Please select a project type', 'error');
+        return false;
+    }
+    
+    if (!projectName || projectName.trim().length < 2) {
+        showNotification('Please enter the project name', 'error');
+        return false;
+    }
+    
+    if (!rating) {
+        showNotification('Please select a rating', 'error');
+        return false;
+    }
+    
+    if (!testimonialText || testimonialText.trim().length < 10) {
+        showNotification('Please write a testimonial (minimum 10 characters)', 'error');
+        return false;
+    }
+    
+    if (testimonialText.length > 500) {
+        showNotification('Testimonial must be 500 characters or less', 'error');
+        return false;
+    }
+    
+    return true;
+}
+
+// ==========================================
+// STATISTICS & UTILITIES
+// ==========================================
+
+function updateTestimonialsStats() {
+    const totalClients = document.getElementById('totalClients');
+    const averageRating = document.getElementById('averageRating');
+    const satisfactionRate = document.getElementById('satisfactionRate');
+    
+    if (totalClients) {
+        totalClients.textContent = `${TESTIMONIALS_STATE.testimonials.length}+`;
+    }
+    
+    if (averageRating && TESTIMONIALS_STATE.testimonials.length > 0) {
+        const avg = TESTIMONIALS_STATE.testimonials.reduce((sum, t) => sum + t.rating, 0) / TESTIMONIALS_STATE.testimonials.length;
+        averageRating.textContent = avg.toFixed(1);
+    }
+    
+    if (satisfactionRate) {
+        // Calculate satisfaction rate (percentage of 4+ star ratings)
+        const satisfied = TESTIMONIALS_STATE.testimonials.filter(t => t.rating >= 4).length;
+        const rate = TESTIMONIALS_STATE.testimonials.length > 0 ? 
+            Math.round((satisfied / TESTIMONIALS_STATE.testimonials.length) * 100) : 98;
+        satisfactionRate.textContent = `${rate}%`;
+    }
+}
+
+function showLoadingState() {
+    const grid = document.getElementById('testimonialsGrid');
+    const loading = document.getElementById('loadingTestimonials');
+    const noResults = document.getElementById('noResults');
+    
+    if (grid) grid.innerHTML = '';
+    if (loading) loading.style.display = 'flex';
+    if (noResults) noResults.style.display = 'none';
+}
+
+// ==========================================
+// HELPER FUNCTIONS
+// ==========================================
+
 function escapeHtml(text) {
-    if (typeof text !== 'string') return '';
     const map = {
         '&': '&amp;',
         '<': '&lt;',
@@ -738,89 +770,22 @@ function escapeHtml(text) {
     return text.replace(/[&<>"']/g, m => map[m]);
 }
 
-/**
- * Show notification (fallback to console if no global function)
- * - Integrates with utils.js showNotification if available
- * @param {string} message - Notification text
- * @param {string} type - Type: info, success, error
- */
-function showNotification(message, type = 'info') {
-    if (typeof window.showNotification === 'function') {
-        window.showNotification(message, type);
-        return;
-    }
-    console.log(`[${type.toUpperCase()}] ${message}`);
-}
+// ==========================================
+// INITIALIZATION AFTER DOM LOAD
+// ==========================================
 
-// ==========================================
-// SAMPLE DATA FALLBACK
-// Production-ready sample testimonials for preview/demo mode
-// Edit here to add/remove sample entries
-// ==========================================
-function createSampleTestimonials() {
-    return [
-        {
-            id: 1,
-            clientName: "Sarah Johnson",
-            clientRole: "CEO, TechStart Inc.",
-            projectType: "Website",
-            projectName: "E-Commerce Platform",
-            rating: 5,
-            testimonialText: "Arsh delivered an outstanding e-commerce site that exceeded our expectations. Professional, timely, and innovative solutions throughout the project.",
-            date: "2025-10-15",
-            approved: true,
-            avatar: "https://ui-avatars.com/api/?name=Sarah+Johnson&background=E4572E&color=fff&size=80"
-        },
-        {
-            id: 2,
-            clientName: "Mike Chen",
-            clientRole: "Product Manager, HealthApp Co.",
-            projectType: "App",
-            projectName: "Fitness Tracker App",
-            rating: 4.8,
-            testimonialText: "Exceptional mobile app development with seamless integration. Arsh's attention to detail and user experience focus made all the difference.",
-            date: "2025-09-20",
-            approved: true,
-            avatar: "https://ui-avatars.com/api/?name=Mike+Chen&background=E4572E&color=fff&size=80"
-        },
-        {
-            id: 3,
-            clientName: "Emily Rodriguez",
-            clientRole: "Game Studio Lead, PixelGames",
-            projectType: "Game",
-            projectName: "Adventure Quest Game",
-            rating: 4.9,
-            testimonialText: "Creative and technically proficient – Arsh brought our game vision to life with stunning graphics and smooth gameplay mechanics.",
-            date: "2025-08-10",
-            approved: true,
-            avatar: "https://ui-avatars.com/api/?name=Emily+Rodriguez&background=E4572E&color=fff&size=80"
-        },
-        {
-            id: 4,
-            clientName: "David Kim",
-            clientRole: "CTO, CloudSolutions Ltd.",
-            projectType: "Consultation",
-            projectName: "Cloud Migration Strategy",
-            rating: 5,
-            testimonialText: "Invaluable consulting expertise that streamlined our cloud transition. Arsh's strategic insights saved us time and resources.",
-            date: "2025-07-05",
-            approved: true,
-            avatar: "https://ui-avatars.com/api/?name=David+Kim&background=E4572E&color=fff&size=80"
-        }
-    ];
-}
+// Initialize star rating system after DOM is fully loaded
+window.addEventListener('load', function() {
+    setupStarRating();
+});
 
 // ==========================================
 // GLOBAL EXPORTS
-// Make key functions available globally for HTML onclicks and utils integration
 // ==========================================
-window.initializeTestimonialsPage = initializeTestimonialsPage;
-window.resetTestimonialFilters = resetTestimonialFilters;
+
+// Make functions available globally
 window.openTestimonialModal = openTestimonialModal;
 window.closeTestimonialModal = closeTestimonialModal;
-window.submitTestimonial = submitTestimonial;
-window.applyTestimonialFilters = applyTestimonialFilters;
+window.resetFilters = resetFilters;
 
-console.log('✅ Testimonials.js loaded successfully');
-console.log('📝 Created by: Arsh Verma');
-console.log('🔧 Version: 2.2.0 - Websites-Inspired Design Applied');
+console.log('✅ Testimonials.js module loaded successfully');
