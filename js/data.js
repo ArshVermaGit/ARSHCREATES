@@ -64,15 +64,15 @@ const PORTFOLIO_DATA = {
             category: "Media Downloader",
             rating: 4.8,
             status: "Live",
-            launchDate: "2023-10-25",
+            launchDate: "2025-11-19",
             developmentTime: "3 months",
             userBase: "50K+",
             performance: "98",
             pageLoadTime: "1.2s",
             mobileResponsive: true,
-            technologies: ["HTML5", "CSS3", "JavaScript", "API Integration"],
+            technologies: ["HTML5", "CSS3", "JavaScript"],
             features: [
-                "Multi-platform support (Instagram, Facebook, Twitter)",
+                "Multi-platform support (Instagram, Facebook, X, TikTok)",
                 "High-quality video downloads",
                 "Batch download capability",
                 "No watermarks",
@@ -80,7 +80,7 @@ const PORTFOLIO_DATA = {
                 "Privacy-focused design"
             ],
             repositoryUrl: "https://github.com/ArshVermaGit/REELSPOT",
-            liveUrl: "https://arshvermagit-reelspot.vercel.app",
+            liveUrl: "https://reelspot.vercel.app",
             screenshots: [
                 "static/images/websites/ReelSpot/1.jpg",
                 "static/images/websites/ReelSpot/2.jpg",
