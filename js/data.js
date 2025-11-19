@@ -135,7 +135,7 @@ const PORTFOLIO_DATA = {
             issuer: "Coursera",
             date: "2025-11-19",
             category: "AR/VR/MR/XR",
-            image: "static/images/certificates/Intro-to-AR/VR/MR/XR/Intro-to-AR/VR/MR/XR.jpg",
+            image: "static/images/certificates/Coursera/1.jpg",
             description: "Explain the conceptual and technological differences between VR, AR, MR, and XR.",
             skills: [
                 "Augmented and Virtual Reality",
