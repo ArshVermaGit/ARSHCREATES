@@ -80,7 +80,7 @@ const PORTFOLIO_DATA = {
                 "Privacy-focused design"
             ],
             repositoryUrl: "https://github.com/ArshVermaGit/REELSPOT",
-            liveUrl: "https://reelspot.vercel.app",
+            liveUrl: "https://reelspot.vercel.ap",
             screenshots: [
                 "static/images/websites/ReelSpot/1.jpg",
                 "static/images/websites/ReelSpot/2.jpg",
