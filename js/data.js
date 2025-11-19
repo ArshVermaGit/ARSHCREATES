@@ -131,25 +131,25 @@ const PORTFOLIO_DATA = {
     certificates: [
         {
             id: 1,
-            title: "AWS Certified Solutions Architect - Associate",
-            issuer: "Amazon Web Services",
-            date: "2024-01-15",
-            category: "Cloud Computing",
-            image: "static/images/certificates/AWS Certified Solutions Architect/image.jpg",
-            description: "Demonstrated expertise in designing distributed systems on AWS platform.",
+            title: "Intro to AR/VR/MR/XR: Technologies, Applications & Issues",
+            issuer: "Coursera",
+            date: "2025-11-19",
+            category: "AR/VR/MR/XR",
+            image: "static/images/certificates/Intro-to-AR/VR/MR/XR/Intro-to-AR/VR/MR/XR.jpg",
+            description: "Explain the conceptual and technological differences between VR, AR, MR, and XR.",
             skills: [
-                "AWS Services Architecture",
-                "Cloud Infrastructure Design",
-                "Security & Compliance",
-                "Cost Optimization"
+                "Augmented and Virtual Reality",
+                "Innovation",
+                "Data Ethics",
+                "Human Computer Interaction"
             ],
-            technologies: ["AWS", "EC2", "S3", "RDS", "Lambda"],
-            credentialId: "AWS-ASA-12345-67890",
-            credentialUrl: "https://www.credly.com/badges/aws-certified",
-            year: "2024",
-            validity: "3 Years",
+            technologies: ["AR", "VR", "MR", "XR"],
+            credentialId: "298DV5MLVE3L",
+            credentialUrl: "https://www.coursera.org/account/accomplishments/verify/298DV5MLVE3L",
+            year: "2025",
+            validity: "Life Time",
             difficulty: "Advanced",
-            duration: "3 Months",
+            duration: "1 Months",
             verified: true,
             featured: true
         }
