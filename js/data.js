@@ -174,7 +174,29 @@ const PORTFOLIO_DATA = {
             year: "2025",
             validity: "Life Time",
             difficulty: "Advanced",
-            duration: "1 Months",
+            duration: "6 Hours",
+            verified: true,
+            featured: true
+        },
+        {
+            id: 3,
+            title: "AWS - Solutions Architecture Job Simulation",
+            issuer: "Forage",
+            date: "2025-11-20",
+            category: "Solutions Architecture",
+            image: "static/images/certificates/forage/2.jpg",
+            description: "AWS Solutions Architecture Job Simulation - Designed a cloud migration strategy for a startup to achieve scalability and high availability.",
+            skills: [
+                "Client Needs Analysis",
+                "Technical Proposal Writing"
+            ],
+            technologies: ["AWS Elastic Beanstalk", "Amazon EC2 & Auto Scaling", "Amazon RDS (PostgreSQL)", "Amazon S3", "Elastic Load Balancing", "AWS CodePipeline", "Amazon Route 53"],
+            credentialId: "ePT9J6zjHRefadbm6",
+            credentialUrl: "https://www.theforage.com/completion-certificates/pmnMSL4QiQ9JCgE3W/kkE9HyeNcw6rwCRGw_pmnMSL4QiQ9JCgE3W_691ddbabc72988b4c63d861b_1763579648735_completion_certificate.pdf",
+            year: "2025",
+            validity: "Life Time",
+            difficulty: "Beginner",
+            duration: "3 Hours",
             verified: true,
             featured: true
         }
