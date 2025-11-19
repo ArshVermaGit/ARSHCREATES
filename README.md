@@ -1,6 +1,5 @@
 # 🚀 ARSHCREATES - Professional Developer Portfolio
 
-![Portfolio Preview](https://via.placeholder.com/1200x600/1A1A2E/FFB800?text=ARSHCREATES+Portfolio)
 *A comprehensive, feature-rich portfolio showcasing full-stack development expertise*
 
 ## ✨ Premium Features
