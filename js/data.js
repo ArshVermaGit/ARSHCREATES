@@ -158,7 +158,7 @@ const PORTFOLIO_DATA = {
             title: "Software Engineering Job Simulation",
             issuer: "Forage",
             date: "2025-11-19",
-            category: "AR/VR/MR/XR",
+            category: "Software Engineering",
             image: "static/images/certificates/forage/1.jpg",
             description: "JPMC Advanced Software Engineering Forage Program.",
             skills: [
