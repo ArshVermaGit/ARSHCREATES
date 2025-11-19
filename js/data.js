@@ -152,6 +152,31 @@ const PORTFOLIO_DATA = {
             duration: "1 Months",
             verified: true,
             featured: true
+        },
+        {
+            id: 2,
+            title: "Software Engineering Job Simulation",
+            issuer: "Forage",
+            date: "2025-11-19",
+            category: "AR/VR/MR/XR",
+            image: "static/images/certificates/forage/1.jpg",
+            description: "JPMC Advanced Software Engineering Forage Program.",
+            skills: [
+                "Project Setup",
+                "Kafka Integration",
+                "H2 Integration",
+                "REST API Integration",
+                "REST API Controller "
+            ],
+            technologies: ["Spring Boot 3.2.5", "Kafka", "Spring Data JPA", "APIs"],
+            credentialId: "XdBvxzSdBopcXfk6v",
+            credentialUrl: "https://www.theforage.com/completion-certificates/Sj7temL583QAYpHXD/E6McHJDKsQYh79moz_Sj7temL583QAYpHXD_691ddbabc72988b4c63d861b_1763575348436_completion_certificate.pdf",
+            year: "2025",
+            validity: "Life Time",
+            difficulty: "Advanced",
+            duration: "1 Months",
+            verified: true,
+            featured: true
         }
     ],
 };
