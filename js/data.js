@@ -51,6 +51,52 @@ const PORTFOLIO_DATA = {
                 "static/images/games/sky_surfers/3.jpg",
                 "static/images/games/sky_surfers/4.jpg"
             ]
+        },
+        {
+            id: 2,
+            name: "Lumi's Learning Adventures",
+            overview: "Educational game for children 4-10 featuring Lumi the Fox",
+            description: "Soar through the skies in this thrilling endless runner game. Navigate through clouds, avoid obstacles, collect power-ups, and compete for the highest score on global leaderboards.",
+            image: "static/images/games/Lumi/Lumi.jpg",
+            category: "Education",
+            rating: 4.8,
+            status: "In Devlopment",
+            releaseDate: "2026-01-01",
+            developmentTime: "3 months",
+            teamSize: "1 developer",
+            likes: 523,
+            playCount: 74569,
+            platforms: ["WebGL", "Mobile"],
+            features: [
+                "Smooth Animations",
+                "Learning Adventure",
+                "IQ Devlopment",
+                "Exiting Rewards",
+                "Kids Friendly"
+            ],
+            technologies: ["Unity", "C#", "Unity Ads", "Firebase"],
+            repositoryUrl: "https://github.com/ArshVermaGit/LumisLearningAdventures",
+            playUrl: null, // Set to null if using Unity WebGL, or provide external URL
+            
+            // Unity WebGL Configuration - IMPORTANT: Set this for WebGL games
+            unityBuild: {
+                enabled: true, // Set to true if this game has Unity WebGL build
+                buildName: "sky_surfers", // Name of the build folder
+                loaderUrl: "static/games_files/sky_surfers/Build/sky_surfers.loader.js",
+                dataUrl: "static/games_files/sky_surfers/Build/sky_surfers.data",
+                frameworkUrl: "static/games_files/sky_surfers/Build/sky_surfers.framework.js",
+                codeUrl: "static/games_files/sky_surfers/Build/sky_surfers.wasm",
+                companyName: "ArshCreates",
+                productName: "Sky Surfers",
+                productVersion: "1.0"
+            },
+            
+            screenshots: [
+                "static/images/games/Lumi/1.jpg",
+                "static/images/games/Lumi/2.jpg",
+                "static/images/games/Lumi/3.jpg",
+                "static/images/games/Lumi/4.jpg"
+            ]
         }
     ],
 
