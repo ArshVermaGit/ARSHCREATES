@@ -245,6 +245,30 @@ const PORTFOLIO_DATA = {
             duration: "3 Hours",
             verified: true,
             featured: true
+        },
+        {
+            id: 4,
+            title: "Introduction to Internet of Things",
+            issuer: "NPTEL",
+            date: "2025-11-23",
+            category: "IOT",
+            image: "static/images/certificates/NPTEL/IOT.jpg",
+            description: "The Internet of Things (IoT) is a globally prominent technology involving government, academia, and industry in its research and implementation across diverse application domains, facilitating pervasive connectivity and enabling the development of various innovative solutions.",
+            skills: [
+                "Learning Fundamentals",
+                "Systems Thinking",
+                "Infrastructure Management",
+                "Solution Development"
+            ],
+            technologies: ["Pervasive Connectivity", "Storage", "Computation", "Amazon S3", "Legacy Infrastructure"],
+            credentialId: "NPTEL25CS147S1053200745",
+            credentialUrl: "https://archive.nptel.ac.in/noc/Ecertificate/?q=NPTEL25CS147S105320074510384831",
+            year: "2025",
+            validity: "Life Time",
+            difficulty: "Beginner",
+            duration: "12 Weeks",
+            verified: true,
+            featured: true
         }
     ],
 };
