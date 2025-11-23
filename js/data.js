@@ -103,6 +103,38 @@ const PORTFOLIO_DATA = {
     websites: [
         {
             id: 1,
+            name: "VTOP 2.0",
+            overview: "VTOP 2.0 is a cloned college portal website",
+            description: "VTOP 2.0 is a complete redesign of the traditional VIT student portal, inspired by premium portfolio websites and modern design aesthetics. This project transforms the academic management system into an elegant, user-friendly interface that students actually enjoy using.",
+            image: "static/images/websites/VTOP2.0/VTOP2.0.jpg",
+            category: "College Portal",
+            rating: 4.5,
+            status: "Live",
+            launchDate: "2025-11-23",
+            developmentTime: "2 months",
+            userBase: "46K+",
+            performance: "99",
+            pageLoadTime: "1.2s",
+            mobileResponsive: true,
+            technologies: ["HTML5", "CSS3", "JavaScript"],
+            features: [
+                "Academic Management",
+                "Student Services",
+                "User Experience",
+                "Dark/Light Theme",
+                "Password Management"
+            ],
+            repositoryUrl: "https://github.com/ArshVermaGit/VTOP2.0",
+            liveUrl: "https://vtop20.vercel.app",
+            screenshots: [
+                "static/images/websites/VTOP2.0/1.jpg",
+                "static/images/websites/VTOP2.0/2.jpg",
+                "static/images/websites/VTOP2.0/3.jpg",
+                "static/images/websites/VTOP2.0/4.jpg"
+            ]
+        },
+        {
+            id: 2,
             name: "ReelSpot",
             overview: "Modern social media downloader with advanced features and seamless UX",
             description: "ReelSpot is a comprehensive social media content downloader that allows users to save their favorite videos, images, and reels from multiple platforms. Built with modern web technologies, it features a clean interface, fast processing, and support for multiple formats.",
