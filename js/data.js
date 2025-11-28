@@ -329,6 +329,32 @@ const PORTFOLIO_DATA = {
             duration: "12 Weeks",
             verified: true,
             featured: true
+        },
+        {
+            id: 6,
+            title: "Complete C# Unity 3D Game Development in Unity 6",
+            issuer: "Udemy",
+            date: "2025-11-28",
+            category: "Game Development",
+            image: "static/images/certificates/Udemy/1.jpg",
+            description: "The long-awaited sequel to the world's most popular Unity course — completely rebuilt for Unity 6! Learn C# programming and Unity engine from absolute zero by building 5 complete, fun, and polished 3D games: Obstacle Dodge, Rocket Boost, Galaxy Strike, Royal Run (procedural endless runner), and Sharp Shooter (FPS). Project-based learning with lifetime access, active community, and all assets provided.",
+            skills: [
+                "C# Programming",
+                "Unity 3D Game Development",
+                "Game Physics",
+                "Enemy AI & NavMesh",
+                "Player Controls & Input",
+                "UI Development"
+            ],
+            technologies: ["Unity 6", "C#", "Unity Physics", "Cinemachine", "NavMesh Agents"],
+            credentialId: "UC-df940a2c-aab6-44e1-9755-925dc93cefd4",
+            credentialUrl: "https://ude.my/UC-df940a2c-aab6-44e1-9755-925dc93cefd4",
+            year: "2025",
+            validity: "Life Time",
+            difficulty: "Beginner",
+            duration: "60+ Hours",
+            verified: true,
+            featured: true
         }
     ],
 };
