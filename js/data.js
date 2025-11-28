@@ -383,6 +383,33 @@ const PORTFOLIO_DATA = {
             duration: "1+ Weeks",
             verified: true,
             featured: true
+        },
+        {
+            id: 8,
+            title: "Python Essentials",
+            issuer: "Vityarthi",
+            date: "2024-09-17",
+            category: "Python",
+            image: "static/images/certificates/Vityarthi/2.jpg",
+            description: "A comprehensive beginner-to-intermediate Python course that transforms novices into proficient programmers through 100+ animated lessons, 50+ quizzes, hands-on coding challenges, and real-world projects. Master Python fundamentals, data types, control structures, functions, OOP, modules, and more — all with interactive learning and practical application for Data Science, AI, and software development.",
+            skills: [
+                "Python Fundamentals",
+                "Operators and Expressions",
+                "Python Data Types",
+                "Loops and Decision Making",
+                "Lists, Tuples, and Dictionaries",
+                "Functions, Modules, and Packages",
+                "Object Oriented Programming in Python"
+            ],
+            technologies: ["Python", "Jupyter Notebook", "VS Code", "Git", "OOP Concepts"],
+            credentialId: "797442d01e",
+            credentialUrl: "https://vityarthi.com/certificate/797442d01e",
+            year: "2024",
+            validity: "Life Time",
+            difficulty: "Beginner",
+            duration: "1+ Weeks",
+            verified: true,
+            featured: true
         }
     ],
 };
