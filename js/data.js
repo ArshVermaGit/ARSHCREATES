@@ -258,6 +258,34 @@ const PORTFOLIO_DATA = {
         },
         {
             id: 3,
+            title: "Forage Academy - Data Labeling Job Simulation",
+            issuer: "Forage",
+            date: "2025-11-28",
+            category: "Data Labeling",
+            image: "static/images/certificates/forage/3.jpg",
+            description: "Completed a virtual job simulation as a Data Labeling Analyst for a hypothetical AI company, reviewing real customer support messages, classifying intent/sentiment/PII, evaluating edge cases, and proposing guideline improvements to ensure high-quality training data for machine learning models.",
+            skills: [
+                "Data Labeling",
+                "Intent Classification",
+                "Sentiment Analysis",
+                "PII Detection & Redaction",
+                "Quality Assurance",
+                "Guideline Improvement",
+                "Edge Case Analysis",
+                "Ethical AI Practices"
+            ],
+            technologies: ["Forage Platform", "Customer Support Data", "Labeling Schema"],
+            credentialId: "zeeXXGechoT79BjLZ",
+            credentialUrl: "https://www.theforage.com/completion-certificates/HgpPSsyQpzob6HEh9/Fnbjyox4Y4SciuEGF_HgpPSsyQpzob6HEh9_691ddbabc72988b4c63d861b_1764324602296_completion_certificate.pdf",
+            year: "2025",
+            validity: "Lifetime",
+            difficulty: "Intermediate",
+            duration: "6-8 Hours",
+            verified: true,
+            featured: true
+        },
+        {
+            id: 4,
             title: "AWS - Solutions Architecture Job Simulation",
             issuer: "Forage",
             date: "2025-11-20",
@@ -279,7 +307,7 @@ const PORTFOLIO_DATA = {
             featured: true
         },
         {
-            id: 4,
+            id: 5,
             title: "Introduction to Internet of Things",
             issuer: "NPTEL",
             date: "2025-11-23",
