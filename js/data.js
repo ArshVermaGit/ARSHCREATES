@@ -355,6 +355,34 @@ const PORTFOLIO_DATA = {
             duration: "60+ Hours",
             verified: true,
             featured: true
+        },
+        {
+            id: 7,
+            title: "Fundamentals of AI and ML",
+            issuer: "Vityarthi",
+            date: "2025-04-21",
+            category: "AI and ML",
+            image: "static/images/certificates/Vityarthi/1.jpg",
+            description: "The course helps you build the basics of Artificial Intelligence and Machine Learning. Designed for learners with no prior knowledge, it covers core AI concepts, machine learning techniques, and practical implementations using Prolog programming. Gain a foundational understanding of agents, search strategies, knowledge representation, and real-world applications through hands-on labs and projects.",
+            skills: [
+                "Agents and Environments",
+                "Search Strategies",
+                "Knowledge Representation",
+                "Mathematical Foundations for AI and ML",
+                "Machine Learning and its Types",
+                "Classification and Clustering",
+                "Sentiment Analysis",
+                "Prolog Programming"
+            ],
+            technologies: ["Prolog", "Python", "AI Search Algorithms", "Machine Learning Algorithms"],
+            credentialId: "Nl3gc5ntAP0f",
+            credentialUrl: "https://vityarthi.com/certificate/Nl3gc5ntAP0f",
+            year: "2025",
+            validity: "Life Time",
+            difficulty: "Beginner",
+            duration: "1+ Weeks",
+            verified: true,
+            featured: true
         }
     ],
 };
