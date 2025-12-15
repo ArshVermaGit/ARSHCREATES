@@ -294,10 +294,10 @@ function addCustomSection(sectionName, data) {
 ## 📞 Support & Contact
 
 ### Direct Support
-- 📧 **Email**: [Arshvermadev@gmail.com](mailto:Arshvermadev@gmail.com)
-- 💼 **LinkedIn**: [ArshVermaDev](https://www.linkedin.com/in/arshvermadev/)
 - 🐙 **GitHub**: [ArshVermaGit](https://github.com/ArshVermaGit)
-- 🐦 **Twitter**: [TheArshVerma](https://x.com/TheArshVerma)
+- 💼 **LinkedIn**: [ArshVermaDev](https://www.linkedin.com/in/arshvermadev/)
+- ✖️ **X (Twitter)**: [@TheArshVerma](https://x.com/TheArshVerma)
+- 📧 **Email**: [Arshverma.dev@gmail.com](mailto:Arshverma.dev@gmail.com)
 
 ## 📄 License
 
