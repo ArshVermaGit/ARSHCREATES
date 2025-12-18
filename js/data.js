@@ -418,6 +418,33 @@ const PORTFOLIO_DATA = {
             duration: "1+ Weeks",
             verified: true,
             featured: true
+        },
+        {
+            id: 9,
+            title: "Software Engineering Job Simulation",
+            issuer: "Forage",
+            date: "2024-09-17",
+            category: "Software Engineering",
+            image: "static/images/certificates/forage/4.jpg",
+            description: "Completed Electronic Arts' Software Engineering virtual experience program on Forage, gaining hands-on experience in game development workflows. Worked on EA Sports College Football, including feature proposal writing, C++ class design and implementation, codebase optimization, and live bugfixing. This simulation provided practical exposure to real-world software engineering tasks at a leading gaming company.",
+            skills: [
+                "Feature Proposal Writing",
+                "C++ Class Design",
+                "Object-Oriented Programming",
+                "Data Structure Optimization",
+                "Bug Fixing and Debugging",
+                "Software Documentation",
+                "Game Development Workflows"
+            ],
+            technologies: ["C++", "UML/Class Diagrams", "Data Structures", "EA Sports Codebase", "Version Control"],
+            credentialId: "v7cidxderegyKAZAD",
+            credentialUrl: "https://www.theforage.com/completion-certificates/j43dGscQHtJJ57N54/a77WE3de8qrxWferQ_j43dGscQHtJJ57N54_691ddbabc72988b4c63d861b_1766001074505_completion_certificate.pdf",
+            year: "2025",
+            validity: "Life Time",
+            difficulty: "Intermediate",
+            duration: "Self-paced",
+            verified: true,
+            featured: true
         }
     ],
 };
