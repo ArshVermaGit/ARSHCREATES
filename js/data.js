@@ -31,7 +31,7 @@ const PORTFOLIO_DATA = {
             technologies: ["Unity", "C#", "Unity Ads", "Firebase"],
             repositoryUrl: "https://github.com/ArshVermaGit/sky-surfers",
             playUrl: null, // Set to null if using Unity WebGL, or provide external URL
-            
+
             // Unity WebGL Configuration - IMPORTANT: Set this for WebGL games
             unityBuild: {
                 enabled: true, // Set to true if this game has Unity WebGL build
@@ -44,7 +44,7 @@ const PORTFOLIO_DATA = {
                 productName: "Sky Surfers",
                 productVersion: "1.0"
             },
-            
+
             screenshots: [
                 "static/images/games/sky_surfers/1.jpg",
                 "static/images/games/sky_surfers/2.jpg",
@@ -77,7 +77,7 @@ const PORTFOLIO_DATA = {
             technologies: ["Unity", "C#", "Unity Ads", "Firebase"],
             repositoryUrl: "https://github.com/ArshVermaGit/LumisLearningAdventures",
             playUrl: null, // Set to null if using Unity WebGL, or provide external URL
-            
+
             // Unity WebGL Configuration - IMPORTANT: Set this for WebGL games
             unityBuild: {
                 enabled: true, // Set to true if this game has Unity WebGL build
@@ -90,7 +90,7 @@ const PORTFOLIO_DATA = {
                 productName: "Sky Surfers",
                 productVersion: "1.0"
             },
-            
+
             screenshots: [
                 "static/images/games/Lumi/1.jpg",
                 "static/images/games/Lumi/2.jpg",
@@ -103,34 +103,39 @@ const PORTFOLIO_DATA = {
     websites: [
         {
             id: 1,
-            name: "VTOP 2.0",
-            overview: "VTOP 2.0 is a cloned college portal website",
-            description: "VTOP 2.0 is a complete redesign of the traditional VIT student portal, inspired by premium portfolio websites and modern design aesthetics. This project transforms the academic management system into an elegant, user-friendly interface that students actually enjoy using.",
-            image: "static/images/websites/VTOP2.0/VTOP2.0.jpg",
-            category: "College Portal",
-            rating: 4.5,
+            name: "SimplyPDF",
+            overview: "The Ultimate Premium Suite for Your PDF Needs",
+            description: "SimplyPDF is a state-of-the-art web application designed to handle complex PDF tasks directly in your browser. With a focus on Privacy-First Architecture, your files never touch a server—everything is processed locally on your machine. Featuring animated backgrounds, floating 3D decorations, and smooth Framer Motion transitions, SimplyPDF brings high-end design to document management with 16+ powerful tools in one seamless interface.",
+            image: "static/images/websites/SimplyPDF/SimplyPDF.jpg",
+            category: "Tools",
+            rating: 4.9,
             status: "Live",
-            launchDate: "2025-11-23",
-            developmentTime: "2 months",
-            userBase: "46K+",
+            launchDate: "2025-12-21",
+            developmentTime: "3 months",
+            userBase: "Growing",
             performance: "99",
-            pageLoadTime: "1.2s",
+            pageLoadTime: "0.9s",
             mobileResponsive: true,
-            technologies: ["HTML5", "CSS3", "JavaScript"],
+            technologies: ["Next.js 14+", "React 18+", "Tailwind CSS", "Framer Motion", "TypeScript", "pdf-lib", "pdfjs-dist", "tesseract.js"],
             features: [
-                "Academic Management",
-                "Student Services",
-                "User Experience",
-                "Dark/Light Theme",
-                "Password Management"
+                "Document Conversions (Word to PDF, Excel to PDF, JPG to PDF)",
+                "AI-Powered OCR Text Extraction",
+                "Password Protection & Security",
+                "PDF Editing Suite (Text, Shapes, Signatures)",
+                "File Compression & Optimization",
+                "Merge, Split, Rotate & Reorder Pages",
+                "100% Client-Side Processing",
+                "No Cloud Storage - Complete Privacy",
+                "Animated Premium UI/UX",
+                "Drag & Drop Interface"
             ],
-            repositoryUrl: "https://github.com/ArshVermaGit/VTOP2.0",
-            liveUrl: "https://vtop20.vercel.app",
+            repositoryUrl: "https://github.com/ArshVermaGit/SimplyPDF.com",
+            liveUrl: "https://simplypdf.vercel.app",
             screenshots: [
-                "static/images/websites/VTOP2.0/1.jpg",
-                "static/images/websites/VTOP2.0/2.jpg",
-                "static/images/websites/VTOP2.0/3.jpg",
-                "static/images/websites/VTOP2.0/4.jpg"
+                "static/images/websites/SimplyPDF/1.jpg",
+                "static/images/websites/SimplyPDF/2.jpg",
+                "static/images/websites/SimplyPDF/3.jpg",
+                "static/images/websites/SimplyPDF/4.jpg"
             ]
         },
         {
@@ -164,6 +169,38 @@ const PORTFOLIO_DATA = {
                 "static/images/websites/ReelSpot/2.jpg",
                 "static/images/websites/ReelSpot/3.jpg",
                 "static/images/websites/ReelSpot/4.jpg"
+            ]
+        },
+        {
+            id: 3,
+            name: "VTOP 2.0",
+            overview: "VTOP 2.0 is a cloned college portal website",
+            description: "VTOP 2.0 is a complete redesign of the traditional VIT student portal, inspired by premium portfolio websites and modern design aesthetics. This project transforms the academic management system into an elegant, user-friendly interface that students actually enjoy using.",
+            image: "static/images/websites/VTOP2.0/VTOP2.0.jpg",
+            category: "College Portal",
+            rating: 4.5,
+            status: "Live",
+            launchDate: "2025-11-23",
+            developmentTime: "2 months",
+            userBase: "46K+",
+            performance: "99",
+            pageLoadTime: "1.2s",
+            mobileResponsive: true,
+            technologies: ["HTML5", "CSS3", "JavaScript"],
+            features: [
+                "Academic Management",
+                "Student Services",
+                "User Experience",
+                "Dark/Light Theme",
+                "Password Management"
+            ],
+            repositoryUrl: "https://github.com/ArshVermaGit/VTOP2.0",
+            liveUrl: "https://vtop20.vercel.app",
+            screenshots: [
+                "static/images/websites/VTOP2.0/1.jpg",
+                "static/images/websites/VTOP2.0/2.jpg",
+                "static/images/websites/VTOP2.0/3.jpg",
+                "static/images/websites/VTOP2.0/4.jpg"
             ]
         }
     ],
@@ -516,7 +553,7 @@ function formatRelativeTime(dateString) {
         const days = Math.floor(hours / 24);
         const months = Math.floor(days / 30);
         const years = Math.floor(days / 365);
-        
+
         if (years > 0) return `${years} year${years > 1 ? 's' : ''} ago`;
         if (months > 0) return `${months} month${months > 1 ? 's' : ''} ago`;
         if (days > 0) return `${days} day${days > 1 ? 's' : ''} ago`;
@@ -532,7 +569,7 @@ function generateStars(rating) {
     const fullStars = Math.floor(rating);
     const halfStar = rating % 1 !== 0;
     const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
-    
+
     let stars = '';
     for (let i = 0; i < fullStars; i++) {
         stars += '<i class="fas fa-star"></i>';
@@ -558,14 +595,14 @@ function getCertificateById(id) {
 
 function getCertificatesByCategory(category) {
     if (category === 'all') return PORTFOLIO_DATA.certificates;
-    return PORTFOLIO_DATA.certificates.filter(cert => 
+    return PORTFOLIO_DATA.certificates.filter(cert =>
         cert.category.toLowerCase() === category.toLowerCase()
     );
 }
 
 function getCertificatesByIssuer(issuer) {
     if (issuer === 'all') return PORTFOLIO_DATA.certificates;
-    return PORTFOLIO_DATA.certificates.filter(cert => 
+    return PORTFOLIO_DATA.certificates.filter(cert =>
         cert.issuer.toLowerCase().includes(issuer.toLowerCase())
     );
 }
@@ -596,39 +633,39 @@ function getCertificateYears() {
 
 function filterCertificates(filters = {}) {
     let certificates = [...PORTFOLIO_DATA.certificates];
-    
+
     if (filters.category && filters.category !== 'all') {
-        certificates = certificates.filter(cert => 
+        certificates = certificates.filter(cert =>
             cert.category.toLowerCase() === filters.category.toLowerCase()
         );
     }
-    
+
     if (filters.issuer && filters.issuer !== 'all') {
-        certificates = certificates.filter(cert => 
+        certificates = certificates.filter(cert =>
             cert.issuer.toLowerCase().includes(filters.issuer.toLowerCase())
         );
     }
-    
+
     if (filters.year && filters.year !== 'all') {
         certificates = certificates.filter(cert => cert.year === filters.year);
     }
-    
+
     if (filters.difficulty && filters.difficulty !== 'all') {
-        certificates = certificates.filter(cert => 
+        certificates = certificates.filter(cert =>
             cert.difficulty.toLowerCase() === filters.difficulty.toLowerCase()
         );
     }
-    
+
     if (filters.featured) {
         certificates = certificates.filter(cert => cert.featured);
     }
-    
+
     if (filters.verified) {
         certificates = certificates.filter(cert => cert.verified);
     }
-    
+
     if (filters.sortBy) {
-        switch(filters.sortBy) {
+        switch (filters.sortBy) {
             case 'newest':
                 certificates.sort((a, b) => new Date(b.date) - new Date(a.date));
                 break;
@@ -646,7 +683,7 @@ function filterCertificates(filters = {}) {
                 certificates.sort((a, b) => a.id - b.id);
         }
     }
-    
+
     return certificates;
 }
 
@@ -654,7 +691,7 @@ function searchCertificates(searchTerm) {
     if (!searchTerm || searchTerm.trim() === '') {
         return PORTFOLIO_DATA.certificates;
     }
-    
+
     const term = searchTerm.toLowerCase();
     return PORTFOLIO_DATA.certificates.filter(cert => {
         return (
@@ -673,24 +710,24 @@ function getCertificateStats() {
     const total = certificates.length;
     const categories = getCertificateCategories();
     const issuers = getCertificateIssuers();
-    
+
     const categoryCount = {};
     categories.forEach(category => {
         categoryCount[category] = certificates.filter(cert => cert.category === category).length;
     });
-    
+
     const yearCount = {};
     const years = getCertificateYears();
     years.forEach(year => {
         yearCount[year] = certificates.filter(cert => cert.year === year).length;
     });
-    
+
     const difficultyCount = {
         'Beginner': certificates.filter(cert => cert.difficulty === 'Beginner').length,
         'Intermediate': certificates.filter(cert => cert.difficulty === 'Intermediate').length,
         'Advanced': certificates.filter(cert => cert.difficulty === 'Advanced').length
     };
-    
+
     return {
         totalCertificates: total,
         totalCategories: categories.length,
@@ -714,27 +751,27 @@ function getTestimonialsByRating(minRating) {
 
 function filterProjects(type, filters = {}) {
     let items = [...PORTFOLIO_DATA[type]];
-    
+
     if (filters.category && filters.category !== 'all') {
-        items = items.filter(item => 
+        items = items.filter(item =>
             item.category.toLowerCase() === filters.category.toLowerCase()
         );
     }
-    
+
     if (filters.minRating) {
         items = items.filter(item => item.rating >= parseFloat(filters.minRating));
     }
-    
+
     if (filters.status && filters.status !== 'all') {
-        items = items.filter(item => 
+        items = items.filter(item =>
             item.status.toLowerCase() === filters.status.toLowerCase()
         );
     }
-    
+
     if (filters.platform && filters.platform !== 'all') {
         items = items.filter(item => {
             if (item.platforms) {
-                return item.platforms.some(p => 
+                return item.platforms.some(p =>
                     p.toLowerCase().includes(filters.platform.toLowerCase())
                 );
             }
@@ -744,18 +781,18 @@ function filterProjects(type, filters = {}) {
             return false;
         });
     }
-    
+
     if (filters.sortBy) {
-        switch(filters.sortBy) {
+        switch (filters.sortBy) {
             case 'newest':
-                items.sort((a, b) => 
-                    new Date(b.releaseDate || b.launchDate) - 
+                items.sort((a, b) =>
+                    new Date(b.releaseDate || b.launchDate) -
                     new Date(a.releaseDate || a.launchDate)
                 );
                 break;
             case 'oldest':
-                items.sort((a, b) => 
-                    new Date(a.releaseDate || a.launchDate) - 
+                items.sort((a, b) =>
+                    new Date(a.releaseDate || a.launchDate) -
                     new Date(b.releaseDate || b.launchDate)
                 );
                 break;
@@ -773,7 +810,7 @@ function filterProjects(type, filters = {}) {
                 items.sort((a, b) => a.id - b.id);
         }
     }
-    
+
     return items;
 }
 
@@ -781,7 +818,7 @@ function searchProjects(type, searchTerm) {
     if (!searchTerm || searchTerm.trim() === '') {
         return PORTFOLIO_DATA[type];
     }
-    
+
     const term = searchTerm.toLowerCase();
     return PORTFOLIO_DATA[type].filter(item => {
         return (
@@ -789,10 +826,10 @@ function searchProjects(type, searchTerm) {
             item.overview.toLowerCase().includes(term) ||
             item.description.toLowerCase().includes(term) ||
             item.category.toLowerCase().includes(term) ||
-            (item.technologies && item.technologies.some(tech => 
+            (item.technologies && item.technologies.some(tech =>
                 tech.toLowerCase().includes(term)
             )) ||
-            (item.features && item.features.some(feature => 
+            (item.features && item.features.some(feature =>
                 feature.toLowerCase().includes(term)
             ))
         );
@@ -808,28 +845,28 @@ function getCategories(type) {
 function getTechnologies(type) {
     const items = PORTFOLIO_DATA[type];
     const techSet = new Set();
-    
+
     items.forEach(item => {
         if (item.technologies) {
             item.technologies.forEach(tech => techSet.add(tech));
         }
     });
-    
+
     return Array.from(techSet).sort();
 }
 
 function getStats() {
     const certificateStats = getCertificateStats();
-    
+
     return {
         totalGames: PORTFOLIO_DATA.games.length,
         totalWebsites: PORTFOLIO_DATA.websites.length,
         totalApps: PORTFOLIO_DATA.apps.length,
         totalCertificates: certificateStats.totalCertificates,
         totalTestimonials: PORTFOLIO_DATA.testimonials.filter(t => t.approved).length,
-        totalProjects: PORTFOLIO_DATA.games.length + 
-                      PORTFOLIO_DATA.websites.length + 
-                      PORTFOLIO_DATA.apps.length,
+        totalProjects: PORTFOLIO_DATA.games.length +
+            PORTFOLIO_DATA.websites.length +
+            PORTFOLIO_DATA.apps.length,
         averageRating: calculateAverageRating(),
         totalDownloads: calculateTotalDownloads(),
         totalUsers: calculateTotalUsers(),
@@ -843,9 +880,9 @@ function calculateAverageRating() {
         ...PORTFOLIO_DATA.websites,
         ...PORTFOLIO_DATA.apps
     ];
-    
+
     if (allProjects.length === 0) return 0;
-    
+
     const totalRating = allProjects.reduce((sum, project) => sum + project.rating, 0);
     return (totalRating / allProjects.length).toFixed(1);
 }
@@ -853,64 +890,64 @@ function calculateAverageRating() {
 function calculateTotalDownloads() {
     const apps = PORTFOLIO_DATA.apps;
     let total = 0;
-    
+
     apps.forEach(app => {
         if (app.downloadCount) {
             const count = app.downloadCount.replace(/[^0-9]/g, '');
             total += parseInt(count) || 0;
         }
     });
-    
+
     return total;
 }
 
 function calculateTotalUsers() {
     const websites = PORTFOLIO_DATA.websites;
     let total = 0;
-    
+
     websites.forEach(website => {
         if (website.userBase) {
             const count = website.userBase.replace(/[^0-9]/g, '');
             total += parseInt(count) || 0;
         }
     });
-    
+
     return total;
 }
 
 function getRecentProjects(limit = 6) {
     const allProjects = [
-        ...PORTFOLIO_DATA.games.map(g => ({...g, type: 'game'})),
-        ...PORTFOLIO_DATA.websites.map(w => ({...w, type: 'website'})),
-        ...PORTFOLIO_DATA.apps.map(a => ({...a, type: 'app'}))
+        ...PORTFOLIO_DATA.games.map(g => ({ ...g, type: 'game' })),
+        ...PORTFOLIO_DATA.websites.map(w => ({ ...w, type: 'website' })),
+        ...PORTFOLIO_DATA.apps.map(a => ({ ...a, type: 'app' }))
     ];
-    
+
     allProjects.sort((a, b) => {
         const dateA = new Date(a.releaseDate || a.launchDate);
         const dateB = new Date(b.releaseDate || b.launchDate);
         return dateB - dateA;
     });
-    
+
     return allProjects.slice(0, limit);
 }
 
 function getFeaturedProjects() {
-    const topGame = PORTFOLIO_DATA.games.reduce((prev, current) => 
+    const topGame = PORTFOLIO_DATA.games.reduce((prev, current) =>
         (prev.rating > current.rating) ? prev : current
     );
-    
-    const topWebsite = PORTFOLIO_DATA.websites.reduce((prev, current) => 
+
+    const topWebsite = PORTFOLIO_DATA.websites.reduce((prev, current) =>
         (prev.rating > current.rating) ? prev : current
     );
-    
-    const topApp = PORTFOLIO_DATA.apps.reduce((prev, current) => 
+
+    const topApp = PORTFOLIO_DATA.apps.reduce((prev, current) =>
         (prev.rating > current.rating) ? prev : current
     );
-    
+
     return {
-        game: {...topGame, type: 'game'},
-        website: {...topWebsite, type: 'website'},
-        app: {...topApp, type: 'app'}
+        game: { ...topGame, type: 'game' },
+        website: { ...topWebsite, type: 'website' },
+        app: { ...topApp, type: 'app' }
     };
 }
 
@@ -921,10 +958,10 @@ function validateProjectData(type, data) {
         apps: ['name', 'description', 'category', 'rating', 'status', 'platform', 'technologies'],
         certificates: ['title', 'issuer', 'date', 'category', 'description', 'skills', 'technologies']
     };
-    
+
     const required = requiredFields[type] || [];
     const missing = required.filter(field => !data[field]);
-    
+
     return {
         isValid: missing.length === 0,
         missingFields: missing
